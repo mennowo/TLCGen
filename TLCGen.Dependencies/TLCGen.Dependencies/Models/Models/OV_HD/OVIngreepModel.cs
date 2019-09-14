@@ -105,6 +105,7 @@ namespace TLCGen.Models
         public OVIngreepModel()
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
+            Koplus = "NG";
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();

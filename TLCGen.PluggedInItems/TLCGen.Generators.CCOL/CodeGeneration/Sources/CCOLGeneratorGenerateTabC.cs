@@ -27,6 +27,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
+
+            sb.Append(GenerateTabCBeforeIncludes(controller));
+
             sb.Append(GenerateTabCIncludes(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlDefaults(controller));
@@ -41,6 +44,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateTabCBeforeIncludes(ControllerModel c)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCBeforeIncludes, false, true, false, true);
+
+            return sb.ToString();
+        }
         private string GenerateTabCIncludes(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
@@ -106,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCIncludes, true, true, true, true);
 
             return sb.ToString();
         }
@@ -253,17 +264,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         break;
                     case DetectorTypeEnum.File:
                     case DetectorTypeEnum.Verweg:
-                        sb.AppendLine("DL_type | DVER_type;");
+                        sb.AppendLine("DVER_type;");
                         break;
                     case DetectorTypeEnum.Kop:
-                        sb.AppendLine("DL_type | DKOP_type;");
+                        sb.AppendLine("DKOP_type;");
                         break;
                     case DetectorTypeEnum.Lang:
-                        sb.AppendLine("DL_type | DLNG_type;");
+                        sb.AppendLine("DLNG_type;");
                         break;
                     case DetectorTypeEnum.OpticomIngang:
                     case DetectorTypeEnum.VecomDetector:
-                        // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                         if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
                         {
                             sb.AppendLine("DSI_type;");
@@ -271,6 +281,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         else
                         {
+                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use?
+                                // #define DSUIT_type  (DS_type+KOP_type) /* inmelding selectief        */
+                                // #define DSIN_type   (DS_type+VER_type) /* uitmelding selectief       */
                             sb.AppendLine("DS_type;");
                         }
                         break;
@@ -281,7 +294,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case DetectorTypeEnum.WisselDetector:
                     case DetectorTypeEnum.WisselStroomKringDetector:
                     case DetectorTypeEnum.Radar:
-                        sb.AppendLine("DL_type | DKOP_type;");
+                        sb.AppendLine("DKOP_type;");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());

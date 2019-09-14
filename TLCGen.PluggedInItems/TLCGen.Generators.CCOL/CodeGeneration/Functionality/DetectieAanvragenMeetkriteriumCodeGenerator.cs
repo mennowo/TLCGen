@@ -270,14 +270,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (!dm.VerlengenHardOpStraat)
                                 {
                                     if (fcm.ToepassenMK2)
-                                        sb.AppendLine($"(va_bool)TDH[{dm.GetDefine()}], (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
+                                        sb.AppendLine($"({c.GetVaBoolV()})TDH[{dm.GetDefine()}], (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
                                     else
                                         sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
                                 }
                                 else
                                 {
                                     if (fcm.ToepassenMK2)
-                                        sb.AppendLine($"(va_bool)TDH[{dm.GetDefine()}], (va_mulv){GetVerlengenSetting(fcm, dm)},");
+                                        sb.AppendLine($"({c.GetVaBoolV()})TDH[{dm.GetDefine()}], (va_mulv){GetVerlengenSetting(fcm, dm)},");
                                     else
                                         sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv){GetVerlengenSetting(fcm, dm)},");
                                 }

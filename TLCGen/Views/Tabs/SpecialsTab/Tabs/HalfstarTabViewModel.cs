@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
 		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
 		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
-		public ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; private set; }
+		public ObservableCollectionAroundList<HalfstarFaseCyclusInstellingenViewModel, HalfstarFaseCyclusInstellingenModel> Alternatieven { get; private set; }
         public ObservableCollection<HalfstarOVIngreepViewModel> OVIngrepenHalfstar { get; } = new ObservableCollection<HalfstarOVIngreepViewModel>();
 
         public bool ShowHalfstarAlert
@@ -376,6 +376,124 @@ namespace TLCGen.ViewModels
                     _importManySignaalPlanCommand = new RelayCommand(ImportManySignaalPlanCommand_Executed, ImportManySignaalPlanCommand_CanExecute);
                 }
                 return _importManySignaalPlanCommand;
+            }
+        }
+
+        private RelayCommand _TLCImportSignaalPlannenCommand;
+        public ICommand TLCImportSignaalPlannenCommand
+        {
+            get
+            {
+                if (_TLCImportSignaalPlannenCommand == null)
+                {
+                    _TLCImportSignaalPlannenCommand = new RelayCommand(TLCImportSignaalPlannenCommand_Executed, TLCImportSignaalPlannenCommand_CanExecute);
+                }
+                return _TLCImportSignaalPlannenCommand;
+            }
+        }
+
+        private bool TLCImportSignaalPlannenCommand_CanExecute(object obj)
+        {
+            return SignaalPlannen != null && SignaalPlannen.Any();
+        }
+
+        private void TLCImportSignaalPlannenCommand_Executed(object obj)
+        {
+            var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, true)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            importWindow.ShowDialog();
+            SignaalPlannen.Rebuild();
+            foreach(var pl in SignaalPlannen)
+            {
+                pl.RaisePropertyChanged("");
+                foreach(var fc in pl.Fasen)
+                {
+                    fc.RaisePropertyChanged("");
+                }
+            }
+        }
+
+        private RelayCommand _TLCExportSignaalPlannenCommand;
+        public ICommand TLCExportSignaalPlannenCommand
+        {
+            get
+            {
+                if (_TLCExportSignaalPlannenCommand == null)
+                {
+                    _TLCExportSignaalPlannenCommand = new RelayCommand(TLCExportSignaalPlannenCommand_Executed, TLCExportSignaalPlannenCommand_CanExecute);
+                }
+                return _TLCExportSignaalPlannenCommand;
+            }
+        }
+
+        private bool TLCExportSignaalPlannenCommand_CanExecute(object obj)
+        {
+            return SignaalPlannen != null && SignaalPlannen.Any();
+        }
+
+        private void TLCExportSignaalPlannenCommand_Executed(object obj)
+        {
+            var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, false)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            importWindow.ShowDialog();
+            SignaalPlannen.Rebuild();
+        }
+
+
+        private RelayCommand _copyPlanToPlanCommand;
+        public ICommand CopyPlanToPlanCommand
+        {
+            get
+            {
+                if (_copyPlanToPlanCommand == null)
+                {
+                    _copyPlanToPlanCommand = new RelayCommand(
+                        x => 
+                        {
+                            var dlg = new InputBoxWindow
+                            {
+                                Owner = Application.Current.MainWindow,
+                                Title = "Kopieëren naar plan naar ander plan",
+                                Explanation = $"Geef de naam van het plan op om de tijden " +
+                                              $"van {SelectedSignaalPlan.Naam} naar toe te kopieëren:"
+                            };
+                            dlg.ShowDialog();
+                            if(dlg.DialogResult == true)
+                            {
+                                var pl = SignaalPlannen.FirstOrDefault(x2 => x2.Naam == dlg.Text);
+                                if (pl != null)
+                                {
+                                    pl.Commentaar = SelectedSignaalPlan.Commentaar;
+                                    pl.Cyclustijd = SelectedSignaalPlan.Cyclustijd;
+                                    pl.StartMoment = SelectedSignaalPlan.StartMoment;
+                                    pl.SwitchMoment = SelectedSignaalPlan.SwitchMoment;
+                                    foreach(var fc in pl.Fasen)
+                                    {
+                                        var fc2 = SelectedSignaalPlan.Fasen.FirstOrDefault(x2 => x2.FaseCyclus == fc.FaseCyclus);
+                                        if (fc2 != null)
+                                        {
+                                            fc.A1 = fc2.A1;
+                                            fc.B1 = fc2.B1;
+                                            fc.C1 = fc2.C1;
+                                            fc.D1 = fc2.D1;
+                                            fc.E1 = fc2.E1;
+                                            fc.A2 = fc2.A2;
+                                            fc.B2 = fc2.B2;
+                                            fc.C2 = fc2.C2;
+                                            fc.D2 = fc2.D2;
+                                            fc.E2 = fc2.E2;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        x => SelectedSignaalPlan != null);
+                }
+                return _copyPlanToPlanCommand;
             }
         }
 
@@ -718,7 +836,7 @@ namespace TLCGen.ViewModels
             {
                 if (Alternatieven.All(x => fc.Naam != x.Model.FaseCyclus))
                 {
-                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel()
+                    Alternatieven.Add(new HalfstarFaseCyclusInstellingenViewModel(new HalfstarFaseCyclusInstellingenModel()
                     {
                         FaseCyclus = fc.Naam
                     }));
@@ -817,7 +935,7 @@ namespace TLCGen.ViewModels
                         k.TypeChanged += GekoppeldeKruising_TypeChanged;
                     }
                     HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
-                    Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel>(HalfstarData.Alternatieven);
+                    Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusInstellingenViewModel, HalfstarFaseCyclusInstellingenModel>(HalfstarData.FaseCyclusInstellingen);
                     OVIngrepenHalfstar.Clear();
                     foreach(var ov in Controller.OVData.OVIngrepen)
                     {
@@ -911,7 +1029,7 @@ namespace TLCGen.ViewModels
 						}));
 						pl.Fasen.BubbleSort();
 					}
-                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel() { FaseCyclus = fc.Naam }));
+                    Alternatieven.Add(new HalfstarFaseCyclusInstellingenViewModel(new HalfstarFaseCyclusInstellingenModel() { FaseCyclus = fc.Naam }));
 				}
 			}
 

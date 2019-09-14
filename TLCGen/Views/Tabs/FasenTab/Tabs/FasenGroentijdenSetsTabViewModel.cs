@@ -24,6 +24,9 @@ namespace TLCGen.ViewModels
         
         private ObservableCollection<string> _SetNames;
         private ObservableCollection<string> _FasenNames;
+        RelayCommand _addGroentijdenSetCommand;
+        RelayCommand _removeGroentijdenSetCommand;
+        RelayCommand _importGroentijdenDataCommand;
 
         #endregion // Fields
 
@@ -77,30 +80,40 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddGroentijdenSetCommand;
         public ICommand AddGroentijdenSetCommand
         {
             get
             {
-                if (_AddGroentijdenSetCommand == null)
+                if (_addGroentijdenSetCommand == null)
                 {
-                    _AddGroentijdenSetCommand = new RelayCommand(AddNewGroentijdenSetCommand_Executed, AddNewGroentijdenSetCommand_CanExecute);
+                    _addGroentijdenSetCommand = new RelayCommand(AddNewGroentijdenSetCommand_Executed, AddNewGroentijdenSetCommand_CanExecute);
                 }
-                return _AddGroentijdenSetCommand;
+                return _addGroentijdenSetCommand;
             }
         }
 
 
-        RelayCommand _RemoveGroentijdenSetCommand;
         public ICommand RemoveGroentijdenSetCommand
         {
             get
             {
-                if (_RemoveGroentijdenSetCommand == null)
+                if (_removeGroentijdenSetCommand == null)
                 {
-                    _RemoveGroentijdenSetCommand = new RelayCommand(RemoveGroentijdenSetCommand_Executed, RemoveGroentijdenSetCommand_CanExecute);
+                    _removeGroentijdenSetCommand = new RelayCommand(RemoveGroentijdenSetCommand_Executed, RemoveGroentijdenSetCommand_CanExecute);
                 }
-                return _RemoveGroentijdenSetCommand;
+                return _removeGroentijdenSetCommand;
+            }
+        }
+
+        public ICommand ImportGroentijdenDataCommand
+        {
+            get
+            {
+                if (_importGroentijdenDataCommand == null)
+                {
+                    _importGroentijdenDataCommand = new RelayCommand(ImportGroentijdenDataCommand_Executed, ImportGroentijdenDataCommand_CanExecute);
+                }
+                return _importGroentijdenDataCommand;
             }
         }
 
@@ -208,6 +221,25 @@ namespace TLCGen.ViewModels
         bool RemoveGroentijdenSetCommand_CanExecute(object prm)
         {
             return SelectedSet != null;
+        }
+
+        void ImportGroentijdenDataCommand_Executed(object prm)
+        {
+            var importWindow = new Dialogs.ImportGroentijdenDataWindow(_Controller)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            var result = importWindow.ShowDialog();
+            if (result == true)
+            {
+                RaisePropertyChanged<object>(broadcast: true);
+                BuildGroentijdenMatrix();
+            }
+        }
+
+        bool ImportGroentijdenDataCommand_CanExecute(object prm)
+        {
+            return true;
         }
 
         #endregion // Command functionality

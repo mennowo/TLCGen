@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -90,7 +94,9 @@ namespace TLCGen.ViewModels
 		        ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
 	        }
 	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
-			PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+            var vm = new PTPKoppelingViewModel(ptp);
+            PTPKoppelingen.Add(vm);
+            SelectedPTPKoppeling = vm;
 			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
         }
 
@@ -102,7 +108,7 @@ namespace TLCGen.ViewModels
         private void RemovePTPKoppelingCommand_Executed(object obj)
         {
             PTPKoppelingen.Remove(SelectedPTPKoppeling);
-            SelectedPTPKoppeling = null;
+            SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
 			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
         }
 
@@ -130,6 +136,23 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            if (Controller == null) return;
+            foreach (var ptp in PTPKoppelingen)
+            {
+                ptp.KoppelSignalenAlles.Clear();
+                ptp.KoppelSignalenAllesId = 0;
+            }
+            var signalen = GetAllKoppelSignalen(Controller);
+            foreach (var s in signalen)
+            {
+                var ptp = PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == s.Koppeling);
+                if (ptp != null)
+                {
+                    ptp.KoppelSignalenAlles.Add(new KoppelSignaalViewModel(s, ptp.KoppelSignalenAllesId));
+                    ++ptp.KoppelSignalenAllesId;
+                }
+            }
+            foreach (var ptp in PTPKoppelingen) ptp.UpdateSignalen();
         }
 
         public override ControllerModel Controller
@@ -151,6 +174,7 @@ namespace TLCGen.ViewModels
                     {
                         PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
                     }
+                    SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
                     PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
                 }
                 else
@@ -162,6 +186,52 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TabItem Overrides
+
+        private List<KoppelSignaalModel> GetAllKoppelSignalen(object obj)
+        {
+            var l = new List<KoppelSignaalModel>();
+            if (obj == null) return l;
+
+            var objType = obj.GetType();
+
+            var ignore = objType.GetCustomAttribute<TLCGenIgnoreAttributeAttribute>();
+            if (ignore != null) return l;
+
+            var attr = objType.GetCustomAttribute<HasKoppelSignalenAttribute>();
+            if (attr != null)
+            {
+                var i = (IHaveKoppelSignalen)obj;
+                var elems2 = i.UpdateKoppelSignalen();
+                l.AddRange(elems2);
+            }
+
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
+            {
+                var ignoreP = property.GetCustomAttribute<TLCGenIgnoreAttributeAttribute>();
+                if (ignoreP != null) continue;
+
+                var hasSignalen = property.GetCustomAttribute<HasKoppelSignalenAttribute>();
+                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string)) continue;
+                var propValue = property.GetValue(obj);
+                var elems = propValue as IList;
+                if (elems != null)
+                {
+                    l.AddRange(from object item in elems from i in GetAllKoppelSignalen(item) select i);
+                }
+                else if(hasSignalen != null)
+                {
+                    var i = (IHaveKoppelSignalen)propValue;
+                    var elems2 = i.UpdateKoppelSignalen();
+                    l.AddRange(elems2);
+                }
+                else
+                {
+                    l.AddRange(GetAllKoppelSignalen(propValue));
+                }
+            }
+            return l;
+        }
 
         #region Collection Changed
 

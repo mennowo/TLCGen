@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using TLCGen.Extensions;
 using TLCGen.Integrity;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
@@ -250,6 +250,75 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
+
+            // Version 0.5.4.0
+            // Sort controller.HalfstarData.FaseCyclusInstellingen after renaming
+            // Set file ingrepen doseren to default 'Doseren toepassen'
+            checkVer = Version.Parse("0.5.4.0");
+            if (v < checkVer)
+            {
+                controller.HalfstarData.FaseCyclusInstellingen.BubbleSort();
+                foreach (var fm in controller.FileIngrepen) fm.ToepassenDoseren = NooitAltijdAanUitEnum.Altijd;
+            }
+        }
+
+        private static void RenameXMLNode(XmlDocument doc, XmlNode oldRoot, string newname)
+        {
+            XmlNode newRoot = doc.CreateElement(newname);
+
+            foreach (XmlNode childNode in oldRoot.ChildNodes)
+            {
+                newRoot.AppendChild(childNode.CloneNode(true));
+            }
+            XmlNode parent = oldRoot.ParentNode;
+            parent.AppendChild(newRoot);
+            parent.RemoveChild(oldRoot);
+        }
+
+        public void CorrectXmlDocumentByVersion(XmlDocument doc)
+        {
+            // get version
+            var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
+            var v = Version.Parse(vi.InnerText);
+
+            var checkVer = Version.Parse("0.5.4.0");
+            if (v < checkVer)
+            {
+                // V0.5.4.0: property KruisingNaam on PelotonKoppelingModel changed to KoppelingNaam
+                var item = doc.SelectSingleNode("//PelotonKoppelingenData//PelotonKoppelingen");
+                XmlNodeList rowList = item.ChildNodes;
+                foreach (XmlNode n in rowList)
+                {
+                    var c = n.SelectSingleNode("KruisingNaam");
+                    if (c != null)
+                    {
+                        RenameXMLNode(doc, c, "KoppelingNaam");
+                    }
+                }
+
+                // V0.5.4.0: property HalfstarFaseCyclusAlternatiefModel in HalfstarDataModel changed to HalfstarFaseCyclusInstellingenModel
+                item = doc.SelectSingleNode("//HalfstarData//Alternatieven");
+                if (item != null)
+                {
+                    rowList = item.ChildNodes;
+                    var newNodes = new List<XmlNode>();
+                    for (var i = 0; i < rowList.Count; ++i)
+                    {
+                        XmlNode newRoot = doc.CreateElement("HalfstarFaseCyclusInstellingenModel");
+                        foreach (XmlNode childNode in rowList[i].ChildNodes)
+                        {
+                            newRoot.AppendChild(childNode.CloneNode(true));
+                        }
+                        newNodes.Add(newRoot);
+                    }
+                    item.RemoveAll();
+                    for (var i = 0; i < newNodes.Count; ++i)
+                    {
+                        item.AppendChild(newNodes[i]);
+                    }
+                    RenameXMLNode(doc, item, "FaseCyclusInstellingen");
+                }
+            }
         }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)
@@ -399,7 +468,10 @@ namespace TLCGen.ModelManagement
                     else
                     {
                         var strRefToAttr = property.GetCustomAttribute<RefersToAttribute>();
-                        if (strRefToAttr != null)
+                        if (strRefToAttr != null &&
+                            (property.Name == strRefToAttr.ReferProperty1 && objectType == strRefToAttr.ObjectType1 ||
+                             property.Name == strRefToAttr.ReferProperty2 && objectType == strRefToAttr.ObjectType2 ||
+                             property.Name == strRefToAttr.ReferProperty3 && objectType == strRefToAttr.ObjectType3))
                         {
                             if ((string)propValue == oldName)
                             {

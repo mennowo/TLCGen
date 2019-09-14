@@ -3,36 +3,236 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Label Content="PTP Koppelingen" FontWeight="Bold" />
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
-                  SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=TeKoppelenKruispunt,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="# In" Binding="{Binding Path=AantalsignalenIn,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="# Uit" Binding="{Binding Path=AantalsignalenUit,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="In start # TLCGen" Binding="{Binding Path=StartIndexInkomendeKoppelSignalen,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Uit start # TLCGen" Binding="{Binding Path=StartIndexUitgaandeKoppelSignalen,UpdateSourceTrigger=PropertyChanged}" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
-            <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
-        </StackPanel>
+        <TabControl>
+            <TabItem Header="PTP koppelingen">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
+                              SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=TeKoppelenKruispunt,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="# In" Binding="{Binding Path=AantalsignalenIn,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="# Uit" Binding="{Binding Path=AantalsignalenUit,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
+                        <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Toedeling Koppelsignalen">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Kruispunt" />
+                    <ListView Grid.Row="1" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
+                              SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TeKoppelenKruispunt" />
+                    <GridSplitter Width="5" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" />
+                    <TabControl Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+                        <TabItem Header="Inkomend">
+                            <Grid DataContext="{Binding Path=SelectedPTPKoppeling}" Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0" Content="PTP ingangen" />
+                                <Label Grid.Column="1" Grid.Row="0" Content="Niet toegedeeld" />
+                                <ListView
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
+                                    dd:DragDrop.DropHandler="{Binding}" 
+                                    SelectedItem="{Binding Path=SelectedKoppelSignaalIn, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding Path=KoppelSignalenIn}" Margin="2" Grid.Row="1" AlternationCount="2">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                                    <Setter Property="Background" Value="DarkGray" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="MinWidth" Value="120"/>
+                                            <Setter Property="Margin" Value="2"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="25" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Path=Count}" />
+                                                <TextBlock Background="Beige" Text="{Binding Path=Description}" Grid.Column="1" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <ListView
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.DropHandler="{Binding}" 
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
+                                    ItemsSource="{Binding Path=KoppelSignalenInBeschikbaar}" Margin="2" Grid.Row="1" Grid.Column="2" AlternationCount="2">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                                    <Setter Property="Background" Value="DarkGray" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="MinWidth" Value="120"/>
+                                            <Setter Property="Margin" Value="2"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Background="Beige" Text="{Binding Path=Description}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal"  Grid.Row="2">
+                                    <Button Content="Verwijderen" Command="{Binding Path=RemoveKoppelSignaalInCommand}" Margin="2" />
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Uitgaand">
+                            <Grid DataContext="{Binding Path=SelectedPTPKoppeling}" Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Column="0" Grid.Row="0" Content="PTP uitgangen" />
+                                <Label Grid.Column="1" Grid.Row="0" Content="Niet toegedeeld" />
+                                <ListView
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
+                                    dd:DragDrop.DropHandler="{Binding}" 
+                                    SelectedItem="{Binding Path=SelectedKoppelSignaalUit, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding Path=KoppelSignalenUit}" Margin="2" Grid.Row="1" AlternationCount="2">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                                    <Setter Property="Background" Value="DarkGray" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="MinWidth" Value="120"/>
+                                            <Setter Property="Margin" Value="2"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="25" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Path=Count}" />
+                                                <TextBlock Background="Beige" Text="{Binding Path=Description}" Grid.Column="1" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <ListView
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
+                                    dd:DragDrop.DropHandler="{Binding}" 
+                                    ItemsSource="{Binding Path=KoppelSignalenUitBeschikbaar}" Margin="2" Grid.Row="1" Grid.Column="2" AlternationCount="2">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Style.Triggers>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </Trigger>
+                                                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                                    <Setter Property="Background" Value="DarkGray" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="MinWidth" Value="120"/>
+                                            <Setter Property="Margin" Value="2"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="25" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Background="Beige" Text="{Binding Path=Description}" Grid.Column="1" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal"  Grid.Row="2">
+                                    <Button Content="Verwijderen" Command="{Binding Path=RemoveKoppelSignaalUitCommand}" Margin="2" />
+                                </StackPanel>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

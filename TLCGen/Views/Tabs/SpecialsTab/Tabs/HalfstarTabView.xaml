@@ -69,7 +69,22 @@
                                 <RowDefinition Height="Auto" MinHeight="30" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListView Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
+                            <DataGrid Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
+                                      ItemsSource="{Binding Path=HoofdRichtingen}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                                <DataGrid.RowHeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                              AncestorType={x:Type DataGridRow}}, 
+                                              Path=Item.FaseCyclus}"/>
+                                    </DataTemplate>
+                                </DataGrid.RowHeaderTemplate>
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=Tegenhouden}" Header="Tegenhouden door OV" />
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=AfkappenWG}" Header="Afkappen WG door OV" />
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=AfkappenVG}" Header="Afkappen VG door OV" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--<ListView Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
                                       ItemsSource="{Binding Path=HoofdRichtingen}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="ListViewItem">
@@ -83,7 +98,7 @@
                                         <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
-                            </ListView>
+                            </ListView>-->
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <ComboBox 
                                     MinWidth="50"
@@ -216,13 +231,13 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Alternatieven" IsEnabled="{Binding Path=IsHalfstarWithAltenatieven}">
+            <TabItem Header="Signaalgroep instellingen" IsEnabled="{Binding Path=IsHalfstarWithAltenatieven}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label Content="Instellingen langstwachtende alternatief halfstar" />
+                    <Label Content="Instellingen signaalgroepen voor halfstar" />
                     <DataGrid Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                   ItemsSource="{Binding Alternatieven}">
                         <DataGrid.RowHeaderTemplate>
@@ -235,7 +250,8 @@
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan,UpdateSourceTrigger=PropertyChanged}" Header="Alt. toestaan" />
                             <DataGridTextColumn Binding="{Binding AlternatieveRuimte,UpdateSourceTrigger=PropertyChanged}" Header="Alt. ruimte" />
-                            <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd,UpdateSourceTrigger=PropertyChanged}" Header="Alt. groentijd" />
+                            <DataGridCheckBoxColumn Binding="{Binding AanvraagOpTxB,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. bij B moment" />
+                            <DataGridCheckBoxColumn Binding="{Binding PrivilegePeriodeOpzetten,UpdateSourceTrigger=PropertyChanged}" Header="PP opzetten" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -257,11 +273,30 @@
                              Margin="2"/>
                     <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" Grid.RowSpan="2" />
                     <StackPanel Orientation="Vertical" Grid.Row="1">
-                        <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddSignaalPlanCommand}" />
-                        <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveSignaalPlanCommand}" />
-                        <Button Content="Dupliceren" Margin="2" Command="{Binding Path=DuplicateSignaalPlanCommand}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button 
+                                ToolTip="Toevoegen plan"
+                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="2" Command="{Binding Path=AddSignaalPlanCommand}" >
+                                <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
+                            </Button>
+                            <Button 
+                                ToolTip="Verwijderen plan"
+                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="2" Command="{Binding Path=RemoveSignaalPlanCommand}" >
+                                <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
+                            </Button>
+                            <Button 
+                                ToolTip="Dupliceren plan"
+                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="2" Command="{Binding Path=DuplicateSignaalPlanCommand}"  >
+                                <Image Source="{StaticResource DuplicateIconDrawingImage}" Width="17" Margin="0" />
+                            </Button>
+                        </StackPanel>
+                        <Button Content="Kopieren naar" Margin="2" Command="{Binding Path=CopyPlanToPlanCommand}" />
                         <Button Content="Importeren" Margin="2" Command="{Binding Path=ImportSignaalPlanCommand}" />
                         <Button Content="Multi import" Margin="2" Command="{Binding Path=ImportManySignaalPlanCommand}" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <Button Content="Import" Margin="2" Command="{Binding Path=TLCImportSignaalPlannenCommand}" />
+                            <Button Content="Export" Margin="2" Command="{Binding Path=TLCExportSignaalPlannenCommand}" />
+                        </StackPanel>
                     </StackPanel>
                     <local:SignaalPlanView DataContext="{Binding Path=SelectedSignaalPlan}" Grid.Column="2" Grid.RowSpan="2" />
                 </Grid>

@@ -41,6 +41,7 @@ namespace TLCGen.Helpers
 
         public Func<T3, T1> GetNewItem { get; }
         public Func<T1, T3, bool> SelectableEqualsItem { get; }
+        public Action OnCollectionChanged { get; }
 
         RelayCommandWpf _addItemCommand;
         public ICommand AddItemCommand => _addItemCommand ?? (_addItemCommand = new RelayCommandWpf(AddItemCommand_executed, AddItemCommand_canExecute));
@@ -55,6 +56,7 @@ namespace TLCGen.Helpers
             var i = SelectableItems.IndexOf(SelectedItemToAdd);
             ItemsSource.Add(GetNewItem(SelectedItemToAdd));
             ItemsSource.BubbleSort();
+            OnCollectionChanged?.Invoke();
             UpdateSelectables(null);
             if (SelectableItems.Any())
             {
@@ -81,6 +83,7 @@ namespace TLCGen.Helpers
             var removedSelToAddItem = AllSelectableItems.FirstOrDefault(x => SelectableEqualsItem(SelectedItem, x));
             var iSelectedToAdd = SelectableItems.IndexOf(SelectedItemToAdd);
             ItemsSource.Remove(SelectedItem);
+            OnCollectionChanged?.Invoke();
             if (ItemsSource.Count > 0)
             {
                 if (iSelectedItem >= 0 && ItemsSource.Count > iSelectedItem) SelectedItem = ItemsSource[iSelectedItem];
@@ -130,11 +133,12 @@ namespace TLCGen.Helpers
             if (SelectableItems.Any()) SelectedItemToAdd = SelectableItems[0];
         }
 
-        public AddRemoveItemsManager(ObservableCollectionAroundList<T1, T2> itemsSource, Func<T3, T1> getNewItem, Func<T1, T3, bool> selectableEqualsItem)
+        public AddRemoveItemsManager(ObservableCollectionAroundList<T1, T2> itemsSource, Func<T3, T1> getNewItem, Func<T1, T3, bool> selectableEqualsItem, Action onCollectionChanged = null)
         {
             ItemsSource = itemsSource;
             GetNewItem = getNewItem;
             SelectableEqualsItem = selectableEqualsItem;
+            OnCollectionChanged = onCollectionChanged;
         }
     }
 }

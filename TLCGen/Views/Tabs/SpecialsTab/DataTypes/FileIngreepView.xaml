@@ -4,11 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              x:Name="root"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="500" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <ag:AutoGrid Columns="Auto,*" RowCount="15">
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
@@ -26,25 +29,17 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Label Content="Naam file ingreep" Grid.Column="0" />
-        <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" />
-        <Label Content="Afval vertraging" Grid.Row="1" />
-        <TextBox Text="{Binding Path=AfvalVertraging,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Row="1" Grid.Column="1" />
+        <Label Content="Naam file ingreep" />
+        <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        <Label Content="Toepassen alternatieve groentijdenset" />
+        <ComboBox 
+               ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FileMetingLocatieEnum}}}"
+               SelectedItem="{Binding Path=FileMetingLocatie,UpdateSourceTrigger=PropertyChanged}" 
+               Margin="2" />
+        <Label Content="Afval vertraging" />
+        <TextBox Text="{Binding Path=AfvalVertraging,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
 
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="2">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <Label Content="Meting per lus" />
             <ct:InfoElement>
                 <ct:InfoElement.InfoPopup>
@@ -55,9 +50,9 @@
                 </ct:InfoElement.InfoPopup>
             </ct:InfoElement>
         </StackPanel>
-        <CheckBox IsChecked="{Binding Path=MetingPerLus}" Margin="5" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding Path=MetingPerLusAvailable,UpdateSourceTrigger=PropertyChanged}" />
-        
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="3">
+        <CheckBox IsChecked="{Binding Path=MetingPerLus}" Margin="5" IsEnabled="{Binding Path=MetingPerLusAvailable,UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" >
             <Label Content="Meting per strook" />
             <ct:InfoElement>
                 <ct:InfoElement.InfoPopup>
@@ -68,11 +63,11 @@
                 </ct:InfoElement.InfoPopup>
             </ct:InfoElement>
         </StackPanel>
-        <CheckBox IsChecked="{Binding Path=MetingPerStrook}" Margin="5" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Path=MetingPerStrookAvailable,UpdateSourceTrigger=PropertyChanged}" />
-        
-        <Label Content="Eerlijk doseren" Grid.Column="0" Grid.Row="4" />
-        <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="4" Grid.Column="1" />
-        <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
+        <CheckBox IsChecked="{Binding Path=MetingPerStrook}" Margin="5" IsEnabled="{Binding Path=MetingPerStrookAvailable,UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Content="Eerlijk doseren" />
+        <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" />
+        <DockPanel Grid.ColumnSpan="2">
             <Label Content="File detectoren" DockPanel.Dock="Top" />
             <local:ItemsManagerView DataContext="{Binding Path=DetectorManager}" Caption="Detectoren" DockPanel.Dock="Bottom"/>
             <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
@@ -99,33 +94,34 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel Grid.Row="6" Grid.ColumnSpan="2">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Label Content="Te doseren fasen" />
-                <ct:InfoElement>
-                    <ct:InfoElement.InfoPopup>
-                        <TextBlock>
-                            Let op: bij toepassen van "eerlijk doseren" zijn de percentages van alle fasen gelijk.<LineBreak />
-                            Bij genereren van CCOL code wordt dan een enkele percentage parameter aangemaakt.
-                        </TextBlock>
-                    </ct:InfoElement.InfoPopup>
-                </ct:InfoElement>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                <Label Content="Fase" />
-                <ComboBox ItemsSource="{Binding Path=SelectableFasen}" 
-                          SelectedValue="{Binding Path=SelectedFaseNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
-                <Button Command="{Binding AddTeDoserenSignaalGroepCommand}" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
-                    <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
-                </Button>
-                <Button Command="{Binding RemoveTeDoserenSignaalGroepCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left"
-                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
-                    <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
-                </Button>
-            </StackPanel>
-            <ct:SpecialDataGrid ItemsSource="{Binding Path=TeDoserenSignaalGroepen}" DockPanel.Dock="Bottom"
+        <Label Content="Toepassen alternatieve groentijdenset" />
+        <ComboBox 
+               ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+               SelectedItem="{Binding Path=ToepassenAlternatieveGroentijdenSet,UpdateSourceTrigger=PropertyChanged}" 
+               DockPanel.Dock="Top" Margin="2" />
+        <Label Content="Alternatieve groentijdenset" IsEnabled="{Binding Path=HasToepassenAlternatieveGroentijdenSet}" />
+        <ComboBox Margin="2" IsEnabled="{Binding Path=HasToepassenAlternatieveGroentijdenSet}"
+               ItemsSource="{Binding Path=DataContext.GroentijdenSets,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl,AncestorLevel=2}}" 
+               SelectedValue="{Binding Path=AlternatieveGroentijdenSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        <Label Content="Toepassen doseren" />
+        <ComboBox 
+               ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+               SelectedItem="{Binding Path=ToepassenDoseren,UpdateSourceTrigger=PropertyChanged}" 
+               DockPanel.Dock="Top" Margin="2" />
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" IsEnabled="{Binding Path=HasToepassenDoseren}">
+            <Label Content="Te doseren fasen" />
+            <ct:InfoElement>
+                <ct:InfoElement.InfoPopup>
+                    <TextBlock>
+                    Let op: bij toepassen van "eerlijk doseren" zijn de percentages van alle fasen gelijk.<LineBreak />
+                    Bij genereren van CCOL code wordt dan een enkele percentage parameter aangemaakt.
+                    </TextBlock>
+                </ct:InfoElement.InfoPopup>
+            </ct:InfoElement>
+        </StackPanel>
+        <ct:SpecialDataGrid ItemsSource="{Binding Path=TeDoserenSignaalGroepen}" Grid.ColumnSpan="2"
                           SelectedItem="{Binding Path=SelectedTeDoserenFase}" Margin="2"
-                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsEnabled="{Binding Path=HasToepassenDoseren}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridCell}" x:Key="DisabledIfNotAfkappenStyle">
                         <Style.Triggers>
@@ -139,6 +135,15 @@
                     <Style TargetType="{x:Type DataGridCell}" x:Key="DisabledIfNotMinimaleRoodtijdStyle">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=MinimaleRoodtijd}" Value="false">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Background" Value="LightGray" />
+                                <Setter Property="Foreground" Value="LightGray" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridCell}" x:Key="DisabledIfNotMaximaleGroentijdStyle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MaximaleGroentijd}" Value="false">
                                 <Setter Property="IsEnabled" Value="False" />
                                 <Setter Property="Background" Value="LightGray" />
                                 <Setter Property="Foreground" Value="LightGray" />
@@ -165,8 +170,24 @@
                     <DataGridTextColumn 
                         CellStyle="{StaticResource DisabledIfNotMinimaleRoodtijdStyle}"
                         Binding="{Binding Path=MinimaleRoodtijdTijd,UpdateSourceTrigger=PropertyChanged}" Header="Min.roodtijd" />
+                    <DataGridCheckBoxColumn 
+                        Binding="{Binding Path=MaximaleGroentijd,UpdateSourceTrigger=PropertyChanged}" Header="Max.groentijd bij file" />
+                    <DataGridTextColumn 
+                        CellStyle="{StaticResource DisabledIfNotMaximaleGroentijdStyle}"
+                        Binding="{Binding Path=MaximaleGroentijdTijd,UpdateSourceTrigger=PropertyChanged}" Header="Max.groentijd" />
                 </DataGrid.Columns>
             </ct:SpecialDataGrid>
-        </DockPanel>
-    </Grid>
+        <StackPanel Orientation="Horizontal" IsEnabled="{Binding Path=HasToepassenDoseren}" Grid.ColumnSpan="2">
+            <Label Content="Fase" />
+            <ComboBox ItemsSource="{Binding Path=SelectableFasen}" 
+                      SelectedValue="{Binding Path=SelectedFaseNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
+            <Button Command="{Binding AddTeDoserenSignaalGroepCommand}" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
+            </Button>
+            <Button Command="{Binding RemoveTeDoserenSignaalGroepCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
+            </Button>
+        </StackPanel>
+    </ag:AutoGrid>
 </UserControl>

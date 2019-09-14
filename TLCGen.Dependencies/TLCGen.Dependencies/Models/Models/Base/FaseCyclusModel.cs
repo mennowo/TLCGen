@@ -44,11 +44,15 @@ namespace TLCGen.Models
         public int? MeeverlengenVerschil { get; set; }
         public bool UitgesteldeVasteAanvraag { get; set; }
         public int UitgesteldeVasteAanvraagTijdsduur { get; set; }
+        public bool AlternatiefBinnenDrukknop { get; set; }
         public int? AantalRijstroken { get; set; }
         public bool HiaatKoplusBijDetectieStoring { get; set; }
         public int? VervangendHiaatKoplus { get; set; }
         public bool AanvraagBijDetectieStoring { get; set; }
+        public bool AanvraagBijDetectieStoringVertraagd { get; set; }
+        public int AanvraagBijDetectieStoringVertraging { get; set; }
         public bool AanvraagBijDetectieStoringKoplusKnop { get; set; }
+        public bool AanvraagBijDetectieStoringKopLang { get; set; }
         public bool PercentageGroenBijDetectieStoring { get; set; }
         public int? PercentageGroen { get; set; }
         public int VeiligheidsGroenMaximaal { get; set; }

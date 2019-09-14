@@ -10,7 +10,8 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private string _StatusText;
+        private string _statusText;
+        private string _alertText;
 
         #endregion // Fields
 
@@ -18,11 +19,21 @@ namespace TLCGen.ViewModels
 
         public string StatusText
         {
-            get { return _StatusText; }
+            get { return _statusText; }
             set
             {
-                _StatusText = value;
-                RaisePropertyChanged("StatusText");
+                _statusText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string AlertText
+        {
+            get { return _alertText; }
+            set
+            {
+                _alertText = value;
+                RaisePropertyChanged();
             }
         }
 

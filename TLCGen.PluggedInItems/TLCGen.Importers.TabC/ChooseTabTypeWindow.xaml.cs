@@ -57,6 +57,7 @@ namespace TLCGen.Importers.TabC
                         break;
                     case TabCType.ATB:
                         ATBCheck.IsChecked = true;
+                        ImportGarantieCheck.IsEnabled = true;
                         break;
                     case TabCType.FICK:
                         FICKCheck.IsChecked = true;

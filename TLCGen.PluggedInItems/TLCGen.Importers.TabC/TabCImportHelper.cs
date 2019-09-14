@@ -209,6 +209,7 @@ namespace TLCGen.Importers.TabC
                 case TabCType.ATB:
                 case TabCType.GC:
                     confRegex = new Regex(@"^\s*TO\(\s*fc(?<fc1>[0-9]+)\s*,\s*fc(?<fc2>[0-9]+)\s*,\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
+                    gconfRegex = new Regex(@"^\s*TO\(\s*fc(?<fc1>[0-9]+)\s*,\s*fc(?<fc2>[0-9]+)\s*,\s*([0-9]+|FK|GK|GKL),\s*(?<conf>([0-9]+)).*");
                     break;
             }
             var clines = lines.Where(x => !ReComment.IsMatch(x));

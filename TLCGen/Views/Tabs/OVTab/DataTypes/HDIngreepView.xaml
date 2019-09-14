@@ -58,6 +58,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Content="Opticom aanwezig" IsEnabled="{Binding Path=OpticomAvailable}" />
                 <CheckBox IsChecked="{Binding Path=Opticom}" Grid.Column="1"
@@ -69,8 +71,12 @@
                           SelectedValue="{Binding Path=OpticomRelatedInput}" />
                 <Label Content="Opticom inmeld filtertijd" IsEnabled="{Binding Path=Opticom}" 
                        Grid.Row="2" />
-                <TextBox 
-                    Text="{Binding Path=OpticomInmeldingFilterTijd}" Grid.Row="2" Grid.Column="1" Margin="2" />
+                <TextBox Text="{Binding Path=OpticomInmeldingFilterTijd}" Grid.Row="2" Grid.Column="1" Margin="2" />
+                <Label Content="Inmelding ook door andere fase" Grid.Row="3" />
+                <CheckBox IsChecked="{Binding Path=InmeldingOokDoorToepassen}" Grid.Column="1" Margin="5" VerticalAlignment="Center" Grid.Row="3" />
+                <Label Content="Inmelding ook door fase" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" 
+                       Grid.Row="4" />
+                <TextBox Text="{Binding Path=InmeldingOokDoorFase}" Grid.Row="4" Grid.Column="1" Margin="2" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" />
             </Grid>
             <Label Content="Meerealiserende fasen" />
             <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeFasen}" SelectedItem="{Binding SelectedMeerealiserendeFase,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" MinHeight="24" >

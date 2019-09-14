@@ -90,15 +90,15 @@ void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 /*****************************************************************************/
 void alternatief_halfstar(count fc, mulv altp, bool condition)
 {
-	PAR[fc] = FALSE;
+	PAR[fc] &= ~BIT0;
 
 	/* als een alternatieve ruimte wordt opgegeven, dan PAR opzetten bij voldoende ruimte, anders
 	kijken naar vastgroentijd. Minimum is altijd vastgroen
 	Let op extra 4 vanwege aantal stappen in ccol (FG->WG->VG->MG->GL)  */
 	if (altp > TFG_max[fc])
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
+		PAR[fc] |= (bool)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
 	else
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
+		PAR[fc] |= (bool)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
 
 	/* afbreken alternatieve realisatie t.b.v. primair realiserend conflict: */
 	FM[fc] = fm_ar_kpr(fc, TFG_max[fc]);
@@ -193,6 +193,45 @@ void getrapte_fietser_halfstar(count fc1, /* fc1 */
 	}
 	}
 	}*/
+}
+
+/* Functie voor berekenen van maximale wachttijden tijdens halfstar regelen.
+   De functie wordt normaliter gebruikt bij toepassing van wachttijdvoorspellers */
+void max_wachttijd_halfstar(mulv twacht[], /* wachttijd (in tienden van seconden) */
+                            count h_plact, /* PL regelen actief                   */
+                            count pl)      /* actieve plan                        */
+{
+	count fc;
+
+	if (!H[h_plact]) return;
+
+	/* Basis-wachttijd: Tijd tot TXB-moment. */
+	if (SH[h_plact])
+	{
+		for (fc = 0; fc < FCMAX; ++fc)
+		{
+			twacht[fc] = NG;
+		}
+	}
+
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		twacht[fc] = TOTXB_PL[fc];
+
+		/* als de richting al (versneld primair) is gerealiseerd of als deze een OS heeft gekregen,
+		   dan de max. cyclustijd bij wachttijd optellen */
+		   /* Op start TXD moment wordt PG gereset. Op TXD + 1 wordt de waarde van TOTXB_PL weer gevuld.
+			  Om te voorkomen dat in die ene seconde de wachttijd 0 wordt en de leds snel aflopen, moet worden
+			  gewacht totdat TOTXB_PL weer wordt gevuld */
+		if (PG[fc] || !TOTXB_PL[fc])
+			twacht[fc] += 10 * TX_max[pl]; /* twacht in hele seconden! */
+
+		if (RA[fc] && !RR[fc] && !BL[fc])
+		{
+			twacht[fc] = max_wachttijd_conflicten(fc);
+		}
+		if (G[fc] || GL[fc]) twacht[fc] = 0;
+	}
 }
 
 /**********************************************************************************/
@@ -309,16 +348,16 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 	/* meerealisaties */
 	if (dk_bui_fc1 != NG && hd_bui_fc1 != NG)
 	{
-		set_special_MR(fc2, fc1, (bool)(IH[hd_bui_fc1] && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+		set_special_MR(fc2, fc1, (bool)(IH[hd_bui_fc1] && R[fc1] && A[fc2] && (A[fc1] != A_WS_HALFSTAR)));
 	}
 	else
 	{
-		set_special_MR(fc2, fc1, (bool)(R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+		set_special_MR(fc2, fc1, (bool)(R[fc1] && A[fc2] && (A[fc1] != A_WS_HALFSTAR)));
 	}
 }
 
 /**********************************************************************************/
-void PercentageMaxGroenTijdenSP(count fc, count percentage)
+void PercentageMaxGroenTijden_halfstar(count fc, count percentage, mulv bit)
 {
 	mulv maxg;
 
@@ -330,13 +369,13 @@ void PercentageMaxGroenTijdenSP(count fc, count percentage)
 
 	if (G[fc] && CV[fc] && !(MK[fc] & ~BIT5)) {
 		if ((TFG_timer[fc] + TVGA_timer[fc])>(mulv)(((long)PRM[percentage] * (long)maxg) / 100)) {
-			MK[fc] &= ~BIT5;
+			MK[fc] &= ~bit;
 		}
 	}
 }
 
 /**********************************************************************************/
-void PercentageVerlengGroenTijdenSP(count fc, count percentage)
+void PercentageVerlengGroenTijden_halfstar(count fc, count percentage, mulv bit)
 {
 	mulv maxg;
 
@@ -348,7 +387,7 @@ void PercentageVerlengGroenTijdenSP(count fc, count percentage)
 
 	if (G[fc] && CV[fc] && !(MK[fc] & ~BIT5)) {
 		if ((TVGA_timer[fc])>(mulv)(((long)PRM[percentage] * (long)maxg) / 100)) {
-			MK[fc] &= ~BIT5;
+			MK[fc] &= ~bit;
 		}
 	}
 }
@@ -419,10 +458,6 @@ void set_pp_halfstar(count fc, bool condition, count value)
 
 	if (PP[fc])
 		PG[fc] &= ~PRIMAIR_OVERSLAG;
-
-	/* Vaste aanvragen (half)starre programma: */
-	if (aanvraag_txb(fc) && PP[fc])
-		A[fc] |= TRUE;
 }
 
 /**********************************************************************************/
@@ -457,6 +492,23 @@ void set_ym_pl_halfstar(count fc, bool condition)
   {
     YM[fc] |= YM_HALFSTAR;
   }
+}
+
+void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until)
+{
+#ifdef CCOLTIG
+	if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+		ym_max_trig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#else
+	if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+		ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#endif
+		ym_max_halfstar(fc, 10) &&   /* meeverlengen kan volgens signaalplan            */
+		hf_wsg_fcfc(fc_from, fc_until) &&   /* minimaal 1 richting actief                      */
+		condition)
+	{
+		YM[fc] |= YM_HALFSTAR;
+	}
 }
 
 /**********************************************************************************/
@@ -681,6 +733,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 
 	if (PL == pl)
 	{
+		bool change = FALSE;
 		if (pl_gebied(NG, (mulv)(PRM[ptxd1] + 1), (mulv)(PRM[ptxd2])) ||
 			(pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
 		{
@@ -688,23 +741,26 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXA[PL][fc] = PRM[ptxa2];
 				TXA_PL[fc] = PRM[ptxa2];
+				change = TRUE;
 			}
 			if (TXB_PL[fc] != PRM[ptxb2])
 			{
 				TXB[PL][fc] = PRM[ptxb2];
 				TXB_PL[fc] = PRM[ptxb2];
+				change = TRUE;
 			}
 			if (TXC_PL[fc] != PRM[ptxc2])
 			{
 				TXC[PL][fc] = PRM[ptxc2];
 				TXC_PL[fc] = PRM[ptxc2];
+				change = TRUE;
 			}
 			if (TXD_PL[fc] != PRM[ptxd2])
 			{
 				TXD[PL][fc] = PRM[ptxd2];
 				TXD_PL[fc] = PRM[ptxd2];
+				change = TRUE;
 			}
-			check_signalplans();
 		}
 
 		if (pl_gebied(NG, (mulv)(PRM[ptxd2] + 1), (mulv)(PRM[ptxd1])) ||
@@ -714,23 +770,26 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXA[PL][fc] = PRM[ptxa1];
 				TXA_PL[fc] = PRM[ptxa1];
+				change = TRUE;
 			}
 			if (TXB_PL[fc] != PRM[ptxb1])
 			{
 				TXB[PL][fc] = PRM[ptxb1];
 				TXB_PL[fc] = PRM[ptxb1];
+				change = TRUE;
 			}
 			if (TXC_PL[fc] != PRM[ptxc1])
 			{
 				TXC[PL][fc] = PRM[ptxc1];
 				TXC_PL[fc] = PRM[ptxc1];
+				change = TRUE;
 			}
 			if (TXD_PL[fc] != PRM[ptxd1])
 			{
 				TXD[PL][fc] = PRM[ptxd1];
 				TXD_PL[fc] = PRM[ptxd1];
+				change = TRUE;
 			}
-			check_signalplans();
 		}
 		if ((PRM[ptxe1] > 0) && (PRM[ptxe2] > 0))
 		{
@@ -738,13 +797,16 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXE[PL][fc] = PRM[ptxe2];
 				TXE_PL[fc] = PRM[ptxe2];
+				change = TRUE;
 			}
 			if (TX_timer == PRM[ptxe2])
 			{
 				TXE[PL][fc] = PRM[ptxe1];
 				TXE_PL[fc] = PRM[ptxe1];
+				change = TRUE;
 			}
 		}
+		if (change) check_signalplans();
 	}
 }
 
@@ -1175,7 +1237,7 @@ bool txboverslag(count fc       ,  /* (hoofd)richting */
         A[fc]                         )  /* als de richting een aanvraag (aanvraag_txb) heeft */
     {
       /* tijdstempel: */
-      sprintf(tekst,"Overslag TXB fc%s PL=%1d Tx=%3d \n", FC_code[fc], PL+1, TX_timer);
+      sprintf(tekst,"%sOverslag TXB fc%s PL=%1d Tx=%3d \n", PROMPT_code, FC_code[fc], PL+1, TX_timer);
       uber_puts(tekst);
       
       return (bool)(TRUE);                /* bericht verzonden */

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -9,103 +9,48 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         #region Static Fields
 
-        private static Dictionary<string, Dictionary<int, int>> _koppelSignaalCountPerFunc = new Dictionary<string, Dictionary<int, int>>();
-        private static Dictionary<string, bool> _koppelSignaalCountSet;
         private static Dictionary<string, List<CCOLKoppelSignaal>> _koppelSignalen;
 
         #endregion // Static Fields
 
         #region Static Methods
 
-        public static void AddKoppelSignaal(string koppeling, int order, string name, CCOLKoppelSignaalRichtingEnum richting)
-        {
-            var koppelingKey = koppeling + richting.ToString();
-            if (!_koppelSignaalCountPerFunc.ContainsKey(koppelingKey))
-            {
-                _koppelSignaalCountPerFunc.Add(koppelingKey, new Dictionary<int, int>());
-            }
-            if (!_koppelSignaalCountPerFunc[koppelingKey].ContainsKey(order))
-            {
-                _koppelSignaalCountPerFunc[koppelingKey].Add(order, 1);
-            }
-            if (!_koppelSignalen.ContainsKey(koppelingKey))
-            {
-                _koppelSignalen.Add(koppelingKey, new List<CCOLKoppelSignaal>());
-                _koppelSignaalCountSet.Add(koppelingKey, false);
-            }
-            _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = _koppelSignaalCountPerFunc[koppelingKey][order], Order = order, Name = name, Richting = richting });
-            ++_koppelSignaalCountPerFunc[koppelingKey][order];
-        }
-
-        public static void AddKoppelSignaal(string koppeling, int order, int count, string name, CCOLKoppelSignaalRichtingEnum richting)
+        public static void AddKoppelSignaal(string koppeling, int count, string name, KoppelSignaalRichtingEnum richting)
         {
             var koppelingKey = koppeling + richting.ToString();
             if (!_koppelSignalen.ContainsKey(koppelingKey))
             {
                 _koppelSignalen.Add(koppelingKey, new List<CCOLKoppelSignaal>());
-                _koppelSignaalCountSet.Add(koppelingKey, false);
             }
             else if (count != 0 && _koppelSignalen[koppelingKey].Any(x => x.Count == count))
             {
                 TLCGen.Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"" +
-                    $"{(richting == CCOLKoppelSignaalRichtingEnum.In ? "Ingangssignaal" : "Uitgangssignaal")} " +
+                    $"{(richting == KoppelSignaalRichtingEnum.In ? "Ingangssignaal" : "Uitgangssignaal")} " +
                        $"nummer {count} van koppeling {koppeling} wordt reeds elders gebruikt. Dit kan de juiste werking " +
                        $"van de regeling negatief beinvloeden.", 
                     "Koppelsignaal dubbel gebruikt", 
                     System.Windows.MessageBoxButton.OK);
             }
-            if (!_koppelSignaalCountPerFunc.ContainsKey(koppelingKey))
-            {
-                _koppelSignaalCountPerFunc.Add(koppelingKey, new Dictionary<int, int>());
-            }
-            if (!_koppelSignaalCountPerFunc[koppelingKey].ContainsKey(order))
-            {
-                _koppelSignaalCountPerFunc[koppelingKey].Add(order, 1);
-            }
             if (count == 0)
             {
-                count = _koppelSignaalCountPerFunc[koppelingKey][order];
-                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
+                // TODO msg!
             }
             else
             {
-                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting, CountSetManually = true });
+                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Name = name, Richting = richting });
             }
-            ++_koppelSignaalCountPerFunc[koppelingKey][order];
         }
 
-        public static int GetKoppelSignaalCount(string koppeling, ControllerModel c, string name, CCOLKoppelSignaalRichtingEnum richting)
+        public static int GetKoppelSignaalCount(string koppeling, string name, KoppelSignaalRichtingEnum richting)
         {
             var koppelingKey = koppeling + richting.ToString();
-            if (_koppelSignaalCountSet.ContainsKey(koppelingKey) && 
-                _koppelSignalen.ContainsKey(koppelingKey) && 
-                !_koppelSignaalCountSet[koppelingKey])
+            CCOLKoppelSignaal ks = null;
+            if (_koppelSignalen.ContainsKey(koppelingKey))
             {
-                _koppelSignalen[koppelingKey].Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
-                for (int i = 1; i <= _koppelSignalen[koppelingKey].Count; i++)
-                {
-                    if(!_koppelSignalen[koppelingKey][i - 1].CountSetManually)
-                        _koppelSignalen[koppelingKey][i - 1].CountAll = i;
-                    else
-                        _koppelSignalen[koppelingKey][i - 1].CountAll = _koppelSignalen[koppelingKey][i - 1].Count;
-                }
-                _koppelSignaalCountSet[koppelingKey] = true;
+                ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
             }
-            var ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
             if (ks == null) return 0;
-            var ct = ks.CountAll;
-            switch (ks.Richting)
-            {
-                case CCOLKoppelSignaalRichtingEnum.In:
-                    var kop = c.PTPData.PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == koppeling);
-                    //if (kop.StartIndexInkomendeKoppelSignalen > 1) ct += kop.StartIndexInkomendeKoppelSignalen - 1;
-                    break;
-                case CCOLKoppelSignaalRichtingEnum.Uit:
-                    var kop2 = c.PTPData.PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == koppeling);
-                    //if (kop2.StartIndexUitgaandeKoppelSignalen > 1) ct += kop2.StartIndexUitgaandeKoppelSignalen - 1;
-                    break;
-            }
-            return ct;
+            return ks.Count;
         }
 
         #endregion // Static Methods
@@ -114,8 +59,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static void Reset()
         {
-            _koppelSignaalCountPerFunc.Clear();
-            _koppelSignaalCountSet = new Dictionary<string, bool>();
             _koppelSignalen = new Dictionary<string, List<CCOLKoppelSignaal>>();
         }
 

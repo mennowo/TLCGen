@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -32,6 +33,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfgd;
         private string _tnlcvd;
         private string _tnlegd;
+        private string _hplact;
+        private string _hpeltegenh;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -67,6 +70,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
+        public override bool HasFunctionLocalVariables() => true;
+
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCSystemApplication:
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -75,6 +91,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 20;
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    return 90;
                 case CCOLCodeTypeEnum.RegCTop:
                     return 50;
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -82,10 +100,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
                 case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
-                    return 10;
+                    return 20;
                 default:
                     return 0;
             }
+        }
+
+        private string GetFaseReeks(ControllerModel c, string fc)
+        {
+            if (!c.Data.MultiModuleReeksen) return "";
+            var reeks = "";
+            var mlr = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc)));
+            if (mlr != null) reeks = "_" + mlr.Reeks;
+            return reeks;
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -107,12 +134,57 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCPreApplication:
+
+                    #region check de combinatie van de wtv met peloton koppelingen
+                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any())
+                    {
+                        var com = false;
+                        foreach (var sg in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            foreach (var sgpl in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                            {
+                                if (TLCGenIntegrityChecker.IsFasenConflicting(c, sg.Naam, sgpl.GekoppeldeSignaalGroep))
+                                {
+                                    if (!com)
+                                    {
+                                        sb.AppendLine($"{ts}/* tegenhouden aansturing RW voor pelotonkoppelingen bij minimaal aantal leds */");
+                                        com = true;
+                                    }
+                                    sb.AppendLine($"{ts}{ts}if (MM[{_mpf}{_mwtvm}{sg.Naam}] && MM[{_mpf}{_mwtvm}{sg.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) IH[{_hpf}{_hpeltegenh}{sgpl.KoppelingNaam}] = TRUE;");
+                                }
+                            }
+                        }
+                    }
+                    #endregion
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCTop:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("/* tijden t.b.v. wachttijdvoorspellers */");
                     sb.AppendLine("/* ----------------------------------- */");
-                    sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
-                    sb.AppendLine("mulv rr_twacht[FCMAX]; /* halteren wachttijd */");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"mulv t_wacht_{r.Reeks}[FCMAX]; /* berekende wachttijd {r.Reeks} */");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
+                    }
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach(var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"mulv rr_twacht_{r.Reeks}[FCMAX]; /* halteren wachttijd {r.Reeks} */");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine("mulv rr_twacht[FCMAX]; /* halteren wachttijd */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
@@ -201,7 +273,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                         {
-                            sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, t_wacht);");
+                            sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, t_wacht_{r.Reeks});");
                         }
                     }
                     sb.AppendLine();
@@ -211,7 +283,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* bereken de alternatieve wachttijd van de richtingen met wachttijdvoorspeller */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}max_wachttijd_alternatief({_fcpf}{fc.Naam}, t_wacht);");
+                        sb.AppendLine($"{ts}max_wachttijd_alternatief({_fcpf}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)});");
+                    }
+                    sb.AppendLine();
+                    #endregion
+
+                    #region Wachttijdvoorspeller aansturing tijdens halfstar regelen
+                    sb.AppendLine($"{ts}/* Berekening wachttijd tijdens halfstar regelen */");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht_{r.Reeks}, {_hpf}{_hplact}, PL);");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
                     }
                     sb.AppendLine();
                     #endregion
@@ -230,16 +318,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             foreach (var gs in gss)
                             {
-                                sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht);");
+                                sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht{GetFaseReeks(c, fc.Naam)});");
                             }
                         }
                     }
-                    sb.AppendLine();
-                    #endregion
-
-                    #region Eventuele correctie op berekende wachttijd door gebruiker
-                    sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
-                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
                     sb.AppendLine();
                     #endregion
 
@@ -253,9 +335,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                         {
-                            sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht);");
+                            sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht_{r.Reeks});");
                         }
                     }
+                    sb.AppendLine();
+                    #endregion
+
+                    #region check de combinatie van de wtv met peloton koppelingen
+                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any())
+                    {
+                        var com = false;
+                        foreach (var sg in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            foreach (var sgpl in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                            {
+                                if (TLCGenIntegrityChecker.IsFasenConflicting(c, sg.Naam, sgpl.GekoppeldeSignaalGroep))
+                                {
+                                    if (!com)
+                                    {
+                                        sb.AppendLine($"{ts}/* halteren wachttijdvoorspellers tijdens RW BIT14 bij conflicten (peloton koppeling) */");
+                                        com = true;
+                                    }
+                                    sb.AppendLine($"{ts}if (RW[{_fcpf}{sgpl.GekoppeldeSignaalGroep}] & BIT14) rr_twacht{GetFaseReeks(c, sg.Naam)}[{_fcpf}{sg.Naam}] = TRUE;");
+                                }
+                            }
+                        }
+                        if (com) sb.AppendLine();
+                    }
+                    #endregion
+
+                    #region Eventuele correctie op berekende wachttijd door gebruiker
+                    sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
+                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
                     sb.AppendLine();
                     #endregion
 
@@ -270,11 +381,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht[{_fcpf}{fc.Naam}] = 0;");
+                        sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
                     }
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{tts}if (rr_twacht[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                        sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
                     }
                     if (c.Data.FixatieMogelijk)
                     {
@@ -285,7 +396,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* laatste ledje laten knipperen bij ov/hd-ingreep of fixatie */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.Append($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht[{_fcpf}{fc.Naam}], ");
+                        sb.Append($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], ");
                         if (c.Data.FixatieData.FixatieMogelijk) sb.Append($"{_ispf}{_isfix}");
                         else sb.Append("NG");
                         sb.AppendLine($");");
@@ -301,17 +412,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
+                        var reeks = GetFaseReeks(c, fc.Naam);
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
                         if (c.Data.WachttijdvoorspellerAansturenBus)
                         {
                             if (!c.Data.WachttijdvoorspellerAansturenBusHD)
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
                             }
                         }
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
@@ -380,6 +492,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _hpeltegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("hpeltegenh");
 
             return base.SetSettings(settings);
         }

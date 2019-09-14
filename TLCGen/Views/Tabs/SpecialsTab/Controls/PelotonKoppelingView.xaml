@@ -14,6 +14,8 @@
         <Grid Visibility="{Binding Path=IsUitgaand,Mode=OneWay}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -22,8 +24,11 @@
             </Grid.ColumnDefinitions>
             <Label Content="PTP koppeling" Grid.Row="0" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                      IsEnabled="{Binding Path=IsNotIntern}"
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="0" />
+            <Label Content="Intern" Grid.Row="1" />
+            <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
+            <Grid Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -32,15 +37,7 @@
                 <Label Content="Detectoren t.b.v. uitgaande koppeling" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector,UpdateSourceTrigger=PropertyChanged}">
-                    <!--<DataGrid.RowHeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                          AncestorType={x:Type DataGridRow}}, 
-                                          Path=Item.DetectorNaam}"/>
-                        </DataTemplate>
-                    </DataGrid.RowHeaderTemplate>-->
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />-->
                         <DataGridTextColumn Header="Detector" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -58,10 +55,16 @@
                                      SelectedItemToAdd="{Binding Path=UitgaandeDetectorenManager.SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
-        <ag:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="34">
+        <ag:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="14">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" />
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
+            <Label Content="Intern" Grid.Row="1" />
+            <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
+            <Label Content="Gerelateerde koppeling" Grid.Row="2" />
+            <ComboBox ItemsSource="{Binding Path=DataContext.InterneKoppelingenUit,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                      IsEnabled="{Binding Path=IsInternIn}"
+                      SelectedValue="{Binding Path=GerelateerdePelotonKoppeling}" Margin="2" Grid.Column="1" Grid.Row="2" />
             <Label Content="Meetperiode" />
             <TextBox Text="{Binding Path=Meetperiode,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Maximale hiaattijd" />
@@ -86,8 +89,6 @@
             <ComboBox IsEnabled="{Binding Path=HasRetourWachtgroen}" 
                       Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                 SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
-            <Label Content="Ingangssignaal FG #" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Grid Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -99,7 +100,6 @@
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Detector naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Ingangsignaal #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
@@ -109,7 +109,13 @@
         <ag:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="10">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" />
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
+            <Label Content="Intern" Grid.Row="1" />
+            <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
+            <Label Content="Gerelateerde koppeling" Grid.Row="2" />
+            <ComboBox ItemsSource="{Binding Path=DataContext.InterneKoppelingenUit,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                      IsEnabled="{Binding Path=IsInternIn}"
+                      SelectedValue="{Binding Path=GerelateerdePelotonKoppeling}" Margin="2" Grid.Column="1" Grid.Row="2" />
             <Label Content="Verschuiving (sec.)" />
             <TextBox Text="{Binding Path=Verschuiving,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Min. duur peloton melding (sec.)" />
@@ -119,16 +125,12 @@
                       SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" />
             <Label Content="Naloop tijd (sec.)" />
             <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <Label Content="Max. tijd toep. RW" />
-            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Toepassen aanvraag" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                       SelectedItem="{Binding Path=ToepassenAanvraag}" />
             <Label Content="Toepassen MK" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                       SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
-            <Label Content="Ingangssignaal peloton #" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         </ag:AutoGrid>
         <Border Grid.Row="0" Background="LightGray">
             <Border.Style>

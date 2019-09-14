@@ -70,5 +70,6 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
 extern mulv FC_type[];
 extern mulv DVG[];
 extern int Knipper_1Hz;
+extern int Knipper_2Hz;
 
 #endif

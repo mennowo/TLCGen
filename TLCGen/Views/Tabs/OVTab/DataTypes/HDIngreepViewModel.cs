@@ -139,6 +139,49 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool InmeldingOokDoorToepassen
+        {
+            get { return _HDIngreep.InmeldingOokDoorToepassen; }
+            set
+            {
+                _HDIngreep.InmeldingOokDoorToepassen = value;
+                if (value)
+                {
+                    if(InmeldingOokDoorFase == 0)
+                    {
+                        if (int.TryParse(_HDIngreep.FaseCyclus, out int i))
+                        {
+                            if (_HDIngreep.FaseCyclus.EndsWith("1") || _HDIngreep.FaseCyclus.EndsWith("4") || _HDIngreep.FaseCyclus.EndsWith("7") || _HDIngreep.FaseCyclus.EndsWith("10"))
+                            {
+                                InmeldingOokDoorFase = i + 1;
+                            }
+                            else if (_HDIngreep.FaseCyclus.EndsWith("3") || _HDIngreep.FaseCyclus.EndsWith("6") || _HDIngreep.FaseCyclus.EndsWith("9") || _HDIngreep.FaseCyclus.EndsWith("12"))
+                            {
+                                InmeldingOokDoorFase = i - 1;
+                            }
+                            else
+                            {
+                                InmeldingOokDoorFase = i;
+                            }
+                        }
+                    }
+                }
+                RaisePropertyChanged<object>(nameof(InmeldingOokDoorToepassen), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public int InmeldingOokDoorFase
+        {
+            get { return _HDIngreep.InmeldingOokDoorFase; }
+            set
+            {
+                _HDIngreep.InmeldingOokDoorFase = value;
+                RaisePropertyChanged<object>(nameof(InmeldingOokDoorFase), broadcast: true);
+            }
+        }
+
         [Category("Tijden")]
         [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd

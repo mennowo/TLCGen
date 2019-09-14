@@ -606,11 +606,12 @@ void OVHalfstarOnderMaximum(void)
 					/* ExtraGroenNaTXD gebied */
 					iMaxResterendeGroenTijd = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
 				}
+				/* TODO herzien
 				else
-				{
+				{*/
 					/* bijzondere realisatie */
-					iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
-				}
+					/* iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
+				}*/
 			}
 			else // !G[fc]
 			{
@@ -653,6 +654,47 @@ void OVHalfstarStartGroenMomenten(void)
 	}
 }
 
+void OVHalfstarTegenhouden(void)
+{
+	/* placeholder for future use */
+	/* if (FALSE == TRUE) */
+	if (IH[hplact])
+	{
+		int ov, fc;
+		boolv magUitstellen;
+
+		for (fc = 0; fc < FCMAX; ++fc)
+		{
+			RR[fc] &= ~OV_RR_BIT;
+		}
+
+		for (ov = 0; ov < ovOVMAX; ++ov)
+		{
+			if (iPrioriteit[ov] && iPrioriteitsOpties[ov] >= poPLGroenVastHoudenNaTXD)
+			{
+				int i, k;
+				fc = iFC_OVix[ov];
+				magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
+				for (i = 0; i < GKFC_MAX[fc]; ++i)
+				{
+#ifdef CCOLTIG
+					k = KF_pointer[fc][i];
+#else
+					k = TO_pointer[fc][i];
+#endif
+					if (magUitstellen)
+					{
+						if (iStartGroen[ov] <= iRealisatieTijd[fc][k])
+						{
+							RR[k] |= OV_RR_BIT;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void OVHalfstarAfkappen(void)
 {
 	if (IH[hplact])
@@ -682,6 +724,7 @@ void OVHalfstarGroenVasthouden(void)
 			magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
 			// Reset OV_YV_BIT, will determine YV according to signalplan structure
 			YV[fc] &= ~OV_YV_BIT;
+			YM[fc] &= ~OV_YM_BIT;
 
 			if (iPrioriteit[ov] &&
 				(iPrioriteitsOpties[ov] & poGroenVastHouden) || (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)) {

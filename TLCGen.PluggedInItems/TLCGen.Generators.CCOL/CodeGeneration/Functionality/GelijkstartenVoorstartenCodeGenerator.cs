@@ -140,13 +140,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (gs.DeelConflict)
                             {
-                                sb.AppendLine($"{ts}FictiefOntruimen((bool) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, BIT3);");
-                                sb.AppendLine($"{ts}FictiefOntruimen((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, BIT3);");
+                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, BIT3);");
+                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, BIT3);");
                             }
                         }
                         foreach (var vs in c.InterSignaalGroep.Voorstarten)
                         {
-                            sb.AppendLine($"{ts}FictiefOntruimen((bool) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, BIT3);");
+                            sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, BIT3);");
                         }
                         sb.AppendLine();
 
@@ -156,13 +156,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (gs.DeelConflict)
                             {
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR((bool) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan});");
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar});");
+                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan});");
+                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar});");
                             }
                         }
                         foreach (var vs in c.InterSignaalGroep.Voorstarten)
                         {
-                            sb.AppendLine($"{ts}FictiefOntruimen_correctionKR((bool) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan});");
+                            sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan});");
                         }
                         sb.AppendLine();
                     }
@@ -173,16 +173,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if(gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR(({c.GetBoolV()}) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
                         }
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}VoorStarten_correctionKR((bool) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar});");
+                        sb.AppendLine($"{ts}VoorStarten_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar});");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Gelijk Starten */");
@@ -191,11 +191,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}GelijkStarten((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
+                            sb.AppendLine($"{ts}GelijkStarten(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, ({c.GetBoolV()}) FALSE);");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}GelijkStarten((bool) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
+                            sb.AppendLine($"{ts}GelijkStarten(({c.GetBoolV()}) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, ({c.GetBoolV()}) FALSE);");
                         }
                     }
                     sb.AppendLine();
@@ -203,7 +203,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ----------- */");
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}VoorStarten((bool) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar}, BIT3);");
+                        sb.AppendLine($"{ts}VoorStarten(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar}, BIT3);");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}realisation_timers(BIT4);");
@@ -214,12 +214,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, (bool) (RA[{_fcpf}{vs.FaseNaar}] && (PR[{_fcpf}{vs.FaseNaar}] || AR[{_fcpf}{vs.FaseNaar}]) && A[{_fcpf}{vs.FaseVan}] && R[{_fcpf}{vs.FaseVan}] && !TRG[{_fcpf}{vs.FaseVan}] && !kcv({_fcpf}{vs.FaseVan})));");
+                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{vs.FaseNaar}] && (PR[{_fcpf}{vs.FaseNaar}] || AR[{_fcpf}{vs.FaseNaar}]) && A[{_fcpf}{vs.FaseVan}] && R[{_fcpf}{vs.FaseVan}] && !TRG[{_fcpf}{vs.FaseVan}] && !kcv({_fcpf}{vs.FaseVan})));");
                     }
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, (bool) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}]) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
-                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, (bool) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}]) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
+                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}]) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
+                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}]) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
                     }
                     return sb.ToString();
 

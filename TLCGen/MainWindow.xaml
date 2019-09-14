@@ -44,6 +44,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -102,7 +103,8 @@
             <MenuItem Header="_Plugins" ItemsSource="{Binding Path=PluginMenuItems}" Visibility="{Binding Path=IsPluginMenuVisible,Converter={StaticResource Bool2VisConv}}">
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" />
+                <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" InputGestureText="F1" />
+                <MenuItem Header="_Versie informatie" Command="{Binding Path=ShowVersionInfoCommand}" />
             </MenuItem>
         </Menu>
         <ToolBarTray Grid.Row="1" x:Name="MainToolBarTray">
@@ -128,9 +130,17 @@
                 <ContentPresenter Content="{Binding Path=SelectedGenerator.GeneratorView}" />
             </ToolBar>
         </ToolBarTray>
-        <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}">
+        <TextBlock Grid.Row="2" Padding="5" Visibility="{Binding Path=ShowAlertMessage,Converter={StaticResource Bool2VisConv}}" Background="LightGoldenrodYellow">
+            <Run Foreground="Red" FontWeight="Bold">Let op!</Run>
+            Deze regeling is gemaakt met een eerdere versie van TLCGen.<LineBreak/>
+            Versie TLCGen: <Run Text="{Binding Path=CurrentVersion,Mode=OneWay}" />, versie regeling: <Run Text="{Binding Path=ControllerVersion,Mode=OneWay}" /><LineBreak />
+            Klik 
+            <Hyperlink Command="{Binding Path=ShowVersionInfoCommand}">hier</Hyperlink> voor informatie over aandachtspunten. 
+            Klik <Hyperlink Command="{Binding Path=HideAlertMessageCommand}">hier</Hyperlink> om deze melding te verbergen.
+        </TextBlock>
+        <Grid Grid.Row="3" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}">
             <vw:ControllerView DataContext="{Binding Path=ControllerVM}" />
         </Grid>
-        <vw:TLCGenStatusBar Grid.Row="3" DataContext="{Binding Path=StatusBarVM}" />
+        <vw:TLCGenStatusBar Grid.Row="4" DataContext="{Binding Path=StatusBarVM}" />
     </Grid>
 </Window>

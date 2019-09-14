@@ -37,7 +37,10 @@ namespace TLCGen.ViewModels
             get { return _Controller?.Data?.Naam; }
             set
             {
-                _Controller.Data.Naam = value;
+                if (Helpers.NameSyntaxChecker.IsValidFileName(value))
+                {
+                    _Controller.Data.Naam = value;
+                }
                 RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }

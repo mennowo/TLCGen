@@ -25,6 +25,8 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string OpticomRelatedInput { get; set; }
         public bool Sirene { get; set; }
+        public bool InmeldingOokDoorToepassen { get; set; }
+        public int InmeldingOokDoorFase { get; set; }
 
         public int RijTijdOngehinderd { get; set; }
         public int RijTijdBeperktgehinderd { get; set; }

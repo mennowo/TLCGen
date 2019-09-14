@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -22,6 +23,7 @@ namespace TLCGen.ViewModels
 
         private RelayCommand _AddFileIngreepCommand;
         private RelayCommand _RemoveFileIngreepCommand;
+        private ObservableCollection<string> _GroentijdenSets;
 
         #endregion // Fields
 
@@ -38,6 +40,18 @@ namespace TLCGen.ViewModels
                     _SelectedFileIngreep.OnSelected(_ControllerFasen);
                 }
                 RaisePropertyChanged("SelectedFileIngreep");
+            }
+        }
+
+        public ObservableCollection<string> GroentijdenSets
+        {
+            get
+            {
+                if (_GroentijdenSets == null)
+                {
+                    _GroentijdenSets = new ObservableCollection<string>();
+                }
+                return _GroentijdenSets;
             }
         }
 
@@ -137,10 +151,25 @@ namespace TLCGen.ViewModels
             {
                 _ControllerFasen.Add(fcm.Naam);
             }
+
+            var v = "";
             
-            if(_SelectedFileIngreep != null)
+            if (_SelectedFileIngreep != null)
             {
                 _SelectedFileIngreep.OnSelected(_ControllerFasen);
+                v = SelectedFileIngreep.AlternatieveGroentijdenSet;
+            }
+
+            GroentijdenSets.Clear();
+            GroentijdenSets.Add("NG");
+            foreach (var gsm in _Controller.GroentijdenSets)
+            {
+                GroentijdenSets.Add(gsm.Naam);
+            }
+
+            if (_SelectedFileIngreep != null && _SelectedFileIngreep.AlternatieveGroentijdenSet != v)
+            {
+                _SelectedFileIngreep.AlternatieveGroentijdenSet = v;
             }
         }
 

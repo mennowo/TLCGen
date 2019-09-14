@@ -4,13 +4,14 @@ using System.Windows;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class PelotonKoppelingViewModel : ViewModelBase
+    public class PelotonKoppelingViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
@@ -25,14 +26,18 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingModel PelotonKoppeling { get; }
 
-        public string KruisingNaam
+        public string KoppelingNaam
         {
-            get { return PelotonKoppeling.KruisingNaam; }
+            get { return PelotonKoppeling.KoppelingNaam; }
             set
             {
-                if (NameSyntaxChecker.IsValidName(value))
+                if (NameSyntaxChecker.IsValidCName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
                 {
-                    PelotonKoppeling.KruisingNaam = value;
+                    var oldname = PelotonKoppeling.KoppelingNaam;
+                    PelotonKoppeling.KoppelingNaam = value;
+
+                    // Notify the messenger
+                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
                     RaisePropertyChanged<object>(broadcast: true);
                 }
                 else
@@ -43,8 +48,8 @@ namespace TLCGen.ViewModels
         }
 
         public Visibility IsInkomend => Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsInkomendDenHaag => Type == PelotonKoppelingType.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsInkomendRHDHV => Type == PelotonKoppelingType.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendDenHaag => Type == PelotonKoppelingTypeEnum.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendRHDHV => Type == PelotonKoppelingTypeEnum.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsUitgaand => Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
 
         public string GekoppeldeSignaalGroepNull
@@ -148,17 +153,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-
-        public int IngangsSignaalFG
-        {
-            get { return PelotonKoppeling.IngangsSignaalFG; }
-            set
-            {
-                PelotonKoppeling.IngangsSignaalFG = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
+        
         public NooitAltijdAanUitEnum ToepassenAanvraag
         {
             get { return PelotonKoppeling.ToepassenAanvraag; }
@@ -191,6 +186,41 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool IsIntern
+        {
+            get => PelotonKoppeling.IsIntern;
+            set
+            {
+                PelotonKoppeling.IsIntern = value;
+                if (value)
+                {
+                    PelotonKoppeling.PTPKruising = "INTERN";
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(PTPKruising));
+                RaisePropertyChanged(nameof(IsNotIntern));
+                RaisePropertyChanged(nameof(IsInternIn));
+                RaisePropertyChanged(nameof(IsInternUit));
+            }
+        }
+
+        public bool IsInternIn => IsIntern && Richting == PelotonKoppelingRichtingEnum.Inkomend;
+        public bool IsInternUit => IsIntern && Richting == PelotonKoppelingRichtingEnum.Uitgaand;
+        public bool IsNotIntern => !IsIntern;
+
+        public string GerelateerdePelotonKoppeling
+        {
+            get => PelotonKoppeling.GerelateerdePelotonKoppeling;
+            set
+            {
+                if (value != null)
+                {
+                    PelotonKoppeling.GerelateerdePelotonKoppeling = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+            }
+        }
+
         public string PTPKruising
         {
             get { return PelotonKoppeling.PTPKruising; }
@@ -200,6 +230,7 @@ namespace TLCGen.ViewModels
                 {
                     PelotonKoppeling.PTPKruising = value;
                     RaisePropertyChanged<object>(broadcast: true);
+                    if (value == "INTERN") IsIntern = true;
                 }
             }
         }
@@ -236,7 +267,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public PelotonKoppelingType Type
+        public PelotonKoppelingTypeEnum Type
         {
             get { return PelotonKoppeling.Type; }
             set
@@ -275,7 +306,7 @@ namespace TLCGen.ViewModels
                 {
                     var lre = new PelotonKoppelingDetectorViewModel(new PelotonKoppelingDetectorModel()
                     {
-                        DetectorNaam = x, KoppelSignaal = 0
+                        DetectorNaam = x
                     });
                     return lre;
                 },
@@ -333,6 +364,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Commands
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return PelotonKoppeling;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

@@ -1,6 +1,7 @@
 #include "extra_func.h"
 
 int Knipper_1Hz = 0;
+int Knipper_2Hz = 0;
 
 /** ------------------------------------------------------------------------------
     MAXIMAAL MEEVERLENGEN
@@ -680,7 +681,8 @@ void FileMeldingV2(count det,     /* filelus                                */
 
 void UpdateKnipperSignalen()
 {
-    Knipper_1Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 10) > 4); /* 1 Hz */
+	Knipper_1Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 10) > 4); /* 1 Hz */
+	Knipper_2Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 5) > 2); /* 2 Hz */
 }
 
 bool hf_wsg_nl(void)
@@ -1036,6 +1038,7 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 			{
 				PRML_temp[ml][fc] = FALSE;
 				PRML_x[fc] = TRUE;
+				BL[fc] |= BIT15;
 				continue;
 			}
 			/* ML toedeling */
@@ -1090,6 +1093,15 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 						}
 					}
 				}
+			}
+		}
+
+		/* reset huidige modulemolen */
+		for (fc = fcfirst; fc < fclast; ++fc)
+		{
+			for (ml = 0; ml < ml_max; ++ml)
+			{
+				prml[ml][fc] = FALSE;
 			}
 		}
 

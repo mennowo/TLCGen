@@ -10,6 +10,7 @@ namespace TLCGen.Plugins.RIS.Models
     {
         public bool RISToepassen { get; set; }
         public bool HasMultipleSystemITF { get; set; }
+        public bool NietCheckenOpSignaalgroep { get; set; }
         public string SystemITF { get; set; }
         public List<RISSystemITFModel> MultiSystemITF { get; set; }
 

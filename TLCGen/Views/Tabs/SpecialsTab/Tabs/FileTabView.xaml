@@ -18,7 +18,7 @@
             <DataGrid ItemsSource="{Binding Path=FileIngrepen}" SelectedItem="{Binding Path=SelectedFileIngreep}" DockPanel.Dock="Bottom"
                       CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="2">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Header="Naam" Width="*" IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" Width="*" IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

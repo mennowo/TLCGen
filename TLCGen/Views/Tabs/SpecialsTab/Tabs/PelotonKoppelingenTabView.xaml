@@ -11,7 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="190" />
+            <ColumnDefinition Width="270" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
                       CanUserDeleteRows="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=KruisingNaam,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridTextColumn Header="Koppeling naam" Binding="{Binding Path=KoppelingNaam}" Width="*" />
                     <DataGridComboBoxColumn
                         Header="Richting" 
                         SelectedItemBinding="{Binding Path=Richting,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -36,8 +36,8 @@
                     <DataGridComboBoxColumn
                         Header="Type" 
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingType}}}" />
-                    <DataGridTemplateColumn Header="Fase" Width="Auto" MinWidth="60">
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingTypeEnum}}}" />
+                    <DataGridTemplateColumn Header="Fase" Width="Auto" MinWidth="35">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
@@ -68,6 +68,8 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <Button Content="Toevoegen" Command="{Binding AddPelotonKoppelingCommand}" Margin="2" />
                 <Button Content="Verwijderen" Command="{Binding RemovePelotonKoppelingCommand}" Margin="2" />
+                <Button Content="Omhoog" Command="{Binding MoveUpPelotonKoppelingCommand}" Margin="2" />
+                <Button Content="Omlaag" Command="{Binding MoveDownPelotonKoppelingCommand}" Margin="2" />
             </StackPanel>
         </Grid>
         <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />

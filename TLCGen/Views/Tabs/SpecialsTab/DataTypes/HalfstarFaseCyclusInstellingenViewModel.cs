@@ -5,11 +5,11 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HalfstarFaseCyclusAlternatiefViewModel : ViewModelBase, IViewModelWithItem, IComparable<HalfstarFaseCyclusAlternatiefViewModel>, IComparable
+    public class HalfstarFaseCyclusInstellingenViewModel : ViewModelBase, IViewModelWithItem, IComparable<HalfstarFaseCyclusInstellingenViewModel>, IComparable
     {
         #region Properties
 
-        public HalfstarFaseCyclusAlternatiefModel Model { get; set; }
+        public HalfstarFaseCyclusInstellingenModel Model { get; set; }
 
         public string FaseCyclus => Model.FaseCyclus;
 
@@ -33,12 +33,22 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int AlternatieveGroenTijd
+        public bool AanvraagOpTxB
         {
-            get => Model.AlternatieveGroenTijd;
+            get => Model.AanvraagOpTxB;
             set
             {
-                Model.AlternatieveGroenTijd = value;
+                Model.AanvraagOpTxB = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool PrivilegePeriodeOpzetten
+        {
+            get => Model.PrivilegePeriodeOpzetten;
+            set
+            {
+                Model.PrivilegePeriodeOpzetten = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -49,19 +59,19 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            return FaseCyclus.CompareTo(((HalfstarFaseCyclusAlternatiefViewModel)obj).FaseCyclus);
+            return FaseCyclus.CompareTo(((HalfstarFaseCyclusInstellingenViewModel)obj).FaseCyclus);
         }
 
         #endregion // IComparable
 
         #region IComparable<HalfstarFaseCyclusAlternatiefViewModel>
 
-        public int CompareTo(HalfstarFaseCyclusAlternatiefViewModel other)
+        public int CompareTo(HalfstarFaseCyclusInstellingenViewModel other)
         {
             return FaseCyclus.CompareTo(other.FaseCyclus);
         }
 
-        #endregion // IComparable<HalfstarFaseCyclusAlternatiefViewModel>
+        #endregion // IComparable<HalfstarFaseCyclusInstellingenViewModel>
 
         #region IViewModelWithItem
 
@@ -73,7 +83,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public HalfstarFaseCyclusAlternatiefViewModel(HalfstarFaseCyclusAlternatiefModel model)
+        public HalfstarFaseCyclusInstellingenViewModel(HalfstarFaseCyclusInstellingenModel model)
         {
             Model = model;
         }

@@ -19,6 +19,7 @@ void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stip
 
 #ifdef OV_CHECK_WAGENNMR
 void WDNST_cleanup(void);
-bool WDNST_check(count fc);
+bool WDNST_check_in(count fc);
+bool WDNST_check_uit(count fc);
 #endif
 #endif

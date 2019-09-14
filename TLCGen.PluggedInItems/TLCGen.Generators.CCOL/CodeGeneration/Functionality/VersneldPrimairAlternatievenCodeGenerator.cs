@@ -241,7 +241,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     foreach (var r in molens)
                     {
-                        sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, (bool)PFPR[fc]);");
+                        sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, ({c.GetBoolV()})PFPR[fc]);");
                     }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
@@ -430,11 +430,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         yes = false;
                         foreach (var fcm in c.Fasen)
                         {
-                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                            foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                             {
-                                var fm = c.FileIngrepen.FirstOrDefault(
-                                    x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam && c.ModuleMolen.FasenModuleData.Any(x3 => x3.FaseCyclus == x2.FaseCyclus)));
-                                if (fm != null)
+                                if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
                                 {
                                     if (!yes)
                                     {
@@ -523,7 +521,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("".PadLeft(pre));
                                         }
                                         ++i;
-                                        sb.Append($"(bool) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
+                                        sb.Append($"({c.GetBoolV()}) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
                                     }
                                     sb.AppendLine(");");
                                 }

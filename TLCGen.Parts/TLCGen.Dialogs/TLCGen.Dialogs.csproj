@@ -51,8 +51,17 @@
     <Compile Include="AddNewTemplateFileWindow.xaml.cs">
       <DependentUpon>AddNewTemplateFileWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InputBoxWindow.xaml.cs">
+      <DependentUpon>InputBoxWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ImportGroentijdenDataWindow.xaml.cs">
+      <DependentUpon>ImportGroentijdenDataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImportDplCWindow.xaml.cs">
       <DependentUpon>ImportDplCWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TLCImportSignalPlannenWindow.xaml.cs">
+      <DependentUpon>TLCImportSignalPlannenWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ImportManySignalPlanWindow.xaml.cs">
       <DependentUpon>ImportManySignalPlanWindow.xaml</DependentUpon>
@@ -80,15 +89,30 @@
     <Compile Include="TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VersionInfoWindow.xaml.cs">
+      <DependentUpon>VersionInfoWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="AddNewTemplateFileWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="InputBoxWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ImportGroentijdenDataWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ImportDplCWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TLCImportSignalPlannenWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ImportManySignalPlanWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +145,10 @@
     <Page Include="TLCGenSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="VersionInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

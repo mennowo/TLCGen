@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
             get { return _FileIngreep.Naam; }
             set
             {
-	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
 	            {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.FileIngreep, value))
                     {
@@ -185,6 +185,57 @@ namespace TLCGen.ViewModels
                     }
                 }
                 RaisePropertyChanged<object>("EerlijkDoseren", broadcast: true);
+            }
+        }
+
+        public NooitAltijdAanUitEnum ToepassenDoseren
+        {
+            get => _FileIngreep.ToepassenDoseren;
+            set
+            {
+                _FileIngreep.ToepassenDoseren = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasToepassenDoseren));
+            }
+        }
+
+        public bool HasToepassenDoseren => ToepassenDoseren != NooitAltijdAanUitEnum.Nooit;
+
+        public NooitAltijdAanUitEnum ToepassenAlternatieveGroentijdenSet
+        {
+            get => _FileIngreep.ToepassenAlternatieveGroentijdenSet;
+            set
+            {
+                _FileIngreep.ToepassenAlternatieveGroentijdenSet = value;
+                if(value != NooitAltijdAanUitEnum.Nooit && string.IsNullOrWhiteSpace(_FileIngreep.AlternatieveGroentijdenSet))
+                {
+                    _FileIngreep.AlternatieveGroentijdenSet = "NG";
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasToepassenAlternatieveGroentijdenSet));
+            }
+        }
+
+        public bool HasToepassenAlternatieveGroentijdenSet => ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit;
+
+        public string AlternatieveGroentijdenSet
+        {
+            get => _FileIngreep.AlternatieveGroentijdenSet;
+            set
+            {
+                _FileIngreep.AlternatieveGroentijdenSet = value;
+                if (_FileIngreep.AlternatieveGroentijdenSet == null) _FileIngreep.AlternatieveGroentijdenSet = "NG";
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public FileMetingLocatieEnum FileMetingLocatie
+        {
+            get => _FileIngreep.FileMetingLocatie;
+            set
+            {
+                _FileIngreep.FileMetingLocatie = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 

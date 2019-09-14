@@ -7,6 +7,7 @@
 #define   OV_RW_BIT      BIT6
 #define   OV_RR_BIT      BIT6
 #define   OV_YV_BIT      BIT6
+#define   OV_YM_BIT      BIT6
 #define   OV_MK_BIT      BIT6
 #define   OV_PP_BIT      BIT6
 #define  OV_PAR_BIT      BIT6
@@ -74,33 +75,33 @@ void AfhandelingOV(void);
 int BepaalPrioriteitsOpties(int prm_prio);
 void OVInit(void);
 void OVInmeldenID(int ov,
-                  int iInmelding,
-                  int iPN,         /* prioriteitsniveau       */
-                  int iPO,         /* prioriteitsopties       */
-                  int iRT,         /* rijtimer                */
-                  int iGBT,        /* groenbewakingstimer     */
-                  int iID);        /* identificatie inmelding */
+	int iInmelding,
+	int iPN,         /* prioriteitsniveau       */
+	int iPO,         /* prioriteitsopties       */
+	int iRT,         /* rijtimer                */
+	int iGBT,        /* groenbewakingstimer     */
+	int iID);        /* identificatie inmelding */
 void OVInmelden(int ov,
-                int iInmelding,
-                int iPN,         /* prioriteitsniveau   */
-                int iPO,         /* prioriteitsopties   */
-                int iRT,         /* rijtimer            */
-                int iGBT);       /* groenbewakingstimer */
+	int iInmelding,
+	int iPN,         /* prioriteitsniveau   */
+	int iPO,         /* prioriteitsopties   */
+	int iRT,         /* rijtimer            */
+	int iGBT);       /* groenbewakingstimer */
 void OVUitmelden(int ov,
-                 int iUitmelding);
+	int iUitmelding);
 void OVUitmeldenIndex(int ov,
-                      int inm,
-                      int iUitmelding,
-                      bool bGeforceerd);
+	int inm,
+	int iUitmelding,
+	bool bGeforceerd);
 void OVUitmeldenID(int ov,
-                   int iUitmelding,
-                   int iID);
+	int iUitmelding,
+	int iID);
 int OVAantalInmeldingenID(int ov,
-                          int iID);
+	int iID);
 void OVRijTijdScenario(int ov,
-                       int dkop,
-                       int dlang,
-                       int tbezet);
+	int dkop,
+	int dlang,
+	int tbezet);
 void OVCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
 void OVCcol(void);
 void KonfliktTijden(void);
@@ -193,6 +194,8 @@ extern int iRTSGehinderd[];
 extern int iSelDetFoutNaGB[];
 extern int iSelDetFout[];
 extern int iAantalInmeldingen[];
+extern int iXPrio[];
+
 extern int *iRealisatieTijd[];
 extern int *iInPrioriteitsNiveau[];
 extern int *iInPrioriteitsOpties[];

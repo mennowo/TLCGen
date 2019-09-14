@@ -8,6 +8,20 @@ using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
+
+    public static class ControllerExtensions
+    {
+        public static string GetBoolV(this ControllerModel c)
+        {
+            return c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL100 ? "boolv" : "bool";
+        }
+
+        public static string GetVaBoolV(this ControllerModel c)
+        {
+            return c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL100 ? "va_boolv" : "va_bool";
+        }
+    }
+
     public abstract class CCOLCodePieceGeneratorBase : ICCOLCodePieceGenerator
     {
         protected string _fcpf;
@@ -20,6 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         protected string _ctpf;
         protected string _schpf;
         protected string _prmpf;
+        protected string _bool;
 
         protected string _BITxnl = "BIT8";
 

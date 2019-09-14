@@ -127,6 +127,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (!c.Data.GenererenDuurtestCode) return "";
+                    sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
+                    sb.AppendLine($"{ts}{ts}for (int i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}if (TFB_timer[i] + 3 > PRM[prmfb])");
+                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}stuffkey(F5KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}#endif");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     if (!c.Data.GenererenDuurtestCode) return "";
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");

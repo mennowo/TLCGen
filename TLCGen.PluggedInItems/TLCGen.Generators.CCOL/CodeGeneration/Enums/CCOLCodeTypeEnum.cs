@@ -3,6 +3,7 @@
     public enum CCOLCodeTypeEnum
     {
 		// REG
+        RegCBeforeIncludes,
         RegCIncludes,
         RegCTop,
         RegCKwcApplication,
@@ -57,7 +58,8 @@
 		OvCBottom,
 
 		// TAB
-	    TabCControlIncludes,
+	    TabCBeforeIncludes,
+	    TabCIncludes,
         TabCControlDefaults,
 	    TabCControlParameters,
 

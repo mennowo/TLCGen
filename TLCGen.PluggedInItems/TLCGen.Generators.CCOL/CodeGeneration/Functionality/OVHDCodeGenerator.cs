@@ -468,8 +468,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var result2 = new List<Tuple<string, string, string>>();
                     if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        result2.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
+                        result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isHD", "FALSE"));
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isWTV", "FALSE"));
 
                     }
                     return result2;
@@ -683,7 +683,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (ov.CheckWagenNummer)
             {
                 extra += (extra == "" ? "" : " && ");
-                extra += $"WDNST_check({_fcpf}{ov.FaseCyclus})";
+                extra += (melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"WDNST_check_in({_fcpf}{ov.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{ov.FaseCyclus})");
             }
             if (extra == "") extra = "TRUE";
 
@@ -693,7 +693,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"DSIMeldingOV_V1(0, " +
                                                     $"{vtgType}, " +
                                                     "TRUE, " + 
-                                                    $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                    $"{(fcNmr == -1 ? "NG" : (fcNmr > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString()))}," +
                                                     "TRUE, " +
                                                     (melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"CIF_DSIN, " : $"CIF_DSUIT, ") +
                                                     $"{extra});");
@@ -946,7 +946,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
                             if (hd.KAR)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                                if(hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && ((DSIMelding_HD_V1({ifc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || DSIMelding_HD_V1({hd.InmeldingOokDoorFase}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                                }
                                 inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
                             }
                             if (hd.Opticom)
@@ -977,7 +984,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* Uitmelding HD {_fcpf}{hd.FaseCyclus} */");
                             if (hd.KAR)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSUIT, FALSE));");
+                                if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({hd.InmeldingOokDoorFase}, CIF_DSUIT, FALSE));");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSUIT, FALSE));");
+                                }
                                 inmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
                             }
                             if (hd.Opticom)

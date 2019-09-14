@@ -30,17 +30,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCIncludes:
                     if(c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT)");
+                        sb.AppendLine($"#if (!defined AUTOMAAT) && (!defined NO_KWC)");
                         sb.AppendLine($"{ts}#include \"pi_ccol.h\"");
-                        sb.AppendLine($"#else");
+                        sb.AppendLine($"#elif (!defined NO_KWC)");
                         sb.AppendLine($"{ts}#include \"pi_ccol.c\"");
                         sb.AppendLine($"#endif");
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT)");
+                        sb.AppendLine($"#if (!defined AUTOMAAT) && (!defined NO_KWC)");
                         sb.AppendLine($"{ts}#include \"mv_ccol.h\"");
-                        sb.AppendLine($"#else");
+                        sb.AppendLine($"#elif (!defined NO_KWC)");
                         sb.AppendLine($"{ts}#include \"mv_ccol.c\"");
                         sb.AppendLine($"#endif");
                     }
@@ -49,13 +49,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM) && (!defined NO_KWC)");
                         sb.AppendLine($"{ts}PI_save();");
                         sb.AppendLine($"#endif");
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM) && (!defined NO_KWC)");
                         sb.AppendLine($"{ts}MvSave();");
                         sb.AppendLine($"#endif");
                     }

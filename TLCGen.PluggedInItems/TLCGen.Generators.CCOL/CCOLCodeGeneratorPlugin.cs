@@ -118,9 +118,16 @@ namespace TLCGen.Generators.CCOL
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibsPathNoTig = userSettings.VisualSettingsCCOL95.CCOLLibsPathNoTig;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions = userSettings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLResPath = userSettings.VisualSettingsCCOL95.CCOLResPath;
-				
-				// always overwrite visual tabspace and others
-				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
+
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLIncludesPaden = userSettings.VisualSettingsCCOL100.CCOLIncludesPaden;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibs = userSettings.VisualSettingsCCOL100.CCOLLibs;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibsPath = userSettings.VisualSettingsCCOL100.CCOLLibsPath;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibsPathNoTig = userSettings.VisualSettingsCCOL100.CCOLLibsPathNoTig;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLPreprocessorDefinitions = userSettings.VisualSettingsCCOL100.CCOLPreprocessorDefinitions;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLResPath = userSettings.VisualSettingsCCOL100.CCOLResPath;
+
+                // always overwrite visual tabspace and others
+                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
 				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating = userSettings.AlterAddFunctionsWhileGenerating;
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources = userSettings.AlwaysOverwriteSources;
                 CCOLGeneratorSettingsProvider.Default.Settings.TabSpace = userSettings.TabSpace;
@@ -229,6 +236,13 @@ namespace TLCGen.Generators.CCOL
             settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions;
             settings.VisualSettingsCCOL95.CCOLResPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLResPath;
 
+            settings.VisualSettingsCCOL100.CCOLIncludesPaden = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLIncludesPaden;
+            settings.VisualSettingsCCOL100.CCOLLibs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibs;
+            settings.VisualSettingsCCOL100.CCOLLibsPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibsPath;
+            settings.VisualSettingsCCOL100.CCOLLibsPathNoTig = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLLibsPathNoTig;
+            settings.VisualSettingsCCOL100.CCOLPreprocessorDefinitions = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLPreprocessorDefinitions;
+            settings.VisualSettingsCCOL100.CCOLResPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100.CCOLResPath;
+            
             // always save visual tabspace and others
             settings.AlterAddHeadersWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
             settings.AlterAddFunctionsWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;

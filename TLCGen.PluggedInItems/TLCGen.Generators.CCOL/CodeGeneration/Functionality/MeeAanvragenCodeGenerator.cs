@@ -177,16 +177,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{tts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                                     sb.AppendLine($"{tts}}}");
                                     sb.AppendLine($"{tts}else");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(TRUE));");
                                     sb.AppendLine($"{tts}}}");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));");
+                                    sb.AppendLine($"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(TRUE));");
                                 }
                             }
                             else
@@ -195,14 +195,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{tts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                                     sb.AppendLine($"{tts}}}");
                                     sb.AppendLine($"{tts}else");
                                     sb.AppendLine($"{tts}{{");
                                 }
 
                                 var uts = ma.Uitgesteld ? ts + tts : tts;
-                                sb.Append($"{uts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(");
+                                sb.Append($"{uts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(");
                                 var i = 0;
                                 foreach (var dm in ma.Detectoren)
                                 {
@@ -226,18 +226,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch(ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (!G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (!G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
                                     sb.AppendLine(!ma.Uitgesteld
-                                        ? $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (SG[{_fcpf}{ma.FaseVan}]));"
-                                        : $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                        ? $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (SG[{_fcpf}{ma.FaseVan}]));"
+                                        : $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
@@ -245,7 +245,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else
                         {
-                            sb.Append($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (");
+                            sb.Append($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (");
                             var i = 0;
                             if (!ma.Uitgesteld)
                             {

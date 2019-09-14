@@ -35,23 +35,17 @@ namespace TLCGen.ViewModels
 
         private ControllerViewModel _ControllerVM;
         private TLCGenStatusBarViewModel _StatusBarVM;
-
-        private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _ApplicationParts;
-
         private List<MenuItem> _ImportMenuItems;
         private List<MenuItem> _PluginMenuItems;
         private List<IGeneratorViewModel> _Generators;
-        
         private IGeneratorViewModel _SelectedGenerator;
+        private bool _showAlertMessage;
 
         #endregion // Fields
 
         #region Properties
 
-        public List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts
-        {
-            get { return _ApplicationParts; }
-        }
+        public List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts { get; }
 
         /// <summary>
         /// ViewModel for the Controller data object that is being edited via the application.
@@ -65,11 +59,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerVM = value;
-                foreach(var pl in ApplicationParts)
+                foreach (var pl in ApplicationParts)
                 {
                     pl.Item2.Controller = TLCGenControllerDataProvider.Default.Controller;
                 }
-                
+
                 RaisePropertyChanged("ControllerVM");
                 RaisePropertyChanged("HasController");
             }
@@ -106,18 +100,18 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(HasController && !string.IsNullOrEmpty(TLCGenControllerDataProvider.Default.ControllerFileName))
+                if (HasController && !string.IsNullOrEmpty(TLCGenControllerDataProvider.Default.ControllerFileName))
                     return "TLCGen - " + TLCGenControllerDataProvider.Default.ControllerFileName;
                 else
                     return "TLCGen";
             }
         }
-        
+
         public List<IGeneratorViewModel> Generators
         {
             get
             {
-                if(_Generators == null)
+                if (_Generators == null)
                 {
                     _Generators = new List<IGeneratorViewModel>();
                 }
@@ -130,7 +124,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_Importers == null)
+                if (_Importers == null)
                 {
                     _Importers = new List<ITLCGenImporter>();
                 }
@@ -143,7 +137,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_TabItems == null)
+                if (_TabItems == null)
                 {
                     _TabItems = new List<ITLCGenTabItem>();
                 }
@@ -173,7 +167,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_ImportMenuItems == null)
+                if (_ImportMenuItems == null)
                 {
                     _ImportMenuItems = new List<MenuItem>();
                 }
@@ -201,6 +195,19 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool ShowAlertMessage
+        {
+            get => _showAlertMessage; set
+            {
+                _showAlertMessage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        public string ControllerVersion => ControllerVM?.Controller?.Data?.TLCGenVersie;
+
         #endregion // Properties
 
         #region Events
@@ -213,24 +220,28 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _NewFileCommand;
-        RelayCommand _OpenFileCommand;
-        RelayCommand _SaveFileCommand;
-        RelayCommand _SaveAsFileCommand;
-        RelayCommand _CloseFileCommand;
-        RelayCommand _ExitApplicationCommand;
-        RelayCommand _ShowSettingsWindowCommand;
-        RelayCommand _ShowAboutCommand;
+        RelayCommand _newFileCommand;
+        RelayCommand _openFileCommand;
+        RelayCommand _saveFileCommand;
+        RelayCommand _saveAsFileCommand;
+        RelayCommand _closeFileCommand;
+        RelayCommand _exitApplicationCommand;
+        RelayCommand _showSettingsWindowCommand;
+        RelayCommand _showAboutCommand;
+        RelayCommand _showVersionInfoCommand;
+        RelayCommand _generateControllerCommand;
+        RelayCommand _importControllerCommand;
+        RelayCommand _hideAlertMessageCommand;
 
         public ICommand NewFileCommand
         {
             get
             {
-                if (_NewFileCommand == null)
+                if (_newFileCommand == null)
                 {
-                    _NewFileCommand = new RelayCommand(NewFileCommand_Executed, NewFileCommand_CanExecute);
+                    _newFileCommand = new RelayCommand(NewFileCommand_Executed, NewFileCommand_CanExecute);
                 }
-                return _NewFileCommand;
+                return _newFileCommand;
             }
         }
 
@@ -238,11 +249,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_OpenFileCommand == null)
+                if (_openFileCommand == null)
                 {
-                    _OpenFileCommand = new RelayCommand(OpenFileCommand_Executed, OpenFileCommand_CanExecute);
+                    _openFileCommand = new RelayCommand(OpenFileCommand_Executed, OpenFileCommand_CanExecute);
                 }
-                return _OpenFileCommand;
+                return _openFileCommand;
             }
         }
 
@@ -250,11 +261,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_SaveFileCommand == null)
+                if (_saveFileCommand == null)
                 {
-                    _SaveFileCommand = new RelayCommand(SaveFileCommand_Executed, SaveFileCommand_CanExecute);
+                    _saveFileCommand = new RelayCommand(SaveFileCommand_Executed, SaveFileCommand_CanExecute);
                 }
-                return _SaveFileCommand;
+                return _saveFileCommand;
             }
         }
 
@@ -262,11 +273,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_SaveAsFileCommand == null)
+                if (_saveAsFileCommand == null)
                 {
-                    _SaveAsFileCommand = new RelayCommand(SaveAsFileCommand_Executed, SaveAsFileCommand_CanExecute);
+                    _saveAsFileCommand = new RelayCommand(SaveAsFileCommand_Executed, SaveAsFileCommand_CanExecute);
                 }
-                return _SaveAsFileCommand;
+                return _saveAsFileCommand;
             }
         }
 
@@ -274,11 +285,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_CloseFileCommand == null)
+                if (_closeFileCommand == null)
                 {
-                    _CloseFileCommand = new RelayCommand(CloseFileCommand_Executed, CloseFileCommand_CanExecute);
+                    _closeFileCommand = new RelayCommand(CloseFileCommand_Executed, CloseFileCommand_CanExecute);
                 }
-                return _CloseFileCommand;
+                return _closeFileCommand;
             }
         }
 
@@ -286,38 +297,35 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_ExitApplicationCommand == null)
+                if (_exitApplicationCommand == null)
                 {
-                    _ExitApplicationCommand = new RelayCommand(ExitApplicationCommand_Executed, ExitApplicationCommand_CanExecute);
+                    _exitApplicationCommand = new RelayCommand(ExitApplicationCommand_Executed, ExitApplicationCommand_CanExecute);
                 }
-                return _ExitApplicationCommand;
+                return _exitApplicationCommand;
             }
         }
 
-
-        RelayCommand _GenerateControllerCommand;
         public ICommand GenerateControllerCommand
         {
             get
             {
-                if (_GenerateControllerCommand == null)
+                if (_generateControllerCommand == null)
                 {
-                    _GenerateControllerCommand = new RelayCommand(GenerateControllerCommand_Executed, GenerateControllerCommand_CanExecute);
+                    _generateControllerCommand = new RelayCommand(GenerateControllerCommand_Executed, GenerateControllerCommand_CanExecute);
                 }
-                return _GenerateControllerCommand;
+                return _generateControllerCommand;
             }
         }
 
-        RelayCommand _ImportControllerCommand;
         public ICommand ImportControllerCommand
         {
             get
             {
-                if (_ImportControllerCommand == null)
+                if (_importControllerCommand == null)
                 {
-                    _ImportControllerCommand = new RelayCommand(ImportControllerCommand_Executed, ImportControllerCommand_CanExecute);
+                    _importControllerCommand = new RelayCommand(ImportControllerCommand_Executed, ImportControllerCommand_CanExecute);
                 }
-                return _ImportControllerCommand;
+                return _importControllerCommand;
             }
         }
 
@@ -325,11 +333,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_ShowSettingsWindowCommand == null)
+                if (_showSettingsWindowCommand == null)
                 {
-                    _ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommand_Executed, null);
+                    _showSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommand_Executed, null);
                 }
-                return _ShowSettingsWindowCommand;
+                return _showSettingsWindowCommand;
             }
         }
 
@@ -337,11 +345,35 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_ShowAboutCommand == null)
+                if (_showAboutCommand == null)
                 {
-                    _ShowAboutCommand = new RelayCommand(ShowAboutCommand_Executed, null);
+                    _showAboutCommand = new RelayCommand(ShowAboutCommand_Executed, null);
                 }
-                return _ShowAboutCommand;
+                return _showAboutCommand;
+            }
+        }
+
+        public ICommand ShowVersionInfoCommand
+        {
+            get
+            {
+                if (_showVersionInfoCommand == null)
+                {
+                    _showVersionInfoCommand = new RelayCommand(ShowVersionInfoCommand_Executed, null);
+                }
+                return _showVersionInfoCommand;
+            }
+        }
+
+        public ICommand HideAlertMessageCommand
+        {
+            get
+            {
+                if (_hideAlertMessageCommand == null)
+                {
+                    _hideAlertMessageCommand = new RelayCommand(HideAlertMessageCommand_Executed, null);
+                }
+                return _hideAlertMessageCommand;
             }
         }
 
@@ -365,6 +397,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
                 RaisePropertyChanged("HasController");
+                ShowAlertMessage = false;
             }
         }
 
@@ -404,7 +437,7 @@ namespace TLCGen.ViewModels
         private void SaveAsFileCommand_Executed(object prm)
         {
             string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-            if(TLCGenControllerDataProvider.Default.SaveControllerAs())
+            if (TLCGenControllerDataProvider.Default.SaveControllerAs())
             {
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
@@ -424,13 +457,14 @@ namespace TLCGen.ViewModels
         private void CloseFileCommand_Executed(object prm)
         {
             string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-            if(TLCGenControllerDataProvider.Default.CloseController())
+            if (TLCGenControllerDataProvider.Default.CloseController())
             {
                 DefaultsProvider.Default.Controller = null;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 RaisePropertyChanged("HasController");
                 RaisePropertyChanged("ProgramTitle");
                 GuiActionsManager.SetStatusBarMessage("");
+                ShowAlertMessage = false;
             }
         }
 
@@ -453,7 +487,7 @@ namespace TLCGen.ViewModels
         {
             if (obj == null)
                 throw new NullReferenceException();
-	        if (!(obj is ITLCGenImporter imp))
+            if (!(obj is ITLCGenImporter imp))
                 throw new InvalidCastException();
 
             // Import into existing controller
@@ -482,17 +516,12 @@ namespace TLCGen.ViewModels
                 }
 
                 // Check data integrity
-                //c2.Data.GarantieOntruimingsTijden = false;
                 s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                 if (s1 != null)
                 {
                     TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                     return;
                 }
-                //if(c1.Data.GarantieOntruimingsTijden)
-                //{
-                //    TLCGenDialogProvider.Default.ShowMessageBox("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
-                //}
                 SetController(c2);
                 ControllerVM.ReloadController();
                 MessengerInstance.Send(new ControllerDataChangedMessage());
@@ -557,7 +586,7 @@ namespace TLCGen.ViewModels
             if (obj == null)
                 return false;
 
-	        if (!(obj is ITLCGenImporter imp))
+            if (!(obj is ITLCGenImporter imp))
                 throw new InvalidCastException();
 
             if (imp.ImportsIntoExisting)
@@ -568,15 +597,46 @@ namespace TLCGen.ViewModels
 
         private void ShowSettingsWindowCommand_Executed(object obj)
         {
-            Settings.Views.TLCGenSettingsWindow settingswin = new Settings.Views.TLCGenSettingsWindow();
-            settingswin.DataContext = new TLCGenSettingsViewModel();
+            Settings.Views.TLCGenSettingsWindow settingswin = new Settings.Views.TLCGenSettingsWindow
+            {
+                DataContext = new TLCGenSettingsViewModel(),
+                Owner = Application.Current.MainWindow
+            };
             settingswin.ShowDialog();
         }
 
         private void ShowAboutCommand_Executed(object obj)
         {
-            AboutWindow about = new AboutWindow();
+            var about = new AboutWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
             about.ShowDialog();
+        }
+
+        private void ShowVersionInfoCommand_Executed(object obj)
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var folderName = $"{executingAssembly.GetName().Name}.Resources.VersionInfo";
+            var files = executingAssembly.GetManifestResourceNames().Where(r => r.StartsWith(folderName) && r.EndsWith(".rtf")).ToList();
+            files.Sort();
+            var vfiles = new List<Tuple<Version, string>>();
+            foreach (var f in files)
+            {
+                var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
+                string text = reader.ReadToEnd();
+                vfiles.Add(new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")), text));
+            }
+            var infoW = new VersionInfoWindow(ControllerVersion, vfiles)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            infoW.ShowDialog();
+        }
+
+        private void HideAlertMessageCommand_Executed(object obj)
+        {
+            ShowAlertMessage = false;
         }
 
         #endregion // Command functionality
@@ -601,10 +661,9 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                foreach (var pl in _ApplicationParts)
+                foreach (var pl in ApplicationParts)
                 {
-                    var setpl = pl.Item2 as ITLCGenHasSettings;
-                    if (setpl != null)
+                    if (pl.Item2 is ITLCGenHasSettings setpl)
                     {
                         setpl.SaveSettings();
                     }
@@ -617,15 +676,17 @@ namespace TLCGen.ViewModels
             }
         }
 
-		// TODO: Make this generic, just like how settings are loaded
+        // TODO: Make this generic, just like how settings are loaded
         private void SaveGeneratorControllerSettingsToModel()
         {
             //SettingsVM.Settings.CustomData.AddinSettings.Clear();
-            foreach(IGeneratorViewModel genvm in Generators)
+            foreach (IGeneratorViewModel genvm in Generators)
             {
                 ITLCGenGenerator gen = genvm.Generator;
-                AddinSettingsModel gendata = new AddinSettingsModel();
-                gendata.Naam = gen.GetGeneratorName();
+                AddinSettingsModel gendata = new AddinSettingsModel
+                {
+                    Naam = gen.GetGeneratorName()
+                };
                 Type t = gen.GetType();
                 // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
                 var dllprops = t.GetProperties().Where(
@@ -645,9 +706,11 @@ namespace TLCGen.ViewModels
                                 if (v != null)
                                 {
                                     string value = v.ToString();
-                                    AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel();
-                                    prop.Naam = name;
-                                    prop.Setting = value;
+                                    AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel
+                                    {
+                                        Naam = name,
+                                        Setting = value
+                                    };
                                     gendata.Properties.Add(prop);
                                 }
                             }
@@ -704,6 +767,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
                 RaisePropertyChanged("HasController");
+                RaisePropertyChanged("ControllerVersion");
                 FileOpened?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
                 var jumpTask = new JumpTask
                 {
@@ -711,6 +775,14 @@ namespace TLCGen.ViewModels
                     Arguments = TLCGenControllerDataProvider.Default.ControllerFileName
                 };
                 JumpList.AddToRecentCategory(jumpTask);
+                if (Version.Parse(ControllerVersion) < Version.Parse(CurrentVersion))
+                {
+                    ShowAlertMessage = true;
+                }
+                else
+                {
+                    ShowAlertMessage = false;
+                }
                 return true;
             }
             if (filename != null) FileOpenFailed?.Invoke(this, filename);
@@ -751,10 +823,10 @@ namespace TLCGen.ViewModels
                 " - Project voor regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " gegenereerd");
         }
 
-	    private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
-	    {
-			RaisePropertyChanged(nameof(ProgramTitle));
-	    }
+        private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
+        {
+            RaisePropertyChanged(nameof(ProgramTitle));
+        }
 
         #endregion // TLCGen Messaging
 
@@ -778,31 +850,31 @@ namespace TLCGen.ViewModels
                 MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
 
                 // Load application settings and defaults
-	            TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
+                TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
                 SettingsProvider.Default.LoadApplicationSettings();
                 DefaultsProvider.Default.LoadSettings();
                 TemplatesProvider.Default.LoadSettings();
 
-	            TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
-	            TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+                TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
+                TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
 
                 // Load available applicationparts and plugins
-	            var assms = Assembly.GetExecutingAssembly();
-	            var types = from t in assms.GetTypes()
-		            where t.IsClass && t.Namespace == "TLCGen.ViewModels"
-		            select t;
-	            TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
+                var assms = Assembly.GetExecutingAssembly();
+                var types = from t in assms.GetTypes()
+                            where t.IsClass && t.Namespace == "TLCGen.ViewModels"
+                            select t;
+                TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
                 TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
-	            TLCGenSplashScreenHelper.ShowText("Laden plugins...");
+                TLCGenSplashScreenHelper.ShowText("Laden plugins...");
                 TLCGenPluginManager.Default.LoadPlugins(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
                 // Instantiate all parts
-                _ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
+                ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
                 var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
                 foreach (var part in parts)
                 {
                     ITLCGenPlugin instpl = part.Item2;
-					TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
+                    TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
                     var flags = Enum.GetValues(typeof(TLCGenPluginElems));
                     foreach (TLCGenPluginElems elem in flags)
                     {
@@ -817,10 +889,12 @@ namespace TLCGen.ViewModels
                                     ((ITLCGenHasSettings)instpl).LoadSettings();
                                     break;
                                 case TLCGenPluginElems.Importer:
-                                    MenuItem mi = new MenuItem();
-                                    mi.Header = instpl.GetPluginName();
-                                    mi.Command = ImportControllerCommand;
-                                    mi.CommandParameter = instpl;
+                                    MenuItem mi = new MenuItem
+                                    {
+                                        Header = instpl.GetPluginName(),
+                                        Command = ImportControllerCommand,
+                                        CommandParameter = instpl
+                                    };
                                     ImportMenuItems.Add(mi);
                                     break;
                                 case TLCGenPluginElems.IOElementProvider:
@@ -837,18 +911,18 @@ namespace TLCGen.ViewModels
                                 case TLCGenPluginElems.PlugMessaging:
                                     (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
                                     break;
-								case TLCGenPluginElems.Switcher:
-									(instpl as ITLCGenSwitcher).ControllerSet += (sender, model) => { SetController(model); };
-									(instpl as ITLCGenSwitcher).FileNameSet += (sender, model) =>
-										{
-											TLCGenControllerDataProvider.Default.ControllerFileName = model;
-										};
-									break;
+                                case TLCGenPluginElems.Switcher:
+                                    (instpl as ITLCGenSwitcher).ControllerSet += (sender, model) => { SetController(model); };
+                                    (instpl as ITLCGenSwitcher).FileNameSet += (sender, model) =>
+                                        {
+                                            TLCGenControllerDataProvider.Default.ControllerFileName = model;
+                                        };
+                                    break;
                             }
                         }
                         TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);
                     }
-                    _ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
+                    ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
                 }
                 if (Generators.Count > 0) SelectedGenerator = Generators[0];
 
@@ -896,13 +970,14 @@ namespace TLCGen.ViewModels
                     win.DialogTitle = "Onverwachte fout in TLCGen";
                     win.DialogMessage = message;
                     win.DialogExpceptionText = e.Exception.ToString();
+                    win.Owner = Application.Current.MainWindow;
                     win.ShowDialog();
                 };
 #endif
             }
             catch (Exception e)
             {
-	            TLCGenSplashScreenHelper.Hide();
+                TLCGenSplashScreenHelper.Hide();
 
                 string message = "Er is een onverwachte fout opgetreden.\n\n";
                 message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
@@ -910,7 +985,8 @@ namespace TLCGen.ViewModels
                 {
                     DialogTitle = "Onverwachte fout in TLCGen",
                     DialogMessage = message,
-                    DialogExpceptionText = e.ToString()
+                    DialogExpceptionText = e.ToString(),
+                    Owner = Application.Current.MainWindow
                 };
                 win.ShowDialog();
             }
@@ -980,6 +1056,7 @@ namespace TLCGen.ViewModels
 							DispatcherHelper.CheckBeginInvokeOnUI(() =>
 							{
 								var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
+                                w.Owner = Application.Current.MainWindow;
 								w.ShowDialog();
 							});
 						}
@@ -987,7 +1064,7 @@ namespace TLCGen.ViewModels
 				}
             });
 #endif
-		}
+        }
         #endregion // Constructor
 
         #region IDropTarget
@@ -1009,7 +1086,7 @@ namespace TLCGen.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-	        if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList()) return;
+            if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList()) return;
             {
                 var files = d.GetFileDropList();
                 if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))

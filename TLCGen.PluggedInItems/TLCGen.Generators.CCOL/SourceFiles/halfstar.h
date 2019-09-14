@@ -32,6 +32,8 @@ extern char HalfstarOmschakelenToegestaan;
 count geeltimer[FCMAX][FCMAX];
 count groodtimer[FCMAX][FCMAX];
 
+mulv max_wachttijd_conflicten(count i);
+
 void altcor_kop_halfstar(count fc_aan, count fc_af, count t_nl);
 void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg12, bool voorwaarde);
 void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde);
@@ -39,11 +41,13 @@ void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void alternatief_halfstar(count fc, mulv altp, bool condition);
 void gelijkstart_va_arg_halfstar(count h_x, count h_rr, bool  overslag, ...);
 void getrapte_fietser_halfstar(count fc1, count fc2, bool  a_bui_fc1, bool  a_bui_fc2, count tkopfc1fc2, count tkopfc2fc1, count voorstartfc1fc2,	count voorstartfc2fc1);
+void max_wachttijd_halfstar(mulv twacht[], count h_plact, count pl);
 void mgcor_halfstar(count fcaan, count fcnal, count t_nal);
 void mgcor_halfstar_deelc(count fc1, count fc2);
 void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
 void naloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1, count hd_bui_fc1, count tkopfc1fc2);
-void PercentageMaxGroenTijdenSP(count fc, count percentage);
+void PercentageMaxGroenTijden_halfstar(count fc, count percentage, mulv bit);
+void PercentageVerlengGroenTijden_halfstar(count fc, count percentage, mulv bit);
 bool pl_gebied(mulv tx, mulv s, mulv e);
 void reset_altreal_halfstar(void);
 void reset_fc_halfstar(void);
@@ -53,6 +57,7 @@ void set_special_MR(count i, count j, bool condition);
 void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te);
 void set_pp_halfstar(count fc, bool condition, count value);
 void set_ym_pl_halfstar(count fc, bool condition);
+void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until);
 void set_yspl(count fc);
 void SetPlanTijden2R(count fc, mulv plan, mulv ta  , mulv tb  , mulv tc  , mulv td  , mulv te  , 
                      count fc_2,          mulv ta_2, mulv tb_2, mulv tc_2, mulv td_2, mulv te_2);

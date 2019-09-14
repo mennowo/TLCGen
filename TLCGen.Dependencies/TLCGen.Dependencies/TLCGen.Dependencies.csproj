@@ -126,6 +126,7 @@
     <Compile Include="Models.Enumerations\DetectorAanvraagTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\FileMetingLocatieEnum.cs" />
     <Compile Include="Models.Enumerations\FaseTypeEnum.cs" />
     <Compile Include="Models.Enumerations\GroentijdenTypeEnum.cs" />
     <Compile Include="Models.Enumerations\HalfstarGekoppeldTypeEnum.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Models.Enumerations\VLOGMonModeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGTypeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGVersieEnum.cs" />
+    <Compile Include="Models\Attributes\HasKoppelSignalenAttribute.cs" />
     <Compile Include="Models\Attributes\TLCGenIgnoreAttribute.cs" />
     <Compile Include="Models\Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Attributes\IOElementAttribute.cs" />
@@ -192,13 +194,15 @@
     <Compile Include="Models\Models\FileIngreep\FileIngreepModel.cs" />
     <Compile Include="Models\Models\FileIngreep\FileIngreepTeDoserenSignaalGroepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarDataModel.cs" />
-    <Compile Include="Models\Models\Halfstar\HalfstarFaseCyclusAlternatiefModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarFaseCyclusInstellingenModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanIngangModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarOVIngreepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarPeriodeDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\KoppelSignaalModel.cs" />
+    <Compile Include="Models.Enumerations\KoppelSignaalRichtingEnum.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanFaseModel.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\ConflictModel.cs" />
@@ -247,6 +251,7 @@
     <Compile Include="Models\Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
     <Compile Include="Models\Models\Varia\PelotonKoppelingDetectorModel.cs" />
     <Compile Include="Models\Models\Varia\PelotonKoppelingenDataModel.cs" />
+    <Compile Include="Models.Enumerations\PelotonKoppelingTypeEnum.cs" />
     <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />
     <Compile Include="Models\Models\Varia\RichtingGevoeligeAanvraagModel.cs" />

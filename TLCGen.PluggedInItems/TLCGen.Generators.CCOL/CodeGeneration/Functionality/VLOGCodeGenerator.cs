@@ -36,8 +36,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     return 0;
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 20;
+                case CCOLCodeTypeEnum.TabCBeforeIncludes:
+                case CCOLCodeTypeEnum.RegCBeforeIncludes:
+                    return 10;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     return 30;
@@ -95,7 +96,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     // lijst met CCOL uitgangen nodig hebben
                     return null;
 
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.TabCBeforeIncludes:
+                case CCOLCodeTypeEnum.RegCBeforeIncludes:
                     if ((c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
                          c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen ||
                          c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
@@ -129,7 +131,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             (c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_ASCII ||
                              c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_BINAIR))
                         {
-                            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                            sb.AppendLine("#if (!defined AUTOMAAT) || (defined VISSIM)");
                             sb.AppendLine($"{ts}{ts}file_uber_to_file_hour(LOGFILE_NUMBER_MAX, LOGFILE_LENGTH_MAX);");
                             sb.AppendLine($"{ts}#endif");
                         }

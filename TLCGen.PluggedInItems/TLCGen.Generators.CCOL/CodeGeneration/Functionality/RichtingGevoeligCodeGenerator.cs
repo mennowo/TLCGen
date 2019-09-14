@@ -132,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}MeetKriteriumRGprm((count) {_fcpf}{first.FaseCyclus}, (count) {_tpf}{_tkm}{first.FaseCyclus},");
                         foreach (RichtingGevoeligVerlengModel rgv in gr)
                         {
-                            sb.AppendLine($"{ts}{ts}(bool) RichtingVerlengen({_fcpf}{rgv.FaseCyclus}, {_dpf}{rgv.VanDetector}, {_dpf}{rgv.NaarDetector},");
+                            sb.AppendLine($"{ts}{ts}({c.GetBoolV()}) RichtingVerlengen({_fcpf}{rgv.FaseCyclus}, {_dpf}{rgv.VanDetector}, {_dpf}{rgv.NaarDetector},");
                             sb.AppendLine($"{ts}{ts}                         {_tpf}{_trgr}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}, {_tpf}{_trgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector},");
                             sb.AppendLine($"{ts}{ts}                         {_hpf}{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}), (mulv)PRM[{_prmpf}{_prmmkrg}{_dpf}{rgv.VanDetector}],");
                         }

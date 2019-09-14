@@ -22,11 +22,41 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
             }
         }
 
-		#endregion // Properties
+        public bool Tegenhouden
+        {
+            get => Hoofdrichting.Tegenhouden;
+            set
+            {
+                Hoofdrichting.Tegenhouden = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
-		#region IViewModelWithItem
+        public bool AfkappenWG
+        {
+            get => Hoofdrichting.AfkappenWG;
+            set
+            {
+                Hoofdrichting.AfkappenWG = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
-		public object GetItem()
+        public bool AfkappenVG
+        {
+            get => Hoofdrichting.AfkappenVG;
+            set
+            {
+                Hoofdrichting.AfkappenVG = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
 		{
 			return Hoofdrichting;
 		}

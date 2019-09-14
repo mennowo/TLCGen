@@ -55,10 +55,17 @@ namespace TLCGen.Plugins.RIS
                 _RISFasen = null;
                 _RISRequestLanes = null;
                 _RISExtendLanes = null;
+                if (MultiSystemITF != null) MultiSystemITF.CollectionChanged -= MultiSystemITF_CollectionChanged;
                 MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
+                MultiSystemITF.CollectionChanged += MultiSystemITF_CollectionChanged;
                 _lanesRequestManager = null;
                 _lanesExtendManager = null;
             }
+        }
+
+        private void MultiSystemITF_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen => _RISFasen ?? (_RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen));
@@ -121,6 +128,16 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
+        public bool NietCheckenOpSignaalgroep
+        {
+            get => _RISModel.NietCheckenOpSignaalgroep;
+            set
+            {
+                _RISModel.NietCheckenOpSignaalgroep = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public bool HasMultipleSystemITF
         {
             get => _RISModel.HasMultipleSystemITF;
@@ -166,7 +183,8 @@ namespace TLCGen.Plugins.RIS
                     });
                     return lre;
                 },
-                (x, y) => false
+                (x, y) => false,
+                () => MessengerInstance.Send(new ControllerDataChangedMessage())
                 ));
 
         public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
@@ -184,7 +202,8 @@ namespace TLCGen.Plugins.RIS
                     });
                     return lre;
                 },
-                (x, y) => false
+                (x, y) => false,
+                () => MessengerInstance.Send(new ControllerDataChangedMessage())
                 ));
 
         #endregion // Properties

@@ -217,7 +217,7 @@ namespace TLCGen.Plugins.Timings
                     return 120;
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     return 120;
-                case CCOLCodeTypeEnum.TabCControlIncludes:
+                case CCOLCodeTypeEnum.TabCIncludes:
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     return 120;
                 default:
@@ -245,7 +245,7 @@ namespace TLCGen.Plugins.Timings
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     sb.AppendLine($"{ts}msg_fctiming();");
                     return sb.ToString();
-                case CCOLCodeTypeEnum.TabCControlIncludes:
+                case CCOLCodeTypeEnum.TabCIncludes:
                     sb.AppendLine($"{ts}void Timings_Eventstate_Definition(void);");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCControlParameters:

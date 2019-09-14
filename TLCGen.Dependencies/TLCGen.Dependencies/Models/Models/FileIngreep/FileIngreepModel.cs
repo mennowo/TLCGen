@@ -21,6 +21,15 @@ namespace TLCGen.Models
         public int AfvalVertraging { get; set; }
         [HasDefault(false)]
         public bool EerlijkDoseren { get; set; }
+        [HasDefault(false)]
+        public NooitAltijdAanUitEnum ToepassenDoseren { get; set; }
+        [HasDefault(false)]
+        public NooitAltijdAanUitEnum ToepassenAlternatieveGroentijdenSet { get; set; }
+        [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
+        public string AlternatieveGroentijdenSet { get; set; }
+        public FileMetingLocatieEnum FileMetingLocatie { get; set; }
+
         [IOElement("file", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 

@@ -14,6 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schdvak;
         private CCOLGeneratorCodeStringSettingModel _thdv;
+        private CCOLGeneratorCodeStringSettingModel _tdstvert;
         private CCOLGeneratorCodeStringSettingModel _prmperc;
 #pragma warning restore 0649
         private string _mperiod;
@@ -48,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 _thdv, fc.Naam, d.Naam));
                     }
                 }
-                if(fc.PercentageGroenBijDetectieStoring && fc.PercentageGroen.HasValue)
+                if (fc.PercentageGroenBijDetectieStoring && fc.PercentageGroen.HasValue)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -56,6 +57,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             fc.PercentageGroen.Value,
                             CCOLElementTimeTypeEnum.None,
                             _prmperc, fc.Naam));
+                }
+                if (fc.AanvraagBijDetectieStoringVertraagd)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tdstvert}{fc.Naam}",
+                            fc.AanvraagBijDetectieStoringVertraging,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            _tdstvert, fc.Naam));
                 }
             }
         }
@@ -77,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AanvraagPerDetector(StringBuilder sb, ControllerModel c, string ts)
         {
-            sb.AppendLine($"{ts}/* Vaste aanvraag bij detectie storing */");
+            sb.AppendLine($"{ts}/* Vaste aanvraag bij detectie storing (per detector) */");
             foreach (var fc in c.Fasen)
             {
                 foreach (var d in fc.Detectoren)
@@ -103,8 +113,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 x.AanvraagBijDetectieStoring &&
                 x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen)))
             {
-                var pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
-                sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
+                var pre = "";
+                if (fc.AanvraagBijDetectieStoringVertraagd)
+                {
+                    pre = "".PadLeft($"{ts}RT[{_tpf}{_tdstvert}{fc.Naam}] = ".Length);
+                    sb.Append($"{ts}RT[{_tpf}{_tdstvert}{fc.Naam}] = !T[{_tpf}{_tdstvert}{fc.Naam}] && R[{_fcpf}{fc.Naam}] && !A[{_fcpf}{fc.Naam}] && (");
+                }
+                else
+                {
+                    pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
+                    sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
+                }
 
                 // voor niet-voetgangers
                 if (fc.AantalRijstroken.HasValue && fc.Type != FaseTypeEnum.Voetganger)
@@ -122,11 +141,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         // check alleen kop & knop
                         var kopKnop = false;
+                        var kopLang = false;
                         if (fc.AanvraagBijDetectieStoringKoplusKnop &&
                             dets.Any(x => x.Type == DetectorTypeEnum.Kop) &&
                             dets.Any(x => x.Type == DetectorTypeEnum.Knop))
                         {
                             kopKnop = true;
+                        }
+                        else if (fc.AanvraagBijDetectieStoringKopLang &&
+                            dets.Any(x => x.Type == DetectorTypeEnum.Kop) &&
+                            dets.Any(x => x.Type == DetectorTypeEnum.Lang))
+                        {
+                            kopLang = true;
                         }
 
                         int det = 0;
@@ -140,6 +166,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             det++;
                             if (kopKnop && !(d.Type == DetectorTypeEnum.Kop || d.Type == DetectorTypeEnum.Knop)) continue;
+                            if (kopLang && !(d.Type == DetectorTypeEnum.Kop || d.Type == DetectorTypeEnum.Lang)) continue;
 
                             if (det > 1)
                             {
@@ -237,7 +264,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append(")");
                     }
                 }
-                sb.AppendLine(";");
+                if (fc.AanvraagBijDetectieStoringVertraagd)
+                {
+                    sb.AppendLine(");");
+                }
+                else
+                {
+                    sb.AppendLine(";");
+                }
+            }
+            foreach (var fc in c.Fasen.Where(x =>
+                x.AanvraagBijDetectieStoring &&
+                x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
+                x.AanvraagBijDetectieStoringVertraagd)))
+            {
+                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= ET[{_tpf}{_tdstvert}{fc.Naam}];");
             }
             sb.AppendLine();
         }
@@ -325,8 +366,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         switch (c.Data.TypeGroentijden)
                         {
-                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijdenSP"; break;
-                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijdenSP"; break;
+                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;
+                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
                         }
                     }
                     else
@@ -339,7 +380,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (halfstar)
                     {
-                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam}, BIT5);");
                     }
                     else
                     {

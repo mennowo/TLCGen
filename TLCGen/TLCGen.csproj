@@ -169,7 +169,7 @@
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingViewModel.cs">
       <DependentUpon>PelotonKoppelingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarFaseCyclusAlternatiefViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarFaseCyclusInstellingenViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarGekoppeldeKruisingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarHoofdrichtingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarPeriodeDataViewModel.cs" />
@@ -857,6 +857,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
+    <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -955,6 +957,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"

@@ -194,6 +194,8 @@ namespace TLCGen.DataAccess
                         {
                             doc.Load(ControllerFileName);
                         }
+                        Controller = null; // Must be made null, otherwise plugins handling GetXmlFromDocument()
+                                           // may still have a previous controller internally
                         foreach (var pi in TLCGenPluginManager.Default.ApplicationPlugins)
                         {
                             if (pi.Item1.HasFlag(TLCGenPluginElems.XMLNodeWriter))
@@ -202,6 +204,7 @@ namespace TLCGen.DataAccess
                                 writer.GetXmlFromDocument(doc);
                             }
                         }
+                        TLCGenModelManager.Default.CorrectXmlDocumentByVersion(doc);
                         var c = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
                         if (!TLCGenModelManager.Default.CheckVersionOrder(c))
                         {
