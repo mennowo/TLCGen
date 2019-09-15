@@ -289,19 +289,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     #endregion
 
                     #region Wachttijdvoorspeller aansturing tijdens halfstar regelen
-                    sb.AppendLine($"{ts}/* Berekening wachttijd tijdens halfstar regelen */");
-                    if (c.Data.MultiModuleReeksen)
+                    if (c.HalfstarData.IsHalfstar)
                     {
-                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        sb.AppendLine($"{ts}/* Berekening wachttijd tijdens halfstar regelen */");
+                        if (c.Data.MultiModuleReeksen)
                         {
-                            sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht_{r.Reeks}, {_hpf}{_hplact}, PL);");
+                            foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                            {
+                                sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht_{r.Reeks}, {_hpf}{_hplact}, PL);");
+                            }
                         }
+                        else
+                        {
+                            sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
+                        }
+                        sb.AppendLine();
                     }
-                    else
-                    {
-                        sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
-                    }
-                    sb.AppendLine();
                     #endregion
 
                     #region corrigeer waarde i.v.m. gelijkstart fietsers
