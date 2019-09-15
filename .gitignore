@@ -217,4 +217,3 @@ ModelManifest.xml
 *.dll
 /published/TLCGen.Setup.msi
 /published/2019-06-27-TLCGen_v0.5.2.0.zip
-TLCGen/TLCGen.csproj
