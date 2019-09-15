@@ -1315,7 +1315,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}/* kopieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
-                    sb.AppendLine($"{ts}#if defined CCOLTIG");
+                    sb.AppendLine($"{ts}#if (CCOL_V >= 95)");
 					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TRIG)");
                     sb.AppendLine($"{ts}#else");
 					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
@@ -1334,7 +1334,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
 					sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinst}] = 0;");
-					sb.AppendLine($"{ts}{ts}#if defined CCOLTIG");
+					sb.AppendLine($"{ts}{ts}#if (CCOL_V >= 95)");
 					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TRIG = FALSE;");
 					sb.AppendLine($"{ts}{ts}#else");
 					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TIG = FALSE;");
