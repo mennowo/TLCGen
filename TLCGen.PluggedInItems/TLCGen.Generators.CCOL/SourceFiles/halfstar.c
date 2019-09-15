@@ -6,7 +6,7 @@
    #include <stdio.h>      /* declaration printf()       */
 #endif
 
-#if defined CCOLTIG
+#if (CCOL_V >= 95)
 bool COPY_2_TRIG = FALSE;  /* nieuwe TX-tijden copieren naar TRIG tabel             */
 #else
 bool COPY_2_TIG = FALSE;  /* nieuwe TX-tijden copieren naar TIG tabel             */
@@ -479,7 +479,7 @@ void set_special_MR(count i, count j, bool condition)
 /**********************************************************************************/
 void set_ym_pl_halfstar(count fc, bool condition)
 {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
   if (ym_max_tig(fc, NG)      &&   /* meeverlengen kan volgens ontruimingstijden      */
       ym_max_trig(fc, NG)     &&   /* meeverlengen kan volgens intergroentijdentabel  */
 #else
@@ -496,7 +496,7 @@ void set_ym_pl_halfstar(count fc, bool condition)
 
 void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until)
 {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 	if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
 		ym_max_trig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
 #else
@@ -722,7 +722,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 		}
 		if (copy)
 		{
-#if defined CCOLTIG
+#if (CCOL_V >= 95)
 			COPY_2_TRIG = TRUE;
 #else
 			COPY_2_TIG = TRUE;
@@ -827,12 +827,12 @@ bool txb_gemist(count i, int marge)
 #ifndef TIGNEW
         for (n=0; n<KFC_MAX[i]; n++)
         {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 			if (TIG[k][i])           /* zoek grootste ontruimingstijd   */
             {
 				to_tmp = TIG_max[k][i] - TIG_timer[k];
@@ -848,7 +848,7 @@ bool txb_gemist(count i, int marge)
 #else
         for (n=0; n<FKFC_MAX[i]; n++)
         {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[i][n];
             if (TRIG_max[k][i]>=0)
             {
@@ -965,7 +965,7 @@ bool ym_max_halfstar(count i, mulv koppeltijd)
 
 		for (n = 0; n<FKFC_MAX[i]; n++)
 		{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[i][n];
 			if (TRIG_max[i][k] >= 0)
 #else
@@ -975,7 +975,7 @@ bool ym_max_halfstar(count i, mulv koppeltijd)
 			{
 				if ((TOTXB_PL[k] > 0) && !PG[k] && R[k] && (A[k] || PP[k]) || ((TOTXB_PL[k] == 0) && RA[k]))
 				{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 					if ((TRIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k] - 9))  /* -9 om rekening te houden met ORT's in tienden van seconden          */
 #else
 					if ((TIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k] - 9))  /* -9 om rekening te houden met ORT's in tienden van seconden          */
@@ -1011,7 +1011,7 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
   
     for (n=0; n<FKFC_MAX[i]; n++) 
     {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
       k = KF_pointer[i][n];
       if (TRIG_max[i][k] >= 0)
 #else
@@ -1021,7 +1021,7 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
       {
         if (TOTXB_PL[k]>0 && !PG[k] && R[k] && (A[k] || PP[k]) || TOTXB_PL[k]==0 && RA[k]) 
         {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			if ((TRIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k]))
 #else
 			if ((TIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k]))
@@ -1062,7 +1062,7 @@ bool yws_groen_fk(count i)
 
 	for (n = 0; n<FKFC_MAX[i]; n++)
 	{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 		k = KF_pointer[i][n];
 #else
 		k = TO_pointer[i][n];
@@ -1121,7 +1121,7 @@ void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool con
   {
     for (j=0; j<FKFC_MAX[fc]; j++) 
     {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 		k = KF_pointer[fc][j];
 #else
 		k = TO_pointer[fc][j];
@@ -1274,7 +1274,7 @@ void print_tig(void)
     /* printen TIG tabel */
     for (fc1=0; fc1<FCMAX; fc1++)
     {
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
       if (fc==fc1)
         xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," X ", TRIG_max[fc][fc1]);
       else
@@ -1421,7 +1421,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 			for (cfc = fc + 1; cfc < FCMAX; ++cfc)
 			{
 				// check if conflicting
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 #ifndef NO_GGCONFLICT
 				if (TIG_max[fc][cfc] >= 0 || TIG_max[fc][cfc] <= GK)
 #else
@@ -1439,7 +1439,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 
 					// calculate TXB and TXD including amber (or not) and clearing/intergreen times
 					txb_cfc = PRM[txa1 + cfc * 10 + real * 5 + 1];
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 					if (TIG_max[fc][cfc] >= 0)
 					{
 						txd_fc = txd + ((TIG_max[fc][cfc] + 9) / 10);
@@ -1456,7 +1456,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 						if (txd_cfc > txmax)  txd_cfc -= txmax;
 					}
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 #ifndef NO_GGCONFLICT
 					else /* TIG_max[fc][cfc] <= GK */
 					{
