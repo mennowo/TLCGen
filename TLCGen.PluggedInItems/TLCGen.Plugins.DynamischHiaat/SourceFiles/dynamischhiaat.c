@@ -1,6 +1,5 @@
 ﻿/* 
    BESTAND:   dynamischhiaat.c
-   TLCGEN :   0.4.0 en hoger
 
    ****************************** Versie commentaar **********************************************************
    *
@@ -12,6 +11,7 @@
    * 2.3.0    15-02-2019   ddo         Veiligstellen hiaattijden aangepast
    * 2.4.0    20-06-2019   ddo         Niet afzetten MK[fc] BIT3 tijdens MG[fc] tot er een conflictaanvraag is
    * 2.5.0    21-06-2019   ddo         Niet afzetten MK[fc] BIT3 tijdens WG[fc] en 'extra verlengen in WG' geselecteerd
+   * 2.5.0a   20-09-2019   ddo         Commentaar toegevoegd mbt 'extra verlengen in WG' en SCH[schdynhiaat<fc>]
    *
    ***********************************************************************************************************
 
@@ -43,26 +43,31 @@
    opgedrempeld mag worden.
    
    De argumenten met een enkel streepje zijn de originele argumenten uit de IVER'18 voorbeeldcode van 
-   Goudappel Coffeng (Willem Kinzel). De argumenten met een dubbel streepje zijn toegevoegde argumenten tbv 
-   het gemeentelijk wegennet (Dick den Ouden). 
+   Goudappel Coffeng (Willem Kinzel). De argumenten met een dubbel streepje zijn toegevoegde argumenten 
+   door Lex Trafico (Dick den Ouden) tbv het gemeentelijk wegennet en de GOM detectieconfiguratie. 
    In de code zijn de wijzigingen aangegeven met / *-* / bij de functie of bij de aanpassing.
    
    De code is vermoedelijk nog voor verbetering vatbaar; feedback wordt gewaardeerd op d.denouden@ll-t.nl 
    
    Beschrijving van de aanroep:
    -- 1e argument: boolean tbv bepaling functie wel/niet gebruiken voor deze fase (bijvoorbeeld niet bij 
-                   brugopening), uitgevoerd als hulpelement
+                   brugopening), uitgevoerd als hulpelement voor aansturing vanuit de applicatie en als
+                   schakelaar voor permanent aan- of uitzetten (!SCH[schdynhiaat<fc>] || IH[hgeendynhiaat<fc>]).
                    Indien waarde == TRUE wordt de functie niet doorlopen.
    -- 2e argument: boolean tbv detectie vrijkomen koplus (tellers starten op ED[koplus] ipv op SG[fc]), 
                    uitgevoerd als schakelaar
                    Indien waarde == TRUE worden de timers gestart bij het voor het eerst na SG[] afvallen van
                    de koplus.
-   -- 3e argument: array-nummer memory element meetkriterium
-   -- 4e argument: boolean tbv wel/niet opdrempelen, uitgevoerd als hulpelement (aan te sturen vanuit de
+   -- 3e argument: boolean t.b.v. wel/niet extra verlengen in WG. Wanneer in TLCGen onder tabblad
+                   'Algemeen' -> 'Info & opties' de optie "extra meeverlengen in WG" is aangevinkt, wordt 
+                   in de aanroep TRUE mee gegeven; anders FALSE. De waarde TRUE zorgt ervoor dat in WG[<fc>] 
+                   de overgang naar VG[<fc>] pas plaats vindt na een conflicterende aanvraag.
+   -- 4e argument: array-nummer memory element meetkriterium
+   -- 5e argument: boolean tbv wel/niet opdrempelen, uitgevoerd als hulpelement (aan te sturen vanuit de
                    applicatie via schakelaar of hulpelement)
                    Indien waarde == TRUE mag er worden opgedrampeld; bij NIET opdrempelen geldt er een 
                    gescheiden hiaatmeting per rijstrook.
-   -  5e argument: array-nummer signaalgroep 
+   -  6e argument: array-nummer signaalgroep 
 
    Dan per detectielus de volgende argumenten:
    -  rijstrook 1, 2, 3 of 4. Deze waarde wordt gebruikt voor het al dan niet opdrempelen. Als er wel 
@@ -125,19 +130,18 @@
 
 
    Voorbeeld voor 2 rijstroken:
-                                    1e argument,      2e argument, 3e arg,        4e argument, 5e arg,
-   hiaattijden_verlenging ( IH[hgeendynhiaat05], SCH[schedkop_05],  mmk05, IH[hopdrempelen05],   fc05, 
+                                                           1e argument,      2e argument, 3e arg, 4e arg,        5e argument, 6e arg,
+    hiaattijden_verlenging( !SCH[schdynhiaat05] || IH[hgeendynhiaat05], SCH[schedkop_05],  FALSE,  mmk05, IH[hopdrempelen05],   fc05,
+        1, d051, t051_1, t051_2, ttdh_051_1, ttdh_051_2, tmax_051, prmspringverleng_051, hverleng_051, prmTDHstd051, 
+        1, d053, t053_1, t053_2, ttdh_053_1, ttdh_053_2, tmax_053, prmspringverleng_053, hverleng_053, prmTDHstd053, 
+        1, d055, t055_1, t055_2, ttdh_055_1, ttdh_055_2, tmax_055, prmspringverleng_055, hverleng_055, prmTDHstd055, 
+        1, d057, t057_1, t057_2, ttdh_057_1, ttdh_057_2, tmax_057, prmspringverleng_057, hverleng_057, prmTDHstd057, 
+        2, d052, t052_1, t052_2, ttdh_052_1, ttdh_052_2, tmax_052, prmspringverleng_052, hverleng_052, prmTDHstd052, 
+        2, d054, t054_1, t054_2, ttdh_054_1, ttdh_054_2, tmax_054, prmspringverleng_054, hverleng_054, prmTDHstd054, 
+        2, d056, t056_1, t056_2, ttdh_056_1, ttdh_056_2, tmax_056, prmspringverleng_056, hverleng_056, prmTDHstd056, 
+        2, d058, t058_1, t058_2, ttdh_058_1, ttdh_058_2, tmax_058, prmspringverleng_058, hverleng_058, prmTDHstd058, 
+        END);
 
-    rijstr,  det,  moment1,  moment2,       tdh1,       tdh2,  maxtijd,      spring- en verlengvoorwaarden, stat.TDH, 
-         1, d051,   t051_1,   t051_2, ttdh_051_1, ttdh_051_2, tmax_051, prmspringverleng_051, hverlengd051, prmTDHstd051, 
-         1, d053,   t053_1,   t053_2, ttdh_053_1, ttdh_053_2, tmax_053, prmspringverleng_053, hverlengd053, prmTDHstd053, 
-         1, d055,   t055_1,   t055_2, ttdh_055_1, ttdh_055_2, tmax_055, prmspringverleng_055, hverlengd055, prmTDHstd055, 
-         1, d057,   t057_1,   t057_2, ttdh_057_1, ttdh_057_2, tmax_057, prmspringverleng_057, hverlengd057, prmTDHstd057, 
-         2, d052,   t052_1,   t052_2, ttdh_052_1, ttdh_052_2, tmax_052, prmspringverleng_052, hverlengd052, prmTDHstd052, 
-         2, d054,   t054_1,   t054_2, ttdh_054_1, ttdh_054_2, tmax_054, prmspringverleng_054, hverlengd054, prmTDHstd054, 
-         2, d056,   t056_1,   t056_2, ttdh_056_1, ttdh_056_2, tmax_056, prmspringverleng_056, hverlengd056, prmTDHstd056, 
-         2, d058,   t058_1,   t058_2, ttdh_058_1, ttdh_058_2, tmax_058, prmspringverleng_058, hverlengd058, prmTDHstd058, 
-         END);
 
 	De hulpelementen IH[hgeendynhiaat05] en IH[hopdrempelen05] kunnen zowel met een schakelaar als vanuit de 
     regelapplicatie worden opgezet.
