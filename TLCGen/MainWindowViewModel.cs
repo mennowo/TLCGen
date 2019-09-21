@@ -206,7 +206,7 @@ namespace TLCGen.ViewModels
 
         public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-        public string ControllerVersion => ControllerVM.Controller.Data.TLCGenVersie;
+        public string ControllerVersion => ControllerVM?.Controller?.Data?.TLCGenVersie;
 
         #endregion // Properties
 
