@@ -25,7 +25,7 @@
             <Label Content="PTP koppeling" Grid.Row="0" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
                       IsEnabled="{Binding Path=IsNotIntern}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="0" />
             <Label Content="Intern" Grid.Row="1" />
             <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
             <Grid Grid.Row="3" Grid.ColumnSpan="2">
@@ -58,7 +58,7 @@
         <ag:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="14">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
             <Label Content="Intern" Grid.Row="1" />
             <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
             <Label Content="Gerelateerde koppeling" Grid.Row="2" />
@@ -109,7 +109,7 @@
         <ag:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="10">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
+                      SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
             <Label Content="Intern" Grid.Row="1" />
             <CheckBox IsChecked="{Binding Path=IsIntern,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" />
             <Label Content="Gerelateerde koppeling" Grid.Row="2" />

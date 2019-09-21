@@ -51,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("mulv TC_max, DD_anyfase;");
             if(c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
             {
-                sb.AppendLine($"#if defined CCOLTIG && !defined NO_TIGMAX");
+                sb.AppendLine($"#if (CCOL_V >= 95) && !defined NO_TIGMAX");
                 sb.AppendLine($"{ts}mulv TIG_ontwerp[FCMAX][FCMAX];");
                 sb.AppendLine($"#else");
                 sb.AppendLine($"{ts}mulv TO_ontwerp[FCMAX][FCMAX];");
@@ -113,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}{{");
             if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
             {
-                sb.AppendLine($"{ts}{ts}{ts}#if defined CCOLTIG && !defined NO_TIGMAX");
+                sb.AppendLine($"{ts}{ts}{ts}#if (CCOL_V >= 95) && !defined NO_TIGMAX");
                 sb.AppendLine($"{ts}{ts}{ts}{ts}TIG_ontwerp[i][j] = TIG_max[i][j];");
                 sb.AppendLine($"{ts}{ts}{ts}#else");
                 sb.AppendLine($"{ts}{ts}{ts}{ts}TO_ontwerp[i][j] = TO_max[i][j];");
@@ -141,7 +141,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* Fase {nl.FaseVan} en conflicten van naloop {nl.FaseNaar} */");
                     if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
                     {
-                        sb.AppendLine($"{ts}#if defined CCOLTIG && !defined NO_TIGMAX");
+                        sb.AppendLine($"{ts}#if (CCOL_V >= 95) && !defined NO_TIGMAX");
                         foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
                         {
                             sb.AppendLine($"{ts}{ts}TIG_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TIG[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");

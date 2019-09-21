@@ -126,6 +126,7 @@
     <Compile Include="Models.Enumerations\DetectorAanvraagTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\FileMetingLocatieEnum.cs" />
     <Compile Include="Models.Enumerations\FaseTypeEnum.cs" />
     <Compile Include="Models.Enumerations\GroentijdenTypeEnum.cs" />
     <Compile Include="Models.Enumerations\HalfstarGekoppeldTypeEnum.cs" />
@@ -200,6 +201,8 @@
     <Compile Include="Models\Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarOVIngreepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarPeriodeDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\KoppelSignaalModel.cs" />
+    <Compile Include="Models.Enumerations\KoppelSignaalRichtingEnum.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanFaseModel.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\ConflictModel.cs" />

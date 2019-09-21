@@ -153,8 +153,17 @@
                 <StackPanel>
                     <CheckBox Content="Aanvraag" IsChecked="{Binding Path=AanvraagBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Aanvraag bij storing op alle aanvraag detectie (op een rijstrook)" Margin="5" />
                     <CheckBox 
+                        Visibility="{Binding Path=AanvraagBijDetectieStoringVertraagdVisible,Converter={StaticResource Bool2VisConverter}}"
+                        Content="Aanvr.: vertraagd" IsChecked="{Binding Path=AanvraagBijDetectieStoringVertraagd,UpdateSourceTrigger=PropertyChanged}" ToolTip="T.b.v. aanvraag bij storing: vertraagd opzetten aanvraag" Margin="5" />
+                    <Label Content="Aanvr. vertraging" Visibility="{Binding Path=AanvraagBijDetectieStoringVertraagd,Converter={StaticResource Bool2VisConverter}}" />
+                    <TextBox Margin="2" Visibility="{Binding Path=AanvraagBijDetectieStoringVertraagd,Converter={StaticResource Bool2VisConverter}}"
+                             Text="{Binding Path=AanvraagBijDetectieStoringVertraging,UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox 
                         Visibility="{Binding Path=AanvraagBijDetectieStoringKoplusKnopVisible,Converter={StaticResource Bool2VisConverter}}"
                         Content="Aanvr.: kop &amp; knop" IsChecked="{Binding Path=AanvraagBijDetectieStoringKoplusKnop,UpdateSourceTrigger=PropertyChanged}" ToolTip="T.b.v. aanvraag bij storing: alleen kijken naar knoppen en koplussen (op een rijstrook)" Margin="5" />
+                    <CheckBox 
+                        Visibility="{Binding Path=AanvraagBijDetectieStoringKopLangVisible,Converter={StaticResource Bool2VisConverter}}"
+                        Content="Aanvr.: kop &amp; lang" IsChecked="{Binding Path=AanvraagBijDetectieStoringKopLang,UpdateSourceTrigger=PropertyChanged}" ToolTip="T.b.v. aanvraag bij storing: alleen kijken naar kop en lange lussen (op een rijstrook)" Margin="5" />
                     <CheckBox Content="Hiaat koplus" 
                               IsEnabled="{Binding Path=HasHiaatKoplusBijDetectieStoring}"
                               IsChecked="{Binding Path=HiaatKoplusBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Hiaat koplus bij defect lange lus" Margin="5" />

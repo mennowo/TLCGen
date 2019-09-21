@@ -4,11 +4,11 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum GroentijdenTypeEnum
+    public enum FileMetingLocatieEnum
     {
-        [Description("Maxgroen")]
-        MaxGroentijden,
-        [Description("Verlenggroen")]
-        VerlengGroentijden
+        [Description("Na stopstreep")]
+        NaStopstreep,
+        [Description("Voor stopstreep")]
+        VoorStopstreep
     }
 }

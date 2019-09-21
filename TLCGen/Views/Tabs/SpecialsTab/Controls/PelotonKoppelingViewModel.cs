@@ -192,9 +192,12 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.IsIntern = value;
-                PelotonKoppeling.PTPKruising = null;
-                RaisePropertyChanged(nameof(PTPKruising));
+                if (value)
+                {
+                    PelotonKoppeling.PTPKruising = "INTERN";
+                }
                 RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(PTPKruising));
                 RaisePropertyChanged(nameof(IsNotIntern));
                 RaisePropertyChanged(nameof(IsInternIn));
                 RaisePropertyChanged(nameof(IsInternUit));
@@ -227,6 +230,7 @@ namespace TLCGen.ViewModels
                 {
                     PelotonKoppeling.PTPKruising = value;
                     RaisePropertyChanged<object>(broadcast: true);
+                    if (value == "INTERN") IsIntern = true;
                 }
             }
         }

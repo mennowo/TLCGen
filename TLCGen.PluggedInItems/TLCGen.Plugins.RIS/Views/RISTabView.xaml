@@ -17,14 +17,27 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <CheckBox IsChecked="{Binding Path=RISToepassen,UpdateSourceTrigger=PropertyChanged}" Content="RIS toepassen" Margin="5" Grid.ColumnSpan="2" />
-        <CheckBox IsChecked="{Binding Path=HasMultipleSystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="1" Grid.ColumnSpan="2" >
+        <CheckBox IsChecked="{Binding Path=NietCheckenOpSignaalgroep,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="1" Grid.ColumnSpan="2" >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Niet checken op signaalgroep" />
+                <ct:InfoElement Margin="2,0,2,0">
+                    <ct:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Bij Vialis moet dit worden geactiveerd.
+                        </TextBlock>
+                    </ct:InfoElement.InfoPopup>
+                </ct:InfoElement>
+            </StackPanel>
+        </CheckBox>
+        <CheckBox IsChecked="{Binding Path=HasMultipleSystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="2" Grid.ColumnSpan="2" >
             <TextBlock Text="Meerdere SYSTEM_ITF waarden" />
         </CheckBox>
         <Grid Visibility="{Binding Path=NoHasMultipleSystemITF,Converter={StaticResource Bool2VisConv}}"
-              Grid.Row="2">
+              Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -33,7 +46,7 @@
             <TextBox Text="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" IsEnabled="{Binding Path=RISToepassen}" />
         </Grid>
         <Grid Visibility="{Binding Path=HasMultipleSystemITF,Converter={StaticResource Bool2VisConv}}"
-              Grid.Row="2">
+              Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -51,7 +64,7 @@
                 <Button Margin="2" Content="Verwijderen" Command="{Binding Path=RemoveSystemITFCommand}" />
             </StackPanel>
         </Grid>
-        <TabControl Grid.Row="3" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
+        <TabControl Grid.Row="4" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
             <!--<TabItem Header="Instellingen fasen">
                 <Grid>
                     <Grid.RowDefinitions>

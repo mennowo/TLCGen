@@ -229,6 +229,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public FileMetingLocatieEnum FileMetingLocatie
+        {
+            get => _FileIngreep.FileMetingLocatie;
+            set
+            {
+                _FileIngreep.FileMetingLocatie = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public int MinimaalAantalMeldingenMax
         {
             get { return _FileIngreep.FileDetectoren.Count; }

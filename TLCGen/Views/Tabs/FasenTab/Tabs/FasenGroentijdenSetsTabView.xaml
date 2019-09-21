@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:dg2d="http://gu.se/DataGrid2D"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
         <DataTemplate x:Key="GroenMatrixCellTemplate">
             <TextBlock 
@@ -31,11 +31,24 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="1">
-            <Button Content="Set toevoegen" Margin="0,2,2,2" Command="{Binding AddGroentijdenSetCommand}" />
-            <ComboBox ItemsSource="{Binding Path=GroentijdenSets}" SelectedItem="{Binding SelectedSet}" Margin="2" DisplayMemberPath="Naam" />
-            <Button Content="Set verwijderen" Margin="2" Command="{Binding RemoveGroentijdenSetCommand}"/>
-        </WrapPanel>
+        <DockPanel Grid.Row="1">
+            <Button DockPanel.Dock="Left" Content="Set toevoegen" Margin="0,2,2,2" Command="{Binding AddGroentijdenSetCommand}" />
+            <ComboBox DockPanel.Dock="Left" ItemsSource="{Binding Path=GroentijdenSets}" SelectedItem="{Binding SelectedSet}" Margin="2" DisplayMemberPath="Naam" />
+            <Button DockPanel.Dock="Left" Content="Set verwijderen" Margin="2" Command="{Binding RemoveGroentijdenSetCommand}"/>
+            <StackPanel DockPanel.Dock="Right" Margin="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Content="Data importeren" Padding="2" Command="{Binding ImportGroentijdenDataCommand}"/>
+                <controls:InfoElement>
+                    <controls:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Importeren van .csv data, in de vorm van:<LineBreak/>
+                            05;250;200;200;150<LineBreak/>
+                            08;150;500;450;100<LineBreak/>
+                            etc...
+                        </TextBlock>
+                    </controls:InfoElement.InfoPopup>
+                </controls:InfoElement>
+            </StackPanel>
+        </DockPanel>
         <Grid Grid.Row="0">
             <DataGrid
                       dg2d:ItemsSource.Array2DTransposed="{Binding GroentijdenMatrix}"

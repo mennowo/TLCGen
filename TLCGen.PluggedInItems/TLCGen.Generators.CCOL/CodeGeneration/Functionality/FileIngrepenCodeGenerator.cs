@@ -834,22 +834,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var yes = false;
                     foreach (var fcm in c.Fasen)
                     {
-                        if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                        foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                         {
+                            if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
                             {
-                                var fm = c.FileIngrepen.FirstOrDefault(
-                                    x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
-                                if (fm != null)
+                                if (!yes)
                                 {
-                                    if (!yes)
-                                    {
-                                        yes = true;
-                                        sb.AppendLine();
-                                        sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
-                                    }
-                                    sb.AppendLine(
-                                        $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                    yes = true;
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file (meting na ss) */");
                                 }
+                                sb.AppendLine(
+                                    $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
                             }
                         }
                     }

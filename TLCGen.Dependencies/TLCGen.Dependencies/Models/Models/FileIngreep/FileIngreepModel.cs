@@ -28,6 +28,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string AlternatieveGroentijdenSet { get; set; }
+        public FileMetingLocatieEnum FileMetingLocatie { get; set; }
 
         [IOElement("file", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }

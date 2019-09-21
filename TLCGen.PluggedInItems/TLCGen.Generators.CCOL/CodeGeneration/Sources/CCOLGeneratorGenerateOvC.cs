@@ -298,8 +298,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
             var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
+            var _schaltghst = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltghst");
             var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
+            var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             sb.AppendLine("void OVInstellingen(void) ");
             sb.AppendLine("{");
@@ -704,6 +706,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
 
                 sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep */");
+                var tts = ts;
+                if (c.HalfstarData.IsHalfstar)
+                {
+                    tts += ts;
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                    sb.AppendLine($"{ts}{{");
+                }
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
                     Tuple<string, List<string>> hasgs = null;
@@ -717,19 +726,49 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     if (hasgs != null)
                     {
-                        sb.Append($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}");
+                        sb.Append($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}");
                         foreach (var ofc in hasgs.Item2)
                         {
                             sb.Append(ofc);
                         }
-                        sb.Append($"]");
-                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
-                        sb.AppendLine($";");
+                        sb.AppendLine("];");
                     }
                     else
                     {
-                        sb.AppendLine($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                        sb.AppendLine($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                     }
+                }
+                if (c.HalfstarData.IsHalfstar)
+                {
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}else");
+                    sb.AppendLine($"{ts}{{");
+                    foreach (var fc in c.ModuleMolen.FasenModuleData)
+                    {
+                        Tuple<string, List<string>> hasgs = null;
+                        foreach (var gs in gelijkstarttuples)
+                        {
+                            if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                            {
+                                hasgs = gs;
+                                break;
+                            }
+                        }
+                        if (hasgs != null)
+                        {
+                            sb.Append($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltghst}");
+                            foreach (var ofc in hasgs.Item2)
+                            {
+                                sb.Append(ofc);
+                            }
+                            sb.AppendLine("];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltghst}{fc.FaseCyclus}];");
+                        }
+                    }
+                    sb.AppendLine($"{ts}}}");
                 }
                 sb.AppendLine();
 

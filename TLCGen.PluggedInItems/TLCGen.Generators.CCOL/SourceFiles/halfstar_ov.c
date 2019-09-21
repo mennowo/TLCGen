@@ -28,7 +28,7 @@
 #include "lwmlvar.h"    /* uitgebreide modulen                                            */
 #include "plvar.h"      /* signaalplannen                                                 */
 #include "plevar.h"     /* uitgebreide signaalplannen                                     */
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 #include "trigvar.h"    /* intergroen variabelen                                          */
 #else
 #include "tigvar.h"     /* intergroen variabelen                                          */
@@ -91,12 +91,12 @@ mulv set_pg_primair_ov_ple(count i)
 #ifdef NO_TIG
 		for (n = 0; n < KFC_MAX[i]; n++)
 		{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 			if (TIG[k][i])                                   /* zoek grootste ontruimingstijd */
 			{
 				to_tmp = TIG_max[k][i] - TIG_timer[k];
@@ -112,7 +112,7 @@ mulv set_pg_primair_ov_ple(count i)
 #else
 		for (n = 0; n < FKFC_MAX[i]; n++)
 		{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[i][n];
 			if (TRIG_max[k][i] >= 0)
 			{
@@ -193,7 +193,7 @@ void set_pg_fk_totxb_ov_ple(count i)
 	/* ------------------------------------------------------- */
 	for (n = 0; n < FKFC_MAX[i]; n++)
 	{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 		k = KF_pointer[i][n];
 #else
 		k = TO_pointer[i][n];
@@ -421,7 +421,7 @@ int BepaalTO(count fcvan, count fcnaar)
 {
 	int to_max = 0;
 
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 	if (TIG_max[fcvan][fcnaar] >= 0) {                      /* zoek grootste ontruimingstijd      */
 		if (TIG[fcvan][fcnaar])
 			to_max = TIG_max[fcvan][fcnaar] - TIG_timer[fcvan];
@@ -556,7 +556,7 @@ bool StartGroenConflictenUitstellen(count fcov, int prio_opties)
 
 	for (j = 0; j < FKFC_MAX[fcov]; j++)
 	{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 		k = KF_pointer[fcov][j];
 #else
 		k = TO_pointer[fcov][j];
@@ -606,11 +606,12 @@ void OVHalfstarOnderMaximum(void)
 					/* ExtraGroenNaTXD gebied */
 					iMaxResterendeGroenTijd = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
 				}
+				/* TODO herzien
 				else
-				{
+				{*/
 					/* bijzondere realisatie */
-					iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
-				}
+					/* iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
+				}*/
 			}
 			else // !G[fc]
 			{
@@ -653,6 +654,47 @@ void OVHalfstarStartGroenMomenten(void)
 	}
 }
 
+void OVHalfstarTegenhouden(void)
+{
+	/* placeholder for future use */
+	/* if (FALSE == TRUE) */
+	if (IH[hplact])
+	{
+		int ov, fc;
+		boolv magUitstellen;
+
+		for (fc = 0; fc < FCMAX; ++fc)
+		{
+			RR[fc] &= ~OV_RR_BIT;
+		}
+
+		for (ov = 0; ov < ovOVMAX; ++ov)
+		{
+			if (iPrioriteit[ov] && iPrioriteitsOpties[ov] >= poPLGroenVastHoudenNaTXD)
+			{
+				int i, k;
+				fc = iFC_OVix[ov];
+				magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
+				for (i = 0; i < GKFC_MAX[fc]; ++i)
+				{
+#if (CCOL_V >= 95)
+					k = KF_pointer[fc][i];
+#else
+					k = TO_pointer[fc][i];
+#endif
+					if (magUitstellen)
+					{
+						if (iStartGroen[ov] <= iRealisatieTijd[fc][k])
+						{
+							RR[k] |= OV_RR_BIT;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void OVHalfstarAfkappen(void)
 {
 	if (IH[hplact])
@@ -682,6 +724,7 @@ void OVHalfstarGroenVasthouden(void)
 			magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
 			// Reset OV_YV_BIT, will determine YV according to signalplan structure
 			YV[fc] &= ~OV_YV_BIT;
+			YM[fc] &= ~OV_YM_BIT;
 
 			if (iPrioriteit[ov] &&
 				(iPrioriteitsOpties[ov] & poGroenVastHouden) || (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)) {

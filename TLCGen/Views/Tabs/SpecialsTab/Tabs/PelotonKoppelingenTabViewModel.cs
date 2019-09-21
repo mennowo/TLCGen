@@ -55,7 +55,10 @@ namespace TLCGen.ViewModels
                 _selectedPelotonKoppeling = value;
                 value?.UitgaandeDetectorenManager.UpdateSelectables(ControllerDetectoren);
                 InterneKoppelingenUit.Clear();
-                foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
+                if(PelotonKoppelingen != null)
+                {
+                    foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
+                }
                 RaisePropertyChanged();
             }
         }
@@ -127,14 +130,13 @@ namespace TLCGen.ViewModels
         {
             var Peloton = new PelotonKoppelingModel();
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
-            if (PTPKruisingenNames.Any())
+            if (PTPKruisingenNames.Any()) Peloton.PTPKruising = PTPKruisingenNames.First();
+            Peloton.KoppelingNaam = "KOP1";
+            int i = 1;
+            while(!TLCGen.Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, Peloton.KoppelingNaam, Models.Enumerations.TLCGenObjectTypeEnum.PelotonKoppeling))
             {
-                Peloton.PTPKruising = PTPKruisingenNames.First();
-                Peloton.KoppelingNaam = PTPKruisingenNames.First();
-            }
-            else
-            {
-                Peloton.KoppelingNaam = "KOP1";
+                ++i;
+                Peloton.KoppelingNaam = "KOP" + i;
             }
             var vm = new PelotonKoppelingViewModel(Peloton);
             PelotonKoppelingen.Add(vm);
@@ -229,6 +231,7 @@ namespace TLCGen.ViewModels
                     {
                         PTPKruisingenNames.Add(kr.TeKoppelenKruispunt);
                     }
+                    PTPKruisingenNames.Add("INTERN");
                 }
                 else
                 {

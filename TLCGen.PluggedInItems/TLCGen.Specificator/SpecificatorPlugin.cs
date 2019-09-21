@@ -79,6 +79,7 @@ namespace TLCGen.Specificator
                         _data = new SpecificatorDataModel();
                     }
                     SpecificatorVM.Data = _data;
+                    SpecificatorTabVM.Data = _data;
                     SpecificatorTabVM.SpecialsParagrafen = new ObservableCollectionAroundList<SpecificatorSpecialsParagraafViewModel, SpecificatorSpecialsParagraaf>(_data.SpecialsParagrafen);
                     SpecificatorTabVM.SelectedSpecialsParagraaf = SpecificatorTabVM.SpecialsParagrafen.FirstOrDefault();
                 }

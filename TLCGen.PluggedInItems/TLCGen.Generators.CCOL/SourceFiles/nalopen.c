@@ -262,7 +262,7 @@ void gk_ResetGK(void)
 	{
 		for (i = KFC_MAX[fc]; i < GKFC_MAX[fc]; ++i)
 		{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 			k = KF_pointer[fc][i];
 #else
 			k = TO_pointer[fc][i];
@@ -329,7 +329,7 @@ void gk_ControlGK(void)
 			TGK_timer[fc] = 0;
 			for (i = KFC_MAX[fc]; i < GKFC_MAX[fc]; ++i)
 			{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 				k = KF_pointer[fc][i];
 #else
 				k = TO_pointer[fc][i];
@@ -346,7 +346,7 @@ void gk_ControlGK(void)
 			TGK_timer[fc] += TE;
 			for (i = KFC_MAX[fc]; i < GKFC_MAX[fc]; ++i)
 			{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 				k = KF_pointer[fc][i];
 #else
 				k = TO_pointer[fc][i];
@@ -366,12 +366,12 @@ void berekenTGK_max(count fc1, count fc2, count tnl_max)
 	int i, k;
 	for (i = KFC_MAX[fc1]; i < GKFC_MAX[fc1]; ++i)
 	{
-#ifdef CCOLTIG
+#if (CCOL_V >= 95)
 		k = KF_pointer[fc1][i];
 #else
 		k = TO_pointer[fc1][i];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
 		if (TIG_max[fc1][k] == GKL &&
 			TIG_max[fc2][k] >= 0 &&
 			((tnl_max + TVG_max[fc2] + TIG_max[fc2][k]) > TGK_max[fc1][k]))

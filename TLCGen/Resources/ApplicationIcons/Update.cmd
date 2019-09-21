@@ -1,2 +1,2 @@
-..\..\..\..\..\..\Downloads\SvgToXaml-master\SvgToXaml-master\SvgToXaml\bin\Debug\SvgToXaml.exe BuildDict /inputdir "." /outputdir ".." /outputname ApplicationIcons
+"C:\Personal Applications\SvgToXaml\SvgToXaml.exe" BuildDict /inputdir "." /outputdir ".." /outputname ApplicationIcons
 pause

@@ -57,6 +57,7 @@ void set_special_MR(count i, count j, bool condition);
 void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te);
 void set_pp_halfstar(count fc, bool condition, count value);
 void set_ym_pl_halfstar(count fc, bool condition);
+void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until);
 void set_yspl(count fc);
 void SetPlanTijden2R(count fc, mulv plan, mulv ta  , mulv tb  , mulv tc  , mulv td  , mulv te  , 
                      count fc_2,          mulv ta_2, mulv tb_2, mulv tc_2, mulv td_2, mulv te_2);

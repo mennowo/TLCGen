@@ -595,6 +595,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
             var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
+            var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
@@ -660,7 +662,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.OVData.OVIngrepen.Count > 0 ||
                 controller.OVData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}AfhandelingOV();");
+                if (controller.HalfstarData.IsHalfstar)
+                {
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingOV();");
+                    sb.AppendLine($"{ts}else");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}int fc;");
+                    sb.AppendLine($"{ts}{ts}RTFB &= ~OV_RTFB_BIT;");
+                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~OV_Z_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~OV_FM_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~OV_RW_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~OV_RR_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~OV_YV_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~OV_YM_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~OV_MK_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~OV_PP_BIT;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}AfhandelingOV();");
+                }
             }
             if (controller.Data.FixatieData.FixatieMogelijk)
             {

@@ -319,6 +319,18 @@ namespace TLCGen.ViewModels
 
         public bool UitgesteldeVasteAanvraagPossible => VasteAanvraag != NooitAltijdAanUitEnum.Nooit;
 
+        //public bool AlternatiefBinnenDrukknopPossible => _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBinnen);
+        //
+        //public bool AlternatiefBinnenDrukknop
+        //{
+        //    get => _faseCyclus.AlternatiefBinnenDrukknop;
+        //    set
+        //    {
+        //        _faseCyclus.AlternatiefBinnenDrukknop = value;
+        //        RaisePropertyChanged<object>(nameof(AlternatiefBinnenDrukknop), broadcast: true);
+        //    }
+        //}
+
         public bool HiaatKoplusBijDetectieStoring
         {
             get => _faseCyclus.HiaatKoplusBijDetectieStoring;
@@ -346,6 +358,30 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AanvraagBijDetectieStoringVertraagdVisible => AanvraagBijDetectieStoring;
+
+        public bool AanvraagBijDetectieStoringVertraagd
+        {
+            get => _faseCyclus.AanvraagBijDetectieStoringVertraagd;
+            set
+            {
+                _faseCyclus.AanvraagBijDetectieStoringVertraagd = value;
+                RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoringVertraagd), broadcast: true);
+            }
+        }
+
+        public bool AanvraagBijDetectieStoringVertragingVisible => AanvraagBijDetectieStoringVertraagd;
+
+        public int AanvraagBijDetectieStoringVertraging
+        {
+            get => _faseCyclus.AanvraagBijDetectieStoringVertraging;
+            set
+            {
+                _faseCyclus.AanvraagBijDetectieStoringVertraging = value;
+                RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoringVertraging), broadcast: true);
+            }
+        }
+
         public bool AanvraagBijDetectieStoringKoplusKnopVisible =>
             AanvraagBijDetectieStoring &&
             _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop) &&
@@ -358,6 +394,21 @@ namespace TLCGen.ViewModels
             {
                 _faseCyclus.AanvraagBijDetectieStoringKoplusKnop = value;
                 RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoringKoplusKnop), broadcast: true);
+            }
+        }
+
+        public bool AanvraagBijDetectieStoringKopLangVisible =>
+            AanvraagBijDetectieStoring &&
+            _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop) &&
+            _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.Lang);
+
+        public bool AanvraagBijDetectieStoringKopLang
+        {
+            get => _faseCyclus.AanvraagBijDetectieStoringKopLang;
+            set
+            {
+                _faseCyclus.AanvraagBijDetectieStoringKopLang = value;
+                RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoringKopLang), broadcast: true);
             }
         }
 
