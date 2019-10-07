@@ -130,6 +130,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
                 sb.AppendLine($"{ts}#endif");
             }
+            if (controller.RISData.RISToepassen)
+            {
+                sb.AppendLine($"{ts}#ifndef NO_RIS");
+                sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
+                sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
+                sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
+                sb.AppendLine($"{ts}{ts}#endif");
+                sb.AppendLine($"{ts}#endif");
+            }
             sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");

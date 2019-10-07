@@ -132,8 +132,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 110;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 110;
                 case CCOLCodeTypeEnum.RegCAanvragen:
@@ -182,16 +180,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"/* ----------------------------------------- */");
                     sb.AppendLine($"#define ris_conflict_gebied    0 /* connection tussen alle ingress lanes en egress lanes */");
                     return sb.ToString();
-
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
-                    sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
-                    sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
-                    sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
-                    sb.AppendLine($"{ts}{ts}#endif");
-                    sb.AppendLine($"{ts}#endif");
-                    return sb.ToString();
+                    
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
