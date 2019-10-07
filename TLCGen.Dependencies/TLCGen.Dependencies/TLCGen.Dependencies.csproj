@@ -215,6 +215,15 @@
     <Compile Include="Models\Models\InterSignaalGroep\NaloopModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\NaloopTijdModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\VoorstartModel.cs" />
+    <Compile Include="Models\Models\RIS\RISDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISFaseCyclusDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISFaseCyclusLaneDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISFaseCyclusLaneSimulatedStationModel.cs" />
+    <Compile Include="Models\Models\RIS\RISLaneExtendDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISLaneRequestDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISStationTypeEnum.cs" />
+    <Compile Include="Models\Models\RIS\RISStationTypeSimEnum.cs" />
+    <Compile Include="Models\Models\RIS\RISSystemITFModel.cs" />
     <Compile Include="Models\Models\Modules\FaseCyclusModuleDataModel.cs" />
     <Compile Include="Models\Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
     <Compile Include="Models\Models\Modules\ModuleFaseCyclusModel.cs" />

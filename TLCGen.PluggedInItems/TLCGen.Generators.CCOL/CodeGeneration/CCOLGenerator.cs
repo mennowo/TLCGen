@@ -193,6 +193,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg.txt"), GeneratePraticeCcolReg(c), Encoding.Default);
                     File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg2.txt"), GeneratePraticeCcolReg2(c), Encoding.Default);
                 }
+                if (c.RISData.RISToepassen)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rissim.c"), GenerateRisSimC(c), Encoding.Default);
+                }
 
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
@@ -276,6 +280,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.Fasen.Any(x => x.WachttijdVoorspeller))
                 {
                     CopySourceIfNeeded(c, "wtv_testwin.c", sourcefilepath);
+                }
+
+                if (c.RISData.RISToepassen)
+                {
+                    CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
                 }
 
                 foreach (var pl in PieceGenerators)

@@ -53,6 +53,8 @@ namespace TLCGen.Models
 
         public OVDataModel OVData { get; set; }
 
+        public RISDataModel RISData { get; set; }
+
         public ModuleMolenModel ModuleMolen { get; set; }
 
         [XmlArrayItem(ElementName = "ModuleMolen")]
@@ -93,6 +95,7 @@ namespace TLCGen.Models
             RoBuGrover = new RoBuGroverModel();
 			HalfstarData = new HalfstarDataModel();
             PelotonKoppelingenData = new PelotonKoppelingenDataModel();
+            RISData = new RISDataModel();
         }
 
         #endregion // Constructor

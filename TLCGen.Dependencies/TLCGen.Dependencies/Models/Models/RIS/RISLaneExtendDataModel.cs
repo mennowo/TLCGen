@@ -2,22 +2,22 @@
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
-namespace TLCGen.Plugins.RIS.Models
+namespace TLCGen.Models
 {
     [Serializable]
-    public class RISLaneRequestDataModel
+    public class RISLaneExtendDataModel
     {
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
         public int RijstrookIndex { get; set; }
-        public bool RISAanvraag { get; set; }
-        public int AanvraagStart { get; set; }
-        public int AanvraagEnd { get; set; }
+        public bool RISVerlengen { get; set; }
+        public int VerlengenStart { get; set; }
+        public int VerlengenEnd { get; set; }
         public RISStationTypeEnum Type { get; set; }
 
-        public RISLaneRequestDataModel()
+        public RISLaneExtendDataModel()
         {
-            RISAanvraag = true;
+            RISVerlengen = true;
         }
     }
 }

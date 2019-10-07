@@ -1,24 +1,23 @@
-﻿using GalaSoft.MvvmLight;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
-using TLCGen.Plugins.RIS.Models;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
-using System;
 using TLCGen.Messaging.Messages;
 using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
+using TLCGen.Plugins;
+using TLCGen.Models.Enumerations;
+using System.Collections.Generic;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
-    public class RISTabViewModel : ViewModelBase
+    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.FasenTab)]
+    public class FasenRISTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
-        private RISPlugin _plugin;
         private RISFaseCyclusDataViewModel _selectedRISFase;
         private RISSystemITFViewModel _selectedSystemITF;
         private RISDataModel _RISModel;
@@ -28,13 +27,21 @@ namespace TLCGen.Plugins.RIS
         private RelayCommand _addDefaultExtendLanesCommand;
         private RelayCommand _addSystemITFCommand;
         private RelayCommand _removeSystemITFCommand;
-        private ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> _RISFasen;
-        private ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> _RISRequestLanes;
-        private ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> _RISExtendLanes;
 
         #endregion // Fields
 
         #region Properties
+
+        public override string DisplayName => "RIS";
+
+        public override ControllerModel Controller
+        {
+            get => base.Controller; set
+            {
+                base.Controller = value;
+                RISModel = value?.RISData;
+            }
+        }
 
         public RISFaseCyclusDataViewModel SelectedRISFase
         {
@@ -52,14 +59,16 @@ namespace TLCGen.Plugins.RIS
             set
             {
                 _RISModel = value;
-                _RISFasen = null;
-                _RISRequestLanes = null;
-                _RISExtendLanes = null;
-                if (MultiSystemITF != null) MultiSystemITF.CollectionChanged -= MultiSystemITF_CollectionChanged;
-                MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
-                MultiSystemITF.CollectionChanged += MultiSystemITF_CollectionChanged;
+                RISFasen = value != null ? new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen) : null;
+                RISRequestLanes = value != null ? new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel?.RISRequestLanes) : null;
+                RISExtendLanes = value != null ? new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes) : null;
                 _lanesRequestManager = null;
                 _lanesExtendManager = null;
+                if (MultiSystemITF != null) MultiSystemITF.CollectionChanged -= MultiSystemITF_CollectionChanged;
+                if (value == null) return;
+                MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
+                MultiSystemITF.CollectionChanged += MultiSystemITF_CollectionChanged;
+                UpdateModel();
             }
         }
 
@@ -68,9 +77,10 @@ namespace TLCGen.Plugins.RIS
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
-        public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen => _RISFasen ?? (_RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen));
-        public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes => _RISRequestLanes ?? (_RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes));
-        public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes => _RISExtendLanes ?? (_RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes));
+        public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
+    
+        public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes { get; private set; }
+        public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes { get; private set; }
         public ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel> MultiSystemITF { get; private set; }
         public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
 
@@ -86,15 +96,15 @@ namespace TLCGen.Plugins.RIS
 
         public bool RISToepassen
         {
-            get => _RISModel.RISToepassen;
+            get => _RISModel?.RISToepassen == true;
             set
             {
                 _RISModel.RISToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
-                if (string.IsNullOrWhiteSpace(SystemITF)) SystemITF = _plugin.Controller.Data.Naam;
+                if (string.IsNullOrWhiteSpace(SystemITF)) SystemITF = Controller.Data.Naam;
                 foreach (var fc in RISFasen)
                 {
-                    var sg = _plugin.Controller.Fasen.First(x => x.Naam == fc.FaseCyclus);
+                    var sg = Controller.Fasen.First(x => x.Naam == fc.FaseCyclus);
                     if (sg != null && fc.Lanes.Any())
                     {
                         foreach (var l in fc.Lanes)
@@ -130,7 +140,7 @@ namespace TLCGen.Plugins.RIS
 
         public bool NietCheckenOpSignaalgroep
         {
-            get => _RISModel.NietCheckenOpSignaalgroep;
+            get => _RISModel?.NietCheckenOpSignaalgroep == true;
             set
             {
                 _RISModel.NietCheckenOpSignaalgroep = value;
@@ -140,7 +150,7 @@ namespace TLCGen.Plugins.RIS
 
         public bool HasMultipleSystemITF
         {
-            get => _RISModel.HasMultipleSystemITF;
+            get => _RISModel?.HasMultipleSystemITF == true;
             set
             {
                 _RISModel.HasMultipleSystemITF = value;
@@ -153,7 +163,7 @@ namespace TLCGen.Plugins.RIS
 
         public string SystemITF
         {
-            get => _RISModel.SystemITF;
+            get => _RISModel?.SystemITF;
             set
             {
                 _RISModel.SystemITF = value;
@@ -208,13 +218,29 @@ namespace TLCGen.Plugins.RIS
 
         #endregion // Properties
 
+        #region ITLCGenTabItem
+
+        public override void OnSelected()
+        {
+            if (!RISRequestLanes.IsSorted())
+            {
+                RISRequestLanes.BubbleSort();
+            }
+            if (!RISExtendLanes.IsSorted())
+            {
+                RISExtendLanes.BubbleSort();
+            }
+        }
+
+        #endregion
+
         #region Commands
 
         public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ?? (_addDefaultRequestLanesCommand = new RelayCommand(AddDefaultRequestLanesCommand_executed));
 
         private void AddDefaultRequestLanesCommand_executed()
         {
-            foreach (var fc in _plugin.Controller.Fasen)
+            foreach (var fc in Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
                 for (int i = 0; i < fc.AantalRijstroken; i++)
@@ -238,7 +264,7 @@ namespace TLCGen.Plugins.RIS
 
         private void AddDefaultExtendLanesCommand_executed()
         {
-            foreach (var fc in _plugin.Controller.Fasen)
+            foreach (var fc in Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
                 for (int i = 0; i < fc.AantalRijstroken; i++)
@@ -282,7 +308,7 @@ namespace TLCGen.Plugins.RIS
         {
             if (fc == null)
             {
-                fc = _plugin.Controller.Fasen.FirstOrDefault(x => x.Naam == faseName);
+                fc = Controller.Fasen.FirstOrDefault(x => x.Naam == faseName);
             }
             RISStationTypeEnum t = RISStationTypeEnum.UNKNOWN;
             if (fc == null) return t;
@@ -423,24 +449,125 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
+        internal void UpdateModel()
+        {
+            if (Controller != null && _RISModel != null)
+            {
+                var sitf = SystemITF;
+                if (HasMultipleSystemITF)
+                {
+                    var msitf = MultiSystemITF.FirstOrDefault();
+                    if (msitf != null)
+                    {
+                        sitf = msitf.SystemITF;
+                    }
+                }
+                foreach (var fc in Controller.Fasen)
+                {
+                    if (RISFasen.All(x => x.FaseCyclus != fc.Naam))
+                    {
+                        var risfc = new RISFaseCyclusDataViewModel(
+                                new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
+                        for (int i = 0; i < fc.AantalRijstroken; i++)
+                        {
+                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf }));
+                        }
+                        RISFasen.Add(risfc);
+                    }
+                    else
+                    {
+                        var risfc = RISFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                        if (risfc != null)
+                        {
+                            if (fc.AantalRijstroken > risfc.Lanes.Count)
+                            {
+                                var i = risfc.Lanes.Count;
+                                for (; i < fc.AantalRijstroken; i++)
+                                {
+                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf }));
+                                }
+                            }
+                            else if (fc.AantalRijstroken < risfc.Lanes.Count)
+                            {
+                                var i = risfc.Lanes.Count - fc.AantalRijstroken;
+                                for (int j = 0; j < i; j++)
+                                {
+                                    if (risfc.Lanes.Any())
+                                        risfc.Lanes.Remove(risfc.Lanes.Last());
+                                }
+                                var rem = _RISModel.RISRequestLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem) _RISModel.RISRequestLanes.Remove(r);
+                                var rem2 = _RISModel.RISExtendLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem2) _RISModel.RISExtendLanes.Remove(r);
+                            }
+                        }
+                    }
+                }
+                var rems = RISFasen.Where(x => Controller.Fasen.All(x2 => x2.Naam != x.FaseCyclus)).ToList(); new List<RISFaseCyclusDataViewModel>();
+                foreach (var sg in rems)
+                {
+                    RISFasen.Remove(sg);
+                }
+                RISFasen.BubbleSort();
+                foreach (var lre in RISRequestLanes) lre.UpdateRijstroken();
+                foreach (var lre in RISExtendLanes) lre.UpdateRijstroken();
+                RISRequestLanes.BubbleSort();
+                RISExtendLanes.BubbleSort();
+                UpdateRISLanes();
+                RaisePropertyChanged("");
+            }
+        }
+
+        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg, int LaneID, int RijstrookIndex, string systemITF)
+        {
+            var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel());
+            st.StationData.SignalGroupName = sg.Naam;
+            st.StationData.RijstrookIndex = RijstrookIndex;
+            st.StationData.LaneID = LaneID;
+            st.StationData.SystemITF = systemITF;
+            if (sg != null)
+            {
+                switch (sg.Type)
+                {
+                    case FaseTypeEnum.Auto:
+                        st.Type = RISStationTypeSimEnum.PASSENGERCAR;
+                        st.Flow = 200;
+                        st.Snelheid = 50;
+                        break;
+                    case FaseTypeEnum.Fiets:
+                        st.Type = RISStationTypeSimEnum.CYCLIST;
+                        st.Flow = 20;
+                        st.Snelheid = 15;
+                        break;
+                    case FaseTypeEnum.Voetganger:
+                        st.Type = RISStationTypeSimEnum.PEDESTRIAN;
+                        st.Flow = 20;
+                        st.Snelheid = 5;
+                        break;
+                    case FaseTypeEnum.OV:
+                        st.Type = RISStationTypeSimEnum.BUS;
+                        st.Flow = 10;
+                        st.Snelheid = 45;
+                        break;
+                }
+            }
+            st.StationData.SimulationData.RelatedName = st.StationData.Naam;
+            return st;
+        }
+
         #endregion // Private Methods 
 
         #region Public Methods
-
-        public void UpdateMessaging()
-        {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
-        }
 
         #endregion // Public Methods
 
         #region Constructor
 
-        public RISTabViewModel(RISPlugin plugin)
+        public FasenRISTabViewModel() : base()
         {
-            _plugin = plugin;
+            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            MessengerInstance.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
         }
 
         #endregion // Constructor

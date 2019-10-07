@@ -112,6 +112,21 @@
       <DependentUpon>VLOGSettingsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab\DataTypes\HardMeeverlengenFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\RISFaseCyclusLaneSimulatieView.xaml.cs">
+      <DependentUpon>RISFaseCyclusLaneSimulatieView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenRISTabView.xaml.cs">
+      <DependentUpon>FasenRISTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISFaseCyclusDataViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISFaseCyclusLaneDataViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISFaseCyclusLaneSimulatedStationViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISLaneExtendDataViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISLaneRequestDataViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISSystemITFViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenRISTabViewModel.cs">
+      <DependentUpon>FasenRISTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseView.xaml.cs">
       <DependentUpon>LateReleaseView.xaml</DependentUpon>
     </Compile>
@@ -568,6 +583,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Tabs\FasenTab\DataTypes\RISFaseCyclusLaneSimulatieView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenRISTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -917,10 +940,6 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
       <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
       <Name>TLCGen.Plugins.RangeerElementen</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RIS\TLCGen.Plugins.RIS.csproj">
-      <Project>{39de55f0-2c7c-4fd0-91ae-005c620aa49a}</Project>
-      <Name>TLCGen.Plugins.RIS</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Sumo\TLCGen.Plugins.Sumo.csproj">
       <Project>{e327cf4f-33b4-4a6f-91ad-17fde5c91d86}</Project>

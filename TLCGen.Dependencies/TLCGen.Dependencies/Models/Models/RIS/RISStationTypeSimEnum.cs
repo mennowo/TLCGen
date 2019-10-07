@@ -1,4 +1,4 @@
-﻿namespace TLCGen.Plugins.RIS.Models
+﻿namespace TLCGen.Models
 {
     public enum RISStationTypeSimEnum
     {

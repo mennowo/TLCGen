@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace TLCGen.Plugins.RIS.Models
+namespace TLCGen.Models
 {
     public enum RISStationTypeEnum
     {

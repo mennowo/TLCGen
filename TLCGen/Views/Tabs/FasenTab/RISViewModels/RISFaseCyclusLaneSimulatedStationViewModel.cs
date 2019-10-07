@@ -1,9 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using TLCGen.Helpers;
-using TLCGen.Plugins.RIS.Models;
+using TLCGen.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
     public class RISFaseCyclusLaneSimulatedStationViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {

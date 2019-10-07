@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
-namespace TLCGen.Plugins.RIS.Models
+namespace TLCGen.Models
 {
     [Serializable]
     public class RISFaseCyclusLaneDataModel

@@ -2,9 +2,9 @@
 using System;
 using System.Linq;
 using TLCGen.Helpers;
-using TLCGen.Plugins.RIS.Models;
+using TLCGen.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
     public class RISFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {

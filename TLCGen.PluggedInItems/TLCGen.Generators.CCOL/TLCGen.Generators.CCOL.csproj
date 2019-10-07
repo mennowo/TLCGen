@@ -51,6 +51,7 @@
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
+    <Compile Include="CodeGeneration\Functionality\RISCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SeniorenIngreepCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SchoolIngreepCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\ModulesInParametersCodeGenerator.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
+    <Compile Include="CodeGeneration\Sources\RisSimGenerator.cs" />
     <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs">
       <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
     </Compile>

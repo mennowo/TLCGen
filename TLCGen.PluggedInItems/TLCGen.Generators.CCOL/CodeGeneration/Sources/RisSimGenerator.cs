@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
-using TLCGen.Plugins.RIS.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class RISPlugin
+    public partial class CCOLGenerator
     {
-        internal void GenerateRisSimC(ControllerModel c, RISDataModel model, string ts)
+        private string GenerateRisSimC(ControllerModel c)
         {
+            var risModel = c.RISData;
+
+            string _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
+
             StringBuilder sb = new StringBuilder();
+
             sb.AppendLine("/* APPLICATIE RIS SIMULATIEPROGRAMMA */");
             sb.AppendLine("/* --------------------------------- */");
             sb.AppendLine();
@@ -45,17 +46,17 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"void ris_simulation_parameters(void)");
             sb.AppendLine($"{{");
             sb.AppendLine($"{ts}#ifdef RISSIMULATIE");
-            foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
+            foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach(var s in l.SimulatedStations)
                 {
                     var sitf = "SYSTEM_ITF";
-                    if (_RISModel.HasMultipleSystemITF)
+                    if (risModel.HasMultipleSystemITF)
                     {
-                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        var msitf = risModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
                         if (msitf != null)
                         {
-                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            var j = risModel.MultiSystemITF.IndexOf(msitf);
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
@@ -64,19 +65,19 @@ namespace TLCGen.Plugins.RIS
             }
             sb.AppendLine($"{ts}#endif // RISSIMULATIE");
             sb.AppendLine();
-            foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
+            foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach (var s in l.SimulatedStations)
                 {
                     var tl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 1 : s.Type == RISStationTypeSimEnum.CYCLIST ? 2 : 6;
                     var dl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 50 : s.Type == RISStationTypeSimEnum.CYCLIST ? 100 : 300;
                     var sitf = "SYSTEM_ITF";
-                    if (_RISModel.HasMultipleSystemITF)
+                    if (risModel.HasMultipleSystemITF)
                     {
-                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        var msitf = risModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
                         if (msitf != null)
                         {
-                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            var j = risModel.MultiSystemITF.IndexOf(msitf);
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
@@ -92,17 +93,17 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"void ris_simulation_application(void)");
             sb.AppendLine($"{{");
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT_TEST)");
-            foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
+            foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach (var s in l.SimulatedStations)
                 {
                     var sitf = "SYSTEM_ITF";
-                    if (_RISModel.HasMultipleSystemITF)
+                    if (risModel.HasMultipleSystemITF)
                     {
-                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        var msitf = risModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
                         if (msitf != null)
                         {
-                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            var j = risModel.MultiSystemITF.IndexOf(msitf);
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
@@ -113,7 +114,7 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"/* Display ris_lanes met ItsStations */");
             sb.AppendLine($"/* --------------------------------- */");
             var i = 15;
-            foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
+            foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 sb.AppendLine($"xyprintf(0, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
                 ++i;
@@ -127,7 +128,7 @@ namespace TLCGen.Plugins.RIS
 
             sb.AppendLine("}");
 
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), $"{c.Data.Naam}rissim.c"), sb.ToString(), Encoding.Default);
+            return sb.ToString();
         }
     }
 }

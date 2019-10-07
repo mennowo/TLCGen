@@ -1,12 +1,13 @@
-﻿using GalaSoft.MvvmLight;
+﻿
+using GalaSoft.MvvmLight;
 using System;
 using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using TLCGen.Plugins.RIS.Models;
+using TLCGen.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
     public class RISFaseCyclusLaneDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
@@ -67,7 +68,7 @@ namespace TLCGen.Plugins.RIS
                 x => 
                 {
                     var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x2 => x2.Naam == _laneData.SignalGroupName);
-                    return RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
+                    return FasenRISTabViewModel.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
                 },
                 (x, y) => false,
                 () => MessengerInstance.Send(new ControllerDataChangedMessage())

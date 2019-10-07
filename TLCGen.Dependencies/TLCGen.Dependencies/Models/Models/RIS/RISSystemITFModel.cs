@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TLCGen.Plugins.RIS.Models
+namespace TLCGen.Models
 {
     [Serializable]
     public class RISSystemITFModel

@@ -1,8 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
-using TLCGen.Plugins.RIS.Models;
+using TLCGen.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
     public class RISSystemITFViewModel : ViewModelBase, IViewModelWithItem
     {

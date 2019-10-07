@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
@@ -26,6 +27,8 @@ namespace TLCGen.ModelManagement
 
         private IMessenger _MessengerInstance;
         private Action<object, string> _setDefaultsAction;
+
+        private List<Tuple<string, object>> _pluginDataToMove = new List<Tuple<string, object>>();
 
         #endregion // Fields
 
@@ -260,6 +263,12 @@ namespace TLCGen.ModelManagement
                 controller.HalfstarData.FaseCyclusInstellingen.BubbleSort();
                 foreach (var fm in controller.FileIngrepen) fm.ToepassenDoseren = NooitAltijdAanUitEnum.Altijd;
             }
+
+            if(_pluginDataToMove.Any())
+            {
+                var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
+                if (risData != null && controller.RISData == null) controller.RISData = (RISDataModel)risData;
+            }
         }
 
         private static void RenameXMLNode(XmlDocument doc, XmlNode oldRoot, string newname)
@@ -284,6 +293,17 @@ namespace TLCGen.ModelManagement
             var checkVer = Version.Parse("0.5.4.0");
             if (v < checkVer)
             {
+                // V0.5.4.0: RIS plugin moved inside TLCGen
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName == "RISData")
+                    {
+                        var risModel = XmlNodeConverter.ConvertNode<RISDataModel>(node);
+                        _pluginDataToMove.Add(new Tuple<string, object>("RISData", risModel));
+                        break;
+                    }
+                }
+
                 // V0.5.4.0: property KruisingNaam on PelotonKoppelingModel changed to KoppelingNaam
                 var item = doc.SelectSingleNode("//PelotonKoppelingenData//PelotonKoppelingen");
                 XmlNodeList rowList = item.ChildNodes;

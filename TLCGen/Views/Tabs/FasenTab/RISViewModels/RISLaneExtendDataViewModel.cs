@@ -5,40 +5,39 @@ using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
-using TLCGen.Plugins.RIS.Models;
 
-namespace TLCGen.Plugins.RIS
+namespace TLCGen.ViewModels
 {
-    public class RISLaneRequestDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISLaneExtendDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        private RISLaneRequestDataModel _laneData;
+        private RISLaneExtendDataModel _laneData;
         
-        public bool RISAanvraag
+        public bool RISVerlengen
         {
-            get => _laneData.RISAanvraag;
+            get => _laneData.RISVerlengen;
             set
             {
-                _laneData.RISAanvraag = value;
+                _laneData.RISVerlengen = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public int AanvraagStart
+        public int VerlengenStart
         {
-            get => _laneData.AanvraagStart;
+            get => _laneData.VerlengenStart;
             set
             {
-                _laneData.AanvraagStart = value;
+                _laneData.VerlengenStart = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public int AanvraagEnd
+        public int VerlengenEnd
         {
-            get => _laneData.AanvraagEnd;
+            get => _laneData.VerlengenEnd;
             set
             {
-                _laneData.AanvraagEnd = value;
+                _laneData.VerlengenEnd = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -97,7 +96,7 @@ namespace TLCGen.Plugins.RIS
 
         public int CompareTo(object obj)
         {
-            var other = obj as RISLaneRequestDataViewModel;
+            var other = obj as RISLaneExtendDataViewModel;
             if(_laneData.SignalGroupName == other.SignalGroupName)
             {
                 return RijstrookIndex.CompareTo(other.RijstrookIndex);
@@ -108,7 +107,7 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        public RISLaneRequestDataViewModel(RISLaneRequestDataModel laneData)
+        public RISLaneExtendDataViewModel(RISLaneExtendDataModel laneData)
         {
             _laneData = laneData;
             UpdateRijstroken();
