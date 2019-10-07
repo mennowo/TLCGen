@@ -83,7 +83,7 @@
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
-    <Compile Include="CodeGeneration\Sources\RisSimGenerator.cs" />
+    <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRisSimC.cs" />
     <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs">
       <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
     </Compile>

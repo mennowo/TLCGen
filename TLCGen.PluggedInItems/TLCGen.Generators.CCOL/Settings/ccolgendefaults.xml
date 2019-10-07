@@ -2114,9 +2114,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="RISPlugin">
+    <CodePieceGenerator CodePiece="RISCodeGenerator">
       <CodePieceData>
-        <ClassName>RISPlugin</ClassName>
+        <ClassName>RISCodeGenerator</ClassName>
         <Description>RIS data</Description>
         <Settings>
           <Setting>
