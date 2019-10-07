@@ -726,7 +726,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
                                 sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
                                 sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !(MK[{_fcpf}{tdfc.FaseCyclus}] & BIT6)) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                             }
                             sb.AppendLine();
                         }
