@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _hmlact;
 	    private string _hplact;
 	    private string _hnla;
+	    private string _schgs;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -296,7 +297,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (gs.Item2.Count > 1)
                             {
                                 yes = true;
-                                sb.Append($"{ts}RR[{_fcpf}{gs.Item1}] |= R[{_fcpf}{gs.Item1}] && ");
+                                var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseNaar == gs.Item1 || x.FaseVan == gs.Item1);
+                                sb.Append($"{ts}");
+                                if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
+                                sb.Append($"RR[{_fcpf}{gs.Item1}] |= R[{_fcpf}{gs.Item1}] && ");
                                 if (gs.Item2.Count > 1) sb.Append("(");
                                 var i = 0;
                                 foreach (var ofc in gs.Item2)
@@ -409,7 +413,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (gs.Item2.Count > 1)
                             {
                                 yes = true;
-                                sb.Append($"{ts}PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
+                                var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseVan == gs.Item1 || x.FaseNaar == gs.Item1);
+                                sb.Append($"{ts}");
+                                if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
+
+                                sb.Append($"PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
                                 foreach (var ofc in gs.Item2)
                                 {
                                     if (ofc == gs.Item1)
@@ -626,6 +634,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
+            _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
 
             return base.SetSettings(settings);
         }
