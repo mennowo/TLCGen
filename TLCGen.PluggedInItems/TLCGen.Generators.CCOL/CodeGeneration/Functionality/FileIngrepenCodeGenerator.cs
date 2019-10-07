@@ -734,7 +734,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
                         {
                             sb.AppendLine($"{ts}/* Afkappen op bereiken maximaal groen tijdens file ingreep {fm.Naam} */");
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.AfkappenOpStartFile))
+                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MaximaleGroentijd))
                             {
                                 sb.AppendLine($"{ts}/* Maximale groentijd fase {tdfc.FaseCyclus} */");
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
