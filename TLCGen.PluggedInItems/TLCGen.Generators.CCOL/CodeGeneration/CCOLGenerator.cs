@@ -88,270 +88,279 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             if (Directory.Exists(sourcefilepath))
             {
-                CCOLGeneratorSettingsProvider.Default.Reset();
-                CCOLElementCollector.Reset();
-
-                _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
-                _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
-                _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
-                _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
-                _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
-                _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
-                _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
-                _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
-                _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
-
-                foreach (var pgen in PieceGenerators)
+                try
                 {
-                    pgen.CollectCCOLElements(c);
-                }
+                    CCOLGeneratorSettingsProvider.Default.Reset();
+                    CCOLElementCollector.Reset();
 
-                _alleDetectoren = new List<DetectorModel>();
-                foreach (var fcm in c.Fasen)
-                {
-                    foreach (var dm in fcm.Detectoren)
+                    _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
+                    _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
+                    _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
+                    _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
+                    _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
+                    _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
+                    _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+                    _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
+                    _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
+                    foreach (var pgen in PieceGenerators)
+                    {
+                        pgen.CollectCCOLElements(c);
+                    }
+
+                    _alleDetectoren = new List<DetectorModel>();
+                    foreach (var fcm in c.Fasen)
+                    {
+                        foreach (var dm in fcm.Detectoren)
+                            _alleDetectoren.Add(dm);
+                    }
+                    foreach (var dm in c.Detectoren)
                         _alleDetectoren.Add(dm);
-                }
-                foreach (var dm in c.Detectoren)
-                    _alleDetectoren.Add(dm);
-                foreach (var dm in c.SelectieveDetectoren)
-                    _alleDetectoren.Add(dm);
+                    foreach (var dm in c.SelectieveDetectoren)
+                        _alleDetectoren.Add(dm);
 
-                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
+                    var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
 
-                if (CCOLElementLists == null || CCOLElementLists.Length != 8)
-                    throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
+                    if (CCOLElementLists == null || CCOLElementLists.Length != 8)
+                        throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
 
-                foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
-                {
-                    if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
-
-                    var elemprov = pl.Item2 as ITLCGenElementProvider;
-                    var elems = elemprov?.GetAllItems();
-                    if (elems == null) continue;
-                    foreach (var elem in elems)
+                    foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                     {
-                        var ccolElement = elem as CCOLElement;
-                        if (ccolElement == null) continue;
-                        switch (ccolElement.Type)
+                        if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
+
+                        var elemprov = pl.Item2 as ITLCGenElementProvider;
+                        var elems = elemprov?.GetAllItems();
+                        if (elems == null) continue;
+                        foreach (var elem in elems)
                         {
-                            case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(ccolElement); break;
-                            case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(ccolElement); break;
-                        }
-                    }
-                }
-
-                _uitgangen = CCOLElementLists[0];
-                _ingangen = CCOLElementLists[1];
-                _hulpElementen = CCOLElementLists[2];
-                _geheugenElementen = CCOLElementLists[3];
-                _timers = CCOLElementLists[4];
-                _counters = CCOLElementLists[5];
-                _schakelaars = CCOLElementLists[6];
-                _parameters = CCOLElementLists[7];
-
-                foreach (var l in CCOLElementLists)
-                {
-                    l.SetMax();
-                }
-
-                CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
-
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
-                if (!c.Data.NietGebruikenBitmap)
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), Encoding.Default);
-                }
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c), Encoding.Default);
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c), Encoding.Default);
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c), Encoding.Default);
-                if(c.RoBuGrover.ConflictGroepen?.Count > 0)
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), Encoding.Default);
-                }
-                if(c.PTPData.PTPKoppelingen?.Count > 0)
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
-                }
-                if (c.OVData.OVIngrepen.Any() ||
-                    c.OVData.HDIngrepen.Any())
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), Encoding.Default);
-                }
-	            if (c.HalfstarData.IsHalfstar)
-	            {
-		            File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
-	            }
-                if (c.Data.PracticeOmgeving)
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg.txt"), GeneratePraticeCcolReg(c), Encoding.Default);
-                    File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg2.txt"), GeneratePraticeCcolReg2(c), Encoding.Default);
-                }
-                if (c.RISData.RISToepassen)
-                {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rissim.c"), GenerateRisSimC(c), Encoding.Default);
-                }
-
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
-                if (!c.Data.NietGebruikenBitmap)
-                {
-                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, Encoding.Default);
-                }
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
-                if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
-                {
-                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
-                }
-                if (c.HalfstarData.IsHalfstar)
-                {
-                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader, Encoding.Default);
-                }
-
-                CopySourceIfNeeded(c, "extra_func.c", sourcefilepath);
-                CopySourceIfNeeded(c, "extra_func.h", sourcefilepath);
-                CopySourceIfNeeded(c, "ccolfunc.c", sourcefilepath);
-                CopySourceIfNeeded(c, "ccolfunc.h", sourcefilepath);
-                CopySourceIfNeeded(c, "detectie.c", sourcefilepath);
-                CopySourceIfNeeded(c, "uitstuur.c", sourcefilepath);
-                CopySourceIfNeeded(c, "uitstuur.h", sourcefilepath);
-
-                if (c.Data.FixatieData.FixatieMogelijk)
-                {
-                    CopySourceIfNeeded(c, "fixatie.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "fixatie.h", sourcefilepath);
-                }
-
-                if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
-                {
-                    CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
-                }
-
-                if(c.InterSignaalGroep.Nalopen.Any())
-                {
-                    CopySourceIfNeeded(c, "gkvar.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "gkvar.h", sourcefilepath);
-                    CopySourceIfNeeded(c, "nlvar.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "nlvar.h", sourcefilepath);
-                    CopySourceIfNeeded(c, "nalopen.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "nalopen.h", sourcefilepath);
-                }
-
-                if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
-                {
-                    CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
-                }
-
-                if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
-                {
-                    CopySourceIfNeeded(c, "ov.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "ov.h", sourcefilepath);
-                }
-
-                if (c.RoBuGrover.ConflictGroepen.Any())
-                {
-                    CopySourceIfNeeded(c, "rgv_overslag.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "rgvfunc.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "rgvvar.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "winmg.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "winmg.h", sourcefilepath);
-				}
-
-	            if (c.HalfstarData.IsHalfstar)
-	            {
-                    CopySourceIfNeeded(c, "halfstar.c", sourcefilepath);
-                    CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
-		            CopySourceIfNeeded(c, "halfstar_ov.c", sourcefilepath);
-					CopySourceIfNeeded(c, "halfstar_ov.h", sourcefilepath);
-		            CopySourceIfNeeded(c, "halfstar_help.c", sourcefilepath);
-					CopySourceIfNeeded(c, "halfstar_help.h", sourcefilepath);
-	            }
-
-                if (c.Fasen.Any(x => x.WachttijdVoorspeller))
-                {
-                    CopySourceIfNeeded(c, "wtv_testwin.c", sourcefilepath);
-                }
-
-                if (c.RISData.RISToepassen)
-                {
-                    CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
-                }
-
-                foreach (var pl in PieceGenerators)
-                {
-                    var fs = pl.GetSourcesToCopy();
-                    if (fs != null)
-                    {
-                        foreach (var f in fs)
-                        {
-                            CopySourceIfNeeded(c, f, sourcefilepath);
-                        }
-                    }
-                }
-
-                if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
-                {
-                    try
-                    {
-                        foreach(var f in Directory.EnumerateFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
-                        {
-                            try
+                            var ccolElement = elem as CCOLElement;
+                            if (ccolElement == null) continue;
+                            switch (ccolElement.Type)
                             {
-                                var lines = File.ReadAllLines(f);
-                                if (lines != null && lines.Length > 0 && lines[0].StartsWith("CONDITION="))
+                                case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(ccolElement); break;
+                                case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(ccolElement); break;
+                            }
+                        }
+                    }
+
+                    _uitgangen = CCOLElementLists[0];
+                    _ingangen = CCOLElementLists[1];
+                    _hulpElementen = CCOLElementLists[2];
+                    _geheugenElementen = CCOLElementLists[3];
+                    _timers = CCOLElementLists[4];
+                    _counters = CCOLElementLists[5];
+                    _schakelaars = CCOLElementLists[6];
+                    _parameters = CCOLElementLists[7];
+
+                    foreach (var l in CCOLElementLists)
+                    {
+                        l.SetMax();
+                    }
+
+                    CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
+
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
+                    if (!c.Data.NietGebruikenBitmap)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), Encoding.Default);
+                    }
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c), Encoding.Default);
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c), Encoding.Default);
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c), Encoding.Default);
+                    if (c.RoBuGrover.ConflictGroepen?.Count > 0)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), Encoding.Default);
+                    }
+                    if (c.PTPData.PTPKoppelingen?.Count > 0)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
+                    }
+                    if (c.OVData.OVIngrepen.Any() ||
+                        c.OVData.HDIngrepen.Any())
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), Encoding.Default);
+                    }
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
+                    }
+                    if (c.Data.PracticeOmgeving)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg.txt"), GeneratePraticeCcolReg(c), Encoding.Default);
+                        File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg2.txt"), GeneratePraticeCcolReg2(c), Encoding.Default);
+                    }
+                    if (c.RISData.RISToepassen)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rissim.c"), GenerateRisSimC(c), Encoding.Default);
+                    }
+
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
+                    if (!c.Data.NietGebruikenBitmap)
+                    {
+                        WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, Encoding.Default);
+                    }
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
+                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    {
+                        WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
+                    }
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader, Encoding.Default);
+                    }
+
+                    CopySourceIfNeeded(c, "extra_func.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "extra_func.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "ccolfunc.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "ccolfunc.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "detectie.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "uitstuur.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "uitstuur.h", sourcefilepath);
+
+                    if (c.Data.FixatieData.FixatieMogelijk)
+                    {
+                        CopySourceIfNeeded(c, "fixatie.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "fixatie.h", sourcefilepath);
+                    }
+
+                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    {
+                        CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
+                    }
+
+                    if (c.InterSignaalGroep.Nalopen.Any())
+                    {
+                        CopySourceIfNeeded(c, "gkvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "gkvar.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "nlvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "nlvar.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "nalopen.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "nalopen.h", sourcefilepath);
+                    }
+
+                    if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
+                    {
+                        CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
+                    }
+
+                    if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
+                    {
+                        CopySourceIfNeeded(c, "ov.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "ov.h", sourcefilepath);
+                    }
+
+                    if (c.RoBuGrover.ConflictGroepen.Any())
+                    {
+                        CopySourceIfNeeded(c, "rgv_overslag.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "rgvfunc.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "rgvvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "winmg.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "winmg.h", sourcefilepath);
+                    }
+
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        CopySourceIfNeeded(c, "halfstar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_ov.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_ov.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_help.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_help.h", sourcefilepath);
+                    }
+
+                    if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+                    {
+                        CopySourceIfNeeded(c, "wtv_testwin.c", sourcefilepath);
+                    }
+
+                    if (c.RISData.RISToepassen)
+                    {
+                        CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
+                    }
+
+                    foreach (var pl in PieceGenerators)
+                    {
+                        var fs = pl.GetSourcesToCopy();
+                        if (fs != null)
+                        {
+                            foreach (var f in fs)
+                            {
+                                CopySourceIfNeeded(c, f, sourcefilepath);
+                            }
+                        }
+                    }
+
+                    if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                    {
+                        try
+                        {
+                            foreach (var f in Directory.EnumerateFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                            {
+                                try
                                 {
-                                    var copy = false;
-                                    var cond = lines[0].Replace("CONDITION=", "");
-                                    switch (cond)
+                                    var lines = File.ReadAllLines(f);
+                                    if (lines != null && lines.Length > 0 && lines[0].StartsWith("CONDITION="))
                                     {
-                                        case "ALWAYS":
-                                            copy = true;
-                                            break;
-                                        case "OV":
-                                            copy = (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0);
-                                            break;
-                                        case "SYNC":
-                                            copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 ||
-                                                    c.InterSignaalGroep.Voorstarten.Count > 0);
-                                            break;
-                                        case "FIXATIE":
-                                            copy = (c.Data.FixatieData.FixatieMogelijk);
-                                            break;
-                                        case "NALOPEN":
-                                            copy = (c.InterSignaalGroep.Nalopen.Count > 0);
-                                            break;
-                                        case "RGV":
-                                            copy = (c.RoBuGrover.SignaalGroepInstellingen.Count > 0);
-                                            break;
+                                        var copy = false;
+                                        var cond = lines[0].Replace("CONDITION=", "");
+                                        switch (cond)
+                                        {
+                                            case "ALWAYS":
+                                                copy = true;
+                                                break;
+                                            case "OV":
+                                                copy = (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0);
+                                                break;
+                                            case "SYNC":
+                                                copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 ||
+                                                        c.InterSignaalGroep.Voorstarten.Count > 0);
+                                                break;
+                                            case "FIXATIE":
+                                                copy = (c.Data.FixatieData.FixatieMogelijk);
+                                                break;
+                                            case "NALOPEN":
+                                                copy = (c.InterSignaalGroep.Nalopen.Count > 0);
+                                                break;
+                                            case "RGV":
+                                                copy = (c.RoBuGrover.SignaalGroepInstellingen.Count > 0);
+                                                break;
+                                        }
+
+                                        if (!copy || File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f)))) continue;
+
+                                        var fileLines = new string[lines.Length - 1];
+                                        Array.Copy(lines, 1, fileLines, 0, lines.Length - 1);
+                                        File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines, Encoding.Default);
                                     }
-
-                                    if (!copy || File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f)))) continue;
-
-                                    var fileLines = new string[lines.Length - 1];
-                                    Array.Copy(lines, 1, fileLines, 0, lines.Length - 1);
-                                    File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines, Encoding.Default);
+                                }
+                                catch
+                                {
+                                    // ignored
                                 }
                             }
-                            catch
-                            {
-                                // ignored
-                            }
+                        }
+                        catch
+                        {
+                            // ignored
                         }
                     }
-                    catch
-                    {
-                        // ignored
-                    }
+                }
+                catch (Exception e)
+                {
+                    TLCGenDialogProvider.Default.ShowMessageBox(
+                        $"Er is een fout opgetreden tijdens genereren. " +
+                        $"Controlleer of alle te genereren bestanden overschreven kunnen worden.\n\nOorspronkelijke foutmelding:\n{e.Message}", "Fout tijdens genereren", MessageBoxButton.OK);
                 }
 
                 return "CCOL source code gegenereerd";
