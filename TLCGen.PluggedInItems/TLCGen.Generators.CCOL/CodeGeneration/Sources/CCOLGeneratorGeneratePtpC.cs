@@ -27,6 +27,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _prmptperr0 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr0");
             string _prmptperr1 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr1");
             string _prmptperr2 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr2");
+            string _prmportnr = CCOLGeneratorSettingsProvider.Default.GetElementName("prmportnr");
+            string _prmsrc = CCOLGeneratorSettingsProvider.Default.GetElementName("prmsrc");
+            string _prmdest = CCOLGeneratorSettingsProvider.Default.GetElementName("prmdest");
+            string _prmtmsgw = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtmsgw");
+            string _prmtmsgs = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtmsgs");
+            string _prmtmsga = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtmsga");
+            string _prmcmsg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmcmsg");
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* APPLICATIE PTP-KOPPELINGEN */");
@@ -101,18 +108,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}{ts}/* ptp-parameters t.b.v. koppeling met PTP_{k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"{ts}{ts}/* ----------------------------------------- */");
-                sb.AppendLine($"{ts}#if (defined AUTOMAAT)");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerAutomaatOmgeving};        /* poortnummer in het regeltoestel     */  /* @ door fabrikant aanpassen */");
-                sb.AppendLine($"{ts}#else");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
-                sb.AppendLine($"{ts}#endif");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = {k.NummerSource};       /* nummer van source                   */ /* @ maximaal 255 */");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.DEST = {k.NummerDestination};       /* nummer van destination              */ /* @ maximaal 255 */");
-                sb.AppendLine();
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGW_max= 200;   /* wait  time-out             */");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGS_max=  10;   /* send  time-out             */");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGA_max=  10;   /* alive time-out             */");
-                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.CMSG_max=    3;   /* max. berichtenteller tbv. herhaling */");
+                if (controller.PTPData.PTPInstellingenInParameters)
+                {
+                    sb.AppendLine($"{ts}#if (defined AUTOMAAT)");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = PRM[{_prmpf}{_prmportnr}{k.TeKoppelenKruispunt}];        /* poortnummer in het regeltoestel     */  /* @ door fabrikant aanpassen */");
+                    sb.AppendLine($"{ts}#else");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
+                    sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = PRM[{_prmpf}{_prmsrc}{k.TeKoppelenKruispunt}];        /* nummer van source                   */ /* @ maximaal 255 */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.DEST = PRM[{_prmpf}{_prmdest}{k.TeKoppelenKruispunt}];       /* nummer van destination              */ /* @ maximaal 255 */");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGW_max= PRM[{_prmpf}{_prmtmsgw}{k.TeKoppelenKruispunt}];   /* wait  time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGS_max= PRM[{_prmpf}{_prmtmsgs}{k.TeKoppelenKruispunt}];   /* send  time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGA_max= PRM[{_prmpf}{_prmtmsga}{k.TeKoppelenKruispunt}];   /* alive time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.CMSG_max=  PRM[{_prmpf}{_prmcmsg}{k.TeKoppelenKruispunt}];    /* max. berichtenteller tbv. herhaling */");
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}#if (defined AUTOMAAT)");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerAutomaatOmgeving};        /* poortnummer in het regeltoestel     */  /* @ door fabrikant aanpassen */");
+                    sb.AppendLine($"{ts}#else");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
+                    sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = {k.NummerSource};       /* nummer van source                   */ /* @ maximaal 255 */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.DEST = {k.NummerDestination};       /* nummer van destination              */ /* @ maximaal 255 */");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGW_max= 200;   /* wait  time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGS_max=  10;   /* send  time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGA_max=  10;   /* alive time-out             */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.CMSG_max=    3;   /* max. berichtenteller tbv. herhaling */");
+                }
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX=  {k.AantalsignalenIn};   /* aantal inkomende koppelsignalen    */ /* @ verhogen in stappen van 8 */");
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX=  {k.AantalsignalenUit};   /* aantal uitgaande koppelsignalen    */ /* @ verhogen in stappen van 8 */");

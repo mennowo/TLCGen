@@ -1131,6 +1131,48 @@
             <Description>PTP error 2 _E1_</Description>
           </Setting>
           <Setting>
+            <Default>portnr</Default>
+            <Setting>portnr</Setting>
+            <Type>Parameter</Type>
+            <Description>Poortnummer in het regeltoestel PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>src</Default>
+            <Setting>src</Setting>
+            <Type>Parameter</Type>
+            <Description>Nummer van source PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>dest</Default>
+            <Setting>dest</Setting>
+            <Type>Parameter</Type>
+            <Description>Nummer van destination PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsgw</Default>
+            <Setting>tmsgw</Setting>
+            <Type>Parameter</Type>
+            <Description>Wait timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsgs</Default>
+            <Setting>tmsgs</Setting>
+            <Type>Parameter</Type>
+            <Description>Send timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsga</Default>
+            <Setting>tmsga</Setting>
+            <Type>Parameter</Type>
+            <Description>Alive timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>cmsg</Default>
+            <Setting>cmsg</Setting>
+            <Type>Parameter</Type>
+            <Description>Max. berichtenteller tbv. herhaling PTP _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>oke</Default>
             <Setting>oke</Setting>
             <Type>Uitgang</Type>

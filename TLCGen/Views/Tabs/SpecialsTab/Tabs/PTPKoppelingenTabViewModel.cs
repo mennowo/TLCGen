@@ -25,6 +25,16 @@ namespace TLCGen.ViewModels
 
         #region Properties
         
+        public bool PTPInstellingenInParameters
+        {
+            get => Controller?.PTPData?.PTPInstellingenInParameters == true;
+            set
+            {
+                Controller.PTPData.PTPInstellingenInParameters = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public ObservableCollection<PTPKoppelingViewModel> PTPKoppelingen
         {
             get

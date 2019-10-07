@@ -32,6 +32,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmerr0;
         private CCOLGeneratorCodeStringSettingModel _prmerr1;
         private CCOLGeneratorCodeStringSettingModel _prmerr2;
+
+        private CCOLGeneratorCodeStringSettingModel _prmportnr;
+        private CCOLGeneratorCodeStringSettingModel _prmsrc;
+        private CCOLGeneratorCodeStringSettingModel _prmdest;
+        private CCOLGeneratorCodeStringSettingModel _prmtmsgw;
+        private CCOLGeneratorCodeStringSettingModel _prmtmsgs;
+        private CCOLGeneratorCodeStringSettingModel _prmtmsga;
+        private CCOLGeneratorCodeStringSettingModel _prmcmsg;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -139,6 +147,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             0,
                             CCOLElementTimeTypeEnum.None,
                             _prmerr2, k.TeKoppelenKruispunt));
+
+                if (c.PTPData.PTPInstellingenInParameters)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmportnr}{k.TeKoppelenKruispunt}",
+                            k.PortnummerAutomaatOmgeving,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmportnr, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmsrc}{k.TeKoppelenKruispunt}",
+                            k.NummerSource,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmsrc, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmdest}{k.TeKoppelenKruispunt}",
+                            k.NummerDestination,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmdest, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmtmsgw}{k.TeKoppelenKruispunt}",
+                            200,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmtmsgw, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmtmsgs}{k.TeKoppelenKruispunt}",
+                            10,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmtmsgs, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmtmsga}{k.TeKoppelenKruispunt}",
+                            10,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmtmsga, k.TeKoppelenKruispunt));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmcmsg}{k.TeKoppelenKruispunt}",
+                            3,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmcmsg, k.TeKoppelenKruispunt));
+                }
             }
         }
 

@@ -30,10 +30,11 @@
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <DockPanel Grid.Row="1">
                         <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
                         <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
-                    </StackPanel>
+                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Toedeling Koppelsignalen">
