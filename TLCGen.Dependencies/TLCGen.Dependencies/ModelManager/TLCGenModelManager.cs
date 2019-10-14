@@ -135,7 +135,7 @@ namespace TLCGen.ModelManagement
             if (!controller.Detectoren.IsSorted()) controller.Detectoren.BubbleSort();
             if (!controller.SelectieveDetectoren.IsSorted()) controller.SelectieveDetectoren.BubbleSort();
         }
-
+        
         public void CorrectModelByVersion(ControllerModel controller, string filename)
         {
             // correct segment items

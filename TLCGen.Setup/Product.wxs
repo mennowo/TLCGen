@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033"
-    Version="0.5.3"
+    Version="0.6.0"
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -136,7 +136,6 @@
         <File Id='TLCGen.Plugins.AFM' Name='TLCGen.Plugins.AFM.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.DynamischHiaat' Name='TLCGen.Plugins.DynamischHiaat.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.RangeerElementen' Name='TLCGen.Plugins.RangeerElementen.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RangeerElementen.dll' KeyPath='no' />
-        <File Id='TLCGen.Plugins.RIS' Name='TLCGen.Plugins.RIS.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RIS.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.Timings' Name='TLCGen.Plugins.Timings.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Timings.dll' KeyPath='no' />
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />

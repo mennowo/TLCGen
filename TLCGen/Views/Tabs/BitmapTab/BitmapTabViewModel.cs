@@ -40,6 +40,7 @@ namespace TLCGen.ViewModels
         private QueueLinearFloodFiller _FloodFiller;
         private string _ControllerFileName;
         private string _BitmapFileName;
+        private int _width = int.MaxValue, _height = int.MaxValue;
 
         private Color TestFillColor = Color.CornflowerBlue;
         private Color DefaultFillColor = Color.LightGray;
@@ -126,14 +127,16 @@ namespace TLCGen.ViewModels
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
                     foreach(Point p in _SelectedItem.Coordinates)
-                        FillMyBitmap(p, GetFillColor(false));
+                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                            FillMyBitmap(p, GetFillColor(false));
                     RefreshMyBitmapImage();
                 }
                 _SelectedItem = value;
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
                     foreach (Point p in _SelectedItem.Coordinates)
-                        FillMyBitmap(p, GetFillColor(true));
+                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                            FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
                 }
                 RaisePropertyChanged("SelectedItem");
@@ -255,15 +258,18 @@ namespace TLCGen.ViewModels
                     List<Point> coords = new List<Point>();
                     foreach (Point pp in SelectedItem.Coordinates)
                     {
-                        FillMyBitmap(pp, TestFillColor);
-                        if(_EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == TestFillColor.ToArgb())
+                        if (pp.X <= _EditableBitmap.Bitmap.Width && pp.Y <= _EditableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(pp, DefaultFillColor);
-                            coords.Add(pp);
-                        }
-                        else
-                        {
-                            FillMyBitmap(pp, GetFillColor(true));
+                            FillMyBitmap(pp, TestFillColor);
+                            if (_EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == TestFillColor.ToArgb())
+                            {
+                                FillMyBitmap(pp, DefaultFillColor);
+                                coords.Add(pp);
+                            }
+                            else
+                            {
+                                FillMyBitmap(pp, GetFillColor(true));
+                            }
                         }
                     }
                     foreach(Point pp in coords)
@@ -535,6 +541,7 @@ namespace TLCGen.ViewModels
             if(string.IsNullOrEmpty(_BitmapFileName))
             {
                 _EditableBitmap = null;
+                _width = _height = int.MaxValue;
                 RefreshMyBitmapImage();
                 return;
             }
@@ -546,6 +553,7 @@ namespace TLCGen.ViewModels
                     using (Bitmap bitmap = new Bitmap(_BitmapFileName))
                     {
                         _EditableBitmap = new EditableBitmap(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                        CorrectCoordinates();
                         _FloodFiller.Bitmap = _EditableBitmap;
                         FillAllIO();
                         RefreshMyBitmapImage();
@@ -622,6 +630,22 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void CorrectCoordinates()
+        {
+            if (_width > _EditableBitmap.Bitmap.Width || _height > _EditableBitmap.Bitmap.Height)
+            {
+                _width = _EditableBitmap.Bitmap.Width;
+                _height = _EditableBitmap.Bitmap.Height;
+                var ioElements = GetAllIOElements(_Controller);
+                foreach (var ioe in ioElements)
+                {
+                    var rems = ioe.Coordinates.Where(x => x.X > _EditableBitmap.Bitmap.Width || x.Y > _EditableBitmap.Bitmap.Height).ToList();
+                    foreach (var r in rems) ioe.Coordinates.Remove(r);
+                    if (rems.Any()) ioe.RaisePropertyChanged("");
+                }
+            }
+        }
+
         private void FillAllIO()
         {
             foreach (BitmappedItemViewModel bivm in Fasen)
@@ -629,7 +653,12 @@ namespace TLCGen.ViewModels
                 if (bivm.HasCoordinates)
                 {
                     foreach (Point p in bivm.Coordinates)
-                        FillMyBitmap(p, DefaultFaseColor);
+                    {
+                        if(p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        {
+                            FillMyBitmap(p, DefaultFaseColor);
+                        }
+                    }
                 }
             }
             foreach (BitmappedItemViewModel bivm in Detectoren)
@@ -637,7 +666,12 @@ namespace TLCGen.ViewModels
                 if (bivm.HasCoordinates)
                 {
                     foreach (Point p in bivm.Coordinates)
-                        FillMyBitmap(p, DefaultDetectorColor);
+                    {
+                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        {
+                            FillMyBitmap(p, DefaultDetectorColor);
+                        }
+                    }
                 }
             }
             foreach (BitmappedItemViewModel bivm in OverigeUitgangen)
@@ -645,7 +679,12 @@ namespace TLCGen.ViewModels
                 if (bivm.HasCoordinates)
                 {
                     foreach (Point p in bivm.Coordinates)
-                        FillMyBitmap(p, DefaultUitgangColor);
+                    {
+                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        {
+                            FillMyBitmap(p, DefaultUitgangColor);
+                        }
+                    }
                 }
             }
             foreach (BitmappedItemViewModel bivm in OverigeIngangen)
@@ -653,7 +692,12 @@ namespace TLCGen.ViewModels
                 if (bivm.HasCoordinates)
                 {
                     foreach (Point p in bivm.Coordinates)
-                        FillMyBitmap(p, DefaultIngangColor);
+                    {
+                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        {
+                            FillMyBitmap(p, DefaultIngangColor);
+                        }
+                    }
                 }
             }
         }
