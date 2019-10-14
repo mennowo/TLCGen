@@ -104,12 +104,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _myBitmapInputs;
         }
 
-        public virtual bool HasSimulationElements()
+        public virtual bool HasSimulationElements(ControllerModel c)
         {
             return false;
         }
 
-        public virtual IEnumerable<DetectorSimulatieModel> GetSimulationElements()
+        public virtual IEnumerable<DetectorSimulatieModel> GetSimulationElements(ControllerModel c)
         {
             throw new NotSupportedException();
         }

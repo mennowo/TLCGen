@@ -117,6 +117,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
+        public override bool HasSimulationElements(ControllerModel c)
+        {
+            return c.RISData.RISToepassen;
+        }
+
+        public override IEnumerable<DetectorSimulatieModel> GetSimulationElements(ControllerModel c)
+        {
+            return c.RISData.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations).Select(x => x.SimulationData);
+        }
+
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)

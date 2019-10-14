@@ -90,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var controllerdets = controller.Detectoren;
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
             var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets).ToList();
-            var itsstations = PieceGenerators.Where(x => x.HasSimulationElements()).SelectMany(x => x.GetSimulationElements()).ToList();
+            var externals = PieceGenerators.Where(x => x.HasSimulationElements(controller)).SelectMany(x => x.GetSimulationElements(controller)).ToList();
 
             foreach (var dm in alldets.Where(x => !x.Dummy))
             {
@@ -106,7 +106,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 ++index;
             }
-            if(alldets.Any(x => x.Dummy) || itsstations.Any())
+            if(alldets.Any(x => x.Dummy) || externals.Any())
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
                 foreach (var dm in alldets.Where(x => x.Dummy))
@@ -123,7 +123,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     ++index;
                 }
-                foreach (var e in itsstations)
+                foreach (var e in externals)
                 {
                     sb.AppendLine($"{ts}LNK_code[{index}] = \"{e.RelatedName}\";");
                     sb.AppendLine($"{ts}IS_nr[{index}] = {_ispf}{e.RelatedName};");

@@ -21,6 +21,7 @@ using System.Collections;
 using System.Windows;
 using TLCGen.Dialogs;
 using Point = System.Drawing.Point;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -636,12 +637,19 @@ namespace TLCGen.ViewModels
             {
                 _width = _EditableBitmap.Bitmap.Width;
                 _height = _EditableBitmap.Bitmap.Height;
-                var ioElements = GetAllIOElements(_Controller);
+                var ioElements = _Fasen.Concat(_Detectoren).Concat(_OverigeUitgangen).Concat(_OverigeIngangen);
                 foreach (var ioe in ioElements)
                 {
                     var rems = ioe.Coordinates.Where(x => x.X > _EditableBitmap.Bitmap.Width || x.Y > _EditableBitmap.Bitmap.Height).ToList();
-                    foreach (var r in rems) ioe.Coordinates.Remove(r);
-                    if (rems.Any()) ioe.RaisePropertyChanged("");
+                    if (rems.Any())
+                    {
+                        var all = ioe.Coordinates.Where(x => true).ToList();
+                        ioe.Coordinates.RemoveAll();
+                        foreach (var a in all.Where(x => rems.All(x2 => x.X != x2.X && x.Y != x2.Y)))
+                        {
+                            ioe.Coordinates.Add(a); 
+                        }
+                    }
                 }
             }
         }
