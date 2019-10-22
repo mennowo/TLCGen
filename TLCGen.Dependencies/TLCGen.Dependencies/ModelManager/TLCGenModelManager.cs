@@ -306,13 +306,16 @@ namespace TLCGen.ModelManagement
 
                 // V0.5.4.0: property KruisingNaam on PelotonKoppelingModel changed to KoppelingNaam
                 var item = doc.SelectSingleNode("//PelotonKoppelingenData//PelotonKoppelingen");
-                XmlNodeList rowList = item.ChildNodes;
-                foreach (XmlNode n in rowList)
+                if (item != null)
                 {
-                    var c = n.SelectSingleNode("KruisingNaam");
-                    if (c != null)
+                    var rowList = item.ChildNodes;
+                    foreach (XmlNode n in rowList)
                     {
-                        RenameXMLNode(doc, c, "KoppelingNaam");
+                        var c = n.SelectSingleNode("KruisingNaam");
+                        if (c != null)
+                        {
+                            RenameXMLNode(doc, c, "KoppelingNaam");
+                        }
                     }
                 }
 
@@ -320,7 +323,7 @@ namespace TLCGen.ModelManagement
                 item = doc.SelectSingleNode("//HalfstarData//Alternatieven");
                 if (item != null)
                 {
-                    rowList = item.ChildNodes;
+                    var rowList = item.ChildNodes;
                     var newNodes = new List<XmlNode>();
                     for (var i = 0; i < rowList.Count; ++i)
                     {
