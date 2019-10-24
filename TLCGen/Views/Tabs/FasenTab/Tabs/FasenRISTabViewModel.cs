@@ -113,16 +113,16 @@ namespace TLCGen.ViewModels
                             {
                                 switch (sg.Type)
                                 {
-                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
+                                    case FaseTypeEnum.Auto:
                                         if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.PASSENGERCAR) l.SimulatedStations[0].Type = RISStationTypeSimEnum.PASSENGERCAR;
                                         break;
-                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
+                                    case FaseTypeEnum.Fiets:
                                         if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.CYCLIST) l.SimulatedStations[0].Type = RISStationTypeSimEnum.CYCLIST;
                                         break;
-                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
+                                    case FaseTypeEnum.Voetganger:
                                         if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.PEDESTRIAN) l.SimulatedStations[0].Type = RISStationTypeSimEnum.PEDESTRIAN;
                                         break;
-                                    case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
+                                    case FaseTypeEnum.OV:
                                         if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.BUS) l.SimulatedStations[0].Type = RISStationTypeSimEnum.BUS;
                                         break;
                                 }
@@ -314,16 +314,16 @@ namespace TLCGen.ViewModels
             if (fc == null) return t;
             switch (fc.Type)
             {
-                case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
+                case FaseTypeEnum.Auto:
                     t = RISStationTypeEnum.MOTORVEHICLES;
                     break;
-                case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
+                case FaseTypeEnum.Fiets:
                     t = RISStationTypeEnum.CYCLIST;
                     break;
-                case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
+                case FaseTypeEnum.Voetganger:
                     t = RISStationTypeEnum.PEDESTRIAN;
                     break;
-                case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
+                case FaseTypeEnum.OV:
                     t = RISStationTypeEnum.MOTORVEHICLES;
                     break;
             }
@@ -385,11 +385,15 @@ namespace TLCGen.ViewModels
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
+            if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {
-                TLCGenModelManager.Default.ChangeNameOnObject(RISModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
                 RISFasen.Rebuild();
+                RISRequestLanes.Rebuild();
+                RISExtendLanes.Rebuild();
+                RISLanes.BubbleSort();
                 RISFasen.BubbleSort();
+                RISRequestLanes.BubbleSort();
+                RISExtendLanes.BubbleSort();
             }
         }
 

@@ -492,9 +492,9 @@ namespace TLCGen.ModelManagement
                     {
                         var strRefToAttr = property.GetCustomAttribute<RefersToAttribute>();
                         if (strRefToAttr != null &&
-                            (property.Name == strRefToAttr.ReferProperty1 && objectType == strRefToAttr.ObjectType1 ||
-                             property.Name == strRefToAttr.ReferProperty2 && objectType == strRefToAttr.ObjectType2 ||
-                             property.Name == strRefToAttr.ReferProperty3 && objectType == strRefToAttr.ObjectType3))
+                            (objectType == strRefToAttr.ObjectType1 ||
+                             objectType == strRefToAttr.ObjectType2 ||
+                             objectType == strRefToAttr.ObjectType3))
                         {
                             if ((string)propValue == oldName)
                             {

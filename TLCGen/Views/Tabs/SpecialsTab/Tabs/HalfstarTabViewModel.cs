@@ -17,7 +17,7 @@ using TLCGen.Views.Tabs.SpecialsTab.DataTypes;
 
 namespace TLCGen.ViewModels
 {
-    public class HalfstarOVIngreepViewModel : ViewModelBase, IViewModelWithItem
+    public class HalfstarOVIngreepViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -64,7 +64,16 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IViewModelWithItem
-        
+
+        #region IComparable
+
+        public int CompareTo(object other)
+        {
+            return FaseCyclus.CompareTo(((HalfstarOVIngreepViewModel)other).FaseCyclus);
+        }
+
+        #endregion // IComparable
+
         #region Constructor
 
         public HalfstarOVIngreepViewModel(HalfstarOVIngreepModel ovIngreep)
@@ -1082,7 +1091,8 @@ namespace TLCGen.ViewModels
 			}
 
 			HoofdRichtingen.BubbleSort();
-			UpdateSelectables();
+            OVIngrepenHalfstar.BubbleSort();
+            UpdateSelectables();
 		}
 
 		private void OnFasenSorted(FasenSortedMessage msg)
