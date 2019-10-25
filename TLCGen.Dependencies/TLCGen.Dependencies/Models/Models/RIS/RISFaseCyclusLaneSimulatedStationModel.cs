@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
-using TLCGen.Models;
+﻿using System;
+using System.ComponentModel;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    [Serializable]
     public class RISFaseCyclusLaneSimulatedStationModel
     {
         public RISStationTypeSimEnum Type { get; set; }
