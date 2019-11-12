@@ -1034,11 +1034,11 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 		{
 			PRML_x[fc] = FALSE;
 			/* Bewust niet toegedeeld */
-			if (PRM[prmfcml + fc] & BIT15)
+			if (PRM[prmfcml + fc] & BIT10)
 			{
 				PRML_temp[ml][fc] = FALSE;
 				PRML_x[fc] = TRUE;
-				BL[fc] |= BIT15;
+				BL[fc] |= BIT10;
 				continue;
 			}
 			/* ML toedeling */
