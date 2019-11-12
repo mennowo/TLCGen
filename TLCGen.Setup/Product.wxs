@@ -38,9 +38,6 @@
       <Feature Id='RotterdamOptions' Title='Plugin Rotterdam' Description='Plugin Rotterdamse functies' Level='1' AllowAdvertise='no'>
         <ComponentGroupRef Id="TLCGenPluginsRotterdam" />
       </Feature>
-      <Feature Id='DenHaagOptions' Title='Plugin Den Haag' Description='Plugin Haagse functies' Level='1' AllowAdvertise='no'>
-        <ComponentGroupRef Id="TLCGenPluginsDenHaag" />
-      </Feature>
     </Feature>
     
     <Icon Id="TLCGen.exe" SourceFile="$(var.ReleaseDir)/TLCGen.exe" />
@@ -221,11 +218,6 @@
       </Component>
     </ComponentGroup>
     
-    <ComponentGroup Id="TLCGenPluginsDenHaag" Directory="PLUGINSFOLDER">
-      <Component Id='TLCGenPluginsDenHaagData' Guid='0B6FF776-639F-45AE-9AB9-F549817FF1E3'>
-        <File Id='TLCGen.SpecialsDenHaag' Name='TLCGen.SpecialsDenHaag.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.SpecialsDenHaag.dll' KeyPath='no' />
-      </Component>
-    </ComponentGroup>
   </Fragment>
   
 </Wix>

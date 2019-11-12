@@ -102,10 +102,10 @@ namespace TLCGen.ViewModels
 
             set
             {
-                foreach (var tab in TabItems)
-                {
-                    tab.Controller = value;
-                }
+                //foreach (var tab in TabItems)
+                //{
+                //    tab.Controller = value;
+                //}
                 base.Controller = value;
             }
         }

@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type vm:ModulesAlternatievenCVInstellingenTabViewModel}">
             <local:ModulesAlternatievenCVInstellingenTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ModulesAlternatievenPerBlokTabViewModel}">
+            <local:ModulesAlternatievenPerBlokTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

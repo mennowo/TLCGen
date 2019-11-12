@@ -137,6 +137,13 @@
     <Compile Include="Views\Tabs\InterSignaalGroepTab\InterSignaalGroepTabViewModel.cs">
       <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\FaseCyclusAlternatiefPerBlokViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenPerBlokTabView.xaml.cs">
+      <DependentUpon>ModulesAlternatievenPerBlokTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenPerBlokTabViewModel.cs">
+      <DependentUpon>ModulesAlternatievenPerBlokTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepRitCategorieViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingenDataViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepInUitMeldingViewModel.cs" />
@@ -595,6 +602,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenPerBlokTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -948,10 +959,6 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Timings\TLCGen.Plugins.Timings.csproj">
       <Project>{790ff4fd-a251-46f8-a6be-bd5fdfa44243}</Project>
       <Name>TLCGen.Plugins.Timings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsDenHaag\TLCGen.SpecialsDenHaag.csproj">
-      <Project>{b1ab1f07-6cc3-4703-80fe-a3d35c7f6d9a}</Project>
-      <Name>TLCGen.SpecialsDenHaag</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj">
       <Project>{14c1bbc3-eda1-4d16-897d-43138abe02da}</Project>

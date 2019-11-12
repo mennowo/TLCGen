@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -267,7 +269,9 @@ namespace TLCGen.ModelManagement
             if(_pluginDataToMove.Any())
             {
                 var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
-                if (risData != null && controller.RISData == null) controller.RISData = (RISDataModel)risData;
+                if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
+                var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
+                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)risData;
             }
         }
 
@@ -340,6 +344,25 @@ namespace TLCGen.ModelManagement
                         item.AppendChild(newNodes[i]);
                     }
                     RenameXMLNode(doc, item, "FaseCyclusInstellingen");
+                }
+            }
+            checkVer = Version.Parse("0.6.2.0");
+            if (v < checkVer)
+            {
+                // V0.6.2.0: Den Haag specials plugin merged with TLCGen core
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName == "SpecialsDenHaag")
+                    {
+                        var data = @"<AlternatievenPerBlokModel>" + node.InnerXml + @"</AlternatievenPerBlokModel>";
+                        using (TextReader reader = new StringReader(data))
+                        {
+                            XmlSerializer xs = new XmlSerializer(typeof(AlternatievenPerBlokModel));
+                            var dhModel = xs.Deserialize(reader);
+                            _pluginDataToMove.Add(new Tuple<string, object>("SpecialsDenHaagData", dhModel));
+                        }
+                        break;
+                    }
                 }
             }
         }

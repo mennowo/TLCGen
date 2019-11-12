@@ -47,6 +47,8 @@ namespace TLCGen.Models
 
         public PelotonKoppelingenDataModel PelotonKoppelingenData { get; set; }
 
+        public AlternatievenPerBlokModel AlternatievenPerBlokData { get; set; }
+
         public PeriodenDataModel PeriodenData { get; set; }
 
         public PTPDataModel PTPData { get; set; }
@@ -96,6 +98,7 @@ namespace TLCGen.Models
 			HalfstarData = new HalfstarDataModel();
             PelotonKoppelingenData = new PelotonKoppelingenDataModel();
             RISData = new RISDataModel();
+            AlternatievenPerBlokData = new AlternatievenPerBlokModel();
         }
 
         #endregion // Constructor
