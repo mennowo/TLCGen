@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -48,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
                                 $"LET OP! Fase {fc.Naam} is toegedeeld aan zowel module reeks {reeks[0].Reeks} als module reeks {reeks[1].Reeks}. " +
-                                $"De module parameter voor deze fase wordt ingesteld op BIT15 (niet toegedeeld).", "Fout in modulestructuur", System.Windows.MessageBoxButton.OK);
+                                $"De module parameter voor deze fase wordt ingesteld op BIT10 (niet toegedeeld).", "Fout in modulestructuur", System.Windows.MessageBoxButton.OK);
                         }
                     }
                     else
@@ -73,6 +74,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override bool HasCCOLElements() => true;
 
         public override bool HasCCOLBitmapInputs() => true;
@@ -81,6 +93,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return 90;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 90;
             }
@@ -95,6 +109,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    sb.AppendLine($"{ts}/* Tbv parametreerbare blokindeling: reset A voor niet toegedeeld fasen */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}if (BL[fc] & BIT10) A[fc] = FALSE;");
+                    sb.AppendLine($"{ts}}}");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}/* Toepassen parametreerbare blokindeling:");
                     sb.AppendLine($"{ts}   - obv schakelaar");
