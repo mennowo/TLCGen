@@ -210,6 +210,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     if (c.Data.UitgangPerModule && c.Data.ModulenDisplayBitmapData.Any())
                     {
+                        sb.AppendLine($"{ts}/* Uitsturen actieve module */");
                         foreach(var m in c.Data.ModulenDisplayBitmapData)
                         {
                             var mNaam = Regex.Replace(m.Naam, @"ML[A-E]+", "ML");

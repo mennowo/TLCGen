@@ -385,6 +385,9 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.MultiModuleReeksen = value;
                 RaisePropertyChanged<object>(nameof(MultiModuleReeksen), broadcast: true);
+
+                _Controller.Data.ModulenDisplayBitmapData.Clear();
+                if (UitgangPerModule) MessengerInstance.Send(new ModulesChangedMessage());
             }
         }
 
