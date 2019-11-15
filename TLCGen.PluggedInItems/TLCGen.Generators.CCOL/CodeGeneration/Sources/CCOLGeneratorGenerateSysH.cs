@@ -352,6 +352,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}{(!string.IsNullOrWhiteSpace(d.Omschrijving) ? " /* " + d.Omschrijving + "*/" : "")}");
                 }
+                sb.AppendLine($"{ts}#define DSMAX    {index}");
                 sb.AppendLine($"{ts}#else");
                 sb.AppendLine($"{ts}#define DSMAX    {rindex}");
                 sb.AppendLine($"{ts}#endif");
