@@ -941,6 +941,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
+                            var actualIfc = ifc > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
                             var inmHelems = new List<string>();
                             if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
@@ -948,11 +949,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if(hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && ((DSIMelding_HD_V1({ifc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || DSIMelding_HD_V1({hd.InmeldingOokDoorFase}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
+                                    var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                    sb.AppendLine($"{ts}" +
+                                        $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
+                                        $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
+                                        $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
+                                        $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
+                                        $"((DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
+                                          $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
                                 }
                                 inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
                             }
@@ -979,6 +987,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
+                            var actualIfc = ifc > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
                             var inmHelems = new List<string>();
                             if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Uitmelding HD {_fcpf}{hd.FaseCyclus} */");
@@ -986,11 +995,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({hd.InmeldingOokDoorFase}, CIF_DSUIT, FALSE));");
+                                    var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({ifc}, CIF_DSUIT, FALSE));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
                                 }
                                 inmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
                             }
