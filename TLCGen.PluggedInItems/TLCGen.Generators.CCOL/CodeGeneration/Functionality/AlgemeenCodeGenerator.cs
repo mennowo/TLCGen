@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -61,6 +62,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmxx}", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, _prmxx));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmyy}", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, _prmyy));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
+
+            // OVM
+            if (c.Data.ToevoegenOVM)
+            {
+                foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
+                {
+                    _myElements.Add(new CCOLElement($"ovmextragroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(new CCOLElement($"ovmmindergroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                }
+            }
+
+            // Logging TFB max
+            if (c.Data.PrmLoggingTfbMax)
+            {
+                _myElements.Add(new CCOLElement("tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -83,6 +104,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 20;
             }
             return 0;
+        }
+
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    if (c.Data.PrmLoggingTfbMax)
+                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return base.GetFunctionLocalVariables(c, type);
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -141,24 +180,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if (!c.Data.GenererenDuurtestCode) return "";
-                    sb.AppendLine($"{ts}/* TESTOMGEVING */");
-                    sb.AppendLine($"{ts}/* ============ */");
-                    sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
-                    sb.AppendLine($"{ts}{ts}if (TS &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_JAAR] == 2099) &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MAAND] == 1) &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_DAG] == 1) &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_UUR] == 1) &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MINUUT] == 1) &&");
-                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_SECONDE] == 1))");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F3KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F5KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY); ");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}#endif");
+                    if (c.Data.GenererenDuurtestCode)
+                    {
+                        sb.AppendLine($"{ts}/* TESTOMGEVING */");
+                        sb.AppendLine($"{ts}/* ============ */");
+                        sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
+                        sb.AppendLine($"{ts}{ts}if (TS &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_JAAR] == 2099) &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MAAND] == 1) &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_DAG] == 1) &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_UUR] == 1) &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MINUUT] == 1) &&");
+                        sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_SECONDE] == 1))");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(F3KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(F5KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY); ");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}#endif");
+                    }
+                    if (c.Data.ToevoegenOVM)
+                    {
+                        if (c.Data.GenererenDuurtestCode)
+                            sb.AppendLine();
+                        sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
+                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
+                        {
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
+                        }
+                        sb.AppendLine();
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
@@ -219,6 +272,41 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
+                    if (c.Data.PrmLoggingTfbMax)
+                    {
+                        if (c.Data.UitgangPerModule && c.Data.ModulenDisplayBitmapData.Any())
+                            sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Onthouden hoogste tfb waarde + tijdstip */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}if (TFB_timer[fc]>PRM[{_prmpf}tfbmax])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 0, \"Hoogste TFB waarde\");");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 1, \"------------------\");");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 2, \"Fc %s TFB:%4d sec\", FC_code[fc], TFB_timer[fc]);");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32,3, \"Tijd %02d\", (CIF_KLOK[CIF_UUR]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,3,     \":%02d\", (CIF_KLOK[CIF_MINUUT]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,3,     \":%02d\", (CIF_KLOK[CIF_SECONDE]));");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32,4, \"d.d. %02d\", (CIF_KLOK[CIF_DAG]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,4,     \"-%02d\", (CIF_KLOK[CIF_MAAND]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,4,     \"-%04d\", (CIF_KLOK[CIF_JAAR]));");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}#endif");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbfc]   = fc;");
+                        sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbmax]  = TFB_timer[fc];");
+                        sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbtijd] = CIF_KLOK[CIF_UUR]*100+CIF_KLOK[CIF_MINUUT];");
+                        sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbdat]  = CIF_KLOK[CIF_DAG]*100+CIF_KLOK[CIF_MAAND];");
+                        sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbjaar] = CIF_KLOK[CIF_JAAR];");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}{ts}CIF_PARM1WIJZAP = CIF_MEER_PARMWIJZ;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}}}");
+                    }
                     break;
             }
 

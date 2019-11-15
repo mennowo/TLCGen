@@ -73,6 +73,9 @@ namespace TLCGen.Models
         public bool AanmakenVerionSysh { get; set; }
         public bool StoreCurrentController { get; set; }
 
+        public bool ToevoegenOVM { get; set; }
+        public bool PrmLoggingTfbMax { get; set; }
+
         [Browsable(false)]
         public string TLCGenVersie { get; set; }
 

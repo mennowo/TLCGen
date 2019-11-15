@@ -350,6 +350,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Toevoegen OVM code")]
+        public bool ToevoegenOVM
+        {
+            get { return _Controller?.Data?.ToevoegenOVM ?? false; }
+            set
+            {
+                _Controller.Data.ToevoegenOVM = value;
+                RaisePropertyChanged<object>(nameof(ToevoegenOVM), broadcast: true);
+            }
+        }
+
         [Browsable(false)]
         public bool HasWTV => _Controller?.Fasen.Any(x => x.WachttijdVoorspeller) == true;
 
@@ -445,6 +456,17 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.WachttijdvoorspellerAansturenBusHD = value;
                 RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBusHD), broadcast: true);
+            }
+        }
+
+        [Description("Loggen max. TFB in PRM")]
+        public bool PrmLoggingTfbMax
+        {
+            get { return _Controller?.Data?.PrmLoggingTfbMax ?? false; }
+            set
+            {
+                _Controller.Data.PrmLoggingTfbMax = value;
+                RaisePropertyChanged<object>(nameof(PrmLoggingTfbMax), broadcast: true);
             }
         }
 

@@ -960,10 +960,6 @@
       <Project>{790ff4fd-a251-46f8-a6be-bd5fdfa44243}</Project>
       <Name>TLCGen.Plugins.Timings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj">
-      <Project>{14c1bbc3-eda1-4d16-897d-43138abe02da}</Project>
-      <Name>TLCGen.SpecialsRotterdam</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Specificator\TLCGen.Specificator.csproj">
       <Project>{6f5df100-b22b-40bc-a8c3-7f19817835f0}</Project>
       <Name>TLCGen.Specificator</Name>

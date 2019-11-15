@@ -35,9 +35,6 @@
         <ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
         <ComponentRef Id="ProgramMenuDir" />
       </Feature>
-      <Feature Id='RotterdamOptions' Title='Plugin Rotterdam' Description='Plugin Rotterdamse functies' Level='1' AllowAdvertise='no'>
-        <ComponentGroupRef Id="TLCGenPluginsRotterdam" />
-      </Feature>
     </Feature>
     
     <Icon Id="TLCGen.exe" SourceFile="$(var.ReleaseDir)/TLCGen.exe" />
@@ -209,12 +206,6 @@
     <ComponentGroup Id="TLCGenCCOLSourcesToCopy" Directory="CCOLSOURCEFILESTOCOPYFOLDER">
       <Component Id='AllCCOLSourcesToCopy' Guid='C142297C-DC60-4286-93E0-E243CE3293D4'>
         <File Id="SourceFilesToCopyReadmeTXT" KeyPath="no" Source="$(var.ReleaseDir)\SourceFilesToCopy\Readme.txt" />
-      </Component>
-    </ComponentGroup>
-
-    <ComponentGroup Id="TLCGenPluginsRotterdam" Directory="PLUGINSFOLDER">
-      <Component Id='TLCGenPluginsRotterdamData' Guid='8320D326-DE89-40DF-A3BB-B88FF68268DE'>
-        <File Id='TLCGen.SpecialsRotterdam' Name='TLCGen.SpecialsRotterdam.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.SpecialsRotterdam.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     

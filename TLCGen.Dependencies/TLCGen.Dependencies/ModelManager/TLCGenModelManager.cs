@@ -272,6 +272,9 @@ namespace TLCGen.ModelManagement
                 if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
                 var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
                 if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)risData;
+                var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
+                if (rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
+                if (rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
             }
         }
 
@@ -361,6 +364,21 @@ namespace TLCGen.ModelManagement
                             var dhModel = xs.Deserialize(reader);
                             _pluginDataToMove.Add(new Tuple<string, object>("SpecialsDenHaagData", dhModel));
                         }
+                        break;
+                    }
+                }
+                // V0.6.2.0: Rotterdam specials plugin merged with TLCGen core
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName == "SpecialsRotterdam")
+                    {
+                        var dataRdam = new Dictionary<string, bool>();
+                        foreach (XmlNode n in node.ChildNodes)
+                        {
+                            if (n.Name == "ToevoegenOVM") dataRdam.Add(n.Name, n.InnerText.ToLower() == "true");
+                            if (n.Name == "PrmLoggingTfbMax") dataRdam.Add(n.Name, n.InnerText.ToLower() == "true");
+                        }
+                        _pluginDataToMove.Add(new Tuple<string, object>("SpecialsRotterdamData", dataRdam));
                         break;
                     }
                 }
