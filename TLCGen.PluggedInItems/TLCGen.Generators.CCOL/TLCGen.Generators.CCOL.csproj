@@ -51,6 +51,7 @@
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
+    <Compile Include="CodeGeneration\Functionality\AlternatievenPerBlokCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\RISCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SeniorenIngreepCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SchoolIngreepCodeGenerator.cs" />

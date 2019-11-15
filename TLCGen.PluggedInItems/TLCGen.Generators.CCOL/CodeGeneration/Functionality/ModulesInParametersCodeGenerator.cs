@@ -78,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
+                case CCOLCodeTypeEnum.RegCPostApplication:
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -93,7 +93,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
+                case CCOLCodeTypeEnum.RegCPostApplication:
                     return 90;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 90;
@@ -109,7 +109,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
+                case CCOLCodeTypeEnum.RegCPostApplication:
                     sb.AppendLine($"{ts}/* Tbv parametreerbare blokindeling: reset A voor niet toegedeeld fasen */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");

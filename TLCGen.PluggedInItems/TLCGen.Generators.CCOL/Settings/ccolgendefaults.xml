@@ -128,6 +128,20 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="AlternatievenPerBlokCodeGenerator">
+      <CodePieceData>
+        <ClassName>AlternatievenPerBlokCodeGenerator</ClassName>
+        <Description>Alternatieven per blok</Description>
+        <Settings>
+          <Setting>
+            <Default>altb</Default>
+            <Setting>altb</Setting>
+            <Type>Parameter</Type>
+            <Description>Alternatief per blok voor fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="DetectieAanvragenMeetkriteriumCodeGenerator">
       <CodePieceData>
         <ClassName>DetectieAanvragenMeetkriteriumCodeGenerator</ClassName>
