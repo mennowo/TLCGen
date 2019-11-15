@@ -16,6 +16,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         AlternatievenPerBlokModel _Specials;
+        private int _numberOfModules;
 
         #endregion // Fields
 
@@ -31,6 +32,7 @@ namespace TLCGen.ViewModels
                 Specials = value?.AlternatievenPerBlokData;
                 if (_Controller != null && Specials != null)
                 {
+                    NumberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
                     if (ToepassenAlternatievenPerBlok)
                     {
                         foreach (var fc in Controller.Fasen)
@@ -108,6 +110,36 @@ namespace TLCGen.ViewModels
             private set;
         }
 
+        public int NumberOfModules
+        {
+            get => _numberOfModules;
+            private set
+            {
+                if(_numberOfModules < value)
+                {
+                    for (int i = _numberOfModules; i < value; i++)
+                    {
+                        foreach (var fc in AlternatievenPerBlok)
+                        {
+                            fc.BitWiseBlokAlternatief |= (1 << i);
+                        }
+                    }
+                }
+                else if (_numberOfModules > value)
+                {
+                    for (int i = value; i < _numberOfModules; i++)
+                    {
+                        foreach (var fc in AlternatievenPerBlok)
+                        {
+                            fc.BitWiseBlokAlternatief &= ~(1 << i);
+                        }
+                    }
+                }
+                _numberOfModules = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public override string DisplayName => "Alternatieven per blok";
 
         #endregion // Properties
@@ -166,6 +198,11 @@ namespace TLCGen.ViewModels
             AlternatievenPerBlok.BubbleSort();
         }
 
+        private void OnModulesChanged(ModulesChangedMessage obj)
+        {
+            NumberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -175,6 +212,7 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            MessengerInstance.Register(this, new Action<ModulesChangedMessage>(OnModulesChanged));
         }
 
         #endregion // Constructor

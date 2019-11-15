@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Name="root"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:NumberOfModulesToVisibilityConverter x:Key="NoOfModConv" />
+    </UserControl.Resources>
     <Grid>
             <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,14 +20,34 @@
                       IsChecked="{Binding Path=ToepassenAlternatievenPerBlok,UpdateSourceTrigger=PropertyChanged}"
                       Margin="2" />
         </StackPanel>
-        <DataGrid
+        <ct:SpecialDataGrid
             ItemsSource="{Binding Path=AlternatievenPerBlok}"
             IsEnabled="{Binding Path=ToepassenAlternatievenPerBlok}"
             Grid.Row="1" Margin="2"
             HorizontalAlignment="Left"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
-            AutoGenerateColumns="False" >
+            AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <DataGridCheckBoxColumn x:Key="ML1Col" Binding="{Binding Path=ML1,UpdateSourceTrigger=PropertyChanged}" Header="ML1" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=1}"/>
+                <DataGridCheckBoxColumn x:Key="ML2Col" Binding="{Binding Path=ML2,UpdateSourceTrigger=PropertyChanged}" Header="ML2" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=2}"/>
+                <DataGridCheckBoxColumn x:Key="ML3Col" Binding="{Binding Path=ML3,UpdateSourceTrigger=PropertyChanged}" Header="ML3" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=3}"/>
+                <DataGridCheckBoxColumn x:Key="ML4Col" Binding="{Binding Path=ML4,UpdateSourceTrigger=PropertyChanged}" Header="ML4" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=4}"/>
+                <DataGridCheckBoxColumn x:Key="ML5Col" Binding="{Binding Path=ML5,UpdateSourceTrigger=PropertyChanged}" Header="ML5" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=5}"/>
+                <DataGridCheckBoxColumn x:Key="ML6Col" Binding="{Binding Path=ML6,UpdateSourceTrigger=PropertyChanged}" Header="ML6" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=6}"/>
+                <DataGridCheckBoxColumn x:Key="ML7Col" Binding="{Binding Path=ML7,UpdateSourceTrigger=PropertyChanged}" Header="ML7" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=7}"/>
+                <DataGridCheckBoxColumn x:Key="ML8Col" Binding="{Binding Path=ML8,UpdateSourceTrigger=PropertyChanged}" Header="ML8" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=8}"/>
+                <DataGridCheckBoxColumn x:Key="ML9Col" Binding="{Binding Path=ML9,UpdateSourceTrigger=PropertyChanged}" Header="ML9" Width="Auto"
+                                        Visibility="{Binding Path=DataContext.NumberOfModules,Source={x:Reference root},Converter={StaticResource NoOfModConv},ConverterParameter=9}"/>
+            </DataGrid.Resources>
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
@@ -32,17 +56,17 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=BitWiseBlokAlternatief,UpdateSourceTrigger=PropertyChanged}" Header="Alternatief per blok" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML1,UpdateSourceTrigger=PropertyChanged}" Header="ML1" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML2,UpdateSourceTrigger=PropertyChanged}" Header="ML2" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML3,UpdateSourceTrigger=PropertyChanged}" Header="ML3" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML4,UpdateSourceTrigger=PropertyChanged}" Header="ML4" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML5,UpdateSourceTrigger=PropertyChanged}" Header="ML5" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML6,UpdateSourceTrigger=PropertyChanged}" Header="ML6" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML7,UpdateSourceTrigger=PropertyChanged}" Header="ML7" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML8,UpdateSourceTrigger=PropertyChanged}" Header="ML8" Width="Auto" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=ML9,UpdateSourceTrigger=PropertyChanged}" Header="ML9" Width="Auto" />
+                <!--<DataGridTextColumn Binding="{Binding Path=BitWiseBlokAlternatief,UpdateSourceTrigger=PropertyChanged}" Header="Alternatief per blok" Width="Auto" />-->
+                <StaticResource ResourceKey="ML1Col" />
+                <StaticResource ResourceKey="ML2Col" />
+                <StaticResource ResourceKey="ML3Col" />
+                <StaticResource ResourceKey="ML4Col" />
+                <StaticResource ResourceKey="ML5Col" />
+                <StaticResource ResourceKey="ML6Col" />
+                <StaticResource ResourceKey="ML7Col" />
+                <StaticResource ResourceKey="ML8Col" />
+                <StaticResource ResourceKey="ML9Col" />
             </DataGrid.Columns>
-        </DataGrid>
+        </ct:SpecialDataGrid>
     </Grid>
 </UserControl>
