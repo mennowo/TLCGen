@@ -98,7 +98,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
                 e.Dummy = true;
                 _myElements.Add(e);
-                _myBitmapInputs.Add(new CCOLIOElement(s.StationBitmapData, $"{_ispf}{s.Naam}"));
+                _myBitmapInputs.Add(new CCOLIOElement(s.StationBitmapData, $"{_ispf}{s.Naam}") { Dummy = true });
             }
         }
 
