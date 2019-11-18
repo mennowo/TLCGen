@@ -395,7 +395,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements() => true;
+        public override bool HasCCOLElements() => false;
 
         public override IEnumerable<DetectorModel> GetDetectors() => _MyDetectors;
 
@@ -409,44 +409,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
-            {
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    var result = new List<Tuple<string, string, string>>();
-                    result.Add(new Tuple<string, string, string>("int", "ov", "0"));
-                    return result;
-
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
-                    var result2 = new List<Tuple<string, string, string>>();
-                    if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
-                    {
-                        result2.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
-
-                    }
-                    return result2;
-
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+            //switch (type)
+            //{
+            //    case CCOLCodeTypeEnum.RegCSystemApplication:
+            //        var result = new List<Tuple<string, string, string>>();
+            //        result.Add(new Tuple<string, string, string>("int", "ov", "0"));
+            //        return result;
+            //
+            //    case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
+            //        var result2 = new List<Tuple<string, string, string>>();
+            //        if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
+            //        {
+            //            result2.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
+            //            if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
+            //
+            //        }
+            //        return result2;
+            //
+            //    default:
+            //        return base.GetFunctionLocalVariables(c, type);
+            //}
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 61;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 41;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 41;
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 31;
-                case CCOLCodeTypeEnum.PrioCInUitMelden:
-                    return 11;
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
-                    return 11;
+                //case CCOLCodeTypeEnum.RegCTop:
+                //    return 61;
+                //case CCOLCodeTypeEnum.RegCPreApplication:
+                //    return 41;
+                //case CCOLCodeTypeEnum.RegCSystemApplication:
+                //    return 41;
+                //case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                //    return 31;
+                //case CCOLCodeTypeEnum.PrioCInUitMelden:
+                //    return 11;
+                //case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
+                //    return 11;
                 default:
                     return 0;
             }

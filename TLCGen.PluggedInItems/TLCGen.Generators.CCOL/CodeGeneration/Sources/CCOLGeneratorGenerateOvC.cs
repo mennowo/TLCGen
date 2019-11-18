@@ -1392,13 +1392,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
+                        var actualIfc = ifc > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+
                         foreach (var m in ov.MeldingenData.Inmeldingen.Where(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
                             if (done.Any(x => x == m.RelatedInput1)) continue;
                             var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
-                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
                                 done.Add(m.RelatedInput1);
                             }
                         }
@@ -1408,7 +1410,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
-                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
                                 done.Add(m.RelatedInput1);
                             }
                         }
