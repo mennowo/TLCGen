@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
                 if (_Controller != null && _Controller.AlternatievenPerBlokData != null)
                 {
                     AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Controller.AlternatievenPerBlokData.AlternatievenPerBlok);
-                    NumberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
+                    _numberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
                     if (ToepassenAlternatievenPerBlok)
                     {
                         foreach (var fc in Controller.Fasen)
