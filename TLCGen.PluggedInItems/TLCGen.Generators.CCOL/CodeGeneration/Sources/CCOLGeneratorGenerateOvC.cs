@@ -1425,8 +1425,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	                const string type = "CIF_POL";
 	                if (int.TryParse(hd.FaseCyclus, out var ifc))
                     {
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message(0, {type}, {ifc}, CIF_DSIN, 1, 0, 0, 0, CIF_SIR);");
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message(0, {type}, {ifc}, CIF_DSUIT, 1, 0, 0, 0, CIF_SIR);");
+                        var actualIfc = ifc > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message(0, {type}, {actualIfc}, CIF_DSIN, 1, 0, 0, 0, CIF_SIR);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message(0, {type}, {actualIfc}, CIF_DSUIT, 1, 0, 0, 0, CIF_SIR);");
                     }
                 }
             }
