@@ -15,7 +15,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        AlternatievenPerBlokModel _Specials;
         private int _numberOfModules;
 
         #endregion // Fields
@@ -25,13 +24,12 @@ namespace TLCGen.ViewModels
         public override ControllerModel Controller
         {
             get => base.Controller;
-
             set
             {
                 base.Controller = value;
-                Specials = value?.AlternatievenPerBlokData;
-                if (_Controller != null && Specials != null)
+                if (_Controller != null && _Controller.AlternatievenPerBlokData != null)
                 {
+                    AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Controller.AlternatievenPerBlokData.AlternatievenPerBlok);
                     NumberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
                     if (ToepassenAlternatievenPerBlok)
                     {
@@ -67,28 +65,14 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public AlternatievenPerBlokModel Specials
-        {
-            get => _Specials;
-            set
-            {
-                _Specials = value;
-                if (_Specials != null)
-                {
-                    AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Specials.AlternatievenPerBlok);
-                }
-                RaisePropertyChanged("");
-            }
-        }
-
         public bool ToepassenAlternatievenPerBlok
         {
-            get => _Specials != null && _Specials.ToepassenAlternatievenPerBlok;
+            get => _Controller.AlternatievenPerBlokData != null && _Controller.AlternatievenPerBlokData.ToepassenAlternatievenPerBlok;
             set
             {
-                if (_Specials != null)
+                if (_Controller.AlternatievenPerBlokData != null)
                 {
-                    _Specials.ToepassenAlternatievenPerBlok = value;
+                    _Controller.AlternatievenPerBlokData.ToepassenAlternatievenPerBlok = value;
                     AlternatievenPerBlok.RemoveAll();
                     if (value)
                     {
@@ -96,7 +80,14 @@ namespace TLCGen.ViewModels
                         {
                             AlternatievenPerBlok.Add(
                                 new FaseCyclusAlternatiefPerBlokViewModel(
-                                    new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 511 }));
+                                    new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam }));
+                        }
+                        for (int i = 0; i < _numberOfModules; i++)
+                        {
+                            foreach (var fc in AlternatievenPerBlok)
+                            {
+                                fc.BitWiseBlokAlternatief |= (1 << i);
+                            }
                         }
                     }
                     RaisePropertyChanged<object>("ToepassenAlternatievenPerBlok", true);

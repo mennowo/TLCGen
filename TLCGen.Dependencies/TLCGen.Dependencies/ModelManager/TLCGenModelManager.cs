@@ -271,7 +271,8 @@ namespace TLCGen.ModelManagement
                 var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
                 if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
                 var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
-                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)risData;
+                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
+                else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
                 var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
                 if (rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
                 if (rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];

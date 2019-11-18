@@ -63,7 +63,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* BLOKGEBONDEN ALTERNATIEF */");
                         sb.AppendLine($"{ts}/* ======================== */");
-                        sb.AppendLine($"{ts} * Voor instellingen de volgende waarden voor het blok waarin het alternatief mag plaatsvinden optellen:");
+                        sb.AppendLine($"{ts}/* Voor instellingen de volgende waarden voor het blok waarin het alternatief mag plaatsvinden optellen:");
                         sb.AppendLine($"{ts} * 1  alternatief mogelijk in blok 1");
                         sb.AppendLine($"{ts} * 2  alternatief mogelijk in blok 2");
                         sb.AppendLine($"{ts} * 4  alternatief mogelijk in blok 3");
