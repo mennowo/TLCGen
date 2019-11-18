@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
+        public static string GetPriorityTypeAbbreviation(OVIngreepModel ov)
+        {
+            return DefaultsProvider.Default.GetVehicleTypeAbbreviation(ov.Type);
+        }
+
         public static bool HasSignalGroupConflictWithPT(ControllerModel c, string sgname)
         {
             foreach (var ov in c.OVData.OVIngrepen)

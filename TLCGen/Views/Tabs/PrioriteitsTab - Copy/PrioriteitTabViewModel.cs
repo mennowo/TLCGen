@@ -1,31 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using TLCGen.Plugins;
+using TLCGen.ViewModels;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 7)]
-    public class PeriodenTabViewModel : TLCGenMainTabItemViewModel
+    [TLCGenTabItem(index: -1)]
+    public class PrioriteitTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
 
         #endregion // Fields
 
         #region Properties
-
-        public override ImageSource Icon
-        {
-            get
-            {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
-                dict.Source = u;
-                return (ImageSource)dict["KlokPeriodenTabDrawingImage"];
-            }
-        }
 
         #endregion // Properties
 
@@ -39,11 +31,24 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        public override ImageSource Icon
+        {
+            get
+            {
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "Resources/TabIcons.xaml");
+                dict.Source = u;
+                return (ImageSource)dict["OVTabDrawingImage"];
+            }
+        }
+
         public override string DisplayName
         {
             get
             {
-                return "Klokperioden";
+                return "Prioriteit";
             }
         }
 
@@ -52,7 +57,7 @@ namespace TLCGen.ViewModels
             get { return true; }
             set { }
         }
-        
+
         #endregion // TabItem Overrides
 
         #region Public Methods
@@ -61,9 +66,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PeriodenTabViewModel() : base(TabItemTypeEnum.PeriodenTab)
+        public PrioriteitTabViewModel() : base(TabItemTypeEnum.PrioriteitTab)
         {
-            
+
         }
 
         #endregion // Constructor

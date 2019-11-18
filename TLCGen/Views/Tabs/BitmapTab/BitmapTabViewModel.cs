@@ -25,7 +25,7 @@ using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 8)]
+    [TLCGenTabItem(index: 9)]
     public class BitmapTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

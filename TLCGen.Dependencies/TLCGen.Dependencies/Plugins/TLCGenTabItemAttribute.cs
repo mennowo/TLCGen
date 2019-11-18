@@ -6,6 +6,7 @@
         AlgemeenTab,
         FasenTab,
         OVTab,
+        PrioriteitTab,
         DetectieTab,
         ModulesTab,
         PeriodenTab,

@@ -29,4 +29,7 @@
     <DataTemplate DataType="{x:Type vm:OVTabViewModel}">
         <vw:OVTab />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:PrioriteitTabViewModel}">
+        <vw:PrioriteitsTab />
+    </DataTemplate>
 </ResourceDictionary>

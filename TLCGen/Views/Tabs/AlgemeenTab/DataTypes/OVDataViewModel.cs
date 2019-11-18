@@ -30,15 +30,21 @@ namespace TLCGen.ViewModels
             get { return _Controller == null ? OVIngreepTypeEnum.Geen : _Controller.OVData.OVIngreepType; }
             set
             {
-                _Controller.OVData.OVIngreepType = value;
-                if(value == OVIngreepTypeEnum.Uitgebreid)
+                if (_Controller.OVData.OVIngreepType == OVIngreepTypeEnum.Geen && value != OVIngreepTypeEnum.Geen)
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
                 }
-                RaisePropertyChanged<object>(nameof(OVIngreepType), broadcast: true);
-                RaisePropertyChanged("");
+                if (value == OVIngreepTypeEnum.GeneriekePrioriteit)
+                {
+                    Dialogs.TLCGenDialogProvider.Default.ShowMessageBox("Generieke prioriteit is voorbereid, maar wordt nog niet geheel ondersteund in de huidige versie.", "Optie nog niet ondersteund");
+                }
+                else
+                {
+                    _Controller.OVData.OVIngreepType = value;
+                }
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                RaisePropertyChanged("");
             }
         }
 

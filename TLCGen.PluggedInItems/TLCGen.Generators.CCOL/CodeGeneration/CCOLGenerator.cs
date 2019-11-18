@@ -181,10 +181,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                     }
-                    if (c.OVData.OVIngrepen.Any() ||
-                        c.OVData.HDIngrepen.Any())
+                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
+                        (c.OVData.OVIngrepen.Any() ||
+                         c.OVData.HDIngrepen.Any()))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), Encoding.Default);
+                    }
+                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.OVData.OVIngrepen.Any() ||
+                         c.OVData.HDIngrepen.Any()))
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.c"), GeneratePrioC(c), Encoding.Default);
                     }
                     if (c.HalfstarData.IsHalfstar)
                     {
@@ -254,10 +261,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
                     }
 
-                    if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
+                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
+                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
                     {
                         CopySourceIfNeeded(c, "ov.c", sourcefilepath);
                         CopySourceIfNeeded(c, "ov.h", sourcefilepath);
+                    }
+
+                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
+                    {
+                        CopySourceIfNeeded(c, "prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "prio.h", sourcefilepath);
                     }
 
                     if (c.RoBuGrover.ConflictGroepen.Any())

@@ -26,6 +26,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public virtual System.Windows.Visibility Visibility { get; set; } = System.Windows.Visibility.Visible;
+
         public virtual System.Windows.DataTemplate ContentDataTemplate { get { return null; } }
 
         public virtual ControllerModel Controller

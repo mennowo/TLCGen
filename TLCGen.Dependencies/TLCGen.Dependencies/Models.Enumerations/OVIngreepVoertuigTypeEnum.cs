@@ -8,6 +8,8 @@ namespace TLCGen.Models.Enumerations
     {
         Tram,
         Bus,
+        Fiets,
+        Vrachtwagen,
         NG
     }
 }

@@ -112,6 +112,7 @@
     <Compile Include="Messaging\Messages\SelectieveDetectorenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\TemplatesChangedMessage.cs" />
     <Compile Include="Messaging\Messages\UpdateTabsEnabledMessage.cs" />
+    <Compile Include="Messaging\OVIngreepMeldingChangingMessage.cs" />
     <Compile Include="Messaging\Requests\IsFasenConflictingRequest.cs" />
     <Compile Include="Messaging\Requests\PrepareForGenerationRequest.cs" />
     <Compile Include="Messaging\Requests\ProcessSynchronisationsRequest.cs" />

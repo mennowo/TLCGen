@@ -52,6 +52,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
     <Compile Include="CodeGeneration\Functionality\AlternatievenPerBlokCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\PrioCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\RISCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SeniorenIngreepCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\SchoolIngreepCodeGenerator.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="CodeGeneration\Functionality\WachttijdVoorspellerCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLKoppelSignaal.cs" />
+    <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePrioC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePractice.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
@@ -309,6 +311,10 @@
     <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
       <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
       <Name>TLCGen.CustomPropertyEditors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>
+      <Name>TLCGen.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

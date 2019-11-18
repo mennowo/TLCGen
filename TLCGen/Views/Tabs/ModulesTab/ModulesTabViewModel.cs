@@ -5,7 +5,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 4)]
+    [TLCGenTabItem(index: 5)]
     public class ModulesTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields

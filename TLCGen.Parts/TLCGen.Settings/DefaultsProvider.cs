@@ -72,6 +72,12 @@ namespace TLCGen.Settings
             _Default = provider;
         }
 
+        public string GetVehicleTypeAbbreviation(OVIngreepVoertuigTypeEnum type)
+        {
+            var t = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == type);
+            return t?.Setting ?? "UNKNOWN_VEHICLE_TYPE";
+        }
+
         #endregion // Public Methods
 
         #region Private Methods

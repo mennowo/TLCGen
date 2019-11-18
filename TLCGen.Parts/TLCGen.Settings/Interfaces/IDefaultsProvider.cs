@@ -1,5 +1,6 @@
 ﻿using System;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Settings
 {
@@ -14,5 +15,6 @@ namespace TLCGen.Settings
         void SaveSettings();
 
         void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null, bool onlyvalues = true);
+        string GetVehicleTypeAbbreviation(OVIngreepVoertuigTypeEnum type);
     }
 }

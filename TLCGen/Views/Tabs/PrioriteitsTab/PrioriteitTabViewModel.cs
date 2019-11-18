@@ -5,8 +5,8 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 3)]
-    public class OVTabViewModel : TLCGenMainTabItemViewModel
+    [TLCGenTabItem(index: 4)]
+    public class PrioriteitTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
 
@@ -26,6 +26,8 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        //public override Visibility Visibility { get => Visibility.Collapsed; set { } }
+
         public override ImageSource Icon
         {
             get
@@ -43,13 +45,13 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "OV/HD";
+                return "Prioriteit";
             }
         }
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid;
+            return _Controller.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit;
         }
 
         #endregion // TabItem Overrides
@@ -60,9 +62,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVTabViewModel() : base(TabItemTypeEnum.OVTab)
+        public PrioriteitTabViewModel() : base(TabItemTypeEnum.PrioriteitTab)
         {
-            
+
         }
 
         #endregion // Constructor

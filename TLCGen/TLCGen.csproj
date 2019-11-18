@@ -184,6 +184,26 @@
     <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabViewModel.cs">
       <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitsTab.xaml.cs">
+      <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitTabViewModel.cs">
+      <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml.cs">
+      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabViewModel.cs">
+      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabView.xaml.cs">
+      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabViewModel.cs">
+      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSignaalGroepInstellingenTabViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingDetectorViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingView.xaml.cs">
       <DependentUpon>PelotonKoppelingView.xaml</DependentUpon>
@@ -566,6 +586,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\VariousIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\ApplicationIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -623,6 +647,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\PrioriteitsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

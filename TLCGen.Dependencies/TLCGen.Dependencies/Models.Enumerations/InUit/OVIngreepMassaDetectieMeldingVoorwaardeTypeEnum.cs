@@ -13,6 +13,8 @@ namespace TLCGen.Models.Enumerations
         [Description("VECOM via detector")]
         VecomViaDetector,
         [Description("Selectieve detector")]
-        SelectieveDetector
+        SelectieveDetector,
+        [Description("RIS input")]
+        RISInput
     }
 }

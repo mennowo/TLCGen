@@ -17,7 +17,7 @@ using TLCGen.ViewModels.Enums;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 5)]
+    [TLCGenTabItem(index: 6)]
     public class SynchronisatiesTabViewModel : TLCGenTabItemViewModel
     {
 

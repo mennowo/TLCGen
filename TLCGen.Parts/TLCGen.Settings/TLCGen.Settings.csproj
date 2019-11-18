@@ -54,6 +54,8 @@
     <Compile Include="Interfaces\ISettingsProvider.cs" />
     <Compile Include="Models\Defaults\TLCGenDefaultModel.cs" />
     <Compile Include="Models\Defaults\TLCGenDefaultsModel.cs" />
+    <Compile Include="Models\Defaults\TLCGenDefaultString.cs" />
+    <Compile Include="Models\Defaults\VehicleTypeAbbreviationModel.cs" />
     <Compile Include="Models\Templates\TLCGenLoadedTemplatesModel.cs" />
     <Compile Include="Models\Templates\TLCGenTemplateModel.cs" />
     <Compile Include="Models\Templates\TLCGenTemplatesModel.cs" />

@@ -12,6 +12,9 @@ namespace TLCGen.Settings
         [XmlArrayItem(ElementName = "Default")]
         public List<TLCGenDefaultModel> Defaults { get; set; }
 
+        [XmlArrayItem(ElementName = "VehicleType")]
+        public List<VehicleTypeAbbreviationModel> VehicleTypes { get; set; }
+
         public TLCGenDefaultsModel()
         {
             Defaults = new List<TLCGenDefaultModel>();
