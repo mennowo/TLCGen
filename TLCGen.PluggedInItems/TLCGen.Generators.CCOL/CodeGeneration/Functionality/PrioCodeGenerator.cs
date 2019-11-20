@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
-    [CCOLCodePieceGenerator]
+    //[CCOLCodePieceGenerator]
     public class PrioCodeGenerator : CCOLCodePieceGeneratorBase
     {
         #region Fields
