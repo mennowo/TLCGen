@@ -3,8 +3,11 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Xml;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -178,11 +181,36 @@ namespace TLCGen.ViewModels
             if (StoreCurrentController)
             {
                 var controller = DeepCloner.DeepClone(Controller);
+                var pluginData = new XmlDocument();
+                var elem = pluginData.CreateElement("root");
+                pluginData.AppendChild(elem);
+                foreach(var pl in TLCGenPluginManager.Default.ApplicationPlugins)
+                {
+                    if(pl.Item2 is ITLCGenXMLNodeWriter nodeWriter)
+                    {
+                        nodeWriter.SetXmlInDocument(pluginData);
+                    }
+                }
                 controller.Data.Versies.Clear();
                 vm.Controller = controller;
+                vm.ControllerPluginData = EncodeTo64(pluginData.OuterXml);
             }
             var vvm = new VersieViewModel(vm);
             Versies?.Add(vvm);
+        }
+
+        static public string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
+            return returnValue;
+        }
+
+        static public string DecodeFrom64(string encodedData)
+        {
+            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
+            string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
+            return returnValue;
         }
 
         bool AddVersieCommand_CanExecute()
@@ -204,15 +232,25 @@ namespace TLCGen.ViewModels
         void RestoreVersieCommand_Executed()
         {
             var c = DeepCloner.DeepClone(SelectedVersie.VersieEntry.Controller);
+            XmlDocument pluginXmlDoc = null;
+            if (SelectedVersie.VersieEntry.ControllerPluginData != null)
+            {
+                pluginXmlDoc = new XmlDocument();
+                pluginXmlDoc.LoadXml(DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
+            }
 
-            var ve = DeepCloner.DeepClone(SelectedVersie.VersieEntry);
-            ve.Controller = null;
-            c.Data.Versies.Add(ve);
+            var iIndex = Versies.IndexOf(SelectedVersie);
+            for (int i = 0; i <= iIndex; i++)
+            {
+                var ve = DeepCloner.DeepClone(Versies[i].VersieEntry);
+                c.Data.Versies.Add(ve);
+            }
 
             var dlg = new SaveFileDialog();
             dlg.Filter = "TLCGen files|*.tlc|TLCGen gzipped files|*.tlcgz";
             dlg.CheckFileExists = false;
             dlg.CheckPathExists = true;
+            dlg.OverwritePrompt = true;
             dlg.FileName = c.Data.Naam + "_" + SelectedVersie.Versie + ".tlc";
             dlg.DefaultExt = ".tlc";
             if(!string.IsNullOrWhiteSpace(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
@@ -224,20 +262,40 @@ namespace TLCGen.ViewModels
             {
                 try
                 {
+                    var cDoc = TLCGenSerialization.SerializeToXmlDocument(c);
+                    if(pluginXmlDoc != null)
+                    {
+                        foreach(XmlNode node in pluginXmlDoc.FirstChild)
+                        {
+                            var iNode = cDoc.ImportNode(node, true);
+                            cDoc.DocumentElement.AppendChild(iNode);
+                        }
+                    }
+
+                    if (File.Exists(dlg.FileName))
+                    {
+                        File.Delete(dlg.FileName);
+                    }
                     if (dlg.FileName.EndsWith(".tlcgz"))
                     {
-                        TLCGenSerialization.SerializeGZip(dlg.FileName, c);
+                        using (var fs = File.Create(dlg.FileName))
+                        {
+                            using (var gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Compress))
+                            {
+                                cDoc.Save(gz);
+                            }
+                        }
                     }
                     else if (dlg.FileName.EndsWith(".tlc"))
                     {
-                        TLCGenSerialization.Serialize(dlg.FileName, c);
+                        cDoc.Save(dlg.FileName);
                     }
                 }
                 catch (Exception e)
                 {
                     Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox("Fout bij terugzetten van regeling:\n\n" + e.ToString(), "Fout bij opslaan", System.Windows.MessageBoxButton.OK);
                 }
-                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Versie {SelectedVersie.Versie} is hier opgeslagen:{dlg.FileName}\n\nLET OP! Dit bestand bevat uitsluitend de data van die versie, zonder data van plugins.", $"Data van versie {SelectedVersie.Versie} opgeslagen", System.Windows.MessageBoxButton.OK);
+                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Versie {SelectedVersie.Versie} is hier opgeslagen:{dlg.FileName}\n\nLET OP! Dit bestand bevat uitsluitend de data tot en met die versie.", $"Data van versie {SelectedVersie.Versie} opgeslagen", System.Windows.MessageBoxButton.OK);
             }
         }
 

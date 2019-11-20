@@ -20,6 +20,9 @@ namespace TLCGen.Models
         [TLCGenIgnoreAttribute]
         [HasDefault(false)]
         public ControllerModel Controller { get; set; }
+        [TLCGenIgnoreAttribute]
+        [HasDefault(false)]
+        public string ControllerPluginData { get; set; }
 
         public VersieModel()
         {

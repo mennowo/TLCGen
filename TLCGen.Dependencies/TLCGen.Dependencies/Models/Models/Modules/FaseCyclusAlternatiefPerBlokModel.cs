@@ -1,5 +1,8 @@
-﻿namespace TLCGen.Models
+﻿using System;
+
+namespace TLCGen.Models
 {
+    [Serializable]
     public class FaseCyclusAlternatiefPerBlokModel
     {
         #region Properties
