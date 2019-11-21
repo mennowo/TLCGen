@@ -1000,6 +1000,10 @@
       <Project>{6f5df100-b22b-40bc-a8c3-7f19817835f0}</Project>
       <Name>TLCGen.Specificator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
+      <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
+      <Name>TLCGen.Plugins.MultiSim</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Tools\TLCGen.Plugins.Tools.csproj">
       <Project>{3ea87140-cb65-4a8d-b93f-0ff1b2520b13}</Project>
       <Name>TLCGen.Plugins.Tools</Name>
@@ -1015,7 +1019,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"

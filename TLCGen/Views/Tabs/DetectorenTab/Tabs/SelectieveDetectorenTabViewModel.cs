@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// ViewModel for the list of extra detectors, not belonging to a PhaseCyclus
     /// </summary>
-    [TLCGenTabItem(index: 6, type: TabItemTypeEnum.DetectieTab)]
+    [TLCGenTabItem(index: 60, type: TabItemTypeEnum.DetectieTab)]
     public class SelectieveDetectorenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

@@ -12,7 +12,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.DetectieTab)]
+    [TLCGenTabItem(index: 20, type: TabItemTypeEnum.DetectieTab)]
     public class DetectorenRichtingGevoeligTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

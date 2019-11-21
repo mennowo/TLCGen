@@ -14,7 +14,7 @@ namespace TLCGen.ViewModels
     /// This class holds an ObservableCollection with all detectors, which must be updated 
     /// before it is used by the View.
     /// </summary>
-    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.DetectieTab)]
+    [TLCGenTabItem(index: 30, type: TabItemTypeEnum.DetectieTab)]
     public class DetectorenAllesTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.DetectieTab)]
+    [TLCGenTabItem(index: 40, type: TabItemTypeEnum.DetectieTab)]
     public class DetectorenSimulatieTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

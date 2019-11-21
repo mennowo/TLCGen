@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="TLCGen.Plugins.MultiSim.MultiSimTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Plugins.MultiSim"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel>
+            <Label Content="Simulatie sets" DockPanel.Dock="Top" />
+            <Button DockPanel.Dock="Bottom" Content="Toepassen" Command="{Binding Path=ApplyMultiSimEntrySetCommand}" Margin="2" />
+            <Button DockPanel.Dock="Bottom" Content="Verwijderen" Command="{Binding Path=RemoveMultiSimEntrySetCommand}" Margin="2" />
+            <Button DockPanel.Dock="Bottom" Content="Toevoegen" Command="{Binding Path=AddMultiSimEntrySetCommand}" Margin="2" />
+            <DataGrid ItemsSource="{Binding MultiSimEntrySets}" DockPanel.Dock="Bottom"
+                      SelectedItem="{Binding SelectedSimEntrySet,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Description}" Header="Beschrijving" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <DataGrid ItemsSource="{Binding Path=SelectedSimEntrySet.Entries}" Grid.Column="2"
+                  Grid.Row="0" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" >
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.DetectorName}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Q1}" Header="Q1" />
+                <DataGridTextColumn Binding="{Binding Path=Q2}" Header="Q2" />
+                <DataGridTextColumn Binding="{Binding Path=Q3}" Header="Q3" />
+                <DataGridTextColumn Binding="{Binding Path=Q4}" Header="Q4" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
