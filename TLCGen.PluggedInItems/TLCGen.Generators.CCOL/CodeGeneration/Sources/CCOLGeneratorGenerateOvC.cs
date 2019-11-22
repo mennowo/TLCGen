@@ -1374,16 +1374,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
 	                if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
+                        var actualIfc = ifc > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+
                         var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                         var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         if (m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                         m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                         if(m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                     }
                 }
