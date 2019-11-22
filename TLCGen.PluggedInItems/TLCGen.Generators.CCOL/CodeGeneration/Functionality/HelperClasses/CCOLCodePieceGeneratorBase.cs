@@ -152,7 +152,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var s in settings.Settings)
             {
-                var type = CCOLGeneratorSettingsProvider.Default.GetPrefix(s.Type);
+                var type = CCOLGeneratorSettingsProvider.Default.GetDefaultPrefix(s.Type);
 
                 foreach (var field in fields)
                 {

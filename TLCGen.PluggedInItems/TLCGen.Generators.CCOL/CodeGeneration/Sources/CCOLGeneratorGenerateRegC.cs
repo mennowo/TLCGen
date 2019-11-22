@@ -606,6 +606,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
             var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
+            var _schbmfix = CCOLGeneratorSettingsProvider.Default.GetElementName("schbmfix");
             var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
 
             sb.AppendLine("void application(void)");
@@ -701,13 +702,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (!controller.Data.MultiModuleReeksen)
                 {
-                    sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
+                    sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PRML, ML);");
                 }
                 else
                 {
                     foreach(var r in controller.MultiModuleMolens)
                     {
-                        sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PR{r.Reeks}, {r.Reeks});");
+                        sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PR{r.Reeks}, {r.Reeks});");
                     }
                 }
             }

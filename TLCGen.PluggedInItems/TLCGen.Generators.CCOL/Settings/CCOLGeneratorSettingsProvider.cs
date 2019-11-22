@@ -159,6 +159,31 @@ namespace TLCGen.Generators.CCOL.Settings
             }
         }
 
+        public string GetDefaultPrefix(CCOLGeneratorSettingTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLGeneratorSettingTypeEnum.Uitgang:
+                    return GetDefaultPrefix("us");
+                case CCOLGeneratorSettingTypeEnum.Ingang:
+                    return GetDefaultPrefix("is");
+                case CCOLGeneratorSettingTypeEnum.HulpElement:
+                    return GetDefaultPrefix("h");
+                case CCOLGeneratorSettingTypeEnum.Timer:
+                    return GetDefaultPrefix("t");
+                case CCOLGeneratorSettingTypeEnum.Counter:
+                    return GetDefaultPrefix("c");
+                case CCOLGeneratorSettingTypeEnum.Schakelaar:
+                    return GetDefaultPrefix("sch");
+                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
+                    return GetDefaultPrefix("m");
+                case CCOLGeneratorSettingTypeEnum.Parameter:
+                    return GetDefaultPrefix("prm");
+                default:
+                    return null;
+            }
+        }
+
         public string GetPrefix(CCOLGeneratorSettingTypeEnum type)
         {
             switch (type)
@@ -218,6 +243,15 @@ namespace TLCGen.Generators.CCOL.Settings
             if (Settings.Prefixes.Any(x => x.Default == pfdefault))
             {
                 return Settings.Prefixes.First(x => x.Default == pfdefault).Setting;
+            }
+            return null;
+        }
+
+        public string GetDefaultPrefix(string pfdefault)
+        {
+            if (Settings.Prefixes.Any(x => x.Default == pfdefault))
+            {
+                return Settings.Prefixes.First(x => x.Default == pfdefault).Default;
             }
             return null;
         }
