@@ -10,15 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class PelotonKoppelingCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        // TODO:
-        // - code RHDHV versie afronden
-        // - elementen tbv RHDHV versie maken
-        //   - toevoegen timer verschuiving
-        //   - verder gebruiken bestaande elementen
-        // - UI aanpassen:
-        //   - type keuze toevoegen (dh/rhdhv)
-        //   - obv type keuze andere velden weergeven
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tpelmeet;
         private CCOLGeneratorCodeStringSettingModel _tpelmaxhiaat;
@@ -533,7 +524,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     sb.AppendLine($"{ts}/* timer resetten maximale tijd toepassen RW vanaf SG */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SG[{_fcpf}{pk.KoppelingNaam}];");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SG[{_fcpf}{pk.GekoppeldeSignaalGroep}];");
                                     sb.AppendLine($"{ts}/* timer resetten om gebied open te houden */");
                                     sb.AppendLine($"{ts}RT[{_tpf}{_tpelstartrw}{pk.KoppelingNaam}] = IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && !T[{_tpf}{_tpelstartrw}{pk.KoppelingNaam}];");
                                     sb.AppendLine();
