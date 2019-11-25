@@ -277,7 +277,7 @@ bool WDNST_check_in(count fc)
 {
 	count listnr;
 	int firstempty = 999;
-	boolv WDNSTbestaatniet = TRUE;
+	bool WDNSTbestaatniet = TRUE;
 	int richting = atoi(FC_code[fc]) < 201 ? atoi(FC_code[fc]) : atoi(FC_code[fc]) - 200;
 
 	if ((CIF_DSIWIJZ == 1) && (CIF_DSI[CIF_DSI_WDNST] != 0) && (CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) &&
@@ -310,7 +310,7 @@ bool WDNST_check_uit(count fc)
 {
 	count listnr, listnr2;
 	int firstempty = 999;
-	boolv WDNSTbestaatniet = TRUE;
+	bool WDNSTbestaatniet = TRUE;
 	int richting = atoi(FC_code[fc]) < 201 ? atoi(FC_code[fc]) : atoi(FC_code[fc]) - 200;
 
 	if ((CIF_DSIWIJZ == 1) && (CIF_DSI[CIF_DSI_WDNST] != 0) && (CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT) &&
