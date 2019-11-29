@@ -24,7 +24,7 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        [Description("Type OV ingreep")]
+        [Description("Type prioriteit")]
         public OVIngreepTypeEnum OVIngreepType
         {
             get { return _Controller == null ? OVIngreepTypeEnum.Geen : _Controller.OVData.OVIngreepType; }
@@ -34,14 +34,7 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
                 }
-                if (value == OVIngreepTypeEnum.GeneriekePrioriteit)
-                {
-                    Dialogs.TLCGenDialogProvider.Default.ShowMessageBox("Generieke prioriteit is voorbereid, maar wordt nog niet geheel ondersteund in de huidige versie.", "Optie nog niet ondersteund");
-                }
-                else
-                {
-                    _Controller.OVData.OVIngreepType = value;
-                }
+                _Controller.OVData.OVIngreepType = value;
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("");

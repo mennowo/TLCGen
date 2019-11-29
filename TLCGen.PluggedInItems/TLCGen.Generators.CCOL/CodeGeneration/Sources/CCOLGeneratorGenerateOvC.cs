@@ -731,11 +731,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.AppendLine("];");
+                        sb.Append($"]");
+                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
+                        sb.AppendLine($";");
                     }
                     else
                     {
-                        sb.AppendLine($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                        sb.Append($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]");
+                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
+                        sb.AppendLine($";");
                     }
                 }
                 if (c.HalfstarData.IsHalfstar)

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
+    <Compile Include="CodeGeneration\Adds\CCOLGeneratorGeneratePrioAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
     <Compile Include="CodeGeneration\Functionality\AlternatievenPerBlokCodeGenerator.cs" />

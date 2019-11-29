@@ -217,7 +217,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
                     if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
                     {
-                        WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
+                        if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid)
+                        {
+                            WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
+                        }
+                        else if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit)
+                        {
+                            WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.add"), c, GeneratePrioAdd, GeneratePrioAddHeader, Encoding.Default);
+                        }
                     }
                     if (c.HalfstarData.IsHalfstar)
                     {

@@ -59,20 +59,24 @@ namespace TLCGen.Models
         [Browsable(false)]
         public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit;
 
+        [HasDefault(false)]
         [Browsable(false)]
-        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
+        public string FaseCyclusType => FaseCyclus + Type.ToString();
+
+        [Browsable(false)]
+        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType")]
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeVroegBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
         public BitmapCoordinatenDataModel GeconditioneerdePrioOpTijdBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
 
         [Browsable(false)]

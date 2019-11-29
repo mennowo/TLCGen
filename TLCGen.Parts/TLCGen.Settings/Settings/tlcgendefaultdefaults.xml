@@ -1,5 +1,32 @@
 ﻿<?xml version="1.0"?>
 <TLCGenDefaultsModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VehicleTypes>
+    <VehicleType>
+      <VehicleType>Tram</VehicleType>
+      <Default>tram</Default>
+      <Setting>tram</Setting>
+    </VehicleType>
+    <VehicleType>
+      <VehicleType>Bus</VehicleType>
+      <Default>bus</Default>
+      <Setting>bus</Setting>
+    </VehicleType>
+    <VehicleType>
+      <VehicleType>Fiets</VehicleType>
+      <Default>fts</Default>
+      <Setting>fts</Setting>
+    </VehicleType>
+    <VehicleType>
+      <VehicleType>Vrachtwagen</VehicleType>
+      <Default>vrw</Default>
+      <Setting>vrw</Setting>
+    </VehicleType>
+    <VehicleType>
+      <VehicleType>NG</VehicleType>
+      <Default>alg</Default>
+      <Setting>alg</Setting>
+    </VehicleType>
+  </VehicleTypes>
   <Defaults>
     <!-- FaseCycli -->
     <Default>

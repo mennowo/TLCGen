@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
-    [CCOLCodePieceGenerator]
+    //[CCOLCodePieceGenerator]
     public class PrioCodeGenerator : CCOLCodePieceGeneratorBase
     {
         #region Fields
@@ -84,9 +84,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schpriowisselpol;
 
         private CCOLGeneratorCodeStringSettingModel _schpriocovuber;
-
 #pragma warning restore 0649
-
 
         private string _tnlfg;
         private string _tnlfgd;
@@ -218,8 +216,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _MyDetectors = new List<DetectorModel>();
             _myBitmapOutputs = new List<CCOLIOElement>();
             _myBitmapInputs = new List<CCOLIOElement>();
-
-            if (c.OVData.OVIngreepType != OVIngreepTypeEnum.GeneriekePrioriteit) return;
 
             if (c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchAan || c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchUit)
             {
@@ -405,44 +401,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             /* Variables for HD */
             foreach (var hd in c.OVData.HDIngrepen)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_uspf}{_uspriohdinm}{hd.FaseCyclus}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspriohdinm}{hd.FaseCyclus}", _uspriohdinm, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohd}{hd.FaseCyclus}", _hpriohd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohdin}{hd.FaseCyclus}", _hpriohdin, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohduit}{hd.FaseCyclus}", _hpriohduit, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushdinm}{hd.FaseCyclus}", _ushdinm, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhd}{hd.FaseCyclus}", _hhd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}", _hhdin, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}", _hhduit, hd.FaseCyclus));
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriogbhd}{hd.FaseCyclus}", hd.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tpriogbhd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriorthd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tpriorthd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cpriovchd}{hd.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cpriovchd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriopriohd}{hd.FaseCyclus}", 9005, CCOLElementTimeTypeEnum.None, _prmpriopriohd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriortohd}{hd.FaseCyclus}", hd.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmpriortohd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriortbghd}{hd.FaseCyclus}", hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmpriortbghd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriortghd}{hd.FaseCyclus}", hd.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmpriortghd, hd.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schprioupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schprioupinagbhd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhd}{hd.FaseCyclus}", hd.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgbhd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _trthd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchd}{hd.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohd}{hd.FaseCyclus}", 9005, CCOLElementTimeTypeEnum.None, _prmpriohd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtohd}{hd.FaseCyclus}", hd.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtohd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbghd}{hd.FaseCyclus}", hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbghd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtghd}{hd.FaseCyclus}", hd.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtghd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagbhd, hd.FaseCyclus));
 
                 // For signal groups that have HD but not OV
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriobtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tpriobtovg, hd.FaseCyclus));
+                if (c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tbtovg, hd.FaseCyclus));
+                }
 
                 if (hd.KAR)
                 {
                     _MyDetectors.Add(hd.DummyKARInmelding);
                     _MyDetectors.Add(hd.DummyKARUitmelding);
 
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohdin}{hd.FaseCyclus}kar", _hpriohdin, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriohdin}{hd.FaseCyclus}kar", hd.KARInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _tpriohdin, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpriohdin}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schpriohdin, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohduit}{hd.FaseCyclus}kar", _hpriohduit, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriohduit}{hd.FaseCyclus}kar", hd.KARUitmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _tpriohduit, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpriohduit}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schpriohduit, hd.FaseCyclus, "KAR"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpriochecksirene}{hd.FaseCyclus}", hd.Sirene ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schpriochecksirene, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}kar", _hhdin, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thdin}{hd.FaseCyclus}kar", hd.KARInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thdin, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhdin}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schhdin, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}kar", _hhduit, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thduit}{hd.FaseCyclus}kar", hd.KARUitmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thduit, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhduit}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schhduit, hd.FaseCyclus, "KAR"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schchecksirene}{hd.FaseCyclus}", hd.Sirene ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schchecksirene, hd.FaseCyclus));
                 }
                 if (hd.Opticom && !string.IsNullOrWhiteSpace(hd.OpticomRelatedInput))
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohdin}{hd.FaseCyclus}opt", _hpriohdin, hd.FaseCyclus, "Opticom"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriohdin}{hd.FaseCyclus}opt", hd.OpticomInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _tpriohdin, hd.FaseCyclus, "Opticom"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpriohdinuit}{hd.FaseCyclus}opt", 1, CCOLElementTimeTypeEnum.SCH_type, _schpriohdinuit, hd.FaseCyclus, "Opticom"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohduit}{hd.FaseCyclus}opt", _hpriohduit, hd.FaseCyclus, "Opticom"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}opt", _hhdin, hd.FaseCyclus, "Opticom"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thdin}{hd.FaseCyclus}opt", hd.OpticomInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thdin, hd.FaseCyclus, "Opticom"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhdinuit}{hd.FaseCyclus}opt", 1, CCOLElementTimeTypeEnum.SCH_type, _schhdinuit, hd.FaseCyclus, "Opticom"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}opt", _hhduit, hd.FaseCyclus, "Opticom"));
                 }
             }
         }
@@ -461,9 +460,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen ||
-                c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid) return base.GetFunctionLocalVariables(c, type);
-
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -668,7 +664,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
             if (melding.AlleenIndienRood)
             {
-                sb.Append($"R[{_fcpf}{ov.FaseCyclus}] && !T[{_tpf}{_tprioovminrood}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] && ");
+                sb.Append($"R[{_fcpf}{ov.FaseCyclus}] && !T[{_tpf}{_tprioovminrood}{ov.FaseCyclus}] && ");
             }
 
             var extra = "";
@@ -734,9 +730,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen ||
-                c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid) return null;
-
             StringBuilder sb = new StringBuilder();
             var first = false;
 
@@ -825,7 +818,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var hd in c.OVData.HDIngrepen)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uspriohdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cpriovchd}{hd.FaseCyclus}];");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
                     if (c.HasKAR())
                     {
@@ -854,7 +847,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var hd in c.OVData.HDIngrepen)
                     {
-                        sb.AppendLine($"{ts}OV_teller({_ctpf}{_cpriovchd}{hd.FaseCyclus}, {sch});");
+                        sb.AppendLine($"{ts}OV_teller({_ctpf}{_cvchd}{hd.FaseCyclus}, {sch});");
                     }
                     return sb.ToString();
 
@@ -965,26 +958,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
                                     sb.AppendLine($"{ts}" +
-                                        $"IH[{_hpf}{_hpriohdin}{hd.FaseCyclus}kar] = " +
-                                        $"RT[{_tpf}{_tpriohdin}{hd.FaseCyclus}kar] = " +
-                                        $"!T[{_tpf}{_tpriohdin}{hd.FaseCyclus}kar] && " +
-                                        $"SCH[{_schpf}{_schpriohdin}{hd.FaseCyclus}kar] && " +
-                                        $"((DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schpriochecksirene}{hd.FaseCyclus}]) || " +
-                                          $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schpriochecksirene}{hd.FaseCyclus}])));");
+                                        $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
+                                        $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
+                                        $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
+                                        $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
+                                        $"((DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
+                                          $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hpriohdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_tpriohdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_tpriohdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schpriohdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schpriochecksirene}{hd.FaseCyclus}]));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
                                 }
-                                inmHelems.Add($"{_hpf}{_hpriohdin}{hd.FaseCyclus}kar");
+                                inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
                             }
                             if (hd.Opticom)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hpriohdin}{hd.FaseCyclus}opt] = !T[{_tpf}{_tpriohdin}{hd.FaseCyclus}opt] && SCH[{_schpf}{_schpriohdinuit}{hd.FaseCyclus}opt] && !C[{_ctpf}{_cpriovchd}{hd.FaseCyclus}] && DB[{_dpf}{hd.OpticomRelatedInput}];");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tpriohdin}{hd.FaseCyclus}opt] = G[{_fcpf}{hd.FaseCyclus}] && C[{_ctpf}{_cpriovchd}{hd.FaseCyclus}];");
-                                inmHelems.Add($"{_hpf}{_hpriohdin}{hd.FaseCyclus}opt");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}opt] = !T[{_tpf}{_thdin}{hd.FaseCyclus}opt] && SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && DB[{_dpf}{hd.OpticomRelatedInput}];");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_thdin}{hd.FaseCyclus}opt] = G[{_fcpf}{hd.FaseCyclus}] && C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
+                                inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}opt");
                             }
-                            sb.Append($"{ts}IH[{_hpf}{_hpriohdin}{hd.FaseCyclus}] = ");
+                            sb.Append($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = ");
                             first = true;
                             foreach (var i in inmHelems)
                             {
@@ -1010,20 +1003,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                                 {
                                     var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hpriohduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_tpriohduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_tpriohduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schpriohduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hpriohduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_tpriohduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_tpriohduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schpriohduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
                                 }
-                                inmHelems.Add($"{_hpf}{_hpriohduit}{hd.FaseCyclus}kar");
+                                inmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
                             }
                             if (hd.Opticom)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hpriohduit}{hd.FaseCyclus}opt] = SCH[{_schpf}{_schpriohdinuit}{hd.FaseCyclus}opt] && !TDH[{_dpf}{hd.OpticomRelatedInput}] && TDH_old[{_dpf}{hd.OpticomRelatedInput}];");
-                                inmHelems.Add($"{_hpf}{_hpriohduit}{hd.FaseCyclus}opt");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}opt] = SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !TDH[{_dpf}{hd.OpticomRelatedInput}] && TDH_old[{_dpf}{hd.OpticomRelatedInput}];");
+                                inmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}opt");
                             }
-                            sb.Append($"{ts}IH[{_hpf}{_hpriohduit}{hd.FaseCyclus}] = ");
+                            sb.Append($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = ");
                             first = true;
                             foreach (var i in inmHelems)
                             {
@@ -1037,71 +1030,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
-                    if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
-                    {
-                        sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");
-                        sb.Append($"{ts}isHD = ");
-                        first = true;
-                        foreach (var hd in c.OVData.HDIngrepen)
-                        {
-                            if (!first)
-                            {
-                                sb.Append(" || ");
-                            }
-                            sb.Append($"C[{_ctpf}{_cpriovchd}{hd.FaseCyclus}]");
-                            first = false;
-                        }
-                        sb.AppendLine(";");
-                        sb.AppendLine();
-                        if (!c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
-                        {
-                            sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
-                            sb.AppendLine($"{ts}if (isHD)");
-                            sb.AppendLine($"{ts}{{");
-                            foreach (var fc in c.Fasen)
-                            {
-                                if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
-                                {
-                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cpriovchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}/* Blokkeren alle langzaam verkeer (tevens niet-conflicten) */");
-                            if(c.Fasen.Any(x => x.WachttijdVoorspeller))
-                            {
-                                sb.AppendLine($"{ts}/* Blokkeren uitstellen indien een wachttijdvoorspeller onder het minimum is */");
-                                foreach(var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
-                                {
-                                    sb.AppendLine($"{ts}isWTV |= (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]);");
-                                }
-                                sb.AppendLine($"{ts}if (isHD && !isWTV)");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"{ts}if (isHD)");
-                            }
-                            sb.AppendLine($"{ts}{{");
-                            foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
-                            {
-                                if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
-                                {
-                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cpriovchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
-                                }
-                            }
-                        }
-                        sb.AppendLine($"{ts}}}");
-                    }
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
 
                     if (c.InterSignaalGroep.Nalopen.Any())
                     {

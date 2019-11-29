@@ -538,22 +538,23 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k, int prio_opties)
 }
 
 
-/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
 /* Functie: StartGroenConflictenUitstellen()                                              */
 /*                                                                                        */
 /* Doel:    Bepalen of het startgroen van conflictrichtingen nog uitgesteld kan worden    */
 /*          zodat de OV richting bijzonder gerealiseerd kan worden of gedurende de        */
 /*          realisatie na het TXD moment groen kan blijven                                */
 /*                                                                                        */
-/* Params:  fc:         fasecyclus                                                        */
+/* Params:  iov:        ov richting index                                                 */
+/*          fcov:       fasecyclus index                                                  */
 /*          prio_opties:geldende prioriteitsopties                                        */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-bool StartGroenConflictenUitstellen(count fcov, int prio_opties)
+bool StartGroenConflictenUitstellen(count iov, count fcov, int prio_opties)
 {
 	int j, k;
-	bool l_fReturn = TRUE;
 
+	if (iMaximumWachtTijdOverschreden[iov]) return FALSE;
 	for (j = 0; j < FKFC_MAX[fcov]; j++)
 	{
 #if (CCOL_V >= 95)
@@ -564,12 +565,10 @@ bool StartGroenConflictenUitstellen(count fcov, int prio_opties)
 
 		if (TijdTotLaatsteRealisatieMomentConflict(fcov, k, prio_opties) <= 0)
 		{
-			l_fReturn = FALSE;
-			break;
+			return FALSE;
 		}
 	}
-
-	return l_fReturn;
+	return TRUE;
 }
 
 void OVHalfstarTerugkomGroen(void)
@@ -645,7 +644,7 @@ void OVHalfstarStartGroenMomenten(void)
 			{
 				if (iAantalInmeldingen[ov] > 0)
 				{
-					if (!StartGroenConflictenUitstellen(iFC_OVix[ov], iPrioriteitsOpties[ov]))
+					if (!StartGroenConflictenUitstellen(ov, iFC_OVix[ov], iPrioriteitsOpties[ov]))
 						iStartGroen[ov] = 9999;
 				}
 			}
@@ -674,7 +673,7 @@ void OVHalfstarTegenhouden(void)
 			{
 				int i, k;
 				fc = iFC_OVix[ov];
-				magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
+				magUitstellen = StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov]);
 				for (i = 0; i < GKFC_MAX[fc]; ++i)
 				{
 #if (CCOL_V >= 95)
@@ -721,7 +720,7 @@ void OVHalfstarGroenVasthouden(void)
 			ov++) {
 
 			fc = iFC_OVix[ov];
-			magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
+			magUitstellen = StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov]);
 			// Reset OV_YV_BIT, will determine YV according to signalplan structure
 			YV[fc] &= ~OV_YV_BIT;
 			YM[fc] &= ~OV_YM_BIT;
@@ -778,7 +777,7 @@ void OVHalfstarMeetKriterium(void)
 					((iGroenBewakingsTimer[ov] < iGroenBewakingsTijd[ov]) || (iAantalInmeldingen[ov] > 0) && !ka(fc)) &&
 						((iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov]) <= iRestGroen)))
 				{
-					if (G[fc] && (StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov])))
+					if (G[fc] && (StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov])))
 						MK[fc] |= OV_MK_BIT;
 					else
 						MK[fc] = 0;

@@ -761,7 +761,9 @@ namespace TLCGen.GebruikersOpties
 
         public bool OnSelectedPreview()
         {
-            return CheckCurrentItemNameUnique();
+            // TODO check why do this? and why does it sometimes return false?
+            // seems like this plugin returns false if two items of different types have the same name (PRM p1 and MM p1...)
+            return true; // CheckCurrentItemNameUnique();
         }
 
         public void OnDeselected()

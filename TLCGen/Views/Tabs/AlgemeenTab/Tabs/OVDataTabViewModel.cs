@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "OV opties";
+                return "Prioriteit opties";
             }
         }
 

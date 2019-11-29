@@ -34,7 +34,7 @@ int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 
 void BepaalHoofdrichtingOpties(void);
 int  TijdTotLaatsteRealisatieMomentConflict(int, int, int);
-bool StartGroenConflictenUitstellen(count, int);
+bool StartGroenConflictenUitstellen(count, count, int);
 void set_pg_primair_fc_ov_ple(void);
 void signaalplan_primair_ov_ple(void);
 

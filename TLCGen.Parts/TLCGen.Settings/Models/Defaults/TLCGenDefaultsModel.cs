@@ -18,6 +18,7 @@ namespace TLCGen.Settings
         public TLCGenDefaultsModel()
         {
             Defaults = new List<TLCGenDefaultModel>();
+            VehicleTypes = new List<VehicleTypeAbbreviationModel>();
         }
     }
 }

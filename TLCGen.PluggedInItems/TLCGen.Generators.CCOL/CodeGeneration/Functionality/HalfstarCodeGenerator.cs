@@ -5,6 +5,7 @@ using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -456,7 +457,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCInstellingen:
                     return 10;
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
-                    return 10;
+                    return 20;
                 case CCOLCodeTypeEnum.OvCOnderMaximum:
                     return 10;
                 case CCOLCodeTypeEnum.OvCAfkapGroen:
@@ -1568,9 +1569,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.HalfstarData.IsHalfstar && c.HasPT())
                     {
                         sb.AppendLine($"{ts}/* Bepalen tijd na TXD t.b.v. verlengen bij OV ingreep */");
-                        foreach (var ov in c.OVData.OVIngrepen)
+                        if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
                         {
-                            sb.AppendLine($"{ts}iExtraGroenNaTXD[ovFC{ov.FaseCyclus}] = PRM[{_prmpf}{_prmnatxdhst}{ov.FaseCyclus}];");
+                            foreach (var ov in c.OVData.OVIngrepen)
+                            {
+                                sb.AppendLine($"{ts}iExtraGroenNaTXD[ovFC{ov.FaseCyclus}] = PRM[{_prmpf}{_prmnatxdhst}{ov.FaseCyclus}];");
+                            }
+                        }
+                        else if (c.OVData.OVIngreepType == OVIngreepTypeEnum.GeneriekePrioriteit)
+                        {
+                            foreach (var ov in c.OVData.OVIngrepen)
+                            {
+                                sb.AppendLine($"{ts}iExtraGroenNaTXD[prioFC{ov.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ov.Type)}] = PRM[{_prmpf}{_prmnatxdhst}{ov.FaseCyclus}];");
+                            }
                         }
                         enter = true;
                     }

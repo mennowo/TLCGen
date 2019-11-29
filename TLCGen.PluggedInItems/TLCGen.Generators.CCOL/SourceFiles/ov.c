@@ -1868,7 +1868,8 @@ void OVAlternatieven(void)
             {
                 if (iT_GBix[ov] >= 0 && iT_GBix[ov] < TMMAX &&
                     iH_OVix[ov] >= 0 && iH_OVix[ov] < HEMAX &&
-                    iPrioriteitsOpties[ov] & poGroenVastHouden)
+                    iPrioriteitsOpties[ov] & poGroenVastHouden &&
+					iPrioriteit[ov])
                 {
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
                     if (TIG_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
@@ -1884,7 +1885,8 @@ void OVAlternatieven(void)
 
                 if (iT_GBix[ov]>=0 && iT_GBix[ov]<TMMAX &&
                     iH_OVix[ov]>=0 && iH_OVix[ov]<HEMAX &&
-                    iPrioriteitsOpties[ov] & poBijzonderRealiseren) 
+                    iPrioriteitsOpties[ov] & poBijzonderRealiseren &&
+					iPrioriteit[ov])
 		        {
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
 					if (TIG_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */

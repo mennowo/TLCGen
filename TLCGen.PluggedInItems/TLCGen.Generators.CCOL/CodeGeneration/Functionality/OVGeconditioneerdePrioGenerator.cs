@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hovuit;
         private string _cvc;
         private string _cvchd;
+        private string _hplact;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _mstp;
@@ -83,7 +84,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCInUitMelden:
                     return 20;
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
-                    return 20;
+                    return 10;
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     return 10;
             }
@@ -121,11 +122,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                     if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Geconditioneerde prioriteit instellen */");
+                    var tsts = ts; 
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        tsts += ts;
+                        sb.AppendLine($"{ts}/* Geconditioneerde prioriteit werkt nog niet in combinatie met prioriteit tijdens PL regelen */");
+                        sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}{{");
+                    }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         var hasconditions = false;
                         var sbc = new StringBuilder();
-                        sbc.Append($"{ts}IH[{_hpf}{_hstp}{ov.FaseCyclus}] = ");
+                        sbc.Append($"{tsts}IH[{_hpf}{_hstp}{ov.FaseCyclus}] = ");
                         var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
                         if (hd != null)
                         {
@@ -150,18 +159,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{ts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_VROEG || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_VROEG || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstipttevroeg});");
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{ts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstiptoptijd});");
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{ts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstipttelaat});");
+                    }
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"{ts}}}");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -186,6 +199,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
             _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }

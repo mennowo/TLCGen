@@ -214,6 +214,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myBitmapOutputs = new List<CCOLIOElement>();
             _myBitmapInputs = new List<CCOLIOElement>();
 
+            if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Uitgebreid) return;
+
             if (c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchAan || c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchUit)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcovuber}", c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcovuber));
@@ -457,6 +459,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Uitgebreid) return base.GetFunctionLocalVariables(c, type);
+
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -724,6 +728,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
+            if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Uitgebreid) return null;
+
             StringBuilder sb = new StringBuilder();
             var first = false;
 

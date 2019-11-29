@@ -4,6 +4,7 @@ using System.Text;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -54,13 +55,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GenerateSysHDS(c));
                 sb.AppendLine();
             }
-            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+            var ov = 0;
+            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.GeneriekePrioriteit ||
+                c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
             {
-                var ov = 0;
-                foreach (var ovFC in c.OVData.OVIngrepen)
+                if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
                 {
-                    sb.AppendLine($"{ts}#define ovFC{ovFC.FaseCyclus} {ov.ToString()}");
-                    ++ov;
+                    foreach (var ovFC in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}#define ovFC{ovFC.FaseCyclus} {ov.ToString()}");
+                        ++ov;
+                    }
+                }
+                if (c.OVData.OVIngreepType == OVIngreepTypeEnum.GeneriekePrioriteit)
+                {
+                    foreach (var ovFC in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovFC.Type)} {ov.ToString()}");
+                        ++ov;
+                    }
                 }
                 foreach (var hdFC in c.OVData.HDIngrepen)
                 {

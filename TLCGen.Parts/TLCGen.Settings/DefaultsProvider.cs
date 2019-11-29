@@ -226,6 +226,32 @@ namespace TLCGen.Settings
             string defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             if (Defaults != null && File.Exists(defsetfile))
             {
+                foreach(var vtgT in Enum.GetValues(typeof(OVIngreepVoertuigTypeEnum)))
+                {
+                    var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (OVIngreepVoertuigTypeEnum)vtgT);
+                    if(vtgTSet == null)
+                    {
+                        switch ((OVIngreepVoertuigTypeEnum)vtgT)
+                        {
+                            case OVIngreepVoertuigTypeEnum.Tram:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "tram", Setting = "tram" });
+                                break;
+                            case OVIngreepVoertuigTypeEnum.Bus:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "bus", Setting = "bus" });
+                                break;
+                            case OVIngreepVoertuigTypeEnum.Fiets:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "fts", Setting = "fts" });
+                                break;
+                            case OVIngreepVoertuigTypeEnum.Vrachtwagen:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "vrw", Setting = "vrw" });
+                                break;
+                            case OVIngreepVoertuigTypeEnum.NG:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "alg", Setting = "alg" });
+                                break;
+                        }
+                    }
+                }
+
                 try
                 {
                     var message = "";
@@ -303,7 +329,7 @@ namespace TLCGen.Settings
             }
         }
 
-	    private TLCGenDefaultsModel DeserializeDefaultsFile(string filename)
+        private TLCGenDefaultsModel DeserializeDefaultsFile(string filename)
 	    {
 		    var defaults = new TLCGenDefaultsModel();
 		    var doc = new XmlDocument();
@@ -402,6 +428,6 @@ namespace TLCGen.Settings
             }
         }
 
-#endregion // IDefaultsProvider
+        #endregion // IDefaultsProvider
     }
 }
