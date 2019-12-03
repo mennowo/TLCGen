@@ -14,6 +14,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
@@ -23,11 +25,12 @@
         <Label Content="Start moment" Grid.Row="1" Grid.Column="0" />
         <Label Content="Switch moment" Grid.Row="2" Grid.Column="0" />
         <Label Content="Commentaar" Grid.Row="3" />
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Cyclustijd}" Margin="2" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Cyclustijd}" Margin="2" Name="CycleTimeTB" />
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=StartMoment}" Margin="2" />
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=SwitchMoment}" Margin="2" />
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=Commentaar}" Margin="2" />
         <DataGrid Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Margin="2" ItemsSource="{Binding Path=Fasen}"
+                  Name="FasenDG"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
@@ -48,6 +51,22 @@
                 <DataGridTextColumn Binding="{Binding Path=D2,TargetNullValue={x:Static sys:String.Empty}}" Header="D2" />
                 <DataGridTextColumn Binding="{Binding Path=E2,TargetNullValue={x:Static sys:String.Empty}}" Header="E2" />
             </DataGrid.Columns>
-        </DataGrid>  
+        </DataGrid>
+        <GridSplitter Height="5" Grid.Row="5" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" />
+        <Expander 
+            Header="Visualisatie" Name="VisualisatieExpender" Expanded="VisualisatieExpender_Expanded"
+            Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Canvas Name="phaseGrid" Margin="2" />
+                <DockPanel Grid.Row="1">
+                    <Button Content="Verversen" Click="Button_Click" HorizontalAlignment="Left" Margin="2" DockPanel.Dock="Left" />
+                    <TextBlock Text="Let op: uitsluitend weergave 1e realisaties" Margin="5" Foreground="RosyBrown" DockPanel.Dock="Right" HorizontalAlignment="Right" />
+                </DockPanel>
+            </Grid>
+        </Expander>
     </Grid>
 </UserControl>
