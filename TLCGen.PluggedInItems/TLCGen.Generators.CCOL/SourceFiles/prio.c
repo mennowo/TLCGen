@@ -3,7 +3,7 @@
 
 #define MAX_INT                       32767L
 
-#include "ov.h"
+#include "prio.h"
 
 VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 
@@ -1393,7 +1393,7 @@ void OVTegenhouden(void)
             RealisatieTijden(fc, iPrioriteitsOpties[ov]);
         }
     }
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     RealisatieTijden_Add();
 #endif
     for (ov = 0; ov < ovOVMAX; ++ov)
@@ -1901,7 +1901,7 @@ void OVAlternatieven(void)
         }
     }
     OVPARCorrecties();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVAlternatieven_Add();
 #endif
 
@@ -2216,7 +2216,7 @@ void AfhandelingOV(void)
        Vaststellen rijtijdscenarios
        ------------------------------------------------------------ */
     RijTijdScenario();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     RijTijdScenario_Add();
 #endif
 
@@ -2224,7 +2224,7 @@ void AfhandelingOV(void)
        In - en uitmeldingen
        -------------------- */
     InUitMelden();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     InUitMelden_Add();
 #endif
 
@@ -2232,46 +2232,46 @@ void AfhandelingOV(void)
        OV-instellingen
        --------------- */
     OVInstellingen();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVInstellingen_Add();
 #endif
 
 	OVTimers();
     KonfliktTijden();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     KonfliktTijden_Add();
 #endif
 
     WachtTijdBewaking();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     WachtTijdBewaking_Add();
 #endif
 
 	OnderMaximum();
 	OnderMaximumExtra();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OnderMaximum_Add();
 #endif
 
     BlokkeringsTijd();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     BlokkeringsTijd_Add();
 #endif
 
     PrioriteitsToekenning();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     PrioriteitsToekenning_Add();
 #endif
 
 	AfkapGroen();
 	AfkapGroenExtra();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     AfkapGroen_Add();
 #endif
 
 	StartGroenMomenten();
 	StartGroenMomentenExtra();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     StartGroenMomenten_Add();
 #endif
 
@@ -2279,7 +2279,7 @@ void AfhandelingOV(void)
        Als de rijtijd verstreken is, wordt de aanvraag gezet.
        ------------------------------------------------------ */
     OVAanvragen();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVAanvragen_Add();
 #endif
 
@@ -2288,7 +2288,7 @@ void AfhandelingOV(void)
        StartGroenMoment.
        ------------------------------------------------ */
 	OVTegenhouden();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVTegenhouden_Add();
 #endif
 
@@ -2298,7 +2298,7 @@ void AfhandelingOV(void)
        ------------------------------------------- */
 	OVAfkappen();
 	OVAfkappenExtra();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVAfkappen_Add();
 #endif
 
@@ -2339,12 +2339,12 @@ void AfhandelingOV(void)
     OVAlternatieven();
 
     PostAfhandelingOV();
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
 	PostAfhandelingOV_Add();
 #endif
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined(VISSIM)
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
     OVDebug_Add();
 #endif
 #endif

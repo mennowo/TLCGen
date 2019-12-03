@@ -4,7 +4,7 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepInUitMeldingVoorwaardeInputTypeEnum
+    public enum PrioIngreepInUitMeldingVoorwaardeInputTypeEnum
     {
         [Description("Start detectie")]
         StartDetectie,

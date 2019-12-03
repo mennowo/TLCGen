@@ -221,7 +221,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 int _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
-            var ovdummies = _plugin.Controller.OVData.GetAllDummyDetectors();
+            var ovdummies = _plugin.Controller.PrioData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
                 pad1 = ovdummies.Max(x => (_plugin.Dpf + x.Naam).Length);

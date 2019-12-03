@@ -12,8 +12,8 @@
     <StackPanel Orientation="Vertical">
         <Label Content="Type OV ingreep" />
         <ComboBox Margin="5"
-                  ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepTypeEnum}}}"
-                  SelectedItem="{Binding Path=OVData.OVIngreepType}" />
-        <ct:SimplePropertyEditor IsEnabled="{Binding Path=OVData.HasOV}" BoundObject="{Binding Path=OVData}" Margin="2" />
+                  ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepTypeEnum}}}"
+                  SelectedItem="{Binding Path=PrioData.PrioIngreepType}" />
+        <ct:SimplePropertyEditor IsEnabled="{Binding Path=PrioData.HasPrio}" BoundObject="{Binding Path=PrioData}" Margin="2" />
     </StackPanel>
 </UserControl>

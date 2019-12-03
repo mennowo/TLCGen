@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
                 _selectedIngreep = value;
                 if (_selectedIngreep != null)
                 {
-                    SelectedMeldingenData = new OVIngreepInUitMeldingenDataViewModel(_selectedIngreep.OVIngreep.MeldingenData);
+                    SelectedMeldingenData = new PrioIngreepInUitMeldingenDataViewModel(_selectedIngreep.PrioIngreep.MeldingenData);
                 }
                 else
                 {
@@ -49,8 +49,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private OVIngreepInUitMeldingenDataViewModel _selectedMeldingenData;
-        public OVIngreepInUitMeldingenDataViewModel SelectedMeldingenData
+        private PrioIngreepInUitMeldingenDataViewModel _selectedMeldingenData;
+        public PrioIngreepInUitMeldingenDataViewModel SelectedMeldingenData
         {
             get => _selectedMeldingenData;
             set
@@ -74,14 +74,14 @@ namespace TLCGen.ViewModels
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()
         {
             Ingrepen.Clear();
             SelectedIngreep = null;
-            foreach (var ov in _Controller.OVData.OVIngrepen)
+            foreach (var ov in _Controller.PrioData.PrioIngrepen)
             {
                 var ovvm = new OVIngreepViewModel(ov);
                 Ingrepen.Add(ovvm);
@@ -95,12 +95,12 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection Changed
 
-        private void OnNeedsFaseCyclus(OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage msg)
+        private void OnNeedsFaseCyclus(PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage msg)
         {
-            if (msg.RequestingObject is OVIngreepInUitMeldingViewModel ||
-                msg.RequestingObject is OVIngreepInUitMeldingenDataViewModel)
+            if (msg.RequestingObject is PrioIngreepInUitMeldingViewModel ||
+                msg.RequestingObject is PrioIngreepInUitMeldingenDataViewModel)
             {
-                msg.FaseCyclus = SelectedIngreep.OVIngreep.FaseCyclus;
+                msg.FaseCyclus = SelectedIngreep.PrioIngreep.FaseCyclus;
             }
         }
 
@@ -108,7 +108,7 @@ namespace TLCGen.ViewModels
 
         public PrioriteitInUitmeldenTabViewModel() : base()
         {
-            MessengerInstance.Register<OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage>(this, OnNeedsFaseCyclus);
+            MessengerInstance.Register<PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage>(this, OnNeedsFaseCyclus);
         }
 
         #endregion // Constructor

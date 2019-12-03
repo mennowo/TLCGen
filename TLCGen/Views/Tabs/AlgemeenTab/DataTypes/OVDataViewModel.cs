@@ -9,7 +9,7 @@ using TLCGen.Controls;
 
 namespace TLCGen.ViewModels
 {
-    public class OVDataViewModel : ViewModelBase
+    public class PrioDataViewModel : ViewModelBase
     {
         #region Properties
 
@@ -25,16 +25,16 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         [Description("Type prioriteit")]
-        public OVIngreepTypeEnum OVIngreepType
+        public PrioIngreepTypeEnum PrioIngreepType
         {
-            get { return _Controller == null ? OVIngreepTypeEnum.Geen : _Controller.OVData.OVIngreepType; }
+            get { return _Controller == null ? PrioIngreepTypeEnum.Geen : _Controller.PrioData.PrioIngreepType; }
             set
             {
-                if (_Controller.OVData.OVIngreepType == OVIngreepTypeEnum.Geen && value != OVIngreepTypeEnum.Geen)
+                if (_Controller.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen && value != PrioIngreepTypeEnum.Geen)
                 {
-                    DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Controller.PrioData);
                 }
-                _Controller.OVData.OVIngreepType = value;
+                _Controller.PrioData.PrioIngreepType = value;
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("");
@@ -42,19 +42,19 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public bool HasOV
+        public bool HasPrio
         {
-            get { return OVIngreepType != OVIngreepTypeEnum.Geen; }
+            get { return PrioIngreepType != PrioIngreepTypeEnum.Geen; }
         }
 
-        [Category("Opties OV")]
+        [Category("Opties prioriteit")]
         [Description("Check type op DSI bericht bij VECOM")]
         public bool CheckOpDSIN
         {
-            get { return _Controller == null ? false : _Controller.OVData.CheckOpDSIN; }
+            get { return _Controller == null ? false : _Controller.PrioData.CheckOpDSIN; }
             set
             {
-                _Controller.OVData.CheckOpDSIN = value;
+                _Controller.PrioData.CheckOpDSIN = value;
                 RaisePropertyChanged<object>(nameof(CheckOpDSIN), broadcast: true);
             }
         }
@@ -62,10 +62,10 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd auto")]
         public int MaxWachttijdAuto
         {
-            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdAuto; }
+            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdAuto; }
             set
             {
-                _Controller.OVData.MaxWachttijdAuto = value;
+                _Controller.PrioData.MaxWachttijdAuto = value;
                 RaisePropertyChanged<object>(nameof(MaxWachttijdAuto), broadcast: true);
             }
         }
@@ -73,10 +73,10 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd fiets")]
         public int MaxWachttijdFiets
         {
-            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdFiets; }
+            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdFiets; }
             set
             {
-                _Controller.OVData.MaxWachttijdFiets = value;
+                _Controller.PrioData.MaxWachttijdFiets = value;
                 RaisePropertyChanged<object>(nameof(MaxWachttijdFiets), broadcast: true);
             }
         }
@@ -84,10 +84,10 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd voetganger")]
         public int MaxWachttijdVoetganger
         {
-            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdVoetganger; }
+            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdVoetganger; }
             set
             {
-                _Controller.OVData.MaxWachttijdVoetganger = value;
+                _Controller.PrioData.MaxWachttijdVoetganger = value;
                 RaisePropertyChanged<object>(nameof(MaxWachttijdVoetganger), broadcast: true);
             }
         }
@@ -95,10 +95,10 @@ namespace TLCGen.ViewModels
         [Description("Grens te vroeg tbv geconditioneerde prio")]
         public int GeconditioneerdePrioGrensTeVroeg
         {
-            get { return _Controller == null ? 0 : _Controller.OVData.GeconditioneerdePrioGrensTeVroeg; }
+            get { return _Controller == null ? 0 : _Controller.PrioData.GeconditioneerdePrioGrensTeVroeg; }
             set
             {
-                _Controller.OVData.GeconditioneerdePrioGrensTeVroeg = value;
+                _Controller.PrioData.GeconditioneerdePrioGrensTeVroeg = value;
                 RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeVroeg), broadcast: true);
             }
         }
@@ -106,10 +106,10 @@ namespace TLCGen.ViewModels
         [Description("Grens te laat tbv geconditioneerde prio")]
         public int GeconditioneerdePrioGrensTeLaat
         {
-            get { return _Controller == null ? 0 : _Controller.OVData.GeconditioneerdePrioGrensTeLaat; }
+            get { return _Controller == null ? 0 : _Controller.PrioData.GeconditioneerdePrioGrensTeLaat; }
             set
             {
-                _Controller.OVData.GeconditioneerdePrioGrensTeLaat = value;
+                _Controller.PrioData.GeconditioneerdePrioGrensTeLaat = value;
                 RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeLaat), broadcast: true);
             }
         }
@@ -117,10 +117,10 @@ namespace TLCGen.ViewModels
         [Description("Blokkeren niet-conflicten tijdens HD ingreep")]
         public bool BlokkeerNietConflictenBijHDIngreep
         {
-            get { return _Controller == null ? false : _Controller.OVData.BlokkeerNietConflictenBijHDIngreep; }
+            get { return _Controller == null ? false : _Controller.PrioData.BlokkeerNietConflictenBijHDIngreep; }
             set
             {
-                _Controller.OVData.BlokkeerNietConflictenBijHDIngreep = value;
+                _Controller.PrioData.BlokkeerNietConflictenBijHDIngreep = value;
                 RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenBijHDIngreep), broadcast: true);
             }
         }
@@ -129,32 +129,32 @@ namespace TLCGen.ViewModels
         [EnabledCondition(nameof(BlokkeerNietConflictenBijHDIngreep))]
         public bool BlokkeerNietConflictenAlleenLangzaamVerkeer
         {
-            get { return _Controller == null ? false : _Controller.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer; }
+            get { return _Controller == null ? false : _Controller.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer; }
             set
             {
-                _Controller.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer = value;
+                _Controller.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer = value;
                 RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenAlleenLangzaamVerkeer), broadcast: true);
             }
         }
 
-        [Description("Verklikken wijzing OV teller via UBER")]
-        public NooitAltijdAanUitEnum VerklikkenOVTellerUber
+        [Description("Verklikken wijziging prio teller via UBER")]
+        public NooitAltijdAanUitEnum VerklikkenPrioTellerUber
         {
-            get { return _Controller == null ? NooitAltijdAanUitEnum.Nooit : _Controller.OVData.VerklikkenOVTellerUber; }
+            get { return _Controller == null ? NooitAltijdAanUitEnum.Nooit : _Controller.PrioData.VerklikkenPrioTellerUber; }
             set
             {
-                _Controller.OVData.VerklikkenOVTellerUber = value;
-                RaisePropertyChanged<object>(nameof(VerklikkenOVTellerUber), broadcast: true);
+                _Controller.PrioData.VerklikkenPrioTellerUber = value;
+                RaisePropertyChanged<object>(nameof(VerklikkenPrioTellerUber), broadcast: true);
             }
         }
 
         [Description("Check signaalgroepnmrs hoger dan 2## als ## in DSI")]
         public bool VerlaagHogeSignaalGroepNummers
         {
-            get { return _Controller == null ? false : _Controller.OVData.VerlaagHogeSignaalGroepNummers; }
+            get { return _Controller == null ? false : _Controller.PrioData.VerlaagHogeSignaalGroepNummers; }
             set
             {
-                _Controller.OVData.VerlaagHogeSignaalGroepNummers = value;
+                _Controller.PrioData.VerlaagHogeSignaalGroepNummers = value;
                 RaisePropertyChanged<object>(nameof(VerlaagHogeSignaalGroepNummers), broadcast: true);
             }
         }

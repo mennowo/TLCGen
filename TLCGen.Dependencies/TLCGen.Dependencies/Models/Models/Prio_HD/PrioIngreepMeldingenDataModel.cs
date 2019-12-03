@@ -6,14 +6,14 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class OVIngreepMeldingenDataModel
+    public class PrioIngreepMeldingenDataModel
     {
         #region Properties
 
         [XmlArrayItem("Inmelding")]
-        public List<OVIngreepInUitMeldingModel> Inmeldingen { get; set; }
+        public List<PrioIngreepInUitMeldingModel> Inmeldingen { get; set; }
         [XmlArrayItem("Uitmelding")]
-        public List<OVIngreepInUitMeldingModel> Uitmeldingen { get; set; }
+        public List<PrioIngreepInUitMeldingModel> Uitmeldingen { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
@@ -44,10 +44,10 @@ namespace TLCGen.Models
 
         #region Constructor
 
-        public OVIngreepMeldingenDataModel()
+        public PrioIngreepMeldingenDataModel()
         {
-            Inmeldingen = new List<OVIngreepInUitMeldingModel>();
-            Uitmeldingen = new List<OVIngreepInUitMeldingModel>();
+            Inmeldingen = new List<PrioIngreepInUitMeldingModel>();
+            Uitmeldingen = new List<PrioIngreepInUitMeldingModel>();
         }
 
         #endregion // Constructor

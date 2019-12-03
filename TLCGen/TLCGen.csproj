@@ -144,12 +144,9 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenPerBlokTabViewModel.cs">
       <DependentUpon>ModulesAlternatievenPerBlokTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepRitCategorieViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingenDataViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepInUitMeldingViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml.cs">
-      <DependentUpon>OVInUitmeldenTabView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\OVIngreepRitCategorieViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenDataViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingViewModel.cs" />
     <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\IngangViewModel.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\SelectieveDetectorViewModel.cs" />
@@ -171,17 +168,17 @@
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\GelijkstartViewModel.cs">
       <DependentUpon>GelijkstartView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVHDFaseDataOverviewViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepView.xaml.cs">
-      <DependentUpon>OVIngreepView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDFaseDataOverviewViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepView.xaml.cs">
+      <DependentUpon>PrioIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabViewModel.cs">
-      <DependentUpon>OVInUitmeldenTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepViewModel.cs">
+      <DependentUpon>PrioIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml.cs">
-      <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabViewModel.cs">
+      <DependentUpon>HDIngrepenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabView.xaml.cs">
       <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitsTab.xaml.cs">
@@ -190,6 +187,7 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitTabViewModel.cs">
       <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml.cs">
       <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
     </Compile>
@@ -203,7 +201,9 @@
       <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSignaalGroepInstellingenTabViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabViewModel.cs">
+      <DependentUpon>PrioriteitSimulatieTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingDetectorViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingView.xaml.cs">
       <DependentUpon>PelotonKoppelingView.xaml</DependentUpon>
@@ -264,21 +264,12 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesVooruitRealisatiesTabViewModel.cs">
       <DependentUpon>ModulesVooruitRealisatiesTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepViewModel.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepSignaalGroepParametersViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\OVTabViewModel.cs">
-      <DependentUpon>OVTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVFasenTabViewModel.cs">
-      <DependentUpon>OVFasenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabViewModel.cs">
-      <DependentUpon>OVSignaalGroepInstellingenTabView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepSignaalGroepParametersViewModel.cs" />
     <Compile Include="Views\Tabs\PeriodenTab\DataTypes\PeriodeViewModel.cs" />
     <Compile Include="Views\Tabs\PeriodenTab\PeriodenTabViewModel.cs">
       <DependentUpon>PeriodenTab.xaml</DependentUpon>
@@ -403,12 +394,6 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModel.cs">
       <DependentUpon>FasenLijstTimersTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepViewModel.cs">
-      <DependentUpon>OVIngreepView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml.cs">
-      <DependentUpon>OVSignaalGroepInstellingenTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml.cs">
       <DependentUpon>OVDataTabView.xaml</DependentUpon>
     </Compile>
@@ -430,14 +415,8 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabView.xaml.cs">
       <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\OVTab.xaml.cs">
-      <DependentUpon>OVTab.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabView.xaml.cs">
-      <DependentUpon>OVSimulatieTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabViewModel.cs">
-      <DependentUpon>OVSimulatieTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabView.xaml.cs">
+      <DependentUpon>PrioriteitSimulatieTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml.cs">
       <DependentUpon>PeriodenOverigTabView.xaml</DependentUpon>
@@ -460,7 +439,7 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabView.xaml.cs">
       <DependentUpon>FileTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepView.xaml.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepView.xaml.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
@@ -492,8 +471,8 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
       <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVFasenTabView.xaml.cs">
-      <DependentUpon>OVFasenTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabView.xaml.cs">
+      <DependentUpon>HDIngrepenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\PeriodenTab.xaml.cs">
       <DependentUpon>PeriodenTab.xaml</DependentUpon>
@@ -630,10 +609,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Tabs\DetectorenTab\Tabs\SelectieveDetectorenTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -646,7 +621,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -678,10 +653,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -706,11 +677,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\OVTab.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -750,11 +717,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\DataTypes\HDIngreepView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\DataTypes\OVIngreepView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -802,7 +769,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVFasenTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

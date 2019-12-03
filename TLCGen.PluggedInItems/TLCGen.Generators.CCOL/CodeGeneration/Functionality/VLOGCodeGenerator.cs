@@ -120,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
                         sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfbvlog}]);");
-                        if(c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
+                        if(c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any())
                         {
                             sb.AppendLine($"{ts}#ifndef NO_VLOG_200");
                             sb.AppendLine($"{ts}{ts}VLOG_mon5_buffer();");

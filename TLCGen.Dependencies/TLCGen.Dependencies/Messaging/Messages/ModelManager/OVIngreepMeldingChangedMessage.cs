@@ -2,12 +2,12 @@
 
 namespace TLCGen.Messaging.Messages
 {
-    public class OVIngreepMeldingChangedMessage : ModelManagerMessageBase
+    public class PrioIngreepMeldingChangedMessage : ModelManagerMessageBase
     {
-        public OVIngreepInUitMeldingVoorwaardeTypeEnum MeldingType { get; }
+        public PrioIngreepInUitMeldingVoorwaardeTypeEnum MeldingType { get; }
         public string FaseCyclus { get; }
 
-        public OVIngreepMeldingChangedMessage(string faseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum type)
+        public PrioIngreepMeldingChangedMessage(string faseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum type)
         {
             FaseCyclus = faseCyclus;
             MeldingType = type;

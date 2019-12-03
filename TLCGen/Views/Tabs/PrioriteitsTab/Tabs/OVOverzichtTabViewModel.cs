@@ -5,7 +5,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.OVTab)]
+    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.PrioTab)]
 	public class OVOverzichtTabViewModel : TLCGenTabItemViewModel
 	{		
         #region Fields
@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
 
 		public override bool CanBeEnabled()
         {
-            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()
@@ -70,7 +70,6 @@ namespace TLCGen.ViewModels
 	        foreach (var fcvm in Fasen)
 	        {
 		        fcvm.PropertyChanged -= OVHDFaseData_PropertyChanged;
-		        if(fcvm.OVIngreep != null) fcvm.OVIngreep.PropertyChanged -= OVIngreep_PropertyChanged;
 		        if(fcvm.HDIngreep != null) fcvm.HDIngreep.PropertyChanged -= HDIngreep_PropertyChanged;
 	        }
 
@@ -125,27 +124,6 @@ namespace TLCGen.ViewModels
 			{
 				_settingMultiple = true;
 				MultiPropertySetter.SetPropertyForAllItems<OVHDFaseDataOverviewViewModel>(sender, e.PropertyName, SelectedFaseCycli);
-			}
-			_settingMultiple = false;
-		}
-
-		public void OVIngreep_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
-				return;
-
-			if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 1)
-			{
-				_settingMultiple = true;
-				var l = new ArrayList();
-				foreach (OVHDFaseDataOverviewViewModel fc in SelectedFaseCycli)
-				{
-                    if(fc.FaseCyclusNaam != null)
-                    {
-					    l.Add(fc.OVIngreep);
-                    }
-				}
-				MultiPropertySetter.SetPropertyForAllItems<OVIngreepViewModel>(sender, e.PropertyName, l);
 			}
 			_settingMultiple = false;
 		}

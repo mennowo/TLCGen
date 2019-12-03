@@ -25,7 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define NALOPEN");
             }
-            if (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            if (controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
                 sb.AppendLine("#define OV_ADDFILE");
             }
@@ -145,10 +145,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
             sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
-            if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
                 sb.AppendLine($"{ts}#include \"ov.h\"       /* ov-afhandeling                    */");
-                if(controller.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
+                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
                 {
                     sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
                 }
@@ -670,8 +670,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}}}");
             }
 
-            if (controller.OVData.OVIngrepen.Count > 0 ||
-                controller.OVData.HDIngrepen.Count > 0)
+            if (controller.PrioData.PrioIngrepen.Count > 0 ||
+                controller.PrioData.HDIngrepen.Count > 0)
             {
                 if (controller.HalfstarData.IsHalfstar)
                 {
@@ -887,8 +887,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSpecialSignals, true, true, false, true);
 
-            if (controller.OVData.OVIngrepen.Any() ||
-				controller.OVData.HDIngrepen.Any())
+            if (controller.PrioData.PrioIngrepen.Any() ||
+				controller.PrioData.HDIngrepen.Any())
 		    {
 				sb.AppendLine($"{ts}OVSpecialSignals();");
 			}

@@ -89,7 +89,7 @@ namespace TLCGen.Plugins.Sumo
                     _sumoPluginViewModel.FaseCycli.Remove(sg);
                 }
                 _sumoPluginViewModel.FaseCycli.BubbleSort();
-                var ds = Controller.GetAllDetectors().Concat(Controller.OVData.GetAllDummyDetectors()).ToList();
+                var ds = Controller.GetAllDetectors().Concat(Controller.PrioData.GetAllDummyDetectors()).ToList();
                 foreach (var d in ds)
                 {
                     if (_sumoPluginViewModel.Detectoren.All(x => x.Naam != d.Naam))

@@ -120,7 +120,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
                 var _pad1 = controller.Detectoren.Max(x => (_dpf + x.Naam).Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
-            var ovdummies = controller.OVData.GetAllDummyDetectors();
+            var ovdummies = controller.PrioData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
                 pad1 = ovdummies.Max(x => (_dpf + x.Naam).Length);

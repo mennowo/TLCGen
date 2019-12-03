@@ -31,10 +31,6 @@ namespace TLCGen.Models
         [Browsable(false)]
         [HasDefault(false)]
         [NoTemplateApplicable]
-        public bool OVIngreep { get; set; }
-        [Browsable(false)]
-        [HasDefault(false)]
-        [NoTemplateApplicable]
         public bool HDIngreep { get; set; }
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }

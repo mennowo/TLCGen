@@ -10,11 +10,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class OVDataModel
+    public class PrioriteitDataModel
     {
         #region Properties
 
-        public OVIngreepTypeEnum OVIngreepType { get; set; }
+        public PrioIngreepTypeEnum PrioIngreepType { get; set; }
         public bool CheckOpDSIN { get; set; }
         public int MaxWachttijdAuto { get; set; }
         public int MaxWachttijdFiets { get; set; }
@@ -23,7 +23,7 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioGrensTeLaat { get; set; }
         public bool BlokkeerNietConflictenBijHDIngreep { get; set; }
         public bool BlokkeerNietConflictenAlleenLangzaamVerkeer { get; set; }
-        public NooitAltijdAanUitEnum VerklikkenOVTellerUber { get; set; }
+        public NooitAltijdAanUitEnum VerklikkenPrioTellerUber { get; set; }
         public bool VerlaagHogeSignaalGroepNummers { get; set; }
 
         [Browsable(false)]
@@ -38,20 +38,16 @@ namespace TLCGen.Models
         [IOElement("maxwt", BitmappedItemTypeEnum.Uitgang, null, "IsOVUitgebreid")]
         public BitmapCoordinatenDataModel MaximaleWachttijdOverschredenBitmapData { get; set; }
 
-        [XmlArrayItem(ElementName = "OVIngreep")]
-        public List<OVIngreepModel> OVIngrepen { get; set; }
+        [XmlArrayItem(ElementName = "PrioIngreep")]
+        public List<PrioIngreepModel> PrioIngrepen { get; set; }
         [XmlArrayItem(ElementName = "HDIngreep")]
         public List<HDIngreepModel> HDIngrepen { get; set; }
-        public List<OVIngreepSignaalGroepParametersModel> OVIngreepSignaalGroepParameters { get; set; }
-        public bool OVIngreepSignaalGroepParametersHard { get; set; }
+        public List<PrioIngreepSignaalGroepParametersModel> PrioIngreepSignaalGroepParameters { get; set; }
+        public bool PrioIngreepSignaalGroepParametersHard { get; set; }
 
         [Browsable(false)]
         [HasDefault(false)]
         public bool HasAnyKAR => this.HasKAR();
-
-        [Browsable(false)]
-        [HasDefault(false)]
-        public bool IsOVUitgebreid => this.OVIngreepType == OVIngreepTypeEnum.Uitgebreid;
 
         #endregion // Properties
 
@@ -61,17 +57,17 @@ namespace TLCGen.Models
         {
             var dets = new List<DetectorModel>();
 
-            foreach(var ov in OVIngrepen)
+            foreach(var prio in PrioIngrepen)
             {
-                if(ov.MeldingenData.Inmeldingen.Any(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
+                if(prio.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
                 {
-                    var m = ov.MeldingenData.Inmeldingen.First(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    dets.Add(ov.DummyKARInmelding);
+                    var m = prio.MeldingenData.Inmeldingen.First(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    dets.Add(prio.DummyKARInmelding);
                 }
-                if (ov.MeldingenData.Uitmeldingen.Any(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
+                if (prio.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
                 {
-                    var m = ov.MeldingenData.Uitmeldingen.First(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    dets.Add(ov.DummyKARUitmelding);
+                    var m = prio.MeldingenData.Uitmeldingen.First(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    dets.Add(prio.DummyKARUitmelding);
                 }
             }
             foreach (var hd in HDIngrepen)
@@ -90,14 +86,14 @@ namespace TLCGen.Models
 
         #region Constructor
 
-        public OVDataModel()
+        public PrioriteitDataModel()
         {
             KARMeldingBitmapData = new BitmapCoordinatenDataModel();
             KAROnderGedragBitmapData = new BitmapCoordinatenDataModel();
             MaximaleWachttijdOverschredenBitmapData = new BitmapCoordinatenDataModel();
-            OVIngrepen = new List<OVIngreepModel>();
+            PrioIngrepen = new List<PrioIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
-            OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();
+            PrioIngreepSignaalGroepParameters = new List<PrioIngreepSignaalGroepParametersModel>();
         }
         
         #endregion // Constructor

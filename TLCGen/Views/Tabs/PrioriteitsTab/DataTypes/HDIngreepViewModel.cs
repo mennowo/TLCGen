@@ -56,7 +56,7 @@ namespace TLCGen.ViewModels
                     _HDIngreep.DummyKARUitmelding = null;
                 }
                 RaisePropertyChanged<object>("KAR", broadcast: true);
-                Messenger.Default.Send(new OVIngrepenChangedMessage());
+                Messenger.Default.Send(new PrioIngrepenChangedMessage());
             }
         }
 
