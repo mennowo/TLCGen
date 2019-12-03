@@ -759,7 +759,7 @@ namespace TLCGen.ViewModels
             RefreshMyBitmapImage();
         }
 
-        private void OnOVIngrepenChanged(OVIngrepenChangedMessage message)
+        private void OnOVIngrepenChanged(PrioIngrepenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
@@ -777,7 +777,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
+            Messenger.Default.Register(this, new Action<PrioIngrepenChangedMessage>(OnOVIngrepenChanged));
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 

@@ -8,7 +8,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersTo(TLCGenObjectTypeEnum.Fase, nameof(FaseCyclus))]
-    public class OVIngreepModel : IComparable
+    public class PrioIngreepModel : IComparable
     {
         #region Properties
 
@@ -34,12 +34,12 @@ namespace TLCGen.Models
         public int RijTijdGehinderd { get; set; }
         public int OnderMaximum { get; set; }
         public int GroenBewaking { get; set; }
-        public int BlokkeertijdNaOVIngreep { get; set; }
-        public int BezettijdOVGehinderd { get; set; }
+        public int BlokkeertijdNaPrioIngreep { get; set; }
+        public int BezettijdPrioGehinderd { get; set; }
         public int MinimaleRoodtijd { get; set; }
 
         public bool AfkappenConflicten { get; set; }
-        public bool AfkappenConflictenOV { get; set; }
+        public bool AfkappenConflictenPrio { get; set; }
         public bool VasthoudenGroen { get; set; }
         public bool TussendoorRealiseren { get; set; }
         public bool CheckLijnNummer { get; set; }
@@ -65,7 +65,7 @@ namespace TLCGen.Models
 
         [Browsable(false)]
         [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType")]
-        public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
+        public BitmapCoordinatenDataModel PrioInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
         [IOElement("tv", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
@@ -87,7 +87,7 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
 
-        public OVIngreepMeldingenDataModel MeldingenData { get; set; }
+        public PrioIngreepMeldingenDataModel MeldingenData { get; set; }
 
         #endregion // Properties
 
@@ -95,7 +95,7 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-	        if (!(obj is OVIngreepModel ov2))
+	        if (!(obj is PrioIngreepModel ov2))
             {
                 throw new InvalidCastException();
             }
@@ -106,15 +106,15 @@ namespace TLCGen.Models
 
         #region Constructor
 
-        public OVIngreepModel()
+        public PrioIngreepModel()
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             Koplus = "NG";
-            OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
+            PrioInmeldingBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
-            MeldingenData = new OVIngreepMeldingenDataModel();
+            MeldingenData = new PrioIngreepMeldingenDataModel();
             HalfstarIngreepData = new HalfstarOVIngreepModel();
         }
 

@@ -181,15 +181,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                     }
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
-                        (c.OVData.OVIngrepen.Any() ||
-                         c.OVData.HDIngrepen.Any()))
-                    {
-                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), Encoding.Default);
-                    }
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.OVData.OVIngrepen.Any() ||
-                         c.OVData.HDIngrepen.Any()))
+                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.PrioData.PrioIngrepen.Any() ||
+                         c.PrioData.HDIngrepen.Any()))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.c"), GeneratePrioC(c), Encoding.Default);
                     }
@@ -215,13 +209,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
-                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
-                        if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid)
-                        {
-                            WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
-                        }
-                        else if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit)
+                        if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit)
                         {
                             WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.add"), c, GeneratePrioAdd, GeneratePrioAddHeader, Encoding.Default);
                         }
@@ -245,7 +235,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "fixatie.h", sourcefilepath);
                     }
 
-                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
                         CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
                         CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
@@ -268,15 +258,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
                     }
 
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
-                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
-                    {
-                        CopySourceIfNeeded(c, "ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "ov.h", sourcefilepath);
-                    }
-
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
+                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any()))
                     {
                         CopySourceIfNeeded(c, "prio.c", sourcefilepath);
                         CopySourceIfNeeded(c, "prio.h", sourcefilepath);
@@ -342,7 +325,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                 copy = true;
                                                 break;
                                             case "OV":
-                                                copy = (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0);
+                                                copy = (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0);
                                                 break;
                                             case "SYNC":
                                                 copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 ||

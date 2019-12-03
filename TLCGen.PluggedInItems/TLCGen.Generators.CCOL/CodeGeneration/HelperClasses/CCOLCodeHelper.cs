@@ -9,14 +9,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
-        public static string GetPriorityTypeAbbreviation(OVIngreepModel ov)
+        public static string GetPriorityTypeAbbreviation(PrioIngreepModel ov)
         {
             return DefaultsProvider.Default.GetVehicleTypeAbbreviation(ov.Type);
         }
 
         public static bool HasSignalGroupConflictWithPT(ControllerModel c, string sgname)
         {
-            foreach (var ov in c.OVData.OVIngrepen)
+            foreach (var ov in c.PrioData.PrioIngrepen)
             {
                 if (sgname == ov.FaseCyclus)
                     continue;

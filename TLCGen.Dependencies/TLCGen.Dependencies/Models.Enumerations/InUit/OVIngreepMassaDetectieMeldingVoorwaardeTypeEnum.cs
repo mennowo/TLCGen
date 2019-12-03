@@ -4,7 +4,7 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepInUitMeldingVoorwaardeTypeEnum
+    public enum PrioIngreepInUitMeldingVoorwaardeTypeEnum
     {
         [Description("KAR DSI melding")]
         KARMelding,

@@ -3,11 +3,11 @@
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for FasenTab.xaml
+    /// Interaction logic for OVSimulatieTabView.xaml
     /// </summary>
-    public partial class OVTab : UserControl
+    public partial class PrioriteitSimulatieTabView : UserControl
     {
-        public OVTab()
+        public PrioriteitSimulatieTabView()
         {
             InitializeComponent();
         }

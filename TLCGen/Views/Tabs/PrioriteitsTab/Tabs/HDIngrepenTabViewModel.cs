@@ -7,14 +7,13 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 0, type: TabItemTypeEnum.OVTab)]
-    public class OVFasenTabViewModel : TLCGenTabItemViewModel
+    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioTab)]
+    public class HDIngrepenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
-        private OVIngreepViewModel _SelectedOVIngreep;
         private HDIngreepViewModel _SelectedHDIngreep;
 
         #endregion // Fields
@@ -39,20 +38,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                SelectedOVIngreep = null;
                 SelectedHDIngreep = null;
                 if (_SelectedFaseCyclus != null)
                 {
-                    foreach (OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
-                    {
-                        if (ovm.FaseCyclus == SelectedFaseCyclus.Naam)
-                        {
-                            SelectedOVIngreep = new OVIngreepViewModel(ovm);
-                            break;
-                        }
-                    }
-
-                    foreach (HDIngreepModel hdm in _Controller.OVData.HDIngrepen)
+                    foreach (HDIngreepModel hdm in _Controller.PrioData.HDIngrepen)
                     {
                         if (hdm.FaseCyclus == SelectedFaseCyclus.Naam)
                         {
@@ -63,72 +52,6 @@ namespace TLCGen.ViewModels
                 }
 
                 RaisePropertyChanged("");
-            }
-        }
-
-        public bool SelectedFaseCyclusOVIngreep
-        {
-            get
-            {
-                if (SelectedFaseCyclus == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return SelectedFaseCyclus.OVIngreep;
-                }
-            }
-            set
-            {
-                if(SelectedFaseCyclus != null)
-                {
-                    SelectedFaseCyclus.OVIngreep = value;
-                    if (value)
-                    {
-                        var ov = new OVIngreepModel();
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov.MeldingenData);
-                        ov.FaseCyclus = SelectedFaseCyclus.Naam;
-						ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
-						{
-							AntiJutterTijdToepassen = true,
-							AntiJutterTijd = 15,
-							InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
-							Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-						});
-						ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel()
-						{
-							AntiJutterTijdToepassen = false,
-							InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
-							Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-						});
-						_Controller.OVData.OVIngrepen.Add(ov);
-                        _Controller.OVData.OVIngrepen.BubbleSort();
-                        SelectedOVIngreep = new OVIngreepViewModel(ov);
-                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
-                    }
-                    else
-                    {
-                        if (SelectedOVIngreep != null)
-                        {
-                            _Controller.OVData.OVIngrepen.Remove(SelectedOVIngreep.OVIngreep);
-                            SelectedOVIngreep = null;
-                        }
-                    }
-                    MessengerInstance.Send(new OVIngrepenChangedMessage());
-                }
-                RaisePropertyChanged<object>(nameof(SelectedFaseCyclusOVIngreep), null, null, true);
-            }
-        }
-
-        public OVIngreepViewModel SelectedOVIngreep
-        {
-            get { return _SelectedOVIngreep; }
-            set
-            {
-                _SelectedOVIngreep = value;
-                RaisePropertyChanged();
             }
         }
 
@@ -155,8 +78,8 @@ namespace TLCGen.ViewModels
                         HDIngreepModel hd = new HDIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
                         hd.FaseCyclus = SelectedFaseCyclus.Naam;
-                        _Controller.OVData.HDIngrepen.Add(hd);
-                        _Controller.OVData.HDIngrepen.BubbleSort();
+                        _Controller.PrioData.HDIngrepen.Add(hd);
+                        _Controller.PrioData.HDIngrepen.BubbleSort();
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);
                         /* Trick to add dummy detectors */
                         if (hd.KAR)
@@ -168,11 +91,11 @@ namespace TLCGen.ViewModels
                     {
                         if (SelectedHDIngreep != null)
                         {
-                            _Controller.OVData.HDIngrepen.Remove(SelectedHDIngreep.HDIngreep);
+                            _Controller.PrioData.HDIngrepen.Remove(SelectedHDIngreep.HDIngreep);
                             SelectedHDIngreep = null;
                         }
                     }
-                    MessengerInstance.Send(new OVIngrepenChangedMessage());
+                    MessengerInstance.Send(new PrioIngrepenChangedMessage());
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
                 RaisePropertyChanged<object>("SelectedFaseCyclusHDIngreep", null, null, true);
@@ -203,7 +126,7 @@ namespace TLCGen.ViewModels
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()
@@ -233,7 +156,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVFasenTabViewModel() : base()
+        public HDIngrepenTabViewModel() : base()
         {
         }
 

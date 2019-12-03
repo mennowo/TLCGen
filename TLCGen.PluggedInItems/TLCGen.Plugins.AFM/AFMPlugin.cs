@@ -336,7 +336,7 @@ namespace TLCGen.Plugins.AFM
                     string _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
                     foreach (var fc in _afmModel.AFMFasen)
                     {
-                        var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                        var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
                         var dummy = (fc.DummyFaseCyclus == "NG" ? "NG" : _fcpf + fc.DummyFaseCyclus);
                         if (hd == null)
                         {

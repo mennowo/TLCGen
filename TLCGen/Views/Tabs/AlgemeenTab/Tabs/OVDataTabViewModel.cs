@@ -8,20 +8,21 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
+        private PrioDataViewModel _prioData;
+
         #endregion // Fields
 
         #region Properties
 
-        private OVDataViewModel _OVData;
-        public OVDataViewModel OVData
+        public PrioDataViewModel PrioData
         {
             get
             {
-                if (_OVData == null)
+                if (_prioData == null)
                 {
-                    _OVData = new OVDataViewModel();
+                    _prioData = new PrioDataViewModel();
                 }
-                return _OVData;
+                return _prioData;
             }
         }
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                OVData.Controller = value;
+                PrioData.Controller = value;
             }
         }
 

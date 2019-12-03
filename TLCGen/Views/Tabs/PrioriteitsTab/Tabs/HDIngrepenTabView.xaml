@@ -29,7 +29,7 @@
                         <CheckBox DockPanel.Dock="Top" Content="OV ingreep" FontWeight="Bold" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusOVIngreep}" />
                     </GroupBox.Header>
                     <DockPanel IsEnabled="{Binding Path=SelectedFaseCyclusOVIngreep}" >
-                        <local:OVIngreepView DataContext="{Binding Path=SelectedOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
+                        <local:PrioIngreepView DataContext="{Binding Path=SelectedOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
                     </DockPanel>
                 </GroupBox>
                 <GroupBox Margin="2">

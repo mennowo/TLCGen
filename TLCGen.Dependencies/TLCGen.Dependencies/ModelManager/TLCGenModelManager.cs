@@ -189,29 +189,29 @@ namespace TLCGen.ModelManagement
             if(v < checkVer)
             {
                 bool vecom = false;
-                foreach (var ov in controller.OVData.OVIngrepen)
+                foreach (var ov in controller.PrioData.PrioIngrepen)
                 {
                     if (ov.KAR)
                     {
-                        ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel
+                        ov.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
                         {
                             AlleenIndienGeenInmelding = false,
                             AntiJutterTijd = 15,
                             AntiJutterTijdToepassen = true,
-                            InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
                             KijkNaarWisselStand = false,
                             OpvangStoring = false,
-                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
                         });
-                        ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel
+                        ov.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
                         {
                             AlleenIndienGeenInmelding = false,
                             AntiJutterTijd = 15,
                             AntiJutterTijdToepassen = true,
-                            InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
                             KijkNaarWisselStand = false,
                             OpvangStoring = false,
-                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
                         });
                     }
                     if(ov.Vecom && !vecom)
@@ -274,8 +274,10 @@ namespace TLCGen.ModelManagement
                 if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
                 else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
                 var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
-                if (rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
-                if (rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
+                if (rtdData != null && rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
+                if (rtdData != null && rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
+                var prioData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "PrioData")?.Item2;
+                if (prioData != null) controller.PrioData = (PrioriteitDataModel)prioData;
             }
         }
 
@@ -384,7 +386,27 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-        }
+            checkVer = Version.Parse("0.7.0.0");
+            if (v < checkVer)
+            {
+                // V0.7.0.0: OV removed, PRIO added
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName == "OVData")
+                    {
+                        var data = @"<PrioriteitDataModel>" + node.InnerXml + @"</PrioriteitDataModel>";
+                        data = data.Replace("OV", "Prio");
+                        using (TextReader reader = new StringReader(data))
+                        {
+                            XmlSerializer xs = new XmlSerializer(typeof(PrioriteitDataModel));
+                            var prioModel = xs.Deserialize(reader);
+                            _pluginDataToMove.Add(new Tuple<string, object>("PrioData", prioModel));
+                        }
+                        break;
+                    }
+                }
+            }
+            }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)
         {
@@ -403,12 +425,12 @@ namespace TLCGen.ModelManagement
                 foreach (var fcm in message.AddedFasen)
                 {
                     // PT Conflict prms
-                    if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+                    if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
                     {
-                        var prms = new OVIngreepSignaalGroepParametersModel();
+                        var prms = new PrioIngreepSignaalGroepParametersModel();
                         _setDefaultsAction?.Invoke(prms, null);
                         prms.FaseCyclus = fcm.Naam;
-                        Controller.OVData.OVIngreepSignaalGroepParameters.Add(prms);
+                        Controller.PrioData.PrioIngreepSignaalGroepParameters.Add(prms);
                     }
 
                     // Module settings
@@ -430,10 +452,10 @@ namespace TLCGen.ModelManagement
                 foreach (var fcm in message.RemovedFasen)
                 {
                     // PT Conflict prms
-                    if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+                    if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
                     {
-                        OVIngreepSignaalGroepParametersModel _prms = null;
-                        foreach (var prms in Controller.OVData.OVIngreepSignaalGroepParameters)
+                        PrioIngreepSignaalGroepParametersModel _prms = null;
+                        foreach (var prms in Controller.PrioData.PrioIngreepSignaalGroepParameters)
                         {
                             if (prms.FaseCyclus == fcm.Naam)
                             {
@@ -442,7 +464,7 @@ namespace TLCGen.ModelManagement
                         }
                         if (_prms != null)
                         {
-                            Controller.OVData.OVIngreepSignaalGroepParameters.Remove(_prms);
+                            Controller.PrioData.PrioIngreepSignaalGroepParameters.Remove(_prms);
                         }
                     }
 
@@ -480,7 +502,7 @@ namespace TLCGen.ModelManagement
             }
 
             // Sorting
-            Controller.OVData.OVIngreepSignaalGroepParameters.BubbleSort();
+            Controller.PrioData.PrioIngreepSignaalGroepParameters.BubbleSort();
             foreach (var set in Controller.GroentijdenSets)
             {
                 set.Groentijden.BubbleSort();
@@ -568,11 +590,11 @@ namespace TLCGen.ModelManagement
             PrepareModelForUI(Controller);
             switch (msg)
             {
-                case OVIngreepMeldingChangedMessage meldingMsg:
-                    var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
-                    if (ovi != null && meldingMsg.MeldingType == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+                case PrioIngreepMeldingChangedMessage meldingMsg:
+                    var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
+                    if (ovi != null && meldingMsg.MeldingType == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                     {
-                        var karMelding = ovi.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                        var karMelding = ovi.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
 
                         if (karMelding != null && ovi.DummyKARInmelding == null)
                         {
@@ -587,7 +609,7 @@ namespace TLCGen.ModelManagement
                             ovi.DummyKARInmelding = null;
                         }
 
-                        karMelding = ovi.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                        karMelding = ovi.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
 
                         if (karMelding != null && ovi.DummyKARUitmelding == null)
                         {
@@ -680,7 +702,7 @@ namespace TLCGen.ModelManagement
                 {
                     if (d.Type == DetectorTypeEnum.OpticomIngang)
                     {
-                        foreach (var hd in msg.Controller.OVData.HDIngrepen)
+                        foreach (var hd in msg.Controller.PrioData.HDIngrepen)
                         {
                             if (hd.Opticom && hd.OpticomRelatedInput == d.Naam)
                             {
@@ -697,7 +719,7 @@ namespace TLCGen.ModelManagement
         {
             if(msg.OldType == DetectorTypeEnum.OpticomIngang && msg.NewType != DetectorTypeEnum.OpticomIngang)
             {
-                foreach (var hd in msg.Controller.OVData.HDIngrepen)
+                foreach (var hd in msg.Controller.PrioData.HDIngrepen)
                 {
                     if (hd.Opticom && hd.OpticomRelatedInput == msg.DetectorDefine)
                     {

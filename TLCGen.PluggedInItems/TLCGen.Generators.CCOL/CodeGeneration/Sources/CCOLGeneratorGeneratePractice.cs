@@ -27,7 +27,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"#include \"{controller.Data.Naam}reg.c\"");
             sb.AppendLine($"#include \"{controller.Data.Naam}tab.c\"");
-            sb.AppendLine($"#include \"{controller.Data.Naam}ov.c\"");
+            sb.AppendLine($"#include \"{controller.Data.Naam}prio.c\"");
             if (controller.Data.VLOGInTestOmgeving)
             {
                 sb.AppendLine();

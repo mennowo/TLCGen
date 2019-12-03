@@ -638,7 +638,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? bgmax = 0;
             int? tflmax = 0;
 
-            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var ovdummydets = controller.PrioData.GetAllDummyDetectors();
             var alldets = controller.GetAllDetectors().Concat(ovdummydets);
 
             var nondummydets = alldets.Where(x => !x.Dummy);

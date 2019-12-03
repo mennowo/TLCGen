@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,11 +7,10 @@ using System.Windows.Input;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using TLCGen.ViewModels;
 
-namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
+namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.PrioTab)]
     public class PrioriteitSimulatieTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
@@ -24,7 +24,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
         {
             get
             {
-                if (_DummyDetectoren == null)
+                if(_DummyDetectoren == null)
                 {
                     _DummyDetectoren = new ObservableCollection<DetectorViewModel>();
                 }
@@ -46,7 +46,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()
@@ -60,7 +60,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
             set
             {
                 _Controller = value;
-                if (_Controller != null)
+                if(_Controller != null)
                 {
                     RebuildDetectorenList();
                 }
@@ -100,30 +100,30 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         private void GenerateSimulationValuesCommand_Executed()
         {
-            foreach (var ov in _Controller.OVData.OVIngrepen)
+            foreach (var prio in _Controller.PrioData.PrioIngrepen)
             {
-                if (ov.HasOVIngreepKAR())
+                if(prio.HasOVIngreepKAR())
                 {
-                    if (ov.DummyKARInmelding != null)
+                    if(prio.DummyKARInmelding != null)
                     {
-                        ov.DummyKARInmelding.Simulatie.Q1 = 3;
-                        ov.DummyKARInmelding.Simulatie.Q2 = 5;
-                        ov.DummyKARInmelding.Simulatie.Q3 = 10;
-                        ov.DummyKARInmelding.Simulatie.Q4 = 15;
-                        ov.DummyKARInmelding.Simulatie.Stopline = 1800;
+                        prio.DummyKARInmelding.Simulatie.Q1 = 3;
+                        prio.DummyKARInmelding.Simulatie.Q2 = 5;
+                        prio.DummyKARInmelding.Simulatie.Q3 = 10;
+                        prio.DummyKARInmelding.Simulatie.Q4 = 15;
+                        prio.DummyKARInmelding.Simulatie.Stopline = 1800;
                     }
-                    if (ov.DummyKARUitmelding != null)
+                    if (prio.DummyKARUitmelding != null)
                     {
-                        ov.DummyKARUitmelding.Simulatie.Q1 = 200;
-                        ov.DummyKARUitmelding.Simulatie.Q2 = 200;
-                        ov.DummyKARUitmelding.Simulatie.Q3 = 200;
-                        ov.DummyKARUitmelding.Simulatie.Q4 = 200;
-                        ov.DummyKARUitmelding.Simulatie.Stopline = 1800;
+                        prio.DummyKARUitmelding.Simulatie.Q1 = 200;
+                        prio.DummyKARUitmelding.Simulatie.Q2 = 200;
+                        prio.DummyKARUitmelding.Simulatie.Q3 = 200;
+                        prio.DummyKARUitmelding.Simulatie.Q4 = 200;
+                        prio.DummyKARUitmelding.Simulatie.Stopline = 1800;
                     }
                 }
             }
 
-            foreach (var hd in _Controller.OVData.HDIngrepen)
+            foreach (var hd in _Controller.PrioData.HDIngrepen)
             {
                 if (hd.KAR)
                 {
@@ -141,7 +141,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
             }
 
             RaisePropertyChanged("");
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             foreach (var d in DummyDetectoren)
             {
                 d.RaisePropertyChanged("");
@@ -156,23 +156,23 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
         {
             DummyDetectoren.Clear();
 
-            foreach (var ov in Controller.OVData.OVIngrepen)
+            foreach (var prio in Controller.PrioData.PrioIngrepen)
             {
-                if (ov.HasOVIngreepKAR())
+                if (prio.HasOVIngreepKAR())
                 {
-                    var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    if (m != null && ov.DummyKARInmelding != null)
+                    var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    if (m != null)
                     {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
+                        DummyDetectoren.Add(new DetectorViewModel(prio.DummyKARInmelding) { FaseCyclus = prio.FaseCyclus });
                     }
-                    m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    if (m != null && ov.DummyKARUitmelding != null)
+                    m = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    if (m != null)
                     {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
+                        DummyDetectoren.Add(new DetectorViewModel(prio.DummyKARUitmelding) { FaseCyclus = prio.FaseCyclus });
                     }
                 }
             }
-            foreach (var hd in Controller.OVData.HDIngrepen)
+            foreach (var hd in Controller.PrioData.HDIngrepen)
             {
                 if (hd.KAR)
                 {
@@ -190,7 +190,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         #region TLCGen events
 
-        public void OnOVIngrepenChangedMessage(OVIngrepenChangedMessage message)
+        public void OnPrioIngrepenChangedMessage(PrioIngrepenChangedMessage message)
         {
             RebuildDetectorenList();
         }
@@ -200,10 +200,10 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
             RebuildDetectorenList();
         }
 
-        private void OnOVIngreepMeldingChangedMessage(OVIngreepMeldingChangedMessage message)
-        {
-            RebuildDetectorenList();
-        }
+		private void OnPrioIngreepMeldingChangedMessage(PrioIngreepMeldingChangedMessage message)
+		{
+			RebuildDetectorenList();
+		}
 
         #endregion TLCGen events
 
@@ -211,11 +211,11 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         public PrioriteitSimulatieTabViewModel()
         {
-            MessengerInstance.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChangedMessage));
+            MessengerInstance.Register(this, new Action<PrioIngrepenChangedMessage>(OnPrioIngrepenChangedMessage));
             MessengerInstance.Register(this, new Action<HDIngrepenChangedMessage>(OnHDIngrepenChangedMessage));
-            MessengerInstance.Register(this, new Action<OVIngreepMeldingChangedMessage>(OnOVIngreepMeldingChangedMessage));
+			MessengerInstance.Register(this, new Action<PrioIngreepMeldingChangedMessage>(OnPrioIngreepMeldingChangedMessage));
         }
 
-        #endregion // Constructor
-    }
+		#endregion // Constructor
+	}
 }

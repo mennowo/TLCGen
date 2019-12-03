@@ -1,11 +1,11 @@
 ﻿namespace TLCGen.Messaging.Messages
 {
-    public class OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage
+    public class PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage
     {
         public object RequestingObject { get; }
         public string FaseCyclus { get; set; }
 
-        public OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(object requestingObject)
+        public PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(object requestingObject)
         {
             RequestingObject = requestingObject;
         }

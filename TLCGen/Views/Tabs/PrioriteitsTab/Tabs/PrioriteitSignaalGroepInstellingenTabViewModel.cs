@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 using TLCGen.Settings;
 using TLCGen.ViewModels;
 
-namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
+namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSignaalGroepInstellingenTabViewModel : TLCGenTabItemViewModel
@@ -22,7 +22,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         #region Properties
 
-        public ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel> PrioriteitIngreepSGParameters
+        public ObservableCollectionAroundList<PrioIngreepSignaalGroepParametersViewModel, PrioIngreepSignaalGroepParametersModel> PrioriteitIngreepSGParameters
         {
             get;
             private set;
@@ -30,10 +30,10 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         public bool PrioriteitIngreepSGParametersHard
         {
-            get => _Controller.OVData.OVIngreepSignaalGroepParametersHard;
+            get => _Controller.PrioData.PrioIngreepSignaalGroepParametersHard;
             set
             {
-                _Controller.OVData.OVIngreepSignaalGroepParametersHard = value;
+                _Controller.PrioData.PrioIngreepSignaalGroepParametersHard = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -52,7 +52,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()
@@ -69,17 +69,17 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
                 if (base.Controller != null)
                 {
                     PrioriteitIngreepSGParameters =
-                        new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+                        new ObservableCollectionAroundList<PrioIngreepSignaalGroepParametersViewModel, PrioIngreepSignaalGroepParametersModel>(Controller.PrioData.PrioIngreepSignaalGroepParameters);
 
-                    if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+                    if (_Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
                     {
                         foreach (var sg in Controller.Fasen)
                         {
-                            if (Controller.OVData.OVIngreepSignaalGroepParameters.All(x => x.FaseCyclus != sg.Naam))
+                            if (Controller.PrioData.PrioIngreepSignaalGroepParameters.All(x => x.FaseCyclus != sg.Naam))
                             {
                                 PrioriteitIngreepSGParameters.Add(
-                                    new OVIngreepSignaalGroepParametersViewModel(
-                                        new OVIngreepSignaalGroepParametersModel
+                                    new PrioIngreepSignaalGroepParametersViewModel(
+                                        new PrioIngreepSignaalGroepParametersModel
                                         {
                                             FaseCyclus = sg.Naam
                                         }));
@@ -118,7 +118,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
-            if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+            if (_Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
             {
                 PrioriteitIngreepSGParameters.Rebuild();
             }
@@ -128,20 +128,20 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
         {
             switch (message.Type)
             {
-                case Models.Enumerations.OVIngreepTypeEnum.Geen:
+                case Models.Enumerations.PrioIngreepTypeEnum.Geen:
                     PrioriteitIngreepSGParameters.RemoveAll();
                     break;
-                case Models.Enumerations.OVIngreepTypeEnum.Uitgebreid:
+                default:
                     foreach (var fcm in _Controller.Fasen)
                     {
                         if (PrioriteitIngreepSGParameters.Any(x => x.FaseCyclus == fcm.Naam))
                         {
                             continue;
                         }
-                        var prms = new OVIngreepSignaalGroepParametersModel();
+                        var prms = new PrioIngreepSignaalGroepParametersModel();
                         DefaultsProvider.Default.SetDefaultsOnModel(prms);
                         prms.FaseCyclus = fcm.Naam;
-                        PrioriteitIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
+                        PrioriteitIngreepSGParameters.Add(new PrioIngreepSignaalGroepParametersViewModel(prms));
                     }
                     PrioriteitIngreepSGParameters.BubbleSort();
                     PrioriteitIngreepSGParameters.RebuildList();
@@ -151,14 +151,14 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
 
         public void OnFasenSorted(FasenSortedMessage message)
         {
-            if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+            if (_Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
             {
                 PrioriteitIngreepSGParameters.BubbleSort();
                 PrioriteitIngreepSGParameters.RebuildList();
             }
         }
 
-        public void OnOVIngreepSignaalGroepParametersChanged(OVIngreepSignaalGroepParametersChangedMessage message)
+        public void OnOVIngreepSignaalGroepParametersChanged(PrioIngreepSignaalGroepParametersChangedMessage message)
         {
             /* Set all options equal for signal groups that are synchronised */
             foreach (var gs in _Controller.InterSignaalGroep.Gelijkstarten)
@@ -195,7 +195,7 @@ namespace TLCGen.Views.Tabs.PrioriteitTab.Tabs
             MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             MessengerInstance.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
-            MessengerInstance.Register(this, new Action<OVIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
+            MessengerInstance.Register(this, new Action<PrioIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
         }
 
         #endregion // Constructor

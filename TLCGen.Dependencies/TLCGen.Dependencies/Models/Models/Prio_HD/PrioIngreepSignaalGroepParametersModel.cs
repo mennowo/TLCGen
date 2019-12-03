@@ -6,7 +6,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
-    public class OVIngreepSignaalGroepParametersModel : IComparable
+    public class PrioIngreepSignaalGroepParametersModel : IComparable
     {
         #region Properties
 
@@ -26,7 +26,7 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            if (!(obj is OVIngreepSignaalGroepParametersModel fcovprm))
+            if (!(obj is PrioIngreepSignaalGroepParametersModel fcovprm))
             {
                 throw new InvalidCastException();
             }

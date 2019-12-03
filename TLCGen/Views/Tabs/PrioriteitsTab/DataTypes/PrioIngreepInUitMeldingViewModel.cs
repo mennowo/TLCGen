@@ -8,17 +8,17 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepInUitMeldingViewModel : ViewModelBase, IViewModelWithItem
+    public class PrioIngreepInUitMeldingViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
-        private OVIngreepInUitMeldingViewModel _meldingBijstoring;
+        private PrioIngreepInUitMeldingViewModel _meldingBijstoring;
 
         #endregion // Fields
 
         #region Properties
 
-        public OVIngreepInUitMeldingModel OVIngreepInUitMelding { get; }
+        public PrioIngreepInUitMeldingModel PrioIngreepInUitMelding { get; }
 
         public ObservableCollection<string> Detectoren { get; }
 
@@ -32,55 +32,55 @@ namespace TLCGen.ViewModels
             {
                 switch (Type)
                 {
-                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                         return Detectoren;
-                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                         return SelectieveDetectoren;
-                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
                         break;
-                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                         return VecomDetectoren;
                 }
                 return null;
             }
         }
 
-        public OVIngreepInUitMeldingTypeEnum InUit => OVIngreepInUitMelding.InUit;
+        public PrioIngreepInUitMeldingTypeEnum InUit => PrioIngreepInUitMelding.InUit;
 
-        public bool HasInput1 => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
+        public bool HasInput1 => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
 
-        public bool DisabledIfDSI => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
+        public bool DisabledIfDSI => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
 
-        public bool HasInput1Type => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && 
-            Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
+        public bool HasInput1Type => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && 
+            Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
 
         public bool HasInput2 => CanHaveInput2 && TweedeInput;
         
-        public bool CanHaveInput2 => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
-            Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
+        public bool CanHaveInput2 => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
+            Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
 
-        public OVIngreepInUitMeldingVoorwaardeTypeEnum Type
+        public PrioIngreepInUitMeldingVoorwaardeTypeEnum Type
         {
-            get => OVIngreepInUitMelding.Type;
+            get => PrioIngreepInUitMelding.Type;
             set
             {
-                OVIngreepInUitMelding.Type = value;
+                PrioIngreepInUitMelding.Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged("");
 
-                var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+                var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
                 MessengerInstance.Send(msg);
                 if (msg.FaseCyclus == null) return;
-                MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
             }
         }
 
         public bool TweedeInput
         {
-            get => OVIngreepInUitMelding.TweedeInput;
+            get => PrioIngreepInUitMelding.TweedeInput;
             set
             {
-                OVIngreepInUitMelding.TweedeInput = value;
+                PrioIngreepInUitMelding.TweedeInput = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(HasInput2));
             }
@@ -88,77 +88,77 @@ namespace TLCGen.ViewModels
 
         public string RelatedInput1
         {
-            get => OVIngreepInUitMelding.RelatedInput1;
+            get => PrioIngreepInUitMelding.RelatedInput1;
             set
             {
                 if(value != null)
                 {
-                    OVIngreepInUitMelding.RelatedInput1 = value;
+                    PrioIngreepInUitMelding.RelatedInput1 = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type
+        public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type
         {
-            get => OVIngreepInUitMelding.RelatedInput1Type;
+            get => PrioIngreepInUitMelding.RelatedInput1Type;
             set
             {
-                OVIngreepInUitMelding.RelatedInput1Type = value;
+                PrioIngreepInUitMelding.RelatedInput1Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public string RelatedInput2
         {
-            get => OVIngreepInUitMelding.RelatedInput2;
+            get => PrioIngreepInUitMelding.RelatedInput2;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepInUitMelding.RelatedInput2 = value;
+                    PrioIngreepInUitMelding.RelatedInput2 = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type
+        public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type
         {
-            get => OVIngreepInUitMelding.RelatedInput2Type;
+            get => PrioIngreepInUitMelding.RelatedInput2Type;
             set
             {
-                OVIngreepInUitMelding.RelatedInput2Type = value;
+                PrioIngreepInUitMelding.RelatedInput2Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public bool KijkNaarWisselStand
         {
-            get => OVIngreepInUitMelding.KijkNaarWisselStand;
+            get => PrioIngreepInUitMelding.KijkNaarWisselStand;
             set
             {
-                OVIngreepInUitMelding.KijkNaarWisselStand = value;
+                PrioIngreepInUitMelding.KijkNaarWisselStand = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public bool OpvangStoring
         {
-            get => OVIngreepInUitMelding.OpvangStoring;
+            get => PrioIngreepInUitMelding.OpvangStoring;
             set
             {
-                OVIngreepInUitMelding.OpvangStoring = value;
+                PrioIngreepInUitMelding.OpvangStoring = value;
                 if (value)
                 {
                     _meldingBijstoring = null;
-                    OVIngreepInUitMelding.MeldingBijstoring = new OVIngreepInUitMeldingModel()
+                    PrioIngreepInUitMelding.MeldingBijstoring = new PrioIngreepInUitMeldingModel()
                     {
                         InUit = this.InUit
                     };
                 }
                 else
                 {
-                    OVIngreepInUitMelding.MeldingBijstoring = null;
+                    PrioIngreepInUitMelding.MeldingBijstoring = null;
                     _meldingBijstoring = null;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
@@ -168,47 +168,47 @@ namespace TLCGen.ViewModels
 
         public bool AlleenIndienGeenInmelding
         {
-            get => OVIngreepInUitMelding.AlleenIndienGeenInmelding;
+            get => PrioIngreepInUitMelding.AlleenIndienGeenInmelding;
             set
             {
-                OVIngreepInUitMelding.AlleenIndienGeenInmelding = value;
+                PrioIngreepInUitMelding.AlleenIndienGeenInmelding = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public bool AlleenIndienRood
         {
-            get => OVIngreepInUitMelding.AlleenIndienRood;
+            get => PrioIngreepInUitMelding.AlleenIndienRood;
             set
             {
-                OVIngreepInUitMelding.AlleenIndienRood = value;
+                PrioIngreepInUitMelding.AlleenIndienRood = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public bool AntiJutterTijdToepassen
         {
-            get => OVIngreepInUitMelding.AntiJutterTijdToepassen;
+            get => PrioIngreepInUitMelding.AntiJutterTijdToepassen;
             set
             {
-                OVIngreepInUitMelding.AntiJutterTijdToepassen = value;
+                PrioIngreepInUitMelding.AntiJutterTijdToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int AntiJutterTijd
         {
-            get => OVIngreepInUitMelding.AntiJutterTijd;
+            get => PrioIngreepInUitMelding.AntiJutterTijd;
             set
             {
-                OVIngreepInUitMelding.AntiJutterTijd= value;
+                PrioIngreepInUitMelding.AntiJutterTijd= value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public OVIngreepInUitMeldingViewModel MeldingBijstoring
+        public PrioIngreepInUitMeldingViewModel MeldingBijstoring
         {
-            get => OpvangStoring ? _meldingBijstoring ?? (_meldingBijstoring = new OVIngreepInUitMeldingViewModel(OVIngreepInUitMelding.MeldingBijstoring)) : null;
+            get => OpvangStoring ? _meldingBijstoring ?? (_meldingBijstoring = new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring)) : null;
         }
 
         #endregion //Properties
@@ -217,12 +217,12 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
-            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
 
-            var sd1 = OVIngreepInUitMelding != null ? RelatedInput1 : "";
-            var sd2 = OVIngreepInUitMelding != null ? RelatedInput2 : "";
+            var sd1 = PrioIngreepInUitMelding != null ? RelatedInput1 : "";
+            var sd2 = PrioIngreepInUitMelding != null ? RelatedInput2 : "";
             
             Detectoren.Clear();
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
@@ -244,7 +244,7 @@ namespace TLCGen.ViewModels
                 VecomDetectoren.Add(d.Naam);
             }
 
-            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
+            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
             {
                 if (Detectoren.Contains(sd1))
                 {
@@ -256,7 +256,7 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)
+            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)
             {
                 if (VecomDetectoren.Contains(sd1))
                 {
@@ -272,7 +272,7 @@ namespace TLCGen.ViewModels
         private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
         {
             var sd = "";
-            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
+            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
             {
                 sd = RelatedInput1;
             }
@@ -283,7 +283,7 @@ namespace TLCGen.ViewModels
                 SelectieveDetectoren.Add(seld.Naam);
             }
 
-            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector &&
+            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector &&
                 SelectieveDetectoren.Contains(sd))
             {
                 RelatedInput1 = sd;
@@ -296,16 +296,16 @@ namespace TLCGen.ViewModels
 
         public object GetItem()
         {
-            return OVIngreepInUitMelding;
+            return PrioIngreepInUitMelding;
         }
 
         #endregion // IViewModelWithItem
 
         #region Constructor
 
-        public OVIngreepInUitMeldingViewModel(OVIngreepInUitMeldingModel oVIngreepMassaDetectieMelding)
+        public PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMeldingModel oVIngreepMassaDetectieMelding)
         {
-            OVIngreepInUitMelding = oVIngreepMassaDetectieMelding;
+            PrioIngreepInUitMelding = oVIngreepMassaDetectieMelding;
 
             Detectoren = new ObservableCollection<string>();
             VecomDetectoren = new ObservableCollection<string>();

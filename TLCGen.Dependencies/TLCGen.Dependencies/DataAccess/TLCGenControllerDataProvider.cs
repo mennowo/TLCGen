@@ -115,7 +115,7 @@ namespace TLCGen.DataAccess
                 {
                     Controller = new ControllerModel();
 	                _setDefaultsAction?.Invoke(Controller.Data);
-                    _setDefaultsAction?.Invoke(Controller.OVData);
+                    _setDefaultsAction?.Invoke(Controller.PrioData);
                     _setDefaultsAction?.Invoke(Controller.PeriodenData);
 				}
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)

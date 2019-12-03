@@ -5,7 +5,7 @@
         MainWindow,
         AlgemeenTab,
         FasenTab,
-        OVTab,
+        PrioTab,
         PrioriteitTab,
         DetectieTab,
         ModulesTab,

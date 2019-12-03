@@ -280,12 +280,12 @@ namespace TLCGen.Integrity
         private void CorrectModel_AlteredHDIngrepen(ControllerModel c)
         {
             var remfcs = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
-            foreach(var hd in c.OVData.HDIngrepen)
+            foreach(var hd in c.PrioData.HDIngrepen)
             {
                 foreach(var mfc in hd.MeerealiserendeFaseCycli)
                 {
                     bool ok = false;
-                    foreach (var hd2 in c.OVData.HDIngrepen)
+                    foreach (var hd2 in c.PrioData.HDIngrepen)
                     {
                         if(hd != hd2 && mfc.FaseCyclus == hd2.FaseCyclus)
                         {

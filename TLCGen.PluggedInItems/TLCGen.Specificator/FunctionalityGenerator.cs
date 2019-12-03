@@ -209,9 +209,9 @@ namespace TLCGen.Specificator
                 $" Een hulpdienstingreep kent de hoogste vorm van prioriteit (zie tabel {TableGenerator.Tables["Table_OV_PrioriteitsOpties"]}: " +
                 $"{Texts["Table_OV_PrioriteitsOpties"]}). Deze ingreep kapt af (na verstrijken van de garantiegroentijd) en blokkeert " +
                 $"alle signaalgroepen die conflicteren met de hulpdienst.";
-            if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
+            if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
             {
-                if (c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
+                if (c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
                     text += $" Van niet-conflicten worden alleen richtingen met langzaam verkeer afgekapt en geblokkeerd.";
                 else
                     text += $" Ook niet-conflicten worden afgekapt, voor zover ze niet ook een actieve hulpdienst ingreep hebben.";
@@ -308,15 +308,15 @@ namespace TLCGen.Specificator
                 $"vasthouden en bijzonder realiseren(\"volledige prioriteit\"). Mag de OV-richting ook conflicterende OV-richtingen " +
                 $"afkappen dan wordt de waarde 234 toegekend; optie 4 maakt optie 1 overbodig. Met behulp van de waarde 500 wordt " +
                 $"een nooddienst toegekend; optie 5 maakt opties 1, 2, 3 en 4 overbodig."));
-            if(c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+            if(c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
             {
                 items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Binnen deze regeling is voorzien in de mogelijk de toe te kennen prioriteit afhankelijk te maken van de stiptheid" +
                     $"van het voertuig. Hiertoe wordt bij de inmelding (indien deze verloopt middels KAR of VECOM) gekeken naar de " +
                     $"afwijking ten opzichte van de dienstregeling. Hierbij gelden de volgende instellingen:"));
                 sl = new List<Tuple<string, int>>();
-                sl.Add(new Tuple<string, int>($"Meer dan {c.OVData.GeconditioneerdePrioGrensTeVroeg} voor op dienstregeling: te vroeg", 0));
-                sl.Add(new Tuple<string, int>($"Meer dan {c.OVData.GeconditioneerdePrioGrensTeLaat} achter op dienstregeling: te laat", 0));
+                sl.Add(new Tuple<string, int>($"Meer dan {c.PrioData.GeconditioneerdePrioGrensTeVroeg} voor op dienstregeling: te vroeg", 0));
+                sl.Add(new Tuple<string, int>($"Meer dan {c.PrioData.GeconditioneerdePrioGrensTeLaat} achter op dienstregeling: te laat", 0));
                 sl.Add(new Tuple<string, int>($"Tussen deze twee waarden: op tijd", 0));
                 items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
             }

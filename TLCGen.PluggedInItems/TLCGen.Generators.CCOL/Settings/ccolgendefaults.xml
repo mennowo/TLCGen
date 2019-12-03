@@ -666,19 +666,19 @@
             <Default>vchst</Default>
             <Setting>vchst</Setting>
             <Type>Counter</Type>
-            <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen</Description>
+            <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>natxdhst</Default>
             <Setting>natxdhst</Setting>
             <Type>Timer</Type>
-            <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen</Description>
+            <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>priohst</Default>
             <Setting>priohst</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteit fase _E1_ tijdens halfstar regelen</Description>
+            <Description>Prioriteit fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>altphst</Default>

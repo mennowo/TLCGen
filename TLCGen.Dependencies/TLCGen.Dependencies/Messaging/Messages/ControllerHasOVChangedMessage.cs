@@ -5,9 +5,9 @@ namespace TLCGen.Messaging.Messages
 {
 	public class ControllerHasOVChangedMessage
     {
-        public OVIngreepTypeEnum Type { get; private set; }
+        public PrioIngreepTypeEnum Type { get; private set; }
 
-        public ControllerHasOVChangedMessage(OVIngreepTypeEnum type)
+        public ControllerHasOVChangedMessage(PrioIngreepTypeEnum type)
         {
             Type = type;
         }

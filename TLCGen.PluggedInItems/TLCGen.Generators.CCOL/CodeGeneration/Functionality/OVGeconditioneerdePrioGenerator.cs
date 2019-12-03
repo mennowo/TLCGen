@@ -42,14 +42,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements = new List<CCOLElement>();
             _myBitmapOutputs = new List<CCOLIOElement>();
 
-            if(c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+            if(c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmOVtstpgrensvroeg}", c.OVData.GeconditioneerdePrioGrensTeVroeg, CCOLElementTimeTypeEnum.TS_type, _prmOVtstpgrensvroeg));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmOVtstpgrenslaat}", c.OVData.GeconditioneerdePrioGrensTeLaat, CCOLElementTimeTypeEnum.TS_type, _prmOVtstpgrenslaat));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmOVtstpgrensvroeg}", c.PrioData.GeconditioneerdePrioGrensTeVroeg, CCOLElementTimeTypeEnum.TS_type, _prmOVtstpgrensvroeg));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmOVtstpgrenslaat}", c.PrioData.GeconditioneerdePrioGrensTeLaat, CCOLElementTimeTypeEnum.TS_type, _prmOVtstpgrenslaat));
 
             }
 
-            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+            foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
             {
                 if(ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
                 {
@@ -98,29 +98,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.OvCTop:
-                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
+                    if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"/* Variabelen tbv registreren stiptheid bij inmelding via KAR: tbv bepalen prioriteit in OV.ADD */");
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"int iKARInSTP{ov.FaseCyclus}[MAX_AANTAL_INMELDINGEN] = {{ 0 }}; int iAantInm{ov.FaseCyclus} = 0;");
                     }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCInUitMelden:
-                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
+                    if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Bijhouden stiptheidsklassen ingemelde voertuigen */");
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hovin}{ov.FaseCyclus}, {_hpf}{_hovuit}{ov.FaseCyclus}, &iAantInm{ov.FaseCyclus}, iKARInSTP{ov.FaseCyclus}, {_hpf}{_hov}{ov.FaseCyclus}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
                     }
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{ov.FaseCyclus}] = iAantInm{ov.FaseCyclus} > 0 ? iKARInSTP{ov.FaseCyclus}[0] : 0;");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
-                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
+                    if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Geconditioneerde prioriteit instellen */");
                     var tsts = ts; 
                     if (c.HalfstarData.IsHalfstar)
@@ -130,12 +130,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
                         sb.AppendLine($"{ts}{{");
                     }
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         var hasconditions = false;
                         var sbc = new StringBuilder();
                         sbc.Append($"{tsts}IH[{_hpf}{_hstp}{ov.FaseCyclus}] = ");
-                        var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
+                        var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
                         if (hd != null)
                         {
                             sbc.Append($"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
@@ -157,17 +157,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append(sbc.ToString());
                         }
                     }
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_VROEG || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstipttevroeg});");
                     }
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstiptoptijd});");
                     }
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstipttelaat});");
@@ -178,9 +178,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
+                    if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Verklikken stiptheid OV */");
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtevroeg}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_VROEG;");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovoptijd}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD;");

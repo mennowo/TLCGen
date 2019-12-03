@@ -97,10 +97,10 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95;
 								break;
 							case "OV":
-								result = plugin.Controller.OVData.OVIngrepen != null &&
-										 plugin.Controller.OVData.OVIngrepen.Any() ||
-										 plugin.Controller.OVData.HDIngrepen != null &&
-										 plugin.Controller.OVData.HDIngrepen.Any();
+								result = plugin.Controller.PrioData.PrioIngrepen != null &&
+										 plugin.Controller.PrioData.PrioIngrepen.Any() ||
+										 plugin.Controller.PrioData.HDIngrepen != null &&
+										 plugin.Controller.PrioData.HDIngrepen.Any();
 								break;
 							case "MV":
 								result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;

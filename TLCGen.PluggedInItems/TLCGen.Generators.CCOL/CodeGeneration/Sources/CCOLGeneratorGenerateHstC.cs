@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("#include \"halfstar.c\"");
 			sb.AppendLine("#include \"tx_synch.h\"");
-			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen && c.HasPTorHD())
+			if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen && c.HasPTorHD())
 			{
 				sb.AppendLine("#include \"halfstar_ov.c\"");
 			}
@@ -413,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            if (!c.OVData.OVIngrepen.Any()) return "";
+            if (!c.PrioData.PrioIngrepen.Any()) return "";
 
             sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
             sb.AppendLine("void OVHalfstarSettings(void)");

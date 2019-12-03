@@ -11,7 +11,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepInUitMeldingenDataViewModel : ViewModelBase
+    public class PrioIngreepInUitMeldingenDataViewModel : ViewModelBase
     {
         #region Fields
 
@@ -19,20 +19,20 @@ namespace TLCGen.ViewModels
         private RelayCommand _removeInmeldingCommand;
         private RelayCommand _addUitmeldingCommand;
         private RelayCommand _removeUitmeldingCommand;
-        private OVIngreepInUitMeldingViewModel _selectedInmelding;
-        private OVIngreepInUitMeldingViewModel _selectedUitmelding;
+        private PrioIngreepInUitMeldingViewModel _selectedInmelding;
+        private PrioIngreepInUitMeldingViewModel _selectedUitmelding;
 
         #endregion // Fields
 
         #region Properties
 
         [Browsable(false)]
-        public OVIngreepMeldingenDataModel OVIngreepMeldingenData { get; }
+        public PrioIngreepMeldingenDataModel PrioIngreepMeldingenData { get; }
 
         [Browsable(false)]
-        public ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel> Inmeldingen { get; }
+        public ObservableCollectionAroundList<PrioIngreepInUitMeldingViewModel, PrioIngreepInUitMeldingModel> Inmeldingen { get; }
         [Browsable(false)]
-        public ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel> Uitmeldingen { get; }
+        public ObservableCollectionAroundList<PrioIngreepInUitMeldingViewModel, PrioIngreepInUitMeldingModel> Uitmeldingen { get; }
 
         [Browsable(false)]
         public ObservableCollection<string> WisselDetectoren { get; }
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> WisselInputs { get; }
 
         [Browsable(false)]
-        public OVIngreepInUitMeldingViewModel SelectedInmelding
+        public PrioIngreepInUitMeldingViewModel SelectedInmelding
         {
             get => _selectedInmelding;
             set
@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public OVIngreepInUitMeldingViewModel SelectedUitmelding
+        public PrioIngreepInUitMeldingViewModel SelectedUitmelding
         {
             get => _selectedUitmelding;
             set
@@ -65,10 +65,10 @@ namespace TLCGen.ViewModels
         [Description("Toepassen")]
         public bool AntiJutterVoorAlleUitmeldingen
         {
-            get => OVIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen;
+            get => PrioIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen;
             set
             {
-                OVIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen = value;
+                PrioIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -76,10 +76,10 @@ namespace TLCGen.ViewModels
         [Description("Anti jutter tijd")]
         public int AntiJutterTijdVoorAlleUitmeldingen
         {
-            get => OVIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen;
+            get => PrioIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen;
             set
             {
-                OVIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen = value;
+                PrioIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -97,10 +97,10 @@ namespace TLCGen.ViewModels
         [Description("Wissel 1")]
         public bool Wissel1
         {
-            get => OVIngreepMeldingenData.Wissel1;
+            get => PrioIngreepMeldingenData.Wissel1;
             set
             {
-                OVIngreepMeldingenData.Wissel1 = value;
+                PrioIngreepMeldingenData.Wissel1 = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(HasWissel));
             }
@@ -109,10 +109,10 @@ namespace TLCGen.ViewModels
         [Description("Wissel 1 type")]
         public OVIngreepInUitDataWisselTypeEnum Wissel1Type
         {
-            get => OVIngreepMeldingenData.Wissel1Type;
+            get => PrioIngreepMeldingenData.Wissel1Type;
             set
             {
-                OVIngreepMeldingenData.Wissel1Type = value;
+                PrioIngreepMeldingenData.Wissel1Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsWissel1Ingang));
                 RaisePropertyChanged(nameof(IsWissel1Detector));
@@ -123,12 +123,12 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel1Ingang))]
         public string Wissel1Input
         {
-            get => OVIngreepMeldingenData.Wissel1Input;
+            get => PrioIngreepMeldingenData.Wissel1Input;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMeldingenData.Wissel1Input = value;
+                    PrioIngreepMeldingenData.Wissel1Input = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
@@ -138,10 +138,10 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel1Ingang))]
         public bool Wissel1Voorwaarde
         {
-            get => OVIngreepMeldingenData.Wissel1InputVoorwaarde;
+            get => PrioIngreepMeldingenData.Wissel1InputVoorwaarde;
             set
             {
-                OVIngreepMeldingenData.Wissel1InputVoorwaarde = value;
+                PrioIngreepMeldingenData.Wissel1InputVoorwaarde = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -150,12 +150,12 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel1Detector))]
         public string Wissel1Detector
         {
-            get => OVIngreepMeldingenData.Wissel1Detector;
+            get => PrioIngreepMeldingenData.Wissel1Detector;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMeldingenData.Wissel1Detector = value;
+                    PrioIngreepMeldingenData.Wissel1Detector = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
@@ -164,10 +164,10 @@ namespace TLCGen.ViewModels
         [Description("Wissel 2")]
         public bool Wissel2
         {
-            get => OVIngreepMeldingenData.Wissel2;
+            get => PrioIngreepMeldingenData.Wissel2;
             set
             {
-                OVIngreepMeldingenData.Wissel2 = value;
+                PrioIngreepMeldingenData.Wissel2 = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(HasWissel));
             }
@@ -176,10 +176,10 @@ namespace TLCGen.ViewModels
         [Description("Wissel 2 type")]
         public OVIngreepInUitDataWisselTypeEnum Wissel2Type
         {
-            get => OVIngreepMeldingenData.Wissel2Type;
+            get => PrioIngreepMeldingenData.Wissel2Type;
             set
             {
-                OVIngreepMeldingenData.Wissel2Type = value;
+                PrioIngreepMeldingenData.Wissel2Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsWissel2Ingang));
                 RaisePropertyChanged(nameof(IsWissel2Detector));
@@ -190,12 +190,12 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel2Ingang))]
         public string Wissel2Input
         {
-            get => OVIngreepMeldingenData.Wissel2Input;
+            get => PrioIngreepMeldingenData.Wissel2Input;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMeldingenData.Wissel2Input = value;
+                    PrioIngreepMeldingenData.Wissel2Input = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
@@ -205,12 +205,12 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel2Detector))]
         public string Wissel2Detector
         {
-            get => OVIngreepMeldingenData.Wissel2Detector;
+            get => PrioIngreepMeldingenData.Wissel2Detector;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMeldingenData.Wissel2Detector = value;
+                    PrioIngreepMeldingenData.Wissel2Detector = value;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
@@ -220,10 +220,10 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel2Detector))]
         public bool Wissel2Voorwaarde
         {
-            get => OVIngreepMeldingenData.Wissel2InputVoorwaarde;
+            get => PrioIngreepMeldingenData.Wissel2InputVoorwaarde;
             set
             {
-                OVIngreepMeldingenData.Wissel2InputVoorwaarde = value;
+                PrioIngreepMeldingenData.Wissel2InputVoorwaarde = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -239,38 +239,37 @@ namespace TLCGen.ViewModels
         public ICommand RemoveInmeldingCommand => _removeInmeldingCommand ?? (_removeInmeldingCommand = new RelayCommand(RemoveInmeldingCommand_Executed, RemoveInmeldingCommand_CanExecute));
         public ICommand AddUitmeldingCommand => _addUitmeldingCommand ?? (_addUitmeldingCommand = new RelayCommand(AddUitmeldingCommand_Executed));
         public ICommand RemoveUitmeldingCommand => _removeUitmeldingCommand ?? (_removeUitmeldingCommand = new RelayCommand(RemoveUitmeldingCommand_Executed, RemoveUitmeldingCommand_CanExecute));
-        //public ICommand AddVoorwaardeCommand => _addVoorwaardeCommand ?? (_addVoorwaardeCommand = new RelayCommand(AddVoorwaardeCommand_Executed));
-
+        
         #endregion // Commands
 
         #region Command functionality
 
         private void AddInmeldingCommand_Executed(object prm)
         {
-            Inmeldingen.Add(new OVIngreepInUitMeldingViewModel(new OVIngreepInUitMeldingModel
+            Inmeldingen.Add(new PrioIngreepInUitMeldingViewModel(new PrioIngreepInUitMeldingModel
             {
-                InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
-                Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
             }));
 
-            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
-            MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
         private void AddUitmeldingCommand_Executed(object prm)
         {
-            Uitmeldingen.Add(new OVIngreepInUitMeldingViewModel(new OVIngreepInUitMeldingModel
+            Uitmeldingen.Add(new PrioIngreepInUitMeldingViewModel(new PrioIngreepInUitMeldingModel
             {
-                InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
-                Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
             }));
 
-            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
-            MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
         private void RemoveInmeldingCommand_Executed(object prm)
@@ -278,10 +277,10 @@ namespace TLCGen.ViewModels
             if(SelectedInmelding != null)
             {
                 Inmeldingen.Remove(SelectedInmelding);
-				var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+				var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
 				MessengerInstance.Send(msg);
 				if (msg.FaseCyclus == null) return;
-				MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
 				SelectedInmelding = null;
             }
         }
@@ -296,10 +295,10 @@ namespace TLCGen.ViewModels
             if (SelectedUitmelding != null)
             {
                 Uitmeldingen.Remove(SelectedUitmelding);
-				var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+				var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
 				MessengerInstance.Send(msg);
 				if (msg.FaseCyclus == null) return;
-				MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
 				SelectedUitmelding = null;
             }
         }
@@ -315,7 +314,7 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
-            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
 
@@ -384,18 +383,17 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVIngreepInUitMeldingenDataViewModel(OVIngreepMeldingenDataModel ovIngreepMassaDetectieData)
+        public PrioIngreepInUitMeldingenDataViewModel(PrioIngreepMeldingenDataModel prioIngreepMassaDetectieData)
         {
-            OVIngreepMeldingenData = ovIngreepMassaDetectieData;
-            Inmeldingen = new ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel>(ovIngreepMassaDetectieData.Inmeldingen);
-            Uitmeldingen = new ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel>(ovIngreepMassaDetectieData.Uitmeldingen);
+            PrioIngreepMeldingenData = prioIngreepMassaDetectieData;
+            Inmeldingen = new ObservableCollectionAroundList<PrioIngreepInUitMeldingViewModel, PrioIngreepInUitMeldingModel>(prioIngreepMassaDetectieData.Inmeldingen);
+            Uitmeldingen = new ObservableCollectionAroundList<PrioIngreepInUitMeldingViewModel, PrioIngreepInUitMeldingModel>(prioIngreepMassaDetectieData.Uitmeldingen);
             WisselInputs = new ObservableCollection<string>();
             WisselDetectoren = new ObservableCollection<string>();
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
             OnDetectorenChanged(null);
             OnIngangenChanged(null);
-            // MessengerInstance.Register<OVIngreepMassaDetectieObjectActionMessage>(this, OnObjectAction);
         }
 
         #endregion // Constructor
