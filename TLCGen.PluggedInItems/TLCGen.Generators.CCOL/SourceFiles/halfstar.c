@@ -1,5 +1,5 @@
 #include "halfstar.h"
-#include "halfstar_ov.h"     /* declaratie functies                                      */
+#include "halfstar_prio.h"     /* declaratie functies                                      */
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */

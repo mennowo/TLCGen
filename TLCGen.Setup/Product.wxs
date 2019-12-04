@@ -170,22 +170,22 @@
         <File Id="filCC84D40C3235DB153D9083B0D02ABFF4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\detectie.c" />
         <File Id="filADD130ED1545F8B1F2C36BACC6711EB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.c" />
         <File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
-        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.c" />
-        <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.h" />
+        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.c" />
+        <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
         <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837H" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.c" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837I" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />
+        <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.c" />
+        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.h" />
         <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.h" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837F" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.c" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837G" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.h" />
-        <File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.c" />
-        <File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.h" />
+        <File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.c" />
+        <File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.h" />
         <File Id="filF6CA61EA27285C0D1CDDA9537E62336D" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgv_overslag.c" />
         <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
         <File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />

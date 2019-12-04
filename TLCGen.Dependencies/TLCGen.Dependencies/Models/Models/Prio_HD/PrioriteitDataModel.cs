@@ -35,7 +35,7 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel KAROnderGedragBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("maxwt", BitmappedItemTypeEnum.Uitgang, null, "IsOVUitgebreid")]
+        [IOElement("maxwt", BitmappedItemTypeEnum.Uitgang, null, "HasPrio")]
         public BitmapCoordinatenDataModel MaximaleWachttijdOverschredenBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "PrioIngreep")]
@@ -48,6 +48,10 @@ namespace TLCGen.Models
         [Browsable(false)]
         [HasDefault(false)]
         public bool HasAnyKAR => this.HasKAR();
+
+        [Browsable(false)]
+        [HasDefault(false)]
+        public bool HasPrio => this.PrioIngreepType != PrioIngreepTypeEnum.Geen;
 
         #endregion // Properties
 

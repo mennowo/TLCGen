@@ -470,7 +470,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     result.Add(new Tuple<string, string, string>("int", "ov", "0"));
                     return result;
             
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     var result2 = new List<Tuple<string, string, string>>();
                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
@@ -499,7 +499,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 31;
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
                     return 11;
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingOV:
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     return 11;
                 default:
                     return 0;
@@ -837,7 +837,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uspriomaxwt}] = FALSE;");
-                        sb.AppendLine($"{ts}for (ov = 0; ov < ovOVMAX; ++ov)");
+                        sb.AppendLine($"{ts}for (ov = 0; ov < prioFCMAX; ++ov)");
                         sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uspriomaxwt}] |= iMaximumWachtTijdOverschreden[ov];");
                     }
                     return sb.ToString();
@@ -1035,7 +1035,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
                         sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");

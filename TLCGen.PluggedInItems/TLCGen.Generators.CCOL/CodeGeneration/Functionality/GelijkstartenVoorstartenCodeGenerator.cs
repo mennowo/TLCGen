@@ -95,7 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 30;
-	            case CCOLCodeTypeEnum.OvCIncludes:
+	            case CCOLCodeTypeEnum.PrioCIncludes:
 		            return 10;
 				default:
                     return 0;
@@ -231,7 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-				case CCOLCodeTypeEnum.OvCIncludes:
+				case CCOLCodeTypeEnum.PrioCIncludes:
 					sb.AppendLine("#include \"syncvar.h\"");
 					return sb.ToString();
 

@@ -68,7 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}#define hdFC{hdFC.FaseCyclus} {ov.ToString()}");
                     ++ov;
                 }
-                sb.AppendLine($"{ts}#define ovOVMAX {ov.ToString()}");
+                sb.AppendLine($"{ts}#define prioFCMAX {ov.ToString()}");
                 sb.AppendLine();
             }
             

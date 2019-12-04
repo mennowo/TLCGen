@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			sb.AppendLine("#include \"tx_synch.h\"");
 			if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen && c.HasPTorHD())
 			{
-				sb.AppendLine("#include \"halfstar_ov.c\"");
+				sb.AppendLine("#include \"halfstar_prio.c\"");
 			}
 			sb.AppendLine();
             sb.AppendLine($"#include \"{c.Data.Naam}hst.add\"");

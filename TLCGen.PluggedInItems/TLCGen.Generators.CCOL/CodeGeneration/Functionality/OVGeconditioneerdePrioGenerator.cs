@@ -79,11 +79,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.OvCTop:
+                case CCOLCodeTypeEnum.PrioCTop:
                     return 50;
-                case CCOLCodeTypeEnum.OvCInUitMelden:
+                case CCOLCodeTypeEnum.PrioCInUitMelden:
                     return 20;
-                case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
                     return 10;
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     return 10;
@@ -97,7 +97,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.OvCTop:
+                case CCOLCodeTypeEnum.PrioCTop:
                     if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"/* Variabelen tbv registreren stiptheid bij inmelding via KAR: tbv bepalen prioriteit in OV.ADD */");
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
@@ -106,7 +106,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCInUitMelden:
+                case CCOLCodeTypeEnum.PrioCInUitMelden:
                     if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Bijhouden stiptheidsklassen ingemelde voertuigen */");
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
@@ -119,7 +119,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{ov.FaseCyclus}] = iAantInm{ov.FaseCyclus} > 0 ? iKARInSTP{ov.FaseCyclus}[0] : 0;");
                     }
                     return sb.ToString();
-                case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
                     if (!c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Geconditioneerde prioriteit instellen */");
                     var tsts = ts; 

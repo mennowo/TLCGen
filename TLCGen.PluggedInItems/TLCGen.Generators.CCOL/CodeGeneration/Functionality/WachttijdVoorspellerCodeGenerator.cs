@@ -99,7 +99,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 30;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
-                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     return 20;
                 default:
                     return 0;
@@ -453,7 +453,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}])");

@@ -248,7 +248,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 20;
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
                     return 10;
-                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     return 10;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
@@ -828,7 +828,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     if (!c.FileIngrepen.Any()) return "";
 
                     var yes = false;

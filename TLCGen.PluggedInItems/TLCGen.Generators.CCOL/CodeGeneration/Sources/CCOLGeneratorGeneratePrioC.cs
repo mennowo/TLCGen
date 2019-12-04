@@ -90,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
             }
-            sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
+            sb.AppendLine($"{ts}#include \"extra_func_prio.h\"");
             if (c.Data.PracticeOmgeving)
             {
                 sb.AppendLine("#endif // PRACTICE_TEST");
@@ -130,7 +130,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#include \"prio.c\"");
                 sb.AppendLine("#else");
                 sb.AppendLine("#include \"prio.h\"");
-                sb.AppendLine("const code *iFC_OV_code[ovOVMAX];");
+                sb.AppendLine("const code *iFC_PRIO_code[prioFCMAX];");
                 sb.AppendLine("#endif");
             }
             else
@@ -139,7 +139,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (c.HalfstarData.IsHalfstar && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen && c.HasPTorHD())
             {
-                sb.AppendLine("#include \"halfstar_ov.h\"");
+                sb.AppendLine("#include \"halfstar_prio.h\"");
             }
             sb.AppendLine();
             if (c.HasKAR())
@@ -194,27 +194,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/*-------------------------------------------------------------------------------------------");
             sb.AppendLine("   OVInstellingen voorziet alle OV-instellingen van een juiste waarde.");
             sb.AppendLine("   Het gaat om de volgende instellingen:");
-            sb.AppendLine("   - iFC_OVix[ov]                        : (de index van) de fasecyclus van de OV-richting ov.");
-            sb.AppendLine("   - iT_GBix[ov]                         : (de index van) de timer voor de groenbewaking");
-            sb.AppendLine("                                           van OV-richting ov.");
-            sb.AppendLine("   - iH_OVix[ov]                         : (de index van) het hulpelement voor de");
-            sb.AppendLine("                                           prioriteitstoekenning van OV-richting ov.");
-            sb.AppendLine("   - iInstPrioriteitsNiveau[ov]          : het prioriteitsniveau van de inmeldingen van de");
-            sb.AppendLine("                                           OV-richting ov.");
-            sb.AppendLine("   - iInstPrioriteitsOpties[ov]          : de prioriteisopties van de inmeldingen van de");
-            sb.AppendLine("                                           OV-richting ov.");
-            sb.AppendLine("   - iGroenBewakingsTijd[ov]             : De groenbewakingstijd van de OV-richting ov.");
-            sb.AppendLine("   - iRTSOngehinderd[ov]                 : De ongehinderde rijtijd van OV-richting ov.");
-            sb.AppendLine("   - iRTSBeperktGehinderd[ov]            : De beperkt gehinderde rijtijd van OV-richting ov.");
-            sb.AppendLine("   - iRTSGehinderd[ov]                   : De gehinderde rijtijd van OV-richting ov.");
-            sb.AppendLine("   - iOnderMaximum[ov]                   : Het ondermaximum van OV-richting ov.");
-            sb.AppendLine("   - iSelDetFoutNaGB[ov]                 : De in- en uitmelddetectie van OV-richting ov");
+            sb.AppendLine("   - iFC_PRIOix[prio]                    : (de index van) de fasecyclus van de PRIO-richting prio.");
+            sb.AppendLine("   - iT_GBix[prio]                       : (de index van) de timer voor de groenbewaking");
+            sb.AppendLine("                                           van PRIO-richting prio.");
+            sb.AppendLine("   - iH_PRIOix[prio]                     : (de index van) het hulpelement voor de");
+            sb.AppendLine("                                           prioriteitstoekenning van PRIO-richting prio.");
+            sb.AppendLine("   - iInstPrioriteitsNiveau[prio]        : het prioriteitsniveau van de inmeldingen van de");
+            sb.AppendLine("                                           PRIO-richting prio.");
+            sb.AppendLine("   - iInstPrioriteitsOpties[prio]        : de prioriteisopties van de inmeldingen van de");
+            sb.AppendLine("                                           PRIO-richting prio.");
+            sb.AppendLine("   - iGroenBewakingsTijd[prio]           : De groenbewakingstijd van de PRIO-richting prio.");
+            sb.AppendLine("   - iRTSOngehinderd[prio]               : De ongehinderde rijtijd van PRIO-richting prio.");
+            sb.AppendLine("   - iRTSBeperktGehinderd[prio]          : De beperkt gehinderde rijtijd van PRIO-richting prio.");
+            sb.AppendLine("   - iRTSGehinderd[prio]                 : De gehinderde rijtijd van PRIO-richting prio.");
+            sb.AppendLine("   - iOnderMaximum[prio]                 : Het ondermaximum van PRIO-richting prio.");
+            sb.AppendLine("   - iSelDetFoutNaGB[prio]               : De in- en uitmelddetectie van PRIO-richting prio");
             sb.AppendLine("                                           wordt als defect beschouwd bij het aanspreken");
             sb.AppendLine("                                           van de groenbewaking. De defectmelding wordt");
             sb.AppendLine("                                           opgeheven bij de eerstvolgende uitmelding.");
-            sb.AppendLine("   - iMaximumWachtTijd[fc]               : de maximum wachttijd voor richting fc waarboven");
+            sb.AppendLine("   - iMaximumWachtTijd[fc]               : de maximum wachttijd voor richting fc waarbprioen");
             sb.AppendLine("                                           geen prioriteit meer wordt toegekend voor");
-            sb.AppendLine("                                           niet-nooddienst-inmeldingen op de OV-richtingen.");
+            sb.AppendLine("                                           niet-nooddienst-inmeldingen op de PRIO-richtingen.");
             sb.AppendLine("   - iInstPercMaxGroenTijdTerugKomen[fc] : percentage van de maximumgroentijd van richting fc");
             sb.AppendLine("                                           waaronder na afkappen de richting terugkomt.");
             sb.AppendLine("   - iInstMinTerugKomGroenTijd[fc]       : minimale maximumgroentijd van richting fc bij");
@@ -234,9 +234,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("                                           gehaald (daarna reset).");
             sb.AppendLine("   - iPRM_ALTP[fc]                       : ruimte die minimaal aanwezig moet zijn voor");
             sb.AppendLine("                                           richting fc, om alternatief te realiseren tijdens");
-            sb.AppendLine("                                           niet-konflikterende OV-ingre(e)p(en).");
+            sb.AppendLine("                                           niet-konflikterende PRIO-ingre(e)p(en).");
             sb.AppendLine("   - iSCH_ALTG[fc]                       : richting fc mag alternatief realiseren tijdens");
-            sb.AppendLine("                                           niet-konflikterende OV-ingre(e)p(en).");
+            sb.AppendLine("                                           niet-konflikterende PRIO-ingre(e)p(en).");
             sb.AppendLine("   - iInstAfkapGroenAlt[fc]              : groentijd die richting fc minimaal mag maken");
             sb.AppendLine("                                           bij een alternatieve realisatie, voordat deze");
             sb.AppendLine("                                           mag worden afgekapt.");
@@ -252,10 +252,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("void OVInitExtra(void) ");
+            sb.AppendLine("void PrioInitExtra(void) ");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInitOV, true, false, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInitPrio, true, false, true, true);
 
             sb.AppendLine("}");
             sb.AppendLine();
@@ -263,52 +263,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GetPriorityName(PrioIngreepModel ov)
+        private string GetPriorityName(PrioIngreepModel prio)
         {
-            return ov.FaseCyclus + CCOLCodeHelper.GetPriorityTypeAbbreviation(ov);
+            return prio.FaseCyclus + CCOLCodeHelper.GetPriorityTypeAbbreviation(prio);
         }
 
         private string GeneratePrioCInstellingen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
-            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
-            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
-            var _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto");
-            var _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg");
-            var _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg");
-            var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtohd");
-            var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbghd");
-            var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtghd");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
-            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
-            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio");
-            var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
-            var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
-            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagb");
-            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagbhd");
-            var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwta");
-            var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtfts");
-            var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtvtg");
-            var _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgt");
-            var _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmognt");
-            var _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmnofm");
-            var _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmgcov");
-            var _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgcov");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogbhd");
+            var _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriorto");
+            var _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortbg");
+            var _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortg");
+            var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortohd");
+            var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortbghd");
+            var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortghd");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohduit");
+            var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioprio");
+            var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopriohd");
+            var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioomx");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioblk");
+            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schprioupinagb");
+            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schprioupinagbhd");
+            var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwta");
+            var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwtfts");
+            var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwtvtg");
+            var _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopmgt");
+            var _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioognt");
+            var _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprionofm");
+            var _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomgcov");
+            var _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopmgcov");
             var _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
             var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
             var _schaltghst = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltghst");
-            var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
+            var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioohpmg");
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
             var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
-            sb.AppendLine("void OVInstellingen(void) ");
+            sb.AppendLine("void PrioInstellingen(void) ");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}/* ======================= */");
             sb.AppendLine($"{ts}/* Instellingen PRIORITEIT */");
@@ -320,13 +320,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.HasPTorHD())
             {
                 sb.AppendLine($"{ts}/* Fasecyclus voor richtingen met PRIO */");
-                foreach (var ov in c.PrioData.PrioIngrepen)
+                foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}iFC_OVix[prioFC{GetPriorityName(ov)}] = {_fcpf}{ov.FaseCyclus};");
+                    sb.AppendLine($"{ts}iFC_PRIOix[prioFC{GetPriorityName(prio)}] = {_fcpf}{prio.FaseCyclus};");
                 }
                 foreach (var hd in c.PrioData.HDIngrepen)
                 {
-                    sb.AppendLine($"{ts}iFC_OVix[hdFC{hd.FaseCyclus}] = {_fcpf}{hd.FaseCyclus};");
+                    sb.AppendLine($"{ts}iFC_PRIOix[hdFC{hd.FaseCyclus}] = {_fcpf}{hd.FaseCyclus};");
                 }
                 sb.AppendLine();
 
@@ -334,13 +334,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}/* Code voor richtingen met PRIO */");
                     sb.AppendLine($"{ts}#ifdef PRACTICE_TEST");
-                    foreach (var ov in c.PrioData.PrioIngrepen)
+                    foreach (var prio in c.PrioData.PrioIngrepen)
                     {
-                        sb.AppendLine($"{ts}{ts}iFC_OV_code[prioFC{GetPriorityName(ov)}] = \"prio{GetPriorityName(ov)}\";");
+                        sb.AppendLine($"{ts}{ts}iFC_PRIO_code[prioFC{GetPriorityName(prio)}] = \"prio{GetPriorityName(prio)}\";");
                     }
                     foreach (var hd in c.PrioData.HDIngrepen)
                     {
-                        sb.AppendLine($"{ts}{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
+                        sb.AppendLine($"{ts}{ts}iFC_PRIO_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
                     }
                     sb.AppendLine($"{ts}#endif // PRACTICE_TEST");
                     sb.AppendLine();
@@ -348,9 +348,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}/* Index van de groenbewakingstimer */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iT_GBix[prioFC{GetPriorityName(ov)}] = {_tpf}{_tgb}{GetPriorityName(ov)};");
+                sb.AppendLine($"{ts}iT_GBix[prioFC{GetPriorityName(prio)}] = {_tpf}{_tgb}{GetPriorityName(prio)};");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -359,20 +359,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Index van het hulpelement voor de ingreep */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iH_OVix[prioFC{GetPriorityName(ov)}] = {_hpf}{_hov}{GetPriorityName(ov)};");
+                sb.AppendLine($"{ts}iH_PRIOix[prioFC{GetPriorityName(prio)}] = {_hpf}{_hov}{GetPriorityName(prio)};");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
-                sb.AppendLine($"{ts}iH_OVix[hdFC{hd.FaseCyclus}] = {_hpf}{_hhd}{hd.FaseCyclus};");
+                sb.AppendLine($"{ts}iH_PRIOix[hdFC{hd.FaseCyclus}] = {_hpf}{_hhd}{hd.FaseCyclus};");
             }
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Prioriteitsniveau */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iInstPrioriteitsNiveau[prioFC{GetPriorityName(ov)}] = PRM[{_prmpf}{_prmprio}{GetPriorityName(ov)}]/1000L;");
+                sb.AppendLine($"{ts}iInstPrioriteitsNiveau[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmprio}{GetPriorityName(prio)}]/1000L;");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -381,9 +381,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Prioriteitsopties */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iInstPrioriteitsOpties[prioFC{GetPriorityName(ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmprio}{GetPriorityName(ov)});");
+                sb.AppendLine($"{ts}iInstPrioriteitsOpties[prioFC{GetPriorityName(prio)}] = BepaalPrioriteitsOpties({_prmpf}{_prmprio}{GetPriorityName(prio)});");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -392,9 +392,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Groenbewakingstijd */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iGroenBewakingsTijd[prioFC{GetPriorityName(ov)}] = T_max[{_tpf}{_tgb}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iGroenBewakingsTijd[prioFC{GetPriorityName(prio)}] = T_max[{_tpf}{_tgb}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -403,9 +403,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Ongehinderde rijtijd */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSOngehinderd[prioFC{GetPriorityName(ov)}] = PRM[{_prmpf}{_prmrto}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iRTSOngehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrto}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -414,9 +414,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Beperkt gehinderde rijtijd */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSBeperktGehinderd[prioFC{GetPriorityName(ov)}] = PRM[{_prmpf}{_prmrtbg}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iRTSBeperktGehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtbg}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -425,9 +425,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Gehinderde rijtijd */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSGehinderd[prioFC{GetPriorityName(ov)}] = PRM[{_prmpf}{_prmrtg}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iRTSGehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtg}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -436,9 +436,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Ondermaximum */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iOnderMaximum[prioFC{GetPriorityName(ov)}] = PRM[{_prmpf}{_prmomx}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iOnderMaximum[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmomx}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -447,9 +447,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Blokkeringstijd */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iBlokkeringsTijd[prioFC{GetPriorityName(ov)}] = T_max[{_tpf}{_tblk}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iBlokkeringsTijd[prioFC{GetPriorityName(prio)}] = T_max[{_tpf}{_tblk}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -459,9 +459,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* Na aanspreken groenbewaking wordt de selectieve ");
             sb.AppendLine("	   detectie niet langer betrouwbaar gevonden */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{GetPriorityName(ov)}] = SCH[{_schpf}{_schupinagb}{GetPriorityName(ov)}];");
+                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{GetPriorityName(prio)}] = SCH[{_schpf}{_schupinagb}{GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -495,14 +495,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Als een richting minder groen heeft gehad door afkappen");
             sb.AppendLine($"{ts}   dan deze instelling, dan mag de richting nog een keer");
             sb.AppendLine($"{ts}   primair realiseren (terugkomen). */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
 
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
                 switch (fct)
                 {
                     case FaseTypeEnum.OV:
@@ -511,11 +511,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.Voetganger:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.PercMaxGroentijdVoorTerugkomen};");
+                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{priofc.FaseCyclus}] = {priofc.PercMaxGroentijdVoorTerugkomen};");
                         }
                         break;
                 }
@@ -524,14 +524,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* De minimale groentijd die een richting krijgt als");
             sb.AppendLine($"{ts}   deze mag terugkomen. */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
 
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
                 switch (fct)
                 {
                     case FaseTypeEnum.OV:
@@ -540,11 +540,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.Voetganger:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.OndergrensNaTerugkomen};");
+                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{priofc.FaseCyclus}] = {priofc.OndergrensNaTerugkomen};");
                         }
                         break;
                 }
@@ -552,14 +552,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Aantal malen niet afkappen */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
 
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
                 switch (fct)
                 {
                     case FaseTypeEnum.Voetganger:
@@ -569,11 +569,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.Fiets:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.AantalKerenNietAfkappen};");
+                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{priofc.FaseCyclus}] = {priofc.AantalKerenNietAfkappen};");
                         }
                         break;
                     default:
@@ -584,29 +584,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* Onder deze groentijd mag een richting niet worden");
             sb.AppendLine($"{ts}   afgekapt, tenzij zich een nooddienst heeft ingemeld. */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
 
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
                 switch (fct)
                 {
                     case FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 0;");
+                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{priofc.FaseCyclus}] = 0;");
                         continue;
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.MinimumGroentijdConflictOVRealisatie};");
+                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{priofc.FaseCyclus}] = {priofc.MinimumGroentijdConflictOVRealisatie};");
                         }
                         break;
                 }
@@ -617,29 +617,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}   dit percentage van de maximum groentijd, dan");
             sb.AppendLine($"{ts}   mag de richting niet worden afgekapt, tenzij");
             sb.AppendLine($"{ts}   zich een nooddienst heeft ingemeld. */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
 
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
                 switch (fct)
                 {
                     case FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 100; /* Voetgangers mogen niet worden afgekapt. */");
+                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{priofc.FaseCyclus}] = 100; /* Voetgangers mogen niet worden afgekapt. */");
                         continue;
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.PercMaxGroentijdConflictOVRealisatie};");
+                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{priofc.FaseCyclus}] = {priofc.PercMaxGroentijdConflictOVRealisatie};");
                         }
                         break;
                 }
@@ -648,29 +648,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* Na te zijn afgekapt, wordt het percentage");
             sb.AppendLine($"{ts}   van de maximumgroentijd verhoogd met dit ophoogpercentage. */");
-            foreach (var ovfc in c.PrioData.PrioIngreepSignaalGroepParameters)
+            foreach (var priofc in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
-                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, priofc.FaseCyclus))
                 {
                     continue;
                 }
-                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
+                var fct = c.Fasen.First(x => x.Naam == priofc.FaseCyclus).Type;
 
                 switch (fct)
                 {
                     case FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = 0;");
+                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{priofc.FaseCyclus}] = 0;");
                         continue;
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
                         if (!c.PrioData.PrioIngreepSignaalGroepParametersHard)
                         {
-                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{ovfc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{priofc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{priofc.FaseCyclus}];");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.OphoogpercentageNaAfkappen};");
+                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{priofc.FaseCyclus}] = {priofc.OphoogpercentageNaAfkappen};");
                         }
                         break;
                 }
@@ -813,12 +813,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
-            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
-            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
-            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
+            var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriobtovg");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
+            var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriovi");
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriogeenwissel");
+            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriowisselpol");
+            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriowissel");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -831,23 +831,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void RijTijdScenario(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}/* Vaststellen rijtijdscenarios */");
-            foreach (var ov in c.PrioData.PrioIngrepen)
+            foreach (var prio in c.PrioData.PrioIngrepen)
             {
                 foreach (var fc in c.Fasen)
                 {
-                    if (ov.FaseCyclus == fc.Naam)
+                    if (prio.FaseCyclus == fc.Naam)
                     {
                         bool wissel = false;
-                        if (ov.KoplusKijkNaarWisselstand && ov.HasOVIngreepWissel())
+                        if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                         {
                             wissel = true;
-                            sb.Append($"{ts}if (IH[{_hpf}{_hwissel}{GetPriorityName(ov)}])");
+                            sb.Append($"{ts}if (IH[{_hpf}{_hwissel}{GetPriorityName(prio)}])");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(prioFC{GetPriorityName(ov)}, {_dpf}{ov.Koplus}, NG, NG);");
+                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, {_dpf}{prio.Koplus}, NG, NG);");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"{ts}else");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(prioFC{GetPriorityName(ov)}, NG, NG, NG);");
+                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, NG, NG, NG);");
                             sb.AppendLine($"{ts}}}");
                         }
                         else
@@ -862,10 +862,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     var i = 0;
                                     foreach (var d in kl)
                                     {
-                                        sb.Append($"{tts}OVRijTijdScenario(prioFC{GetPriorityName(ov)}, {_dpf}{d.Naam}, ");
+                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, {_dpf}{d.Naam}, ");
                                         if (i < ll.Count)
                                         {
-                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{GetPriorityName(ov)});");
+                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{GetPriorityName(prio)});");
                                             ++i;
                                         }
                                         else
@@ -879,10 +879,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     var i = 0;
                                     foreach (var d in ll)
                                     {
-                                        sb.Append($"{tts}OVRijTijdScenario(prioFC{GetPriorityName(ov)}, ");
+                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, ");
                                         if (i < kl.Count)
                                         {
-                                            sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{GetPriorityName(ov)});");
+                                            sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{GetPriorityName(prio)});");
                                             ++i;
                                         }
                                         else
@@ -894,7 +894,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                             else
                             {
-                                sb.Append($"{tts}OVRijTijdScenario(prioFC{GetPriorityName(ov)}, NG, NG, NG);");
+                                sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, NG, NG, NG);");
                             }
                             sb.AppendLine();
                         }
@@ -918,7 +918,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 var i = 0;
                                 foreach (var d in kl)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
+                                    sb.Append($"{ts}PrioRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
                                     if (i < ll.Count)
                                     {
                                         sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
@@ -935,7 +935,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 var i = 0;
                                 foreach (var d in ll)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, ");
+                                    sb.Append($"{ts}PrioRijTijdScenario(hdFC{fc.Naam}, ");
                                     if (i < kl.Count)
                                     {
                                         sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam});");
@@ -950,23 +950,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         else
                         {
-                            sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, NG, NG, NG);");
+                            sb.Append($"{ts}PrioRijTijdScenario(hdFC{fc.Naam}, NG, NG, NG);");
                         }
                         break;
                     }
                 }
             }
             sb.AppendLine();
-            foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
+            foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
             {
-                sb.Append(ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
-                        ? $"{ts}if (DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(ov)}] && (iRijTimer[prioFC{GetPriorityName(ov)}] < iRijTijd[prioFC{GetPriorityName(ov)}])"
-                        : $"{ts}if (SCH[{_schpf}{_schvi}{GetPriorityName(ov)}] && DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(ov)}] && (iRijTimer[prioFC{GetPriorityName(ov)}] < iRijTijd[prioFC{GetPriorityName(ov)}])");
-                if (ov.KoplusKijkNaarWisselstand && ov.HasOVIngreepWissel())
+                sb.Append(prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
+                        ? $"{ts}if (DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(prio)}] && (iRijTimer[prioFC{GetPriorityName(prio)}] < iRijTijd[prioFC{GetPriorityName(prio)}])"
+                        : $"{ts}if (SCH[{_schpf}{_schvi}{GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(prio)}] && (iRijTimer[prioFC{GetPriorityName(prio)}] < iRijTijd[prioFC{GetPriorityName(prio)}])");
+                if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                 {
-                    sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(ov)}]");
+                    sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(prio)}]");
                 }
-                sb.AppendLine($") iRijTijd[prioFC{GetPriorityName(ov)}] = 0;");
+                sb.AppendLine($") iRijTijd[prioFC{GetPriorityName(prio)}] = 0;");
             }
 
             if (OrderedPieceGenerators[CCOLCodeTypeEnum.PrioCRijTijdScenario].Any())
@@ -988,22 +988,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
-            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
-            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
-            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
-            var _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkarin");
-            var _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkaruit");
-            var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
-            var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tovminrood");
-            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
-            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
-            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohduit");
+            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriocprio");
+            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriolaatcrit");
+            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioallelijnen");
+            var _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriodhkarin");
+            var _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriodhkaruit");
+            var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriokarmelding");
+            var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriokarog");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
+            var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioovminrood");
+            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriowissel");
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriogeenwissel");
+            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriowisselpol");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
@@ -1022,16 +1022,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInUitMelden, true, false, false, true);
 
-                sb.AppendLine($"{ts}/* OV-inmeldingen */");
-                foreach (var ov in c.PrioData.PrioIngrepen)
+                sb.AppendLine($"{ts}/* Pririteit-inmeldingen */");
+                foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}OVInmelden(prioFC{GetPriorityName(ov)}, SH[{_hpf}{_hovin}{GetPriorityName(ov)}], iInstPrioriteitsNiveau[prioFC{GetPriorityName(ov)}], iInstPrioriteitsOpties[prioFC{GetPriorityName(ov)}], 0, 0);");
+                    sb.AppendLine($"{ts}PrioInmelden(prioFC{GetPriorityName(prio)}, SH[{_hpf}{_hovin}{GetPriorityName(prio)}], iInstPrioriteitsNiveau[prioFC{GetPriorityName(prio)}], iInstPrioriteitsOpties[prioFC{GetPriorityName(prio)}], 0, 0);");
                 }
                 sb.AppendLine();
-                sb.AppendLine($"{ts}/* OV-uitmeldingen */");
-                foreach (var ov in c.PrioData.PrioIngrepen)
+                sb.AppendLine($"{ts}/* Pririteit-uitmeldingen */");
+                foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}OVUitmelden(prioFC{GetPriorityName(ov)}, SH[{_hpf}{_hovuit}{GetPriorityName(ov)}]);");
+                    sb.AppendLine($"{ts}PrioUitmelden(prioFC{GetPriorityName(prio)}, SH[{_hpf}{_hovuit}{GetPriorityName(prio)}]);");
                 }
                 sb.AppendLine();
             }
@@ -1040,13 +1040,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* HD-inmeldingen */");
                 foreach (var hd in c.PrioData.HDIngrepen)
                 {
-                    sb.AppendLine($"{ts}OVInmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhdin}{hd.FaseCyclus}], iInstPrioriteitsNiveau[hdFC{hd.FaseCyclus}], iInstPrioriteitsOpties[hdFC{hd.FaseCyclus}], 0, 0);");
+                    sb.AppendLine($"{ts}PrioInmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhdin}{hd.FaseCyclus}], iInstPrioriteitsNiveau[hdFC{hd.FaseCyclus}], iInstPrioriteitsOpties[hdFC{hd.FaseCyclus}], 0, 0);");
                 }
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* HD-uitmeldingen */");
                 foreach (var hd in c.PrioData.HDIngrepen)
                 {
-                    sb.AppendLine($"{ts}OVUitmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhduit}{hd.FaseCyclus}]);");
+                    sb.AppendLine($"{ts}PrioUitmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhduit}{hd.FaseCyclus}]);");
                 }
                 sb.AppendLine();
             }
@@ -1093,14 +1093,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Noodaanvragen obv koplus */");
 
-                foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
                 {
-                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{GetPriorityName(ov)}] && DB[{_dpf}{ov.Koplus}] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && !T[{_tpf}{_tovminrood}{GetPriorityName(ov)}]");
-                    if (ov.KoplusKijkNaarWisselstand && ov.HasOVIngreepWissel())
+                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && R[{_fcpf}{prio.FaseCyclus}] && !TRG[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{GetPriorityName(prio)}]");
+                    if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                     {
-                        sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(ov)}]");
+                        sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(prio)}]");
                     }
-                    sb.AppendLine($") A[{_fcpf}{ov.FaseCyclus}] |= BIT6;");
+                    sb.AppendLine($") A[{_fcpf}{prio.FaseCyclus}] |= BIT6;");
                 }
             }
 
@@ -1115,22 +1115,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCPrioriteitsOpties(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("/* -------------------------");
-            sb.AppendLine("   Prioriteitsopties voor OV");
-            sb.AppendLine("   ------------------------- */");
+            sb.AppendLine("/* ------------------------------------");
+            sb.AppendLine("   Prioriteitsopties voor PRIO ingrepen");
+            sb.AppendLine("   ------------------------------------ */");
             sb.AppendLine("void PrioriteitsOpties(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPrioriteitsNiveau, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPrioriteitsOpties, true, true, false, true);
 
-            sb.AppendLine($"{ts}#ifdef OV_ADDFILE");
+            sb.AppendLine($"{ts}#ifdef PRIO_ADDFILE");
             sb.AppendLine($"{ts}{ts}PrioriteitsOpties_Add();");
             sb.AppendLine($"{ts}#endif");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPrioriteitsNiveau, false, true, true, true);
 
-            sb.AppendLine($"{ts}#ifdef OV_ADDFILE");
+            sb.AppendLine($"{ts}#ifdef PRIO_ADDFILE");
             sb.AppendLine($"{ts}{ts}PrioriteitsNiveau_Add();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine("}");
@@ -1180,7 +1180,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCAfkappen(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVAfkappenExtra(void)");
+            sb.AppendLine("void PrioAfkappenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCAfkappen, true, true, false, true);
@@ -1193,7 +1193,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCTerugkomGroen(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVTerugkomGroenExtra(void)");
+            sb.AppendLine("void PrioTerugkomGroenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCTerugkomGroen, true, true, false, true);
@@ -1206,7 +1206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCGroenVasthouden(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVGroenVasthoudenExtra(void)");
+            sb.AppendLine("void PrioGroenVasthoudenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCGroenVasthouden, true, true, false, true);
@@ -1219,7 +1219,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCMeetkriterium(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVMeetKriteriumExtra(void)");
+            sb.AppendLine("void PrioMeetKriteriumExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCMeetkriterium, true, true, false, true);
@@ -1273,13 +1273,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCPostAfhandelingOV(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("/* -------------------");
-            sb.AppendLine("   Post afhandeling OV");
-            sb.AppendLine("   ------------------- */");
-            sb.AppendLine("void PostAfhandelingOV(void)");
+            sb.AppendLine("/* ---------------------------");
+            sb.AppendLine("   Post afhandeling prioriteit");
+            sb.AppendLine("   --------------------------- */");
+            sb.AppendLine("void PostAfhandelingPrio(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPostAfhandelingOV, true, true, false, false);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPostAfhandelingPrio, true, true, false, false);
 
             sb.AppendLine("}");
 
@@ -1289,11 +1289,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePrioCPARCorrecties(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("/* -------------------------------------");
-            sb.AppendLine("   OVPARCorrecties corrigeert de PAR van");
+            sb.AppendLine("/* ---------------------------------------");
+            sb.AppendLine("   PrioPARCorrecties corrigeert de PAR van");
             sb.AppendLine("   gesynchroniseerde richtingen.");
-            sb.AppendLine("   ------------------------------------- */");
-            sb.AppendLine("void OVPARCorrecties(void)");
+            sb.AppendLine("   --------------------------------------- */");
+            sb.AppendLine("void PrioPARCorrecties(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPARCorrecties, true, true, false, false);
@@ -1307,29 +1307,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
-            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
-            var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("trt");
-            var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("trthd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
-            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
-            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogbhd");
+            var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriort");
+            var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriorthd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
+            var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovchd");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioblk");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohd");
 
-            sb.AppendLine("/* -----------------------------------------------------");
-            sb.AppendLine("   OVCcol zorgt voor het bijwerken van de CCOL-elementen");
-            sb.AppendLine("   voor het OV.");
-            sb.AppendLine("   ----------------------------------------------------- */");
-            sb.AppendLine("void OVCcol(void) {");
+            sb.AppendLine("/* -------------------------------------------------------");
+            sb.AppendLine("   PrioCcol zorgt voor het bijwerken van de CCOL-elementen");
+            sb.AppendLine("   voor het richtingen met prioriteit.");
+            sb.AppendLine("   ------------------------------------------------------- */");
+            sb.AppendLine("void PrioCcol(void) {");
             foreach (var ov in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}OVCcolElementen(prioFC{GetPriorityName(ov)}, {_tpf}{_tgb}{GetPriorityName(ov)}, {_tpf}{_trt}{GetPriorityName(ov)}, {_hpf}{_hov}{GetPriorityName(ov)}, {_cpf}{_cvc}{GetPriorityName(ov)}, {_tpf}{_tblk}{GetPriorityName(ov)});");
+                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{GetPriorityName(ov)}, {_tpf}{_tgb}{GetPriorityName(ov)}, {_tpf}{_trt}{GetPriorityName(ov)}, {_hpf}{_hov}{GetPriorityName(ov)}, {_cpf}{_cvc}{GetPriorityName(ov)}, {_tpf}{_tblk}{GetPriorityName(ov)});");
             }
             foreach(var hd in c.PrioData.HDIngrepen)
             {
-                sb.AppendLine($"  OVCcolElementen(hdFC{hd.FaseCyclus}, {_tpf}{_tgbhd}{hd.FaseCyclus}, {_tpf}{_trthd}{hd.FaseCyclus}, {_hpf}{_hhd}{hd.FaseCyclus}, {_cpf}{_cvchd}{hd.FaseCyclus}, -1);");
+                sb.AppendLine($"  PrioCcolElementen(hdFC{hd.FaseCyclus}, {_tpf}{_tgbhd}{hd.FaseCyclus}, {_tpf}{_trthd}{hd.FaseCyclus}, {_hpf}{_hhd}{hd.FaseCyclus}, {_cpf}{_cvchd}{hd.FaseCyclus}, -1);");
             }
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPARCcol, true, true, false, false);
@@ -1344,9 +1344,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsivert");
-            var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsilyn");
-            var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsicat");
+            var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsivert");
+            var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsilyn");
+            var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsicat");
             var _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
             var _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
             var _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
@@ -1355,12 +1355,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
 
             sb.AppendLine("/* ----------------------------------------------------------------");
-            sb.AppendLine("   OVSpecialSignals wordt aangeroepen vanuit de functie ");
+            sb.AppendLine("   PrioSpecialSignals wordt aangeroepen vanuit de functie ");
             sb.AppendLine("   is_special_signals. Deze wordt in de testomgeving gebruikt voor ");
             sb.AppendLine("   het opzetten van bijzondere ingangen.");
             sb.AppendLine("   ---------------------------------------------------------------- */");
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
-            sb.AppendLine("void OVSpecialSignals(void)");
+            sb.AppendLine("void PrioSpecialSignals(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCSpecialSignals, false, true, false, true);
@@ -1378,47 +1378,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.PrioData.PrioIngrepen.Any())
             {
-                sb.AppendLine($"{ts}/* OV ingrepen */");
-                foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepKAR()))
+                sb.AppendLine($"{ts}/* Prioriteit ingrepen */");
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepKAR()))
                 {
-                    if (int.TryParse(ov.FaseCyclus, out var ifc))
+                    if (int.TryParse(prio.FaseCyclus, out var ifc))
                     {
                         var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
 
-                        var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                        var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         if (m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{prio.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
-                        m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                        m = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                         if (m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{prio.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                     }
                 }
                 var done = new List<string>();
-                foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepVecom()))
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepVecom()))
                 {
-                    if (int.TryParse(ov.FaseCyclus, out var ifc))
+                    if (int.TryParse(prio.FaseCyclus, out var ifc))
                     {
                         var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
 
-                        foreach (var m in ov.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
+                        foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
                             if (done.Any(x => x == m.RelatedInput1)) continue;
-                            var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
                                 sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
                                 done.Add(m.RelatedInput1);
                             }
                         }
-                        foreach (var m in ov.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
+                        foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
                             if (done.Any(x => x == m.RelatedInput1)) continue;
-                            var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
                                 sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
@@ -1446,7 +1446,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, false, true, false, false);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCSpecialSignals, false, true, false, false);
 
             if (c.Data.PracticeOmgeving)
             {

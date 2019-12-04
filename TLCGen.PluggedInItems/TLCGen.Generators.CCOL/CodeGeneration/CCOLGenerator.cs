@@ -237,8 +237,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
-                        CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.h", sourcefilepath);
                     }
 
                     if (c.InterSignaalGroep.Nalopen.Any())
@@ -278,10 +278,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         CopySourceIfNeeded(c, "halfstar.c", sourcefilepath);
                         CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_ov.h", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_help.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_help.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_prio.h", sourcefilepath);
                     }
 
                     if (c.Fasen.Any(x => x.WachttijdVoorspeller))
