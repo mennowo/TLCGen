@@ -13,13 +13,13 @@ namespace TLCGen.Models
         public string FaseCyclus { get; set; }
         public int VAOntrMax { get; set; }
         public bool KijkNaarWisselstand { get; set; }
-        public OVIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
+        public PrioIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
         [HasDefault(false)]
         public string Wissel1Input { get; set; }
         [HasDefault(false)]
         public string Wissel1Detector { get; set; }
         public bool Wissel2 { get; set; }
-        public OVIngreepInUitDataWisselTypeEnum Wissel2Type { get; set; }
+        public PrioIngreepInUitDataWisselTypeEnum Wissel2Type { get; set; }
         [HasDefault(false)]
         public string Wissel2Input { get; set; }
         [HasDefault(false)]

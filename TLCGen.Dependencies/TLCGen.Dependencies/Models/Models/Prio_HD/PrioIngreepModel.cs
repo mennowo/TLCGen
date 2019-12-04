@@ -21,7 +21,7 @@ namespace TLCGen.Models
         //[Obsolete("This property has been deprecated: use Meldingen instead.")]
         public bool Vecom { get; set; }
         
-        public OVIngreepVoertuigTypeEnum Type { get; set; }
+        public PrioIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
         public bool NoodaanvraagKoplus { get; set; }
         public bool KoplusKijkNaarWisselstand { get; set; }

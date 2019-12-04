@@ -85,13 +85,13 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public bool IsWissel1Ingang => Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel1Ingang => Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
         [Browsable(false)]
-        public bool IsWissel2Ingang => Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel2Ingang => Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
         [Browsable(false)]
-        public bool IsWissel1Detector => Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector;
+        public bool IsWissel1Detector => Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector;
         [Browsable(false)]
-        public bool IsWissel2Detector => Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector;
+        public bool IsWissel2Detector => Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector;
 
         [Category("Wissels")]
         [Description("Wissel 1")]
@@ -107,7 +107,7 @@ namespace TLCGen.ViewModels
         }
 
         [Description("Wissel 1 type")]
-        public OVIngreepInUitDataWisselTypeEnum Wissel1Type
+        public PrioIngreepInUitDataWisselTypeEnum Wissel1Type
         {
             get => PrioIngreepMeldingenData.Wissel1Type;
             set
@@ -174,7 +174,7 @@ namespace TLCGen.ViewModels
         }
 
         [Description("Wissel 2 type")]
-        public OVIngreepInUitDataWisselTypeEnum Wissel2Type
+        public PrioIngreepInUitDataWisselTypeEnum Wissel2Type
         {
             get => PrioIngreepMeldingenData.Wissel2Type;
             set
@@ -320,11 +320,11 @@ namespace TLCGen.ViewModels
 
             var sd1 = "";
             var sd2 = "";
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
             {
                 sd1 = Wissel1Detector;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
             {
                 sd2 = Wissel2Detector;
             }
@@ -340,11 +340,11 @@ namespace TLCGen.ViewModels
                 WisselDetectoren.Add(d.Naam);
             }
 
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
+            if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
             {
                 Wissel1Detector = sd1;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
+            if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
             {
                 Wissel2Detector = sd2;
             }
@@ -354,11 +354,11 @@ namespace TLCGen.ViewModels
         {
             var sd1 = "";
             var sd2 = "";
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+            if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
             {
                 sd1 = Wissel1Input;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+            if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
             {
                 sd2 = Wissel2Input;
             }
@@ -369,11 +369,11 @@ namespace TLCGen.ViewModels
                 WisselInputs.Add(seld.Naam);
             }
 
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
+            if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
             {
                 Wissel1Input = sd1;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
+            if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
             {
                 Wissel2Input = sd2;
             }

@@ -178,8 +178,8 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabViewModel.cs">
       <DependentUpon>HDIngrepenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabView.xaml.cs">
-      <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabView.xaml.cs">
+      <DependentUpon>HDOverzichtTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitsTab.xaml.cs">
       <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
@@ -187,7 +187,9 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitTabViewModel.cs">
       <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabViewModel.cs">
+      <DependentUpon>HDOverzichtTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml.cs">
       <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
     </Compile>
@@ -621,7 +623,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\OVOverzichtTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

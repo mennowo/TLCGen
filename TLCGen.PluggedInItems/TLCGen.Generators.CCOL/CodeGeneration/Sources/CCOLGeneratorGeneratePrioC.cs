@@ -272,39 +272,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogb");
-            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogbhd");
-            var _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriorto");
-            var _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortbg");
-            var _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortg");
-            var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortohd");
-            var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortbghd");
-            var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriortghd");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioov");
-            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
-            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovuit");
-            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohduit");
-            var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioprio");
-            var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopriohd");
-            var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioomx");
-            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioblk");
-            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schprioupinagb");
-            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schprioupinagbhd");
-            var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwta");
-            var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwtfts");
-            var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomwtvtg");
-            var _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopmgt");
-            var _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioognt");
-            var _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprionofm");
-            var _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriomgcov");
-            var _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriopmgcov");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
+            var _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto");
+            var _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg");
+            var _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg");
+            var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtohd");
+            var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbghd");
+            var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtghd");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
+            var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio");
+            var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
+            var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
+            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagb");
+            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagbhd");
+            var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwta");
+            var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtfts");
+            var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtvtg");
+            var _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgt");
+            var _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmognt");
+            var _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmnofm");
+            var _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmgcov");
+            var _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgcov");
             var _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
             var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
             var _schaltghst = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltghst");
-            var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioohpmg");
+            var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
             var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
@@ -813,12 +813,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriobtovg");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
-            var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriovi");
-            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriogeenwissel");
-            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriowisselpol");
-            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriowissel");
+            var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
+            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -988,22 +988,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
-            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovuit");
-            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohduit");
-            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriocprio");
-            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriolaatcrit");
-            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprioallelijnen");
-            var _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriodhkarin");
-            var _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriodhkaruit");
-            var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriokarmelding");
-            var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriokarog");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
-            var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioovminrood");
-            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriowissel");
-            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriogeenwissel");
-            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriowisselpol");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
+            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
+            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
+            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
+            var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
+            var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tovminrood");
+            var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
@@ -1307,16 +1305,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogb");
-            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriogbhd");
-            var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriort");
-            var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("tpriorthd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
-            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
-            var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovchd");
-            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tprioblk");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioov");
-            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriohd");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
+            var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("trt");
+            var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("trthd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
 
             sb.AppendLine("/* -------------------------------------------------------");
             sb.AppendLine("   PrioCcol zorgt voor het bijwerken van de CCOL-elementen");
@@ -1344,15 +1342,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsivert");
-            var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsilyn");
-            var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriotestdsicat");
-            var _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
-            var _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
-            var _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
-            var _ddummykarhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhduit");
-            var _ddummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomin");
-            var _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
+            var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsivert");
+            var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsilyn");
+            var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsicat");
 
             sb.AppendLine("/* ----------------------------------------------------------------");
             sb.AppendLine("   PrioSpecialSignals wordt aangeroepen vanuit de functie ");
@@ -1386,7 +1378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
 
                         var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                        var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         if (m != null)
                         {
                             sb.AppendLine($"{ts}if (SD[{_dpf}{prio.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
@@ -1408,7 +1400,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
                             if (done.Any(x => x == m.RelatedInput1)) continue;
-                            var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
                                 sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
@@ -1418,7 +1410,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
                             if (done.Any(x => x == m.RelatedInput1)) continue;
-                            var type = prio.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                             if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
                             {
                                 sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");

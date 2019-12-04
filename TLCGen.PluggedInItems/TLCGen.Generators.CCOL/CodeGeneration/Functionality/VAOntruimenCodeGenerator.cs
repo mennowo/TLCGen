@@ -79,15 +79,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append($"{ts}if (!(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING)");
                                 if (va.KijkNaarWisselstand &&
-                                    (((va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel1Input)) ||
-                                       (va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel1Detector))) ||
+                                    (((va.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel1Input)) ||
+                                       (va.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel1Detector))) ||
                                      (va.Wissel2 &&
-                                      ((va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel2Input)) ||
-                                       (va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel2Detector))))))
+                                      ((va.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel2Input)) ||
+                                       (va.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel2Detector))))))
                                 {
                                     if (va.KijkNaarWisselstand)
                                     {
-                                        if (va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                        if (va.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
                                         {
                                             sb.Append(va.Wissel1InputVoorwaarde ?
                                                 $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel1Input}] ? !IS[{_ispf}{va.Wissel1Input}] : IS[{_ispf}{va.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Input}])" :
@@ -100,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     if (va.Wissel2)
                                     {
-                                        if (va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                        if (va.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
                                         {
                                             sb.Append(va.Wissel2InputVoorwaarde ?
                                                 $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel2Input}] ? !IS[{_ispf}{va.Wissel2Input}] : IS[{_ispf}{va.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel2Input}])" :

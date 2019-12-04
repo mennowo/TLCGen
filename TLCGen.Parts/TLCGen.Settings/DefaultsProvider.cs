@@ -72,7 +72,7 @@ namespace TLCGen.Settings
             _Default = provider;
         }
 
-        public string GetVehicleTypeAbbreviation(OVIngreepVoertuigTypeEnum type)
+        public string GetVehicleTypeAbbreviation(PrioIngreepVoertuigTypeEnum type)
         {
             var t = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == type);
             return t?.Setting ?? "UNKNOWN_VEHICLE_TYPE";
@@ -226,27 +226,27 @@ namespace TLCGen.Settings
             string defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             if (Defaults != null && File.Exists(defsetfile))
             {
-                foreach(var vtgT in Enum.GetValues(typeof(OVIngreepVoertuigTypeEnum)))
+                foreach(var vtgT in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
                 {
-                    var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (OVIngreepVoertuigTypeEnum)vtgT);
+                    var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (PrioIngreepVoertuigTypeEnum)vtgT);
                     if(vtgTSet == null)
                     {
-                        switch ((OVIngreepVoertuigTypeEnum)vtgT)
+                        switch ((PrioIngreepVoertuigTypeEnum)vtgT)
                         {
-                            case OVIngreepVoertuigTypeEnum.Tram:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "tram", Setting = "tram" });
+                            case PrioIngreepVoertuigTypeEnum.Tram:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "tram", Setting = "tram" });
                                 break;
-                            case OVIngreepVoertuigTypeEnum.Bus:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "bus", Setting = "bus" });
+                            case PrioIngreepVoertuigTypeEnum.Bus:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "bus", Setting = "bus" });
                                 break;
-                            case OVIngreepVoertuigTypeEnum.Fiets:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "fts", Setting = "fts" });
+                            case PrioIngreepVoertuigTypeEnum.Fiets:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "fts", Setting = "fts" });
                                 break;
-                            case OVIngreepVoertuigTypeEnum.Vrachtwagen:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "vrw", Setting = "vrw" });
+                            case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "vrw", Setting = "vrw" });
                                 break;
-                            case OVIngreepVoertuigTypeEnum.NG:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (OVIngreepVoertuigTypeEnum)vtgT, Default = "alg", Setting = "alg" });
+                            case PrioIngreepVoertuigTypeEnum.NG:
+                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "alg", Setting = "alg" });
                                 break;
                         }
                     }

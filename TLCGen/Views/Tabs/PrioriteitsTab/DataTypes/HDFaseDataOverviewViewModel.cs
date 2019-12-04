@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
 		private OVIngreepViewModel _OVIngreep;
 		private HDIngreepViewModel _HDIngreep;
 		private ControllerModel _controller;
-		private OVOverzichtTabViewModel _overVM;
+		private HDOverzichtTabViewModel _overVM;
 
 		#endregion // Fields
 
@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
 
 		#region Constructor
 
-		public OVHDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, OVOverzichtTabViewModel overvm, ControllerModel controller)
+		public OVHDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, HDOverzichtTabViewModel overvm, ControllerModel controller)
 		{
 			_faseCyclus = faseCyclus;
 			_controller = controller;
