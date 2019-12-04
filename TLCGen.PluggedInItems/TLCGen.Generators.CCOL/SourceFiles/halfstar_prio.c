@@ -9,7 +9,7 @@
 /*                                                                                        */
 /* Versie :  2.1                                                                          */
 /*           Integratie met uitgebreide OV module CCOL Generator                          */
-/* Naam   :  ov_ple.h                                                                     */
+/* Naam   :  PRIO_ple.h                                                                     */
 /* Datum  :  05-12-2017                                                                   */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
@@ -59,16 +59,16 @@ extern mulv test_pr_fk_totxb(count i, bool fpr);  /* standaard CCOL functie uit 
 
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: set_pg_primair_ov_ple()                                                       */
+/* Functie: set_pg_primair_PRIO_ple()                                                       */
 /*                                                                                        */
-/* Doel:    set_pg_primair_ov_ple() is een aangepaste versie van de CCOL set_pg_primair() */
+/* Doel:    set_pg_primair_PRIO_ple() is een aangepaste versie van de CCOL set_pg_primair() */
 /*          functie. De originele functie houdt geen rekening met het uitstellen van      */
 /*          realisaties tot het uiterste realisatiemoment voor TXD                        */
 /*                                                                                        */
 /* Params:  i     Fasecyclus                                                              */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-mulv set_pg_primair_ov_ple(count i)
+mulv set_pg_primair_PRIO_ple(count i)
 {
 	register count n, k;
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
@@ -129,7 +129,7 @@ mulv set_pg_primair_ov_ple(count i)
 		}
 #endif
 
-		if ((RR[i] & OV_PLE_BIT) || (BL[i] & OV_PLE_BIT)) /* uitstel tot "kort" voor TXD moment */
+		if ((RR[i] & PRIO_PLE_BIT) || (BL[i] & PRIO_PLE_BIT)) /* uitstel tot "kort" voor TXD moment */
 		{
 			if ((TOTXB_PL[i] == 0) && (TOTXD_PL[i] > 0) && ((TOTXD_PL[i] - to_max) < 0))
 			{
@@ -166,26 +166,26 @@ mulv set_pg_primair_ov_ple(count i)
 }
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: set_pg_primair_fc_ov_ple()                                                    */
+/* Functie: set_pg_primair_fc_PRIO_ple()                                                    */
 /*                                                                                        */
-/* Doel:    set_pg_primair_fc_ov_ple() is een aangepaste versie van de CCOL               */
-/*          set_pg_primair_fc() functie. De functie set_pg_primair_fc_ov_ple() roept voor */
-/*          alle fasecycli de functie set_pg_primair_ov_ple() aan.                        */
+/* Doel:    set_pg_primair_fc_PRIO_ple() is een aangepaste versie van de CCOL               */
+/*          set_pg_primair_fc() functie. De functie set_pg_primair_fc_PRIO_ple() roept voor */
+/*          alle fasecycli de functie set_pg_primair_PRIO_ple() aan.                        */
 /*                                                                                        */
 /* Params:  geen                                                                          */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void set_pg_primair_fc_ov_ple(void)
+void set_pg_primair_fc_PRIO_ple(void)
 {
 	register count i;
 
 	for (i = 0; i < FC_MAX; i++)
 	{
-		set_pg_primair_ov_ple(i);
+		set_pg_primair_PRIO_ple(i);
 	}
 }
 
-void set_pg_fk_totxb_ov_ple(count i)
+void set_pg_fk_totxb_PRIO_ple(count i)
 {
 	register count n, k;
 
@@ -206,12 +206,12 @@ void set_pg_fk_totxb_ov_ple(count i)
 }
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: set_PRPL_ov_ple()                                                             */
+/* Functie: set_PRPL_PRIO_ple()                                                             */
 /*                                                                                        */
-/* Doel:    set_PRPL_ov_ple() is een aangepaste versie van de CCOL set_PRPL() functie     */
+/* Doel:    set_PRPL_PRIO_ple() is een aangepaste versie van de CCOL set_PRPL() functie     */
 /*          De originele functie houdt geen rekening met het uitstellen van realisaties   */
 /*          tot het uiterste realisatiemoment voor TXD                                    */
-/*          set_PRPL_ov_ple() bepaalt tijdens de primaire ruimte van een richting of er   */
+/*          set_PRPL_PRIO_ple() bepaalt tijdens de primaire ruimte van een richting of er   */
 /*          sprake is van tegehouden tbv OV prioriteit en zet de AA[] en PR[] van een     */
 /*          richting die wordt tegengehouden wel op als er een aanvraag is                */
 /*                                                                                        */
@@ -219,7 +219,7 @@ void set_pg_fk_totxb_ov_ple(count i)
 /*          fpr   voorwaarde versnelde realisatie                                         */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-bool set_PRPL_ov_ple(count i, bool fpr)
+bool set_PRPL_PRIO_ple(count i, bool fpr)
 {
 	mulv result = 0;
 
@@ -250,10 +250,10 @@ bool set_PRPL_ov_ple(count i, bool fpr)
 
 	/* (versneld) primaire realisatie */
 	/* ------------------------------ */
-	if (A[i] && RV[i] && !SRV[i] && !AA[i] && !RR_PL[i] && (!RR[i] || (RR[i] & OV_PLE_BIT)) && (!BL[i] || (BL[i] & OV_PLE_BIT))
+	if (A[i] && RV[i] && !SRV[i] && !AA[i] && !RR_PL[i] && (!RR[i] || (RR[i] & PRIO_PLE_BIT)) && (!BL[i] || (BL[i] & PRIO_PLE_BIT))
 		&& !PG[i] && !fkaa_primair(i) && ((TOTXB_PL[i] > 0) && !kcv(i)   /* @@ */
 			|| (TXB_PL[i] == TX_PL_timer)
-			|| ((TOTXB_PL[i] == 0 && TOTXD_PL[i] > TFG_max[i]/* && (RR[i]&OV_PLE_BIT)*/))))  /* DHV CvB toegevoegd ivm uitstellen conflicten door OV */
+			|| ((TOTXB_PL[i] == 0 && TOTXD_PL[i] > TFG_max[i]/* && (RR[i]&PRIO_PLE_BIT)*/))))  /* DHV CvB toegevoegd ivm uitstellen conflicten door OV */
 						   /* 12-9-1998 ivm TXA==TXB @@ */
 							/* geen test op !TRG[i] @@ */
 							/* 1-1-1999 toegevoegd !SRV[i] */
@@ -268,7 +268,7 @@ bool set_PRPL_ov_ple(count i, bool fpr)
 		case VERSNELD_PRIMAIR:
 			AA[i] |= TRUE;
 			PR[i] |= VERSNELD_PRIMAIR;
-			set_pg_fk_totxb_ov_ple(i);  /* set PG voor fictieve conflicten */
+			set_pg_fk_totxb_PRIO_ple(i);  /* set PG voor fictieve conflicten */
 			break;
 		}
 		if (result)  return ((bool)TRUE);
@@ -279,28 +279,28 @@ bool set_PRPL_ov_ple(count i, bool fpr)
 
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: set_pg_primair_fc_ov_ple()                                                    */
+/* Functie: set_pg_primair_fc_PRIO_ple()                                                    */
 /*                                                                                        */
-/* Doel:    set_pg_primair_fc_ov_ple() is een aangepaste versie van de CCOL functie       */
-/*          set_pg_primair_fc(). De functie set_pg_primair_fc_ov_ple() roept voor         */
-/*          alle fasecycli de functie set_pg_primair_ov_ple() aan.                        */
+/* Doel:    set_pg_primair_fc_PRIO_ple() is een aangepaste versie van de CCOL functie       */
+/*          set_pg_primair_fc(). De functie set_pg_primair_fc_PRIO_ple() roept voor         */
+/*          alle fasecycli de functie set_pg_primair_PRIO_ple() aan.                        */
 /*                                                                                        */
 /* Params:  geen                                                                          */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void signaalplan_primair_ov_ple(void)
+void signaalplan_primair_PRIO_ple(void)
 {
 	register count i;
 
 	for (i = 0; i < FC_MAX; i++)
 	{
-		set_PRPL_ov_ple(i, (bool)TRUE);  /* TRUE -> versneld primair */
+		set_PRPL_PRIO_ple(i, (bool)TRUE);  /* TRUE -> versneld primair */
 	}
 
 }
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: OV_ple_init()                                                                 */
+/* Functie: PRIO_ple_init()                                                                 */
 /*                                                                                        */
 /* Doel:    Initialiseren instellingen t.b.v. prioriteit                                  */
 /*                                                                                        */
@@ -354,7 +354,7 @@ int OVHalfstarBepaalPrioriteitsOpties(int prm_prio) {
 
 
 /* -------------------------------------------------------------------------------------- */
-/* Functie: OV_ple_BepaalHoofdrichtingOpties()                                            */
+/* Functie: PRIO_ple_BepaalHoofdrichtingOpties()                                            */
 /*                                                                                        */
 /* Doel:    Instellingen voor hoofdrichtingen bepalen                                     */
 /*                                                                                        */
@@ -664,7 +664,7 @@ void OVHalfstarTegenhouden(void)
 
 		for (fc = 0; fc < FCMAX; ++fc)
 		{
-			RR[fc] &= ~OV_RR_BIT;
+			RR[fc] &= ~PRIO_RR_BIT;
 		}
 
 		for (prio = 0; prio < prioFCMAX; ++prio)
@@ -685,7 +685,7 @@ void OVHalfstarTegenhouden(void)
 					{
 						if (iStartGroen[prio] <= iRealisatieTijd[fc][k])
 						{
-							RR[k] |= OV_RR_BIT;
+							RR[k] |= PRIO_RR_BIT;
 						}
 					}
 				}
@@ -721,15 +721,15 @@ void OVHalfstarGroenVasthouden(void)
 
 			fc = iFC_PRIOix[prio];
 			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
-			// Reset OV_YV_BIT, will determine YV according to signalplan structure
-			YV[fc] &= ~OV_YV_BIT;
-			YM[fc] &= ~OV_YM_BIT;
+			// Reset PRIO_YV_BIT, will determine YV according to signalplan structure
+			YV[fc] &= ~PRIO_YV_BIT;
+			YM[fc] &= ~PRIO_YM_BIT;
 
 			if (iPrioriteit[prio] &&
 				(iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) {
 
 				if (G[fc] && (iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]) && magUitstellen) {
-					YV[fc] |= OV_YV_BIT;
+					YV[fc] |= PRIO_YV_BIT;
 				}
 				if (!magUitstellen)
 					iWachtOpKonflikt[prio] = TRUE;
@@ -749,8 +749,8 @@ void OVHalfstarMeetKriterium(void)
 			fc = iFC_PRIOix[prio];
 			iRestGroen = 0;
 
-			// Reset OV_MK_BIT, will determine MK according to signalplan structure
-			MK[fc] &= ~OV_MK_BIT;
+			// Reset PRIO_MK_BIT, will determine MK according to signalplan structure
+			MK[fc] &= ~PRIO_MK_BIT;
 
 			if (G[fc])
 			{
@@ -778,7 +778,7 @@ void OVHalfstarMeetKriterium(void)
 						((iGroenBewakingsTijd[prio] - iGroenBewakingsTimer[prio]) <= iRestGroen)))
 				{
 					if (G[fc] && (StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio])))
-						MK[fc] |= OV_MK_BIT;
+						MK[fc] |= PRIO_MK_BIT;
 					else
 						MK[fc] = 0;
 				}

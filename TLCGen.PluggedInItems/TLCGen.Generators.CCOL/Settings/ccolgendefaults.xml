@@ -1785,7 +1785,7 @@
             <Default>priocovuber</Default>
             <Setting>covuber</Setting>
             <Type>Schakelaar</Type>
-            <Description>Weergeven wijzigingen OV_teller via CIF_UBER</Description>
+            <Description>Weergeven wijzigingen PRIO_teller via CIF_UBER</Description>
           </Setting>
         </Settings>
       </CodePieceData>

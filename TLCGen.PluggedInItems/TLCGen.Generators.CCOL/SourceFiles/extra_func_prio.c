@@ -1,6 +1,6 @@
 #include "extra_func_prio.h"
 
-bool DSIMeldingOV_V1(
+bool DSIMeldingPRIO_V1(
 	count dslus,
 	count vtgtype,
 	bool checkfcnmr,
@@ -21,7 +21,7 @@ bool DSIMeldingOV_V1(
 	return TRUE;
 }
 
-bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
+bool DSIMeldingPRIO_LijnNummer_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;
 	if (PRM[lijnparm]) return TRUE;
@@ -33,7 +33,7 @@ bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
 	return FALSE;
 }
 
-bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
+bool DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;
 	if (PRM[lijnparm]) return TRUE;
@@ -126,10 +126,10 @@ void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], c
 }
 
 /**
- Functie : OV_teller
- Functionele omschrijving : Bij wijziging van OV_teller wordt deze in CIF_UBER geschreven.
+ Functie : PRIO_teller
+ Functionele omschrijving : Bij wijziging van PRIO_teller wordt deze in CIF_UBER geschreven.
  **/
-void OV_teller(count cov, count scov)
+void PRIO_teller(count cov, count scov)
 {
 	if (scov == NG || SCH[scov])
 	{
@@ -188,7 +188,7 @@ void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stip
 
 #endif
 
-#ifdef OV_CHECK_WAGENNMR
+#ifdef PRIO_CHECK_WAGENNMR
 
 /* Check op wagendienstnummer openbaar vervoer */
 #define WDNSTlist 10    /* maximaal 10 wagendienstnummers onthouden (IN, VOOR) */
@@ -350,4 +350,4 @@ bool WDNST_check_uit(count fc)
 	return WDNSTbestaatniet;
 }
 
-#endif // OV_CHECK_WAGENNMR
+#endif // PRIO_CHECK_WAGENNMR

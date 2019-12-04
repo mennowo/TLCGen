@@ -104,7 +104,7 @@ __ELSE__      <AdditionalLibraryDirectories>__CCOLLIBSDIRNOTIG__</AdditionalLibr
   <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__sys.h" />
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
-__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
+__IF;PRIO__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
     <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />

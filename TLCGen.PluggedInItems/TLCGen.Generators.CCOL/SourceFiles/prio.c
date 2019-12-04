@@ -288,15 +288,15 @@ void PrioTimers(void)
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
-        Z[fc] &= ~OV_Z_BIT;
-        FM[fc] &= ~OV_FM_BIT;
-        RW[fc] &= ~OV_RW_BIT;
-        RR[fc] &= ~OV_RR_BIT;
-        YV[fc] &= ~OV_YV_BIT;
-		YM[fc] &= ~OV_YM_BIT;
-		MK[fc] &= ~OV_MK_BIT;
-        PP[fc] &= ~OV_PP_BIT;
-        RTFB &= ~OV_RTFB_BIT;
+        Z[fc] &= ~PRIO_Z_BIT;
+        FM[fc] &= ~PRIO_FM_BIT;
+        RW[fc] &= ~PRIO_RW_BIT;
+        RR[fc] &= ~PRIO_RR_BIT;
+        YV[fc] &= ~PRIO_YV_BIT;
+		YM[fc] &= ~PRIO_YM_BIT;
+		MK[fc] &= ~PRIO_MK_BIT;
+        PP[fc] &= ~PRIO_PP_BIT;
+        RTFB &= ~PRIO_RTFB_BIT;
 
         if (G[fc])
         {
@@ -1290,7 +1290,7 @@ void PrioAanvragen(void)
 																															   zodat conflictrichtingen niet nogmaals kan realiseren 
 																															   als er afgekapt is */
         {
-            A[fc] |= !(EG[fc] || GL[fc]) ? OV_A_BIT : 0; /* R[fc] vervangen door !(EG[fc] || GL[fc]) 15-2-2016 */
+            A[fc] |= !(EG[fc] || GL[fc]) ? PRIO_A_BIT : 0; /* R[fc] vervangen door !(EG[fc] || GL[fc]) 15-2-2016 */
         }
     }
 }
@@ -1360,7 +1360,7 @@ void TegenHoudenStartGroen(int fc, int iStartGroenFC)
 #endif
         if (iStartGroenFC <= iRealisatieTijd[fc][k])
         {
-            RR[k] |= OV_RR_BIT;
+            RR[k] |= PRIO_RR_BIT;
         }
     }
 }
@@ -1404,7 +1404,7 @@ void PrioTegenhouden(void)
             TegenHoudenStartGroen(fc, iStartGroen[prio]);
             if (iPrioriteitsOpties[prio] & poNoodDienst)
             {
-                RTFB |= OV_RTFB_BIT;
+                RTFB |= PRIO_RTFB_BIT;
             }
         }
     }
@@ -1440,7 +1440,7 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #endif
             ))
         {
-            Z[k] |= OV_Z_BIT;
+            Z[k] |= PRIO_Z_BIT;
             if (PR[k] && CV[k])
             {
                 iAantalMalenNietAfkappen[k] = iInstAantalMalenNietAfkappen[k];
@@ -1482,7 +1482,7 @@ void AfkappenMG(int fc, int iStartGr)
 #endif
 		)
         {
-            Z[k] |= OV_Z_BIT;
+            Z[k] |= PRIO_Z_BIT;
         }
     }
 }
@@ -1554,7 +1554,7 @@ void PrioAfkappen(void)
                 ka(fc) &&
                 !iPrioriteit[prio]) /* toevoeging Ane 20100204 ikv. niet afbreken fc wanneer fc prioriteit moet hebben  */
             {
-                FM[fc] |= OV_FM_BIT;
+                FM[fc] |= PRIO_FM_BIT;
             }
         }
         if (EG[fc] && !MK[fc] && !iTerugKomen[fc] || R[fc] && !TRG[fc] && !A[fc])
@@ -1667,7 +1667,7 @@ void PrioAfkappen(void)
         }
         if (iTerugKomen[fc])
         {
-            if (G[fc] && !(Z[fc] & OV_Z_BIT) && !(FM[fc] & OV_FM_BIT))
+            if (G[fc] && !(Z[fc] & PRIO_Z_BIT) && !(FM[fc] & PRIO_FM_BIT))
             {
                 /* Konflikterende prioriteit is ingetrokken
                    Er is dus niet langer reden richting fc
@@ -1676,11 +1676,11 @@ void PrioAfkappen(void)
                    in de huidige realisatie worden afgemaakt. */
                 iPercMGOphogen[fc] = FALSE;
                 iTerugKomen[fc] = FALSE;
-                RW[fc] |= OV_RW_BIT;
+                RW[fc] |= PRIO_RW_BIT;
             }
             if ((PG[fc] || !G[fc]) && (GL[fc] || TRG[fc] || A[fc]))
             {
-                PP[fc] |= OV_PP_BIT;
+                PP[fc] |= PRIO_PP_BIT;
                 if (PG[fc])
                 {
                     PG[fc] = 0;
@@ -1778,8 +1778,8 @@ void PrioGroenVasthouden(void)
             fc = iFC_PRIOix[prio];
             if (iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio])
             {
-				if (MG[fc]) YM[fc] |= OV_YM_BIT; /* toevoeging Ane, 2019-08-05: aangepast van RW naar YM door Menno */
-                YV[fc] |= OV_YV_BIT;
+				if (MG[fc]) YM[fc] |= PRIO_YM_BIT; /* toevoeging Ane, 2019-08-05: aangepast van RW naar YM door Menno */
+                YV[fc] |= PRIO_YV_BIT;
                 /* 15-02-2017 Werner : FM bit van alternatieven intrekken, om 'flipperen' te voorkomen */ 
                 /*                     we willen het groen vasthouden en niet be?indigen!              */
                 FM[fc] &= ~BIT5;
@@ -1824,7 +1824,7 @@ void PrioMeetKriterium(void)
                  iAantalInmeldingen[prio]>0 && !ka(fc)) &&
                 iGroenBewakingsTijd[prio] - iGroenBewakingsTimer[prio] <= iRestGroen)
             {
-                MK[fc] |= OV_MK_BIT;
+                MK[fc] |= PRIO_MK_BIT;
             }
             else
             {
@@ -1855,7 +1855,7 @@ void PrioAlternatieven(void)
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
-        PAR[fc] &= ~OV_PAR_BIT;
+        PAR[fc] &= ~PRIO_PAR_BIT;
         FM[fc] &= ~BIT4;
         RR[fc] &= ~BIT4;
     }
@@ -1877,7 +1877,7 @@ void PrioAlternatieven(void)
                     if (TO_max[fc][iFC_PRIOix[prio]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #endif
                     {
-                        PAR[fc] |= (((max_tar_ov(fc, iFC_PRIOix[prio], iT_GBix[prio], iH_PRIOix[prio], END) >= iPRM_ALTP[fc])) && iSCH_ALTG[fc]) ? OV_PAR_BIT : 0;
+                        PAR[fc] |= (((max_tar_ov(fc, iFC_PRIOix[prio], iT_GBix[prio], iH_PRIOix[prio], END) >= iPRM_ALTP[fc])) && iSCH_ALTG[fc]) ? PRIO_PAR_BIT : 0;
                     }
 
                     iLWAlt |= PAR[fc];
@@ -1894,7 +1894,7 @@ void PrioAlternatieven(void)
 					if (TO_max[fc][iFC_PRIOix[prio]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #endif
                     {
-                        PAR[fc] |= (IH[iH_PRIOix[prio]] && R[iFC_PRIOix[prio]] && iSCH_ALTG[fc]) ? OV_PAR_BIT : 0;
+                        PAR[fc] |= (IH[iH_PRIOix[prio]] && R[iFC_PRIOix[prio]] && iSCH_ALTG[fc]) ? PRIO_PAR_BIT : 0;
                     }
                 }
             }
@@ -1908,7 +1908,7 @@ void PrioAlternatieven(void)
     for (fc = 0; fc < FCMAX; ++fc)
     { 
         /* Resetten RR Bit 5 als PAR alsnog wordt opgezet door OV */
-        if ((PAR[fc] & OV_PAR_BIT) && R[fc] && !ERA[fc]) RR[fc] &= ~BIT5;
+        if ((PAR[fc] & PRIO_PAR_BIT) && R[fc] && !ERA[fc]) RR[fc] &= ~BIT5;
     }
     langstwachtende_alternatief_bit6();
     for (fc = 0; fc < FCMAX; ++fc)

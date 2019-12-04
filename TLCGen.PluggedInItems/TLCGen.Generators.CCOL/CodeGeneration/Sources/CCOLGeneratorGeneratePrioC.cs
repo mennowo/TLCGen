@@ -88,7 +88,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
             if (c.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
             {
-                sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
+                sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
             }
             sb.AppendLine($"{ts}#include \"extra_func_prio.h\"");
             if (c.Data.PracticeOmgeving)
