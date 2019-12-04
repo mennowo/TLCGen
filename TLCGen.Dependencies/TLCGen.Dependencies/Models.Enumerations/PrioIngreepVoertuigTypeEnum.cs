@@ -4,9 +4,12 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepWisselTypeEnum
+    public enum PrioIngreepVoertuigTypeEnum
     {
-        Detector,
-        Ingang
+        Tram,
+        Bus,
+        Fiets,
+        Vrachtwagen,
+        NG
     }
 }

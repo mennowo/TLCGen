@@ -3,11 +3,11 @@
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for FasenOVTabView.xaml
+    /// Interaction logic for HDIngrepenTabView.xaml
     /// </summary>
-    public partial class OVFasenTabView : UserControl
+    public partial class HDIngrepenTabView : UserControl
     {
-        public OVFasenTabView()
+        public HDIngrepenTabView()
         {
             InitializeComponent();
         }

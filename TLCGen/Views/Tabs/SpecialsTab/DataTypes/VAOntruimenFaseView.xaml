@@ -71,7 +71,7 @@
             <Label Content="Wissel type" Grid.Row="0" />
             <ComboBox 
                             IsEnabled="{Binding Path=HasWissel1}" Margin="2"
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
                             SelectedItem="{Binding Path=Wissel1Type}" Grid.Row="0" Grid.Column="1" />
 
             <Label Content="Wissel ingang" Grid.Row="1" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
@@ -99,7 +99,7 @@
             <Label Content="Wissel 2 type" Grid.Row="4" />
             <ComboBox 
                             IsEnabled="{Binding Path=HasWissel2}" Margin="2"
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
                             SelectedItem="{Binding Path=Wissel2Type}" Grid.Row="4" Grid.Column="1" />
 
             <Label Content="Wissel 2 ingang" Grid.Row="5" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />

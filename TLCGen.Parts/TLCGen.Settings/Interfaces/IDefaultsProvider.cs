@@ -15,6 +15,6 @@ namespace TLCGen.Settings
         void SaveSettings();
 
         void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null, bool onlyvalues = true);
-        string GetVehicleTypeAbbreviation(OVIngreepVoertuigTypeEnum type);
+        string GetVehicleTypeAbbreviation(PrioIngreepVoertuigTypeEnum type);
     }
 }

@@ -19,10 +19,10 @@ namespace TLCGen.ViewModels
 {
     public class FaseCyclusWithPrioViewModel : ViewModelBase
     {
-        public bool HasBus => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == OVIngreepVoertuigTypeEnum.Bus);
-        public bool HasTram => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == OVIngreepVoertuigTypeEnum.Tram);
-        public bool HasBicycle => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == OVIngreepVoertuigTypeEnum.Fiets);
-        public bool HasTruck => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == OVIngreepVoertuigTypeEnum.Vrachtwagen);
+        public bool HasBus => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Bus);
+        public bool HasTram => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Tram);
+        public bool HasBicycle => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
+        public bool HasTruck => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
 
         public string Naam { get; }
 
@@ -90,10 +90,10 @@ namespace TLCGen.ViewModels
                     {
                         Ingrepen.Add(new OVIngreepViewModel(ig));
                     }
-                    var selType = OVIngreepVoertuigTypeEnum.Bus;
-                    if (SelectedTram) selType = OVIngreepVoertuigTypeEnum.Tram;
-                    if (SelectedTruck) selType = OVIngreepVoertuigTypeEnum.Vrachtwagen;
-                    if (SelectedBicycle) selType = OVIngreepVoertuigTypeEnum.Fiets;
+                    var selType = PrioIngreepVoertuigTypeEnum.Bus;
+                    if (SelectedTram) selType = PrioIngreepVoertuigTypeEnum.Tram;
+                    if (SelectedTruck) selType = PrioIngreepVoertuigTypeEnum.Vrachtwagen;
+                    if (SelectedBicycle) selType = PrioIngreepVoertuigTypeEnum.Fiets;
                     SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == selType);
                     //RefreshAvailableTypes();
                 }
@@ -119,10 +119,10 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool HasBus => Ingrepen.Any(x => x.Type == OVIngreepVoertuigTypeEnum.Bus);
-        public bool HasTram => Ingrepen.Any(x => x.Type == OVIngreepVoertuigTypeEnum.Tram);
-        public bool HasBicycle => Ingrepen.Any(x => x.Type == OVIngreepVoertuigTypeEnum.Fiets);
-        public bool HasTruck => Ingrepen.Any(x => x.Type == OVIngreepVoertuigTypeEnum.Vrachtwagen);
+        public bool HasBus => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Bus);
+        public bool HasTram => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Tram);
+        public bool HasBicycle => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
+        public bool HasTruck => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
 
         public bool Prioriteit
         {
@@ -130,11 +130,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _prioriteit = value;
-                var vtgtype = OVIngreepVoertuigTypeEnum.NG;
-                if (SelectedBus) vtgtype = OVIngreepVoertuigTypeEnum.Bus;
-                else if (SelectedTram) vtgtype = OVIngreepVoertuigTypeEnum.Tram;
-                else if (SelectedTruck) vtgtype = OVIngreepVoertuigTypeEnum.Vrachtwagen;
-                else if (SelectedBicycle) vtgtype = OVIngreepVoertuigTypeEnum.Fiets;
+                var vtgtype = PrioIngreepVoertuigTypeEnum.NG;
+                if (SelectedBus) vtgtype = PrioIngreepVoertuigTypeEnum.Bus;
+                else if (SelectedTram) vtgtype = PrioIngreepVoertuigTypeEnum.Tram;
+                else if (SelectedTruck) vtgtype = PrioIngreepVoertuigTypeEnum.Vrachtwagen;
+                else if (SelectedBicycle) vtgtype = PrioIngreepVoertuigTypeEnum.Fiets;
                 if (value)
                 {
                     if (!Ingrepen.Any(x => x.Type == vtgtype))
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
                         };
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio);
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio.MeldingenData);
-                        if (prio.Type == OVIngreepVoertuigTypeEnum.Bus || prio.Type == OVIngreepVoertuigTypeEnum.Tram)
+                        if (prio.Type == PrioIngreepVoertuigTypeEnum.Bus || prio.Type == PrioIngreepVoertuigTypeEnum.Tram)
                         {
                             prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel()
                             {
@@ -197,7 +197,7 @@ namespace TLCGen.ViewModels
                 _selectedBus = value;
                 if (value)
                 {
-                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == OVIngreepVoertuigTypeEnum.Bus);
+                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == PrioIngreepVoertuigTypeEnum.Bus);
                     SelectedTram = SelectedTruck = SelectedBicycle = false;
                 }
                 RaisePropertyChanged();
@@ -212,7 +212,7 @@ namespace TLCGen.ViewModels
                 _selectedTram = value;
                 if (value)
                 {
-                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == OVIngreepVoertuigTypeEnum.Tram);
+                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == PrioIngreepVoertuigTypeEnum.Tram);
                     SelectedBus = SelectedTruck = SelectedBicycle = false;
                 }
                 RaisePropertyChanged();
@@ -227,7 +227,7 @@ namespace TLCGen.ViewModels
                 _selectedTruck = value;
                 if (value)
                 {
-                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == OVIngreepVoertuigTypeEnum.Vrachtwagen);
+                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
                     SelectedTram = SelectedBus = SelectedBicycle = false;
                 }
                 RaisePropertyChanged();
@@ -242,7 +242,7 @@ namespace TLCGen.ViewModels
                 _selectedBicycle = value;
                 if (value)
                 {
-                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == OVIngreepVoertuigTypeEnum.Fiets);
+                    SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
                     SelectedTram = SelectedTruck = SelectedBus = false;
                 }
                 RaisePropertyChanged();
@@ -290,11 +290,11 @@ namespace TLCGen.ViewModels
                         var prio = new PrioIngreepModel
                         {
                             FaseCyclus = SelectedFaseCyclus.Naam,
-                            Type = OVIngreepVoertuigTypeEnum.NG
+                            Type = PrioIngreepVoertuigTypeEnum.NG
                         };
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio);
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio.MeldingenData);
-                        if (prio.Type == OVIngreepVoertuigTypeEnum.Bus || prio.Type == OVIngreepVoertuigTypeEnum.Tram)
+                        if (prio.Type == PrioIngreepVoertuigTypeEnum.Bus || prio.Type == PrioIngreepVoertuigTypeEnum.Tram)
                         {
                             prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel()
                             {

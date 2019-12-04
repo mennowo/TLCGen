@@ -9,7 +9,7 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum
+    public enum PrioIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum
     {
         [Description("Melding opvang wederzijds")]
         MeldingOpvangWederzijds,

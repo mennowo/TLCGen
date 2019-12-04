@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -28,7 +29,7 @@ namespace TLCGen.ViewModels
 
         [Category("Algemene opties")]
         [Description("Type voertuig")]
-        public OVIngreepVoertuigTypeEnum Type
+        public PrioIngreepVoertuigTypeEnum Type
         {
             get { return PrioIngreep.Type; }
             set
@@ -380,6 +381,8 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public ObservableCollection<string> Detectoren { get; }
+
+        public string Description => PrioIngreep.FaseCyclus + " " + Type.GetDescription();
 
         #endregion // Properties
 

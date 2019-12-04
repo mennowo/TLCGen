@@ -22,7 +22,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Wissel2Detector { get; set; }
         public bool Wissel1 { get; set; }
-        public OVIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
+        public PrioIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
         public bool Wissel1InputVoorwaarde { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.Input)]
@@ -32,7 +32,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Wissel1Detector { get; set; }
         public bool Wissel2 { get; set; }
-        public OVIngreepInUitDataWisselTypeEnum Wissel2Type { get; set; }
+        public PrioIngreepInUitDataWisselTypeEnum Wissel2Type { get; set; }
         public bool Wissel2InputVoorwaarde { get; set; }
         
         public bool AntiJutterVoorAlleInmeldingen { get; set; }

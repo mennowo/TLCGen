@@ -7,7 +7,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioTab)]
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.PrioriteitTab)]
     public class HDIngrepenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
@@ -120,7 +120,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "Ingrepen";
+                return "HD ingrepen";
             }
         }
 

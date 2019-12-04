@@ -1693,7 +1693,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
 		{
 			_mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
-			_cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cpriovc");
+			_cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 			_schmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schmv");
 			_schwg = CCOLGeneratorSettingsProvider.Default.GetElementName("schwg");
 			_schca = CCOLGeneratorSettingsProvider.Default.GetElementName("schca");
@@ -1708,8 +1708,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
 
-            _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovin");
-            _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioovuit");
+            _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
 
             return base.SetSettings(settings);
 		}

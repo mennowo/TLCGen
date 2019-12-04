@@ -4,9 +4,9 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepInUitDataWisselTypeEnum
+    public enum PrioIngreepWisselTypeEnum
     {
-        Ingang,
-        Detector
+        Detector,
+        Ingang
     }
 }

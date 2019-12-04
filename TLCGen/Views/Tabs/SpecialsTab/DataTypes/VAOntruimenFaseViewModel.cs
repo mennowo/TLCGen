@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public OVIngreepInUitDataWisselTypeEnum Wissel1Type
+        public PrioIngreepInUitDataWisselTypeEnum Wissel1Type
         {
             get => _VAOntruimenFase.Wissel1Type;
             set
@@ -130,7 +130,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public OVIngreepInUitDataWisselTypeEnum Wissel2Type
+        public PrioIngreepInUitDataWisselTypeEnum Wissel2Type
         {
             get => _VAOntruimenFase.Wissel2Type;
             set
@@ -188,13 +188,13 @@ namespace TLCGen.ViewModels
         }
 
         public bool HasWissel1 => KijkNaarWisselstand;
-        public bool IsWissel1Ingang => KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
-        public bool IsWissel1Detector => KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector;
-        public bool HasWissel1Voorwaarde => KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel1Ingang => KijkNaarWisselstand && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel1Detector => KijkNaarWisselstand && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector;
+        public bool HasWissel1Voorwaarde => KijkNaarWisselstand && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
         public bool HasWissel2 => KijkNaarWisselstand && Wissel2;
-        public bool IsWissel2Ingang => HasWissel2 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
-        public bool IsWissel2Detector => HasWissel2 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector;
-        public bool HasWissel2Voorwaarde => HasWissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel2Ingang => HasWissel2 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
+        public bool IsWissel2Detector => HasWissel2 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector;
+        public bool HasWissel2Voorwaarde => HasWissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
 
         public ObservableCollectionAroundList<VAOntruimenDetectorViewModel, VAOntruimenDetectorModel> VAOntruimenDetectoren
         {

@@ -5,8 +5,8 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.PrioTab)]
-	public class OVOverzichtTabViewModel : TLCGenTabItemViewModel
+    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.PrioriteitTab)]
+	public class HDOverzichtTabViewModel : TLCGenTabItemViewModel
 	{		
         #region Fields
 
@@ -56,7 +56,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName => "Overzicht";
+        public override string DisplayName => "HD overzicht";
 
 		public override bool CanBeEnabled()
         {
@@ -153,7 +153,7 @@ namespace TLCGen.ViewModels
 
 		#region Constructor
 
-		public OVOverzichtTabViewModel()
+		public HDOverzichtTabViewModel()
         {
         }
 

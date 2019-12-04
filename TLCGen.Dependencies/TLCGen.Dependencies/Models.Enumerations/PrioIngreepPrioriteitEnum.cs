@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using TLCGen.Helpers;
 
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepPrioriteitEnum
+    public enum PrioIngreepPrioriteitEnum
     {
         [Description("Afkappen conflicten")]
         Afkappen = 1,
@@ -17,7 +12,7 @@ namespace TLCGen.Models.Enumerations
         Vasthouden = 2,
         [Description("Tussendoor realiseren")]
         Tussendoor = 3,
-        [Description("Afkappen OV conflicten")]
-        AfkappenOV = 4
+        [Description("Afkappen PRIO conflicten")]
+        AfkappenPrio = 4
     }
 }
