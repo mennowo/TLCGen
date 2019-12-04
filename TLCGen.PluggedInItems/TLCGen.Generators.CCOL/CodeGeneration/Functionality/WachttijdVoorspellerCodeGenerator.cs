@@ -74,6 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return base.GetFunctionLocalVariables(c, type);
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:

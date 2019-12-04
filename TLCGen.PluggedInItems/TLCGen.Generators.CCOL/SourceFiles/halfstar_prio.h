@@ -38,18 +38,18 @@ bool StartGroenConflictenUitstellen(count, count, int);
 void set_pg_primair_fc_PRIO_ple(void);
 void signaalplan_primair_PRIO_ple(void);
 
-void OVHalfstarBepaalHoofdrichtingOpties(int, ...);
-int  OVHalfstarBepaalPrioriteitsOpties(int);
+void PrioHalfstarBepaalHoofdrichtingOpties(int, ...);
+int  PrioHalfstarBepaalPrioriteitsOpties(int);
 
-void OVHalfstarInit(void);
-void OVHalfstarSettings(void);
-void OVHalfstarOnderMaximum(void);
-void OVHalfstarAfkapGroen(void);
-void OVHalfstarStartGroenMomenten(void);
-void OVHalfstarTegenhouden(void);
-void OVHalfstarAfkappen(void);
-void OVHalfstarTerugkomGroen(void);
-void OVHalfstarGroenVasthouden(void);
-void OVHalfstarMeetKriterium(void);
+void PrioHalfstarInit(void);
+void PrioHalfstarSettings(void);
+void PrioHalfstarOnderMaximum(void);
+void PrioHalfstarAfkapGroen(void);
+void PrioHalfstarStartGroenMomenten(void);
+void PrioHalfstarTegenhouden(void);
+void PrioHalfstarAfkappen(void);
+void PrioHalfstarTerugkomGroen(void);
+void PrioHalfstarGroenVasthouden(void);
+void PrioHalfstarMeetKriterium(void);
 
 #endif
