@@ -374,7 +374,7 @@ namespace TLCGen.ViewModels
             _lijnNummers ?? (_lijnNummers = new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(PrioIngreep.LijnNummers));
 
         [Browsable(false)]
-        public bool HasKAR => PrioIngreep.HasOVIngreepKAR();
+        public bool HasKAR => PrioIngreep.HasPrioIngreepKAR();
 
         [Browsable(false)]
         public bool HasVecom => PrioIngreep.HasOVIngreepVecom();

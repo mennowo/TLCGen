@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
         {
             foreach (var prio in _Controller.PrioData.PrioIngrepen)
             {
-                if(prio.HasOVIngreepKAR())
+                if(prio.HasPrioIngreepKAR())
                 {
                     if(prio.DummyKARInmelding != null)
                     {
@@ -158,7 +158,7 @@ namespace TLCGen.ViewModels
 
             foreach (var prio in Controller.PrioData.PrioIngrepen)
             {
-                if (prio.HasOVIngreepKAR())
+                if (prio.HasPrioIngreepKAR())
                 {
                     var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                     if (m != null)

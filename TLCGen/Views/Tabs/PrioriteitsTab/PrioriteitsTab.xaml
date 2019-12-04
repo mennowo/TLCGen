@@ -23,6 +23,9 @@
         <DataTemplate DataType="{x:Type vm:PrioriteitSimulatieTabViewModel}">
             <local:PrioriteitSimulatieTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrioriteitSignaalGroepInstellingenTabViewModel}">
+            <local:PrioriteitSignaalGroepInstellingenTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 
