@@ -38,8 +38,8 @@
 #include "bericht.h"    /* CVN berichten                                                  */
 #include "stdfunc.h"    /* standaardfuncties                                              */
 #include "rtappl.h"     /* applicatie routines                                            */
-#include "ov.h"
-#include "halfstar_ov.h"/* declaratie functies                                            */
+#include "prio.h"
+#include "halfstar_prio.h"/* declaratie functies                                            */
 
 #if !defined AUTOMAAT || defined VISSIM
 #include "xyprintf.h"/* voor debug infowindow                                          */
@@ -302,7 +302,7 @@ void signaalplan_primair_ov_ple(void)
 /* -------------------------------------------------------------------------------------- */
 /* Functie: OV_ple_init()                                                                 */
 /*                                                                                        */
-/* Doel:    Initialiseren instellingen t.b.v. ov prioriteit                               */
+/* Doel:    Initialiseren instellingen t.b.v. prioriteit                                  */
 /*                                                                                        */
 /* Params:  Geen                                                                          */
 /*                                                                                        */
@@ -521,7 +521,7 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k, int prio_opties)
 		}
 	}
 
-	/* Indien OV richting nog gerealiseerd moet worden, rekening houden met groentijd en ontruimingstijd */ /* RvdS Welke TO? na de ov richting of die daarvoor? */
+	/* Indien OV richting nog gerealiseerd moet worden, rekening houden met groentijd en ontruimingstijd */ /* RvdS Welke TO? na de prio richting of die daarvoor? */
 	if (R[fcov])
 	{
 		totxb_min -= TFG_max[fcov]; /* RvdS: evt aanpassen met extra tijd bovenop TFG */
@@ -545,7 +545,7 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k, int prio_opties)
 /*          zodat de OV richting bijzonder gerealiseerd kan worden of gedurende de        */
 /*          realisatie na het TXD moment groen kan blijven                                */
 /*                                                                                        */
-/* Params:  iov:        ov richting index                                                 */
+/* Params:  iov:        prio richting index                                               */
 /*          fcov:       fasecyclus index                                                  */
 /*          prio_opties:geldende prioriteitsopties                                        */
 /*                                                                                        */
@@ -586,21 +586,21 @@ void OVHalfstarOnderMaximum(void)
 
 	if (IH[hplact])
 	{
-		int ov, fc, iMaxResterendeGroenTijd;
-		for (ov = 0; ov < ovOVMAX; ++ov) {
-			fc = iFC_OVix[ov];
+		int prio, fc, iMaxResterendeGroenTijd;
+		for (prio = 0; prio < prioFCMAX; ++prio) {
+			fc = iFC_PRIOix[prio];
 
 			iMaxResterendeGroenTijd = 0;
 			if (G[fc])
 			{
-				int iLatestTXD = ((TXD_PL[fc] + iExtraGroenNaTXD[ov]) % TX_PL_max);
+				int iLatestTXD = ((TXD_PL[fc] + iExtraGroenNaTXD[prio]) % TX_PL_max);
 				if ((TOTXB_PL[fc] == 0) && (TOTXD_PL[fc] > 0))
 				{
 					/* primair gebied */          iMaxResterendeGroenTijd = TOTXD_PL[fc];
-					if (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)
-						iMaxResterendeGroenTijd += iExtraGroenNaTXD[ov];
+					if (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)
+						iMaxResterendeGroenTijd += iExtraGroenNaTXD[prio];
 				}
-				else if (TX_between(TX_PL_timer, TXD_PL[fc], iLatestTXD, TX_PL_max) && (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD))
+				else if (TX_between(TX_PL_timer, TXD_PL[fc], iLatestTXD, TX_PL_max) && (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD))
 				{
 					/* ExtraGroenNaTXD gebied */
 					iMaxResterendeGroenTijd = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
@@ -609,15 +609,15 @@ void OVHalfstarOnderMaximum(void)
 				else
 				{*/
 					/* bijzondere realisatie */
-					/* iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
+					/* iMaxResterendeGroenTijd = iGroenBewakingsTijd[prio] - iGroenBewakingsTimer[prio];
 				}*/
 			}
 			else // !G[fc]
 			{
-				iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov];
+				iMaxResterendeGroenTijd = iGroenBewakingsTijd[prio];
 			}
 
-			iOnderMaximumVerstreken[ov] = iOnderMaximum[ov] >= iMaxResterendeGroenTijd;
+			iOnderMaximumVerstreken[prio] = iOnderMaximum[prio] >= iMaxResterendeGroenTijd;
 		}
 	}
 }
@@ -639,13 +639,13 @@ void OVHalfstarStartGroenMomenten(void)
 {
 	if (IH[hplact])
 	{
-		int ov;
-		for (ov = 0; ov < ovOVMAX; ++ov) {
+		int prio;
+		for (prio = 0; prio < prioFCMAX; ++prio) {
 			{
-				if (iAantalInmeldingen[ov] > 0)
+				if (iAantalInmeldingen[prio] > 0)
 				{
-					if (!StartGroenConflictenUitstellen(ov, iFC_OVix[ov], iPrioriteitsOpties[ov]))
-						iStartGroen[ov] = 9999;
+					if (!StartGroenConflictenUitstellen(prio, iFC_PRIOix[prio], iPrioriteitsOpties[prio]))
+						iStartGroen[prio] = 9999;
 				}
 			}
 
@@ -659,7 +659,7 @@ void OVHalfstarTegenhouden(void)
 	/* if (FALSE == TRUE) */
 	if (IH[hplact])
 	{
-		int ov, fc;
+		int prio, fc;
 		boolv magUitstellen;
 
 		for (fc = 0; fc < FCMAX; ++fc)
@@ -667,13 +667,13 @@ void OVHalfstarTegenhouden(void)
 			RR[fc] &= ~OV_RR_BIT;
 		}
 
-		for (ov = 0; ov < ovOVMAX; ++ov)
+		for (prio = 0; prio < prioFCMAX; ++prio)
 		{
-			if (iPrioriteit[ov] && iPrioriteitsOpties[ov] >= poPLGroenVastHoudenNaTXD)
+			if (iPrioriteit[prio] && iPrioriteitsOpties[prio] >= poPLGroenVastHoudenNaTXD)
 			{
 				int i, k;
-				fc = iFC_OVix[ov];
-				magUitstellen = StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov]);
+				fc = iFC_PRIOix[prio];
+				magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
 				for (i = 0; i < GKFC_MAX[fc]; ++i)
 				{
 #if (CCOL_V >= 95)
@@ -683,7 +683,7 @@ void OVHalfstarTegenhouden(void)
 #endif
 					if (magUitstellen)
 					{
-						if (iStartGroen[ov] <= iRealisatieTijd[fc][k])
+						if (iStartGroen[prio] <= iRealisatieTijd[fc][k])
 						{
 							RR[k] |= OV_RR_BIT;
 						}
@@ -713,26 +713,26 @@ void OVHalfstarGroenVasthouden(void)
 {
 	if (IH[hplact])
 	{
-		int ov, fc;
+		int prio, fc;
 		bool magUitstellen;
-		for (ov = 0;
-			ov < ovOVMAX;
-			ov++) {
+		for (prio = 0;
+			prio < prioFCMAX;
+			prio++) {
 
-			fc = iFC_OVix[ov];
-			magUitstellen = StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov]);
+			fc = iFC_PRIOix[prio];
+			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
 			// Reset OV_YV_BIT, will determine YV according to signalplan structure
 			YV[fc] &= ~OV_YV_BIT;
 			YM[fc] &= ~OV_YM_BIT;
 
-			if (iPrioriteit[ov] &&
-				(iPrioriteitsOpties[ov] & poGroenVastHouden) || (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)) {
+			if (iPrioriteit[prio] &&
+				(iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) {
 
-				if (G[fc] && (iGroenBewakingsTimer[ov] < iGroenBewakingsTijd[ov]) && magUitstellen) {
+				if (G[fc] && (iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]) && magUitstellen) {
 					YV[fc] |= OV_YV_BIT;
 				}
 				if (!magUitstellen)
-					iWachtOpKonflikt[ov] = TRUE;
+					iWachtOpKonflikt[prio] = TRUE;
 			}
 		}
 	}
@@ -742,11 +742,11 @@ void OVHalfstarMeetKriterium(void)
 {
 	if (IH[hplact])
 	{
-		int ov, fc, iRestGroen;
-		for (ov = 0;
-			ov < ovOVMAX;
-			ov++) {
-			fc = iFC_OVix[ov];
+		int prio, fc, iRestGroen;
+		for (prio = 0;
+			prio < prioFCMAX;
+			prio++) {
+			fc = iFC_PRIOix[prio];
 			iRestGroen = 0;
 
 			// Reset OV_MK_BIT, will determine MK according to signalplan structure
@@ -757,27 +757,27 @@ void OVHalfstarMeetKriterium(void)
 				if (TOTXB_PL[fc] == 0 && TOTXD_PL[fc] > 0) // primary
 				{
 					iRestGroen = TOTXD_PL[fc];
-					if (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)
-						iRestGroen += iExtraGroenNaTXD[ov];
+					if (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)
+						iRestGroen += iExtraGroenNaTXD[prio];
 				}
 				else if (TOTXB_PL[fc] > 0 && TXD_PL[fc] > 0) // non primary
 				{
 					//extra groen na txd
-					int iLatestTXD = ((TXD_PL[fc] + iExtraGroenNaTXD[ov]) % TX_PL_max);
+					int iLatestTXD = ((TXD_PL[fc] + iExtraGroenNaTXD[prio]) % TX_PL_max);
 					iRestGroen = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
 
 					//bijzondere realisatie
-					iRestGroen = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
+					iRestGroen = iGroenBewakingsTijd[prio] - iGroenBewakingsTimer[prio];
 				}
 
-				if (iPrioriteit[ov] &&
-					((iPrioriteitsOpties[ov] & poGroenVastHouden) || (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)) &&
-					(iGroenBewakingsTimer[ov] < iGroenBewakingsTijd[ov]) ||
+				if (iPrioriteit[prio] &&
+					((iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) &&
+					(iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]) ||
 					((PR[fc] & PRIMAIR_VERSNELD) &&
-					((iGroenBewakingsTimer[ov] < iGroenBewakingsTijd[ov]) || (iAantalInmeldingen[ov] > 0) && !ka(fc)) &&
-						((iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov]) <= iRestGroen)))
+					((iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]) || (iAantalInmeldingen[prio] > 0) && !ka(fc)) &&
+						((iGroenBewakingsTijd[prio] - iGroenBewakingsTimer[prio]) <= iRestGroen)))
 				{
-					if (G[fc] && (StartGroenConflictenUitstellen(ov, fc, iPrioriteitsOpties[ov])))
+					if (G[fc] && (StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio])))
 						MK[fc] |= OV_MK_BIT;
 					else
 						MK[fc] = 0;

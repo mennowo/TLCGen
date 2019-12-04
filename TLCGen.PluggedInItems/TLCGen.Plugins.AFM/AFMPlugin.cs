@@ -223,9 +223,9 @@ namespace TLCGen.Plugins.AFM
                     return 105;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 105;
-                case CCOLCodeTypeEnum.OvCTop:
+                case CCOLCodeTypeEnum.PrioCTop:
                     return 105;
-                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     return 105;
                 default:
                     return 0;
@@ -253,7 +253,7 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCIncludes:
+                case CCOLCodeTypeEnum.PrioCIncludes:
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     sb.AppendLine("#include \"AFMroutines.h\"");
                     sb.AppendLine();
@@ -394,12 +394,12 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCTop:
+                case CCOLCodeTypeEnum.PrioCTop:
                     sb.AppendLine($"#include \"AFMroutines.h\"");
                     sb.AppendLine($"extern AFM_FC_STRUCT verwerken_fcs[AFM_fcmax];");
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     sb.AppendLine($"{ts}/* AFM */");
                     sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && !PRM[{_prmpf}AFM_Test])");
                     sb.AppendLine($"{ts}{{");

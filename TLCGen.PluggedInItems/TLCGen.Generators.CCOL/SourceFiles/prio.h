@@ -1,5 +1,5 @@
-#ifndef __OVH
-#define __OVH
+#ifndef __PRIOH
+#define __PRIOH
 
 #define    OV_A_BIT      BIT6
 #define    OV_Z_BIT      BIT6
@@ -53,57 +53,57 @@ extern VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 #endif
 
 /* Functie declaraties voor functies uit de applicatie */
-void OVInitExtra(void);
-void OVInstellingen(void);
+void PrioInitExtra(void);
+void PrioInstellingen(void);
 void RijTijdScenario(void);
 void InUitMelden(void);
 void PrioriteitsOpties(void);
 void PrioriteitsToekenningExtra(void);
 void TegenhoudenConflictenExtra(void);
-void PostAfhandelingOV(void);
-void OVPARCorrecties(void);
+void PostAfhandelingPrio(void);
+void PrioPARCorrecties(void);
 void OnderMaximumExtra(void);
 void AfkapGroenExtra(void);
 void StartGroenMomentenExtra(void);
-void OVAfkappenExtra(void);
-void OVTerugkomGroenExtra(void);
-void OVGroenVasthoudenExtra(void);
-void OVMeetKriteriumExtra(void);
+void PrioAfkappenExtra(void);
+void PrioTerugkomGroenExtra(void);
+void PrioGroenVasthoudenExtra(void);
+void PrioMeetKriteriumExtra(void);
 
-/* Functie declaraties voor functies uit ov.c */
-void AfhandelingOV(void);
+/* Functie declaraties voor functies uit prio.c */
+void AfhandelingPrio(void);
 int BepaalPrioriteitsOpties(int prm_prio);
-void OVInit(void);
-void OVInmeldenID(int ov,
+void PrioInit(void);
+void PrioInmeldenID(int ov,
 	int iInmelding,
 	int iPN,         /* prioriteitsniveau       */
 	int iPO,         /* prioriteitsopties       */
 	int iRT,         /* rijtimer                */
 	int iGBT,        /* groenbewakingstimer     */
 	int iID);        /* identificatie inmelding */
-void OVInmelden(int ov,
+void PrioInmelden(int ov,
 	int iInmelding,
 	int iPN,         /* prioriteitsniveau   */
 	int iPO,         /* prioriteitsopties   */
 	int iRT,         /* rijtimer            */
 	int iGBT);       /* groenbewakingstimer */
-void OVUitmelden(int ov,
+void PrioUitmelden(int ov,
 	int iUitmelding);
-void OVUitmeldenIndex(int ov,
+void PrioUitmeldenIndex(int ov,
 	int inm,
 	int iUitmelding,
 	bool bGeforceerd);
-void OVUitmeldenID(int ov,
+void PrioUitmeldenID(int ov,
 	int iUitmelding,
 	int iID);
-int OVAantalInmeldingenID(int ov,
+int PrioAantalInmeldingenID(int ov,
 	int iID);
-void OVRijTijdScenario(int ov,
+void PrioRijTijdScenario(int ov,
 	int dkop,
 	int dlang,
 	int tbezet);
-void OVCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
-void OVCcol(void);
+void PrioCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
+void PrioCcol(void);
 void KonfliktTijden(void);
 void SKVoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit);
 void SKGelijkStarten(bool period, count fc1, count fc2, bool bit, bool overslag_sg);
@@ -114,12 +114,12 @@ void TegenHoudenStartGroen(int fc, int iStartGroenFC);
 void AfkappenStartGroen(int fc, int iStartGr);
 void VLOG_mon5_buffer(void);
 
-#ifdef OV_ADDFILE
+#ifdef PRIO_ADDFILE
 extern int iStartGroenFC[];
 
 void RijTijdScenario_Add(void);
 void InUitMelden_Add(void);
-void OVInstellingen_Add(void);
+void PrioInstellingen_Add(void);
 void WachtTijdBewaking_Add(void);
 void KonfliktTijden_Add(void);
 void OnderMaximum_Add(void);
@@ -129,20 +129,20 @@ void PrioriteitsNiveau_Add(void);
 void PrioriteitsToekenning_Add(void);
 void AfkapGroen_Add(void);
 void StartGroenMomenten_Add(void);
-void OVAanvragen_Add(void);
+void PrioAanvragen_Add(void);
 void RealisatieTijden_Add(void);
-void OVTegenhouden_Add(void);
-void OVAfkappen_Add(void);
-void OVAlternatieven_Add(void);
-void PostAfhandelingOV_Add(void);
+void PrioTegenhouden_Add(void);
+void PrioAfkappen_Add(void);
+void PrioAlternatieven_Add(void);
+void PostAfhandelingPrio_Add(void);
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
-void OVDebug_Add(void);
+void PrioDebug_Add(void);
 #endif
 #endif
 
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
-void OVDebug(int ov);
+void PrioDebug(int ov);
 #endif
 
 extern int iMaximumWachtTijdOverschreden[];
@@ -167,10 +167,10 @@ extern int iInstAfkapGroenAlt[];
 extern int iInstOphoogPercentageMG[];
 extern int iOphoogPercentageMG[];
 extern int iT_GBix[];
-extern int iH_OVix[];
+extern int iH_PRIOix[];
 extern int iBlokkeringsTijd[];
 extern int iBlokkeringsTimer[];
-extern int iFC_OVix[];
+extern int iFC_PRIOix[];
 extern int iOnderMaximum[];
 extern int iOnderMaximumVerstreken[];
 extern int iGroenBewakingsTijd[];
@@ -203,8 +203,8 @@ extern int *iInRijTimer[];
 extern int *iInGroenBewakingsTimer[];
 extern int *iInOnderMaximumVerstreken[];
 
-extern int ovKFC_MAX[];
-extern int *ovTO_pointer[];
+extern int prioKFC_MAX[];
+extern int *prioTO_pointer[];
 extern int iLangstWachtendeAlternatief;
 
-#endif // __OVH
+#endif // __PRIOH

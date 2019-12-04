@@ -147,12 +147,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
             if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}#include \"ov.h\"       /* ov-afhandeling                    */");
+                sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
                 if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
                 {
                     sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
                 }
-                sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");
+                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
             }
             sb.AppendLine();
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
@@ -675,7 +675,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (controller.HalfstarData.IsHalfstar)
                 {
-                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingOV();");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingPrio();");
                     sb.AppendLine($"{ts}else");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}int fc;");
@@ -881,7 +881,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
 
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
-            sb.AppendLine("void OVSpecialSignals();");
+            sb.AppendLine("void PrioSpecialSignals();");
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
 
@@ -890,7 +890,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.PrioData.PrioIngrepen.Any() ||
 				controller.PrioData.HDIngrepen.Any())
 		    {
-				sb.AppendLine($"{ts}OVSpecialSignals();");
+				sb.AppendLine($"{ts}PrioSpecialSignals();");
 			}
             sb.AppendLine($"{ts}SpecialSignals_Add();");
             sb.AppendLine("}");

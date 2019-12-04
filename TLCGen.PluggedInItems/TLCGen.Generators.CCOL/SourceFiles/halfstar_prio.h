@@ -24,7 +24,7 @@ bool HoofdRichting[FCMAX];             /* Array met hoofdrichtingen             
 bool HoofdRichtingTegenhouden[FCMAX];  /* Tegenhouden hoofdrichting (TXC of minimum groen)*/
 bool HoofdRichtingAfkappenYWPL[FCMAX]; /* Afkappen YW_PL hoofdrichting (na minimum groen) */
 bool HoofdRichtingAfkappenYVPL[FCMAX]; /* Afkappen YV_PL hoofdrichting (na minimum groen) */
-int iExtraGroenNaTXD[ovOVMAX];
+int iExtraGroenNaTXD[prioFCMAX];
 int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 
 /* -------------------------------------------------------------------------------------- */
