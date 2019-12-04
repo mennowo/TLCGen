@@ -416,10 +416,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (!c.PrioData.PrioIngrepen.Any()) return "";
 
             sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
-            sb.AppendLine("void OVHalfstarSettings(void)");
+            sb.AppendLine("void PrioHalfstarSettings(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCOVHalfstarSettings, true, true, false, false);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCPrioHalfstarSettings, true, true, false, false);
             
             sb.AppendLine("}");
             sb.AppendLine();

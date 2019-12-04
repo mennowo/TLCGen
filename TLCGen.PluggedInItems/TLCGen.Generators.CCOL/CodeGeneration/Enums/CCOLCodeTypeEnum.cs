@@ -85,6 +85,6 @@
 		HstCPreSystemApplication,
 		HstCPostSystemApplication,
 		HstCPostDumpApplication,
-        HstCOVHalfstarSettings
+        HstCPrioHalfstarSettings
     };
 }

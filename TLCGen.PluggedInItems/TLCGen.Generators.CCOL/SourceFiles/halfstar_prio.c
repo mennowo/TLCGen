@@ -307,7 +307,7 @@ void signaalplan_primair_PRIO_ple(void)
 /* Params:  Geen                                                                          */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void OVHalfstarInit(void)
+void PrioHalfstarInit(void)
 {
 	int i;
 
@@ -322,7 +322,7 @@ void OVHalfstarInit(void)
 }
 
 
-int OVHalfstarBepaalPrioriteitsOpties(int prm_prio) {
+int PrioHalfstarBepaalPrioriteitsOpties(int prm_prio) {
 	int p, iReturn;
 
 	for (iReturn = 0, p = PRM[prm_prio] % 10000L;
@@ -373,7 +373,7 @@ int OVHalfstarBepaalPrioriteitsOpties(int prm_prio) {
 /*                         (va_count) END);                                               */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void OVHalfstarBepaalHoofdrichtingOpties(int dummy, ...)
+void PrioHalfstarBepaalHoofdrichtingOpties(int dummy, ...)
 {
 	va_list argpt;                                     /*  variabele argumentenlijst       */
 	count fc;                                          /*  arraynummer fc hoofdrichting    */
@@ -571,7 +571,7 @@ bool StartGroenConflictenUitstellen(count iov, count fcov, int prio_opties)
 	return TRUE;
 }
 
-void OVHalfstarTerugkomGroen(void)
+void PrioHalfstarTerugkomGroen(void)
 {
 	int fc;
 	if (IH[hplact])
@@ -581,7 +581,7 @@ void OVHalfstarTerugkomGroen(void)
 	}
 }
 
-void OVHalfstarOnderMaximum(void)
+void PrioHalfstarOnderMaximum(void)
 {
 
 	if (IH[hplact])
@@ -622,7 +622,7 @@ void OVHalfstarOnderMaximum(void)
 	}
 }
 
-void OVHalfstarAfkapGroen(void)
+void PrioHalfstarAfkapGroen(void)
 {
 	if (IH[hplact])
 	{
@@ -635,7 +635,7 @@ void OVHalfstarAfkapGroen(void)
 	}
 }
 
-void OVHalfstarStartGroenMomenten(void)
+void PrioHalfstarStartGroenMomenten(void)
 {
 	if (IH[hplact])
 	{
@@ -653,7 +653,7 @@ void OVHalfstarStartGroenMomenten(void)
 	}
 }
 
-void OVHalfstarTegenhouden(void)
+void PrioHalfstarTegenhouden(void)
 {
 	/* placeholder for future use */
 	/* if (FALSE == TRUE) */
@@ -694,7 +694,7 @@ void OVHalfstarTegenhouden(void)
 	}
 }
 
-void OVHalfstarAfkappen(void)
+void PrioHalfstarAfkappen(void)
 {
 	if (IH[hplact])
 	{
@@ -709,7 +709,7 @@ void OVHalfstarAfkappen(void)
 	}
 }
 
-void OVHalfstarGroenVasthouden(void)
+void PrioHalfstarGroenVasthouden(void)
 {
 	if (IH[hplact])
 	{
@@ -738,7 +738,7 @@ void OVHalfstarGroenVasthouden(void)
 	}
 }
 
-void OVHalfstarMeetKriterium(void)
+void PrioHalfstarMeetKriterium(void)
 {
 	if (IH[hplact])
 	{

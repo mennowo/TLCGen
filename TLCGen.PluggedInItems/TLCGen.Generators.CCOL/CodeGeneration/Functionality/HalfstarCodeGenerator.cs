@@ -451,7 +451,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return 10;
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
                     return 10;
-                case CCOLCodeTypeEnum.HstCOVHalfstarSettings:
+                case CCOLCodeTypeEnum.HstCPrioHalfstarSettings:
                     return 10;
                 case CCOLCodeTypeEnum.PrioCInitPrio:
                     return 10;
@@ -551,7 +551,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					//	sb.AppendLine($"{ts}{ts}if (CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ ||");
 					//	sb.AppendLine($"{ts}{ts}    CIF_PARM1WIJZAP != CIF_GEEN_PARMWIJZ)");
 					//	sb.AppendLine($"{ts}{ts}{{");
-					//	sb.AppendLine($"{ts}{ts}{ts}OVHalfstarSettings();");
+					//	sb.AppendLine($"{ts}{ts}{ts}PrioHalfstarSettings();");
 					//	sb.AppendLine($"{ts}{ts}}}");
 					//	sb.AppendLine($"{ts}{ts}{ts}");
 					//	sb.AppendLine($"{ts}{ts}BijhoudenWachtTijd();");
@@ -1565,7 +1565,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
 					return sb.ToString();
 
-                case CCOLCodeTypeEnum.HstCOVHalfstarSettings:
+                case CCOLCodeTypeEnum.HstCPrioHalfstarSettings:
                     var enter = false;
                     if (c.HalfstarData.IsHalfstar && c.HasPT())
                     {
@@ -1589,8 +1589,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.HalfstarData.Hoofdrichtingen.Any())
                     {
                         if (enter) sb.AppendLine();
-                        sb.AppendLine($"{ts}/* OV opties hoofdrichtingen */");
-                        sb.Append($"{ts}OVHalfstarBepaalHoofdrichtingOpties(NG, ");
+                        sb.AppendLine($"{ts}/* PRIO opties hoofdrichtingen */");
+                        sb.Append($"{ts}PrioHalfstarBepaalHoofdrichtingOpties(NG, ");
                         var first = true;
                         foreach (var hr in c.HalfstarData.Hoofdrichtingen)
                         {
@@ -1611,11 +1611,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 #region prio.c
 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
-                    sb.AppendLine($"{ts}OVHalfstarInit();");
+                    sb.AppendLine($"{ts}PrioHalfstarInit();");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCInstellingen:
-                    sb.AppendLine($"{ts}OVHalfstarSettings();");
+                    sb.AppendLine($"{ts}PrioHalfstarSettings();");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
@@ -1637,7 +1637,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var prio in c.PrioData.PrioIngrepen)
                         {
-                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[prioFC{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)}] |= OVHalfstarBepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)});");
+                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[prioFC{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)}] |= PrioHalfstarBepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)});");
                         }
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
@@ -1659,28 +1659,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCOnderMaximum:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarOnderMaximum();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarOnderMaximum();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCAfkapGroen:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarAfkapGroen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarAfkapGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCStartGroenMomenten:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarStartGroenMomenten();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarStartGroenMomenten();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarTegenhouden();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarTegenhouden();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCAfkappen:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarAfkappen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarAfkappen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCTerugkomGroen:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarTerugkomGroen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarTerugkomGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCGroenVasthouden:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarGroenVasthouden();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarGroenVasthouden();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCMeetkriterium:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarMeetKriterium();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) PrioHalfstarMeetKriterium();");
                     return sb.ToString();
 
                 #endregion // prio.c
