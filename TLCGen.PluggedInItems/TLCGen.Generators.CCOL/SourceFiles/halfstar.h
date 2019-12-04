@@ -79,7 +79,7 @@ void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool con
 void wg_ple(count fc, bool condition);
 bool ym_max_halfstar(count i, mulv koppeltijd);
 bool yv_ar_max_halfstar(count i, mulv koppeltijd);
-void yv_ov_pl_halfstar(count fc, bool bit, bool condition);
+void yv_PRIO_pl_halfstar(count fc, bool bit, bool condition);
 bool yws_groen_fk(count i);
 void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
 

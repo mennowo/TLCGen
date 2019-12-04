@@ -1,17 +1,17 @@
 #ifndef __PRIOH
 #define __PRIOH
 
-#define    OV_A_BIT      BIT6
-#define    OV_Z_BIT      BIT6
-#define   OV_FM_BIT      BIT6
-#define   OV_RW_BIT      BIT6
-#define   OV_RR_BIT      BIT6
-#define   OV_YV_BIT      BIT6
-#define   OV_YM_BIT      BIT6
-#define   OV_MK_BIT      BIT6
-#define   OV_PP_BIT      BIT6
-#define  OV_PAR_BIT      BIT6
-#define OV_RTFB_BIT      BIT6
+#define    PRIO_A_BIT      BIT6
+#define    PRIO_Z_BIT      BIT6
+#define   PRIO_FM_BIT      BIT6
+#define   PRIO_RW_BIT      BIT6
+#define   PRIO_RR_BIT      BIT6
+#define   PRIO_YV_BIT      BIT6
+#define   PRIO_YM_BIT      BIT6
+#define   PRIO_MK_BIT      BIT6
+#define   PRIO_PP_BIT      BIT6
+#define  PRIO_PAR_BIT      BIT6
+#define PRIO_RTFB_BIT      BIT6
 
 typedef enum
 {

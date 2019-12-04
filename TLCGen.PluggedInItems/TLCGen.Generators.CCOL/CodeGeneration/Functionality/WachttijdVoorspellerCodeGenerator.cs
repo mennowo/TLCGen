@@ -422,7 +422,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (!c.Data.WachttijdvoorspellerAansturenBusHD)
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & PRIO_RTFB_BIT);");
                             }
                             else
                             {

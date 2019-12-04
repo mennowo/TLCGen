@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 							case "CCOL95ORHIGHER":
 								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95;
 								break;
-							case "OV":
+							case "PRIO":
 								result = plugin.Controller.PrioData.PrioIngrepen != null &&
 										 plugin.Controller.PrioData.PrioIngrepen.Any() ||
 										 plugin.Controller.PrioData.HDIngrepen != null &&

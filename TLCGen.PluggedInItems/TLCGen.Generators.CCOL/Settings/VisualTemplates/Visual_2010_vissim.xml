@@ -79,7 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
+__IF;PRIO__    <ClCompile Include="__CONTROLLERNAME__prio.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
 __IF;SYNC__    <ClCompile Include="Syncfunc.c" />
@@ -90,7 +90,7 @@ __IF;KS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
-__IF;OV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
+__IF;PRIO__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />

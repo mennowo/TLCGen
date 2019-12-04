@@ -144,8 +144,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void OVTegenhouden_Add(void) {");
             sb.AppendLine("  /* -----------------------------------------------------");
             sb.AppendLine("     Pas hier zonodig de instructievariabele RR aan, bijv:");
-            sb.AppendLine("     if (RR[fc08] & OV_RR_BIT) {");
-            sb.AppendLine("       RR[fc24]|= OV_RR_BIT;");
+            sb.AppendLine("     if (RR[fc08] & PRIO_RR_BIT) {");
+            sb.AppendLine("       RR[fc24]|= PRIO_RR_BIT;");
             sb.AppendLine("     }");
             sb.AppendLine("     ----------------------------------------------------- */");
             sb.AppendLine("}");
@@ -175,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("    ----------------------------------------------------- */");
             sb.AppendLine("}");
             sb.AppendLine("");
-            sb.AppendLine("void PostAfhandelingOV_Add(void) {");
+            sb.AppendLine("void PostAfhandelingPRIO_Add(void) {");
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine("");

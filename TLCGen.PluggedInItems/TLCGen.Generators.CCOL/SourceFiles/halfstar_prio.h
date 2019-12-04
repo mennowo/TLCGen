@@ -9,13 +9,13 @@
 /*                                                                                        */
 /* Versie :  2.0                                                                          */
 /*           Integratie met uitgebreide OV module CCOL Generator                          */
-/* Naam   :  ov_ple.h                                                                     */
+/* Naam   :  PRIO_ple.h                                                                     */
 /* Datum  :  14-06-2017                                                                   */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
 
-#ifndef __OV_PLE__
-#define __OV_PLE__
+#ifndef __PRIO_PLE__
+#define __PRIO_PLE__
 
 extern mulv TXB_PL[FCMAX], TXD_PL[FCMAX];
 mulv TVGPL_max[FCMAX];
@@ -30,13 +30,13 @@ int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 /* -------------------------------------------------------------------------------------- */
 /* Gereserveerde bitwaarde tbv OV ingrepen tijdens signaalplan                            */
 /* -------------------------------------------------------------------------------------- */
-#define OV_PLE_BIT          BIT14  /* FM tbv OV ingrepen tijdens PL             */
+#define PRIO_PLE_BIT          BIT14  /* FM tbv OV ingrepen tijdens PL             */
 
 void BepaalHoofdrichtingOpties(void);
 int  TijdTotLaatsteRealisatieMomentConflict(int, int, int);
 bool StartGroenConflictenUitstellen(count, count, int);
-void set_pg_primair_fc_ov_ple(void);
-void signaalplan_primair_ov_ple(void);
+void set_pg_primair_fc_PRIO_ple(void);
+void signaalplan_primair_PRIO_ple(void);
 
 void OVHalfstarBepaalHoofdrichtingOpties(int, ...);
 int  OVHalfstarBepaalPrioriteitsOpties(int);

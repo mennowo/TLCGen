@@ -1044,7 +1044,7 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
 
 /*****************************************************************************/
 /* vasthouden groen OV bij signaalplan */
-void yv_ov_pl_halfstar(count fc, bool bit, bool condition)
+void yv_PRIO_pl_halfstar(count fc, bool bit, bool condition)
 {
     RW[fc] &= ~bit;
     YV[fc] &= ~bit;

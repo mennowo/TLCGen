@@ -544,7 +544,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					//sb.AppendLine();
                     //if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 					//{
-					//	sb.AppendLine($"{ts}/* tbv ov_ple */");
+					//	sb.AppendLine($"{ts}/* tbv PRIO_ple */");
 					//	sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
 					//	sb.AppendLine($"{ts}{{");
 					//	sb.AppendLine($"{ts}{ts}/* Instellen OV parameters */");
@@ -901,7 +901,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}/* Prio meetkriterium bij PL bedrijf */");
                         foreach (var prio in c.PrioData.PrioIngrepen)
                         {
-                            sb.AppendLine($"{ts}{ts}yv_ov_pl_halfstar({_fcpf}{prio.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)}]);");
+                            sb.AppendLine($"{ts}{ts}yv_PRIO_pl_halfstar({_fcpf}{prio.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{prio.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(prio)}]);");
                         }
                         sb.AppendLine($"{ts}}}");
                     }
@@ -1048,7 +1048,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}{ts}if (!hasOV)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}PAR[fc] &= ~OV_PAR_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}PAR[fc] &= ~PRIO_PAR_BIT;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
 
@@ -1206,7 +1206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					{
 						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
 						sb.AppendLine($"{ts}{{");
-						sb.AppendLine($"{ts}{ts}signaalplan_primair_ov_ple();");
+						sb.AppendLine($"{ts}{ts}signaalplan_primair_PRIO_ple();");
 						sb.AppendLine($"{ts}}}");
 						sb.AppendLine($"{ts}else");
 						sb.AppendLine($"{ts}{{");
@@ -1224,7 +1224,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					{
 						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
 						sb.AppendLine($"{ts}{{");
-						sb.AppendLine($"{ts}{ts}set_pg_primair_fc_ov_ple();");
+						sb.AppendLine($"{ts}{ts}set_pg_primair_fc_PRIO_ple();");
 						sb.AppendLine($"{ts}}}");
 						sb.AppendLine($"{ts}else");
 						sb.AppendLine($"{ts}{{");
