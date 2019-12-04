@@ -37,7 +37,7 @@ namespace TLCGen.Models
                    ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
         }
 
-        public static bool HasOVIngreepKAR(this PrioIngreepModel ov)
+        public static bool HasPrioIngreepKAR(this PrioIngreepModel ov)
         {
             return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)) ||
                    ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
@@ -62,7 +62,7 @@ namespace TLCGen.Models
 
         public static bool HasKAR(this ControllerModel c)
         {
-            return c.PrioData.PrioIngrepen.Any(x => x.HasOVIngreepKAR()) ||
+            return c.PrioData.PrioIngrepen.Any(x => x.HasPrioIngreepKAR()) ||
                    c.PrioData.HDIngrepen.Any(x => x.KAR);
         }
 
@@ -80,7 +80,7 @@ namespace TLCGen.Models
 
         public static bool HasKAR(this PrioriteitDataModel ovdm)
         {
-            return ovdm.PrioIngrepen.Any(x => x.HasOVIngreepKAR()) ||
+            return ovdm.PrioIngrepen.Any(x => x.HasPrioIngreepKAR()) ||
                    ovdm.HDIngrepen.Any(x => x.KAR);
         }
 

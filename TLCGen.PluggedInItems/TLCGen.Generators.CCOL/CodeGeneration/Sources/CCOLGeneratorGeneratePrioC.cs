@@ -1371,7 +1371,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.PrioData.PrioIngrepen.Any())
             {
                 sb.AppendLine($"{ts}/* Prioriteit ingrepen */");
-                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepKAR()))
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.HasPrioIngreepKAR()))
                 {
                     if (int.TryParse(prio.FaseCyclus, out var ifc))
                     {

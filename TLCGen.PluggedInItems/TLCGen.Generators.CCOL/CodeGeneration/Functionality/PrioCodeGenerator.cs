@@ -386,7 +386,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwissel}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _hwissel, ov.FaseCyclus, ov.Type.GetDescription()));
                 }
 
-                if (ov.HasOVIngreepKAR())
+                if (ov.HasPrioIngreepKAR())
                 {
                     _MyDetectors.Add(ov.DummyKARInmelding);
                     _MyDetectors.Add(ov.DummyKARUitmelding);
