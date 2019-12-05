@@ -396,6 +396,7 @@ namespace TLCGen.ModelManagement
                     {
                         var data = @"<PrioriteitDataModel>" + node.InnerXml + @"</PrioriteitDataModel>";
                         data = data.Replace("OV", "Prio");
+                        data = data.Replace(">Uitgebreid<", ">GeneriekePrioriteit<");
                         using (TextReader reader = new StringReader(data))
                         {
                             XmlSerializer xs = new XmlSerializer(typeof(PrioriteitDataModel));
