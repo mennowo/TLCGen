@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -17,7 +18,11 @@ namespace TLCGen.GebruikersOpties
         private RelayCommand _exportCommand;
         private RelayCommand _openExternalDataCommand;
         private RelayCommand _importCommand;
+        private RelayCommand _replaceInImportCommand;
         private RelayCommand _selectAllCommand;
+        private string _replaceInImportFind;
+        private string _replaceInImportReplace;
+        private bool _replaceInImportRegex;
 
         #endregion // Fields
 
@@ -40,10 +45,40 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
-        public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new RelayCommand(
-            () => 
+        public string ReplaceInImportFind
+        {
+            get => _replaceInImportFind;
+            set
             {
-                foreach(var i in ItemsAllPresent)
+                _replaceInImportFind = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ReplaceInImportReplace
+        {
+            get => _replaceInImportReplace;
+            set
+            {
+                _replaceInImportReplace = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ReplaceInImportRegex
+        {
+            get => _replaceInImportRegex;
+            set
+            {
+                _replaceInImportRegex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new RelayCommand(
+            () =>
+            {
+                foreach (var i in ItemsAllPresent)
                 {
                     i.Selected = true;
                 }
@@ -57,7 +92,7 @@ namespace TLCGen.GebruikersOpties
                 if (_exportCommand == null)
                 {
                     _exportCommand = new RelayCommand(
-                        () => 
+                        () =>
                         {
                             var dlg = new SaveFileDialog
                             {
@@ -71,7 +106,7 @@ namespace TLCGen.GebruikersOpties
                             if (r == true)
                             {
                                 var exp = new GebruikersOptiesExportModel();
-                                foreach(var o in ItemsAllPresent.Where(x => x.Selected))
+                                foreach (var o in ItemsAllPresent.Where(x => x.Selected))
                                 {
                                     exp.Items.Add(o);
                                 }
@@ -100,7 +135,7 @@ namespace TLCGen.GebruikersOpties
                 if (_openExternalDataCommand == null)
                 {
                     _openExternalDataCommand = new RelayCommand(
-                        () => 
+                        () =>
                         {
                             var dlg = new OpenFileDialog
                             {
@@ -117,7 +152,7 @@ namespace TLCGen.GebruikersOpties
                                 {
                                     var imp = Helpers.TLCGenSerialization.DeSerialize<GebruikersOptiesExportModel>(dlg.FileName);
                                     ItemsToImport.Clear();
-                                    foreach(var o in imp.Items)
+                                    foreach (var o in imp.Items)
                                     {
                                         o.Selected = true;
                                         ItemsToImport.Add(o);
@@ -144,9 +179,9 @@ namespace TLCGen.GebruikersOpties
                 if (_importCommand == null)
                 {
                     _importCommand = new RelayCommand(
-                        () => 
+                        () =>
                         {
-                            foreach(var o in ItemsToImport.Where(x => x.Selected))
+                            foreach (var o in ItemsToImport.Where(x => x.Selected))
                             {
                                 if (Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_plugin.Controller, o.Naam, o.ObjectType))
                                 {
@@ -183,6 +218,36 @@ namespace TLCGen.GebruikersOpties
                         () => ItemsToImport.Where(x => x.Selected).Any());
                 }
                 return _importCommand;
+            }
+        }
+
+        public ICommand ReplaceInImportCommand
+        {
+            get
+            {
+                if (_replaceInImportCommand == null)
+                {
+                    _replaceInImportCommand = new RelayCommand(
+                        () =>
+                        {
+                            foreach (var i in ItemsToImport)
+                            {
+                                if (ReplaceInImportRegex)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(i.Naam)) i.Naam = Regex.Replace(i.Naam, ReplaceInImportFind, ReplaceInImportReplace);
+                                    if (!string.IsNullOrWhiteSpace(i.Commentaar)) i.Commentaar = Regex.Replace(i.Commentaar, ReplaceInImportFind, ReplaceInImportReplace);
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrWhiteSpace(i.Naam)) i.Naam = i.Naam.Replace(ReplaceInImportFind, ReplaceInImportReplace);
+                                    if (!string.IsNullOrWhiteSpace(i.Commentaar)) i.Commentaar = i.Commentaar.Replace(ReplaceInImportFind, ReplaceInImportReplace);
+                                }
+                            }
+                        },
+                        () => { return ItemsToImport.Where(x => x.Selected).Any() && !string.IsNullOrWhiteSpace(ReplaceInImportFind) && !string.IsNullOrWhiteSpace(ReplaceInImportReplace); }
+                    );
+                }
+                return _replaceInImportCommand;
             }
         }
 
