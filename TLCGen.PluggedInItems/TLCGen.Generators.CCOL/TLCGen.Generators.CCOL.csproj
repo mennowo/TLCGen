@@ -141,6 +141,7 @@
     <Compile Include="Settings\CCOLGeneratorSettingsModel.cs" />
     <Compile Include="Settings\CCOLGeneratorSettingsProvider.cs" />
     <Compile Include="Settings\CodePieceSettingsTuple.cs" />
+    <Content Include="SourceFiles\MirakelMonitor.h" />
     <Content Include="SourceFiles\gkvar.c">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -96,6 +96,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     return 10;
+                case CCOLCodeTypeEnum.RegCIncludes:
+                    return 40;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 40;
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -136,47 +138,64 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"#ifdef PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define XTND_DIC");
                     sb.AppendLine($"#endif");
-                    sb.AppendLine($"");
-                    sb.AppendLine($"");
-                    sb.AppendLine($"");
-                    sb.AppendLine($"");
+                    return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCIncludes:
+                    sb.AppendLine($"#ifdef MIRMON");
+                    sb.AppendLine($"{ts}#include \"MirakelMonitor.h\"");
+                    sb.AppendLine($"#endif /* MIRMON */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (!c.Data.GenererenDuurtestCode) return "";
-                    sb.AppendLine($"{ts}/* TESTOMGEVING */");
-                    sb.AppendLine($"{ts}/* ============ */");
-                    sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
-                    sb.AppendLine($"{ts}{ts}if (!SAPPLPROG)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
-                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY); ");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F11KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}CFB_max = 0; /* maximum aantal herstarts na fasebewaking */");
-                    sb.AppendLine($"{ts}{ts}{ts}MONTYPE[MONTYPE_DATI] = 0;");
-                    sb.AppendLine($"{ts}{ts}{ts}LOGTYPE[LOGTYPE_DATI] = 0;");
-                    sb.AppendLine($"{ts}{ts}#endif");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}#endif");
+                    if (c.Data.GenererenDuurtestCode)
+                    {
+                        sb.AppendLine($"{ts}/* TESTOMGEVING */");
+                        sb.AppendLine($"{ts}/* ============ */");
+                        sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
+                        sb.AppendLine($"{ts}{ts}if (!SAPPLPROG)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
+                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY); ");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F11KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}CFB_max = 0; /* maximum aantal herstarts na fasebewaking */");
+                        sb.AppendLine($"{ts}{ts}{ts}MONTYPE[MONTYPE_DATI] = 0;");
+                        sb.AppendLine($"{ts}{ts}{ts}LOGTYPE[LOGTYPE_DATI] = 0;");
+                        sb.AppendLine($"{ts}{ts}#endif");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}#endif");
+                    }
+                    if (c.Data.MirakelMonitor)
+                    {
+                        sb.AppendLine($"#ifdef MIRMON");
+                        sb.AppendLine($"{ts}if (SAPPLPROG) MirakelMonitor_init(SYSTEM);");
+                        sb.AppendLine($"#endif /* MIRMON */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    if (!c.Data.GenererenDuurtestCode) return "";
-                    sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
-                    sb.AppendLine($"{ts}{ts}for (int i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}if (TFB_timer[i] + 3 > PRM[prmfb])");
-                    sb.AppendLine($"{ts}{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}stuffkey(F5KEY);");
-                    sb.AppendLine($"{ts}{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}#endif");
+                    if (c.Data.GenererenDuurtestCode)
+                    {
+                        sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
+                        sb.AppendLine($"{ts}{ts}for (int i = 0; i < FCMAX; ++i)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}if (TFB_timer[i] + 3 > PRM[prmfb])");
+                        sb.AppendLine($"{ts}{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}stuffkey(F5KEY);");
+                        sb.AppendLine($"{ts}{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}#endif");
+                    }
+                    if (c.Data.MirakelMonitor)
+                    {
+                        sb.AppendLine($"#ifdef MIRMON");
+                        sb.AppendLine($"{ts}MirakelMonitor();");
+                        sb.AppendLine($"#endif /* MIRMON */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:

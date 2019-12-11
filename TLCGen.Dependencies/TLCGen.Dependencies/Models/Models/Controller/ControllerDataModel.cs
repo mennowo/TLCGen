@@ -42,6 +42,7 @@ namespace TLCGen.Models
         public VLOGSettingsDataModel VLOGSettings { get; set; }
         public bool VLOGInTestOmgeving { get; set; }
         public bool WachttijdvoorspellerVensterTestomgeving { get; set; }
+        public bool MirakelMonitor { get; set; }
         public bool GenererenDuurtestCode { get; set; }
         [IsDocumented]
         public bool GarantieOntruimingsTijden { get; set; }

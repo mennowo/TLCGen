@@ -376,6 +376,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Opnemen code mirakel monitor")]
+        public bool MirakelMonitor
+        {
+            get { return _Controller?.Data?.MirakelMonitor ?? false; }
+            set
+            {
+                _Controller.Data.MirakelMonitor = value;
+                RaisePropertyChanged<object>(nameof(MirakelMonitor), broadcast: true);
+            }
+        }
+
         [Category("CCOL specifieke opties")]
         [Description("Gekoppelde regeling (CCOLMS)")]
         public bool CCOLMulti
