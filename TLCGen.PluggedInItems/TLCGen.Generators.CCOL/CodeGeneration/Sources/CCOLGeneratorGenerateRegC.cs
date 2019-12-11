@@ -695,7 +695,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 else
                 {
-                    sb.AppendLine($"{ts}AfhandelingOV();");
+                    sb.AppendLine($"{ts}AfhandelingPrio();");
                 }
             }
             if (controller.Data.FixatieData.FixatieMogelijk)
