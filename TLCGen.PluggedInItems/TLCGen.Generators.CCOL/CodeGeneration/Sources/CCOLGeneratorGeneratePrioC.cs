@@ -38,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GeneratePrioCPrioriteitsOpties(controller));
             sb.Append(GeneratePrioCPrioriteitsToekenning(controller));
             sb.Append(GeneratePrioCTegenhoudenConflicten(controller));
-            sb.Append(GeneratePrioCPostAfhandelingOV(controller));
+            sb.Append(GeneratePrioCPostAfhandelingPrio(controller));
             sb.Append(GeneratePrioCPARCorrecties(controller));
             sb.Append(GeneratePrioCPARCcol(controller));
             sb.Append(GeneratePrioCSpecialSignals(controller));
@@ -1268,7 +1268,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GeneratePrioCPostAfhandelingOV(ControllerModel c)
+        private string GeneratePrioCPostAfhandelingPrio(ControllerModel c)
         {
             var sb = new StringBuilder();
             sb.AppendLine("/* ---------------------------");

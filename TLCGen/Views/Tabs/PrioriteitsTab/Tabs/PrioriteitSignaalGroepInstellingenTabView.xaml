@@ -6,7 +6,7 @@
         xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
         xmlns:local="clr-namespace:TLCGen.Views"
         mc:Ignorable="d"
-        Height="450" Width="800">
+        d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <CheckBox DockPanel.Dock="Right" Content="Niet aanmaken parameters" Margin="5" VerticalAlignment="Center"

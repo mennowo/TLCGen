@@ -163,20 +163,20 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            // check PostAfhandelingOV_Add in ov.add
+            // check PostAfhandelingPrio_Add in ov.add
             if (filename != null)
             {
-                var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
+                var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "prio.add");
                 if (File.Exists(ovAddFile))
                 {
                     var ovaddtext = File.ReadAllLines(ovAddFile);
-                    if (ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingOV_Add.*")))
+                    if (ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingPrio_Add.*")))
                     {
                         MessageBox.Show($"Let op! Deze versie van TLCGen maakt een functie\n" +
-                                    $"'PostAfhandelingOV' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
-                                    $"de functie 'PostAfhandelingOV_Add' aangeroepen, die echter\n" +
-                                    $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingOV_Add ontbreekt.\n\n" +
-                                    "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingOV'," +
+                                    $"'PostAfhandelingPrio' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
+                                    $"de functie 'PostAfhandelingPrio_Add' aangeroepen, die echter\n" +
+                                    $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingPrio_Add ontbreekt.\n\n" +
+                                    "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingPrio'," +
                                     "want die wordt niet aangeroepen.");
                     }
                 }
