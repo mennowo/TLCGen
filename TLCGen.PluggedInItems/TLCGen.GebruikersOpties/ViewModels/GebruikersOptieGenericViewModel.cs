@@ -39,6 +39,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _objectType = value;
+                _relatedObject = null;
                 RaisePropertyChanged();
             }
         }
@@ -49,6 +50,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _naam = value;
+                _relatedObject = null;
                 RaisePropertyChanged();
             }
         }
@@ -59,6 +61,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _commentaar = value;
+                _relatedObject = null;
                 RaisePropertyChanged();
             }
         }
@@ -69,6 +72,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _instelling = value;
+                _relatedObject = null;
                 RaisePropertyChanged();
             }
         }
@@ -79,6 +83,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _timeType = value;
+                _relatedObject = null;
                 RaisePropertyChanged();
             }
         }
