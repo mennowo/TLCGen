@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033"
-    Version="0.6.1"
+    Version="0.6.2"
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -173,7 +173,7 @@
         <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.c" />
         <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
-        <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
+        <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ " />
         <File Id="fil29C62D038F3BAA50853B269B2F63837H" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.c" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837I" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />

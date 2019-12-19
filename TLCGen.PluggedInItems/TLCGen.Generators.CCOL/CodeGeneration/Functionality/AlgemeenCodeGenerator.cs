@@ -29,6 +29,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myBitmapOutputs = new List<CCOLIOElement>();
             _myBitmapInputs = new List<CCOLIOElement>();
 
+
+            _myElements.Add(new CCOLElement("period", CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
+
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
@@ -155,7 +158,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}if (!SAPPLPROG)");
                         sb.AppendLine($"{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
-                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY); ");
+                        sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");

@@ -10,8 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateDplC(ControllerModel controller)
         {
-            CollectAllIO();
-
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* DISPLAY APPLICATIE */");
             sb.AppendLine("/* ------------------ */");
@@ -29,40 +27,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateDplCDisplayParameters(controller));
 
             return sb.ToString();
-        }
-
-        private List<CCOLIOElement> AllCCOLOutputElements;
-        private List<CCOLIOElement> AllCCOLInputElements;
-        private List<IOElementModel> AllOutputModelElements;
-        private List<IOElementModel> AllInputModelElements;
-
-        private void CollectAllIO()
-        {
-            AllCCOLOutputElements = new List<CCOLIOElement>();
-            AllCCOLInputElements = new List<CCOLIOElement>();
-            AllOutputModelElements = new List<IOElementModel>();
-            AllInputModelElements = new List<IOElementModel>();
-
-            foreach (var pgen in PieceGenerators)
-            {
-                if (pgen.HasCCOLBitmapOutputs())
-                {
-                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs());
-                }
-                if (pgen.HasCCOLBitmapInputs())
-                {
-                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs());
-                }
-            }
-
-            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
-            {
-                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
-                {
-                    AllOutputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems());
-                    AllInputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems());
-                }
-            }
         }
 
         private string GenerateDplCIncludes(ControllerModel controller)

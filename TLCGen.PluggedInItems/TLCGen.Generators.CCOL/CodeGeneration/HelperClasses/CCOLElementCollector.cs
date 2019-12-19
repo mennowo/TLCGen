@@ -149,7 +149,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count == 0)
             {
-                data.Elements.Add(new CCOLElement() { Define = "hedummy", Naam = "dummy" });
+                var he = Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Parameter);
+                data.Elements.Add(new CCOLElement() { Define = $"{he}dummy", Naam = "dummy" });
             }
 
             return data;
@@ -158,8 +159,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private static CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             var data = new CCOLElemListData { CCOLCode = "MM_code" };
-
-            data.Elements.Add(new CCOLElement() { Define = "mperiod", Naam = "PERIOD", Commentaar = "Onthouden actieve periode" });
 
             // Collect everything
             foreach (var pgen in pgens)
@@ -198,7 +197,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count == 0)
             {
-                data.Elements.Add(new CCOLElement { Define = "tdummy", Naam = "dummy" });
+                var tm = Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Timer);
+                data.Elements.Add(new CCOLElement { Define = $"{tm}dummy", Naam = "dummy" });
             }
 
             return data;
@@ -249,7 +249,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count == 0)
             {
-                data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
+                var ct = CCOL.Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Counter);
+                data.Elements.Add(new CCOLElement() { Define = $"{ct}dummy", Naam = "dummy" });
             }
 
             return data;
@@ -265,7 +266,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             };
 
             // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = controller.Data.Fasebewaking, TType = CCOLElementTimeTypeEnum.TS_type, Commentaar = "Instelling fasebewaking" });
+            var prm = CCOL.Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Parameter);
+            data.Elements.Add(new CCOLElement() { Define = $"{prm}fb", Naam = "FB", Instelling = controller.Data.Fasebewaking, TType = CCOLElementTimeTypeEnum.TS_type, Commentaar = "Instelling fasebewaking" });
 
             foreach(var pgen in pgens)
             {

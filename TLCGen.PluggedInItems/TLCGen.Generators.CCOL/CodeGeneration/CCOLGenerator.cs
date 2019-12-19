@@ -28,6 +28,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private List<DetectorModel> _alleDetectoren;
 
+        private List<CCOLIOElement> AllCCOLOutputElements;
+        private List<CCOLIOElement> AllCCOLInputElements;
+        private List<IOElementModel> AllOutputModelElements;
+        private List<IOElementModel> AllInputModelElements;
+
         private string _uspf;
         private string _ispf;
         private string _fcpf;
@@ -120,6 +125,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _alleDetectoren.Add(dm);
 
                     var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
+
+                    CollectAllIO();
 
                     if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                         throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
@@ -597,6 +604,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         #endregion // Public Methods
 
         #region Private Methods
+
+        private void CollectAllIO()
+        {
+            AllCCOLOutputElements = new List<CCOLIOElement>();
+            AllCCOLInputElements = new List<CCOLIOElement>();
+            AllOutputModelElements = new List<IOElementModel>();
+            AllInputModelElements = new List<IOElementModel>();
+
+            foreach (var pgen in PieceGenerators)
+            {
+                if (pgen.HasCCOLBitmapOutputs())
+                {
+                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs());
+                }
+                if (pgen.HasCCOLBitmapInputs())
+                {
+                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs());
+                }
+            }
+
+            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            {
+                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
+                {
+                    AllOutputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems());
+                    AllInputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems());
+                }
+            }
+        }
 
         /// <summary>
         /// Generates all "sys.h" lines for a given instance of CCOLElemListData.

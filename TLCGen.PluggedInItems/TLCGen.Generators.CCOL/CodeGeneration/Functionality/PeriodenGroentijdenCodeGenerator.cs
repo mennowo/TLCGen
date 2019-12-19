@@ -371,7 +371,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (mgm.FaseCyclus != fcm.Naam || !mgm.Waarde.HasValue) continue;
                                         sb.Append("".PadLeft(($"{ts}{grfunc}(").Length));
                                         sb.AppendLine(
-                                            ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
+                                            ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[{_mpf}{_mperiod}] == {mper}),"));
                                     }
                                 }
                                 ++mper;
