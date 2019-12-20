@@ -156,7 +156,7 @@ namespace TLCGen.ViewModels
         {
             DummyDetectoren.Clear();
 
-            foreach (var prio in Controller.PrioData.PrioIngrepen)
+            foreach (var prio in Controller.PrioData.PrioIngrepen.Where(x => x.DummyKARInmelding != null && x.DummyKARUitmelding != null))
             {
                 if (prio.HasPrioIngreepKAR())
                 {
