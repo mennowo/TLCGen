@@ -593,34 +593,39 @@ namespace TLCGen.ModelManagement
             {
                 case PrioIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
-                    if (ovi != null && meldingMsg.MeldingType == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+                    if (meldingMsg.IngreepMelding != null && meldingMsg.IngreepMelding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                     {
-                        var karMelding = ovi.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-
-                        if (karMelding != null && ovi.DummyKARInmelding == null)
+                        switch (meldingMsg.IngreepMelding.InUit)
                         {
-                            ovi.DummyKARInmelding = new DetectorModel()
-                            {
-                                Dummy = true,
-                                Naam = "dummykarin" + ovi.FaseCyclus
-                            };
+                            case PrioIngreepInUitMeldingTypeEnum.Inmelding:
+                                if (ovi.DummyKARInmelding == null)
+                                {
+                                    ovi.DummyKARInmelding = new DetectorModel()
+                                    {
+                                        Dummy = true,
+                                        Naam = $"dummykarin" + ovi.FaseCyclus
+                                    };
+                                }
+                                break;
+                            case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
+                                if (ovi.DummyKARUitmelding == null)
+                                {
+                                    ovi.DummyKARUitmelding = new DetectorModel()
+                                    {
+                                        Dummy = true,
+                                        Naam = $"dummykaruit" + ovi.FaseCyclus
+                                    };
+                                }
+                                break;
                         }
-                        else if (karMelding == null && ovi.DummyKARInmelding != null)
+                    }
+                    else
+                    {
+                        if (ovi.MeldingenData.Inmeldingen.All(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) && ovi.DummyKARInmelding != null)
                         {
                             ovi.DummyKARInmelding = null;
                         }
-
-                        karMelding = ovi.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-
-                        if (karMelding != null && ovi.DummyKARUitmelding == null)
-                        {
-                            ovi.DummyKARUitmelding = new DetectorModel()
-                            {
-                                Dummy = true,
-                                Naam = "dummykaruit" + ovi.FaseCyclus
-                            };
-                        }
-                        else if (karMelding == null && ovi.DummyKARUitmelding != null)
+                        if (ovi.MeldingenData.Uitmeldingen.All(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) && ovi.DummyKARUitmelding != null)
                         {
                             ovi.DummyKARUitmelding = null;
                         }
@@ -682,10 +687,10 @@ namespace TLCGen.ModelManagement
                     }
                     break;
 
-            }
         }
+    }
 
-        private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
+    private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
         {
             foreach (var fcm in msg.Controller.Fasen)
             {
@@ -749,6 +754,6 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChangedMessage));
         }
 
-        #endregion // Constructor
-    }
+    #endregion // Constructor
+}
 }
