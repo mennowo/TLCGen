@@ -159,6 +159,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 var sb = new StringBuilder();
                 var lines = File.ReadAllLines(sysFile);
                 var inserted = false;
+                var detectieFound = false;
                 foreach (var l in lines)
                 {
                     if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z_]+\s+[0-9]+.*"))
@@ -166,6 +167,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                         var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
                         if (m.Success)
                         {
+                            detectieFound = true;
                             var rd = RangeerElementen.FirstOrDefault(x => _plugin.Dpf + x.Element == m.Groups["def"].Value);
                             if (rd != null)
                             {
@@ -173,7 +175,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                             }
                         }
                     }
-                    if (!inserted && 
+                    if (!inserted && detectieFound &&
                         (Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*") || 
                          Regex.IsMatch(l, $@"\s*#if\s+!defined\s+AUTOMAAT.*") || 
                          Regex.IsMatch(l, $@"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||

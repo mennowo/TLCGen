@@ -57,6 +57,17 @@ namespace TLCGen.GebruikersOpties
                 RaisePropertyChanged<object>("Instelling", broadcast: true);
             }
         }
+
+        public bool Dummy
+        {
+            get { return GebruikersOptie.Dummy; }
+            set
+            {
+                GebruikersOptie.Dummy = value;
+                RaisePropertyChanged<object>("Dummy", broadcast: true);
+            }
+        }
+
         public string Commentaar
         {
             get { return GebruikersOptie.Commentaar; }

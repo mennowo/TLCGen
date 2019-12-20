@@ -9,6 +9,7 @@ namespace TLCGen.GebruikersOpties
 
         public CCOLElementTypeEnum Type { get; set; }
         public int? Instelling { get; set; }
+        public bool Dummy { get; set; }
         public string Commentaar { get; set; }
 
         public bool ShouldSerializeType()

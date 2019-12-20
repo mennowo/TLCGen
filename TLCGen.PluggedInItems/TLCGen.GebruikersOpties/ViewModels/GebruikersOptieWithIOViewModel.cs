@@ -46,6 +46,16 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        public bool Dummy
+        {
+            get => _GebruikersOptieWithOI.Dummy;
+            set
+            {
+                _GebruikersOptieWithOI.Dummy = value;
+                RaisePropertyChanged<object>("Dummy", broadcast: true);
+            }
+        }
+
         public TLCGenObjectTypeEnum ObjectType { get; set; }
 
         public string Commentaar

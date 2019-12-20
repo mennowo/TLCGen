@@ -190,6 +190,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="paket.references" />
+    <None Include="SourceFiles\MirakelMonitor.lib" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Settings\ccolgendefaults.xml">

@@ -902,7 +902,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in Ingangen)
             {
@@ -910,7 +910,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in HulpElementen)
             {
@@ -918,7 +918,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in Timers)
             {
@@ -928,7 +928,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in Counters)
             {
@@ -938,7 +938,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in Schakelaars)
             {
@@ -948,7 +948,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.SCH_type,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in GeheugenElementen)
             {
@@ -956,7 +956,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
             foreach (var elem in Parameters)
             {
@@ -966,7 +966,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter,
-                        elem.Commentaar));
+                        elem.Commentaar){ Dummy = elem.Dummy });
             }
 
             return AllElements;
