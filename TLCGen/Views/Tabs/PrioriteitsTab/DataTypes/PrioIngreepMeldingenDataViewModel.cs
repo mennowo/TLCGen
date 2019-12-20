@@ -246,30 +246,32 @@ namespace TLCGen.ViewModels
 
         private void AddInmeldingCommand_Executed(object prm)
         {
-            Inmeldingen.Add(new PrioIngreepInUitMeldingViewModel(new PrioIngreepInUitMeldingModel
+            var m = new PrioIngreepInUitMeldingModel
             {
                 InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
                 Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-            }));
+            };
+            Inmeldingen.Add(new PrioIngreepInUitMeldingViewModel(m));
 
             var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
-            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, m));
         }
 
         private void AddUitmeldingCommand_Executed(object prm)
         {
-            Uitmeldingen.Add(new PrioIngreepInUitMeldingViewModel(new PrioIngreepInUitMeldingModel
+            var m = new PrioIngreepInUitMeldingModel
             {
                 InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
                 Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-            }));
+            };
+            Uitmeldingen.Add(new PrioIngreepInUitMeldingViewModel(m));
 
             var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
-            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, m));
         }
 
         private void RemoveInmeldingCommand_Executed(object prm)
@@ -280,7 +282,7 @@ namespace TLCGen.ViewModels
 				var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
 				MessengerInstance.Send(msg);
 				if (msg.FaseCyclus == null) return;
-				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, null));
 				SelectedInmelding = null;
             }
         }
@@ -298,7 +300,7 @@ namespace TLCGen.ViewModels
 				var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
 				MessengerInstance.Send(msg);
 				if (msg.FaseCyclus == null) return;
-				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, null));
 				SelectedUitmelding = null;
             }
         }

@@ -71,7 +71,7 @@ namespace TLCGen.ViewModels
                 var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
                 MessengerInstance.Send(msg);
                 if (msg.FaseCyclus == null) return;
-                MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
             }
         }
 
