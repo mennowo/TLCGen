@@ -22,6 +22,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmyy;
         private CCOLGeneratorCodeStringSettingModel _prmzz;
 #pragma warning restore 0649
+        string _mperiod;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -29,8 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myBitmapOutputs = new List<CCOLIOElement>();
             _myBitmapInputs = new List<CCOLIOElement>();
 
-
-            _myElements.Add(new CCOLElement("period", CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
+            _myElements.Add(new CCOLElement(_mperiod, CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
 
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
@@ -338,6 +338,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
 
             return base.SetSettings(settings);
         }

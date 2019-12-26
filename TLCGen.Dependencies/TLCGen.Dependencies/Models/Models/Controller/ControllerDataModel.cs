@@ -50,6 +50,7 @@ namespace TLCGen.Models
         public bool ExtraMeeverlengenInWG { get; set; }
         [IsDocumented]
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
+        public bool VerlengGroenInTVGMax { get; set; }
         [IsDocumented]
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
 

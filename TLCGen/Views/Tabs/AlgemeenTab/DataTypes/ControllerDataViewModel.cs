@@ -346,7 +346,22 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.TypeGroentijden = value;
                 RaisePropertyChanged<object>(nameof(TypeGroentijden), broadcast: true);
+                RaisePropertyChanged(nameof(IsTypeGroenVerlengGroen));
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
+            }
+        }
+
+        public bool IsTypeGroenVerlengGroen => TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden;
+
+        [Description("Verlenggroentijden direct in TVG max")]
+        [BrowsableCondition("IsTypeGroenVerlengGroen")]
+        public bool VerlengGroenInTVGMax
+        {
+            get { return _Controller?.Data.VerlengGroenInTVGMax ?? false; }
+            set
+            {
+                _Controller.Data.VerlengGroenInTVGMax = value;
+                RaisePropertyChanged<object>(nameof(VerlengGroenInTVGMax), broadcast: true);
             }
         }
 
@@ -373,17 +388,6 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.WachttijdvoorspellerVensterTestomgeving = value;
                 RaisePropertyChanged<object>(nameof(WachttijdvoorspellerVensterTestomgeving), broadcast: true);
-            }
-        }
-
-        [Description("Opnemen code mirakel monitor")]
-        public bool MirakelMonitor
-        {
-            get { return _Controller?.Data?.MirakelMonitor ?? false; }
-            set
-            {
-                _Controller.Data.MirakelMonitor = value;
-                RaisePropertyChanged<object>(nameof(MirakelMonitor), broadcast: true);
             }
         }
 
@@ -524,6 +528,17 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.PracticeOmgeving = value;
                 RaisePropertyChanged<object>("PracticeOmgeving", broadcast: true);
+            }
+        }
+
+        [Description("Opnemen code mirakel monitor")]
+        public bool MirakelMonitor
+        {
+            get { return _Controller?.Data?.MirakelMonitor ?? false; }
+            set
+            {
+                _Controller.Data.MirakelMonitor = value;
+                RaisePropertyChanged<object>(nameof(MirakelMonitor), broadcast: true);
             }
         }
 

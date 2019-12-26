@@ -355,7 +355,6 @@ hierbij:
 
 Resultaat:   zet BIT4 op van A[fc]
 ------------------------------------------------------------------------------ */
-
 void AanvraagSnelV2(count fc1, count dp)
 {
 	/* richting mag gelijk realiseren indien er geen conflicten lopen */
@@ -1179,4 +1178,15 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
         RT[tnl] |= (T[meergroen] || RT[meergroen]) && (VS[fc] || FG[fc] || WG[fc]);
     }
     va_end(argpt);
+}
+
+
+void verleng_star_groentijden_va_argTVG(count fc,       /* fase */
+	count has,      /* hulpelement rateltikkers voor deze fase */
+	count has_aan_, /* hulpelement tikkers werking */
+	count has_cont_,/* hulpelement tikkers continu */
+	count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
+	...)            /* hulpelementen drukknoppen */
+{
+
 }
