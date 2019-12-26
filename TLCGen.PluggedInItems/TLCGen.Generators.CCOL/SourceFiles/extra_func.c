@@ -1179,14 +1179,3 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
     }
     va_end(argpt);
 }
-
-
-void verleng_star_groentijden_va_argTVG(count fc,       /* fase */
-	count has,      /* hulpelement rateltikkers voor deze fase */
-	count has_aan_, /* hulpelement tikkers werking */
-	count has_cont_,/* hulpelement tikkers continu */
-	count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
-	...)            /* hulpelementen drukknoppen */
-{
-
-}

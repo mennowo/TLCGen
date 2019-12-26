@@ -39,11 +39,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var iperbel = 1;
             var iperbeldim = 1;
 
-            if (c.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden && c.Data.VerlengGroenInTVGMax)
-            {
-                _myElements.Add(new CCOLElement($"{_mperiod}old", CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode vorige ronde"));
-            }
-
             // outputs
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
             _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_uspf}{_usperdef}"));
@@ -330,15 +325,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    var tts = ts;
-                    // groentijden naar TVG_max op start periode
-                    if (c.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden && c.Data.VerlengGroenInTVGMax)
-                    {
-                        tts = ts + ts;
-                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mperiod}old] != MM[{_mpf}{_mperiod}])");
-                        sb.AppendLine($"{ts}{{");
-                    }
-
                     string grfunc;
                     switch (c.Data.TypeGroentijden)
                     {
@@ -347,11 +333,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    if (c.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden && c.Data.VerlengGroenInTVGMax)
-                    {
-                        grfunc = "verleng_star_groentijden_va_argTVG";
-                    }
-
+                    
                     // Groentijden obv periode
                     foreach (var fcm in c.Fasen)
                     {
@@ -399,13 +381,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.AppendLine($"{ts}TVG_max[{_fcpf}{fcm.Naam}] = 0;");
                         }
-                    }
-                    if (c.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden && c.Data.VerlengGroenInTVGMax)
-                    {
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}MM[{_mpf}{_mperiod}old] = MM[{_mpf}{_mperiod}];");
-
-                         // TODO check for changes in TVG_max
                     }
                     return sb.ToString();
 

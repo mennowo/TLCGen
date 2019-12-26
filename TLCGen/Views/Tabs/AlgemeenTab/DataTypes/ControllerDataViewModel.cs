@@ -346,22 +346,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.TypeGroentijden = value;
                 RaisePropertyChanged<object>(nameof(TypeGroentijden), broadcast: true);
-                RaisePropertyChanged(nameof(IsTypeGroenVerlengGroen));
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
-            }
-        }
-
-        public bool IsTypeGroenVerlengGroen => TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden;
-
-        [Description("Verlenggroentijden direct in TVG max")]
-        [BrowsableCondition("IsTypeGroenVerlengGroen")]
-        public bool VerlengGroenInTVGMax
-        {
-            get { return _Controller?.Data.VerlengGroenInTVGMax ?? false; }
-            set
-            {
-                _Controller.Data.VerlengGroenInTVGMax = value;
-                RaisePropertyChanged<object>(nameof(VerlengGroenInTVGMax), broadcast: true);
             }
         }
 
