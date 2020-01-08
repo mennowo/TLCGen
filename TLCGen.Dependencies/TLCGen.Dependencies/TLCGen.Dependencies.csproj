@@ -42,8 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ITLCGenControllerDataProvider.cs" />
-    <Compile Include="DataAccess\TLCGenControllerDataProvider.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DataGridExtensions.cs" />
@@ -118,8 +116,6 @@
     <Compile Include="Messaging\Requests\ProcessSynchronisationsRequest.cs" />
     <Compile Include="Messaging\Requests\RefreshBitmapRequest.cs" />
     <Compile Include="Messaging\Responses\GetDetectorListResponse.cs" />
-    <Compile Include="ModelManager\ITLCGenModelManager.cs" />
-    <Compile Include="ModelManager\TLCGenModelManager.cs" />
     <Compile Include="Models.Enumerations\AansturingWaitsignalenEnum.cs" />
     <Compile Include="Models.Enumerations\AltijdAanUitEnum.cs" />
     <Compile Include="Models.Enumerations\BitmappedItemTypeEnum.cs" />

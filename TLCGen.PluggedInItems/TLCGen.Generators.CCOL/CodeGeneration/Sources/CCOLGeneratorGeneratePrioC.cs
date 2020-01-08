@@ -1376,17 +1376,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (int.TryParse(prio.FaseCyclus, out var ifc))
                     {
                         var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
-
-                        var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                         var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                        if (m != null)
+                        foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{prio.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
-                        m = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                        if (m != null)
+                        foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{prio.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                     }
                 }

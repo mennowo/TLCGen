@@ -53,7 +53,7 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioOpTijd { get; set; }
         public int GeconditioneerdePrioTeLaat { get; set; }
 
-        public HalfstarOVIngreepModel HalfstarIngreepData { get; set; }
+        public HalfstarPrioIngreepModel HalfstarIngreepData { get; set; }
 
         [HasDefault(false)]
         [Browsable(false)]
@@ -78,11 +78,6 @@ namespace TLCGen.Models
         [Browsable(false)]
         [IOElement("tl", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
-
-        [Browsable(false)]
-        public DetectorModel DummyKARInmelding { get; set; }
-        [Browsable(false)]
-        public DetectorModel DummyKARUitmelding { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
@@ -115,7 +110,7 @@ namespace TLCGen.Models
             GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
             MeldingenData = new PrioIngreepMeldingenDataModel();
-            HalfstarIngreepData = new HalfstarOVIngreepModel();
+            HalfstarIngreepData = new HalfstarPrioIngreepModel();
         }
 
         #endregion // Constructor

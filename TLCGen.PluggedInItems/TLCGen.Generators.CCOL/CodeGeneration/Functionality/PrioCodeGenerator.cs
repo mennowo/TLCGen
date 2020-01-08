@@ -388,8 +388,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (ov.HasPrioIngreepKAR())
                 {
-                    _MyDetectors.Add(ov.DummyKARInmelding);
-                    _MyDetectors.Add(ov.DummyKARUitmelding);
+                    _MyDetectors.AddRange(ov.GetDummyInDetectors());
+                    _MyDetectors.AddRange(ov.GetDummyUitDetectors());
                 }
 
                 if (ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus)

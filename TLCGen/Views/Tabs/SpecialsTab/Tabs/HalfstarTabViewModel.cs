@@ -21,7 +21,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private HalfstarOVIngreepModel _ovIngreep;
+        private HalfstarPrioIngreepModel _ovIngreep;
 
         #endregion // Fields
 
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public HalfstarOVIngreepViewModel(HalfstarOVIngreepModel ovIngreep)
+        public HalfstarOVIngreepViewModel(HalfstarPrioIngreepModel ovIngreep)
         {
             _ovIngreep = ovIngreep;
         }

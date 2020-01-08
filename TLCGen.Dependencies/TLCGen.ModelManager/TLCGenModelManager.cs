@@ -17,6 +17,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.ModelManagement
 {
@@ -386,7 +387,7 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-            checkVer = Version.Parse("0.7.0.0");
+            checkVer = Version.Parse("0.7.1.0");
             if (v < checkVer)
             {
                 // V0.7.0.0: OV removed, PRIO added
@@ -394,6 +395,55 @@ namespace TLCGen.ModelManagement
                 {
                     if (node.LocalName == "OVData")
                     {
+                        // Move dummy KAR dets to appropriate melding instead of ingreep
+                        var ingrepen = node.SelectNodes("OVIngrepen/OVIngreep");
+                        foreach(XmlNode ingreep in ingrepen)
+                        {
+                            var dummyIn = ingreep.SelectSingleNode("DummyKARInmelding");
+                            var dummyUit = ingreep.SelectSingleNode("DummyKARUitmelding");
+                            if (dummyIn != null)
+                            {
+                                ingreep.RemoveChild(dummyIn);
+                                var inmeldingen = ingreep.SelectNodes("MeldingenData/Inmeldingen/Inmelding");
+                                foreach(XmlNode inmelding in inmeldingen)
+                                {
+                                    if (inmelding.SelectSingleNode("Type").InnerText == "KARMelding")
+                                    {
+                                        var fase = ingreep.SelectSingleNode("FaseCyclus").InnerText;
+                                        var type = ingreep.SelectSingleNode("Type").InnerText;
+                                        if (Enum.TryParse(type, out PrioIngreepVoertuigTypeEnum eType))
+                                        {
+                                            var name = dummyIn.SelectSingleNode("Naam");
+                                            name.InnerText = $"dummykarin{fase}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(eType)}";
+                                            inmelding.AppendChild(dummyIn);
+                                            RenameXMLNode(doc, dummyIn, "DummyKARMelding");
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            if (dummyUit != null)
+                            {
+                                ingreep.RemoveChild(dummyUit);
+                                var uitmeldingen = ingreep.SelectNodes("MeldingenData/Uitmeldingen/Uitmelding");
+                                foreach (XmlNode uitmelding in uitmeldingen)
+                                {
+                                    if (uitmelding.SelectSingleNode("Type").InnerText == "KARMelding")
+                                    {
+                                        var fase = ingreep.SelectSingleNode("FaseCyclus").InnerText;
+                                        var type = ingreep.SelectSingleNode("Type").InnerText;
+                                        if (Enum.TryParse(type, out PrioIngreepVoertuigTypeEnum eType))
+                                        {
+                                            var name = dummyUit.SelectSingleNode("Naam");
+                                            name.InnerText = $"dummykaruit{fase}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(eType)}";
+                                            uitmelding.AppendChild(dummyUit);
+                                            RenameXMLNode(doc, dummyUit, "DummyKARMelding");
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         var data = @"<PrioriteitDataModel>" + node.InnerXml + @"</PrioriteitDataModel>";
                         data = data.Replace("OV", "Prio");
                         data = data.Replace(">Uitgebreid<", ">GeneriekePrioriteit<");
@@ -592,42 +642,34 @@ namespace TLCGen.ModelManagement
             switch (msg)
             {
                 case PrioIngreepMeldingChangedMessage meldingMsg:
-                    var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
+                    var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(
+                        x => 
+                            x.MeldingenData.Inmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)) ||
+                            x.MeldingenData.Uitmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)));
                     if (meldingMsg.IngreepMelding != null && meldingMsg.IngreepMelding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                     {
                         switch (meldingMsg.IngreepMelding.InUit)
                         {
                             case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                                if (ovi.DummyKARInmelding == null)
+                                if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                 {
-                                    ovi.DummyKARInmelding = new DetectorModel()
+                                    meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                     {
                                         Dummy = true,
-                                        Naam = $"dummykarin" + ovi.FaseCyclus
+                                        Naam = $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
                                     };
                                 }
                                 break;
                             case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                                if (ovi.DummyKARUitmelding == null)
+                                if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                 {
-                                    ovi.DummyKARUitmelding = new DetectorModel()
+                                    meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                     {
                                         Dummy = true,
-                                        Naam = $"dummykaruit" + ovi.FaseCyclus
+                                        Naam = $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
                                     };
                                 }
                                 break;
-                        }
-                    }
-                    else
-                    {
-                        if (ovi.MeldingenData.Inmeldingen.All(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) && ovi.DummyKARInmelding != null)
-                        {
-                            ovi.DummyKARInmelding = null;
-                        }
-                        if (ovi.MeldingenData.Uitmeldingen.All(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) && ovi.DummyKARUitmelding != null)
-                        {
-                            ovi.DummyKARUitmelding = null;
                         }
                     }
                     break;

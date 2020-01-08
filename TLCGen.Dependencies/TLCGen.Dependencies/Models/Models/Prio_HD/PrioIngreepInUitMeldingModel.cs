@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -31,9 +32,12 @@ namespace TLCGen.Models
 
         public bool OpvangStoring { get; set; }
         public PrioIngreepInUitMeldingModel MeldingBijstoring { get; set; }
-        
+
+        [Browsable(false)]
+        public DetectorModel DummyKARMelding { get; set; } = null;
+
         #endregion // Properties
-        
+
         #region Constructor
 
         public PrioIngreepInUitMeldingModel()

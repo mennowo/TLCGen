@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
                 _Controller.PrioData.PrioIngreepType = value;
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("");
+                RaisePropertyChanged<object>(nameof(PrioIngreepType), broadcast: true);
             }
         }
 

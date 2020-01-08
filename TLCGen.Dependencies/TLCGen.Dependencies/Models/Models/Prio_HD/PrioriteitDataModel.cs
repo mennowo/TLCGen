@@ -59,21 +59,9 @@ namespace TLCGen.Models
 
         public List<DetectorModel> GetAllDummyDetectors()
         {
-            var dets = new List<DetectorModel>();
-
-            foreach(var prio in PrioIngrepen)
-            {
-                if(prio.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
-                {
-                    var m = prio.MeldingenData.Inmeldingen.First(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    dets.Add(prio.DummyKARInmelding);
-                }
-                if (prio.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
-                {
-                    var m = prio.MeldingenData.Uitmeldingen.First(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    dets.Add(prio.DummyKARUitmelding);
-                }
-            }
+            var detsIn = PrioIngrepen.SelectMany(x => x.MeldingenData.Inmeldingen.Where(x2 => x2.DummyKARMelding != null).Select(x2 => x2.DummyKARMelding));
+            var detsUit = PrioIngrepen.SelectMany(x => x.MeldingenData.Uitmeldingen.Where(x2 => x2.DummyKARMelding != null).Select(x2 => x2.DummyKARMelding));
+            var dets = detsIn.Concat(detsUit).ToList();
             foreach (var hd in HDIngrepen)
             {
                 if (hd.KAR)
@@ -82,8 +70,7 @@ namespace TLCGen.Models
                     dets.Add(hd.DummyKARUitmelding);
                 }
             }
-
-                return dets;
+            return dets;
         }
 
         #endregion // Public Methods

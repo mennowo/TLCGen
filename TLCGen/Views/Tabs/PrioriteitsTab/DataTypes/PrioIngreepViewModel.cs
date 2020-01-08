@@ -9,6 +9,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -35,6 +36,10 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.Type = value;
+
+                foreach (var m in PrioIngreep.MeldingenData.Inmeldingen) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
+                foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
+
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }

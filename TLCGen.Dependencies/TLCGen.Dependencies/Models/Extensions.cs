@@ -43,6 +43,16 @@ namespace TLCGen.Models
                    ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
+        public static IEnumerable<DetectorModel> GetDummyInDetectors(this PrioIngreepModel ov)
+        {
+            return ov.MeldingenData.Inmeldingen.Where(x => x.DummyKARMelding != null).Select(x => x.DummyKARMelding);
+        }
+
+        public static IEnumerable<DetectorModel> GetDummyUitDetectors(this PrioIngreepModel ov)
+        {
+            return ov.MeldingenData.Uitmeldingen.Where(x => x.DummyKARMelding != null).Select(x => x.DummyKARMelding);
+        }
+
         public static bool HasOVIngreepWissel(this PrioIngreepModel ov)
         {
             return ((ov.MeldingenData.Wissel1 &&

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
@@ -104,21 +105,21 @@ namespace TLCGen.ViewModels
             {
                 if(prio.HasPrioIngreepKAR())
                 {
-                    if(prio.DummyKARInmelding != null)
+                    foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                     {
-                        prio.DummyKARInmelding.Simulatie.Q1 = 3;
-                        prio.DummyKARInmelding.Simulatie.Q2 = 5;
-                        prio.DummyKARInmelding.Simulatie.Q3 = 10;
-                        prio.DummyKARInmelding.Simulatie.Q4 = 15;
-                        prio.DummyKARInmelding.Simulatie.Stopline = 1800;
+                        m.DummyKARMelding.Simulatie.Q1 = 3;
+                        m.DummyKARMelding.Simulatie.Q2 = 5;
+                        m.DummyKARMelding.Simulatie.Q3 = 10;
+                        m.DummyKARMelding.Simulatie.Q4 = 15;
+                        m.DummyKARMelding.Simulatie.Stopline = 1800;
                     }
-                    if (prio.DummyKARUitmelding != null)
+                    foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                     {
-                        prio.DummyKARUitmelding.Simulatie.Q1 = 200;
-                        prio.DummyKARUitmelding.Simulatie.Q2 = 200;
-                        prio.DummyKARUitmelding.Simulatie.Q3 = 200;
-                        prio.DummyKARUitmelding.Simulatie.Q4 = 200;
-                        prio.DummyKARUitmelding.Simulatie.Stopline = 1800;
+                        m.DummyKARMelding.Simulatie.Q1 = 200;
+                        m.DummyKARMelding.Simulatie.Q2 = 200;
+                        m.DummyKARMelding.Simulatie.Q3 = 200;
+                        m.DummyKARMelding.Simulatie.Q4 = 200;
+                        m.DummyKARMelding.Simulatie.Stopline = 1800;
                     }
                 }
             }
@@ -156,20 +157,12 @@ namespace TLCGen.ViewModels
         {
             DummyDetectoren.Clear();
 
-            foreach (var prio in Controller.PrioData.PrioIngrepen.Where(x => x.DummyKARInmelding != null && x.DummyKARUitmelding != null))
+            foreach (var prio in Controller.PrioData.PrioIngrepen)
             {
                 if (prio.HasPrioIngreepKAR())
                 {
-                    var m = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    if (m != null)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(prio.DummyKARInmelding) { FaseCyclus = prio.FaseCyclus });
-                    }
-                    m = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
-                    if (m != null)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(prio.DummyKARUitmelding) { FaseCyclus = prio.FaseCyclus });
-                    }
+                    foreach (var id in prio.GetDummyInDetectors().Select(x => new DetectorViewModel(x) { FaseCyclus = prio.FaseCyclus })) DummyDetectoren.Add(id);
+                    foreach (var id in prio.GetDummyUitDetectors().Select(x => new DetectorViewModel(x) { FaseCyclus = prio.FaseCyclus })) DummyDetectoren.Add(id);
                 }
             }
             foreach (var hd in Controller.PrioData.HDIngrepen)
