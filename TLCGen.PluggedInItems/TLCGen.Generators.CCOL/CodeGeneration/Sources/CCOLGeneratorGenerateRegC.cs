@@ -165,6 +165,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            if (controller.Data.FixatieMogelijk)
+            {
+                sb.AppendLine($"{ts}#include \"fixatie.c\"");
+            }
             if (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any())
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");

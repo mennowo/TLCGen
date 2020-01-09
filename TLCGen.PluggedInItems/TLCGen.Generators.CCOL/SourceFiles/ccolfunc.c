@@ -17,7 +17,6 @@
 #endif
 
 #include "uitstuur.c"
-#include "fixatie.c"
 
 
 #define TAMAX  32000      /* Maximaal aantal tijdelijke aanvragen op een fasecyclus     */
