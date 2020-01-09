@@ -46,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"#define LNKMAX {lnkmax} /* aantal links */");
+            sb.AppendLine($"#define LNKMAX1 {lnkmax} /* aantal links */");
 
             return sb.ToString();
         }

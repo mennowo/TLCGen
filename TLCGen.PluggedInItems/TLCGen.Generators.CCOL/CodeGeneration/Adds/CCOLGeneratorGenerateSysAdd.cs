@@ -53,6 +53,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        {
 				sb.AppendLine("#define PLMAX  (PLMAX1+0)  /* Totaal aantal gebruikte signaalplannen */");
 	        }
+            sb.AppendLine("#if !defined AUTOMAAT");
+            sb.AppendLine("#define LNKMAX (LNKMAX1+0) /* Totaal aantal gebruikte simulatie elementen */");
+            sb.AppendLine("#endif");
             sb.AppendLine();
 
             return sb.ToString();

@@ -341,7 +341,7 @@ namespace TLCGen.Generators.CCOL
                     {
                         _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
                         {
-                            Header = "Bijwerken functies in add files tijdens genereren"
+                            Header = "Bijwerken code in add files tijdens genereren"
                         };
                     }
                     if (_resetSettingsMenuItem == null)
