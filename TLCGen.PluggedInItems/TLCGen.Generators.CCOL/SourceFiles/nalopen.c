@@ -13,8 +13,7 @@ count TNL_TGK[TMMAX];
 void NaloopVtg(count fc1, count fc2, count tnl)
 {
    RT[tnl] = SG[fc1];
-   if (RT[tnl])             RW[fc2] |= BIT2;
-   if (RT[tnl] || T[tnl])   YV[fc2] |= BIT2;
+   if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
    berekenTNL(fc2,tnl);
    if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
 
@@ -32,8 +31,7 @@ void NaloopVtgDet(count fc1, count fc2, count dk, count hdk, count tnl)
    if (SG[fc1]) IH[hdk] = FALSE;
    IH[hdk] |= D[dk] && !G[fc1] && A[fc1];
    RT[tnl] = SG[fc1] && H[hdk];
-   if (RT[tnl])             RW[fc2] |= BIT2;
-   if (RT[tnl] || T[tnl])   YV[fc2] |= BIT2;
+   if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
    berekenTNL(fc2,tnl);
    if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
 }
