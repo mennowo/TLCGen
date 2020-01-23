@@ -188,15 +188,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                     }
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
-                        (c.OVData.OVIngrepen.Any() ||
-                         c.OVData.HDIngrepen.Any()))
-                    {
-                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), Encoding.Default);
-                    }
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.OVData.OVIngrepen.Any() ||
-                         c.OVData.HDIngrepen.Any()))
+                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.PrioData.PrioIngrepen.Any() ||
+                         c.PrioData.HDIngrepen.Any()))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.c"), GeneratePrioC(c), Encoding.Default);
                     }
@@ -215,6 +209,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
+                    ReviseRegAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, Encoding.Default);
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
                     if (!c.Data.NietGebruikenBitmap)
                     {
@@ -222,13 +217,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
-                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    ReviseSysAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, Encoding.Default);
+                    if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
-                        if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid)
-                        {
-                            WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, Encoding.Default);
-                        }
-                        else if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit)
+                        if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit)
                         {
                             WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.add"), c, GeneratePrioAdd, GeneratePrioAddHeader, Encoding.Default);
                         }
@@ -252,10 +244,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "fixatie.h", sourcefilepath);
                     }
 
-                    if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                    if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
-                        CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.h", sourcefilepath);
                     }
 
                     if (c.InterSignaalGroep.Nalopen.Any())
@@ -275,15 +267,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
                     }
 
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.Uitgebreid &&
-                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
-                    {
-                        CopySourceIfNeeded(c, "ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "ov.h", sourcefilepath);
-                    }
-
-                    if (c.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any()))
+                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                        (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any()))
                     {
                         CopySourceIfNeeded(c, "prio.c", sourcefilepath);
                         CopySourceIfNeeded(c, "prio.h", sourcefilepath);
@@ -302,10 +287,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         CopySourceIfNeeded(c, "halfstar.c", sourcefilepath);
                         CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_ov.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_ov.h", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_help.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "halfstar_help.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "halfstar_prio.h", sourcefilepath);
                     }
 
                     if (c.Fasen.Any(x => x.WachttijdVoorspeller))
@@ -349,7 +332,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                 copy = true;
                                                 break;
                                             case "OV":
-                                                copy = (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0);
+                                                copy = (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0);
                                                 break;
                                             case "SYNC":
                                                 copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 ||
@@ -435,17 +418,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 File.WriteAllText(filename, generateFunc(c), encoding);
             }
-            else if(CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating)
+            else if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating)
             {
                 try
                 {
                     var addlines = File.ReadAllLines(filename);
-
-                    var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
-                    var postSys2 = c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
-
                     var sb = new StringBuilder();
-                    
+
                     var header = false;
                     foreach (var l in addlines)
                     {
@@ -458,29 +437,89 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             header = true;
                             sb.Append(generateHeaderFunc(c));
                         }
-                        else if(!header)
+                        else if (!header)
                         {
-                            if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating && 
-                                wtvAdd && l.Contains("pre_system_application"))
-                            {
-                                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
-                                postSys2 && l.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine("");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
                             sb.AppendLine(l);
                         }
                     }
+                    File.Delete(filename);
+                    File.WriteAllText(filename, sb.ToString(), encoding);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+        }
+
+        private void ReviseRegAdd(string filename, ControllerModel c, Encoding encoding)
+        {
+            if(CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating)
+            {
+                try
+                {
+                    var addlines = File.ReadAllLines(filename);
+
+                    var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
+                    var postSys2 = c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
+
+                    var sb = new StringBuilder();
+
+                    foreach (var l in addlines)
+                    {
+                        if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
+                                wtvAdd && l.Contains("pre_system_application"))
+                        {
+                            sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
+                            postSys2 && l.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void post_system_application2()");
+                            sb.AppendLine("{");
+                            sb.AppendLine("");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        sb.AppendLine(l);
+                    }
+                    File.Delete(filename);
+                    File.WriteAllText(filename, sb.ToString(), encoding);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+        }
+
+        private void ReviseSysAdd(string filename, ControllerModel c, Encoding encoding)
+        {
+            if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating)
+            {
+                try
+                {
+                    var addlines = File.ReadAllLines(filename);
+
+                    var addLnkmax = addlines.All(x => !x.Contains("LNKMAX"));
+                    
+                    var sb = new StringBuilder();
+
+                    foreach (var l in addlines)
+                    {
+                        sb.AppendLine(l);
+                    }
+
+                    if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
+                        addLnkmax)
+                    {
+                        sb.AppendLine("#define LNKMAX (LNKMAX1+0) /* Totaal aantal gebruikte simulatie elementen */");
+                    }
+
                     File.Delete(filename);
                     File.WriteAllText(filename, sb.ToString(), encoding);
                 }

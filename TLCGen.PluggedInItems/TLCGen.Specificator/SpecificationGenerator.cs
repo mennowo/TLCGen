@@ -117,7 +117,7 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetChapter_OntruimingstijdenGarantie(c));
                 body.Append(FunctionalityGenerator.GetChapter_Synchronisaties(c, doc));
 
-                if (c.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen && c.HasPTorHD())
+                if (c.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen && c.HasPTorHD())
                 {
                     if (c.HasPT() && c.HasHD())
                     {

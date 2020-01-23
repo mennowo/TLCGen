@@ -58,9 +58,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("#include \"halfstar.c\"");
 			sb.AppendLine("#include \"tx_synch.h\"");
-			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen && c.HasPTorHD())
+			if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen && c.HasPTorHD())
 			{
-				sb.AppendLine("#include \"halfstar_ov.c\"");
+				sb.AppendLine("#include \"halfstar_prio.c\"");
 			}
 			sb.AppendLine();
             sb.AppendLine($"#include \"{c.Data.Naam}hst.add\"");
@@ -413,13 +413,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            if (!c.OVData.OVIngrepen.Any()) return "";
+            if (!c.PrioData.PrioIngrepen.Any()) return "";
 
             sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
-            sb.AppendLine("void OVHalfstarSettings(void)");
+            sb.AppendLine("void PrioHalfstarSettings(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCOVHalfstarSettings, true, true, false, false);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCPrioHalfstarSettings, true, true, false, false);
             
             sb.AppendLine("}");
             sb.AppendLine();

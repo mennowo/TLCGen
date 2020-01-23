@@ -29,9 +29,9 @@
     <ClCompile Include="__CONTROLLERNAME__tab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-__IF;OV__<ClCompile Include="__CONTROLLERNAME__ov.c">
-__IF;OV__  <Filter>Source Files</Filter>
-__IF;OV__</ClCompile>
+__IF;PRIO__<ClCompile Include="__CONTROLLERNAME__prio.c">
+__IF;PRIO__  <Filter>Source Files</Filter>
+__IF;PRIO__</ClCompile>
 __IF;SYNC__<ClCompile Include="Syncfunc.C">
 __IF;SYNC__  <Filter>Source Files</Filter>
 __IF;SYNC__</ClCompile>

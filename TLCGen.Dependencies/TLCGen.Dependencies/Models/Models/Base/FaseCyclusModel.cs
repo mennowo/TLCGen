@@ -31,7 +31,11 @@ namespace TLCGen.Models
         [Browsable(false)]
         [HasDefault(false)]
         [NoTemplateApplicable]
-        public bool OVIngreep { get; set; }
+        public bool PrioIngreep { get; set; }
+        [Browsable(false)]
+        [HasDefault(false)]
+        [NoTemplateApplicable]
+        public bool PrioIngreepGeconditioneerd { get; set; }
         [Browsable(false)]
         [HasDefault(false)]
         [NoTemplateApplicable]
@@ -68,7 +72,22 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
-        [IOElement("wtv", BitmappedItemTypeEnum.Uitgang, "Naam", "WachttijdVoorspeller")]
+        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(PrioIngreep))]
+        public BitmapCoordinatenDataModel PrioIngreepBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(PrioIngreepGeconditioneerd))]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioTeVroegBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(PrioIngreepGeconditioneerd))]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioOpTijdBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(PrioIngreepGeconditioneerd))]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
+
+        [IOElement("wtv", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
         public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "HardMeeverlengFaseCyclus")]
@@ -100,6 +119,10 @@ namespace TLCGen.Models
         {
             Detectoren = new List<DetectorModel>();
             HardMeeverlengenFaseCycli = new List<HardMeeverlengenFaseCyclusModel>();
+            PrioIngreepBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData = new BitmapCoordinatenDataModel();
             AantalRijstroken = 1;
         }

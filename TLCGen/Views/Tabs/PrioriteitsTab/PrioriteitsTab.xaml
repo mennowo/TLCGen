@@ -14,6 +14,18 @@
         <DataTemplate DataType="{x:Type vm:PrioriteitInUitmeldenTabViewModel}">
             <local:PrioriteitInUitmeldenTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HDIngrepenTabViewModel}">
+            <local:HDIngrepenTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HDOverzichtTabViewModel}">
+            <local:HDOverzichtTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrioriteitSimulatieTabViewModel}">
+            <local:PrioriteitSimulatieTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrioriteitSignaalGroepInstellingenTabViewModel}">
+            <local:PrioriteitSignaalGroepInstellingenTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

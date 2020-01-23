@@ -547,7 +547,7 @@ namespace TLCGen.ViewModels
                 }
                 TLCGenControllerDataProvider.Default.CloseController();
                 DefaultsProvider.Default.SetDefaultsOnModel(c1.Data);
-                DefaultsProvider.Default.SetDefaultsOnModel(c1.OVData);
+                DefaultsProvider.Default.SetDefaultsOnModel(c1.PrioData);
                 SetController(c1);
                 ControllerVM.ReloadController();
                 GuiActionsManager.SetStatusBarMessage(

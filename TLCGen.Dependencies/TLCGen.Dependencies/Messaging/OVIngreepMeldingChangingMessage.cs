@@ -5,11 +5,11 @@ namespace TLCGen.Messaging.Messages
 {
     public class OVIngreepMeldingChangingMessage : ModelManagerMessageBase
     {
-        public OVIngreepModel Ingreep;
+        public PrioIngreepModel Ingreep;
         public string FaseCyclus;
-        public OVIngreepInUitMeldingVoorwaardeTypeEnum MeldingType;
+        public PrioIngreepInUitMeldingVoorwaardeTypeEnum MeldingType;
 
-        public OVIngreepMeldingChangingMessage(OVIngreepModel ingreep, string faseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum type)
+        public OVIngreepMeldingChangingMessage(PrioIngreepModel ingreep, string faseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum type)
         {
             FaseCyclus = faseCyclus;
             Ingreep = ingreep;

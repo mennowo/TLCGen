@@ -116,7 +116,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 20;
-                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                case CCOLCodeTypeEnum.PrioCPrioriteitsNiveau:
                     return 20;
                 default:
                     return 0;
@@ -317,7 +317,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                case CCOLCodeTypeEnum.PrioCPrioriteitsNiveau:
                     //if(!c.InterSignaalGroep.Nalopen.Any()) return "";
                     //sb.AppendLine($"{ts}/* Tegenhouden OV prio met conflict met nalooprichting indien die nog moet komen */");
                     //foreach (var nl in c.InterSignaalGroep.Nalopen)

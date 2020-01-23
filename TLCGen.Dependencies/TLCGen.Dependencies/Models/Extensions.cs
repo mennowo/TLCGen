@@ -19,95 +19,105 @@ namespace TLCGen.Models
             return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren).Where(predicate);
         }
 
-        public static bool HasOVIngreepVecomIO(this OVIngreepModel ov)
+        public static bool HasOVIngreepVecomIO(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
         }
 
-        public static bool HasOVIngreepDSI(this OVIngreepModel ov)
+        public static bool HasOVIngreepDSI(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
         }
 
-        public static bool HasOVIngreepVecom(this OVIngreepModel ov)
+        public static bool HasOVIngreepVecom(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
         }
 
-        public static bool HasOVIngreepKAR(this OVIngreepModel ov)
+        public static bool HasPrioIngreepKAR(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
-        public static bool HasOVIngreepWissel(this OVIngreepModel ov)
+        public static IEnumerable<DetectorModel> GetDummyInDetectors(this PrioIngreepModel ov)
+        {
+            return ov.MeldingenData.Inmeldingen.Where(x => x.DummyKARMelding != null).Select(x => x.DummyKARMelding);
+        }
+
+        public static IEnumerable<DetectorModel> GetDummyUitDetectors(this PrioIngreepModel ov)
+        {
+            return ov.MeldingenData.Uitmeldingen.Where(x => x.DummyKARMelding != null).Select(x => x.DummyKARMelding);
+        }
+
+        public static bool HasOVIngreepWissel(this PrioIngreepModel ov)
         {
             return ((ov.MeldingenData.Wissel1 &&
-                     ((ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
-                      (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
+                     ((ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
+                      (ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
                     (ov.MeldingenData.Wissel2 &&
-                     ((ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
-                      (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector)))));
+                     ((ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
+                      (ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector)))));
         }
 
         public static bool HasDSI(this ControllerModel c)
         {
-            return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||
-                   c.OVData.HDIngrepen.Any(x => x.KAR) ||
+            return c.PrioData.PrioIngrepen.Any(x => x.HasOVIngreepDSI()) ||
+                   c.PrioData.HDIngrepen.Any(x => x.KAR) ||
                    c.SelectieveDetectoren.Any(x => x.SdType == SelectieveDetectorTypeEnum.VECOM);
         }
 
         public static bool HasKAR(this ControllerModel c)
         {
-            return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()) ||
-                   c.OVData.HDIngrepen.Any(x => x.KAR);
+            return c.PrioData.PrioIngrepen.Any(x => x.HasPrioIngreepKAR()) ||
+                   c.PrioData.HDIngrepen.Any(x => x.KAR);
         }
 
         public static bool HasVecom(this ControllerModel c)
         {
             return c.SelectieveDetectoren.Any(x => x.SdType == SelectieveDetectorTypeEnum.VECOM) &&
-                   c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecom());
+                   c.PrioData.PrioIngrepen.Any(x => x.HasOVIngreepVecom());
         }
 
         public static bool HasVecomIO(this ControllerModel c)
         {
             return c.GetAllDetectors(x => x.Type == DetectorTypeEnum.VecomDetector).Any() &&
-                   c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecomIO());
+                   c.PrioData.PrioIngrepen.Any(x => x.HasOVIngreepVecomIO());
         }
 
-        public static bool HasKAR(this OVDataModel ovdm)
+        public static bool HasKAR(this PrioriteitDataModel ovdm)
         {
-            return ovdm.OVIngrepen.Any(x => x.HasOVIngreepKAR()) ||
+            return ovdm.PrioIngrepen.Any(x => x.HasPrioIngreepKAR()) ||
                    ovdm.HDIngrepen.Any(x => x.KAR);
         }
 
         public static bool HasPT(this ControllerModel c)
         {
-            return c.OVData.OVIngrepen.Any();
+            return c.PrioData.PrioIngrepen.Any();
         }
 
         public static bool HasHD(this ControllerModel c)
         {
-            return c.OVData.HDIngrepen.Any();
+            return c.PrioData.HDIngrepen.Any();
         }
 
         public static bool HasHDKAR(this ControllerModel c)
         {
-            return c.OVData.HDIngrepen.Any(x => x.KAR);
+            return c.PrioData.HDIngrepen.Any(x => x.KAR);
         }
 
         public static bool HasHDOpticom(this ControllerModel c)
         {
-            return c.OVData.HDIngrepen.Any(x => x.Opticom && !string.IsNullOrWhiteSpace(x.OpticomRelatedInput));
+            return c.PrioData.HDIngrepen.Any(x => x.Opticom && !string.IsNullOrWhiteSpace(x.OpticomRelatedInput));
         }
 
         public static bool HasPTorHD(this ControllerModel c)
         {
-            return c.OVData.OVIngrepen.Any() ||
-                   c.OVData.HDIngrepen.Any();
+            return c.PrioData.PrioIngrepen.Any() ||
+                   c.PrioData.HDIngrepen.Any();
         }
     }
 }

@@ -125,9 +125,11 @@ __IF;HS__      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspoo
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+__IF;PRIO__    <ClCompile Include="__CONTROLLERNAME__prio.c">
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
-    <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
+__IF;SYNC__    <ClCompile Include="Syncfunc.c" />
+__IF;PTP__    <ClCompile Include="PTPWIN.C" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__ccolvissim_e.res" />

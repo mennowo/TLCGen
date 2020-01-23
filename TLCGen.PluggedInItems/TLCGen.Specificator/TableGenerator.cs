@@ -910,7 +910,7 @@ namespace TLCGen.Specificator
             items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_OV_PrioriteitsInstellingen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
 
             List<List<string>> l;
-            if (c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+            if (c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
             {
                 l = new List<List<string>>
                 {
@@ -931,12 +931,12 @@ namespace TLCGen.Specificator
                         "Ondermaximum"
                     }
                 };
-                foreach(var ov in c.OVData.OVIngrepen)
+                foreach(var ov in c.PrioData.PrioIngrepen)
                 {
                     var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
                     var opties = 0;
-                    if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
-                    if (ov.AfkappenConflictenOV) opties += 300;
+                    if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                    if (ov.AfkappenConflictenPrio) opties += 300;
                     if (ov.TussendoorRealiseren) opties += 3;
                     if (ov.VasthoudenGroen) opties += 20;
                     var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
@@ -951,8 +951,8 @@ namespace TLCGen.Specificator
                         ov.RijTijdOngehinderd.ToString(),
                         ov.RijTijdBeperktgehinderd.ToString(),
                         ov.RijTijdGehinderd.ToString(),
-                        ov.BezettijdOVGehinderd.ToString(),
-                        ov.BlokkeertijdNaOVIngreep.ToString(),
+                        ov.BezettijdPrioGehinderd.ToString(),
+                        ov.BlokkeertijdNaPrioIngreep.ToString(),
                         ov.GroenBewaking.ToString(),
                         ov.OnderMaximum.ToString()
                     });
@@ -975,12 +975,12 @@ namespace TLCGen.Specificator
                         "Ondermaximum"
                     }
                 };
-                foreach (var ov in c.OVData.OVIngrepen)
+                foreach (var ov in c.PrioData.PrioIngrepen)
                 {
                     var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
                     var opties = 0;
-                    if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
-                    if (ov.AfkappenConflictenOV) opties += 300;
+                    if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                    if (ov.AfkappenConflictenPrio) opties += 300;
                     if (ov.TussendoorRealiseren) opties += 3;
                     if (ov.VasthoudenGroen) opties += 20;
                     var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
@@ -991,8 +991,8 @@ namespace TLCGen.Specificator
                         ov.RijTijdOngehinderd.ToString(),
                         ov.RijTijdBeperktgehinderd.ToString(),
                         ov.RijTijdGehinderd.ToString(),
-                        ov.BezettijdOVGehinderd.ToString(),
-                        ov.BlokkeertijdNaOVIngreep.ToString(),
+                        ov.BezettijdPrioGehinderd.ToString(),
+                        ov.BlokkeertijdNaPrioIngreep.ToString(),
                         ov.GroenBewaking.ToString(),
                         ov.OnderMaximum.ToString()
                     });
@@ -1026,7 +1026,7 @@ namespace TLCGen.Specificator
                         "Ondergrens na terugkomen"
                     }
                 };
-            foreach (var ovcf in c.OVData.OVIngreepSignaalGroepParameters)
+            foreach (var ovcf in c.PrioData.PrioIngreepSignaalGroepParameters)
             {
                 l.Add(new List<string>
                 {
@@ -1071,12 +1071,12 @@ namespace TLCGen.Specificator
                 ll.Add("Opticom");
                 ll.Add("Opticom inmeld filtertijd");
             }
-            if(c.OVData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
+            if(c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
             {
                 ll.Add("Meerealiserende fasen");
             }
             l.Add(ll);
-            foreach (var ovcf in c.OVData.HDIngrepen)
+            foreach (var ovcf in c.PrioData.HDIngrepen)
             {
                 ll = new List<string> { ovcf.FaseCyclus };
                 if (c.HasHDKAR())
@@ -1095,7 +1095,7 @@ namespace TLCGen.Specificator
                     ll.Add(ovcf.Opticom.ToCustomString() + (ovcf.Opticom ? $" [{ovcf.OpticomRelatedInput}]" : ""));
                     ll.Add(ovcf.OpticomInmeldingFilterTijd.ToString());
                 }
-                if (c.OVData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
+                if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
                 {
                     ll.Add(
                         ovcf.MeerealiserendeFaseCycli.Any() ?

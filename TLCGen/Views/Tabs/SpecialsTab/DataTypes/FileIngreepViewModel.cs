@@ -264,7 +264,12 @@ namespace TLCGen.ViewModels
                     _DetectorManager = new ItemsManagerViewModel<FileIngreepDetectorViewModel, string>(
                         FileDetectoren as ObservableCollection<FileIngreepDetectorViewModel>,
                         dets,
-                        (x) => { var fd = new FileIngreepDetectorViewModel(new FileIngreepDetectorModel { Detector = x }); return fd; },
+                        (x) => 
+                        {
+                            var fd = new FileIngreepDetectorModel { Detector = x };
+                            DefaultsProvider.Default.SetDefaultsOnModel(fd);
+                            var fdvm = new FileIngreepDetectorViewModel(fd); return fdvm;
+                        },
                         (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
                         null,
                         () => { RaisePropertyChanged<object>("SelectedFileDetector", broadcast: true); },

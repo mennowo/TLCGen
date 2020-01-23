@@ -25,9 +25,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define NALOPEN");
             }
-            if (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            if (controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine("#define OV_ADDFILE");
+                sb.AppendLine("#define PRIO_ADDFILE");
             }
             sb.AppendLine();
             sb.Append(GenerateRegCBeforeIncludes(controller));
@@ -145,14 +145,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
             sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
-            if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}#include \"ov.h\"       /* ov-afhandeling                    */");
-                if(controller.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
+                sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
+                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
                 {
-                    sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
+                    sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
                 }
-                sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");
+                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
             }
             sb.AppendLine();
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
@@ -165,6 +165,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            if (controller.Data.FixatieMogelijk)
+            {
+                sb.AppendLine($"{ts}#include \"fixatie.c\"");
+            }
             if (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any())
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
@@ -670,32 +674,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}}}");
             }
 
-            if (controller.OVData.OVIngrepen.Count > 0 ||
-                controller.OVData.HDIngrepen.Count > 0)
+            if (controller.PrioData.PrioIngrepen.Count > 0 ||
+                controller.PrioData.HDIngrepen.Count > 0)
             {
                 if (controller.HalfstarData.IsHalfstar)
                 {
-                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingOV();");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingPrio();");
                     sb.AppendLine($"{ts}else");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}int fc;");
-                    sb.AppendLine($"{ts}{ts}RTFB &= ~OV_RTFB_BIT;");
+                    sb.AppendLine($"{ts}{ts}RTFB &= ~PRIO_RTFB_BIT;");
                     sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~OV_Z_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~OV_FM_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~OV_RW_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~OV_RR_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~OV_YV_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~OV_YM_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~OV_MK_BIT;");
-                    sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~OV_PP_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~PRIO_Z_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~PRIO_RW_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~PRIO_RR_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~PRIO_YV_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~PRIO_YM_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~PRIO_MK_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~PRIO_PP_BIT;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                 }
                 else
                 {
-                    sb.AppendLine($"{ts}AfhandelingOV();");
+                    sb.AppendLine($"{ts}AfhandelingPrio();");
                 }
             }
             if (controller.Data.FixatieData.FixatieMogelijk)
@@ -881,16 +885,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
 
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
-            sb.AppendLine("void OVSpecialSignals();");
+            sb.AppendLine("void PrioSpecialSignals();");
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSpecialSignals, true, true, false, true);
 
-            if (controller.OVData.OVIngrepen.Any() ||
-				controller.OVData.HDIngrepen.Any())
+            if (controller.PrioData.PrioIngrepen.Any() ||
+				controller.PrioData.HDIngrepen.Any())
 		    {
-				sb.AppendLine($"{ts}OVSpecialSignals();");
+				sb.AppendLine($"{ts}PrioSpecialSignals();");
 			}
             sb.AppendLine($"{ts}SpecialSignals_Add();");
             sb.AppendLine("}");

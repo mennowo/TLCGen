@@ -666,19 +666,19 @@
             <Default>vchst</Default>
             <Setting>vchst</Setting>
             <Type>Counter</Type>
-            <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen</Description>
+            <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>natxdhst</Default>
             <Setting>natxdhst</Setting>
             <Type>Timer</Type>
-            <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen</Description>
+            <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>priohst</Default>
             <Setting>priohst</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteit fase _E1_ tijdens halfstar regelen</Description>
+            <Description>Prioriteit fase _E1_ tijdens halfstar regelen _E2_</Description>
           </Setting>
           <Setting>
             <Default>altphst</Default>
@@ -1321,37 +1321,37 @@
             <Default>stp</Default>
             <Setting>stp</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Stiptheid voorste OV voertuig bij _E1_</Description>
+            <Description>Stiptheid voorste OV voertuig bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>stp</Default>
             <Setting>stp</Setting>
             <Type>HulpElement</Type>
-            <Description>Geconditioneerde prio OV mogelijk bij _E1_</Description>
+            <Description>Geconditioneerde prio OV mogelijk bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipt</Default>
             <Setting>ovstipt</Setting>
             <Type>Schakelaar</Type>
-            <Description>Geconditioneerde prioteit voor OV bij _E1_</Description>
+            <Description>Geconditioneerde prioteit voor OV bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipttevroeg</Default>
             <Setting>ovstipttevroeg</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te vroeg bij _E1_</Description>
+            <Description>Prioriteitsnveau OV te vroeg bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstiptoptijd</Default>
             <Setting>ovstiptoptijd</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV op tijd bij _E1_</Description>
+            <Description>Prioriteitsnveau OV op tijd bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipttelaat</Default>
             <Setting>ovstipttelaat</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te laat bij _E1_</Description>
+            <Description>Prioriteitsnveau OV te laat bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>OVtstpgrenslaat</Default>
@@ -1369,45 +1369,45 @@
             <Default>ovtevroeg</Default>
             <Setting>ovtevroeg</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te vroeg</Description>
+            <Description>Voorste OV voertuig bij _E1_ te vroeg _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovoptijd</Default>
             <Setting>ovoptijd</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ op tijd</Description>
+            <Description>Voorste OV voertuig bij _E1_ op tijd _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovtelaat</Default>
             <Setting>ovtelaat</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te laat</Description>
+            <Description>Voorste OV voertuig bij _E1_ te laat _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="OVHDCodeGenerator">
+    <CodePieceGenerator CodePiece="PrioCodeGenerator">
       <CodePieceData>
-        <ClassName>OVHDCodeGenerator</ClassName>
-        <Description>OV en HD ingrepen</Description>
+        <ClassName>PrioCodeGenerator</ClassName>
+        <Description>Prioriteitsingrepen</Description>
         <Settings>
           <Setting>
             <Default>vc</Default>
             <Setting>vc</Setting>
             <Type>Counter</Type>
-            <Description>Bijhouden inmeldingen OV fase _E1_</Description>
+            <Description>Bijhouden prio inmeldingen fase _E1_ type _E2_</Description>
           </Setting>
           <Setting>
             <Default>vchd</Default>
             <Setting>vchd</Setting>
             <Type>Counter</Type>
-            <Description>Bijhouden inmeldingen HD fase _E1_</Description>
+            <Description>Bijhouden prio inmeldingen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rt</Default>
             <Setting>rt</Setting>
             <Type>Timer</Type>
-            <Description>Actuele rijtijd OV fase _E1_</Description>
+            <Description>Actuele rijtijd prio fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rthd</Default>
@@ -1785,411 +1785,7 @@
             <Default>covuber</Default>
             <Setting>covuber</Setting>
             <Type>Schakelaar</Type>
-            <Description>Weergeven wijzigingen OV_teller via CIF_UBER</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="PrioCodeGenerator">
-      <CodePieceData>
-        <ClassName>PrioCodeGenerator</ClassName>
-        <Description>Prioriteitsingrepen</Description>
-        <Settings>
-          <Setting>
-            <Default>priovc</Default>
-            <Setting>vc</Setting>
-            <Type>Counter</Type>
-            <Description>Bijhouden prio inmeldingen fase _E1_ type _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>priovchd</Default>
-            <Setting>vchd</Setting>
-            <Type>Counter</Type>
-            <Description>Bijhouden prio inmeldingen fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priort</Default>
-            <Setting>rt</Setting>
-            <Type>Timer</Type>
-            <Description>Actuele rijtijd prio fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priorthd</Default>
-            <Setting>rthd</Setting>
-            <Type>Timer</Type>
-            <Description>Actuele rijtijd HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priogb</Default>
-            <Setting>gb</Setting>
-            <Type>Timer</Type>
-            <Description>Groenbewaking OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priogbhd</Default>
-            <Setting>gbhd</Setting>
-            <Type>Timer</Type>
-            <Description>Groenbewaking HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priorto</Default>
-            <Setting>rto</Setting>
-            <Type>Parameter</Type>
-            <Description>Ongehinderde rijtijd OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priortbg</Default>
-            <Setting>rtbg</Setting>
-            <Type>Parameter</Type>
-            <Description>Beperkt gehinderde rijtijd OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priortg</Default>
-            <Setting>rtg</Setting>
-            <Type>Parameter</Type>
-            <Description>Gehinderde rijtijd OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priortohd</Default>
-            <Setting>rtohd</Setting>
-            <Type>Parameter</Type>
-            <Description>Ongehinderde rijtijd HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priortbghd</Default>
-            <Setting>rtbghd</Setting>
-            <Type>Parameter</Type>
-            <Description>Beperkt gehinderde rijtijd HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priortghd</Default>
-            <Setting>rtghd</Setting>
-            <Type>Parameter</Type>
-            <Description>Gehinderde rijtijd HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioblk</Default>
-            <Setting>blk</Setting>
-            <Type>Timer</Type>
-            <Description>Blokkeertijd na ingreep OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priobtovg</Default>
-            <Setting>btovg</Setting>
-            <Type>Timer</Type>
-            <Description>Timer bezettijd OV gehinderde rijtijd fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioov</Default>
-            <Setting>ov</Setting>
-            <Type>HulpElement</Type>
-            <Description>Bijhouden aanwezigheid OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohd</Default>
-            <Setting>hd</Setting>
-            <Type>HulpElement</Type>
-            <Description>Bijhouden aanwezigheid HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovin</Default>
-            <Setting>ovin</Setting>
-            <Type>HulpElement</Type>
-            <Description>OV inmelding fase _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovuit</Default>
-            <Setting>ovuit</Setting>
-            <Type>HulpElement</Type>
-            <Description>OV uitmelding _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohdin</Default>
-            <Setting>hdin</Setting>
-            <Type>HulpElement</Type>
-            <Description>HD inmelding _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohduit</Default>
-            <Setting>hduit</Setting>
-            <Type>HulpElement</Type>
-            <Description>HD uitmelding _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priolaatcrit</Default>
-            <Setting>laatcrit</Setting>
-            <Type>Parameter</Type>
-            <Description>Criterium OV aanmerken als te laat</Description>
-          </Setting>
-          <Setting>
-            <Default>prioallelijnen</Default>
-            <Setting>allelijnen</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteit geven aan alle lijnen fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priolijn</Default>
-            <Setting>lijn</Setting>
-            <Type>Parameter</Type>
-            <Description>Lijnnummer _E1_ tbv prioriteit OV fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioritcat</Default>
-            <Setting>ritcat</Setting>
-            <Type>Parameter</Type>
-            <Description>Ritcategorie bij lijnnummer _E1_ tbv prioriteit OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priocprio</Default>
-            <Setting>cprio</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toepassen geconditioneerde priorieit fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioupinagb</Default>
-            <Setting>upinagb</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Selectieve detectie onbetrouwbaar na groenbewaking OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioupinagbhd</Default>
-            <Setting>upinagbhd</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Selectieve detectie onbetrouwbaar na groenbewaking HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priovi</Default>
-            <Setting>vi</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Versnelde inmelding fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priocheckdstype</Default>
-            <Setting>checkdstype</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Check type DSI bericht bij VECOM</Description>
-          </Setting>
-          <Setting>
-            <Default>priotestdsivert</Default>
-            <Setting>testdsivert</Setting>
-            <Type>Parameter</Type>
-            <Description>Testen vertraging in DSI bericht in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>priotestdsilyn</Default>
-            <Setting>testdsilyn</Setting>
-            <Type>Parameter</Type>
-            <Description>Testen lijnnummer DSI bericht in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>priotestdsicat</Default>
-            <Setting>testdsicat</Setting>
-            <Type>Parameter</Type>
-            <Description>Testen ritcategorie DSI bericht in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>prioprio</Default>
-            <Setting>prio</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteitsinstelling OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priopriohd</Default>
-            <Setting>priohd</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteitsinstelling HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioomx</Default>
-            <Setting>omx</Setting>
-            <Type>Parameter</Type>
-            <Description>Ondermaximum OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priomwta</Default>
-            <Setting>mwta</Setting>
-            <Type>Parameter</Type>
-            <Description>Maximale wachttijd autoverkeer</Description>
-          </Setting>
-          <Setting>
-            <Default>priomwtfts</Default>
-            <Setting>mwtfts</Setting>
-            <Type>Parameter</Type>
-            <Description>Maximale wachttijd fiets</Description>
-          </Setting>
-          <Setting>
-            <Default>priomwtvtg</Default>
-            <Setting>mwtvtg</Setting>
-            <Type>Parameter</Type>
-            <Description>Maximale wachttijd voetgangers</Description>
-          </Setting>
-          <Setting>
-            <Default>priopmgt</Default>
-            <Setting>pmgt</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale groentijd primair terugkomen fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioognt</Default>
-            <Setting>ognt</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale groentijd bij terugkomen fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioohpmg</Default>
-            <Setting>ohpmg</Setting>
-            <Type>Parameter</Type>
-            <Description>Percentage ophogen groentijd na afkappen fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prionofm</Default>
-            <Setting>nofm</Setting>
-            <Type>Parameter</Type>
-            <Description>Aantal malen niet afkappen na OV ingreep fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priomgcov</Default>
-            <Setting>mgcov</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimum groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
-          </Setting>
-          <Setting>
-            <Default>priopmgcov</Default>
-            <Setting>pmgcov</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimum percentage groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovinm</Default>
-            <Setting>ovinm</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken inmelding OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohdinm</Default>
-            <Setting>hdinm</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken inmelding HD fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priokarmelding</Default>
-            <Setting>karmelding</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken ontvangst melding KAR</Description>
-          </Setting>
-          <Setting>
-            <Default>priokarog</Default>
-            <Setting>karog</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken ondergedrag KAR</Description>
-          </Setting>
-          <Setting>
-            <Default>priomaxwt</Default>
-            <Setting>maxwt</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken maximale wachttijd overschreden</Description>
-          </Setting>
-          <Setting>
-            <Default>priokarmelding</Default>
-            <Setting>karmelding</Setting>
-            <Type>Timer</Type>
-            <Description>Duur verklikking ontvangst melding KAR</Description>
-          </Setting>
-          <Setting>
-            <Default>priokarog</Default>
-            <Setting>karog</Setting>
-            <Type>Timer</Type>
-            <Description>Ondergedrag KAR</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovminrood</Default>
-            <Setting>ovminrood</Setting>
-            <Type>Timer</Type>
-            <Description>Minimale roodtijd vooraf aan inmelden mogelijk bij _E1_ (indien ingesteld per inmelding)</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovin</Default>
-            <Setting>ovin</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd inmelden _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovin</Default>
-            <Setting>ovin</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Inmelden _E1_ via _E2_ toestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovuit</Default>
-            <Setting>ovuit</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>prioovuit</Default>
-            <Setting>ovuit</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Uitmelden _E1_ via _E2_ toestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>priogeenwissel</Default>
-            <Setting>geenwissel</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Wisselstand van _E1_ negeren</Description>
-          </Setting>
-          <Setting>
-            <Default>priowissel</Default>
-            <Setting>wissel</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden voorwaarde fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohdin</Default>
-            <Setting>hdin</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd inmelden HD _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohdin</Default>
-            <Setting>hdin</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Inmelden _E1_ via _E2_ HD toestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>priohduit</Default>
-            <Setting>hduit</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden HD _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priohduit</Default>
-            <Setting>hduit</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Uitmelden _E1_ via _E2_ HD toestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>priohdinuit</Default>
-            <Setting>hdinuit</Setting>
-            <Type>Schakelaar</Type>
-            <Description>In- en uitmelden _E1_ via _E2_ HD toestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>priochecksirene</Default>
-            <Setting>checksirene</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Bij HD meldingen bij _E1_ via DSI controleren op CIF_SIR</Description>
-          </Setting>
-          <Setting>
-            <Default>priowisselpol</Default>
-            <Setting>wisselpol</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Polariteit van wissel ingang _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>priocovuber</Default>
-            <Setting>covuber</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Weergeven wijzigingen OV_teller via CIF_UBER</Description>
+            <Description>Weergeven wijzigingen PRIO_teller via CIF_UBER</Description>
           </Setting>
         </Settings>
       </CodePieceData>

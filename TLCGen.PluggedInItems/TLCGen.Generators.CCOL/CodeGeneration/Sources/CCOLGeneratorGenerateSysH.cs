@@ -56,31 +56,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
             var ov = 0;
-            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.GeneriekePrioriteit ||
-                c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+            if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit)
             {
-                if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+                foreach (var ovFC in c.PrioData.PrioIngrepen)
                 {
-                    foreach (var ovFC in c.OVData.OVIngrepen)
-                    {
-                        sb.AppendLine($"{ts}#define ovFC{ovFC.FaseCyclus} {ov.ToString()}");
-                        ++ov;
-                    }
+                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovFC.Type)} {ov.ToString()}");
+                    ++ov;
                 }
-                if (c.OVData.OVIngreepType == OVIngreepTypeEnum.GeneriekePrioriteit)
-                {
-                    foreach (var ovFC in c.OVData.OVIngrepen)
-                    {
-                        sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovFC.Type)} {ov.ToString()}");
-                        ++ov;
-                    }
-                }
-                foreach (var hdFC in c.OVData.HDIngrepen)
+                foreach (var hdFC in c.PrioData.HDIngrepen)
                 {
                     sb.AppendLine($"{ts}#define hdFC{hdFC.FaseCyclus} {ov.ToString()}");
                     ++ov;
                 }
-                sb.AppendLine($"{ts}#define ovOVMAX {ov.ToString()}");
+                sb.AppendLine($"{ts}#define prioFCMAX {ov.ToString()}");
                 sb.AppendLine();
             }
             
@@ -188,7 +176,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 int _pad1 = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
-            var ovdummies = controller.OVData.GetAllDummyDetectors();
+            var ovdummies = controller.PrioData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
                 pad1 = ovdummies.Max(x => x.GetDefine().Length);

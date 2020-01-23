@@ -53,7 +53,7 @@ namespace TLCGen.Models
 
         public PTPDataModel PTPData { get; set; }
 
-        public OVDataModel OVData { get; set; }
+        public PrioriteitDataModel PrioData { get; set; }
 
         public RISDataModel RISData { get; set; }
 
@@ -93,7 +93,7 @@ namespace TLCGen.Models
             VAOntruimenFasen = new List<VAOntruimenFaseModel>();
             Signalen = new SignalenDataModel();
             PTPData = new PTPDataModel();
-            OVData = new OVDataModel();
+            PrioData = new PrioriteitDataModel();
             RoBuGrover = new RoBuGroverModel();
 			HalfstarData = new HalfstarDataModel();
             PelotonKoppelingenData = new PelotonKoppelingenDataModel();

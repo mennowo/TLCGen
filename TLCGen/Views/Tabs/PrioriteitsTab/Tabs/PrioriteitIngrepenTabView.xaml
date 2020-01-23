@@ -167,7 +167,7 @@
             </StackPanel>
             <CheckBox Content="Prioriteit" IsChecked="{Binding Path=Prioriteit}" Margin="5" VerticalAlignment="Center" Grid.Row="1" />-->
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="2">
-                <local:OVIngreepView DataContext="{Binding Path=SelectedIngreep,UpdateSourceTrigger=PropertyChanged}" />
+                <local:PrioIngreepView DataContext="{Binding Path=SelectedIngreep,UpdateSourceTrigger=PropertyChanged}" />
             </ScrollViewer>
         </Grid>
     </Grid>

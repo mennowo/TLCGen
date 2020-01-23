@@ -491,17 +491,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-#warning This seems obsolete?
-        public bool OVIngreep
-        {
-            get => _faseCyclus.OVIngreep;
-            set
-            {
-                _faseCyclus.OVIngreep = value;
-                RaisePropertyChanged<object>(nameof(OVIngreep), broadcast: true);
-            }
-        }
-
         public bool HDIngreep
         {
             get => _faseCyclus.HDIngreep;

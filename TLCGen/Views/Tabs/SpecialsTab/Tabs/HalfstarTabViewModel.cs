@@ -21,13 +21,13 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private HalfstarOVIngreepModel _ovIngreep;
+        private HalfstarPrioIngreepModel _ovIngreep;
 
         #endregion // Fields
 
         #region Properties
 
-        public OVIngreepModel BelongsToOVIngreep { get; set; }
+        public PrioIngreepModel BelongsToOVIngreep { get; set; }
 
         public string FaseCyclus => BelongsToOVIngreep?.FaseCyclus;
 
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public HalfstarOVIngreepViewModel(HalfstarOVIngreepModel ovIngreep)
+        public HalfstarOVIngreepViewModel(HalfstarPrioIngreepModel ovIngreep)
         {
             _ovIngreep = ovIngreep;
         }
@@ -946,7 +946,7 @@ namespace TLCGen.ViewModels
                     HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
                     Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusInstellingenViewModel, HalfstarFaseCyclusInstellingenModel>(HalfstarData.FaseCyclusInstellingen);
                     OVIngrepenHalfstar.Clear();
-                    foreach(var ov in Controller.OVData.OVIngrepen)
+                    foreach(var ov in Controller.PrioData.PrioIngrepen)
                     {
                         OVIngrepenHalfstar.Add(new HalfstarOVIngreepViewModel(ov.HalfstarIngreepData) { BelongsToOVIngreep = ov });
                     }
@@ -1142,14 +1142,14 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-        private void OnOVIngrepenChanged(OVIngrepenChangedMessage msg)
+        private void OnOVIngrepenChanged(PrioIngrepenChangedMessage msg)
         {
-            var rems = OVIngrepenHalfstar.Where(x => Controller.OVData.OVIngrepen.All(x2 => !ReferenceEquals(x, x2.HalfstarIngreepData)));
+            var rems = OVIngrepenHalfstar.Where(x => Controller.PrioData.PrioIngrepen.All(x2 => !ReferenceEquals(x, x2.HalfstarIngreepData)));
             foreach(var rem in rems)
             {
                 OVIngrepenHalfstar.Remove(rem);
             }
-            foreach(var ovi in Controller.OVData.OVIngrepen)
+            foreach(var ovi in Controller.PrioData.PrioIngrepen)
             {
                 if (OVIngrepenHalfstar.All(x => !ReferenceEquals(x, ovi.HalfstarIngreepData)))
                 {
@@ -1170,7 +1170,7 @@ namespace TLCGen.ViewModels
 			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
 			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
 			Messenger.Default.Register(this, new Action<PTPKoppelingenChangedMessage>(OnPTPKoppelingenChanged));
-			Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
+			Messenger.Default.Register(this, new Action<PrioIngrepenChangedMessage>(OnOVIngrepenChanged));
 
             if (SignaalPlannen?.Any() == true)
             {

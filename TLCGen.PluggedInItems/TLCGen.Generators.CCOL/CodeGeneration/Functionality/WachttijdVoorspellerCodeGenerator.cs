@@ -74,6 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return base.GetFunctionLocalVariables(c, type);
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -99,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 30;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
-                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     return 20;
                 default:
                     return 0;
@@ -422,7 +423,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (!c.Data.WachttijdvoorspellerAansturenBusHD)
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & PRIO_RTFB_BIT);");
                             }
                             else
                             {
@@ -453,7 +454,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}])");

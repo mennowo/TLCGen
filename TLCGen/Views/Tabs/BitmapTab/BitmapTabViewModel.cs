@@ -22,6 +22,7 @@ using System.Windows;
 using TLCGen.Dialogs;
 using Point = System.Drawing.Point;
 using TLCGen.Extensions;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -50,7 +51,7 @@ namespace TLCGen.ViewModels
         private Color DefaultDetectorColor = Color.Yellow;
         private Color DefaultDetectorSelectedColor = Color.Magenta;
 
-        private Color DefaultUitgangColor = Color.Blue;
+        private readonly Color DefaultUitgangColor = Color.Blue;
         private Color DefaultUitgangSelectedColor = Color.Lime;
         private Color DefaultIngangColor = Color.DarkCyan;
         private Color DefaultIngangSelectedColor = Color.Cyan;
@@ -228,6 +229,8 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             // Collect all IO to be displayed in the lists
+            _SelectedItem = null;
+            TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
             CollectAllIO();
             LoadBitmap();
         }
@@ -759,7 +762,7 @@ namespace TLCGen.ViewModels
             RefreshMyBitmapImage();
         }
 
-        private void OnOVIngrepenChanged(OVIngrepenChangedMessage message)
+        private void OnOVIngrepenChanged(PrioIngrepenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
@@ -777,7 +780,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
+            Messenger.Default.Register(this, new Action<PrioIngrepenChangedMessage>(OnOVIngrepenChanged));
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 

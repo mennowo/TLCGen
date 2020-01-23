@@ -3,11 +3,11 @@ using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class OVIngreepSignaalGroepParametersChangedMessage
+    public class PrioIngreepSignaalGroepParametersChangedMessage
     {
-        public OVIngreepSignaalGroepParametersModel SignaalGroepParameters { get; }
+        public PrioIngreepSignaalGroepParametersModel SignaalGroepParameters { get; }
 
-        public OVIngreepSignaalGroepParametersChangedMessage(OVIngreepSignaalGroepParametersModel signaalgroepparameters)
+        public PrioIngreepSignaalGroepParametersChangedMessage(PrioIngreepSignaalGroepParametersModel signaalgroepparameters)
         {
             SignaalGroepParameters = signaalgroepparameters;
         }

@@ -129,6 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCMeetkriterium:

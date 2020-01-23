@@ -131,7 +131,9 @@ namespace TLCGen.Generators.CCOL.Settings
 
         public string GetElementName(string defaultwithprefix)
         {
-            return CCOLElementNames.TryGetValue(defaultwithprefix, out var n) ? n : null;
+            var result = CCOLElementNames.TryGetValue(defaultwithprefix, out var n);
+            if (result == false) throw new KeyNotFoundException($"The default {defaultwithprefix} was not found. Code generation will be faulty.");
+            return n;
         }
 
         private CCOLElementTypeEnum TranslateType(CCOLGeneratorSettingTypeEnum type)

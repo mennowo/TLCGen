@@ -75,7 +75,7 @@
 
                                         <ScrollViewer MaxHeight="120" Background="LightGray">
                                             <ScrollViewer.Resources>
-                                                <DataTemplate DataType="{x:Type vm:OVIngreepInUitMeldingViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:PrioIngreepInUitMeldingViewModel}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto" />
@@ -116,7 +116,7 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="1" Margin="2"
                                                         SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="2" Margin="2" 
                                                         ItemsSource="{Binding Path=AvailableInputs}" IsEnabled="{Binding Path=HasInput1}"
@@ -124,7 +124,7 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="3" Margin="2" IsEnabled="{Binding Path=HasInput1}"
                                                         SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
                                                         <CheckBox 
                                                         Grid.Row="2" Grid.Column="4" Margin="5" IsEnabled="{Binding Path=CanHaveInput2}"
                                                         IsChecked="{Binding Path=TweedeInput,UpdateSourceTrigger=PropertyChanged}" />
@@ -135,8 +135,8 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="6" Margin="2" IsEnabled="{Binding Path=HasInput2}"
                                                         SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
-                                                        <CheckBox 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        <CheckBox
                                                         Grid.Row="2" Grid.Column="7" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}"
                                                         Margin="5" IsChecked="{Binding Path=KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" />
                                                         <CheckBox 
@@ -241,7 +241,7 @@
                                 <DataGridComboBoxColumn 
                                     Header="Type"
                                     SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
                                 <DataGridComboBoxColumn 
                                     Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
                                     SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
@@ -259,7 +259,7 @@
                                 <DataGridComboBoxColumn 
                                     Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
                                     SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
                                 </DataGridComboBoxColumn>
                                 <DataGridCheckBoxColumn Header="2e input" Binding="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                                     <DataGridCheckBoxColumn.CellStyle>
@@ -291,7 +291,7 @@
                                 <DataGridComboBoxColumn 
                                     Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
                                     SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
                                 <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
                                                         Binding="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Header="Geen OV aanw." />
                                 <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
@@ -346,7 +346,7 @@
 
                                         <ScrollViewer MaxHeight="120" Background="LightGray">
                                             <ScrollViewer.Resources>
-                                                <DataTemplate DataType="{x:Type vm:OVIngreepInUitMeldingViewModel}">
+                                                <DataTemplate DataType="{x:Type vm:PrioIngreepInUitMeldingViewModel}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto" />
@@ -379,7 +379,7 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="1" Margin="2"
                                                         SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="2" Margin="2" 
                                                         ItemsSource="{Binding Path=AvailableInputs}" IsEnabled="{Binding Path=HasInput1}"
@@ -387,7 +387,7 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="3" Margin="2" IsEnabled="{Binding Path=HasInput1}"
                                                         SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
                                                         <CheckBox 
                                                         Grid.Row="2" Grid.Column="4" Margin="5" IsEnabled="{Binding Path=CanHaveInput2}"
                                                         IsChecked="{Binding Path=TweedeInput,UpdateSourceTrigger=PropertyChanged}" />
@@ -398,7 +398,7 @@
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="6" Margin="2" IsEnabled="{Binding Path=HasInput2}"
                                                         SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
                                                         <CheckBox 
                                                         Grid.Row="2" Grid.Column="7" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}"
                                                         Margin="5" IsChecked="{Binding Path=KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" />
@@ -492,7 +492,7 @@
                                 <DataGridComboBoxColumn 
                                 Header="Type"
                                 SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
                                 <DataGridComboBoxColumn 
                                 Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
                                 SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
@@ -510,7 +510,7 @@
                                 <DataGridComboBoxColumn 
                                 Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
                                 SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
                                 </DataGridComboBoxColumn>
                                 <DataGridCheckBoxColumn Header="2e input" Binding="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                                     <DataGridCheckBoxColumn.CellStyle>
@@ -542,7 +542,7 @@
                                 <DataGridComboBoxColumn 
                                 Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
                                 SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
                                 <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
                                 <DataGridCheckBoxColumn CellStyle="{StaticResource DisabledIfDSI}" Binding="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Header="Opvang storing" />
                             </DataGrid.Columns>
@@ -586,7 +586,7 @@
                         <Label Content="Wissel 1 type" Grid.Row="3" />
                         <ComboBox 
                             IsEnabled="{Binding Path=Wissel1}" Margin="2"
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
                             SelectedItem="{Binding Path=Wissel1Type}" Grid.Row="3" Grid.Column="1" />
 
                         <Label Content="Wissel 1 ingang" Grid.Row="4" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
@@ -624,7 +624,7 @@
                         <Label Content="Wissel 2 type" Grid.Row="7" />
                         <ComboBox 
                             IsEnabled="{Binding Path=Wissel2}" Margin="2"
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
                             SelectedItem="{Binding Path=Wissel2Type}" Grid.Row="7" Grid.Column="1" />
 
                         <Label Content="Wissel 2 ingang" Grid.Row="8" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />

@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
 
         public override bool CanBeEnabled()
         {
-            return _Controller.OVData.OVIngreepType == Models.Enumerations.OVIngreepTypeEnum.GeneriekePrioriteit;
+            return _Controller.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit;
         }
 
         #endregion // TabItem Overrides

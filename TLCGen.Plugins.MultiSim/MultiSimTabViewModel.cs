@@ -60,7 +60,7 @@ namespace TLCGen.Plugins.MultiSim
 
             var fasendets = _plugin.Controller.Fasen.SelectMany(x => x.Detectoren);
             var controllerdets = _plugin.Controller.Detectoren;
-            var ovdummydets = _plugin.Controller.OVData.GetAllDummyDetectors();
+            var ovdummydets = _plugin.Controller.PrioData.GetAllDummyDetectors();
             var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets).ToList();
             foreach (var d in alldets)
             {
@@ -86,7 +86,7 @@ namespace TLCGen.Plugins.MultiSim
         {
             var fasendets = _plugin.Controller.Fasen.SelectMany(x => x.Detectoren);
             var controllerdets = _plugin.Controller.Detectoren;
-            var ovdummydets = _plugin.Controller.OVData.GetAllDummyDetectors();
+            var ovdummydets = _plugin.Controller.PrioData.GetAllDummyDetectors();
             var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets).ToList();
             foreach (var e in SelectedSimEntrySet.Entries)
             {

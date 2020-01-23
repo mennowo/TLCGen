@@ -1,5 +1,5 @@
 #include "halfstar.h"
-#include "halfstar_ov.h"     /* declaratie functies                                      */
+#include "halfstar_prio.h"     /* declaratie functies                                      */
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */
@@ -1044,7 +1044,7 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
 
 /*****************************************************************************/
 /* vasthouden groen OV bij signaalplan */
-void yv_ov_pl_halfstar(count fc, bool bit, bool condition)
+void yv_PRIO_pl_halfstar(count fc, bool bit, bool condition)
 {
     RW[fc] &= ~bit;
     YV[fc] &= ~bit;

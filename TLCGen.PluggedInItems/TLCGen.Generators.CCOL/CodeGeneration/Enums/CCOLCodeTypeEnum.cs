@@ -33,34 +33,10 @@
         RegCDumpApplication,
         RegCSpecialSignals,
 
-        // OV
-        OvCIncludes,
-		OvCTop,
-		OvCInitOV,
-		OvCInstellingen,
-		OvCRijTijdScenario,
-		OvCInUitMelden,
-		OvCOnderMaximum,
-		OvCAfkapGroen,
-		OvCStartGroenMomenten,
-		OvCAfkappen,
-		OvCTerugkomGroen,
-		OvCGroenVasthouden,
-		OvCMeetkriterium,
-	    OvCPrioriteitsOpties,
-        OvCPrioriteitsNiveau,
-	    OvCPrioriteitsToekenning,
-        OvCTegenhoudenConflicten,
-        OvCPostAfhandelingOV,
-	    OvCPARCorrecties,
-	    OvCPARCcol,
-	    OvCSpecialSignals,
-		OvCBottom,
-
         // PRIO
         PrioCIncludes,
         PrioCTop,
-        PrioCInitOV,
+        PrioCInitPrio,
         PrioCInstellingen,
         PrioCRijTijdScenario,
         PrioCInUitMelden,
@@ -75,7 +51,7 @@
         PrioCPrioriteitsNiveau,
         PrioCPrioriteitsToekenning,
         PrioCTegenhoudenConflicten,
-        PrioCPostAfhandelingOV,
+        PrioCPostAfhandelingPrio,
         PrioCPARCorrecties,
         PrioCPARCcol,
         PrioCSpecialSignals,
@@ -109,6 +85,6 @@
 		HstCPreSystemApplication,
 		HstCPostSystemApplication,
 		HstCPostDumpApplication,
-        HstCOVHalfstarSettings
+        HstCPrioHalfstarSettings
     };
 }

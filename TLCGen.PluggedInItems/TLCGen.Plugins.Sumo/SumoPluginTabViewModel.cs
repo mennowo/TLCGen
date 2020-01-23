@@ -270,7 +270,7 @@ namespace TLCGen.Plugins.Sumo
 
         #region TLCGen Events
 
-        private void OnModelManagerMessage(OVIngreepMeldingChangedMessage message)
+        private void OnModelManagerMessage(PrioIngreepMeldingChangedMessage message)
         {
             _plugin.UpdateModel();
         }

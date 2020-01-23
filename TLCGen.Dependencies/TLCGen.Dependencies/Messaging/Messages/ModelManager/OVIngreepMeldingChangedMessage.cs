@@ -1,16 +1,17 @@
-﻿using TLCGen.Models.Enumerations;
+﻿using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class OVIngreepMeldingChangedMessage : ModelManagerMessageBase
+    public class PrioIngreepMeldingChangedMessage : ModelManagerMessageBase
     {
-        public OVIngreepInUitMeldingVoorwaardeTypeEnum MeldingType { get; }
+        public PrioIngreepInUitMeldingModel IngreepMelding { get; }
         public string FaseCyclus { get; }
 
-        public OVIngreepMeldingChangedMessage(string faseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum type)
+        public PrioIngreepMeldingChangedMessage(string faseCyclus, PrioIngreepInUitMeldingModel ingreepMelding)
         {
             FaseCyclus = faseCyclus;
-            MeldingType = type;
+            IngreepMelding = ingreepMelding;
         }
     }
 }
