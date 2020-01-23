@@ -28,7 +28,6 @@ namespace TLCGen.ModelManagement
         private static readonly object _Locker = new object();
         private static ITLCGenModelManager _Default;
 
-        private IMessenger _MessengerInstance;
         private Action<object, string> _setDefaultsAction;
 
         private List<Tuple<string, object>> _pluginDataToMove = new List<Tuple<string, object>>();
@@ -55,11 +54,7 @@ namespace TLCGen.ModelManagement
             }
         }
 
-        private IMessenger MessengerInstance
-        {
-            get { return _MessengerInstance; }
-            set { _MessengerInstance = value; }
-        }
+        private IMessenger MessengerInstance { get; set; }
 
         public ControllerModel Controller
         {
@@ -69,6 +64,22 @@ namespace TLCGen.ModelManagement
         #endregion // Properties
 
         #region Public Methods
+
+        public void SetPrioOutputPerSignalGroup(ControllerModel controller, bool outputPerSg)
+        { 
+            if (outputPerSg)
+            {
+                controller.PrioData.PrioIngrepen.ForEach(x => x.GeenEigenVerklikking = true);
+                controller.Fasen.ForEach(x => x.PrioIngreep = controller.PrioData.PrioIngrepen.Any(x2 => x2.FaseCyclus == x.Naam));
+                controller.Fasen.ForEach(x => x.PrioIngreepGeconditioneerd = controller.PrioData.PrioIngrepen.Any(x2 => x2.FaseCyclus == x.Naam && x2.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit));
+            }
+            else
+            {
+                controller.PrioData.PrioIngrepen.ForEach(x => x.GeenEigenVerklikking = false);
+                controller.Fasen.ForEach(x => x.PrioIngreep = false);
+                controller.Fasen.ForEach(x => x.PrioIngreepGeconditioneerd = false);
+            }
+        }
 
         public void ConvertToIntergroen(ControllerModel controller)
         {
@@ -115,8 +126,8 @@ namespace TLCGen.ModelManagement
             {
                 MessageBox.Show($"Dit bestand is gemaakt met een nieuwere versie van TLCGen,\n" +
                                 $"en kan met deze versie niet worden geopend.\n\n" +
-                                $"Versie TLCGen: {vp.ToString()}\n" +
-                                $"Versie bestand: {vc.ToString()}", "Versies komen niet overeen");
+                                $"Versie TLCGen: {vp}\n" +
+                                $"Versie bestand: {vc}", "Versies komen niet overeen");
                 return false;
             }
             return true;
@@ -185,46 +196,8 @@ namespace TLCGen.ModelManagement
 
             var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
             
-            // In version 0.2.2.0, the OVIngreepModel object was changed
-            var checkVer = Version.Parse("0.2.2.0");
-            if(v < checkVer)
-            {
-                bool vecom = false;
-                foreach (var ov in controller.PrioData.PrioIngrepen)
-                {
-                    if (ov.KAR)
-                    {
-                        ov.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
-                        {
-                            AlleenIndienGeenInmelding = false,
-                            AntiJutterTijd = 15,
-                            AntiJutterTijdToepassen = true,
-                            InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
-                            KijkNaarWisselStand = false,
-                            OpvangStoring = false,
-                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-                        });
-                        ov.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
-                        {
-                            AlleenIndienGeenInmelding = false,
-                            AntiJutterTijd = 15,
-                            AntiJutterTijdToepassen = true,
-                            InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
-                            KijkNaarWisselStand = false,
-                            OpvangStoring = false,
-                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-                        });
-                    }
-                    if(ov.Vecom && !vecom)
-                    {
-                        vecom = true;
-                        MessageBox.Show("Dit is oud type TLCGen bestand. OV via VECOM moet opnieuw worden opgegeven.", "VECOM opnieuw invoeren.", MessageBoxButton.OK);
-                    }
-                }
-            }
-
             // In version 0.2.3.0, handling of segments was altered.
-            checkVer = Version.Parse("0.2.3.0");
+            var checkVer = Version.Parse("0.2.3.0");
             if(v < checkVer)
             {
                 foreach (var s in controller.Data.SegmentenDisplayBitmapData)
@@ -282,7 +255,7 @@ namespace TLCGen.ModelManagement
             }
         }
 
-        private static void RenameXMLNode(XmlDocument doc, XmlNode oldRoot, string newname)
+        private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)
         {
             XmlNode newRoot = doc.CreateElement(newname);
 
@@ -290,7 +263,8 @@ namespace TLCGen.ModelManagement
             {
                 newRoot.AppendChild(childNode.CloneNode(true));
             }
-            XmlNode parent = oldRoot.ParentNode;
+            var parent = oldRoot.ParentNode;
+            if (parent == null) return;
             parent.AppendChild(newRoot);
             parent.RemoveChild(oldRoot);
         }
@@ -301,7 +275,32 @@ namespace TLCGen.ModelManagement
             var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
             var v = Version.Parse(vi.InnerText);
 
-            var checkVer = Version.Parse("0.5.4.0");
+            // In version 0.2.2.0, the OVIngreepModel object was changed
+            var checkVer = Version.Parse("0.2.2.0");
+            if(v < checkVer)
+            {
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName != "OVData") continue;
+                    // Move dummy KAR dets to appropriate melding instead of ingreep
+                    var ingrepen = node.SelectNodes("OVIngrepen/OVIngreep");
+                    if (ingrepen == null) continue;
+                    foreach (XmlNode ingreep in ingrepen)
+                    {
+                        var kar = ingreep.SelectSingleNode("KAR");
+                        var vecom = ingreep.SelectSingleNode("Vecom");
+
+                        if (kar != null && (kar.InnerText.ToLower() == "true" ||
+                                            vecom != null && vecom.InnerText.ToLower() == "true"))
+                        {
+                            MessageBox.Show(
+                                "Dit is oud type TLCGen bestand. OV via KAR en/of VECOM moet opnieuw worden opgegeven.",
+                                "KAR en VECOM opnieuw invoeren.", MessageBoxButton.OK);
+                        }
+                    }
+                }
+            }
+            checkVer = Version.Parse("0.5.4.0");
             if (v < checkVer)
             {
                 // V0.5.4.0: RIS plugin moved inside TLCGen
@@ -325,7 +324,7 @@ namespace TLCGen.ModelManagement
                         var c = n.SelectSingleNode("KruisingNaam");
                         if (c != null)
                         {
-                            RenameXMLNode(doc, c, "KoppelingNaam");
+                            RenameXmlNode(doc, c, "KoppelingNaam");
                         }
                     }
                 }
@@ -350,7 +349,7 @@ namespace TLCGen.ModelManagement
                     {
                         item.AppendChild(newNodes[i]);
                     }
-                    RenameXMLNode(doc, item, "FaseCyclusInstellingen");
+                    RenameXmlNode(doc, item, "FaseCyclusInstellingen");
                 }
             }
             checkVer = Version.Parse("0.6.2.0");
@@ -397,6 +396,7 @@ namespace TLCGen.ModelManagement
                     {
                         // Move dummy KAR dets to appropriate melding instead of ingreep
                         var ingrepen = node.SelectNodes("OVIngrepen/OVIngreep");
+                        if (ingrepen == null) continue;
                         foreach(XmlNode ingreep in ingrepen)
                         {
                             var dummyIn = ingreep.SelectSingleNode("DummyKARInmelding");
@@ -416,7 +416,7 @@ namespace TLCGen.ModelManagement
                                             var name = dummyIn.SelectSingleNode("Naam");
                                             name.InnerText = $"dummykarin{fase}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(eType)}";
                                             inmelding.AppendChild(dummyIn);
-                                            RenameXMLNode(doc, dummyIn, "DummyKARMelding");
+                                            RenameXmlNode(doc, dummyIn, "DummyKARMelding");
                                         }
                                         break;
                                     }
@@ -437,7 +437,7 @@ namespace TLCGen.ModelManagement
                                             var name = dummyUit.SelectSingleNode("Naam");
                                             name.InnerText = $"dummykaruit{fase}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(eType)}";
                                             uitmelding.AppendChild(dummyUit);
-                                            RenameXMLNode(doc, dummyUit, "DummyKARMelding");
+                                            RenameXmlNode(doc, dummyUit, "DummyKARMelding");
                                         }
                                         break;
                                     }
@@ -457,12 +457,13 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-            }
+        }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)
         {
-            if(!vissim) return TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier, objectType);
-            return TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
+            return !vissim ? 
+                TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier, objectType) : 
+                TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
         }
 
         #endregion // Public Methods
@@ -493,7 +494,7 @@ namespace TLCGen.ModelManagement
                     foreach (var set in Controller.GroentijdenSets)
                     {
                         var mgm = new GroentijdModel { FaseCyclus = fcm.Naam };
-                        _setDefaultsAction(mgm, fcm.Type.ToString());
+                        _setDefaultsAction?.Invoke(mgm, fcm.Type.ToString());
                         set.Groentijden.Add(mgm);
                     }
                 }
@@ -574,18 +575,18 @@ namespace TLCGen.ModelManagement
         {
             var i = 0;
             if (obj == null) return i;
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
             // class refers to?
             var refToAttr = objType.GetCustomAttribute<RefersToAttribute>();
 
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
                 var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
                 if (ignore != null) continue;
 
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
 
                 // for strings
                 if (property.PropertyType == typeof(string))
@@ -643,10 +644,11 @@ namespace TLCGen.ModelManagement
             {
                 case PrioIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(
-                        x => 
+                        x =>
                             x.MeldingenData.Inmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)) ||
                             x.MeldingenData.Uitmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)));
-                    if (meldingMsg.IngreepMelding != null && meldingMsg.IngreepMelding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+                    if (meldingMsg.IngreepMelding != null && meldingMsg.IngreepMelding.Type ==
+                        PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                     {
                         switch (meldingMsg.IngreepMelding.InUit)
                         {
@@ -656,9 +658,11 @@ namespace TLCGen.ModelManagement
                                     meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                     {
                                         Dummy = true,
-                                        Naam = $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                        Naam =
+                                            $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
                                     };
                                 }
+
                                 break;
                             case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
                                 if (meldingMsg.IngreepMelding.DummyKARMelding == null)
@@ -666,78 +670,81 @@ namespace TLCGen.ModelManagement
                                     meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                     {
                                         Dummy = true,
-                                        Naam = $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                        Naam =
+                                            $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
                                     };
                                 }
+
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
+                    SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
                     break;
                 case ModulesChangedMessage modulesMessage:
                     if (Controller.Data.UitgangPerModule)
                     {
                         if (!Controller.Data.MultiModuleReeksen)
                         {
-                            foreach (var m in Controller.ModuleMolen.Modules)
+                            foreach (var m in Controller.ModuleMolen.Modules.Where(m =>
+                                Controller.Data.ModulenDisplayBitmapData.All(x => x.Naam != m.Naam)))
                             {
-                                if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                                Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
                                 {
-                                    Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
-                                    {
-                                        Naam = m.Naam
-                                    });
-                                    Controller.Data.ModulenDisplayBitmapData.BubbleSort();
-                                }
+                                    Naam = m.Naam
+                                });
+                                Controller.Data.ModulenDisplayBitmapData.BubbleSort();
                             }
                         }
                         else
                         {
                             foreach (var m in Controller.MultiModuleMolens.SelectMany(x => x.Modules))
                             {
-                                if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                                if (Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam)) continue;
+                                Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
                                 {
-                                    Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
-                                    {
-                                        Naam = m.Naam
-                                    });
-                                    Controller.Data.ModulenDisplayBitmapData.BubbleSort();
-                                }
+                                    Naam = m.Naam
+                                });
+                                Controller.Data.ModulenDisplayBitmapData.BubbleSort();
                             }
                         }
+
                         var rd = new List<ModuleDisplayElementModel>();
                         foreach (var md in Controller.Data.ModulenDisplayBitmapData)
                         {
                             if (!Controller.Data.MultiModuleReeksen)
                             {
-                                if (!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                                if (Controller.ModuleMolen.Modules.All(x => x.Naam != md.Naam))
                                 {
                                     rd.Add(md);
                                 }
                             }
                             else
                             {
-                                if (!Controller.MultiModuleMolens.SelectMany(x => x.Modules).Any(x => x.Naam == md.Naam))
+                                if (Controller.MultiModuleMolens.SelectMany(x => x.Modules).All(x => x.Naam != md.Naam))
                                 {
                                     rd.Add(md);
                                 }
                             }
                         }
+
                         foreach (var r in rd)
                         {
                             Controller.Data.ModulenDisplayBitmapData.Remove(r);
                         }
                     }
                     break;
-
+            }
         }
-    }
 
-    private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
+        private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
         {
             foreach (var fcm in msg.Controller.Fasen)
             {
                 fcm.Detectoren.BubbleSort();
             }
+
             msg.Controller.Detectoren.BubbleSort();
             msg.Controller.SelectieveDetectoren.BubbleSort();
         }

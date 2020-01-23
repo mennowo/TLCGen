@@ -22,6 +22,7 @@ using System.Windows;
 using TLCGen.Dialogs;
 using Point = System.Drawing.Point;
 using TLCGen.Extensions;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -50,7 +51,7 @@ namespace TLCGen.ViewModels
         private Color DefaultDetectorColor = Color.Yellow;
         private Color DefaultDetectorSelectedColor = Color.Magenta;
 
-        private Color DefaultUitgangColor = Color.Blue;
+        private readonly Color DefaultUitgangColor = Color.Blue;
         private Color DefaultUitgangSelectedColor = Color.Lime;
         private Color DefaultIngangColor = Color.DarkCyan;
         private Color DefaultIngangSelectedColor = Color.Cyan;
@@ -228,6 +229,8 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             // Collect all IO to be displayed in the lists
+            _SelectedItem = null;
+            TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
             CollectAllIO();
             LoadBitmap();
         }

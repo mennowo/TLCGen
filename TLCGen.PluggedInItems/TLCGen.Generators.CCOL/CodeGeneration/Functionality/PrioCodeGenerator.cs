@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -95,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _mwtvm;
         private string _prmwtvnhaltmin;
-        private string _hrisprio;
+        //private string _hrisprio;
 
         #endregion // Fields
 
@@ -114,8 +115,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return "sd";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     return "vecio";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
-                    return "ris";
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
+                //    return "ris";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -305,12 +306,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
+            if (c.PrioData.PrioUitgangPerFase)
+            {
+                foreach (var sg in c.Fasen.Where(x => x.PrioIngreep))
+                {
+                    _myBitmapOutputs.Add(new CCOLIOElement(sg.PrioIngreepBitmapData,
+                        $"{_uspf}{_usovinm}{sg.Naam}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{sg.Naam}", _usovinm, sg.Naam, ""));
+                }
+            }
+
             /* Variables for OV */
             foreach (var ov in c.PrioData.PrioIngrepen)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(ov.PrioInmeldingBitmapData, $"{_uspf}{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}"));
-
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _usovinm, ov.FaseCyclus, ov.Type.GetDescription()));
+                if (!c.PrioData.PrioUitgangPerFase)
+                {
+                    _myBitmapOutputs.Add(new CCOLIOElement(ov.PrioInmeldingBitmapData,
+                        $"{_uspf}{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _usovinm, ov.FaseCyclus, ov.Type.GetDescription()));
+                }
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hov}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _hov, ov.FaseCyclus, ov.Type.GetDescription()));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovin}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _hovin, ov.FaseCyclus, ov.Type.GetDescription()));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovuit}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}", _hovuit, ov.FaseCyclus, ov.Type.GetDescription()));
@@ -716,9 +730,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
                     break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
-                    sb.AppendLine($" {(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "SH" : "EH")}[{_hpf}{_hrisprio}{melding.RelatedInput1}];");
-                    break;
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
+                //    sb.AppendLine($" {(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "SH" : "EH")}[{_hpf}{_hrisprio}{melding.RelatedInput1}];");
+                //    break;
             }
             sb.AppendLine($"{ts}}}");
             if (melding.OpvangStoring && melding.MeldingBijstoring != null && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
@@ -814,9 +828,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine($"{ts}/* PRIO verklikking */");
                     sb.AppendLine($"{ts}/* ---------------- */");
-                    foreach (var ov in c.PrioData.PrioIngrepen)
+                    if (!c.PrioData.PrioUitgangPerFase)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] = C[{_ctpf}{_cvc}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}];");
+                        foreach (var ov in c.PrioData.PrioIngrepen)
+                        {
+                            sb.AppendLine(
+                                $"{ts}CIF_GUS[{_uspf}{_usovinm}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] = C[{_ctpf}{_cvc}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}];");
+                        }
+                    }
+                    else
+                    {
+                        foreach (var sg in c.Fasen.Where(x => x.PrioIngreep))
+                        {
+                            sb.Append(
+                                $"{ts}CIF_GUS[{_uspf}{_usovinm}{sg.Naam}] = ");
+                            var firstSg = true;
+                            foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == sg.Naam))
+                            {
+                                if (!firstSg) sb.Append(" || ");
+                                sb.Append($"C[{_ctpf}{_cvc}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}]");
+                                firstSg = false;
+                            }
+                            sb.AppendLine(";");
+                        }
                     }
                     foreach (var hd in c.PrioData.HDIngrepen)
                     {

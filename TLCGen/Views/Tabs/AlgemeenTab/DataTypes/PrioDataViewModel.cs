@@ -1,11 +1,13 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System.ComponentModel;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 using TLCGen.Controls;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -27,7 +29,7 @@ namespace TLCGen.ViewModels
         [Description("Type prioriteit")]
         public PrioIngreepTypeEnum PrioIngreepType
         {
-            get { return _Controller == null ? PrioIngreepTypeEnum.Geen : _Controller.PrioData.PrioIngreepType; }
+            get => _Controller?.PrioData.PrioIngreepType ?? PrioIngreepTypeEnum.Geen;
             set
             {
                 if (_Controller.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen && value != PrioIngreepTypeEnum.Geen)
@@ -41,17 +43,27 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Browsable(false)]
-        public bool HasPrio
+        [Description("Enkele uitgang prio actief per fase")]
+        public bool PrioUitgangPerFase
         {
-            get { return PrioIngreepType != PrioIngreepTypeEnum.Geen; }
+            get => _Controller?.PrioData.PrioUitgangPerFase ?? false;
+            set
+            {
+                _Controller.PrioData.PrioUitgangPerFase = value;
+                RaisePropertyChanged<object>(nameof(PrioUitgangPerFase), broadcast: true);
+
+                TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(_Controller, value);
+            }
         }
+
+        [Browsable(false)]
+        public bool HasPrio => PrioIngreepType != PrioIngreepTypeEnum.Geen;
 
         [Category("Opties prioriteit")]
         [Description("Check type op DSI bericht bij VECOM")]
         public bool CheckOpDSIN
         {
-            get { return _Controller == null ? false : _Controller.PrioData.CheckOpDSIN; }
+            get => _Controller?.PrioData.CheckOpDSIN ?? false;
             set
             {
                 _Controller.PrioData.CheckOpDSIN = value;
@@ -62,7 +74,7 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd auto")]
         public int MaxWachttijdAuto
         {
-            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdAuto; }
+            get => _Controller?.PrioData.MaxWachttijdAuto ?? 0;
             set
             {
                 _Controller.PrioData.MaxWachttijdAuto = value;
@@ -73,7 +85,7 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd fiets")]
         public int MaxWachttijdFiets
         {
-            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdFiets; }
+            get => _Controller?.PrioData.MaxWachttijdFiets ?? 0;
             set
             {
                 _Controller.PrioData.MaxWachttijdFiets = value;
@@ -84,7 +96,7 @@ namespace TLCGen.ViewModels
         [Description("Maximale wachttijd voetganger")]
         public int MaxWachttijdVoetganger
         {
-            get { return _Controller == null ? 0 : _Controller.PrioData.MaxWachttijdVoetganger; }
+            get => _Controller?.PrioData.MaxWachttijdVoetganger ?? 0;
             set
             {
                 _Controller.PrioData.MaxWachttijdVoetganger = value;
@@ -95,7 +107,7 @@ namespace TLCGen.ViewModels
         [Description("Grens te vroeg tbv geconditioneerde prio")]
         public int GeconditioneerdePrioGrensTeVroeg
         {
-            get { return _Controller == null ? 0 : _Controller.PrioData.GeconditioneerdePrioGrensTeVroeg; }
+            get => _Controller?.PrioData.GeconditioneerdePrioGrensTeVroeg ?? 0;
             set
             {
                 _Controller.PrioData.GeconditioneerdePrioGrensTeVroeg = value;
@@ -106,7 +118,7 @@ namespace TLCGen.ViewModels
         [Description("Grens te laat tbv geconditioneerde prio")]
         public int GeconditioneerdePrioGrensTeLaat
         {
-            get { return _Controller == null ? 0 : _Controller.PrioData.GeconditioneerdePrioGrensTeLaat; }
+            get => _Controller?.PrioData.GeconditioneerdePrioGrensTeLaat ?? 0;
             set
             {
                 _Controller.PrioData.GeconditioneerdePrioGrensTeLaat = value;
@@ -117,7 +129,7 @@ namespace TLCGen.ViewModels
         [Description("Blokkeren niet-conflicten tijdens HD ingreep")]
         public bool BlokkeerNietConflictenBijHDIngreep
         {
-            get { return _Controller == null ? false : _Controller.PrioData.BlokkeerNietConflictenBijHDIngreep; }
+            get => _Controller?.PrioData.BlokkeerNietConflictenBijHDIngreep ?? false;
             set
             {
                 _Controller.PrioData.BlokkeerNietConflictenBijHDIngreep = value;
@@ -129,7 +141,7 @@ namespace TLCGen.ViewModels
         [EnabledCondition(nameof(BlokkeerNietConflictenBijHDIngreep))]
         public bool BlokkeerNietConflictenAlleenLangzaamVerkeer
         {
-            get { return _Controller == null ? false : _Controller.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer; }
+            get => _Controller?.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ?? false;
             set
             {
                 _Controller.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer = value;
@@ -140,7 +152,7 @@ namespace TLCGen.ViewModels
         [Description("Verklikken wijziging prio teller via UBER")]
         public NooitAltijdAanUitEnum VerklikkenPrioTellerUber
         {
-            get { return _Controller == null ? NooitAltijdAanUitEnum.Nooit : _Controller.PrioData.VerklikkenPrioTellerUber; }
+            get => _Controller?.PrioData.VerklikkenPrioTellerUber ?? NooitAltijdAanUitEnum.Nooit;
             set
             {
                 _Controller.PrioData.VerklikkenPrioTellerUber = value;
@@ -151,7 +163,7 @@ namespace TLCGen.ViewModels
         [Description("Check signaalgroepnmrs hoger dan 2## als ## in DSI")]
         public bool VerlaagHogeSignaalGroepNummers
         {
-            get { return _Controller == null ? false : _Controller.PrioData.VerlaagHogeSignaalGroepNummers; }
+            get => _Controller?.PrioData.VerlaagHogeSignaalGroepNummers ?? false;
             set
             {
                 _Controller.PrioData.VerlaagHogeSignaalGroepNummers = value;

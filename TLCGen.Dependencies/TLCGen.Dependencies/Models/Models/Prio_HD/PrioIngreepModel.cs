@@ -16,11 +16,6 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
 
-        //[Obsolete("This property has been deprecated: use Meldingen instead.")]
-        public bool KAR { get; set; }
-        //[Obsolete("This property has been deprecated: use Meldingen instead.")]
-        public bool Vecom { get; set; }
-        
         public PrioIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
         public bool NoodaanvraagKoplus { get; set; }
@@ -48,6 +43,8 @@ namespace TLCGen.Models
         public bool AlleLijnen { get; set; }
         public bool AlleRitCategorien { get; set; }
 
+        public bool GeenEigenVerklikking { get; set; }
+
         public NooitAltijdAanUitEnum GeconditioneerdePrioriteit { get; set; }
         public int GeconditioneerdePrioTeVroeg { get; set; }
         public int GeconditioneerdePrioOpTijd { get; set; }
@@ -57,26 +54,30 @@ namespace TLCGen.Models
 
         [HasDefault(false)]
         [Browsable(false)]
-        public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit;
+        public bool HeeftEigenVerklikking => !GeenEigenVerklikking;
 
         [HasDefault(false)]
         [Browsable(false)]
-        public string FaseCyclusType => FaseCyclus + Type.ToString();
+        public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit && !GeenEigenVerklikking;
+
+        [HasDefault(false)]
+        [Browsable(false)]
+        public string FaseCyclusType => FaseCyclus + Type;
 
         [Browsable(false)]
-        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType")]
+        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HeeftEigenVerklikking))]
         public BitmapCoordinatenDataModel PrioInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
+        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeVroegBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
+        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioOpTijdBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, "FaseCyclusType", "HasGeconditioneerdePrioriteit")]
+        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]

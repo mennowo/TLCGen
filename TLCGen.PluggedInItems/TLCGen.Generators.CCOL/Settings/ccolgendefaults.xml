@@ -1321,37 +1321,37 @@
             <Default>stp</Default>
             <Setting>stp</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Stiptheid voorste OV voertuig bij _E1_</Description>
+            <Description>Stiptheid voorste OV voertuig bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>stp</Default>
             <Setting>stp</Setting>
             <Type>HulpElement</Type>
-            <Description>Geconditioneerde prio OV mogelijk bij _E1_</Description>
+            <Description>Geconditioneerde prio OV mogelijk bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipt</Default>
             <Setting>ovstipt</Setting>
             <Type>Schakelaar</Type>
-            <Description>Geconditioneerde prioteit voor OV bij _E1_</Description>
+            <Description>Geconditioneerde prioteit voor OV bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipttevroeg</Default>
             <Setting>ovstipttevroeg</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te vroeg bij _E1_</Description>
+            <Description>Prioriteitsnveau OV te vroeg bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstiptoptijd</Default>
             <Setting>ovstiptoptijd</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV op tijd bij _E1_</Description>
+            <Description>Prioriteitsnveau OV op tijd bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovstipttelaat</Default>
             <Setting>ovstipttelaat</Setting>
             <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te laat bij _E1_</Description>
+            <Description>Prioriteitsnveau OV te laat bij _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>OVtstpgrenslaat</Default>
@@ -1369,19 +1369,19 @@
             <Default>ovtevroeg</Default>
             <Setting>ovtevroeg</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te vroeg</Description>
+            <Description>Voorste OV voertuig bij _E1_ te vroeg _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovoptijd</Default>
             <Setting>ovoptijd</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ op tijd</Description>
+            <Description>Voorste OV voertuig bij _E1_ op tijd _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovtelaat</Default>
             <Setting>ovtelaat</Setting>
             <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te laat</Description>
+            <Description>Voorste OV voertuig bij _E1_ te laat _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

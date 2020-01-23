@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -296,14 +297,14 @@ namespace TLCGen.ViewModels
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio.MeldingenData);
                         if (prio.Type == PrioIngreepVoertuigTypeEnum.Bus || prio.Type == PrioIngreepVoertuigTypeEnum.Tram)
                         {
-                            prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel()
+                            prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
                             {
                                 AntiJutterTijdToepassen = true,
                                 AntiJutterTijd = 15,
                                 InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
                                 Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
                             });
-                            prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel()
+                            prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
                             {
                                 AntiJutterTijdToepassen = false,
                                 InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
@@ -331,6 +332,7 @@ namespace TLCGen.ViewModels
                         _Controller.PrioData.PrioIngrepen.Remove(_selectedIngreep.PrioIngreep);
                         Ingrepen.Remove(_selectedIngreep);
                         SelectedIngreep = Ingrepen.FirstOrDefault();
+                        TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
                     },
                     () => _selectedFaseCyclus != null && _selectedIngreep != null));
             }

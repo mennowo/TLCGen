@@ -377,7 +377,7 @@
       <DependentUpon>DetectorenRichtingGevoeligTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\ControllerDataViewModel.cs" />
-    <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\OVDataViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\PrioDataViewModel.cs" />
     <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\VersieViewModel.cs" />
     <Compile Include="Views\Tabs\BitmapTab\DataTypes\BitmappedItemViewModel.cs" />
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabViewModel.cs">

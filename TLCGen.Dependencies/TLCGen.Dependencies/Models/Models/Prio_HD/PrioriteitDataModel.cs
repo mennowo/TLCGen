@@ -15,6 +15,7 @@ namespace TLCGen.Models
         #region Properties
 
         public PrioIngreepTypeEnum PrioIngreepType { get; set; }
+        public bool PrioUitgangPerFase { get; set; }
         public bool CheckOpDSIN { get; set; }
         public int MaxWachttijdAuto { get; set; }
         public int MaxWachttijdFiets { get; set; }

@@ -18,5 +18,6 @@ namespace TLCGen.ModelManagement
         int ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType);
         void ConvertToIntergroen(ControllerModel controller);
         void ConvertToOntruimingstijden(ControllerModel controller);
+        void SetPrioOutputPerSignalGroup(ControllerModel controller, bool outputPerSg);
     }
 }
