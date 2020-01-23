@@ -104,6 +104,7 @@
                             <DataGridTextColumn Binding="{Binding Path=ObjectType}" IsReadOnly="True" Header="Type" />
                             <DataGridTextColumn Binding="{Binding Path=Naam}" IsReadOnly="True" Header="Naam" />
                             <DataGridTextColumn Binding="{Binding Path=Commentaar}" IsReadOnly="True" Header="Commentaar" Width="*" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Dummy}" Header="Dummy" />
                             <DataGridCheckBoxColumn Binding="{Binding Path=Selected}" Header="Export" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -121,6 +122,7 @@
                             <StaticResource ResourceKey="ImpExpTypeColumn" />
                             <StaticResource ResourceKey="ImpExpInstellingColumn" />
                             <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Dummy}" Header="Dummy" />
                             <DataGridCheckBoxColumn Binding="{Binding Path=Selected}" Header="Import" />
                         </DataGrid.Columns>
                     </DataGrid>

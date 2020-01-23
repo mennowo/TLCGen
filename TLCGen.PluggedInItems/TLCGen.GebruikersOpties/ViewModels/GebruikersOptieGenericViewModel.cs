@@ -24,6 +24,7 @@ namespace TLCGen.GebruikersOpties
         private object _relatedObject;
         private TLCGenObjectTypeEnum _objectType;
         private string _naam;
+        private bool _dummy;
         private bool _selected;
         private string _commentaar;
         private int? _instelling;
@@ -88,6 +89,16 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        public bool Dummy
+        {
+            get => _dummy;
+            set
+            {
+                _dummy = value;
+                RaisePropertyChanged();
+            }
+        }
+
         [XmlIgnore]
         public bool Selected
         {
@@ -141,7 +152,8 @@ namespace TLCGen.GebruikersOpties
                         _relatedObject = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel
                         {
                             Naam = _naam,
-                            Commentaar = _commentaar
+                            Commentaar = _commentaar,
+                            Dummy = _dummy
                         });
                         break;
                     case TLCGenObjectTypeEnum.CCOLHelpElement:
@@ -155,7 +167,8 @@ namespace TLCGen.GebruikersOpties
                             Naam = _naam,
                             Commentaar = _commentaar,
                             Type = _timeType,
-                            Instelling = _instelling
+                            Instelling = _instelling,
+                            Dummy = _dummy
                         });
                         break;
                 }
@@ -184,11 +197,13 @@ namespace TLCGen.GebruikersOpties
                     Commentaar = o.Commentaar;
                     TimeType = o.Type;
                     Instelling = o.Instelling;
+                    Dummy = o.Dummy;
                     break;
                 case GebruikersOptieWithIOViewModel oio:
                     ObjectType = oio.ObjectType;
                     Naam = oio.Naam;
                     Commentaar = oio.Commentaar;
+                    Dummy = oio.Dummy;
                     break;
             }
         }

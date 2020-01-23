@@ -215,7 +215,7 @@ namespace TLCGen.GebruikersOpties
                                 }
                             }
                         },
-                        () => ItemsToImport.Where(x => x.Selected).Any());
+                        () => ItemsToImport.Any(x => x.Selected));
                 }
                 return _importCommand;
             }
@@ -244,7 +244,7 @@ namespace TLCGen.GebruikersOpties
                                 }
                             }
                         },
-                        () => { return ItemsToImport.Where(x => x.Selected).Any() && !string.IsNullOrWhiteSpace(ReplaceInImportFind) && !string.IsNullOrWhiteSpace(ReplaceInImportReplace); }
+                        () => { return ItemsToImport.Any(x => x.Selected) && !string.IsNullOrWhiteSpace(ReplaceInImportFind) && !string.IsNullOrWhiteSpace(ReplaceInImportReplace); }
                     );
                 }
                 return _replaceInImportCommand;
