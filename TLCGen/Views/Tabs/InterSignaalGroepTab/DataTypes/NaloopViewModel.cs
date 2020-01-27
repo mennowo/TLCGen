@@ -151,7 +151,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_detectorManager == null && _naloop?.FaseVan != null)
+                if (TLCGenControllerDataProvider.Default.Controller != null && 
+                    _detectorManager == null && _naloop?.FaseVan != null)
                 {
                     var dets =
                         TLCGenControllerDataProvider.Default.Controller.Fasen.

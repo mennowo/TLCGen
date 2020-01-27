@@ -6,7 +6,7 @@ namespace TLCGen.Models.Enumerations
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum PrioIngreepTypeEnum
     {
-        [Description("Geen OV module")]
+        [Description("Geen prioriteit")]
         Geen,
         [Description("Generieke prioriteit")]
         GeneriekePrioriteit

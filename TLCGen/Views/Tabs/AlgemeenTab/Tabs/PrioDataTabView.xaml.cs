@@ -5,9 +5,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for OVDataTabView.xaml
     /// </summary>
-    public partial class OVDataTabView : UserControl
+    public partial class PrioDataTabView : UserControl
     {
-        public OVDataTabView()
+        public PrioDataTabView()
         {
             InitializeComponent();
         }

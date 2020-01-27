@@ -135,7 +135,7 @@
             Deze regeling is gemaakt met een eerdere versie van TLCGen.<LineBreak/>
             Versie TLCGen: <Run Text="{Binding Path=CurrentVersion,Mode=OneWay}" />, versie regeling: <Run Text="{Binding Path=ControllerVersion,Mode=OneWay}" /><LineBreak />
             Klik 
-            <Hyperlink Command="{Binding Path=ShowVersionInfoCommand}">hier</Hyperlink> voor informatie over aandachtspunten. 
+            <Hyperlink Command="{Binding Path=ShowVersionInfoCommand}">hier</Hyperlink> voor informatie over <Bold>belangrijke aandachtspunten</Bold>. 
             Klik <Hyperlink Command="{Binding Path=HideAlertMessageCommand}">hier</Hyperlink> om deze melding te verbergen.
         </TextBlock>
         <Grid Grid.Row="3" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}">

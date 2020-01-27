@@ -4,7 +4,7 @@ using TLCGen.Plugins;
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 1, type: TabItemTypeEnum.AlgemeenTab)]
-    public class OVDataTabViewModel : TLCGenTabItemViewModel
+    public class PrioDataTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
@@ -67,7 +67,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVDataTabViewModel() : base()
+        public PrioDataTabViewModel() : base()
         {
         }
 

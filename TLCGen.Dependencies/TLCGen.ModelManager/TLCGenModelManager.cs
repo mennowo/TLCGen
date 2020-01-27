@@ -171,14 +171,13 @@ namespace TLCGen.ModelManagement
                 if (!fcm.Detectoren.IsSorted())
                 {
                     fcm.Detectoren.BubbleSort();
-                    MessengerInstance.Send(new DetectorenChangedMessage(controller, null, null));
                 }
             }
 
             // check PostAfhandelingPrio_Add in ov.add
             if (filename != null)
             {
-                var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "prio.add");
+                var ovAddFile = Path.Combine(Path.GetDirectoryName(filename) ?? throw new InvalidOperationException(), controller.Data.Naam + "prio.add");
                 if (File.Exists(ovAddFile))
                 {
                     var ovaddtext = File.ReadAllLines(ovAddFile);
@@ -240,7 +239,7 @@ namespace TLCGen.ModelManagement
                 foreach (var fm in controller.FileIngrepen) fm.ToepassenDoseren = NooitAltijdAanUitEnum.Altijd;
             }
 
-            if(_pluginDataToMove.Any())
+            if (_pluginDataToMove.Any())
             {
                 var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
                 if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;

@@ -332,6 +332,7 @@ namespace TLCGen.ViewModels
                         _Controller.PrioData.PrioIngrepen.Remove(_selectedIngreep.PrioIngreep);
                         Ingrepen.Remove(_selectedIngreep);
                         SelectedIngreep = Ingrepen.FirstOrDefault();
+                        _selectedFaseCyclus.UpdateTypes();
                         TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
                     },
                     () => _selectedFaseCyclus != null && _selectedIngreep != null));

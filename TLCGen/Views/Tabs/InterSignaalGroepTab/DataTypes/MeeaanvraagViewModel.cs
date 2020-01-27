@@ -153,7 +153,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_DetectorManager == null && _Meeaanvraag != null && _Meeaanvraag.FaseVan != null)
+                if (TLCGenControllerDataProvider.Default.Controller != null &&
+                    _DetectorManager == null && _Meeaanvraag != null && _Meeaanvraag.FaseVan != null)
                 {
                     List<string> dets = 
                         TLCGenControllerDataProvider.Default.Controller.Fasen.

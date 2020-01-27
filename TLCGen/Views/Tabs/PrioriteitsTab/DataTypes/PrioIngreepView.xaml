@@ -10,12 +10,11 @@
              xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
-             x:Name="root"
+             x:Name="Root"
              d:DesignHeight="1000" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:OVIngreepViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
-        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
     </UserControl.Resources>
     <Grid>
         <Label Content="Geen instellingen beschikbaar">
@@ -23,7 +22,7 @@
                 <Style TargetType="Label">
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -31,6 +30,16 @@
             </Label.Style>
         </Label>
         <Grid>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <ag:AutoGrid Columns="Auto,*" RowCount="34">
                 
                 <!-- Algemeen -->
@@ -147,7 +156,7 @@
                     Grid.ColumnSpan="2">
                     <DataGrid.Resources>
                         <DataGridTextColumn Binding="{Binding Path=RitCategorie}" Header="Ritcategorie" x:Key="RitCategorieCol"
-                                            Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}" />
+                                            Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=Nummer}" Header="Lijnnummer" />

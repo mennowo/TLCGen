@@ -296,19 +296,20 @@ namespace TLCGen.ViewModels
 
         private void UpdateFasenEnDetectoren()
         {
+            if (_Controller == null) return;
+            
             Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fc in _Controller.Fasen.Select(fcm => new RoBuGroverTabFaseViewModel(fcm.Naam)))
             {
-                var fc = new RoBuGroverTabFaseViewModel(fcm.Naam);
                 Fasen.Add(fc);
             }
             SelectedConflictGroep = SelectedConflictGroep;
 
             _ControllerRGVFileDetectoren = new Dictionary<string, string>();
             _ControllerRGVHiaatDetectoren = new Dictionary<string, string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (var dm in fcm.Detectoren)
                 {
                     if (dm.Type == Models.Enumerations.DetectorTypeEnum.Kop)
                         _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Naam);

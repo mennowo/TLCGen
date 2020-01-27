@@ -105,6 +105,9 @@
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\VLOGSettingsDataViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\PrioDataTabViewModel.cs">
+      <DependentUpon>PrioDataTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\VLOGSettingsTabView.xaml.cs">
       <DependentUpon>VLOGSettingsTabView.xaml</DependentUpon>
     </Compile>
@@ -383,9 +386,6 @@
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabViewModel.cs">
       <DependentUpon>ControllerDataTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabViewModel.cs">
-      <DependentUpon>OVDataTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\AlgemeenTabViewModel.cs">
       <DependentUpon>AlgemeenTab.xaml</DependentUpon>
     </Compile>
@@ -401,8 +401,8 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModel.cs">
       <DependentUpon>FasenLijstTimersTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml.cs">
-      <DependentUpon>OVDataTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\PrioDataTabView.xaml.cs">
+      <DependentUpon>PrioDataTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabView.xaml.cs">
       <DependentUpon>ControllerDataTabView.xaml</DependentUpon>
@@ -664,7 +664,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml">
+    <Page Include="Views\Tabs\AlgemeenTab\Tabs\PrioDataTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -907,6 +907,7 @@
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
+    <EmbeddedResource Include="Resources\VersionInfo\0.7.0.0.rtf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

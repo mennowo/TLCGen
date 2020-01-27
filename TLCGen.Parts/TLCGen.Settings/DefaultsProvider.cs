@@ -15,8 +15,8 @@ namespace TLCGen.Settings
     {
         #region Fields
 
-        private static readonly object _Locker = new object();
-        private static IDefaultsProvider _Default;
+        private static readonly object Locker = new object();
+        private static IDefaultsProvider _default;
 
         #endregion // Fields
 
@@ -24,23 +24,15 @@ namespace TLCGen.Settings
 
         public event EventHandler DefaultsChanged;
 
-        private ControllerModel _Controller;
-        public ControllerModel Controller
-        {
-            get { return _Controller; }
-            set
-            {
-                _Controller = value;
-            }
-        }
+        public ControllerModel Controller { get; set; }
 
-        private TLCGenDefaultsModel _Defaults;
+        private TLCGenDefaultsModel _defaults;
         public TLCGenDefaultsModel Defaults
         {
-            get { return _Defaults; }
+            get => _defaults;
             set
             {
-                _Defaults = value;
+                _defaults = value;
                 DefaultsChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -49,17 +41,15 @@ namespace TLCGen.Settings
         {
             get
             {
-                if (_Default == null)
+                if (_default != null) return _default;
+                lock (Locker)
                 {
-                    lock (_Locker)
+                    if (_default == null)
                     {
-                        if (_Default == null)
-                        {
-                            _Default = new DefaultsProvider();
-                        }
+                        _default = new DefaultsProvider();
                     }
                 }
-                return _Default;
+                return _default;
             }
         }
 
@@ -69,7 +59,7 @@ namespace TLCGen.Settings
 
         public static void OverrideDefault(IDefaultsProvider provider)
         {
-            _Default = provider;
+            _default = provider;
         }
 
         public string GetVehicleTypeAbbreviation(PrioIngreepVoertuigTypeEnum type)
@@ -106,10 +96,10 @@ namespace TLCGen.Settings
 
         private FaseTypeEnum GetFaseCyclusTypeFromName(string name)
         {
-            if (_Controller == null)
+            if (Controller == null)
                 return FaseTypeEnum.Auto;
 
-            foreach(var fc in _Controller.Fasen)
+            foreach(var fc in Controller.Fasen)
             {
                 if(fc.Naam == name)
                 {
@@ -121,10 +111,10 @@ namespace TLCGen.Settings
 
         private DetectorTypeEnum GetDetectorTypeFromName(string name)
         {
-            if (_Controller == null)
+            if (Controller == null)
                 return DetectorTypeEnum.Kop;
 
-            foreach (var fc in _Controller.Fasen)
+            foreach (var fc in Controller.Fasen)
             {
                 foreach (var d in fc.Detectoren)
                 {
@@ -134,7 +124,7 @@ namespace TLCGen.Settings
                     }
                 }
             }
-            foreach (var d in _Controller.Detectoren)
+            foreach (var d in Controller.Detectoren)
             {
                 if (d.Naam == name)
                 {
@@ -223,13 +213,13 @@ namespace TLCGen.Settings
                 }
             }
 
-            string defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+            var defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             if (Defaults != null && File.Exists(defsetfile))
             {
                 foreach(var vtgT in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
                 {
                     var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (PrioIngreepVoertuigTypeEnum)vtgT);
-                    if(vtgTSet == null)
+                    if (vtgTSet == null)
                     {
                         switch ((PrioIngreepVoertuigTypeEnum)vtgT)
                         {
@@ -248,6 +238,8 @@ namespace TLCGen.Settings
                             case PrioIngreepVoertuigTypeEnum.NG:
                                 Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "alg", Setting = "alg" });
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 }

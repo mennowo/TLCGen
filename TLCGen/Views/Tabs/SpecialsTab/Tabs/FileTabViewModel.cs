@@ -201,12 +201,12 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
-            FileIngrepen.Rebuild();
+            FileIngrepen?.Rebuild();
         }
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
-            FileIngrepen.Rebuild();
+            FileIngrepen?.Rebuild();
         }
 
         public void OnFileIngreepTeDoserenSignaalPercentageChanged(FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)

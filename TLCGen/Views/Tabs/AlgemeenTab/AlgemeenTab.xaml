@@ -11,8 +11,8 @@
         <DataTemplate DataType="{x:Type vm:ControllerDataTabViewModel}">
             <local:ControllerDataTabView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:OVDataTabViewModel}">
-            <local:OVDataTabView />
+        <DataTemplate DataType="{x:Type vm:PrioDataTabViewModel}">
+            <local:PrioDataTabView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:VersieBeheerTabViewModel}">
             <local:VersieBeheerTabView />

@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
         [Description("Type voertuig")]
         public PrioIngreepVoertuigTypeEnum Type
         {
-            get { return PrioIngreep.Type; }
+            get => PrioIngreep.Type;
             set
             {
                 PrioIngreep.Type = value;
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
         [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd
         {
-            get { return PrioIngreep.RijTijdOngehinderd; }
+            get => PrioIngreep.RijTijdOngehinderd;
             set
             {
                 PrioIngreep.RijTijdOngehinderd = value;
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
         [Description("Rijtijd beperkt gehinderd")]
         public int RijTijdBeperktgehinderd
         {
-            get { return PrioIngreep.RijTijdBeperktgehinderd; }
+            get => PrioIngreep.RijTijdBeperktgehinderd;
             set
             {
                 PrioIngreep.RijTijdBeperktgehinderd = value;
@@ -135,7 +135,7 @@ namespace TLCGen.ViewModels
         [Description("Rijtijd gehinderd")]
         public int RijTijdGehinderd
         {
-            get { return PrioIngreep.RijTijdGehinderd; }
+            get => PrioIngreep.RijTijdGehinderd;
             set
             {
                 PrioIngreep.RijTijdGehinderd = value;
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
         [Description("Ondermaximum")]
         public int OnderMaximum
         {
-            get { return PrioIngreep.OnderMaximum; }
+            get => PrioIngreep.OnderMaximum;
             set
             {
                 PrioIngreep.OnderMaximum = value;
@@ -157,7 +157,7 @@ namespace TLCGen.ViewModels
         [Description("Groenbewaking")]
         public int GroenBewaking
         {
-            get { return PrioIngreep.GroenBewaking; }
+            get => PrioIngreep.GroenBewaking;
             set
             {
                 PrioIngreep.GroenBewaking = value;
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
         [Description("Blokkeren prio na ingreep")]
         public int BlokkeertijdNaPrioIngreep
         {
-            get { return PrioIngreep.BlokkeertijdNaPrioIngreep; }
+            get => PrioIngreep.BlokkeertijdNaPrioIngreep;
             set
             {
                 PrioIngreep.BlokkeertijdNaPrioIngreep = value;
@@ -179,7 +179,7 @@ namespace TLCGen.ViewModels
         [Description("Bezettijd prio gehinderd")]
         public int BezettijdPrioGehinderd
         {
-            get { return PrioIngreep.BezettijdPrioGehinderd; }
+            get => PrioIngreep.BezettijdPrioGehinderd;
             set
             {
                 PrioIngreep.BezettijdPrioGehinderd = value;
@@ -202,7 +202,7 @@ namespace TLCGen.ViewModels
         [Description("Afkappen conflicten")]
         public bool AfkappenConflicten
         {
-            get { return PrioIngreep.AfkappenConflicten; }
+            get => PrioIngreep.AfkappenConflicten;
             set
             {
                 PrioIngreep.AfkappenConflicten = value;
@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
         [Description("Afkappen conflicten prio")]
         public bool AfkappenConflictenPrio
         {
-            get { return PrioIngreep.AfkappenConflictenPrio; }
+            get => PrioIngreep.AfkappenConflictenPrio;
             set
             {
                 PrioIngreep.AfkappenConflictenPrio = value;
@@ -224,7 +224,7 @@ namespace TLCGen.ViewModels
         [Description("Vasthouden groen")]
         public bool VasthoudenGroen
         {
-            get { return PrioIngreep.VasthoudenGroen; }
+            get => PrioIngreep.VasthoudenGroen;
             set
             {
                 PrioIngreep.VasthoudenGroen = value;
@@ -235,7 +235,7 @@ namespace TLCGen.ViewModels
         [Description("Tussendoor realiseren")]
         public bool TussendoorRealiseren
         {
-            get { return PrioIngreep.TussendoorRealiseren; }
+            get => PrioIngreep.TussendoorRealiseren;
             set
             {
                 PrioIngreep.TussendoorRealiseren = value;
@@ -246,7 +246,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public NooitAltijdAanUitEnum GeconditioneerdePrioriteit
         {
-            get { return PrioIngreep.GeconditioneerdePrioriteit; }
+            get => PrioIngreep.GeconditioneerdePrioriteit;
             set
             {
                 PrioIngreep.GeconditioneerdePrioriteit = value;
@@ -261,7 +261,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public int GeconditioneerdePrioTeVroeg
         {
-            get { return PrioIngreep.GeconditioneerdePrioTeVroeg; }
+            get => PrioIngreep.GeconditioneerdePrioTeVroeg;
             set
             {
                 PrioIngreep.GeconditioneerdePrioTeVroeg = value;
@@ -272,7 +272,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public int GeconditioneerdePrioOpTijd
         {
-            get { return PrioIngreep.GeconditioneerdePrioOpTijd; }
+            get => PrioIngreep.GeconditioneerdePrioOpTijd;
             set
             {
                 PrioIngreep.GeconditioneerdePrioOpTijd = value;
@@ -283,7 +283,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public int GeconditioneerdePrioTeLaat
         {
-            get { return PrioIngreep.GeconditioneerdePrioTeLaat; }
+            get => PrioIngreep.GeconditioneerdePrioTeLaat;
             set
             {
                 PrioIngreep.GeconditioneerdePrioTeLaat = value;
@@ -295,7 +295,7 @@ namespace TLCGen.ViewModels
         [Description("Check op lijnnummers")]
         public bool CheckLijnNummer
         {
-            get { return PrioIngreep.CheckLijnNummer; }
+            get => PrioIngreep.CheckLijnNummer;
             set
             {
                 PrioIngreep.CheckLijnNummer = value;
@@ -311,18 +311,16 @@ namespace TLCGen.ViewModels
         [Description("Check op wagennummers")]
         public bool CheckWagenNummer
         {
-            get { return PrioIngreep.CheckWagenNummer; }
+            get => PrioIngreep.CheckWagenNummer;
             set
             {
                 PrioIngreep.CheckWagenNummer = value;
                 RaisePropertyChanged<object>(nameof(CheckWagenNummer), broadcast: true);
-                if(value)
-                {
-                    PrioIngreep.MeldingenData.AntiJutterVoorAlleInmeldingen = false;
-                    PrioIngreep.MeldingenData.AntiJutterVoorAlleUitmeldingen = false;
-                    foreach (var m in PrioIngreep.MeldingenData.Inmeldingen) m.AntiJutterTijdToepassen = false;
-                    foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen) m.AntiJutterTijdToepassen = false;
-                }
+                if (!value) return;
+                PrioIngreep.MeldingenData.AntiJutterVoorAlleInmeldingen = false;
+                PrioIngreep.MeldingenData.AntiJutterVoorAlleUitmeldingen = false;
+                foreach (var m in PrioIngreep.MeldingenData.Inmeldingen) m.AntiJutterTijdToepassen = false;
+                foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen) m.AntiJutterTijdToepassen = false;
             }
         }
 
@@ -330,7 +328,7 @@ namespace TLCGen.ViewModels
         [Description("Check op ritcategorie")]
         public bool CheckRitCategorie
         {
-            get { return PrioIngreep.CheckRitCategorie; }
+            get => PrioIngreep.CheckRitCategorie;
             set
             {
                 PrioIngreep.CheckRitCategorie = value;
@@ -343,7 +341,7 @@ namespace TLCGen.ViewModels
         [Description("Prioriteit voor alle lijnen")]
         public bool AlleLijnen
         {
-            get { return PrioIngreep.AlleLijnen; }
+            get => PrioIngreep.AlleLijnen;
             set
             {
                 PrioIngreep.AlleLijnen = value;
@@ -354,7 +352,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public OVIngreepLijnNummerViewModel SelectedLijnNummer
         {
-            get { return _SelectedLijnNummer; }
+            get => _SelectedLijnNummer;
             set
             {
                 _SelectedLijnNummer = value;
@@ -365,7 +363,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public string NewLijnNummer
         {
-            get { return _NewLijnNummer; }
+            get => _NewLijnNummer;
             set
             {
                 _NewLijnNummer = value;
