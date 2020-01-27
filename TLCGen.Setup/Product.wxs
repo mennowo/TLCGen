@@ -119,6 +119,8 @@
         <File Id='TLCGen.Dialogs' Name='TLCGen.Dialogs.dll' Source='$(var.ReleaseDir)/TLCGen.Dialogs.dll' KeyPath='no' />
         <File Id='TLCGen.Settings' Name='TLCGen.Settings.dll' Source='$(var.ReleaseDir)/TLCGen.Settings.dll' KeyPath='no' />
         <File Id='TLCGen.Dependencies' Name='TLCGen.Dependencies.dll' Source='$(var.ReleaseDir)/TLCGen.Dependencies.dll' KeyPath='no' />
+        <File Id='TLCGen.DataAccess' Name='TLCGen.DataAccess.dll' Source='$(var.ReleaseDir)/TLCGen.DataAccess.dll' KeyPath='no' />
+        <File Id='TLCGen.ModelManagement' Name='TLCGen.ModelManagement.dll' Source='$(var.ReleaseDir)/TLCGen.ModelManagement.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenPlugins" Directory="PLUGINSFOLDER">

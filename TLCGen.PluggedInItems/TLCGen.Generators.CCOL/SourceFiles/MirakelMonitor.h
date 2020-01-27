@@ -1,4 +1,4 @@
-﻿int MirakelMonitor_init(char * lpWindowName);
+int MirakelMonitor_init(char * lpWindowName);
 void MirakelMonitor();
 
 #ifdef VISSIM
