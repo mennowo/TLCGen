@@ -65,30 +65,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Public Methods
 
-        public static List<Tuple<ICCOLCodePieceGenerator, List<CCOLElement>>> GetAllGeneratorsWithElements(ControllerModel c)
-        {
-            var l = new List<Tuple<ICCOLCodePieceGenerator, List<CCOLElement>>>();
-            foreach (var pgen in PieceGenerators)
-            {
-                pgen.CollectCCOLElements(c);
-                var elems = pgen.GetCCOLElements();
-                if(elems != null)
-                {
-                    l.Add(new Tuple<ICCOLCodePieceGenerator, List<CCOLElement>>(pgen, elems.ToList()));
-                }
-            }
-            return l;
-        }
-
-        public static CCOLElemListData[] GetAllCCOLElements(ControllerModel c)
-        {
-            foreach (var pgen in PieceGenerators)
-            {
-                pgen.CollectCCOLElements(c);
-            }
-            return CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
-        }
-
         public string GenerateSourceFiles(ControllerModel c, string sourcefilepath)
         {
             if (Directory.Exists(sourcefilepath))
@@ -124,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (var dm in c.SelectieveDetectoren)
                         _alleDetectoren.Add(dm);
 
-                    var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
+                    var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators.OrderBy(x => x.ElementGenerationOrder).ToList());
 
                     CollectAllIO();
 

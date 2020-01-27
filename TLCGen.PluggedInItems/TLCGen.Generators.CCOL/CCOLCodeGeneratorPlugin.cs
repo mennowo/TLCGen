@@ -21,17 +21,10 @@ namespace TLCGen.Generators.CCOL
     {
         #region ITLCGenGenerator
 
-        private UserControl _GeneratorView;
-        private CCOLGenerator _Generator;
+        private readonly CCOLGenerator _generator;
 
         [Browsable(false)]
-        public UserControl GeneratorView
-        {
-            get
-            {
-                return _GeneratorView;
-            }
-        }
+        public UserControl GeneratorView { get; }
 
         public string GetGeneratorName()
         {
@@ -40,7 +33,7 @@ namespace TLCGen.Generators.CCOL
 
         public string GetGeneratorVersion()
         {
-            return "0.11 (alfa)";
+            return "0.7.1.0";
         }
 
         public string GetPluginName()
@@ -57,15 +50,15 @@ namespace TLCGen.Generators.CCOL
 
         public void GenerateController()
         {
-            if(this._MyVM.GenerateCodeCommand.CanExecute(null))
+            if(_myVm.GenerateCodeCommand.CanExecute(null))
             {
-                this._MyVM.GenerateCodeCommand.Execute(null);
+                _myVm.GenerateCodeCommand.Execute(null);
             }
         }
 
         public bool CanGenerateController()
         {
-            return this._MyVM.GenerateCodeCommand.CanExecute(null);
+            return _myVm.GenerateCodeCommand.CanExecute(null);
         }
 
         #endregion // ITLCGenGenerator
@@ -174,7 +167,7 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
-            _Generator.LoadSettings();
+            _generator.LoadSettings();
 
             if (_alwaysOverwriteSourcesMenuItem == null)
             {
@@ -398,22 +391,22 @@ namespace TLCGen.Generators.CCOL
 
         #region Fields
 
-        private CCOLGeneratorViewModel _MyVM;
+        private readonly CCOLGeneratorViewModel _myVm;
 
         #endregion // Fields
 
         #region Commands
 
-        RelayCommand _ShowSettingsCommand;
+        RelayCommand _showSettingsCommand;
         public ICommand ShowSettingsCommand
         {
             get
             {
-                if (_ShowSettingsCommand == null)
+                if (_showSettingsCommand == null)
                 {
-                    _ShowSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
+                    _showSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
                 }
-                return _ShowSettingsCommand;
+                return _showSettingsCommand;
             }
         }
 
@@ -423,9 +416,12 @@ namespace TLCGen.Generators.CCOL
 
         private void ShowSettingsCommand_Executed(object obj)
         {
-            var w = new CCOLGeneratorSettingsView();
-            w.DataContext = new CCOLGeneratorSettingsViewModel(CCOLGeneratorSettingsProvider.Default.Settings, _Generator);
-            Window window = new Window
+            var w = new CCOLGeneratorSettingsView
+            {
+                DataContext =
+                    new CCOLGeneratorSettingsViewModel(CCOLGeneratorSettingsProvider.Default.Settings, _generator)
+            };
+            var window = new Window
             {
                 Title = "CCOL Code Generator instellingen",
                 Content = w,
@@ -454,12 +450,12 @@ namespace TLCGen.Generators.CCOL
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(TLCGen.Messaging.Messages.ControllerFileNameChangedMessage msg)
+        private void OnControllerFileNameChanged(Messaging.Messages.ControllerFileNameChangedMessage msg)
         {
             ControllerFileName = msg.NewFileName;
         }
 
-        private void OnControllerDataChanged(TLCGen.Messaging.Messages.ControllerDataChangedMessage msg)
+        private void OnControllerDataChanged(Messaging.Messages.ControllerDataChangedMessage msg)
         {
         }
 
@@ -469,10 +465,10 @@ namespace TLCGen.Generators.CCOL
 
         public CCOLCodeGeneratorPlugin()
         {
-            _GeneratorView = new CCOLGeneratorView();
-            _Generator = new CCOLGenerator();
-            _MyVM = new CCOLGeneratorViewModel(this, _Generator);
-            _GeneratorView.DataContext = _MyVM;
+            GeneratorView = new CCOLGeneratorView();
+            _generator = new CCOLGenerator();
+            _myVm = new CCOLGeneratorViewModel(this, _generator);
+            GeneratorView.DataContext = _myVm;
 
 	        var filesDef = Directory.GetFiles(
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\VisualTemplates"),
@@ -482,7 +478,7 @@ namespace TLCGen.Generators.CCOL
 	        {
 		        if (!t.ToLower().EndsWith("_filters.xml"))
 		        {
-					_MyVM.VisualProjects.Add(Path.GetFileNameWithoutExtension(t).Replace("_", " "));
+					_myVm.VisualProjects.Add(Path.GetFileNameWithoutExtension(t).Replace("_", " "));
 				}
 	        }
         }

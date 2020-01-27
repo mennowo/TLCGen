@@ -7,6 +7,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public interface ICCOLCodePieceGenerator
     {
+        int ElementGenerationOrder { get; }
         void CollectCCOLElements(ControllerModel c);
         bool HasFunctionLocalVariables();
         IEnumerable<Tuple<string,string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type);

@@ -44,6 +44,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private Regex __fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
+        public int ElementGenerationOrder { get; private set; }
+
         public virtual bool HasFunctionLocalVariables()
         {
             return false;
@@ -146,6 +148,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _ctpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
             _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
             _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
+            ElementGenerationOrder = settings?.ElementGenerationOrder ?? 0;
 
             if (settings == null) return true;
 

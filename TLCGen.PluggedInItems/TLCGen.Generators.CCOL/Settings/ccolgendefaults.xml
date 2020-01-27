@@ -88,6 +88,7 @@
       <CodePieceData>
         <ClassName>AlgemeenCodeGenerator</ClassName>
         <Description>Algemeen</Description>
+        <ElementGenerationOrder>10</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>segm</Default>
@@ -132,6 +133,7 @@
       <CodePieceData>
         <ClassName>AlternatievenPerBlokCodeGenerator</ClassName>
         <Description>Alternatieven per blok</Description>
+        <ElementGenerationOrder>20</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>altb</Default>
@@ -146,6 +148,7 @@
       <CodePieceData>
         <ClassName>DetectieAanvragenMeetkriteriumCodeGenerator</ClassName>
         <Description>Detectie aanvragen</Description>
+        <ElementGenerationOrder>30</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>da</Default>
@@ -184,6 +187,7 @@
       <CodePieceData>
         <ClassName>DetectieStoringGenerator</ClassName>
         <Description>Detectie storing</Description>
+        <ElementGenerationOrder>40</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>dvak</Default>
@@ -217,6 +221,7 @@
       <CodePieceData>
         <ClassName>FileIngrepenCodeGenerator</ClassName>
         <Description>File ingrepen</Description>
+        <ElementGenerationOrder>50</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>file</Default>
@@ -327,6 +332,7 @@
       <CodePieceData>
         <ClassName>FixatieCodeGenerator</ClassName>
         <Description>Fixatie</Description>
+        <ElementGenerationOrder>60</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>fix</Default>
@@ -347,6 +353,7 @@
       <CodePieceData>
         <ClassName>GelijkstartenVoorstartenCodeGenerator</ClassName>
         <Description>Voor- en gelijkstarten</Description>
+        <ElementGenerationOrder>70</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>vs</Default>
@@ -379,6 +386,7 @@
       <CodePieceData>
         <ClassName>HalfstarCodeGenerator</ClassName>
         <Description>Halfstar</Description>
+        <ElementGenerationOrder>80</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>mlact</Default>
@@ -723,6 +731,7 @@
       <CodePieceData>
         <ClassName>MeeAanvragenCodeGenerator</ClassName>
         <Description>Meeaanvragen</Description>
+        <ElementGenerationOrder>90</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>ma</Default>
@@ -755,6 +764,7 @@
       <CodePieceData>
         <ClassName>MeeverlengenCodeGenerator</ClassName>
         <Description>Meeverlengen</Description>
+        <ElementGenerationOrder>100</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>mv</Default>
@@ -762,8 +772,6 @@
             <Type>Schakelaar</Type>
             <Description>Meeverlengen fase _E1_</Description>
           </Setting>
-        </Settings>
-        <Settings>
           <Setting>
             <Default>mv</Default>
             <Setting>mv</Setting>
@@ -777,6 +785,7 @@
       <CodePieceData>
         <ClassName>ModulesInParametersCodeGenerator</ClassName>
         <Description>Modules in parameters</Description>
+        <ElementGenerationOrder>110</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>mlprm</Default>
@@ -797,6 +806,7 @@
       <CodePieceData>
         <ClassName>NalopenCodeGenerator</ClassName>
         <Description>Nalopen</Description>
+        <ElementGenerationOrder>120</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>nla</Default>
@@ -861,11 +871,215 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    
+    <CodePieceGenerator CodePiece="OVGeconditioneerdePrioGenerator">
+      <CodePieceData>
+        <ClassName>OVGeconditioneerdePrioGenerator</ClassName>
+        <Description>Geconditioneerde prioriteit OV</Description>
+        <ElementGenerationOrder>130</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>stp</Default>
+            <Setting>stp</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Stiptheid voorste OV voertuig bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>stp</Default>
+            <Setting>stp</Setting>
+            <Type>HulpElement</Type>
+            <Description>Geconditioneerde prio OV mogelijk bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipt</Default>
+            <Setting>ovstipt</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Geconditioneerde prioteit voor OV bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipttevroeg</Default>
+            <Setting>ovstipttevroeg</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV te vroeg bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstiptoptijd</Default>
+            <Setting>ovstiptoptijd</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV op tijd bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipttelaat</Default>
+            <Setting>ovstipttelaat</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV te laat bij _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>OVtstpgrenslaat</Default>
+            <Setting>OVtstpgrenslaat</Setting>
+            <Type>Parameter</Type>
+            <Description>Grens waarboven een OV voertuig als te laat wordt aangemerkt</Description>
+          </Setting>
+          <Setting>
+            <Default>OVtstpgrensvroeg</Default>
+            <Setting>OVtstpgrensvroeg</Setting>
+            <Type>Parameter</Type>
+            <Description>Grens waarboven een OV voertuig als te vroeg wordt aangemerkt</Description>
+          </Setting>
+          <Setting>
+            <Default>ovtevroeg</Default>
+            <Setting>ovtevroeg</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ te vroeg _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovoptijd</Default>
+            <Setting>ovoptijd</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ op tijd _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovtelaat</Default>
+            <Setting>ovtelaat</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ te laat _E2_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="PelotonKoppelingCodeGenerator">
+      <CodePieceData>
+        <ClassName>PelotonKoppelingCodeGenerator</ClassName>
+        <Description>Peloton koppelingen</Description>
+        <ElementGenerationOrder>150</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden aanwezigheid peloton tbv peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>peltegenh</Default>
+            <Setting>peltegenh</Setting>
+            <Type>HulpElement</Type>
+            <Description>Tegenhouden opzetten RW voor peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmeet</Default>
+            <Setting>pelmeet</Setting>
+            <Type>Timer</Type>
+            <Description>Meetperiode peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmaxhiaat</Default>
+            <Setting>pelmaxhiaat</Setting>
+            <Type>Timer</Type>
+            <Description>Maximaal hiaat tbv meting peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelgrens</Default>
+            <Setting>pelgrens</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimaal aantal voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelvtg</Default>
+            <Setting>pelvtg</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden aantal gemeten voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden inkomend peloton gezien tbv peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken inkomend peloton gezien tbv peloton koppeling _E1_ naar fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelrw</Default>
+            <Setting>pelrw</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur toepassen RW na meting peloton bij _E1_ voor fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelnl</Default>
+            <Setting>pelnl</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop tijd tbv peloton bij _E1_ voor fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelverschuif</Default>
+            <Setting>pelverschuif</Setting>
+            <Type>Parameter</Type>
+            <Description>Aantal seconden verschuiven peloton koppeling _E1_ naar fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelrwmax</Default>
+            <Setting>pelrwmax</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale tijdsduur toepassen RW vanaf SG voor peloton koppeling bij _E1_ voor fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelstartrw</Default>
+            <Setting>pelstartrw</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur vanaf meting peloton tot toepassen RW voor _E1_ bij fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelrw</Default>
+            <Setting>pelrw</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen retour wachtgroen na meting peloton bij voor _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmk</Default>
+            <Setting>pelmk</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen vasthouden MK na meting peloton voor _E1_ bij fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pela</Default>
+            <Setting>pela</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur tot aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pela</Default>
+            <Setting>pela</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pku</Default>
+            <Setting>pku</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen uitgaande koppeling vanaf fase _E2_ voor koppeling _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pku</Default>
+            <Setting>pku</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden uitgaande status voor koppeling _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pkud</Default>
+            <Setting>pkud</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden uitgaande status _E1_ voor koppeling _E2_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="PeriodenGroentijdenCodeGenerator">
       <CodePieceData>
         <ClassName>PeriodenGroentijdenCodeGenerator</ClassName>
         <Description>Perioden en maxgroen</Description>
+        <ElementGenerationOrder>160</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>perdef</Default>
@@ -954,442 +1168,11 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-
-    <CodePieceGenerator CodePiece="VersneldPrimairAlternatievenCodeGenerator">
-      <CodePieceData>
-        <ClassName>VersneldPrimairAlternatievenCodeGenerator</ClassName>
-        <Description>Modules en alternatieven</Description>
-        <Settings>
-          <Setting>
-            <Default>mlfpr</Default>
-            <Setting>mlfpr</Setting>
-            <Type>Parameter</Type>
-            <Description>Maximaal aantal modules vooruit fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>altg</Default>
-            <Setting>altg</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Alternatieve realisatie toestaan _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>altg</Default>
-            <Setting>altg</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale groentijd bij alternatieve realisatie fase _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>altp</Default>
-            <Setting>altp</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale ruimte tbv alternatieve realisatie _E1_ _E2_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="RichtingGevoeligCodeGenerator">
-      <CodePieceData>
-        <ClassName>RichtingGevoeligCodeGenerator</ClassName>
-        <Description>Richting gevoeligheid</Description>
-        <Settings>
-          <Setting>
-            <Default>rga</Default>
-            <Setting>rga</Setting>
-            <Type>Timer</Type>
-            <Description>Richtinggevoelige aanvraag rijtijd fase _E1_ van _E2_ naar _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>rgav</Default>
-            <Setting>rgav</Setting>
-            <Type>Timer</Type>
-            <Description>Timer reset richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>rgad</Default>
-            <Setting>rgad</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Type richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>rgr</Default>
-            <Setting>rgr</Setting>
-            <Type>Timer</Type>
-            <Description>Richtinggevoelig verlengen rijtijd fase _E1_ van _E2_ naar _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>rgv</Default>
-            <Setting>rgv</Setting>
-            <Type>Timer</Type>
-            <Description>Richtinggevoelig verlengen hiaattijd fase _E1_ van _E2_ naar _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>rgv</Default>
-            <Setting>rgv</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden detector melding _E1_ richtinggevoelig verlengen fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>mkrg</Default>
-            <Setting>mkrg</Setting>
-            <Type>Parameter</Type>
-            <Description>Type verlengen tbv richtinggevoelig verlengen fase _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="PtpCodeGenerator">
-      <CodePieceData>
-        <ClassName>PtpCodeGenerator</ClassName>
-        <Description>PTP koppeling</Description>
-        <Settings>
-          <Setting>
-            <Default>ptp</Default>
-            <Setting>ptp</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement prefix</Description>
-          </Setting>
-          <Setting>
-            <Default>ptp</Default>
-            <Setting>ptp</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter prefix</Description>
-          </Setting>
-          <Setting>
-            <Default>ptp</Default>
-            <Setting>ptp</Setting>
-            <Type>Uitgang</Type>
-            <Description>Uitgang prefix</Description>
-          </Setting>
-          <Setting>
-            <Default>iks</Default>
-            <Setting>iks</Setting>
-            <Type>HulpElement</Type>
-            <Description>Inkomende PTP signalen van kruising _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uks</Default>
-            <Setting>uks</Setting>
-            <Type>HulpElement</Type>
-            <Description>Uitgaande PTP signalen naar _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>oke</Default>
-            <Setting>oke</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden PTP oke _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err</Default>
-            <Setting>err</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden PTP error _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err0</Default>
-            <Setting>err0</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden PTP error 0 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err1</Default>
-            <Setting>err1</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden PTP error 1 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err2</Default>
-            <Setting>err2</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden PTP error 2 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>iks</Default>
-            <Setting>iks</Setting>
-            <Type>Parameter</Type>
-            <Description>Instelling inkomende signalen van _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uks</Default>
-            <Setting>uks</Setting>
-            <Type>Parameter</Type>
-            <Description>Isntelling uitgaande signalen naar _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>oke</Default>
-            <Setting>oke</Setting>
-            <Type>Parameter</Type>
-            <Description>PTP oke _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err</Default>
-            <Setting>err</Setting>
-            <Type>Parameter</Type>
-            <Description>PTP error _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err0</Default>
-            <Setting>err0</Setting>
-            <Type>Parameter</Type>
-            <Description>PTP error 0 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err1</Default>
-            <Setting>err1</Setting>
-            <Type>Parameter</Type>
-            <Description>PTP error 1 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err2</Default>
-            <Setting>err2</Setting>
-            <Type>Parameter</Type>
-            <Description>PTP error 2 _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>portnr</Default>
-            <Setting>portnr</Setting>
-            <Type>Parameter</Type>
-            <Description>Poortnummer in het regeltoestel PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>src</Default>
-            <Setting>src</Setting>
-            <Type>Parameter</Type>
-            <Description>Nummer van source PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>dest</Default>
-            <Setting>dest</Setting>
-            <Type>Parameter</Type>
-            <Description>Nummer van destination PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>tmsgw</Default>
-            <Setting>tmsgw</Setting>
-            <Type>Parameter</Type>
-            <Description>Wait timeout PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>tmsgs</Default>
-            <Setting>tmsgs</Setting>
-            <Type>Parameter</Type>
-            <Description>Send timeout PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>tmsga</Default>
-            <Setting>tmsga</Setting>
-            <Type>Parameter</Type>
-            <Description>Alive timeout PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>cmsg</Default>
-            <Setting>cmsg</Setting>
-            <Type>Parameter</Type>
-            <Description>Max. berichtenteller tbv. herhaling PTP _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>oke</Default>
-            <Setting>oke</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken PTP oke _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>err</Default>
-            <Setting>err</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken PTP error _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="VAOntruimenCodeGenerator">
-      <CodePieceData>
-        <ClassName>VAOntruimenCodeGenerator</ClassName>
-        <Description>VA ontruimen</Description>
-        <Settings>
-          <Setting>
-            <Default>va</Default>
-            <Setting>va</Setting>
-            <Type>Timer</Type>
-            <Description>Tijdsduur VA ontruimen van _E1_ naar _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>vamax</Default>
-            <Setting>vamax</Setting>
-            <Type>Timer</Type>
-            <Description>Maximale tijd VA ontruimen na einde geel fase _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator> 
-    
-    <CodePieceGenerator CodePiece="RateltikkersCodeGenerator">
-      <CodePieceData>
-        <ClassName>RateltikkersCodeGenerator</ClassName>
-        <Description>Rateltikkers</Description>
-        <Settings>
-          <Setting>
-            <Default>rt</Default>
-            <Setting>rt</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden rateltikker actief fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>drt</Default>
-            <Setting>drt</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden drukknop melding _E2_ tbv aansturing rateltikkers</Description>
-          </Setting>
-          <Setting>
-            <Default>rt</Default>
-            <Setting>rt</Setting>
-            <Type>Uitgang</Type>
-            <Description>Rateltikker actief fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>rtdim</Default>
-            <Setting>rtdim</Setting>
-            <Type>Uitgang</Type>
-            <Description>Rateltikker gedimd fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>nlrt</Default>
-            <Setting>nlrt</Setting>
-            <Type>Timer</Type>
-            <Description>Nalooptijd rateltikker fase _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="WaarschuwingsLichtenCodeGenerator">
-      <CodePieceData>
-        <ClassName>WaarschuwingsLichtenCodeGenerator</ClassName>
-        <Description>Waarschuwings groepen</Description>
-        <Settings>
-          <Setting>
-            <Default>wl</Default>
-            <Setting>wl</Setting>
-            <Type>Uitgang</Type>
-            <Description>Aansturing waarschuwingslichten actief _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>bel</Default>
-            <Setting>bel</Setting>
-            <Type>Uitgang</Type>
-            <Description>Aansturing bellen actief _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>beldim</Default>
-            <Setting>beldim</Setting>
-            <Type>Uitgang</Type>
-            <Description>Aansturing dimmen bellen _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>belcontdim</Default>
-            <Setting>belcontdim</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Continu dimmen bellen</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="VLOGCodeGenerator">
-      <CodePieceData>
-        <ClassName>VLOGCodeGenerator</ClassName>
-        <Description>VLOG</Description>
-        <Settings>
-          <Setting>
-            <Default>maxtvgvlog</Default>
-            <Setting>maxtvgvlog</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
-          </Setting>
-          <Setting>
-            <Default>maxtfbvlog</Default>
-            <Setting>maxtfbvlog</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="OVGeconditioneerdePrioGenerator">
-      <CodePieceData>
-        <ClassName>OVGeconditioneerdePrioGenerator</ClassName>
-        <Description>Geconditioneerde prioriteit OV</Description>
-        <Settings>
-          <Setting>
-            <Default>stp</Default>
-            <Setting>stp</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Stiptheid voorste OV voertuig bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>stp</Default>
-            <Setting>stp</Setting>
-            <Type>HulpElement</Type>
-            <Description>Geconditioneerde prio OV mogelijk bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovstipt</Default>
-            <Setting>ovstipt</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Geconditioneerde prioteit voor OV bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovstipttevroeg</Default>
-            <Setting>ovstipttevroeg</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te vroeg bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovstiptoptijd</Default>
-            <Setting>ovstiptoptijd</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV op tijd bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovstipttelaat</Default>
-            <Setting>ovstipttelaat</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteitsnveau OV te laat bij _E1_ _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>OVtstpgrenslaat</Default>
-            <Setting>OVtstpgrenslaat</Setting>
-            <Type>Parameter</Type>
-            <Description>Grens waarboven een OV voertuig als te laat wordt aangemerkt</Description>
-          </Setting>
-          <Setting>
-            <Default>OVtstpgrensvroeg</Default>
-            <Setting>OVtstpgrensvroeg</Setting>
-            <Type>Parameter</Type>
-            <Description>Grens waarboven een OV voertuig als te vroeg wordt aangemerkt</Description>
-          </Setting>
-          <Setting>
-            <Default>ovtevroeg</Default>
-            <Setting>ovtevroeg</Setting>
-            <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te vroeg _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovoptijd</Default>
-            <Setting>ovoptijd</Setting>
-            <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ op tijd _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>ovtelaat</Default>
-            <Setting>ovtelaat</Setting>
-            <Type>Uitgang</Type>
-            <Description>Voorste OV voertuig bij _E1_ te laat _E2_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="PrioCodeGenerator">
       <CodePieceData>
         <ClassName>PrioCodeGenerator</ClassName>
         <Description>Prioriteitsingrepen</Description>
+        <ElementGenerationOrder>140</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>vc</Default>
@@ -1790,130 +1573,302 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="PelotonKoppelingCodeGenerator">
+    <CodePieceGenerator CodePiece="PtpCodeGenerator">
       <CodePieceData>
-        <ClassName>PelotonKoppelingCodeGenerator</ClassName>
-        <Description>Peloton koppelingen</Description>
+        <ClassName>PtpCodeGenerator</ClassName>
+        <Description>PTP koppeling</Description>
+        <ElementGenerationOrder>170</ElementGenerationOrder>
         <Settings>
           <Setting>
-            <Default>pelin</Default>
-            <Setting>pelin</Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
             <Type>HulpElement</Type>
-            <Description>Bijhouden aanwezigheid peloton tbv peloton koppeling _E1_ fase _E2_</Description>
+            <Description>Hulpelement prefix</Description>
           </Setting>
           <Setting>
-            <Default>peltegenh</Default>
-            <Setting>peltegenh</Setting>
-            <Type>HulpElement</Type>
-            <Description>Tegenhouden opzetten RW voor peloton koppeling _E1_ fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pelmeet</Default>
-            <Setting>pelmeet</Setting>
-            <Type>Timer</Type>
-            <Description>Meetperiode peloton koppeling _E1_ fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pelmaxhiaat</Default>
-            <Setting>pelmaxhiaat</Setting>
-            <Type>Timer</Type>
-            <Description>Maximaal hiaat tbv meting peloton koppeling _E1_ fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pelgrens</Default>
-            <Setting>pelgrens</Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
             <Type>Parameter</Type>
-            <Description>Minimaal aantal voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
+            <Description>Parameter prefix</Description>
           </Setting>
           <Setting>
-            <Default>pelvtg</Default>
-            <Setting>pelvtg</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Bijhouden aantal gemeten voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pelin</Default>
-            <Setting>pelin</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Bijhouden inkomend peloton gezien tbv peloton koppeling _E1_ fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pelin</Default>
-            <Setting>pelin</Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken inkomend peloton gezien tbv peloton koppeling _E1_ naar fase _E2_</Description>
+            <Description>Uitgang prefix</Description>
           </Setting>
           <Setting>
-            <Default>pelrw</Default>
-            <Setting>pelrw</Setting>
-            <Type>Timer</Type>
-            <Description>Tijdsduur toepassen RW na meting peloton bij _E1_ voor fase _E2_</Description>
+            <Default>iks</Default>
+            <Setting>iks</Setting>
+            <Type>HulpElement</Type>
+            <Description>Inkomende PTP signalen van kruising _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pelnl</Default>
-            <Setting>pelnl</Setting>
-            <Type>Timer</Type>
-            <Description>Naloop tijd tbv peloton bij _E1_ voor fase _E2_</Description>
+            <Default>uks</Default>
+            <Setting>uks</Setting>
+            <Type>HulpElement</Type>
+            <Description>Uitgaande PTP signalen naar _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pelverschuif</Default>
-            <Setting>pelverschuif</Setting>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden PTP oke _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden PTP error _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err0</Default>
+            <Setting>err0</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden PTP error 0 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err1</Default>
+            <Setting>err1</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden PTP error 1 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err2</Default>
+            <Setting>err2</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden PTP error 2 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>iks</Default>
+            <Setting>iks</Setting>
             <Type>Parameter</Type>
-            <Description>Aantal seconden verschuiven peloton koppeling _E1_ naar fase _E2_</Description>
+            <Description>Instelling inkomende signalen van _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pelrwmax</Default>
-            <Setting>pelrwmax</Setting>
-            <Type>Timer</Type>
-            <Description>Maximale tijdsduur toepassen RW vanaf SG voor peloton koppeling bij _E1_ voor fase _E2_</Description>
+            <Default>uks</Default>
+            <Setting>uks</Setting>
+            <Type>Parameter</Type>
+            <Description>Isntelling uitgaande signalen naar _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pelstartrw</Default>
-            <Setting>pelstartrw</Setting>
-            <Type>Timer</Type>
-            <Description>Tijdsduur vanaf meting peloton tot toepassen RW voor _E1_ bij fase _E2_</Description>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>Parameter</Type>
+            <Description>PTP oke _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pelrw</Default>
-            <Setting>pelrw</Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>Parameter</Type>
+            <Description>PTP error _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err0</Default>
+            <Setting>err0</Setting>
+            <Type>Parameter</Type>
+            <Description>PTP error 0 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err1</Default>
+            <Setting>err1</Setting>
+            <Type>Parameter</Type>
+            <Description>PTP error 1 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err2</Default>
+            <Setting>err2</Setting>
+            <Type>Parameter</Type>
+            <Description>PTP error 2 _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>portnr</Default>
+            <Setting>portnr</Setting>
+            <Type>Parameter</Type>
+            <Description>Poortnummer in het regeltoestel PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>src</Default>
+            <Setting>src</Setting>
+            <Type>Parameter</Type>
+            <Description>Nummer van source PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>dest</Default>
+            <Setting>dest</Setting>
+            <Type>Parameter</Type>
+            <Description>Nummer van destination PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsgw</Default>
+            <Setting>tmsgw</Setting>
+            <Type>Parameter</Type>
+            <Description>Wait timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsgs</Default>
+            <Setting>tmsgs</Setting>
+            <Type>Parameter</Type>
+            <Description>Send timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tmsga</Default>
+            <Setting>tmsga</Setting>
+            <Type>Parameter</Type>
+            <Description>Alive timeout PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>cmsg</Default>
+            <Setting>cmsg</Setting>
+            <Type>Parameter</Type>
+            <Description>Max. berichtenteller tbv. herhaling PTP _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken PTP oke _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken PTP error _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="RISCodeGenerator">
+      <CodePieceData>
+        <ClassName>RISCodeGenerator</ClassName>
+        <Description>RIS data</Description>
+        <ElementGenerationOrder>180</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>risastart</Default>
+            <Setting>risastart</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start aanvraag gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risaend</Default>
+            <Setting>risaend</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvstart</Default>
+            <Setting>risvstart</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start verleng gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvend</Default>
+            <Setting>risvend</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rissim</Default>
+            <Setting>rissim</Setting>
             <Type>Schakelaar</Type>
-            <Description>Toepassen retour wachtgroen na meting peloton bij voor _E1_ fase _E2_</Description>
+            <Description>Inschakelen automatische simulatie RIS</Description>
           </Setting>
           <Setting>
-            <Default>pelmk</Default>
-            <Setting>pelmk</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toepassen vasthouden MK na meting peloton voor _E1_ bij fase _E2_</Description>
+            <Default>rislaneid</Default>
+            <Setting>rislaneid</Setting>
+            <Type>Parameter</Type>
+            <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
           </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="RateltikkersCodeGenerator">
+      <CodePieceData>
+        <ClassName>RateltikkersCodeGenerator</ClassName>
+        <Description>Rateltikkers</Description>
+        <ElementGenerationOrder>190</ElementGenerationOrder>
+        <Settings>
           <Setting>
-            <Default>pela</Default>
-            <Setting>pela</Setting>
-            <Type>Timer</Type>
-            <Description>Tijdsduur tot aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pela</Default>
-            <Setting>pela</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toepassen aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>pku</Default>
-            <Setting>pku</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toepassen uitgaande koppeling vanaf fase _E2_ voor koppeling _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>pku</Default>
-            <Setting>pku</Setting>
+            <Default>rt</Default>
+            <Setting>rt</Setting>
             <Type>HulpElement</Type>
-            <Description>Bijhouden uitgaande status voor koppeling _E1_</Description>
+            <Description>Onthouden rateltikker actief fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>pkud</Default>
-            <Setting>pkud</Setting>
+            <Default>drt</Default>
+            <Setting>drt</Setting>
             <Type>HulpElement</Type>
-            <Description>Bijhouden uitgaande status _E1_ voor koppeling _E2_</Description>
+            <Description>Onthouden drukknop melding _E2_ tbv aansturing rateltikkers</Description>
+          </Setting>
+          <Setting>
+            <Default>rt</Default>
+            <Setting>rt</Setting>
+            <Type>Uitgang</Type>
+            <Description>Rateltikker actief fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rtdim</Default>
+            <Setting>rtdim</Setting>
+            <Type>Uitgang</Type>
+            <Description>Rateltikker gedimd fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlrt</Default>
+            <Setting>nlrt</Setting>
+            <Type>Timer</Type>
+            <Description>Nalooptijd rateltikker fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="RichtingGevoeligCodeGenerator">
+      <CodePieceData>
+        <ClassName>RichtingGevoeligCodeGenerator</ClassName>
+        <Description>Richting gevoeligheid</Description>
+        <ElementGenerationOrder>200</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>rga</Default>
+            <Setting>rga</Setting>
+            <Type>Timer</Type>
+            <Description>Richtinggevoelige aanvraag rijtijd fase _E1_ van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>rgav</Default>
+            <Setting>rgav</Setting>
+            <Type>Timer</Type>
+            <Description>Timer reset richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>rgad</Default>
+            <Setting>rgad</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Type richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>rgr</Default>
+            <Setting>rgr</Setting>
+            <Type>Timer</Type>
+            <Description>Richtinggevoelig verlengen rijtijd fase _E1_ van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>Timer</Type>
+            <Description>Richtinggevoelig verlengen hiaattijd fase _E1_ van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden detector melding _E1_ richtinggevoelig verlengen fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>mkrg</Default>
+            <Setting>mkrg</Setting>
+            <Type>Parameter</Type>
+            <Description>Type verlengen tbv richtinggevoelig verlengen fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1922,6 +1877,7 @@
       <CodePieceData>
         <ClassName>RoBuGroverCodeGenerator</ClassName>
         <Description>RoBuGrover</Description>
+        <ElementGenerationOrder>210</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>rgv</Default>
@@ -2022,10 +1978,125 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="SchoolIngreepCodeGenerator">
+      <CodePieceData>
+        <ClassName>SchoolIngreepCodeGenerator</ClassName>
+        <Description>Schoolingreep</Description>
+        <ElementGenerationOrder>220</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>dbsi</Default>
+            <Setting>dbsi</Setting>
+            <Type>Timer</Type>
+            <Description>Bezettijd detector _E1_ t.b.v. schoolingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreep</Default>
+            <Setting>schoolingreep</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden actief zijn schoolingreep voor fase _E1_ via detector _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreep</Default>
+            <Setting>schoolingreep</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schoolingreep aan/uit voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreepmaxg</Default>
+            <Setting>schoolingreepmaxg</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale duur groen vanaf startgroen bij schoolingreep op fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="SeniorenIngreepCodeGenerator">
+      <CodePieceData>
+        <ClassName>SeniorenIngreepCodeGenerator</ClassName>
+        <Description>Senioreningreep</Description>
+        <ElementGenerationOrder>230</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>dbsiexgr</Default>
+            <Setting>dbsiexgr</Setting>
+            <Type>Timer</Type>
+            <Description>Bezettijd detector _E1_ t.b.v. Senioreningreep</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgr</Default>
+            <Setting>siexgr</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden actief zijn senioreningreep bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>si</Default>
+            <Setting>si</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Senioreningreep aan/uit voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgr</Default>
+            <Setting>siexgr</Setting>
+            <Type>Timer</Type>
+            <Description>Meten duur extra groen bij senioreningreep op fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgrperc</Default>
+            <Setting>siexgrperc</Setting>
+            <Type>Parameter</Type>
+            <Description>Extra groen percentage tov. TFG voor senioreningreep op fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="VAOntruimenCodeGenerator">
+      <CodePieceData>
+        <ClassName>VAOntruimenCodeGenerator</ClassName>
+        <Description>VA ontruimen</Description>
+        <ElementGenerationOrder>240</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>va</Default>
+            <Setting>va</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur VA ontruimen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>vamax</Default>
+            <Setting>vamax</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale tijd VA ontruimen na einde geel fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator> 
+    <CodePieceGenerator CodePiece="VLOGCodeGenerator">
+      <CodePieceData>
+        <ClassName>VLOGCodeGenerator</ClassName>
+        <Description>VLOG</Description>
+        <ElementGenerationOrder>250</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>maxtvgvlog</Default>
+            <Setting>maxtvgvlog</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
+          </Setting>
+          <Setting>
+            <Default>maxtfbvlog</Default>
+            <Setting>maxtfbvlog</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="VasteAanvraagCodeGenerator">
       <CodePieceData>
         <ClassName>VasteAanvraagCodeGenerator</ClassName>
         <Description>Vaste aanvragen</Description>
+        <ElementGenerationOrder>260</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>ca</Default>
@@ -2042,38 +2113,11 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="WachtstandGroenCodeGenerator">
-      <CodePieceData>
-        <ClassName>WachtstandGroenCodeGenerator</ClassName>
-        <Description>Wachtstand groen</Description>
-        <Settings>
-          <Setting>
-            <Default>wg</Default>
-            <Setting>wg</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Wachtstand groen fase _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="WaitsignalenCodeGenerator">
-      <CodePieceData>
-        <ClassName>WaitsignalenCodeGenerator</ClassName>
-        <Description>Waitsignalen</Description>
-        <Settings>
-          <Setting>
-            <Default>wt</Default>
-            <Setting>wt</Setting>
-            <Type>Uitgang</Type>
-            <Description>Aansturing waitsignaal detector _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="VeiligheidsGroenCodeGenerator">
       <CodePieceData>
         <ClassName>VeiligheidsGroenCodeGenerator</ClassName>
         <Description>Veiligheidsgroen</Description>
+        <ElementGenerationOrder>270</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>vg</Default>
@@ -2102,10 +2146,92 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="VersneldPrimairAlternatievenCodeGenerator">
+      <CodePieceData>
+        <ClassName>VersneldPrimairAlternatievenCodeGenerator</ClassName>
+        <Description>Modules en alternatieven</Description>
+        <ElementGenerationOrder>280</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>mlfpr</Default>
+            <Setting>mlfpr</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximaal aantal modules vooruit fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>altg</Default>
+            <Setting>altg</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Alternatieve realisatie toestaan _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>altg</Default>
+            <Setting>altg</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimale groentijd bij alternatieve realisatie fase _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>altp</Default>
+            <Setting>altp</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimale ruimte tbv alternatieve realisatie _E1_ _E2_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="WaarschuwingsLichtenCodeGenerator">
+      <CodePieceData>
+        <ClassName>WaarschuwingsLichtenCodeGenerator</ClassName>
+        <Description>Waarschuwings groepen</Description>
+        <ElementGenerationOrder>290</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>wl</Default>
+            <Setting>wl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing waarschuwingslichten actief _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>bel</Default>
+            <Setting>bel</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing bellen actief _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>beldim</Default>
+            <Setting>beldim</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing dimmen bellen _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>belcontdim</Default>
+            <Setting>belcontdim</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Continu dimmen bellen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="WachtstandGroenCodeGenerator">
+      <CodePieceData>
+        <ClassName>WachtstandGroenCodeGenerator</ClassName>
+        <Description>Wachtstand groen</Description>
+        <ElementGenerationOrder>300</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>wg</Default>
+            <Setting>wg</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Wachtstand groen fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="WachttijdVoorspellerCodeGenerator">
       <CodePieceData>
         <ClassName>WachttijdVoorspellerCodeGenerator</ClassName>
         <Description>WachttijdVoorspeller</Description>
+        <ElementGenerationOrder>310</ElementGenerationOrder>
         <Settings>
           <Setting>
             <Default>wtvnhaltmax</Default>
@@ -2170,116 +2296,17 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="RISCodeGenerator">
+    <CodePieceGenerator CodePiece="WaitsignalenCodeGenerator">
       <CodePieceData>
-        <ClassName>RISCodeGenerator</ClassName>
-        <Description>RIS data</Description>
+        <ClassName>WaitsignalenCodeGenerator</ClassName>
+        <Description>Waitsignalen</Description>
+        <ElementGenerationOrder>320</ElementGenerationOrder>
         <Settings>
           <Setting>
-            <Default>risastart</Default>
-            <Setting>risastart</Setting>
-            <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot start aanvraag gebied RIS fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>risaend</Default>
-            <Setting>risaend</Setting>
-            <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>risvstart</Default>
-            <Setting>risvstart</Setting>
-            <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot start verleng gebied RIS fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>risvend</Default>
-            <Setting>risvend</Setting>
-            <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>rissim</Default>
-            <Setting>rissim</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Inschakelen automatische simulatie RIS</Description>
-          </Setting>
-          <Setting>
-            <Default>rislaneid</Default>
-            <Setting>rislaneid</Setting>
-            <Type>Parameter</Type>
-            <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="SchoolIngreepCodeGenerator">
-      <CodePieceData>
-        <ClassName>SchoolIngreepCodeGenerator</ClassName>
-        <Description>Schoolingreep</Description>
-        <Settings>
-          <Setting>
-            <Default>dbsi</Default>
-            <Setting>dbsi</Setting>
-            <Type>Timer</Type>
-            <Description>Bezettijd detector _E1_ t.b.v. schoolingreep</Description>
-          </Setting>
-          <Setting>
-            <Default>schoolingreep</Default>
-            <Setting>schoolingreep</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden actief zijn schoolingreep voor fase _E1_ via detector _E2_</Description>
-          </Setting>
-          <Setting>
-            <Default>schoolingreep</Default>
-            <Setting>schoolingreep</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schoolingreep aan/uit voor fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>schoolingreepmaxg</Default>
-            <Setting>schoolingreepmaxg</Setting>
-            <Type>Timer</Type>
-            <Description>Maximale duur groen vanaf startgroen bij schoolingreep op fase _E1_</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="SeniorenIngreepCodeGenerator">
-      <CodePieceData>
-        <ClassName>SeniorenIngreepCodeGenerator</ClassName>
-        <Description>Senioreningreep</Description>
-        <Settings>
-          <Setting>
-            <Default>dbsiexgr</Default>
-            <Setting>dbsiexgr</Setting>
-            <Type>Timer</Type>
-            <Description>Bezettijd detector _E1_ t.b.v. Senioreningreep</Description>
-          </Setting>
-          <Setting>
-            <Default>siexgr</Default>
-            <Setting>siexgr</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden actief zijn senioreningreep bij fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>si</Default>
-            <Setting>si</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Senioreningreep aan/uit voor fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>siexgr</Default>
-            <Setting>siexgr</Setting>
-            <Type>Timer</Type>
-            <Description>Meten duur extra groen bij senioreningreep op fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>siexgrperc</Default>
-            <Setting>siexgrperc</Setting>
-            <Type>Parameter</Type>
-            <Description>Extra groen percentage tov. TFG voor senioreningreep op fase _E1_</Description>
+            <Default>wt</Default>
+            <Setting>wt</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing waitsignaal detector _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
