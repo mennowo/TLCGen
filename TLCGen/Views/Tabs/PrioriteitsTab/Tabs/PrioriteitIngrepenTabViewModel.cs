@@ -109,15 +109,13 @@ namespace TLCGen.ViewModels
 
         private void SelectedIngreep_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Type")
-            {
-                RaisePropertyChanged(nameof(Prioriteit));
-                RaisePropertyChanged(nameof(HasBus));
-                RaisePropertyChanged(nameof(HasTram));
-                RaisePropertyChanged(nameof(HasBicycle));
-                RaisePropertyChanged(nameof(HasTruck));
-                SelectedFaseCyclus.UpdateTypes();
-            }
+            if (e.PropertyName != "Type") return;
+            RaisePropertyChanged(nameof(Prioriteit));
+            RaisePropertyChanged(nameof(HasBus));
+            RaisePropertyChanged(nameof(HasTram));
+            RaisePropertyChanged(nameof(HasBicycle));
+            RaisePropertyChanged(nameof(HasTruck));
+            SelectedFaseCyclus.UpdateTypes();
         }
 
         public bool HasBus => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Bus);
@@ -138,7 +136,7 @@ namespace TLCGen.ViewModels
                 else if (SelectedBicycle) vtgtype = PrioIngreepVoertuigTypeEnum.Fiets;
                 if (value)
                 {
-                    if (!Ingrepen.Any(x => x.Type == vtgtype))
+                    if (Ingrepen.All(x => x.Type != vtgtype))
                     {
                         var prio = new PrioIngreepModel
                         {

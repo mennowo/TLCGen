@@ -134,6 +134,7 @@
         <File Id='TLCGen.Plugins.RangeerElementen' Name='TLCGen.Plugins.RangeerElementen.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RangeerElementen.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.Timings' Name='TLCGen.Plugins.Timings.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Timings.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.Tools' Name='TLCGen.Plugins.Tools.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Tools.dll' KeyPath='no' />
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>

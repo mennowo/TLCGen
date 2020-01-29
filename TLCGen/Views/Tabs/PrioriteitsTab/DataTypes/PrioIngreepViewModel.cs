@@ -37,8 +37,8 @@ namespace TLCGen.ViewModels
             {
                 PrioIngreep.Type = value;
 
-                foreach (var m in PrioIngreep.MeldingenData.Inmeldingen) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
-                foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
+                foreach (var m in PrioIngreep.MeldingenData.Inmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
+                foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
 
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
@@ -96,19 +96,7 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public bool HasWisselstand => HasKoplus && PrioIngreep.MeldingenData.Wissel1 || PrioIngreep.MeldingenData.Wissel2;
-
-        //[Description("Min. rijtijd versn. inm.")]
-        //[EnabledCondition("VersneldeInmeldingKoplus")]
-        //public int MinimaleRijtijdVoorVersneldeInmelding
-        //{
-        //    get => _OVIngreep.MinimaleRijtijdVoorVersneldeInmelding;
-        //    set
-        //    {
-        //        _OVIngreep.MinimaleRijtijdVoorVersneldeInmelding = value;
-        //        RaisePropertyChanged<object>("MinimaleRijtijdVoorVersneldeInmelding", broadcast: true);
-        //    }
-        //}
-
+        
         [Category("Tijden")]
         [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd

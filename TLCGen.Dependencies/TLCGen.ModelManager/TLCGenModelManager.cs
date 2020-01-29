@@ -646,37 +646,44 @@ namespace TLCGen.ModelManagement
                         x =>
                             x.MeldingenData.Inmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)) ||
                             x.MeldingenData.Uitmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)));
-                    if (meldingMsg.IngreepMelding != null && meldingMsg.IngreepMelding.Type ==
-                        PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+                    if (meldingMsg.IngreepMelding != null)
                     {
-                        switch (meldingMsg.IngreepMelding.InUit)
+                        if (meldingMsg.IngreepMelding.Type ==
+                            PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                         {
-                            case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                                if (meldingMsg.IngreepMelding.DummyKARMelding == null)
-                                {
-                                    meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
+                            switch (meldingMsg.IngreepMelding.InUit)
+                            {
+                                case PrioIngreepInUitMeldingTypeEnum.Inmelding:
+                                    if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                     {
-                                        Dummy = true,
-                                        Naam =
-                                            $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
-                                    };
-                                }
+                                        meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
+                                        {
+                                            Dummy = true,
+                                            Naam =
+                                                $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                        };
+                                    }
 
-                                break;
-                            case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                                if (meldingMsg.IngreepMelding.DummyKARMelding == null)
-                                {
-                                    meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
+                                    break;
+                                case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
+                                    if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                     {
-                                        Dummy = true,
-                                        Naam =
-                                            $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
-                                    };
-                                }
+                                        meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
+                                        {
+                                            Dummy = true,
+                                            Naam =
+                                                $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                        };
+                                    }
 
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                        else
+                        {
+                            meldingMsg.IngreepMelding.DummyKARMelding = null;
                         }
                     }
                     SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);

@@ -13,3 +13,4 @@ nuget DocumentFormat.OpenXml framework: >= net45
 nuget InputSimulator framework: >= net45
 nuget NewtonSoft.Json framework: >= net45
 nuget AvalonEdit framework: >= net45
+nuget GitVersionTask framework: >= net45

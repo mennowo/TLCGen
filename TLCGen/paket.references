@@ -7,3 +7,5 @@ Gu.Wpf.DataGrid2D
 WpfAutoGrid
 gong-wpf-dragdrop
 AvalonEdit
+GitVersionTask
+Newtonsoft.Json

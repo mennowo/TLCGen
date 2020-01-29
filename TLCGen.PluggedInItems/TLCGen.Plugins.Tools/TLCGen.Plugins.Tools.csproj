@@ -96,19 +96,19 @@
     <EmbeddedResource Include="Resources\json.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Dependencies\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
       <Project>{2c2e8ce7-2299-48ab-b3a0-862ad01098dd}</Project>
       <Name>TLCGen.DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
       <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
       <Name>TLCGen.Dependencies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
@@ -136,7 +136,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="ICSharpCode.AvalonEdit">
-          <HintPath>..\packages\AvalonEdit\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+          <HintPath>..\..\packages\AvalonEdit\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -147,7 +147,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -156,7 +156,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net46\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net46\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -165,7 +165,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net47\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net47\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -176,22 +176,22 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="GalaSoft.MvvmLight">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="GalaSoft.MvvmLight.Extras">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="GalaSoft.MvvmLight.Platform">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="System.Windows.Interactivity">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -202,7 +202,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="Newtonsoft.Json">
-          <HintPath>..\packages\NewtonSoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <HintPath>..\..\packages\NewtonSoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

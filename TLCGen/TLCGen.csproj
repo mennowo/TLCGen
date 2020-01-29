@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\GitVersionTask\build\GitVersionTask.props" Condition="Exists('..\packages\GitVersionTask\build\GitVersionTask.props')" Label="Paket" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -983,6 +984,10 @@
       <Project>{790ff4fd-a251-46f8-a6be-bd5fdfa44243}</Project>
       <Name>TLCGen.Plugins.Timings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Tools\TLCGen.Plugins.Tools.csproj">
+      <Project>{3ea87140-cb65-4a8d-b93f-0ff1b2520b13}</Project>
+      <Name>TLCGen.Plugins.Tools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Specificator\TLCGen.Specificator.csproj">
       <Project>{6f5df100-b22b-40bc-a8c3-7f19817835f0}</Project>
       <Name>TLCGen.Specificator</Name>
@@ -990,10 +995,6 @@
     <ProjectReference Include="..\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
       <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
       <Name>TLCGen.Plugins.MultiSim</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Tools\TLCGen.Plugins.Tools.csproj">
-      <Project>{3ea87140-cb65-4a8d-b93f-0ff1b2520b13}</Project>
-      <Name>TLCGen.Plugins.Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -1112,6 +1113,15 @@ move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
     </When>
   </Choose>
   <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
       <ItemGroup>
         <Reference Include="System.ComponentModel.DataAnnotations">
@@ -1170,6 +1180,28 @@ move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
     </When>
   </Choose>
   <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Extensions.DependencyInjection">
+          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+          <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="Microsoft.WindowsAPICodePack">
@@ -1220,6 +1252,17 @@ move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\packages\NewtonSoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
         <Reference Include="WpfAutoGrid">
           <HintPath>..\packages\WpfAutoGrid\lib\net45\WpfAutoGrid.dll</HintPath>
           <Private>True</Private>
@@ -1228,4 +1271,5 @@ move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
       </ItemGroup>
     </When>
   </Choose>
+  <Import Project="..\packages\GitVersionTask\build\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask\build\GitVersionTask.targets')" Label="Paket" />
 </Project>
