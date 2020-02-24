@@ -215,7 +215,6 @@ ModelManifest.xml
 
 # dlls
 *.dll
-/published/TLCGen.Setup.msi
-/published/*.zip
+/published/
 /Tools
 /local.cake
