@@ -91,6 +91,8 @@ namespace TLCGen.Models
 
         public bool UitgangPerModule { get; set; }
 
+        public bool GenererenIncludesLijst { get; set; }
+
         public bool MultiModuleReeksen { get; set; }
 
         public bool ModulenInParameters { get; set; }

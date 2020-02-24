@@ -34,65 +34,65 @@ namespace TLCGen.ViewModels
 
         public string Naam
         {
-            get { return _Controller?.Data?.Naam; }
+            get => _Controller?.Data?.Naam;
             set
             {
                 if (Helpers.NameSyntaxChecker.IsValidFileName(value))
                 {
                     _Controller.Data.Naam = value;
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
         public string Nummer
         {
-            get { return _Controller?.Data?.Nummer; }
+            get => _Controller?.Data?.Nummer;
             set
             {
                 _Controller.Data.Nummer = value;
-                RaisePropertyChanged<object>("Nummer", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Nummer), broadcast: true);
             }
         }
 
         public string Stad
         {
-            get { return _Controller?.Data?.Stad; }
+            get => _Controller?.Data?.Stad;
             set
             {
                 _Controller.Data.Stad = value;
-                RaisePropertyChanged<object>("Stad", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Stad), broadcast: true);
             }
         }
 
         public string Straat1
         {
-            get { return _Controller?.Data?.Straat1; }
+            get => _Controller?.Data?.Straat1;
             set
             {
                 _Controller.Data.Straat1 = value;
-                RaisePropertyChanged<object>("Straat1", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Straat1), broadcast: true);
             }
         }
 
         public string Straat2
         {
-            get { return _Controller?.Data?.Straat2; }
+            get => _Controller?.Data?.Straat2;
             set
             {
                 _Controller.Data.Straat2 = value;
-                RaisePropertyChanged<object>("Straat2", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Straat2), broadcast: true);
             }
         }
 
         [Description("Bitmap naam")]
         public string BitmapNaam
         {
-            get { return _Controller?.Data?.BitmapNaam; }
+            get => _Controller?.Data?.BitmapNaam;
             set
             {
                 _Controller.Data.BitmapNaam = value;
-                RaisePropertyChanged<object>("BitmapNaam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(BitmapNaam), broadcast: true);
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
@@ -115,18 +115,18 @@ namespace TLCGen.ViewModels
         [Description("Fasebewaking")]
         public int Fasebewaking
         {
-            get { return _Controller?.Data == null ? 0 : _Controller.Data.Fasebewaking; }
+            get => _Controller?.Data?.Fasebewaking ?? 0;
             set
             {
                 _Controller.Data.Fasebewaking = value;
-                RaisePropertyChanged<object>("Fasebewaking", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Fasebewaking), broadcast: true);
             }
         }
 
         [Description("CCOL versie")]
         public CCOLVersieEnum CCOLVersie
         {
-            get { return _Controller?.Data == null ? CCOLVersieEnum.CCOL8 : _Controller.Data.CCOLVersie; }
+            get => _Controller?.Data?.CCOLVersie ?? CCOLVersieEnum.CCOL8;
             set
             {
                 if (Intergroen && value < CCOLVersieEnum.CCOL95)
@@ -162,17 +162,17 @@ namespace TLCGen.ViewModels
         [BrowsableCondition("IsVLOGVersieHigherThan9")]
         public bool Intergroen
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.Intergroen; }
+            get => _Controller?.Data?.Intergroen ?? false;
             set
             {
                 if (_Controller.Data.Intergroen != value)
                 {
                     if (TLCGenDialogProvider.Default.ShowDialogs)
                     {
-                        if (value == true)
+                        if (value)
                         {
                             var result = TLCGenDialogProvider.Default.ShowMessageBox("De regeling wordt omgezet naar intergroen. Huidige ontruimingstijden ophogen met de geeltijd?", "Conversie naar intergroen", System.Windows.MessageBoxButton.YesNoCancel);
-                            if(result == System.Windows.MessageBoxResult.Yes)
+                            if (result == System.Windows.MessageBoxResult.Yes)
                             {
                                 ModelManagement.TLCGenModelManager.Default.ConvertToIntergroen(_Controller);
                             }
@@ -196,7 +196,7 @@ namespace TLCGen.ViewModels
                             }
                         }
                         _Controller.Data.Intergroen = value;
-                        RaisePropertyChanged<object>("Intergroen", broadcast: true);
+                        RaisePropertyChanged<object>(nameof(Intergroen), broadcast: true);
                     }
                     else
                     {
@@ -209,11 +209,11 @@ namespace TLCGen.ViewModels
         [Description("Type KWC")]
         public KWCTypeEnum KWCType
         {
-            get { return _Controller?.Data == null ? KWCTypeEnum.Geen : _Controller.Data.KWCType; }
+            get => _Controller?.Data?.KWCType ?? KWCTypeEnum.Geen;
             set
             {
                 _Controller.Data.KWCType = value;
-                RaisePropertyChanged<object>("KWCType", broadcast: true);
+                RaisePropertyChanged<object>(nameof(KWCType), broadcast: true);
             }
         }
 
@@ -221,11 +221,11 @@ namespace TLCGen.ViewModels
         [BrowsableCondition("IsVLOGVersieLowerThan9")]
         public VLOGTypeEnum VLOGType
         {
-            get { return _Controller?.Data == null ? VLOGTypeEnum.Geen : _Controller.Data.VLOGType; }
+            get => _Controller?.Data?.VLOGType ?? VLOGTypeEnum.Geen;
             set
             {
                 _Controller.Data.VLOGType = value;
-                RaisePropertyChanged<object>("VLOGType", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VLOGType), broadcast: true);
             }
         }
 
@@ -238,18 +238,18 @@ namespace TLCGen.ViewModels
         [Description("Extra meeverlengen in WG")]
         public bool ExtraMeeverlengenInWG
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.ExtraMeeverlengenInWG; }
+            get => _Controller?.Data?.ExtraMeeverlengenInWG ?? false;
             set
             {
                 _Controller.Data.ExtraMeeverlengenInWG = value;
-                RaisePropertyChanged<object>("ExtraMeeverlengenInWG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(ExtraMeeverlengenInWG), broadcast: true);
             }
         }
 
         [Description("Aansturing waitsignalen")]
         public AansturingWaitsignalenEnum AansturingWaitsignalen
         {
-            get { return _Controller?.Data?.AansturingWaitsignalen ?? AansturingWaitsignalenEnum.AanvraagGezet; }
+            get => _Controller?.Data?.AansturingWaitsignalen ?? AansturingWaitsignalenEnum.AanvraagGezet;
             set
             {
                 _Controller.Data.AansturingWaitsignalen = value;
@@ -260,7 +260,7 @@ namespace TLCGen.ViewModels
         [Description("Type segmenten display")]
         public SegmentDisplayTypeEnum SegmentDisplayType
         {
-            get { return _Controller?.Data?.SegmentDisplayType ?? SegmentDisplayTypeEnum.GeenSegmenten; }
+            get => _Controller?.Data?.SegmentDisplayType ?? SegmentDisplayTypeEnum.GeenSegmenten;
             set
             {
                 if(_Controller.Data.SegmentDisplayType != value)
@@ -275,7 +275,7 @@ namespace TLCGen.ViewModels
         [Description("Uitgang per module")]
         public bool UitgangPerModule
         {
-            get { return _Controller?.Data?.UitgangPerModule ?? false; }
+            get => _Controller?.Data?.UitgangPerModule ?? false;
             set
             {
                 if (_Controller.Data.UitgangPerModule != value)
@@ -319,7 +319,7 @@ namespace TLCGen.ViewModels
         [Description("Fixatie mogelijk")]
         public bool FixatieMogelijk
         {
-            get { return _Controller?.Data?.FixatieData.FixatieMogelijk ?? false; }
+            get => _Controller?.Data?.FixatieData.FixatieMogelijk ?? false;
             set
             {
                 _Controller.Data.FixatieData.FixatieMogelijk = value;
@@ -330,7 +330,7 @@ namespace TLCGen.ViewModels
         [Description("Bijkomen tijdens fixatie")]
         public bool BijkomenTijdensFixatie
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.FixatieData.BijkomenTijdensFixatie; }
+            get => _Controller?.Data?.FixatieData.BijkomenTijdensFixatie ?? false;
             set
             {
                 _Controller.Data.FixatieData.BijkomenTijdensFixatie = value;
@@ -341,7 +341,7 @@ namespace TLCGen.ViewModels
         [Description("Type groentijden")]
         public GroentijdenTypeEnum TypeGroentijden
         {
-            get { return _Controller?.Data?.TypeGroentijden ?? GroentijdenTypeEnum.MaxGroentijden; }
+            get => _Controller?.Data?.TypeGroentijden ?? GroentijdenTypeEnum.MaxGroentijden;
             set
             {
                 _Controller.Data.TypeGroentijden = value;
@@ -353,7 +353,7 @@ namespace TLCGen.ViewModels
         [Description("Toevoegen OVM code")]
         public bool ToevoegenOVM
         {
-            get { return _Controller?.Data?.ToevoegenOVM ?? false; }
+            get => _Controller?.Data?.ToevoegenOVM ?? false;
             set
             {
                 _Controller.Data.ToevoegenOVM = value;
@@ -368,7 +368,7 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(HasWTV))]
         public bool WachttijdvoorspellerVensterTestomgeving
         {
-            get { return _Controller?.Data?.WachttijdvoorspellerVensterTestomgeving ?? false; }
+            get => _Controller?.Data?.WachttijdvoorspellerVensterTestomgeving ?? false;
             set
             {
                 _Controller.Data.WachttijdvoorspellerVensterTestomgeving = value;
@@ -462,11 +462,22 @@ namespace TLCGen.ViewModels
         [Description("Loggen max. TFB in PRM")]
         public bool PrmLoggingTfbMax
         {
-            get { return _Controller?.Data?.PrmLoggingTfbMax ?? false; }
+            get => _Controller?.Data?.PrmLoggingTfbMax ?? false;
             set
             {
                 _Controller.Data.PrmLoggingTfbMax = value;
                 RaisePropertyChanged<object>(nameof(PrmLoggingTfbMax), broadcast: true);
+            }
+        }
+        
+        [Description("Genereren lijst met includes")]
+        public bool GenererenIncludesLijst
+        {
+            get => _Controller?.Data?.GenererenIncludesLijst ?? false;
+            set
+            {
+                _Controller.Data.GenererenIncludesLijst = value;
+                RaisePropertyChanged<object>(nameof(GenererenIncludesLijst), broadcast: true);
             }
         }
 
@@ -474,33 +485,33 @@ namespace TLCGen.ViewModels
         [Description("VLOG in testomgeving")]
         public bool VLOGInTestOmgeving
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.VLOGInTestOmgeving; }
+            get => _Controller?.Data?.VLOGInTestOmgeving ?? false;
             set
             {
                 _Controller.Data.VLOGInTestOmgeving = value;
-                RaisePropertyChanged<object>("VLOGInTestOmgeving", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VLOGInTestOmgeving), broadcast: true);
             }
         }
 
         [Description("Genereren code t.b.v. DUURTEST")]
         public bool GenererenDuurtestCode
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.GenererenDuurtestCode; }
+            get => _Controller?.Data?.GenererenDuurtestCode ?? false;
             set
             {
                 _Controller.Data.GenererenDuurtestCode = value;
-                RaisePropertyChanged<object>("GenererenDuurtestCode", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GenererenDuurtestCode), broadcast: true);
             }
         }
 
         [Description("Niet gebruiken bitmap")]
         public bool GebruikBitmap
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.NietGebruikenBitmap; }
+            get => _Controller?.Data?.NietGebruikenBitmap ?? false;
             set
             {
                 _Controller.Data.NietGebruikenBitmap = value;
-                RaisePropertyChanged<object>("GebruikBitmap", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GebruikBitmap), broadcast: true);
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
@@ -508,18 +519,18 @@ namespace TLCGen.ViewModels
         [Description("Practice omgeving")]
         public bool PracticeOmgeving
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.PracticeOmgeving; }
+            get => _Controller?.Data?.PracticeOmgeving ?? false;
             set
             {
                 _Controller.Data.PracticeOmgeving = value;
-                RaisePropertyChanged<object>("PracticeOmgeving", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PracticeOmgeving), broadcast: true);
             }
         }
 
         [Description("Opnemen code mirakel monitor")]
         public bool MirakelMonitor
         {
-            get { return _Controller?.Data?.MirakelMonitor ?? false; }
+            get => _Controller?.Data?.MirakelMonitor ?? false;
             set
             {
                 _Controller.Data.MirakelMonitor = value;

@@ -26,6 +26,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLElemListData _schakelaars;
         private CCOLElemListData _parameters;
 
+        private List<string> _allFiles = new List<string>();
+
         private List<DetectorModel> _alleDetectoren;
 
         private List<CCOLIOElement> AllCCOLOutputElements;
@@ -149,30 +151,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
 
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}reg.c");
                     if (!c.Data.NietGebruikenBitmap)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), Encoding.Default);
                     }
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c), Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}tab.c");
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c), Encoding.Default);
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c), Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}sys.h");
                     if (c.RoBuGrover.ConflictGroepen?.Count > 0)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}rgv.c");
                     }
                     if (c.PTPData.PTPKoppelingen?.Count > 0)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}ptp.c");
                     }
                     if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
                         (c.PrioData.PrioIngrepen.Any() ||
                          c.PrioData.HDIngrepen.Any()))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.c"), GeneratePrioC(c), Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}prio.c");
                     }
                     if (c.HalfstarData.IsHalfstar)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}hst.c");
                     }
                     if (c.Data.PracticeOmgeving)
                     {
@@ -185,25 +194,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}reg.add");
                     ReviseRegAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, Encoding.Default);
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}tab.add");
                     if (!c.Data.NietGebruikenBitmap)
                     {
                         WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, Encoding.Default);
                     }
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
+                    _allFiles.Add($"{c.Data.Naam}sys.add");
                     ReviseSysAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, Encoding.Default);
                     if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
                         if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit)
                         {
                             WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.add"), c, GeneratePrioAdd, GeneratePrioAddHeader, Encoding.Default);
+                            _allFiles.Add($"{c.Data.Naam}prio.add");
                         }
                     }
                     if (c.HalfstarData.IsHalfstar)
                     {
                         WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader, Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}hst.add");
                     }
 
                     CopySourceIfNeeded(c, "extra_func.c", sourcefilepath);
@@ -330,6 +344,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         var fileLines = new string[lines.Length - 1];
                                         Array.Copy(lines, 1, fileLines, 0, lines.Length - 1);
                                         File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines, Encoding.Default);
+                                        _allFiles.Add(Path.GetFileName(f));
                                     }
                                 }
                                 catch
@@ -342,6 +357,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             // ignored
                         }
+                    }
+
+                    if (c.Data.GenererenIncludesLijst)
+                    {
+                        GenerateIncludesList(c, Path.Combine(sourcefilepath, $"{c.Data.Naam}_sources_list.txt"));
                     }
                 }
                 catch (Exception e)
@@ -356,8 +376,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
         }
 
+        private void GenerateIncludesList(ControllerModel c, string filename)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Overzicht TLCGen bestanden regeling: {c.Data.Naam}");
+            sb.AppendLine("  > excl. dpl, sim");
+            sb.AppendLine("  > let op: diverse files zijn reeds opgenomen middels #include");
+            foreach (var file in _allFiles)
+            {
+                sb.AppendLine($"- {file}");
+            }
+            File.WriteAllText(filename, sb.ToString());
+        }
+
         private void CopySourceIfNeeded(ControllerModel c, string filename, string sourcefilepath)
         {
+            _allFiles.Add(filename);
             if ((!File.Exists(Path.Combine(sourcefilepath, filename)) || CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources)
                 && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
             {
