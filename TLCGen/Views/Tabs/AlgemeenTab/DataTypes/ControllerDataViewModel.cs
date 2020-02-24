@@ -151,15 +151,16 @@ namespace TLCGen.ViewModels
                     MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());
                     RaisePropertyChanged<object>(nameof(CCOLVersie), broadcast: true);
                 }
-                RaisePropertyChanged(nameof(IsVLOGVersieLowerThan9));
-                RaisePropertyChanged(nameof(IsVLOGVersieHigherThan9));
+                RaisePropertyChanged(nameof(IsCCOLVersieLowerThan9));
+                RaisePropertyChanged(nameof(IsCCOLVersieHigherThan9));
+                RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
             }
         }
 
 
         [Description("Intergroen")]
-        [BrowsableCondition("IsVLOGVersieHigherThan9")]
+        [BrowsableCondition("IsCCOLVersieHigherThan9")]
         public bool Intergroen
         {
             get => _Controller?.Data?.Intergroen ?? false;
@@ -218,7 +219,7 @@ namespace TLCGen.ViewModels
         }
 
         [Description("Type VLOG")]
-        [BrowsableCondition("IsVLOGVersieLowerThan9")]
+        [BrowsableCondition("IsCCOLVersieLowerThan9")]
         public VLOGTypeEnum VLOGType
         {
             get => _Controller?.Data?.VLOGType ?? VLOGTypeEnum.Geen;
@@ -230,10 +231,13 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public bool IsVLOGVersieHigherThan9 => CCOLVersie > CCOLVersieEnum.CCOL9;
+        public bool IsCCOLVersieHigherThan9 => CCOLVersie > CCOLVersieEnum.CCOL9;
 
         [Browsable(false)]
-        public bool IsVLOGVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;
+        public bool IsCCOLVersieHigherThanOrEqualTo9 => CCOLVersie >= CCOLVersieEnum.CCOL9;
+
+        [Browsable(false)]
+        public bool IsCCOLVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;
 
         [Description("Extra meeverlengen in WG")]
         public bool ExtraMeeverlengenInWG
@@ -358,6 +362,18 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.ToevoegenOVM = value;
                 RaisePropertyChanged<object>(nameof(ToevoegenOVM), broadcast: true);
+            }
+        }
+
+        [Description("Geen OG/BG/flutter in AUTOMAAT omgeving")]
+        [BrowsableCondition("IsCCOLVersieHigherThanOrEqualTo9")]
+        public bool GeenDetectorGedragInAutomaatOmgeving
+        {
+            get => _Controller?.Data?.GeenDetectorGedragInAutomaatOmgeving ?? false;
+            set
+            {
+                _Controller.Data.GeenDetectorGedragInAutomaatOmgeving = value;
+                RaisePropertyChanged<object>(nameof(GeenDetectorGedragInAutomaatOmgeving), broadcast: true);
             }
         }
 

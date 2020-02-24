@@ -120,6 +120,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    if (c.Data.GeenDetectorGedragInAutomaatOmgeving)
+                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "i", "") };
+                    return base.GetFunctionLocalVariables(c, type);
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (c.Data.PrmLoggingTfbMax)
                         return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
@@ -177,6 +181,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"#ifdef MIRMON");
                         sb.AppendLine($"{ts}if (SAPPLPROG) MirakelMonitor_init(SYSTEM);");
                         sb.AppendLine($"#endif /* MIRMON */");
+                    }
+                    if (c.Data.GeenDetectorGedragInAutomaatOmgeving)
+                    {
+                        sb.AppendLine("#if defined AUTOMAAT || defined AUTOMAAT_TEST");
+                        sb.AppendLine($"{ts}/* verwijderen BG, OG en FL tijden in ITSAPP */");
+                        sb.AppendLine($"{ts}for (i = 0; i < DPMAX; ++i) {{");
+                        sb.AppendLine($"{ts}{ts}TBG_max[i]=NG;");
+                        sb.AppendLine($"{ts}{ts}TOG_max[i]=NG;");
+                        sb.AppendLine($"{ts}{ts}TFL_max[i]=NG;");
+                        sb.AppendLine($"{ts}{ts}CFG_max[i]=NG;");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine("#endif");
+
                     }
                     return sb.ToString();
 
