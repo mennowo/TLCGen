@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using TLCGen.Dependencies.Providers;
+using TLCGen.Generators.CCOL.ProjectGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -385,6 +386,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var file in _allFiles)
             {
                 sb.AppendLine($"- {file}");
+            }
+            sb.AppendLine();
+            sb.AppendLine($"Overzicht benodigde CCOL libraries regeling: {c.Data.Naam}");
+            foreach (var lib in CCOLVisualProjectGenerator.GetNeededCCOLLibraries(c, true, 0))
+            {
+                sb.AppendLine($"- {lib}");
             }
             File.WriteAllText(filename, sb.ToString());
         }

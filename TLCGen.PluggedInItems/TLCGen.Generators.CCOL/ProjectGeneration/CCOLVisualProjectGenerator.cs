@@ -163,32 +163,42 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 			return writeline;
         }
 
-        public List<string> GetNeededPreprocDefs(ControllerModel c, bool automaat, int visualVer)
+        public static List<string> GetNeededPreprocDefs(ControllerModel c, bool automaat, int visualVer)
         {
             var neededpps = new List<string> {"CCOL_IS_SPECIAL", "_CRT_SECURE_NO_WARNINGS"};
 
-            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
-            {
-                if (c.Data.Intergroen) neededpps.Add("CCOLTIG");
-                else neededpps.Add("NOTIGMAX");
-            }
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL95) return neededpps;
+
+            neededpps.Add(c.Data.Intergroen ? "CCOLTIG" : "NOTIGMAX");
 
             return neededpps;
         }
 
-        public List<string> GetNeededCCOLLibraries(ControllerModel c, bool automaat, int visualVer)
+        public static List<string> GetNeededCCOLLibraries(ControllerModel c, bool automaat, int visualVer)
         {
             // Collect needed libraries
             var neededlibs = new List<string> {"ccolreg.lib", "lwmlfunc.lib", "stdfunc.lib"};
             if (!automaat)
             {
-                neededlibs.Add("ccolsim.lib");
                 neededlibs.Add("comctl32.lib");
+                neededlibs.Add("ccolsim.lib");
                 neededlibs.Add(c.Data.CCOLMulti ? "ccolmainms.lib" : "ccolmain.lib");
                 if (c.PTPData.PTPKoppelingen != null &&
                     c.PTPData.PTPKoppelingen.Any())
                 {
                     neededlibs.Add("ccolks.lib");
+                }
+                switch (c.Data.CCOLVersie)
+                {
+                    case CCOLVersieEnum.CCOL8:
+                        break;
+                    case CCOLVersieEnum.CCOL9:
+                    case CCOLVersieEnum.CCOL95:
+                    case CCOLVersieEnum.CCOL100:
+                        neededlibs.Add("htmlhelp.lib");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
             if (c.Data.VLOGType != VLOGTypeEnum.Geen)
@@ -205,18 +215,6 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
             if (c.HasDSI())
             {
                 neededlibs.Add("dsifunc.lib");
-            }
-            switch (c.Data.CCOLVersie)
-            {
-                case CCOLVersieEnum.CCOL8:
-                    break;
-                case CCOLVersieEnum.CCOL9:
-                case CCOLVersieEnum.CCOL95:
-                case CCOLVersieEnum.CCOL100:
-                    neededlibs.Add("htmlhelp.lib");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             switch (visualVer)
