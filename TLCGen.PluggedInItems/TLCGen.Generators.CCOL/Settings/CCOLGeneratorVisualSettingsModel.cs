@@ -13,7 +13,7 @@ namespace TLCGen.Generators.CCOL.Settings
         [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
         public string CCOLIncludesPaden
         {
-            get { return _CCOLIncludesPaden; }
+            get => _CCOLIncludesPaden;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.Settings
         [Editor(typeof(FolderEditor), typeof(FolderEditor))]
         public string CCOLLibsPath
         {
-            get { return _CCOLLibsPath; }
+            get => _CCOLLibsPath;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
@@ -50,8 +50,8 @@ namespace TLCGen.Generators.CCOL.Settings
 		[Browsable(false)]
 		public string CCOLLibsPathNoTig
 		{
-			get { return _CCOLLibsPathNoTig; }
-			set
+			get => _CCOLLibsPathNoTig;
+            set
 			{
 				if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
 					_CCOLLibsPathNoTig = value + ";";
@@ -61,13 +61,13 @@ namespace TLCGen.Generators.CCOL.Settings
 		}
 
 		private string _CCOLLibs;
-        [DisplayName("CCOL libraries")]
-        [Description("CCOL libraries (indien van toepassing)")]
+        [DisplayName("CCOL extra libraries")]
+        [Description("CCOL extra libraries (indien van toepassing)")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
         public string CCOLLibs
         {
-            get { return _CCOLLibs; }
+            get => _CCOLLibs;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
@@ -85,7 +85,7 @@ namespace TLCGen.Generators.CCOL.Settings
         [Editor(typeof(FolderEditor), typeof(FolderEditor))]
         public string CCOLResPath
         {
-            get { return _CCOLResPath; }
+            get => _CCOLResPath;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
@@ -96,13 +96,13 @@ namespace TLCGen.Generators.CCOL.Settings
         }
 
         private string _CCOLPreprocessorDefinitions;
-        [DisplayName("Preprocessor definities")]
-        [Description("Preprocessor definities")]
+        [DisplayName("Extra preprocessor definities")]
+        [Description("Extra preprocessor definities")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
         public string CCOLPreprocessorDefinitions
         {
-            get { return _CCOLPreprocessorDefinitions; }
+            get => _CCOLPreprocessorDefinitions;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))

@@ -32,16 +32,13 @@ __IF;PTP__      <Filter>Source Files</Filter>
 __IF;PTP__    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-__IF;KS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
-    <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
-    <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
-    <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
-__IF;PRIO__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
-    <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
-    <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
-    <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />
+    <ClInclude Include="__CONTROLLERNAME__sys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="__CCOLLIBSDIR__VISSIM\ccolvissim_e.res" />
+    <Resource Include="__CCOLLRESDIR__ccolvissim_e.res">
+      <Filter>Resource Files</Filter>
+    </Resource>
   </ItemGroup>
 </Project>

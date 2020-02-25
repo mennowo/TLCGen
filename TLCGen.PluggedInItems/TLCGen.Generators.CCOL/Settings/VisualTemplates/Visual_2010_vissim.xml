@@ -49,11 +49,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CCOL_IS_SPECIAL;WIN32;_DEBUG;_WINDOWS;AUTOMAAT;VISSIM;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;AUTOMAAT;VISSIM;__PREPROCESSORDEFS__;__PREPROCESSORDEFSEXTRA__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>__ADDITIONALINCLUDEDIRS__%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
+      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;ccolvissim.lib;__CCOLLIBS__;__CCOLLIBSEXTRA__%(AdditionalDependencies);</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>

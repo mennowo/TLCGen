@@ -179,7 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine("");
-            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
             sb.AppendLine("void PrioDebug_Add(void) {");
             sb.AppendLine("  PrioDebug(NG);");
             sb.AppendLine("}");

@@ -43,7 +43,7 @@ __IF;PTP__      <Filter>Source Files</Filter>
 __IF;PTP__    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="__CCOLLRESDIR__Ccolmenu.res">
+    <Resource Include="__CCOLLRESDIR__ccolvissim_e.res">
       <Filter>Resource Files</Filter>
     </Resource>
   </ItemGroup>

@@ -52,22 +52,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-__IF;!TIG__      <PreprocessorDefinitions>CCOL_IS_SPECIAL;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
-__ELSE__      <PreprocessorDefinitions>CCOLTIG;CCOL_IS_SPECIAL;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;__PREPROCESSORDEFS__;__PREPROCESSORDEFSEXTRA__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>__ADDITIONALINCLUDEDIRS__%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-__IF;!HS;!MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;!HS;MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;HS;!MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;HS;MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;!HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;!HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);__CCOLLIBS__;__CCOLLIBSEXTRA__</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
 __IF;!CCOL95ORHIGHER__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
 __ELIF;IGT__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
@@ -83,20 +75,12 @@ __ELSE__      <AdditionalLibraryDirectories>__CCOLLIBSDIRNOTIG__</AdditionalLibr
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-__IF;!TIG__      <PreprocessorDefinitions>CCOL_IS_SPECIAL;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
-__ELSE__      <PreprocessorDefinitions>CCOLTIG;CCOL_IS_SPECIAL;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCOLTIG;CCOL_IS_SPECIAL;WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__;__PREPROCESSORDEFSEXTRA__%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-__IF;!HS;!MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;!HS;MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;HS;!MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;HS;MS;!CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;!HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;!HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;</AdditionalDependencies>
-__IF;HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
-__IF;HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);__CCOLLIBS__;__CCOLLIBSEXTRA__</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
 __IF;!CCOL95ORHIGHER__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
 __ELIF;IGT__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>

@@ -481,6 +481,8 @@ namespace TLCGen.Generators.CCOL
 					_myVm.VisualProjects.Add(Path.GetFileNameWithoutExtension(t).Replace("_", " "));
 				}
 	        }
+
+            _myVm.SelectedVisualProject = _myVm.VisualProjects.FirstOrDefault(x => x.StartsWith("Visual 2017"));
         }
 
         #endregion // Constructor

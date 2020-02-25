@@ -1,69 +1,77 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Models;
+using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL.ProjectGeneration
 {
     public class CCOLVisualProjectGenerator
     {
-		private bool _prevCondition = false;
+		private bool _prevCondition;
 
-        private string HandleFileLine(string line, CCOLCodeGeneratorPlugin plugin)
+        private string HandleFileLine(string line, ITLCGenPlugin plugin, int visualVer)
         {
-            string writeline = line;
+            var writeline = line;
 
-            CCOLGeneratorVisualSettingsModel settings = null;
+            CCOLGeneratorVisualSettingsModel settings;
             switch (plugin.Controller.Data.CCOLVersie)
             {
-                case Models.Enumerations.CCOLVersieEnum.CCOL8:
+                case CCOLVersieEnum.CCOL8:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings;
                     break;
-                case Models.Enumerations.CCOLVersieEnum.CCOL9:
+                case CCOLVersieEnum.CCOL9:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL9;
                     break;
-                case Models.Enumerations.CCOLVersieEnum.CCOL95:
+                case CCOLVersieEnum.CCOL95:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95;
                     break;
-                case Models.Enumerations.CCOLVersieEnum.CCOL100:
+                case CCOLVersieEnum.CCOL100:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            var _ccolinclpaths = settings.CCOLIncludesPaden;
-            var _ccollibs = settings.CCOLLibs;
-			var _ccollibsnotig = settings.CCOLLibsPathNoTig;
-			var _ccollibspath = settings.CCOLLibsPath;
-            var _ccolppdefs = settings.CCOLPreprocessorDefinitions;
-            var _ccolrespath = settings.CCOLResPath;
+            var ccolinclpaths = settings.CCOLIncludesPaden;
+            var ccolextralibs = settings.CCOLLibs;
+			var ccollibsnotig = settings.CCOLLibsPathNoTig;
+			var ccollibspath = settings.CCOLLibsPath;
+            var ccolppdefs = string.Join(";", GetNeededPreprocDefs(plugin.Controller, false, visualVer).OrderBy(x => x));
+            var ccolppdefsextra = settings.CCOLPreprocessorDefinitions;
+            var ccolrespath = settings.CCOLResPath;
+            var ccollibs = string.Join(";", GetNeededCCOLLibraries(plugin.Controller, false, visualVer).OrderBy(x => x));
 
             // Replace all
             if (writeline.Contains("__"))
             {
-                string prepro = _ccolppdefs;
-                if (string.IsNullOrEmpty(prepro))
-                    prepro = "";
                 writeline = writeline.Replace("__CONTROLLERNAME__", plugin.Controller.Data.Naam);
                 writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
-                string ccollibspath = _ccollibspath == null ? "" : _ccollibspath.Remove(_ccollibspath == null ? 0 : _ccollibspath.Length - 1);
-                if(!ccollibspath.EndsWith("\\"))
+                var actualccollibspath = ccollibspath == null ? "" : ccollibspath.Remove(ccollibspath.Length - 1);
+                if(!actualccollibspath.EndsWith("\\"))
                 {
-                    ccollibspath = ccollibspath + "\\";
+                    actualccollibspath += "\\";
                 }
-                writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath == null ? "" : ccollibspath);
-                writeline = writeline.Replace("__CCOLLIBSDIRNOTIG__", _ccollibsnotig == null ? "" : _ccollibsnotig);
-                writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs == null ? "" : _ccollibs);
-                string ccolrespath = _ccolrespath == null ? "" : _ccolrespath.Remove(_ccolrespath == null ? 0 : _ccolrespath.Length - 1);
-                if (!ccolrespath.EndsWith("\\"))
+                writeline = writeline.Replace("__CCOLLIBSDIR__", actualccollibspath);
+                writeline = writeline.Replace("__CCOLLIBSDIRNOTIG__", ccollibsnotig ?? "");
+                writeline = writeline.Replace("__CCOLLIBS__", ccollibs);
+                writeline = writeline.Replace("__CCOLLIBSEXTRA__", ccolextralibs ?? "");
+                
+                var actualccolrespath = ccolrespath == null ? "" : ccolrespath.Remove(ccolrespath.Length - 1);
+                if (!actualccolrespath.EndsWith("\\"))
                 {
-                    ccolrespath = ccolrespath + "\\";
+                    actualccolrespath += "\\";
                 }
-                writeline = writeline.Replace("__CCOLLRESDIR__", ccolrespath == null ? "" : ccolrespath);
-                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", _ccolinclpaths == null ? "" : _ccolinclpaths);
-                writeline = writeline.Replace("__PREPROCESSORDEFS__", prepro == null ? "" : prepro);
+                writeline = writeline.Replace("__CCOLLRESDIR__", actualccolrespath);
+                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", ccolinclpaths ?? "");
+                writeline = writeline.Replace("__PREPROCESSORDEFS__", ccolppdefs);
+                writeline = writeline.Replace("__PREPROCESSORDEFSEXTRA__", ccolppdefsextra);
             }
 
             // If conditions
@@ -73,7 +81,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 				var lineelif = Regex.IsMatch(line, @"^\s*__ELIF;.*");
 				var lineelse = Regex.IsMatch(line, @"^\s*__ELSE__*");
 
-				bool result = false;
+				var result = false;
 
 				if (lineif || lineelif && !_prevCondition)
 				{
@@ -87,14 +95,14 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 						switch (actualCondition)
 						{
 							case "IGT":
-								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95 &&
+								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 &&
 										 plugin.Controller.Data.Intergroen;
 								break;
 							case "CCOL9ORHIGHER":
-								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9;
+								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9;
 								break;
 							case "CCOL95ORHIGHER":
-								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95;
+								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95;
 								break;
 							case "PRIO":
 								result = plugin.Controller.PrioData.PrioIngrepen != null &&
@@ -103,14 +111,14 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 										 plugin.Controller.PrioData.HDIngrepen.Any();
 								break;
 							case "MV":
-								result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
+								result = plugin.Controller.Data.KWCType != KWCTypeEnum.Geen;
 								break;
 							case "MVVIALIS":
-								result = plugin.Controller.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis;
+								result = plugin.Controller.Data.KWCType == KWCTypeEnum.Vialis;
 								break;
 							case "MVOVERIG":
-								result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Vialis &&
-										 plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
+								result = plugin.Controller.Data.KWCType != KWCTypeEnum.Vialis &&
+										 plugin.Controller.Data.KWCType != KWCTypeEnum.Geen;
 								break;
 							case "PTP":
 							case "KS":
@@ -155,29 +163,97 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 			return writeline;
         }
 
-        public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, string templateName)
+        public List<string> GetNeededPreprocDefs(ControllerModel c, bool automaat, int visualVer)
         {
-            StringBuilder sb = new StringBuilder();
+            var neededpps = new List<string> {"CCOL_IS_SPECIAL", "_CRT_SECURE_NO_WARNINGS"};
 
-            string templatefilename = "";
-            string filtersfilename = "";
-            string outputfilename = "";
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+            {
+                if (c.Data.Intergroen) neededpps.Add("CCOLTIG");
+                else neededpps.Add("NOTIGMAX");
+            }
 
-			templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}.xml");
-	        filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}_filters.xml");
-            outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName) ?? throw new InvalidOperationException(), $"{plugin.Controller.Data.Naam}_{templateName}.vcxproj");
+            return neededpps;
+        }
+
+        public List<string> GetNeededCCOLLibraries(ControllerModel c, bool automaat, int visualVer)
+        {
+            // Collect needed libraries
+            var neededlibs = new List<string> {"ccolreg.lib", "lwmlfunc.lib", "stdfunc.lib"};
+            if (!automaat)
+            {
+                neededlibs.Add("ccolsim.lib");
+                neededlibs.Add("comctl32.lib");
+                neededlibs.Add(c.Data.CCOLMulti ? "ccolmainms.lib" : "ccolmain.lib");
+                if (c.PTPData.PTPKoppelingen != null &&
+                    c.PTPData.PTPKoppelingen.Any())
+                {
+                    neededlibs.Add("ccolks.lib");
+                }
+            }
+            if (c.Data.VLOGType != VLOGTypeEnum.Geen)
+            {
+                neededlibs.Add("ccolvlog.lib");
+            }
+            if (c.HalfstarData.IsHalfstar)
+            {
+                neededlibs.Add("plfunc.lib");
+                neededlibs.Add("plefunc.lib");
+                neededlibs.Add("tx_synch.lib");
+                neededlibs.Add(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "trigfunc.lib" : "tigfunc.lib");
+            }
+            if (c.HasDSI())
+            {
+                neededlibs.Add("dsifunc.lib");
+            }
+            switch (c.Data.CCOLVersie)
+            {
+                case CCOLVersieEnum.CCOL8:
+                    break;
+                case CCOLVersieEnum.CCOL9:
+                case CCOLVersieEnum.CCOL95:
+                case CCOLVersieEnum.CCOL100:
+                    neededlibs.Add("htmlhelp.lib");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            switch (visualVer)
+            {
+                case 0:
+                    break;
+                case 2010:
+                    break;
+                case 2013:
+                    break;
+                case 2017:
+                    neededlibs.Add("legacy_stdio_definitions.lib");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return neededlibs;
+        }
+
+        public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, string templateName, int visualVer)
+        {
+            var sb = new StringBuilder();
+
+            var templatefilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}.xml");
+	        var filtersfilename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}_filters.xml");
+            var outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName) ?? throw new InvalidOperationException(), $"{plugin.Controller.Data.Naam}_{templateName}.vcxproj");
             if (File.Exists(templatefilename))
             {
-                string[] projtemplate = File.ReadAllLines(templatefilename);
-                foreach (string line in projtemplate)
+                var projtemplate = File.ReadAllLines(templatefilename);
+                foreach (var line in projtemplate)
                 {
-                    string writeline = HandleFileLine(line, plugin);
-
+                    var writeline = HandleFileLine(line, plugin, visualVer);
 
                     if (!string.IsNullOrWhiteSpace(writeline))
                         sb.AppendLine(writeline);
                 }
-
                 try
                 {
                     File.WriteAllText(outputfilename, sb.ToString());
@@ -192,10 +268,10 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 
             if (File.Exists(filtersfilename))
             {
-                string[] projtemplate = File.ReadAllLines(filtersfilename);
-                foreach (string line in projtemplate)
+                var projtemplate = File.ReadAllLines(filtersfilename);
+                foreach (var line in projtemplate)
                 {
-                    string writeline = HandleFileLine(line, plugin);
+                    var writeline = HandleFileLine(line, plugin, visualVer);
 
                     if (!string.IsNullOrWhiteSpace(writeline))
                         sb.AppendLine(writeline);

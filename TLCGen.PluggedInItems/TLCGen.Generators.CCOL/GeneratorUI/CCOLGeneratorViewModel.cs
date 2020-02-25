@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -18,11 +19,13 @@ namespace TLCGen.Generators.CCOL
     {
         #region Fields
 
-        private CCOLCodeGeneratorPlugin _Plugin;
-        private CCOLGenerator _CodeGenerator;
-        private CCOLVisualProjectGenerator _ProjectGenerator;
+        private readonly CCOLCodeGeneratorPlugin _plugin;
+        private readonly CCOLGenerator _codeGenerator;
+        private readonly CCOLVisualProjectGenerator _projectGenerator;
         private string _SelectedVisualProject;
         private bool _VisualCBEnabled;
+        private RelayCommand _generateCodeCommand;
+        private RelayCommand _generateVisualProjectCommand;
 
         #endregion // Fields
 
@@ -30,7 +33,7 @@ namespace TLCGen.Generators.CCOL
 
         public CCOLGenerator CodeGenerator
         {
-            get { return _CodeGenerator; }
+            get { return _codeGenerator; }
         }
 
 		public ObservableCollection<string> VisualProjects { get; }
@@ -59,29 +62,27 @@ namespace TLCGen.Generators.CCOL
 
         #region Commands
 
-        RelayCommand _GenerateCodeCommand;
         public ICommand GenerateCodeCommand
         {
             get
             {
-                if (_GenerateCodeCommand == null)
+                if (_generateCodeCommand == null)
                 {
-                    _GenerateCodeCommand = new RelayCommand(GenerateCodeCommand_Executed, GenerateCodeCommand_CanExecute);
+                    _generateCodeCommand = new RelayCommand(GenerateCodeCommand_Executed, GenerateCodeCommand_CanExecute);
                 }
-                return _GenerateCodeCommand;
+                return _generateCodeCommand;
             }
         }
 
-        RelayCommand _GenerateVisualProjectCommand;
         public ICommand GenerateVisualProjectCommand
         {
             get
             {
-                if (_GenerateVisualProjectCommand == null)
+                if (_generateVisualProjectCommand == null)
                 {
-                    _GenerateVisualProjectCommand = new RelayCommand(GenerateVisualProjectCommand_Executed, GenerateVisualProjectCommand_CanExecute);
+                    _generateVisualProjectCommand = new RelayCommand(GenerateVisualProjectCommand_Executed, GenerateVisualProjectCommand_CanExecute);
                 }
-                return _GenerateVisualProjectCommand;
+                return _generateVisualProjectCommand;
             }
         }
 
@@ -91,12 +92,12 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateCodeCommand_Executed(object prm)
         {
-            var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_Plugin.Controller);
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(prepreq);
-            string s = TLCGenIntegrityChecker.IsControllerDataOK(_Plugin.Controller);
+            var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_plugin.Controller);
+            Messenger.Default.Send(prepreq);
+            var s = TLCGenIntegrityChecker.IsControllerDataOK(_plugin.Controller);
             if (s == null)
             {
-                _CodeGenerator.GenerateSourceFiles(_Plugin.Controller, Path.GetDirectoryName(_Plugin.ControllerFileName));
+                _codeGenerator.GenerateSourceFiles(_plugin.Controller, Path.GetDirectoryName(_plugin.ControllerFileName));
                 Messenger.Default.Send(new ControllerCodeGeneratedMessage());
             }
             else
@@ -107,28 +108,30 @@ namespace TLCGen.Generators.CCOL
 
         private bool GenerateCodeCommand_CanExecute(object prm)
         {
-            return _Plugin?.Controller?.Fasen.Any() == true &&
-                   (_Plugin.Controller.ModuleMolen.Modules.Any(x2 => x2.Fasen.Any()) ||
-                    _Plugin.Controller.Data.MultiModuleReeksen && 
-                    _Plugin.Controller.MultiModuleMolens.Any(x => x.Modules.Any(x2 => x2.Fasen.Any()))) &&
-                   _Plugin.Controller.GroentijdenSets.Any() &&
-                   _Plugin.Controller.PeriodenData.DefaultPeriodeGroentijdenSet != null &&
-                   !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
+            return _plugin?.Controller?.Fasen.Any() == true &&
+                   (_plugin.Controller.ModuleMolen.Modules.Any(x2 => x2.Fasen.Any()) ||
+                    _plugin.Controller.Data.MultiModuleReeksen && 
+                    _plugin.Controller.MultiModuleMolens.Any(x => x.Modules.Any(x2 => x2.Fasen.Any()))) &&
+                   _plugin.Controller.GroentijdenSets.Any() &&
+                   _plugin.Controller.PeriodenData.DefaultPeriodeGroentijdenSet != null &&
+                   !string.IsNullOrWhiteSpace(_plugin.ControllerFileName);
         }
 
         private void GenerateVisualProjectCommand_Executed(object prm)
         {
-            _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin, SelectedVisualProject.Replace(" ", "_"));
+            var vVer = Regex.Replace(SelectedVisualProject, @"Visual.?([0-9]+).*", "$1");
+            if (!int.TryParse(vVer, out var iVer)) return;
+            _projectGenerator.GenerateVisualStudioProjectFiles(_plugin, SelectedVisualProject.Replace(" ", "_"), iVer);
             Messenger.Default.Send(new ControllerProjectGeneratedMessage());
         }
 
         private bool GenerateVisualProjectCommand_CanExecute(object prm)
         {
-            bool b = _Plugin.Controller != null && 
-                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath) &&
-                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden) &&
-                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath) &&
-                     !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
+            var b = _plugin.Controller != null && 
+                    !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath) &&
+                    !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden) &&
+                    !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath) &&
+                    !string.IsNullOrWhiteSpace(_plugin.ControllerFileName);
             VisualCBEnabled = b;
             return b && !string.IsNullOrWhiteSpace(SelectedVisualProject);
         }
@@ -147,13 +150,12 @@ namespace TLCGen.Generators.CCOL
 
         public CCOLGeneratorViewModel(CCOLCodeGeneratorPlugin plugin, CCOLGenerator generator)
         {
-            _Plugin = plugin;
-            _CodeGenerator = generator;
-            _ProjectGenerator = new CCOLVisualProjectGenerator();
+            _plugin = plugin;
+            _codeGenerator = generator;
+            _projectGenerator = new CCOLVisualProjectGenerator();
 
 	        VisualProjects = new ObservableCollection<string>();
-
-		}
+        }
 
         #endregion // Constructor
     }
