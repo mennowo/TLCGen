@@ -1439,6 +1439,12 @@
             <Description>Minimum percentage groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
           </Setting>
           <Setting>
+            <Default>karsg</Default>
+            <Setting>karsg</Setting>
+            <Type>Parameter</Type>
+            <Description>Signaalgroep nummer voor fase _E1_ bij inmelding via DSI</Description>
+          </Setting>
+          <Setting>
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>

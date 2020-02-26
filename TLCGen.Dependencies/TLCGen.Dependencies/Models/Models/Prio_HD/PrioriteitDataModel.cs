@@ -26,6 +26,7 @@ namespace TLCGen.Models
         public bool BlokkeerNietConflictenAlleenLangzaamVerkeer { get; set; }
         public NooitAltijdAanUitEnum VerklikkenPrioTellerUber { get; set; }
         public bool VerlaagHogeSignaalGroepNummers { get; set; }
+        public bool KARSignaalGroepNummersInParameters { get; set; }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]

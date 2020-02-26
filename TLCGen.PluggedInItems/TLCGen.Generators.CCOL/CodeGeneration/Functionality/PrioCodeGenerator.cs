@@ -81,10 +81,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schchecksirene;
         private CCOLGeneratorCodeStringSettingModel _schwisselpol;
         private CCOLGeneratorCodeStringSettingModel _schcovuber;
-
+        private CCOLGeneratorCodeStringSettingModel _prmkarsg;
 
 #pragma warning restore 0649
-
 
         private string _tnlfg;
         private string _tnlfgd;
@@ -456,6 +455,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}opt", _hhduit, hd.FaseCyclus, "Opticom"));
                 }
             }
+
+            if (c.PrioData.KARSignaalGroepNummersInParameters)
+            {
+                foreach (var ov in c.PrioData.PrioIngrepen)
+                {
+                    if (!int.TryParse(ov.FaseCyclus, out var iFc)) continue;
+                    if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmkarsg}{ov.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, ov.FaseCyclus));
+                }
+                foreach (var hd in c.PrioData.HDIngrepen)
+                {
+                    if (!int.TryParse(hd.FaseCyclus, out var iFc)) continue;
+                    if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmkarsg}{hd.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, hd.FaseCyclus));
+                }
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -707,10 +724,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (melding.Type)
             {
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                    var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
+                            ? $"PRM[{_prmpf}{_prmkarsg}{ov.FaseCyclus}]"
+                            : fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString();
                     sb.AppendLine($"DSIMeldingPRIO_V1(0, " +
                                                     $"{vtgType}, " +
                                                     "TRUE, " +
-                                                    $"{(fcNmr == -1 ? "NG" : (fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString()))}," +
+                                                    $"{(fcNmr == -1 ? "NG" : sgCheck)}," +
                                                     "TRUE, " +
                                                     (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "CIF_DSIN, " : "CIF_DSUIT, ") +
                                                     $"{extra});");
@@ -984,7 +1004,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
-                            var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+                            var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters 
+                                ? $"PRM[{_prmpf}{_prmkarsg}{hd.FaseCyclus}]"
+                                : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
                             var inmHelems = new List<string>();
                             if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
@@ -998,12 +1020,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
                                         $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
                                         $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
-                                        $"((DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
-                                          $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
+                                        $"((DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
+                                        $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
                                 }
                                 inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
                             }

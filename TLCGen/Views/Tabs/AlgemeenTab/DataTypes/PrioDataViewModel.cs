@@ -171,6 +171,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("KAR signaalgroep nummers in PRMs")]
+        public bool KARSignaalGroepNummersInParameters
+        {
+            get => _Controller?.PrioData.KARSignaalGroepNummersInParameters ?? false;
+            set
+            {
+                _Controller.PrioData.KARSignaalGroepNummersInParameters = value;
+                RaisePropertyChanged<object>(nameof(KARSignaalGroepNummersInParameters), broadcast: true);
+            }
+        }
+
         #endregion // Properties
     }
 }
