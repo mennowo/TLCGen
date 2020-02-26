@@ -200,11 +200,47 @@ Task("Deploy")
                 }
           }
 });
+
+Task("DeployDev")
+	.IsDependentOn("PackPortable")
+    .Does(() => {
+        Information("Starting FTP upload...");
+        // Setup session options
+        var sessionOptions = new SessionOptions {
+                Protocol = Protocol.Sftp,
+				HostName = ftpHostname,
+				UserName = ftpUser,
+				Password = ftpPassword,
+				PortNumber = ftpPort,
+                SshHostKeyFingerprint = sshFingerPrint
+            };
+         using (Session session = new Session()) {
+				var version = GetFullVersionNumber(buildDir + new FilePath("TLCGen.exe"));
+                // Setting executable Path
+                var winScpExe = File("./Tools/Addins/Cake.WinSCP.0.4.3/lib/netstandard2.0/WinSCP.exe");
+                // Connect
+                session.Open(sessionOptions);
+ 		 
+                // Upload files
+                TransferOptions transferOptions = new TransferOptions();
+                transferOptions.TransferMode = TransferMode.Binary;
+
+                transferResult = session.PutFiles(
+				  outputDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\"), 
+				  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Dev/", false, transferOptions);
+                transferResult.Check();
+
+                // Print results
+                foreach (TransferEventArgs transfer in transferResult.Transfers) {
+                    Information("Upload of {0} succeeded", transfer.FileName);
+                }
+          }
+});
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 Task("Default")
-    .IsDependentOn("Deploy");
+    .IsDependentOn("DeployDev");
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
