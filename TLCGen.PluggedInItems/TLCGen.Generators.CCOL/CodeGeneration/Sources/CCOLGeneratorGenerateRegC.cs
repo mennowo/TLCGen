@@ -287,7 +287,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        }
 	        sb.AppendLine();
 
-	        if (controller.HalfstarData.IsHalfstar || controller.Fasen.Any(x => x.WachttijdVoorspeller))
+	        if (controller.HalfstarData.IsHalfstar || controller.Fasen.Any(x => x.WachttijdVoorspeller) ||
+                controller.Fasen.Any(x => x.SchoolIngreep != NooitAltijdAanUitEnum.Nooit || x.SeniorenIngreep != NooitAltijdAanUitEnum.Nooit))
 	        {
 		        sb.AppendLine($"{ts}/* Genereren knippersignalen */");
 		        sb.AppendLine($"{ts}UpdateKnipperSignalen();");
