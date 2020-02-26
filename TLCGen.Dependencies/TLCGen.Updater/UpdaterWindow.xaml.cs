@@ -29,7 +29,7 @@ namespace TLCGen.Updater
 			{
 				updaterVm.CleanUp();
 			};
-			Switcher.pageSwitcher = this;
+			Switcher.PageSwitcher = this;
 			Switcher.Switch(new UpdaterHome(), updaterVm);
 		}
 

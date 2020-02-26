@@ -24,7 +24,6 @@ using System.Windows.Shell;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Net;
-using System.Web.Script.Serialization;
 using GalaSoft.MvvmLight.Threading;
 
 namespace TLCGen.ViewModels
@@ -994,7 +993,7 @@ namespace TLCGen.ViewModels
             Directory.SetCurrentDirectory(tmpCurDir);
 
 #if !DEBUG
-            // Find out if there is a newer version available via Wordpress REST API
+            // Find out if there is a newer version available via online check
             Task.Run(() =>
             {
 				// clean potential old data
@@ -1011,32 +1010,23 @@ namespace TLCGen.ViewModels
 					sk2?.DeleteValue("TempInstallFile");
 	            }
 			
-	            var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
+	            var webRequest = WebRequest.Create(@"https://www.codingconnected.eu/tlcgen/deploy/tlcgenversioning");
 	            webRequest.UseDefaultCredentials = true;
 	            using (var response = webRequest.GetResponse())
 				using (var content = response.GetResponseStream())
 				if(content != null) {
 					using (var reader = new StreamReader(content))
 					{
-						var strContent = reader.ReadToEnd().Replace("\n", "");
-						var jsonDeserializer = new JavaScriptSerializer();
-						var deserializedJson = jsonDeserializer.Deserialize<dynamic>(strContent);
-						if (deserializedJson == null) return;
-						var contentData = deserializedJson["content"];
-						if (contentData == null) return;
-						var renderedData = contentData["rendered"];
-						if (renderedData == null) return;
-						var data = renderedData as string;
-						if (data == null) return;
-						var all = data.Split('\r');
+                        var data = reader.ReadToEnd();
+                        var all = data.Split('\r');
 						var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
 						if (tlcgenVer == null) return;
-						var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+						var oldvers = Assembly.GetEntryAssembly()?.GetName().Version.ToString().Split('.');
 						var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-                        bool newer = false;
+                        var newer = false;
 						if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
 						{
-							for (int i = 0; i < newvers.Length; i++)
+							for (var i = 0; i < newvers.Length; i++)
 							{
                                     var o = int.Parse(oldvers[i]);
                                     var n = int.Parse(newvers[i]);
@@ -1055,9 +1045,11 @@ namespace TLCGen.ViewModels
 						{
 							DispatcherHelper.CheckBeginInvokeOnUI(() =>
 							{
-								var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
-                                w.Owner = Application.Current.MainWindow;
-								w.ShowDialog();
+                                var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""))
+                                {
+                                    Owner = Application.Current.MainWindow
+                                };
+                                w.ShowDialog();
 							});
 						}
 					}
