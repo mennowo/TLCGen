@@ -60,6 +60,8 @@ namespace TLCGen.Generators.CCOL.Settings
             descr = Regex.Replace(descr, @"\s_E[0-9]_", "");
             var finalDescr = descr;
 
+            if (!CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods) return descr;
+
             // Check last line
             if (_lastItemDescription.ContainsKey(type))
             {

@@ -123,6 +123,7 @@ namespace TLCGen.Generators.CCOL
                 CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
 				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating = userSettings.AlterAddFunctionsWhileGenerating;
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources = userSettings.AlwaysOverwriteSources;
+                CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods = userSettings.ReplaceRepeatingCommentsTextWithPeriods;
                 CCOLGeneratorSettingsProvider.Default.Settings.TabSpace = userSettings.TabSpace;
 
                 // prefixes: overwrite where needed
@@ -178,6 +179,7 @@ namespace TLCGen.Generators.CCOL
             }
             _alwaysOverwriteSourcesMenuItem.IsChecked =
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+
             if (_alterAddHeadersWhileGeneratingMenuItem == null)
             {
                 _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
@@ -197,6 +199,16 @@ namespace TLCGen.Generators.CCOL
             }
             _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
                 CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
+
+            if (_replaceRepeatingCommentsTextWithPeriodsMenuItem == null)
+            {
+                _replaceRepeatingCommentsTextWithPeriodsMenuItem = new MenuItem
+                {
+                    Header = "Herhalend commentaar vervangen door ..."
+                };
+            }
+            _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
+                CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
         }
 
         public void SaveSettings()
@@ -240,6 +252,7 @@ namespace TLCGen.Generators.CCOL
             settings.AlterAddHeadersWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
             settings.AlterAddFunctionsWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
             settings.AlwaysOverwriteSources = CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+            settings.ReplaceRepeatingCommentsTextWithPeriods = CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
             settings.TabSpace = CCOLGeneratorSettingsProvider.Default.Settings.TabSpace;
 
             // save prefixes where needed
@@ -299,6 +312,7 @@ namespace TLCGen.Generators.CCOL
         private MenuItem _alterAddHeadersWhileGeneratingMenuItem;
         private MenuItem _alterAddFunctionsWhileGeneratingMenuItem;
         private MenuItem _resetSettingsMenuItem;
+        private MenuItem _replaceRepeatingCommentsTextWithPeriodsMenuItem;
         private MenuItem _pluginMenuItem;
 
         public MenuItem Menu
@@ -344,6 +358,13 @@ namespace TLCGen.Generators.CCOL
 			                Header = "Reset CCOL generator instellingen"
 		                };
 	                }
+                    if (_replaceRepeatingCommentsTextWithPeriodsMenuItem == null)
+                    {
+                        _replaceRepeatingCommentsTextWithPeriodsMenuItem = new MenuItem
+                        {
+                            Header = "Herhalend commentaar vervangen door ..."
+                        };
+                    }
 					_alwaysOverwriteSourcesMenuItem.Click += (o, e) =>
                     {
                         CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources =
@@ -371,10 +392,18 @@ namespace TLCGen.Generators.CCOL
                             TLCGenSerialization.DeSerializeData<CCOLGeneratorSettingsModel>(
                                 ResourceReader.GetResourceTextFile("TLCGen.Generators.CCOL.Settings.ccolgendefaults.xml", this));
                     };
+                    _replaceRepeatingCommentsTextWithPeriodsMenuItem.Click += (o, e) =>
+                    {
+                        CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods =
+                            !CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
+                        _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
+                            CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
+                    };
 					_pluginMenuItem.Items.Add(sitem1);
                     _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
                     _pluginMenuItem.Items.Add(_alterAddHeadersWhileGeneratingMenuItem);
                     _pluginMenuItem.Items.Add(_alterAddFunctionsWhileGeneratingMenuItem);
+                    _pluginMenuItem.Items.Add(_replaceRepeatingCommentsTextWithPeriodsMenuItem);
                 }
                 return _pluginMenuItem;
             }

@@ -482,25 +482,25 @@
             <Default>klok</Default>
             <Setting>klok</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Halfstar/va obv klokperioden</Description>
+            <Description>Halfstar of VA obv klokperioden</Description>
           </Setting>
           <Setting>
             <Default>hand</Default>
             <Setting>hand</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Halstar/va handmatig bepaald</Description>
+            <Description>Halstar of VA handmatig bepaald</Description>
           </Setting>
           <Setting>
             <Default>master</Default>
             <Setting>master</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Halstar/va bepaald door master</Description>
+            <Description>Halstar of VA bepaald door master</Description>
           </Setting>
           <Setting>
             <Default>slave</Default>
             <Setting>slave</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Halstar/va bepaald door slave</Description>
+            <Description>Halstar of VA bepaald door slave</Description>
           </Setting>
           <Setting>
             <Default>kpact</Default>
@@ -524,7 +524,7 @@
             <Default>var</Default>
             <Setting>var</Setting>
             <Type>Schakelaar</Type>
-            <Description>VA regelen aan/uit</Description>
+            <Description>VA regelen aan of uit</Description>
           </Setting>
           <Setting>
             <Default>arh</Default>
@@ -560,7 +560,7 @@
             <Default>varstreng</Default>
             <Setting>varstreng</Setting>
             <Type>Schakelaar</Type>
-            <Description>VA regelen aan/uit voor gehele streng</Description>
+            <Description>VA regelen aan of uit voor gehele streng</Description>
           </Setting>
           <Setting>
             <Default>vaml</Default>
@@ -578,7 +578,7 @@
             <Default>ovpriople</Default>
             <Setting>ovpriople</Setting>
             <Type>Schakelaar</Type>
-            <Description>Wel/niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
+            <Description>Wel of niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
           </Setting>
           <Setting>
             <Default>plxper</Default>
@@ -644,7 +644,7 @@
             <Default>volgmasterpl</Default>
             <Setting>volgmasterpl</Setting>
             <Type>Parameter</Type>
-            <Description>Per plan (bitwise) instellen wel/niet volgen master</Description>
+            <Description>Per plan (bitwise) instellen wel of niet volgen master</Description>
           </Setting>
           <Setting>
             <Default>offset</Default>
@@ -797,7 +797,7 @@
             <Default>prml</Default>
             <Setting>prml</Setting>
             <Type>Parameter</Type>
-            <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 t/m BIT14; gebruik BIT15 indien niet toegewezen)</Description>
+            <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 tot en met BIT14; gebruik BIT15 indien niet toegewezen)</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1949,13 +1949,13 @@
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Schakelaar</Type>
-            <Description>RoBuGrover aan/uit</Description>
+            <Description>RoBuGrover aan of uit</Description>
           </Setting>
           <Setting>
             <Default>rgv_snel</Default>
             <Setting>rgv_snel</Setting>
             <Type>Schakelaar</Type>
-            <Description>RoBuGrover versneld ophogen/verlagen</Description>
+            <Description>RoBuGrover versneld ophogen of verlagen</Description>
           </Setting>
           <Setting>
             <Default>fd</Default>
@@ -2006,7 +2006,7 @@
             <Default>schoolingreep</Default>
             <Setting>schoolingreep</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schoolingreep aan/uit voor fase _E1_</Description>
+            <Description>Schoolingreep aan of uit voor fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>schoolingreepmaxg</Default>
@@ -2039,7 +2039,7 @@
             <Default>si</Default>
             <Setting>si</Setting>
             <Type>Schakelaar</Type>
-            <Description>Senioreningreep aan/uit voor fase _E1_</Description>
+            <Description>Senioreningreep aan of uit voor fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>siexgr</Default>
@@ -2267,7 +2267,7 @@
             <Default>wtv</Default>
             <Setting>wtv</Setting>
             <Type>Schakelaar</Type>
-            <Description>Aansturing wachttijdvoorspeller fase _E1_ aan/uit</Description>
+            <Description>Aansturing wachttijdvoorspeller fase _E1_ aan of uit</Description>
           </Setting>
           <Setting>
             <Default>wtv</Default>

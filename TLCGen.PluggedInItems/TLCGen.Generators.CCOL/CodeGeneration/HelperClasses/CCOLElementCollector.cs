@@ -24,7 +24,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             else if (count != 0 && _koppelSignalen[koppelingKey].Any(x => x.Count == count))
             {
-                TLCGen.Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"" +
+                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
                     $"{(richting == KoppelSignaalRichtingEnum.In ? "Ingangssignaal" : "Uitgangssignaal")} " +
                        $"nummer {count} van koppeling {koppeling} wordt reeds elders gebruikt. Dit kan de juiste werking " +
                        $"van de regeling negatief beinvloeden.", 
@@ -37,20 +37,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             else
             {
-                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Name = name, Richting = richting });
+                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal { Count = count, Name = name, Richting = richting });
             }
         }
 
         public static int GetKoppelSignaalCount(string koppeling, string name, KoppelSignaalRichtingEnum richting)
         {
-            var koppelingKey = koppeling + richting.ToString();
+            var koppelingKey = koppeling + richting;
             CCOLKoppelSignaal ks = null;
             if (_koppelSignalen.ContainsKey(koppelingKey))
             {
                 ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
             }
-            if (ks == null) return 0;
-            return ks.Count;
+            return ks?.Count ?? 0;
         }
 
         #endregion // Static Methods
@@ -64,14 +63,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static void AddAllMaxElements(CCOLElemListData[] lists)
         {
-            lists[0].Elements.Add(new CCOLElement() { Define = "USMAX1", Commentaar = "Totaal aantal uitgangen" });
-            lists[1].Elements.Add(new CCOLElement() { Define = "ISMAX1", Commentaar = "Totaal aantal ingangen" });
-            lists[2].Elements.Add(new CCOLElement() { Define = "HEMAX1", Commentaar = "Totaal aantal hulpelementen" });
-            lists[3].Elements.Add(new CCOLElement() { Define = "MEMAX1", Commentaar = "Totaal aantal geheugen elementen" });
-            lists[4].Elements.Add(new CCOLElement() { Define = "TMMAX1", Commentaar = "Totaal aantal timers" });
-            lists[5].Elements.Add(new CCOLElement() { Define = "CTMAX1", Commentaar = "Totaal aantal counters" });
-            lists[6].Elements.Add(new CCOLElement() { Define = "SCHMAX1", Commentaar = "Totaal aantal schakelaars" });
-            lists[7].Elements.Add(new CCOLElement() { Define = "PRMMAX1", Commentaar = "Totaal aantal parameters" });
+            lists[0].Elements.Add(new CCOLElement { Define = "USMAX1", Commentaar = "Totaal aantal uitgangen" });
+            lists[1].Elements.Add(new CCOLElement { Define = "ISMAX1", Commentaar = "Totaal aantal ingangen" });
+            lists[2].Elements.Add(new CCOLElement { Define = "HEMAX1", Commentaar = "Totaal aantal hulpelementen" });
+            lists[3].Elements.Add(new CCOLElement { Define = "MEMAX1", Commentaar = "Totaal aantal geheugen elementen" });
+            lists[4].Elements.Add(new CCOLElement { Define = "TMMAX1", Commentaar = "Totaal aantal timers" });
+            lists[5].Elements.Add(new CCOLElement { Define = "CTMAX1", Commentaar = "Totaal aantal counters" });
+            lists[6].Elements.Add(new CCOLElement { Define = "SCHMAX1", Commentaar = "Totaal aantal schakelaars" });
+            lists[7].Elements.Add(new CCOLElement { Define = "PRMMAX1", Commentaar = "Totaal aantal parameters" });
         }
 
         public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
@@ -100,30 +99,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                if (pgen.HasCCOLElements())
+                if (!pgen.HasCCOLElements()) continue;
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
                 {
-                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
-                    {
-                        data.Elements.Add(i);
-                    }
+                    data.Elements.Add(i);
                 }
             }
             
             return data;
         }
 
-        private static CCOLElemListData CollectAllIngangen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
+        private static CCOLElemListData CollectAllIngangen(ControllerModel controller, IEnumerable<ICCOLCodePieceGenerator> pgens)
         {
             var data = new CCOLElemListData { CCOLCode = "IS_code" };
 
             foreach (var pgen in pgens)
             {
-                if (pgen.HasCCOLElements())
+                if (!pgen.HasCCOLElements()) continue;
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Ingang))
                 {
-                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Ingang))
-                    {
-                        data.Elements.Add(i);
-                    }
+                    data.Elements.Add(i);
                 }
             }
 
@@ -138,12 +133,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                if (pgen.HasCCOLElements())
+                if (!pgen.HasCCOLElements()) continue;
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.HulpElement))
                 {
-                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.HulpElement))
-                    {
-                        data.Elements.Add(i);
-                    }
+                    data.Elements.Add(i);
                 }
             }
 

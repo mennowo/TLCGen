@@ -726,9 +726,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
 				if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 				{
-                    sb.Append($" /* ");
+                    sb.Append(" /* ");
                     sb.Append($"{elem.Commentaar}".PadRight(pad3));
-                    sb.Append($" */");
+                    sb.Append(" */");
                 }
 				sb.AppendLine();
                 ++index;
@@ -854,7 +854,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
-                foreach (CCOLElement delem in data.Elements)
+                foreach (var delem in data.Elements)
                 {
                     if (!delem.Dummy)
                         continue;
@@ -877,7 +877,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (!string.IsNullOrWhiteSpace(delem.Commentaar))
                     {
                         sb.Append($" /*");
-                        sb.Append($"{ delem.Commentaar}".PadRight(pad6));
+                        sb.Append($"{delem.Commentaar}".PadRight(pad6));
                         sb.Append($" */");
                     }
                     sb.AppendLine();

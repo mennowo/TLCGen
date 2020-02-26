@@ -26,7 +26,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var ver = c.Data.Versies.LastOrDefault();
                 if (ver!= null)
                 {
-                    sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum.ToString("yyyyMMdd")}\"");
+                    sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
                 }
             }
             sb.AppendLine();
