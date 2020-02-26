@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
-                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
+                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
                 }
             }
             sb.AppendLine($"{ts}#endif // RISSIMULATIE");

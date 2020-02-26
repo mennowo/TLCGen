@@ -229,20 +229,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if(item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
             }
-            if (AllCCOLOutputElements.Any(x => x.Dummy))
+            foreach (var item in AllOutputModelElements.Where(x => !x.Dummy))
+            {
+                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
+            }
+
+            if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+            }
+            if (AllCCOLOutputElements.Any(x => x.Dummy))
+            {
                 foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
                 {
                     if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
                 }
+            }
+            if (AllOutputModelElements.Any(x => x.Dummy))
+            {
+                foreach (var item in AllOutputModelElements.Where(x => x.Dummy))
+                {
+                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "us"));
+                }
+            }
+            if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
+            {
                 sb.AppendLine("#endif");
             }
 
-            foreach (var item in AllOutputModelElements)
-            {
-                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
-            }
 
             sb.AppendLine();
 
