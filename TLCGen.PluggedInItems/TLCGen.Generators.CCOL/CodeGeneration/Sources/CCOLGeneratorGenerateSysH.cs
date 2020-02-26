@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHUitgangen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
@@ -156,24 +156,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHDetectors(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* detectie */");
             sb.AppendLine("/* -------- */");
 
-            int pad1 = "ISMAX".Length;
+            var pad1 = "ISMAX".Length;
             if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any())
             {
                 pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
             }
             if(controller.Detectoren.Any())
             {
-                int _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
+                var _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             if (controller.SelectieveDetectoren.Any())
             {
-                int _pad1 = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
+                var _pad1 = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             var ovdummies = controller.PrioData.GetAllDummyDetectors();
@@ -183,24 +183,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             pad1 = pad1 + $"{ts}#define  ".Length;
 
-            int pad2 = controller.Fasen.Count.ToString().Length;
+            var pad2 = controller.Fasen.Count.ToString().Length;
 
-            int index = 0;
+            var index = 0;
             foreach (var dm in controller.GetAllDetectors())
             {
-                if (!dm.Dummy)
-                {
-                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                    ++index;
-                }
+                if (dm.Dummy) continue;
+                sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                ++index;
             }
 
-            int autom_index = index;
+            var autom_index = index;
 
             /* Dummies */
-            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy).Any() ||
-                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
+            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Dummy) ||
+                controller.Detectoren.Any() && controller.Detectoren.Any(x => x.Dummy) ||
                 ovdummies.Any())
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");

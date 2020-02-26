@@ -226,80 +226,106 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersIOTypes(ControllerModel c)
         {
+            string GetIOTypeCode(DetectorTypeEnum detectorTypeEnum, DetectorModel dm, List<string> list)
+            {
+                var stringBuilder = new StringBuilder();
+                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
+                {
+                    if (detectorTypeEnum != DetectorTypeEnum.VecomDetector &&
+                        (dm.Type == DetectorTypeEnum.VecomDetector || dm.Type == DetectorTypeEnum.OpticomIngang))
+                    {
+                        stringBuilder.AppendLine("#ifndef NO_CVN_50");
+                    }
+
+                    if ((detectorTypeEnum == DetectorTypeEnum.VecomDetector ||
+                         detectorTypeEnum == DetectorTypeEnum.OpticomIngang) &&
+                        dm.Type != DetectorTypeEnum.VecomDetector)
+                    {
+                        stringBuilder.AppendLine("#else");
+                        foreach (var d in list)
+                        {
+                            stringBuilder.AppendLine($"{ts}IS_type[{_dpf}{d}] = DS_type;");
+                        }
+
+                        list.Clear();
+                        stringBuilder.AppendLine("#endif");
+                    }
+                }
+
+                stringBuilder.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                switch (dm.Type)
+                {
+                    case DetectorTypeEnum.Knop:
+                    case DetectorTypeEnum.KnopBinnen:
+                    case DetectorTypeEnum.KnopBuiten:
+                        stringBuilder.AppendLine("DK_type;");
+                        break;
+                    case DetectorTypeEnum.File:
+                    case DetectorTypeEnum.Verweg:
+                        stringBuilder.AppendLine("DVER_type;");
+                        break;
+                    case DetectorTypeEnum.Kop:
+                        stringBuilder.AppendLine("DKOP_type;");
+                        break;
+                    case DetectorTypeEnum.Lang:
+                        stringBuilder.AppendLine("DLNG_type;");
+                        break;
+                    case DetectorTypeEnum.OpticomIngang:
+                    case DetectorTypeEnum.VecomDetector:
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
+                        {
+                            stringBuilder.AppendLine("DSI_type;");
+                            list.Add(dm.Naam);
+                        }
+                        else
+                        {
+                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use?
+                            // #define DSUIT_type  (DS_type+KOP_type) /* inmelding selectief        */
+                            // #define DSIN_type   (DS_type+VER_type) /* uitmelding selectief       */
+                            stringBuilder.AppendLine("DS_type;");
+                        }
+
+                        break;
+                    case DetectorTypeEnum.Overig:
+                        stringBuilder.AppendLine("DL_type;");
+                        break;
+                    case DetectorTypeEnum.WisselStandDetector:
+                    case DetectorTypeEnum.WisselDetector:
+                    case DetectorTypeEnum.WisselStroomKringDetector:
+                    case DetectorTypeEnum.Radar:
+                        stringBuilder.AppendLine("DKOP_type;");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " +
+                                                              dm.Type.ToString());
+                }
+
+                return stringBuilder.ToString();
+            }
+
             var sb = new StringBuilder();
 
             sb.AppendLine("/* Typen ingangen */");
             sb.AppendLine("/* -------------- */");
 
             var ds = new List<string>();
-            DetectorTypeEnum prev = DetectorTypeEnum.Kop;
-            foreach (DetectorModel dm in c.GetAllDetectors())
+            var prev = DetectorTypeEnum.Kop;
+            foreach (var dm in c.GetAllDetectors(x => !x.Dummy))
             {
-                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
-                {
-                    if (prev != DetectorTypeEnum.VecomDetector && 
-                        (dm.Type == DetectorTypeEnum.VecomDetector || dm.Type == DetectorTypeEnum.OpticomIngang))
-                    {
-                        sb.AppendLine("#ifndef NO_CVN_50");
-                    }
-                    if ((prev == DetectorTypeEnum.VecomDetector || prev == DetectorTypeEnum.OpticomIngang) && 
-                        dm.Type != DetectorTypeEnum.VecomDetector)
-                    {
-                        sb.AppendLine("#else");
-                        foreach (var d in ds)
-                        {
-                            sb.AppendLine($"{ts}IS_type[{_dpf}{d}] = DS_type;");
-                        }
-                        ds.Clear();
-                        sb.AppendLine("#endif");
-                    }
-                }
-                sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
-                switch (dm.Type)
-                {
-                    case DetectorTypeEnum.Knop:
-                    case DetectorTypeEnum.KnopBinnen:
-                    case DetectorTypeEnum.KnopBuiten:
-                        sb.AppendLine("DK_type;");
-                        break;
-                    case DetectorTypeEnum.File:
-                    case DetectorTypeEnum.Verweg:
-                        sb.AppendLine("DVER_type;");
-                        break;
-                    case DetectorTypeEnum.Kop:
-                        sb.AppendLine("DKOP_type;");
-                        break;
-                    case DetectorTypeEnum.Lang:
-                        sb.AppendLine("DLNG_type;");
-                        break;
-                    case DetectorTypeEnum.OpticomIngang:
-                    case DetectorTypeEnum.VecomDetector:
-                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
-                        {
-                            sb.AppendLine("DSI_type;");
-                            ds.Add(dm.Naam);
-                        }
-                        else
-                        {
-                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use?
-                                // #define DSUIT_type  (DS_type+KOP_type) /* inmelding selectief        */
-                                // #define DSIN_type   (DS_type+VER_type) /* uitmelding selectief       */
-                            sb.AppendLine("DS_type;");
-                        }
-                        break;
-                    case DetectorTypeEnum.Overig:
-                        sb.AppendLine("DL_type;");
-                        break;
-                    case DetectorTypeEnum.WisselStandDetector:
-                    case DetectorTypeEnum.WisselDetector:
-                    case DetectorTypeEnum.WisselStroomKringDetector:
-                    case DetectorTypeEnum.Radar:
-                        sb.AppendLine("DKOP_type;");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
-                }
+                sb.Append(GetIOTypeCode(prev, dm, ds));
                 prev = dm.Type;
+            }
+
+            var dummies = c.GetAllDetectors(x => x.Dummy).ToList();
+            if (dummies.Count != 0)
+            {
+                sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+                foreach (var dm in dummies)
+                {
+                    sb.Append(GetIOTypeCode(prev, dm, ds));
+                    prev = dm.Type;
+                }
+                sb.AppendLine("#endif");
             }
 
             sb.AppendLine();
@@ -333,10 +359,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Multivalente ingangen */");
-                sb.AppendLine($"#if !defined NO_VLOG_300");
-                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent))
+                sb.AppendLine("#if !defined NO_VLOG_300");
+                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent && !x.Dummy))
                 {
                     sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
+                }
+                if (AllCCOLInputElements.Any(x => x.Multivalent && x.Dummy))
+                {
+                    sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+                    foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent && x.Dummy))
+                    {
+                        sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
+                    }
+                    sb.AppendLine("#endif");
                 }
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }
@@ -345,10 +380,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Multivalente ingangen */");
-                sb.AppendLine($"#if !defined NO_VLOG_300");
+                sb.AppendLine("#if !defined NO_VLOG_300");
                 foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
                 {
                     sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
+                }
+                if (AllCCOLOutputElements.Any(x => x.Multivalent && x.Dummy))
+                {
+                    sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+                    foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent && x.Dummy))
+                    {
+                        sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
+                    }
+                    sb.AppendLine("#endif");
                 }
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }
