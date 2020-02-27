@@ -687,11 +687,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
             if (melding.AlleenIndienGeenInmelding)
             {
-                sb.Append($"!C[{_ctpf}{_cvc}{ov.FaseCyclus}] && ");
+                sb.Append($"!C[{_ctpf}{_cvc}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] && ");
             }
             if (melding.KijkNaarWisselStand)
             {
-                sb.Append($"IH[{_hpf}{_hwissel}{ov.FaseCyclus}] && ");
+                sb.Append($"IH[{_hpf}{_hwissel}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] && ");
             }
             if (melding.AlleenIndienRood)
             {
