@@ -82,6 +82,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schwisselpol;
         private CCOLGeneratorCodeStringSettingModel _schcovuber;
         private CCOLGeneratorCodeStringSettingModel _prmkarsg;
+        private CCOLGeneratorCodeStringSettingModel _prmkarsghd;
 
 #pragma warning restore 0649
 
@@ -470,7 +471,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!int.TryParse(hd.FaseCyclus, out var iFc)) continue;
                     if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_prmkarsg}{hd.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, hd.FaseCyclus));
+                        $"{_prmkarsghd}{hd.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsghd, hd.FaseCyclus));
                 }
             }
         }
@@ -1005,7 +1006,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
                             var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters 
-                                ? $"PRM[{_prmpf}{_prmkarsg}{hd.FaseCyclus}]"
+                                ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
                                 : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
                             var inmHelems = new List<string>();
                             if (!first) sb.AppendLine(); first = false;

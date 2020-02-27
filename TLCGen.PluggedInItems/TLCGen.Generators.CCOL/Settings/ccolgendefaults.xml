@@ -1445,6 +1445,12 @@
             <Description>Signaalgroep nummer voor fase _E1_ bij inmelding via DSI</Description>
           </Setting>
           <Setting>
+            <Default>karsghd</Default>
+            <Setting>karsghd</Setting>
+            <Type>Parameter</Type>
+            <Description>Signaalgroep nummer voor fase _E1_ bij inmelding HD via DSI</Description>
+          </Setting>
+          <Setting>
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>
