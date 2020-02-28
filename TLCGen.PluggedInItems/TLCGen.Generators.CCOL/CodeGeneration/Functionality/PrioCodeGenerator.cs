@@ -459,14 +459,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.PrioData.KARSignaalGroepNummersInParameters)
             {
-                foreach (var ov in c.PrioData.PrioIngrepen)
+                foreach (var sg in c.Fasen)
                 {
-                    if (!int.TryParse(ov.FaseCyclus, out var iFc)) continue;
-                    if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_prmkarsg}{ov.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, ov.FaseCyclus));
+                    var hasOvKar = c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == sg.Naam && x.HasPrioIngreepKAR());
+                    if (hasOvKar)
+                    {
+                        if (!int.TryParse(sg.Naam, out var iFc)) continue;
+                        if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmkarsg}{sg.Naam}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, sg.Naam));
+                    }
                 }
-                foreach (var hd in c.PrioData.HDIngrepen)
+                foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom))
                 {
                     if (!int.TryParse(hd.FaseCyclus, out var iFc)) continue;
                     if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
@@ -912,8 +916,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var ov in c.PrioData.PrioIngrepen)
                     {
                         var vtgType = "";
-                        int fcNmr;
-                        if (!Int32.TryParse(ov.FaseCyclus, out fcNmr)) fcNmr = -1;
+                        if (!int.TryParse(ov.FaseCyclus, out var fcNmr)) fcNmr = -1;
                         switch (ov.Type)
                         {
                             case PrioIngreepVoertuigTypeEnum.Tram:
@@ -948,7 +951,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"IH[{i}] = ");
                             }
                             sb.AppendLine("FALSE;");
-                            sb.Append(sb2.ToString());
+                            sb.Append(sb2);
 
                             sb.Append($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] = ");
                             if (ov.MeldingenData.AntiJutterVoorAlleInmeldingen)
@@ -968,7 +971,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (ov.MeldingenData.Uitmeldingen.Any())
                         {
                             var uitmHelems = new List<string>();
-                            if (!first) sb.AppendLine(); first = false;
+                            if (!first) sb.AppendLine(); 
+                            first = false;
                             sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{ov.FaseCyclus} type {ov.Type.GetDescription()} */");
 
                             var sb2 = new StringBuilder();
@@ -982,7 +986,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"IH[{i}] = ");
                             }
                             sb.AppendLine("FALSE;");
-                            sb.Append(sb2.ToString());
+                            sb.Append(sb2);
 
                             sb.Append($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{CCOLCodeHelper.GetPriorityTypeAbbreviation(ov)}] = ");
                             if (ov.MeldingenData.AntiJutterVoorAlleUitmeldingen)
@@ -1009,7 +1013,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
                                 : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
                             var inmHelems = new List<string>();
-                            if (!first) sb.AppendLine(); first = false;
+                            if (!first) sb.AppendLine(); 
+                            first = false;
                             sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
                             if (hd.KAR)
                             {
