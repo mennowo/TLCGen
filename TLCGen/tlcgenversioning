@@ -1,5 +1,8 @@
-TLCGen=0.7.2.0
+TLCGen=0.7.3.0
 RN==TLCGen
+TLCGen versie: 0.7.3.0
+- Hotfix fout bij laden regeling terwijl er al een open staat
+- Diverse kleinere fixes
 TLCGen versie: 0.7.2.0
 - Fixes rond dummy IO
 - Optie KAR fasen in parameters
