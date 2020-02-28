@@ -64,23 +64,13 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ObservableCollection<FaseCyclusWithPrioViewModel> Fasen
-        {
-            get
-            {
-                if (_fasen == null)
-                {
-                    _fasen = new ObservableCollection<FaseCyclusWithPrioViewModel>();
-                }
-                return _fasen;
-            }
-        }
+        public ObservableCollection<FaseCyclusWithPrioViewModel> Fasen => _fasen ?? (_fasen = new ObservableCollection<FaseCyclusWithPrioViewModel>());
 
         public ObservableCollection<OVIngreepViewModel> Ingrepen { get; }
 
         public FaseCyclusWithPrioViewModel SelectedFaseCyclus
         {
-            get { return _selectedFaseCyclus; }
+            get => _selectedFaseCyclus;
             set
             {
                 _selectedFaseCyclus = value;
@@ -96,7 +86,6 @@ namespace TLCGen.ViewModels
                     if (SelectedTruck) selType = PrioIngreepVoertuigTypeEnum.Vrachtwagen;
                     if (SelectedBicycle) selType = PrioIngreepVoertuigTypeEnum.Fiets;
                     SelectedIngreep = Ingrepen.FirstOrDefault(x => x.Type == selType);
-                    //RefreshAvailableTypes();
                 }
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(Prioriteit));
@@ -250,7 +239,7 @@ namespace TLCGen.ViewModels
 
         public OVIngreepViewModel SelectedIngreep
         {
-            get { return _selectedIngreep; }
+            get => _selectedIngreep;
             set
             {
                 if (_selectedIngreep != null)
@@ -262,14 +251,7 @@ namespace TLCGen.ViewModels
                 {
                     _selectedIngreep.PropertyChanged += SelectedIngreep_PropertyChanged;
                 }
-                if (value == null)
-                {
-                    _prioriteit = false;
-                }
-                else
-                {
-                    _prioriteit = true;
-                }
+                _prioriteit = value != null;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(Prioriteit));
             }
@@ -341,17 +323,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Ingrepen";
-            }
-        }
+        public override string DisplayName => "Ingrepen";
 
         public override bool CanBeEnabled()
         {
-            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
+            return _Controller?.PrioData?.PrioIngreepType != PrioIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()

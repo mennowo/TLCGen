@@ -128,6 +128,7 @@ Task("PackPortable")
 	DeleteFiles(files);
 	files = GetFiles(packedDir.Path + "/Deps/Xceed.Wpf.DataGrid.dll");
 	DeleteFiles(files);
+	CopyDirectory(buildDir.Path + "/Plugins", packedDir.Path + "/Plugins");
 	CopyDirectory(buildDir.Path + "/Settings", packedDir.Path + "/Settings");
 	CopyDirectory(buildDir.Path + "/SourceFiles", packedDir.Path + "/SourceFiles");
 	CopyDirectory(buildDir.Path + "/SourceFilesToCopy", packedDir.Path + "/SourceFilesToCopy");
@@ -164,38 +165,38 @@ Task("Deploy")
                 session.Open(sessionOptions);
  		 
 				// Duplicate old files
-				var files = GetFiles("./TempCake/");
-				DeleteFiles(files);
-				var old1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen_portable_latest.zip";
-				var new1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen_portable.zip";
-				var old2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen.Setup.msi";
-				var new2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen.Setup.msi";
-				if (!DirectoryExists(outputDirBase.ToString() + "/TempCake/"))
-					CreateDirectory(outputDirBase.ToString() + "/TempCake/");
+				//var files = GetFiles("./TempCake/");
+				//DeleteFiles(files);
+				//var old1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen_portable_latest.zip";
+				//var new1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen_portable.zip";
+				//var old2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen.Setup.msi";
+				//var new2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen.Setup.msi";
+				//if (!DirectoryExists(outputDirBase.ToString() + "/TempCake/"))
+				//	CreateDirectory(outputDirBase.ToString() + "/TempCake/");
 
 				// versioning
-				var versionFile = buildDir.Path.ToString().Replace("/", "\\") + "\\tlcgenversioning.txt";
+				var versionFile = buildDir.Path.ToString().Replace("/", "\\") + "\\tlcgenversioning";
 
                 // Upload files
                 TransferOperationResult transferResult;
                 TransferOptions transferOptions = new TransferOptions();
                 transferOptions.TransferMode = TransferMode.Binary;
 
-				transferResult = session.GetFiles(old1, outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\", false, transferOptions);
-				transferResult = session.GetFiles(old2, outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\", false, transferOptions);
-                transferResult.Check();
- 		 
-				transferResult = session.PutFiles(
-				  outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\" + "TLCGen_portable_latest.zip",
-				  new1, false, transferOptions);
-				transferResult = session.PutFiles(
-				  outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\" + "TLCGen.Setup.msi",
-				  new2, false, transferOptions);
-                transferResult.Check();
+				//transferResult = session.GetFiles(old1, outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\", false, transferOptions);
+				//transferResult = session.GetFiles(old2, outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\", false, transferOptions);
+                //transferResult.Check();
+ 		 		//
+				//transferResult = session.PutFiles(
+				//  outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\" + "TLCGen_portable_latest.zip",
+				//  new1, false, transferOptions);
+				//transferResult = session.PutFiles(
+				//  outputDirBase.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\TempCake\\" + "TLCGen.Setup.msi",
+				//  new2, false, transferOptions);
+                //transferResult.Check();
 
 				transferResult = session.PutFiles(
 				  versionFile,
-				  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/tlcgenversioning.txt", false, transferOptions);
+				  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/tlcgenversioning", false, transferOptions);
                 transferResult.Check();
 
                 transferResult = session.PutFiles(
@@ -211,7 +212,7 @@ Task("Deploy")
 });
 
 Task("DeployDev")
-	//.IsDependentOn("PackPortable")
+	.IsDependentOn("PackPortable")
     .Does(() => {
         Information("Starting FTP upload...");
         // Setup session options
@@ -231,7 +232,7 @@ Task("DeployDev")
                 session.Open(sessionOptions);
  		 
 				// versioning
-				var versionFile = buildDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\tlcgenversioning.txt";
+				var versionFile = buildDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\") + "\\tlcgenversioning";
 
                 // Upload files
                 TransferOperationResult transferResult;
@@ -258,7 +259,7 @@ Task("DeployDev")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 Task("Default")
-    .IsDependentOn("DeployDev");
+    .IsDependentOn("Deploy");
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////

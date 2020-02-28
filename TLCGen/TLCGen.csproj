@@ -1008,7 +1008,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="tlcgenversioning.txt">
+    <None Include="tlcgenversioning">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

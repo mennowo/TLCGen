@@ -310,7 +310,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     #region corrigeer waarde i.v.m. gelijkstart fietsers
                     var start = false;
-                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    foreach (var fc in c.Fasen)
                     {
                         var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam);
                         if (gss.Any())
