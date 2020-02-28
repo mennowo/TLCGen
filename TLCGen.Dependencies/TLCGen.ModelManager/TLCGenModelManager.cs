@@ -270,6 +270,8 @@ namespace TLCGen.ModelManagement
 
         public void CorrectXmlDocumentByVersion(XmlDocument doc)
         {
+            _pluginDataToMove.Clear();
+
             // get version
             var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
             var v = Version.Parse(vi.InnerText);
