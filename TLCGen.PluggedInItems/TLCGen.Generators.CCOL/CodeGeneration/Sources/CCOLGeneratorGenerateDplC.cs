@@ -194,7 +194,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(FaseCyclusModel fcm in controller.Fasen)
             {
-                sb.Append(GetCoordinatesString(fcm as IOElementModel, fcm.GetDefine(), "us"));
+                sb.Append(GetCoordinatesString(fcm, fcm.GetDefine(), "us"));
             }
 
             sb.AppendLine();
@@ -207,7 +207,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var dm in alldets.Where(x => !x.Dummy))
             {
-                sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
+                sb.Append(GetCoordinatesString(dm, dm.GetDefine(), "is"));
             }
 
             if (alldets.Any(x => x.Dummy))
@@ -215,7 +215,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
                 foreach (var dm in alldets.Where(x => x.Dummy))
                 {
-                    sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
+                    sb.Append(GetCoordinatesString(dm, dm.GetDefine(), "is"));
                 }
                 sb.AppendLine("#endif");
             }
@@ -249,7 +249,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var item in AllOutputModelElements.Where(x => x.Dummy))
                 {
-                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "us"));
+                    sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
                 }
             }
             if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
