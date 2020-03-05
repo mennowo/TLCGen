@@ -44,6 +44,8 @@
                 
                 <!-- Algemeen -->
                 <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
+                <Label Content="Naam ingreep" />
+                <TextBox Text="{Binding Path=Naam}" Margin="2" />
                 <Label Content="Type voertuig" />
                 <ComboBox Margin="2"
                     SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

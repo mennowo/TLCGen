@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var ovFC in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovFC.Type)} {ov.ToString()}");
+                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{ovFC.Naam} {ov.ToString()}");
                     ++ov;
                 }
                 foreach (var hdFC in c.PrioData.HDIngrepen)

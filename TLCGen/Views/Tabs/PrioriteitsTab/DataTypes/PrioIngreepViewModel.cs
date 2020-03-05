@@ -14,6 +14,7 @@ using TLCGen.Settings;
 namespace TLCGen.ViewModels
 {
     public class OVIngreepViewModel : ViewModelBase
+    public class OVIngreepViewModel : ViewModelBase
     {
         #region Fields
 
@@ -41,6 +42,41 @@ namespace TLCGen.ViewModels
                 foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
 
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+            }
+        }
+
+        public string DisplayName => PrioIngreep.DisplayName;
+
+        public string Naam
+        {
+            get => PrioIngreep.Naam;
+            set
+            {
+                var oldName = PrioIngreep.Naam;
+                var newName = PrioIngreep.FaseCyclus + value;
+                if (NameSyntaxChecker.IsValidCName(value) &&
+                    Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(
+                    DataAccess.TLCGenControllerDataProvider.Default.Controller, newName,
+                    TLCGenObjectTypeEnum.PrioriteitsIngreep))
+                {
+                    PrioIngreep.Naam = value;
+                    foreach (var melding in PrioIngreep.MeldingenData.Inmeldingen.Where(x =>
+                        x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
+                    {
+                        melding.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{value}";
+                    }
+                    foreach (var melding in PrioIngreep.MeldingenData.Uitmeldingen.Where(x =>
+                        x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
+                    {
+                        melding.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{value}";
+                    }
+                }
+                else
+                {
+                    PrioIngreep.Naam = oldName;
+                }
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                RaisePropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -373,7 +409,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public ObservableCollection<string> Detectoren { get; }
 
-        public string Description => PrioIngreep.FaseCyclus + " " + Type.GetDescription();
+        public string Description => PrioIngreep.DisplayName;
 
         #endregion // Properties
 

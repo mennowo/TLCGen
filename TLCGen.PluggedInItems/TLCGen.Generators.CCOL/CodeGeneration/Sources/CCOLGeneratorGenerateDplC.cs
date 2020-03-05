@@ -184,7 +184,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateDplCDisplayParameters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void display_parameters(void)");
             sb.AppendLine("{");
@@ -192,7 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* fasecycli */");
             sb.AppendLine($"{ts}/* --------- */");
 
-            foreach(FaseCyclusModel fcm in controller.Fasen)
+            foreach(var fcm in controller.Fasen)
             {
                 sb.Append(GetCoordinatesString(fcm, fcm.GetDefine(), "us"));
             }
@@ -229,6 +229,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if(item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
             }
+
             foreach (var item in AllOutputModelElements.Where(x => !x.Dummy))
             {
                 sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
@@ -238,6 +239,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
             }
+
             if (AllCCOLOutputElements.Any(x => x.Dummy))
             {
                 foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
@@ -245,6 +247,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
                 }
             }
+
             if (AllOutputModelElements.Any(x => x.Dummy))
             {
                 foreach (var item in AllOutputModelElements.Where(x => x.Dummy))
@@ -252,17 +255,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
                 }
             }
+
             if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#endif");
             }
 
-
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
-
 
             foreach (var item in AllCCOLInputElements.Where(x => !x.Dummy))
             {
@@ -273,12 +275,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
             }
-
             
             if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
             }
+
             if (AllCCOLInputElements.Any(x => x.Dummy))
             {
                 foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
@@ -286,6 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
                 }
             }
+
             if (AllInputModelElements.Any(x => x.Dummy))
             {
                 foreach (var item in AllInputModelElements.Where(x => x.Dummy))
@@ -293,6 +296,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
                 }
             }
+
             if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
             { 
                 sb.AppendLine("#endif");

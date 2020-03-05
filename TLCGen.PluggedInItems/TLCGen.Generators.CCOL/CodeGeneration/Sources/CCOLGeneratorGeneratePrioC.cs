@@ -263,11 +263,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GetPriorityName(PrioIngreepModel prio)
-        {
-            return prio.FaseCyclus + CCOLCodeHelper.GetPriorityTypeAbbreviation(prio);
-        }
-
         private string GeneratePrioCInstellingen(ControllerModel c)
         {
             var sb = new StringBuilder();
@@ -322,7 +317,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* Fasecyclus voor richtingen met PRIO */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}iFC_PRIOix[prioFC{GetPriorityName(prio)}] = {_fcpf}{prio.FaseCyclus};");
+                    sb.AppendLine($"{ts}iFC_PRIOix[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = {_fcpf}{prio.FaseCyclus};");
                 }
                 foreach (var hd in c.PrioData.HDIngrepen)
                 {
@@ -336,7 +331,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}#ifdef PRACTICE_TEST");
                     foreach (var prio in c.PrioData.PrioIngrepen)
                     {
-                        sb.AppendLine($"{ts}{ts}iFC_PRIO_code[prioFC{GetPriorityName(prio)}] = \"prio{GetPriorityName(prio)}\";");
+                        sb.AppendLine($"{ts}{ts}iFC_PRIO_code[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = \"prio{CCOLCodeHelper.GetPriorityName(prio)}\";");
                     }
                     foreach (var hd in c.PrioData.HDIngrepen)
                     {
@@ -350,7 +345,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Index van de groenbewakingstimer */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iT_GBix[prioFC{GetPriorityName(prio)}] = {_tpf}{_tgb}{GetPriorityName(prio)};");
+                sb.AppendLine($"{ts}iT_GBix[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = {_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(prio)};");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -361,7 +356,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Index van het hulpelement voor de ingreep */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iH_PRIOix[prioFC{GetPriorityName(prio)}] = {_hpf}{_hov}{GetPriorityName(prio)};");
+                sb.AppendLine($"{ts}iH_PRIOix[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = {_hpf}{_hov}{CCOLCodeHelper.GetPriorityName(prio)};");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -372,7 +367,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Prioriteitsniveau */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iInstPrioriteitsNiveau[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmprio}{GetPriorityName(prio)}]/1000L;");
+                sb.AppendLine($"{ts}iInstPrioriteitsNiveau[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = PRM[{_prmpf}{_prmprio}{CCOLCodeHelper.GetPriorityName(prio)}]/1000L;");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -383,7 +378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Prioriteitsopties */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iInstPrioriteitsOpties[prioFC{GetPriorityName(prio)}] = BepaalPrioriteitsOpties({_prmpf}{_prmprio}{GetPriorityName(prio)});");
+                sb.AppendLine($"{ts}iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = BepaalPrioriteitsOpties({_prmpf}{_prmprio}{CCOLCodeHelper.GetPriorityName(prio)});");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -394,7 +389,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Groenbewakingstijd */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iGroenBewakingsTijd[prioFC{GetPriorityName(prio)}] = T_max[{_tpf}{_tgb}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iGroenBewakingsTijd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = T_max[{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -405,7 +400,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Ongehinderde rijtijd */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSOngehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrto}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iRTSOngehinderd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrto}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -416,7 +411,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Beperkt gehinderde rijtijd */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSBeperktGehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtbg}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iRTSBeperktGehinderd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtbg}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -427,7 +422,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Gehinderde rijtijd */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iRTSGehinderd[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtg}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iRTSGehinderd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = PRM[{_prmpf}{_prmrtg}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -438,7 +433,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Ondermaximum */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iOnderMaximum[prioFC{GetPriorityName(prio)}] = PRM[{_prmpf}{_prmomx}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iOnderMaximum[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = PRM[{_prmpf}{_prmomx}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -449,7 +444,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Blokkeringstijd */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iBlokkeringsTijd[prioFC{GetPriorityName(prio)}] = T_max[{_tpf}{_tblk}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iBlokkeringsTijd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = T_max[{_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -461,7 +456,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("	   detectie niet langer betrouwbaar gevonden */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{GetPriorityName(prio)}] = SCH[{_schpf}{_schupinagb}{GetPriorityName(prio)}];");
+                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = SCH[{_schpf}{_schupinagb}{CCOLCodeHelper.GetPriorityName(prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -841,13 +836,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                         {
                             wissel = true;
-                            sb.Append($"{ts}if (IH[{_hpf}{_hwissel}{GetPriorityName(prio)}])");
+                            sb.Append($"{ts}if (IH[{_hpf}{_hwissel}{CCOLCodeHelper.GetPriorityName(prio)}])");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, {_dpf}{prio.Koplus}, NG, NG);");
+                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, {_dpf}{prio.Koplus}, NG, NG);");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"{ts}else");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, NG, NG, NG);");
+                            sb.AppendLine($"{ts}{ts}PrioRijTijdScenario(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, NG, NG, NG);");
                             sb.AppendLine($"{ts}}}");
                         }
                         else
@@ -862,10 +857,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     var i = 0;
                                     foreach (var d in kl)
                                     {
-                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, {_dpf}{d.Naam}, ");
+                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, {_dpf}{d.Naam}, ");
                                         if (i < ll.Count)
                                         {
-                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{GetPriorityName(prio)});");
+                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{CCOLCodeHelper.GetPriorityName(prio)});");
                                             ++i;
                                         }
                                         else
@@ -879,10 +874,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     var i = 0;
                                     foreach (var d in ll)
                                     {
-                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, ");
+                                        sb.Append($"{tts}PrioRijTijdScenario(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, ");
                                         if (i < kl.Count)
                                         {
-                                            sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{GetPriorityName(prio)});");
+                                            sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{CCOLCodeHelper.GetPriorityName(prio)});");
                                             ++i;
                                         }
                                         else
@@ -894,7 +889,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                             else
                             {
-                                sb.Append($"{tts}PrioRijTijdScenario(prioFC{GetPriorityName(prio)}, NG, NG, NG);");
+                                sb.Append($"{tts}PrioRijTijdScenario(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, NG, NG, NG);");
                             }
                             sb.AppendLine();
                         }
@@ -960,13 +955,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
             {
                 sb.Append(prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
-                        ? $"{ts}if (DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(prio)}] && (iRijTimer[prioFC{GetPriorityName(prio)}] < iRijTijd[prioFC{GetPriorityName(prio)}])"
-                        : $"{ts}if (SCH[{_schpf}{_schvi}{GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{GetPriorityName(prio)}] && (iRijTimer[prioFC{GetPriorityName(prio)}] < iRijTijd[prioFC{GetPriorityName(prio)}])");
+                        ? $"{ts}if (DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(prio)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] < iRijTijd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}])"
+                        : $"{ts}if (SCH[{_schpf}{_schvi}{CCOLCodeHelper.GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && C[{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(prio)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] < iRijTijd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}])");
                 if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                 {
-                    sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(prio)}]");
+                    sb.Append($" && IH[{_hpf}{_hwissel}{CCOLCodeHelper.GetPriorityName(prio)}]");
                 }
-                sb.AppendLine($") iRijTijd[prioFC{GetPriorityName(prio)}] = 0;");
+                sb.AppendLine($") iRijTijd[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = 0;");
             }
 
             if (OrderedPieceGenerators[CCOLCodeTypeEnum.PrioCRijTijdScenario].Any())
@@ -1023,13 +1018,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* Pririteit-inmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}PrioInmelden(prioFC{GetPriorityName(prio)}, SH[{_hpf}{_hovin}{GetPriorityName(prio)}], iInstPrioriteitsNiveau[prioFC{GetPriorityName(prio)}], iInstPrioriteitsOpties[prioFC{GetPriorityName(prio)}], 0, 0);");
+                    sb.AppendLine($"{ts}PrioInmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hovin}{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsNiveau[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], 0, 0);");
                 }
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Pririteit-uitmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}PrioUitmelden(prioFC{GetPriorityName(prio)}, SH[{_hpf}{_hovuit}{GetPriorityName(prio)}]);");
+                    sb.AppendLine($"{ts}PrioUitmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hovuit}{CCOLCodeHelper.GetPriorityName(prio)}]);");
                 }
                 sb.AppendLine();
             }
@@ -1093,10 +1088,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
                 {
-                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && R[{_fcpf}{prio.FaseCyclus}] && !TRG[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{GetPriorityName(prio)}]");
+                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(prio)}] && DB[{_dpf}{prio.Koplus}] && R[{_fcpf}{prio.FaseCyclus}] && !TRG[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{CCOLCodeHelper.GetPriorityName(prio)}]");
                     if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                     {
-                        sb.Append($" && IH[{_hpf}{_hwissel}{GetPriorityName(prio)}]");
+                        sb.Append($" && IH[{_hpf}{_hwissel}{CCOLCodeHelper.GetPriorityName(prio)}]");
                     }
                     sb.AppendLine($") A[{_fcpf}{prio.FaseCyclus}] |= BIT6;");
                 }
@@ -1323,7 +1318,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioCcol(void) {");
             foreach (var ov in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{GetPriorityName(ov)}, {_tpf}{_tgb}{GetPriorityName(ov)}, {_tpf}{_trt}{GetPriorityName(ov)}, {_hpf}{_hov}{GetPriorityName(ov)}, {_cpf}{_cvc}{GetPriorityName(ov)}, {_tpf}{_tblk}{GetPriorityName(ov)});");
+                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hov}{CCOLCodeHelper.GetPriorityName(ov)}, {_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(ov)});");
             }
             foreach(var hd in c.PrioData.HDIngrepen)
             {

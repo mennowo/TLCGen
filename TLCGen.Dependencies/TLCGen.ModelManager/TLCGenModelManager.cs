@@ -239,6 +239,20 @@ namespace TLCGen.ModelManagement
                 foreach (var fm in controller.FileIngrepen) fm.ToepassenDoseren = NooitAltijdAanUitEnum.Altijd;
             }
 
+            // Version 0.7.4.0
+            // Prioriteisingrepen hebben nu een unieke naam per fase
+            checkVer = Version.Parse("0.7.4.0");
+            if (v < checkVer)
+            {
+                foreach (var prio in controller.PrioData.PrioIngrepen)
+                {
+                    if (string.IsNullOrWhiteSpace(prio.Naam))
+                    {
+                        prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
+                    }
+                }
+            }
+
             if (_pluginDataToMove.Any())
             {
                 var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
@@ -364,7 +378,7 @@ namespace TLCGen.ModelManagement
                         var data = @"<AlternatievenPerBlokModel>" + node.InnerXml + @"</AlternatievenPerBlokModel>";
                         using (TextReader reader = new StringReader(data))
                         {
-                            XmlSerializer xs = new XmlSerializer(typeof(AlternatievenPerBlokModel));
+                            var xs = new XmlSerializer(typeof(AlternatievenPerBlokModel));
                             var dhModel = xs.Deserialize(reader);
                             _pluginDataToMove.Add(new Tuple<string, object>("SpecialsDenHaagData", dhModel));
                         }
@@ -450,7 +464,7 @@ namespace TLCGen.ModelManagement
                         data = data.Replace(">Uitgebreid<", ">GeneriekePrioriteit<");
                         using (TextReader reader = new StringReader(data))
                         {
-                            XmlSerializer xs = new XmlSerializer(typeof(PrioriteitDataModel));
+                            var xs = new XmlSerializer(typeof(PrioriteitDataModel));
                             var prioModel = xs.Deserialize(reader);
                             _pluginDataToMove.Add(new Tuple<string, object>("PrioData", prioModel));
                         }
@@ -596,13 +610,11 @@ namespace TLCGen.ModelManagement
                     if (refToAttr != null &&
                         (property.Name == refToAttr.ReferProperty1 && objectType == refToAttr.ObjectType1 || 
                          property.Name == refToAttr.ReferProperty2 && objectType == refToAttr.ObjectType2 ||
-                         property.Name == refToAttr.ReferProperty3 && objectType == refToAttr.ObjectType3))
+                         property.Name == refToAttr.ReferProperty3 && objectType == refToAttr.ObjectType3) &&
+                        (string) propValue == oldName)
                     {
-                        if ((string)propValue == oldName)
-                        {
-                            property.SetValue(obj, newName);
-                            ++i;
-                        }
+                        property.SetValue(obj, newName);
+                        ++i;
                     }
                     // otherwise, check if the string has RefersTo itself, and set if needed
                     else
@@ -611,13 +623,11 @@ namespace TLCGen.ModelManagement
                         if (strRefToAttr != null &&
                             (objectType == strRefToAttr.ObjectType1 ||
                              objectType == strRefToAttr.ObjectType2 ||
-                             objectType == strRefToAttr.ObjectType3))
+                             objectType == strRefToAttr.ObjectType3) &&
+                            (string)propValue == oldName)
                         {
-                            if ((string)propValue == oldName)
-                            {
-                                property.SetValue(obj, newName);
-                                ++i;
-                            }
+                            property.SetValue(obj, newName);
+                            ++i;
                         }
                     }
                 }
@@ -662,7 +672,7 @@ namespace TLCGen.ModelManagement
                                         {
                                             Dummy = true,
                                             Naam =
-                                                $"dummykarin{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                                $"dummykarin{ovi.FaseCyclus}{ovi.Naam}"
                                         };
                                     }
 
@@ -674,7 +684,7 @@ namespace TLCGen.ModelManagement
                                         {
                                             Dummy = true,
                                             Naam =
-                                                $"dummykaruit{ovi.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(ovi.Type)}"
+                                                $"dummykaruit{ovi.FaseCyclus}{ovi.Naam}"
                                         };
                                     }
 

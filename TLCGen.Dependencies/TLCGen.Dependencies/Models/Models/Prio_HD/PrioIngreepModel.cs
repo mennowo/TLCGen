@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
@@ -11,6 +12,18 @@ namespace TLCGen.Models
     public class PrioIngreepModel : IComparable
     {
         #region Properties
+
+        [HasDefault(false)]
+        public string Naam { get; set; }
+
+        [XmlIgnore]
+        [HasDefault(false)]
+        [ModelName(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
+        public string DisplayName
+        {
+            get => FaseCyclus + Naam;
+            set => Naam = Regex.Replace(value, $"^{FaseCyclus}", "");
+        }
 
         [Browsable(false)]
         [HasDefault(false)]
@@ -62,22 +75,22 @@ namespace TLCGen.Models
 
         [HasDefault(false)]
         [Browsable(false)]
-        public string FaseCyclusType => FaseCyclus + Type;
+        public string IngreepNaam => FaseCyclus + Naam;
 
         [Browsable(false)]
-        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HeeftEigenVerklikking))]
+        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, nameof(IngreepNaam), nameof(HeeftEigenVerklikking))]
         public BitmapCoordinatenDataModel PrioInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
+        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, nameof(IngreepNaam), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeVroegBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
+        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, nameof(IngreepNaam), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioOpTijdBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, nameof(FaseCyclusType), nameof(HasGeconditioneerdePrioriteit))]
+        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, nameof(IngreepNaam), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]

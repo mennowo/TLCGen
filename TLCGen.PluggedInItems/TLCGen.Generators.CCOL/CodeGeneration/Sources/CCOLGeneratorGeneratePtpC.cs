@@ -115,8 +115,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}#else");
                     sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
                     sb.AppendLine($"{ts}#endif");
-                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = PRM[{_prmpf}{_prmsrc}{k.TeKoppelenKruispunt}];        /* nummer van source                   */ /* @ maximaal 255 */");
-                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.DEST = PRM[{_prmpf}{_prmdest}{k.TeKoppelenKruispunt}];       /* nummer van destination              */ /* @ maximaal 255 */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = (byte)PRM[{_prmpf}{_prmsrc}{k.TeKoppelenKruispunt}];        /* nummer van source                   */ /* @ maximaal 255 */");
+                    sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.DEST = (byte)PRM[{_prmpf}{_prmdest}{k.TeKoppelenKruispunt}];       /* nummer van destination              */ /* @ maximaal 255 */");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGW_max= PRM[{_prmpf}{_prmtmsgw}{k.TeKoppelenKruispunt}];   /* wait  time-out             */");
                     sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.TMSGS_max= PRM[{_prmpf}{_prmtmsgs}{k.TeKoppelenKruispunt}];   /* send  time-out             */");

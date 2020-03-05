@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -195,8 +194,6 @@ namespace TLCGen.Integrity
 
                 if (property.PropertyType == typeof(string))
                 {
-
-
                     var attr = property.GetCustomAttributes(typeof(ModelNameAttribute), true);
                     if (attr.Length != 1) continue;
                     var mnAttr = (ModelNameAttribute)attr.First();

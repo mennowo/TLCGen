@@ -20,6 +20,7 @@
         WaarschuwingsGroep,
         Module,
         SelectieveDetector,
-        PelotonKoppeling
+        PelotonKoppeling,
+        PrioriteitsIngreep
     }
 }

@@ -9,9 +9,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
-        public static string GetPriorityTypeAbbreviation(PrioIngreepModel ov)
+        public static string GetPriorityName(PrioIngreepModel prio)
         {
-            return DefaultsProvider.Default.GetVehicleTypeAbbreviation(ov.Type);
+            return prio.FaseCyclus + prio.Naam;
         }
 
         public static bool HasSignalGroupConflictWithPT(ControllerModel c, string sgname)
