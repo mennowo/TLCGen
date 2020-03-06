@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 using TLCGen.ViewModels;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -271,32 +273,55 @@ namespace TLCGen.ViewModels
                         var prio = new PrioIngreepModel
                         {
                             FaseCyclus = SelectedFaseCyclus.Naam,
-                            Type = PrioIngreepVoertuigTypeEnum.NG
+                            Type = PrioIngreepVoertuigTypeEnum.Bus
                         };
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio);
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(prio.MeldingenData);
-                        if (prio.Type == PrioIngreepVoertuigTypeEnum.Bus || prio.Type == PrioIngreepVoertuigTypeEnum.Tram)
+                        var newName = prio.FaseCyclus + DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
+                        if (!NameSyntaxChecker.IsValidCName(newName))
                         {
-                            prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
+                            newName = prio.FaseCyclus + "default";
+                        }
+
+                        var iNewName = 0;
+                        var tempName = newName;
+                        while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(
+                            DataAccess.TLCGenControllerDataProvider.Default.Controller, tempName,
+                            TLCGenObjectTypeEnum.PrioriteitsIngreep))
+                        {
+                            tempName = newName + ++iNewName;
+                        }
+
+                        prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type) + (iNewName == 0 ? "" : iNewName.ToString());
+
+                        DefaultsProvider.Default.SetDefaultsOnModel(prio);
+                        DefaultsProvider.Default.SetDefaultsOnModel(prio.MeldingenData);
+                        PrioIngreepInUitMeldingModel inM = null;
+                        PrioIngreepInUitMeldingModel uitM = null;
+                        if (prio.Type == PrioIngreepVoertuigTypeEnum.Bus)
+                        {
+                            inM = new PrioIngreepInUitMeldingModel
                             {
                                 AntiJutterTijdToepassen = true,
                                 AntiJutterTijd = 15,
                                 InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
                                 Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-                            });
-                            prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
+                            };
+                            prio.MeldingenData.Inmeldingen.Add(inM);
+                            uitM = new PrioIngreepInUitMeldingModel
                             {
                                 AntiJutterTijdToepassen = false,
                                 InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
                                 Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-                            });
+                            };
+                            prio.MeldingenData.Uitmeldingen.Add(uitM);
                         }
                         _Controller.PrioData.PrioIngrepen.Add(prio);
                         _Controller.PrioData.PrioIngrepen.BubbleSort();
                         var prioVm = new OVIngreepViewModel(prio);
-                        MessengerInstance.Send(new OVIngreepMeldingChangingMessage(prio, prio.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
                         Ingrepen.Add(prioVm);
+                        if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                        if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                         SelectedIngreep = prioVm;
+                        _selectedFaseCyclus.UpdateTypes();
                     },
                     () => _selectedFaseCyclus != null));
             }
@@ -352,17 +377,6 @@ namespace TLCGen.ViewModels
         #endregion // TabItem Overrides
 
         #region Private Methods
-
-        //private void RefreshAvailableTypes()
-        //{
-        //    _availableTypes.Clear();
-        //    foreach (OVIngreepVoertuigTypeEnum prioVtgType in Enum.GetValues(typeof(OVIngreepVoertuigTypeEnum)))
-        //    {
-        //        if (prioVtgType == OVIngreepVoertuigTypeEnum.NG) continue;
-        //        if (!Ingrepen.Any(x => x.Type == prioVtgType)) _availableTypes.Add(prioVtgType);
-        //    }
-        //}
-
         #endregion // Private Methods
 
         #region Constructor

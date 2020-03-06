@@ -14,7 +14,6 @@ using TLCGen.Settings;
 namespace TLCGen.ViewModels
 {
     public class OVIngreepViewModel : ViewModelBase
-    public class OVIngreepViewModel : ViewModelBase
     {
         #region Fields
 
@@ -42,8 +41,17 @@ namespace TLCGen.ViewModels
                 foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
 
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                RaisePropertyChanged(nameof(IsTypeBus));
+                RaisePropertyChanged(nameof(IsTypeBicycle));
+                RaisePropertyChanged(nameof(IsTypeTram));
+                RaisePropertyChanged(nameof(IsTypeTruck));
             }
         }
+
+        public bool IsTypeBus => Type == PrioIngreepVoertuigTypeEnum.Bus;
+        public bool IsTypeBicycle => Type == PrioIngreepVoertuigTypeEnum.Fiets;
+        public bool IsTypeTram => Type == PrioIngreepVoertuigTypeEnum.Tram;
+        public bool IsTypeTruck => Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen;
 
         public string DisplayName => PrioIngreep.DisplayName;
 
@@ -70,12 +78,12 @@ namespace TLCGen.ViewModels
                     {
                         melding.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{value}";
                     }
+                    RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
                 }
                 else
                 {
                     PrioIngreep.Naam = oldName;
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
                 RaisePropertyChanged(nameof(DisplayName));
             }
         }

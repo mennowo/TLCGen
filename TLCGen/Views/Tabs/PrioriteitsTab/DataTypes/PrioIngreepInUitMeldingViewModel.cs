@@ -18,6 +18,16 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public string Naam
+        {
+            get => string.IsNullOrWhiteSpace(PrioIngreepInUitMelding.Naam) ? "geen_naam" : PrioIngreepInUitMelding.Naam;
+            set
+            {
+                PrioIngreepInUitMelding.Naam = value;
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+            }
+        }
+
         public PrioIngreepInUitMeldingModel PrioIngreepInUitMelding { get; }
 
         public ObservableCollection<string> Detectoren { get; }
@@ -72,8 +82,17 @@ namespace TLCGen.ViewModels
                 MessengerInstance.Send(msg);
                 if (msg.FaseCyclus == null) return;
                 MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
+                RaisePropertyChanged(nameof(HasDet));
+                RaisePropertyChanged(nameof(HasInpSD));
+                RaisePropertyChanged(nameof(HasSD));
+                RaisePropertyChanged(nameof(HasKAR));
             }
         }
+
+        public bool HasKAR => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
+        public bool HasSD => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
+        public bool HasInpSD => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector;
+        public bool HasDet => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector;
 
         public bool TweedeInput
         {
@@ -155,9 +174,11 @@ namespace TLCGen.ViewModels
                     {
                         InUit = this.InUit
                     };
+                    MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring));
                 }
                 else
                 {
+                    MeldingBijstoring.Clear();
                     PrioIngreepInUitMelding.MeldingBijstoring = null;
                     _meldingBijstoring = null;
                 }
@@ -206,10 +227,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public PrioIngreepInUitMeldingViewModel MeldingBijstoring
-        {
-            get => OpvangStoring ? _meldingBijstoring ?? (_meldingBijstoring = new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring)) : null;
-        }
+        public ObservableCollection<PrioIngreepInUitMeldingViewModel> MeldingBijstoring { get; } = new ObservableCollection<PrioIngreepInUitMeldingViewModel>();
 
         #endregion //Properties
 
@@ -315,6 +333,11 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
             OnDetectorenChanged(null);
             OnSelectieveDetectorenChanged(null);
+
+            if (PrioIngreepInUitMelding.MeldingBijstoring != null)
+            {
+                MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring));
+            }
         }
 
         #endregion //Constructor

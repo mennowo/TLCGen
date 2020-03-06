@@ -1,0 +1,121 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="SDIconGeometry1">F1 M16,16z M0,0z M335.12482,506.1287A4.6335538,4.4011851,0,0,1,334.33307,503.66819A4.6335538,4.4011851,0,0,1,338.96663,499.267A4.6335538,4.4011851,0,0,1,340.65429,499.56932</Geometry>
+  <Geometry x:Key="SDIconGeometry2">F1 M16,16z M0,0z M332.77297,507.48412A7.4083928,7.0368683,0,0,1,331.50708,503.5501A7.4083928,7.0368683,0,0,1,338.91548,496.51325A7.4083928,7.0368683,0,0,1,341.61381,496.99659</Geometry>
+  <Geometry x:Key="SDIconGeometry3">F1 M16,16z M0,0z M338.56662,509.9755L330.48034,509.9755</Geometry>
+  <DrawingGroup x:Key="SDIconDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <GeometryDrawing>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0" RadiusY="0" Rect="338.5666,503.2684,6.2756,6.7071" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDIconGeometry1}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDIconGeometry3}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="0.9091984" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="SDIconDrawingImage" Drawing="{StaticResource SDIconDrawingGroup}" />
+  <Geometry x:Key="SDInpIconGeometry1">F1 M16,16z M0,0z M335.12482,506.1287A4.6335538,4.4011851,0,0,1,334.33307,503.66819A4.6335538,4.4011851,0,0,1,338.96663,499.267A4.6335538,4.4011851,0,0,1,340.65429,499.56932</Geometry>
+  <Geometry x:Key="SDInpIconGeometry2">F1 M16,16z M0,0z M332.77297,507.48412A7.4083928,7.0368683,0,0,1,331.50708,503.5501A7.4083928,7.0368683,0,0,1,338.91548,496.51325A7.4083928,7.0368683,0,0,1,341.61381,496.99659</Geometry>
+  <Geometry x:Key="SDInpIconGeometry3">F1 M16,16z M0,0z M338.56662,509.9755L330.48034,509.9755</Geometry>
+  <DrawingGroup x:Key="SDInpIconDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <GeometryDrawing Brush="#FF999999">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0" RadiusY="0" Rect="338.5666,503.2684,6.2756,6.7071" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDInpIconGeometry1}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDInpIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SDInpIconGeometry3}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="0.9091984" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="SDInpIconDrawingImage" Drawing="{StaticResource SDInpIconDrawingGroup}" />
+  <Geometry x:Key="KARIconGeometry1">F1 M16,16z M0,0z M342.04241,511.13114L342.04241,503.90124</Geometry>
+  <Geometry x:Key="KARIconGeometry2">F1 M16,16z M0,0z M338.30215,506.28794A4.6335537,4.401185,0,0,1,337.5104,503.82743A4.6335537,4.401185,0,0,1,342.14396,499.42624A4.6335537,4.401185,0,0,1,343.83162,499.72856</Geometry>
+  <Geometry x:Key="KARIconGeometry3">F1 M16,16z M0,0z M335.9503,507.64336A7.4083926,7.0368682,0,0,1,334.68441,503.70934A7.4083926,7.0368682,0,0,1,342.09281,496.67249A7.4083926,7.0368682,0,0,1,344.79114,497.15583</Geometry>
+  <DrawingGroup x:Key="KARIconDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <DrawingGroup Opacity="1" Transform="1,0,0,1,-1.2462026,-0.14139226">
+          <GeometryDrawing Geometry="{StaticResource KARIconGeometry1}">
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF000000" Thickness="1.9482826" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+          <GeometryDrawing Brush="#FF000000">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="2.608" RadiusY="2.608" Center="342.0424,503.9013" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+          <GeometryDrawing Geometry="{StaticResource KARIconGeometry2}">
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF000000" Thickness="1.55109243" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+          <GeometryDrawing Geometry="{StaticResource KARIconGeometry3}">
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF000000" Thickness="1.55109243" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+        </DrawingGroup>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="KARIconDrawingImage" Drawing="{StaticResource KARIconDrawingGroup}" />
+  <Geometry x:Key="DetIconGeometry">F1 M16,16z M0,0z M338.70595,509.71789L330.61967,509.71789</Geometry>
+  <DrawingGroup x:Key="DetIconDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <GeometryDrawing>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.55109239" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0" RadiusY="0" Rect="338.7059,497.2805,6.2756,12.4374" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource DetIconGeometry}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="0.9091984" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="DetIconDrawingImage" Drawing="{StaticResource DetIconDrawingGroup}" />
+</ResourceDictionary>

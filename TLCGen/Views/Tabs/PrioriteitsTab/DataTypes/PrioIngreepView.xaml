@@ -40,7 +40,7 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <ag:AutoGrid Columns="Auto,*" RowCount="34">
+            <ag:AutoGrid Columns="Auto,*" RowCount="35">
                 
                 <!-- Algemeen -->
                 <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />

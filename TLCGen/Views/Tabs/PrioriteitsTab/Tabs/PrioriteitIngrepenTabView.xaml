@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -57,9 +58,20 @@
                     Margin="2" 
                     DockPanel.Dock="Top"
                     ItemsSource="{Binding Path=Ingrepen}" 
-                    DisplayMemberPath="Naam"
                     SelectedItem="{Binding Path=SelectedIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    SelectionMode="Single" />
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="viewModels:OVIngreepViewModel">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{StaticResource BusIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBus,Converter={StaticResource Bool2VisConv}}" />
+                                <Image Source="{StaticResource TramIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTram,Converter={StaticResource Bool2VisConv}}" />
+                                <Image Source="{StaticResource TruckIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTruck,Converter={StaticResource Bool2VisConv}}" />
+                                <Image Source="{StaticResource BicycleIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBicycle,Converter={StaticResource Bool2VisConv}}" />
+                                <TextBlock Text="{Binding Naam}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </DockPanel>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="2">

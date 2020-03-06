@@ -250,6 +250,14 @@ namespace TLCGen.ModelManagement
                     {
                         prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
                     }
+
+                    foreach (var m in prio.MeldingenData.Inmeldingen)
+                    {
+                        if (string.IsNullOrWhiteSpace(m.Naam))
+                        {
+                            m.Naam = DefaultsProvider.Default.GetMeldingShortcode(m);
+                        }
+                    }
                 }
             }
 

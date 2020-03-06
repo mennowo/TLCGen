@@ -68,6 +68,26 @@ namespace TLCGen.Settings
             return t?.Setting ?? "UNKNOWN_VEHICLE_TYPE";
         }
 
+        
+        public string GetMeldingShortcode(PrioIngreepInUitMeldingModel melding)
+        {
+            switch (melding.Type)
+            {
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
+                    return "det";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                    return "kar";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                    return "sd";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
+                    return "vecio";
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
+                //    return "ris";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         #endregion // Public Methods
 
         #region Private Methods

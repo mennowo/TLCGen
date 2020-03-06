@@ -9,6 +9,8 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        public string Naam { get; set; }
+
         public PrioIngreepInUitMeldingTypeEnum InUit { get; set; }
         public PrioIngreepInUitMeldingVoorwaardeTypeEnum Type { get; set; }
 

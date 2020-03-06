@@ -6,6 +6,7 @@ using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -102,25 +103,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         #region Properties
         #endregion // Properties
 
-        private string GetMeldingShortcode(PrioIngreepInUitMeldingModel melding)
-        {
-            switch (melding.Type)
-            {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
-                    return "det";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
-                    return "kar";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
-                    return "sd";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
-                    return "vecio";
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
-                //    return "ris";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
         private string GetDetectorTypeSCHString(PrioIngreepInUitMeldingVoorwaardeInputTypeEnum type)
         {
             switch (type)
@@ -165,9 +147,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     break;
             }
 
-            var he = $"{hov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
-            var ti = $"{tov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
-            var sw = $"{schov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
+            var he = $"{hov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+            var ti = $"{tov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+            var sw = $"{schov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
             {
                 he = he + melding.RelatedInput1;
@@ -612,9 +594,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     break;
             }
 
-            var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
-            var ti = $"{_tpf}{tov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
-            var sw = $"{_schpf}{schov}{CCOLCodeHelper.GetPriorityName(ov)}{GetMeldingShortcode(melding)}";
+            var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+            var ti = $"{_tpf}{tov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+            var sw = $"{_schpf}{schov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
             {
                 he = he + melding.RelatedInput1;
