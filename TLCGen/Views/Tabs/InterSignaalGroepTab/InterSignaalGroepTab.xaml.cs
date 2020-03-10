@@ -22,8 +22,8 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IntersignaalGroepTypeEnum e1 = (IntersignaalGroepTypeEnum)value;
-            IntersignaalGroepTypeEnum e2 = (IntersignaalGroepTypeEnum)parameter;
+            var e1 = (IntersignaalGroepTypeEnum)value;
+            var e2 = (IntersignaalGroepTypeEnum)parameter;
             if (e2.HasFlag(e1))
                 return Visibility.Visible;
             else

@@ -8,7 +8,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
     {
         private string GenerateDplC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* DISPLAY SETTINGS */");
             sb.AppendLine("/* ---------------- */");
             sb.AppendLine();
@@ -25,7 +25,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateDplCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
@@ -36,7 +36,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateDplCDisplayParameters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void DisplayParameters(void)");
             sb.AppendLine("{");

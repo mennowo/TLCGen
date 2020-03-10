@@ -18,57 +18,21 @@ namespace TLCGen.Generators.CCOL
 
         #region Properties
 
-        public CCOLGeneratorVisualSettingsModel VisualSettings
-        {
-            get
-            {
-                return _Settings?.VisualSettings;
-            }
-        }
+        public CCOLGeneratorVisualSettingsModel VisualSettings => _Settings?.VisualSettings;
 
-        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL9
-        {
-            get
-            {
-                return _Settings?.VisualSettingsCCOL9;
-            }
-        }
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL9 => _Settings?.VisualSettingsCCOL9;
 
-        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL95
-        {
-            get
-            {
-                return _Settings?.VisualSettingsCCOL95;
-            }
-        }
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL95 => _Settings?.VisualSettingsCCOL95;
 
-        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100
-        {
-            get
-            {
-                return _Settings?.VisualSettingsCCOL100;
-            }
-        }
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100 => _Settings?.VisualSettingsCCOL100;
 
-        public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings
-        {
-            get
-            {
-                return _Settings?.CodePieceGeneratorSettings;
-            }
-        }
+        public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings => _Settings?.CodePieceGeneratorSettings;
 
-        public List<CCOLGeneratorCodeStringSettingModel> Prefixes
-        {
-            get
-            {
-                return _Settings?.Prefixes;
-            }
-        }
+        public List<CCOLGeneratorCodeStringSettingModel> Prefixes => _Settings?.Prefixes;
 
         public string TabSpace
         {
-            get { return _Settings.TabSpace; }
+            get => _Settings.TabSpace;
             set
             {
                 _Settings.TabSpace = value;

@@ -23,7 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvAdd(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.Append(GenerateOvAddHeader(c));
             sb.AppendLine();

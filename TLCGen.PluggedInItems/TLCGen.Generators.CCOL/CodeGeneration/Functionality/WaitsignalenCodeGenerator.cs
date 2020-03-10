@@ -65,9 +65,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             if (d.Wachtlicht)
                             {
-                                string wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine(_uswt + d.Naam);
-                                string ddef = d.GetDefine();
-                                string fcdef = fc.GetDefine();
+                                var wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine(_uswt + d.Naam);
+                                var ddef = d.GetDefine();
+                                var fcdef = fc.GetDefine();
                                 if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik)
                                 {
                                     sb.AppendLine($"{ts}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");

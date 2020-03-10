@@ -15,8 +15,8 @@ namespace TLCGen.Views
 
         public Visibility InsertableItemsVisibility
         {
-            get { return (Visibility)GetValue(InsertableItemsVisibilityProperty); }
-            set { SetValue(InsertableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(InsertableItemsVisibilityProperty);
+            set => SetValue(InsertableItemsVisibilityProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InsertableDetectorsVisibility.  This enables animation, styling, binding, etc...
@@ -25,8 +25,8 @@ namespace TLCGen.Views
 
         public Visibility RemovableItemsVisibility
         {
-            get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }
-            set { SetValue(RemovableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(RemovableItemsVisibilityProperty);
+            set => SetValue(RemovableItemsVisibilityProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for RemovableDetectorsVisibility.  This enables animation, styling, binding, etc...
@@ -35,8 +35,8 @@ namespace TLCGen.Views
 
         public string Caption
         {
-            get { return (string)GetValue(CaptionProperty); }
-            set { SetValue(CaptionProperty, value); }
+            get => (string)GetValue(CaptionProperty);
+            set => SetValue(CaptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Caption.  This enables animation, styling, binding, etc...
@@ -45,8 +45,8 @@ namespace TLCGen.Views
 
         public bool ShowCaption
         {
-            get { return (bool)GetValue(ShowCaptionProperty); }
-            set { SetValue(ShowCaptionProperty, value); }
+            get => (bool)GetValue(ShowCaptionProperty);
+            set => SetValue(ShowCaptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ShowCaption.  This enables animation, styling, binding, etc...

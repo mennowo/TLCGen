@@ -18,14 +18,8 @@ namespace TLCGen.Generators.CCOL.Settings
         public string TabSpace { get; set; }
         public string TabSpaceSerialized
         {
-            get
-            {
-                return TabSpace.Replace(' ', 's').Replace('\t', 't');
-            }
-            set
-            {
-                TabSpace = value.Replace('s', ' ').Replace('t', '\t');
-            }
+            get => TabSpace.Replace(' ', 's').Replace('\t', 't');
+            set => TabSpace = value.Replace('s', ' ').Replace('t', '\t');
         }
 
         #endregion // Properties

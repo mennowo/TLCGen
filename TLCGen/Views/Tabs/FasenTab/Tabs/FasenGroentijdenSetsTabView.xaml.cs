@@ -47,7 +47,7 @@ namespace TLCGen.Views
                     _PreviousRow = row;
                     var col = dg.SelectedCells[0].Column as DataGridColumn;
                     _PreviousCol = col;
-                    DataGridCell cell = dg.GetCell(row.GetIndex(), col.DisplayIndex);
+                    var cell = dg.GetCell(row.GetIndex(), col.DisplayIndex);
                     dg.BeginEdit();
                 }
             }

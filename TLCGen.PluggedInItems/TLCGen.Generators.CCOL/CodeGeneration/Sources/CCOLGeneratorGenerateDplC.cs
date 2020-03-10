@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateDplC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* DISPLAY APPLICATIE */");
             sb.AppendLine("/* ------------------ */");
             sb.AppendLine();
@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateDplCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
@@ -44,18 +44,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateDplCExtraDefines(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* aantal ingangs-/uitgangs signalen */");
             sb.AppendLine("/* --------------------------------- */");
-            int usmaxplus = 0;
-            int ismaxplus = 0;
+            var usmaxplus = 0;
+            var ismaxplus = 0;
 
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach (var fcm in controller.Fasen)
             {
                 if (fcm.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {fcm.GetDefine()}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
@@ -67,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (item.Element?.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {item.Naam}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
@@ -79,7 +79,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (item.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {_uspf}{item.Naam}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (dm.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
@@ -108,7 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (item.Element?.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {item.Naam}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
@@ -120,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (item.BitmapCoordinaten?.Count > 1)
                 {
-                    for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {_ispf}{item.Naam}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
@@ -138,11 +138,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateDplCDisplayBackground(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void display_background(void)");
             sb.AppendLine("{");
-            string bmnaam = controller.Data.BitmapNaam;
+            var bmnaam = controller.Data.BitmapNaam;
             if(bmnaam != null)
             {
                 if(!bmnaam.ToLower().EndsWith(".bmp"))
@@ -158,7 +158,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GetCoordinatesString(IOElementModel item, string itemdefine, string itemtype)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             if (item.BitmapCoordinaten?.Count > 0)
             {
                 sb.Append($"{ts}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
@@ -172,7 +172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (item.BitmapCoordinaten?.Count > 1)
             {
-                for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
                 {
                     sb.Append($"{ts}X_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].X}; ");
                     sb.Append($"Y_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].Y}; ");

@@ -61,7 +61,7 @@
                     SelectedItem="{Binding Path=SelectedIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     SelectionMode="Single">
                     <ListBox.ItemTemplate>
-                        <DataTemplate DataType="viewModels:OVIngreepViewModel">
+                        <DataTemplate DataType="viewModels:PrioIngreepViewModel">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="{StaticResource BusIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBus,Converter={StaticResource Bool2VisConv}}" />
                                 <Image Source="{StaticResource TramIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTram,Converter={StaticResource Bool2VisConv}}" />

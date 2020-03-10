@@ -29,17 +29,14 @@ namespace TLCGen.ViewModels
 
         public HDIngreepModel HDIngreep
         {
-            get { return _HDIngreep; }
-            set
-            {
-                _HDIngreep = value;
-            }
+            get => _HDIngreep;
+            set => _HDIngreep = value;
         }
 
         [Category("Opties")]
         public bool KAR
         {
-            get { return _HDIngreep.KAR; }
+            get => _HDIngreep.KAR;
             set
             {
                 _HDIngreep.KAR = value;
@@ -55,7 +52,7 @@ namespace TLCGen.ViewModels
                     _HDIngreep.DummyKARInmelding = null;
                     _HDIngreep.DummyKARUitmelding = null;
                 }
-                RaisePropertyChanged<object>("KAR", broadcast: true);
+                RaisePropertyChanged<object>(nameof(KAR), broadcast: true);
                 Messenger.Default.Send(new PrioIngrepenChangedMessage());
             }
         }
@@ -85,11 +82,11 @@ namespace TLCGen.ViewModels
         [Description("Check op sirene")]
         public bool Sirene
         {
-            get { return _HDIngreep.Sirene; }
+            get => _HDIngreep.Sirene;
             set
             {
                 _HDIngreep.Sirene = value;
-                RaisePropertyChanged<object>("Sirene", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Sirene), broadcast: true);
             }
         }
 
@@ -102,7 +99,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public bool Opticom
         {
-            get { return _HDIngreep.Opticom; }
+            get => _HDIngreep.Opticom;
             set
             {
                 _HDIngreep.Opticom = value;
@@ -114,7 +111,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public string OpticomRelatedInput
         {
-            get { return _HDIngreep.OpticomRelatedInput; }
+            get => _HDIngreep.OpticomRelatedInput;
             set
             {
                 if(value != null)
@@ -128,7 +125,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public int? OpticomInmeldingFilterTijd
         {
-            get { return _HDIngreep.OpticomInmeldingFilterTijd; }
+            get => _HDIngreep.OpticomInmeldingFilterTijd;
             set
             {
                 if (value != null)
@@ -142,7 +139,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public bool InmeldingOokDoorToepassen
         {
-            get { return _HDIngreep.InmeldingOokDoorToepassen; }
+            get => _HDIngreep.InmeldingOokDoorToepassen;
             set
             {
                 _HDIngreep.InmeldingOokDoorToepassen = value;
@@ -150,7 +147,7 @@ namespace TLCGen.ViewModels
                 {
                     if(InmeldingOokDoorFase == 0)
                     {
-                        if (int.TryParse(_HDIngreep.FaseCyclus, out int i))
+                        if (int.TryParse(_HDIngreep.FaseCyclus, out var i))
                         {
                             if (_HDIngreep.FaseCyclus.EndsWith("1") || _HDIngreep.FaseCyclus.EndsWith("4") || _HDIngreep.FaseCyclus.EndsWith("7") || _HDIngreep.FaseCyclus.EndsWith("10"))
                             {
@@ -174,7 +171,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public int InmeldingOokDoorFase
         {
-            get { return _HDIngreep.InmeldingOokDoorFase; }
+            get => _HDIngreep.InmeldingOokDoorFase;
             set
             {
                 _HDIngreep.InmeldingOokDoorFase = value;
@@ -186,44 +183,44 @@ namespace TLCGen.ViewModels
         [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd
         {
-            get { return _HDIngreep.RijTijdOngehinderd; }
+            get => _HDIngreep.RijTijdOngehinderd;
             set
             {
                 _HDIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<object>("RijTijdOngehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdOngehinderd), broadcast: true);
             }
         }
 
         [Description("Rijtijd beperkt gehinderd")]
         public int RijTijdBeperktgehinderd
         {
-            get { return _HDIngreep.RijTijdBeperktgehinderd; }
+            get => _HDIngreep.RijTijdBeperktgehinderd;
             set
             {
                 _HDIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<object>("RijTijdBeperktgehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdBeperktgehinderd), broadcast: true);
             }
         }
 
         [Description("Rijtijd gehinderd")]
         public int RijTijdGehinderd
         {
-            get { return _HDIngreep.RijTijdGehinderd; }
+            get => _HDIngreep.RijTijdGehinderd;
             set
             {
                 _HDIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<object>("RijTijdGehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdGehinderd), broadcast: true);
             }
         }
 
         [Description("Groenbewaking")]
         public int GroenBewaking
         {
-            get { return _HDIngreep.GroenBewaking; }
+            get => _HDIngreep.GroenBewaking;
             set
             {
                 _HDIngreep.GroenBewaking = value;
-                RaisePropertyChanged<object>("GroenBewaking", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroenBewaking), broadcast: true);
             }
         }
 
@@ -243,7 +240,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public string SelectedFase
         {
-            get { return _SelectedFase; }
+            get => _SelectedFase;
             set
             {
                 _SelectedFase = value;
@@ -254,7 +251,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public HDIngreepMeerealiserendeFaseCyclusViewModel SelectedMeerealiserendeFase
         {
-            get { return _SelectedMeerealiserendeFase; }
+            get => _SelectedMeerealiserendeFase;
             set
             {
                 _SelectedMeerealiserendeFase = value;
@@ -370,7 +367,7 @@ namespace TLCGen.ViewModels
         private void BuildFasenList()
         {
             Fasen.Clear();
-            foreach (FaseCyclusModel m in _Controller.Fasen)
+            foreach (var m in _Controller.Fasen)
             {
                 if (m.Naam != _HDIngreep.FaseCyclus && 
                     m.HDIngreep &&

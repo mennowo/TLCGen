@@ -23,7 +23,7 @@ namespace TLCGen.Specificator.Tester
 
         static void Main(string[] args)
         {
-            IntPtr windowPtr = FindWindowByCaption(IntPtr.Zero, "SP16.docx - Word");
+            var windowPtr = FindWindowByCaption(IntPtr.Zero, "SP16.docx - Word");
             if (windowPtr == IntPtr.Zero)
             {
                 Console.WriteLine("Window not found");

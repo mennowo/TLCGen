@@ -42,8 +42,8 @@ namespace TLCGen.Controls
 
         public bool EnsurePathExists
         {
-            get { return (bool)GetValue(EnsurePathExistsProperty); }
-            set { SetValue(EnsurePathExistsProperty, value); }
+            get => (bool)GetValue(EnsurePathExistsProperty);
+            set => SetValue(EnsurePathExistsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for EnsurePathExists.  This enables animation, styling, binding, etc...

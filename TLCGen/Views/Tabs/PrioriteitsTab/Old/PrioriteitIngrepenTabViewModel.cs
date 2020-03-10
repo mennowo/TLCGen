@@ -1,7 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,32 +19,6 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class FaseCyclusWithPrioViewModel : ViewModelBase
-    {
-        public bool HasBus => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Bus);
-        public bool HasTram => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Tram);
-        public bool HasBicycle => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
-        public bool HasTruck => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
-
-        public string Naam { get; }
-
-        public List<PrioIngreepModel> Ingrepen { get; }
-
-        public void UpdateTypes()
-        {
-            RaisePropertyChanged(nameof(HasBus));
-            RaisePropertyChanged(nameof(HasTram));
-            RaisePropertyChanged(nameof(HasBicycle));
-            RaisePropertyChanged(nameof(HasTruck));
-        }
-
-        public FaseCyclusWithPrioViewModel(string naam, List<PrioIngreepModel> ingrepen)
-        {
-            Naam = naam;
-            Ingrepen = ingrepen;
-        }
-    }
-
     [TLCGenTabItem(index: 0, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitIngrepenTabViewModel : TLCGenTabItemViewModel
     {
@@ -53,7 +26,7 @@ namespace TLCGen.ViewModels
 
         private RelayCommand _addIngreepCommand;
         private RelayCommand _removeIngreepCommand;
-        private OVIngreepViewModel _selectedIngreep;
+        private PrioIngreepViewModel _selectedIngreep;
         private FaseCyclusWithPrioViewModel _selectedFaseCyclus;
         private ObservableCollection<FaseCyclusWithPrioViewModel> _fasen;
         private bool _selectedBus;
@@ -68,7 +41,7 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<FaseCyclusWithPrioViewModel> Fasen => _fasen ?? (_fasen = new ObservableCollection<FaseCyclusWithPrioViewModel>());
 
-        public ObservableCollection<OVIngreepViewModel> Ingrepen { get; }
+        public ObservableCollection<PrioIngreepViewModel> Ingrepen { get; }
 
         public FaseCyclusWithPrioViewModel SelectedFaseCyclus
         {
@@ -81,7 +54,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var ig in _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == _selectedFaseCyclus.Naam))
                     {
-                        Ingrepen.Add(new OVIngreepViewModel(ig));
+                        Ingrepen.Add(new PrioIngreepViewModel(ig));
                     }
                     var selType = PrioIngreepVoertuigTypeEnum.Bus;
                     if (SelectedTram) selType = PrioIngreepVoertuigTypeEnum.Tram;
@@ -109,9 +82,13 @@ namespace TLCGen.ViewModels
             SelectedFaseCyclus.UpdateTypes();
         }
 
+        [Browsable(false)]
         public bool HasBus => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Bus);
+        [Browsable(false)]
         public bool HasTram => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Tram);
+        [Browsable(false)]
         public bool HasBicycle => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
+        [Browsable(false)]
         public bool HasTruck => Ingrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
 
         public bool Prioriteit
@@ -154,7 +131,7 @@ namespace TLCGen.ViewModels
                         }
                         _Controller.PrioData.PrioIngrepen.Add(prio);
                         _Controller.PrioData.PrioIngrepen.BubbleSort();
-                        var prioVm = new OVIngreepViewModel(prio);
+                        var prioVm = new PrioIngreepViewModel(prio);
                         MessengerInstance.Send(new OVIngreepMeldingChangingMessage(prio, prio.FaseCyclus, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
                         Ingrepen.Add(prioVm);
                         SelectedIngreep = prioVm;
@@ -239,7 +216,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public OVIngreepViewModel SelectedIngreep
+        public PrioIngreepViewModel SelectedIngreep
         {
             get => _selectedIngreep;
             set
@@ -316,7 +293,7 @@ namespace TLCGen.ViewModels
                         }
                         _Controller.PrioData.PrioIngrepen.Add(prio);
                         _Controller.PrioData.PrioIngrepen.BubbleSort();
-                        var prioVm = new OVIngreepViewModel(prio);
+                        var prioVm = new PrioIngreepViewModel(prio);
                         Ingrepen.Add(prioVm);
                         if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
                         if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
@@ -362,7 +339,9 @@ namespace TLCGen.ViewModels
             SelectedFaseCyclus = null;
             foreach (var fcm in _Controller.Fasen)
             {
-                var fcvm = new FaseCyclusWithPrioViewModel(fcm.Naam, _Controller.PrioData.PrioIngrepen);
+                var fcvm = new FaseCyclusWithPrioViewModel(fcm.Naam, _Controller.PrioData.PrioIngrepen
+                    .Where(x => x.FaseCyclus == fcm.Naam)
+                    .Select(x => new PrioIngreepViewModel(x)).ToList());
                 Fasen.Add(fcvm);
                 if (temp == null || fcvm.Naam != temp.Naam) continue;
                 SelectedFaseCyclus = fcvm;
@@ -383,7 +362,7 @@ namespace TLCGen.ViewModels
 
         public PrioriteitIngrepenTabViewModel() : base()
         {
-            Ingrepen = new ObservableCollection<OVIngreepViewModel>();
+            Ingrepen = new ObservableCollection<PrioIngreepViewModel>();
             SelectedBus = true;
         }
 

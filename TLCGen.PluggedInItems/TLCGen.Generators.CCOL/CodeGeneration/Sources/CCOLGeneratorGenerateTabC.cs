@@ -13,7 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateTabC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* REGEL INSTELLINGEN */");
             sb.AppendLine("/* ------------------ */");
             sb.AppendLine();
@@ -46,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCBeforeIncludes(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCBeforeIncludes, false, true, false, true);
 
@@ -54,7 +54,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         }
         private string GenerateTabCIncludes(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
@@ -124,7 +124,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlDefaults(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void control_defaults(void)");
             sb.AppendLine("{");
@@ -155,7 +155,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParameters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void control_parameters(void)");
             sb.AppendLine("{");
@@ -332,7 +332,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* Typen uitgangen */");
             sb.AppendLine("/* --------------- */");
 
-            foreach (FaseCyclusModel fc in c.Fasen)
+            foreach (var fc in c.Fasen)
             {
                 sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
                 switch (fc.Type)
@@ -402,15 +402,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersFasen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* fasecycli */");
             sb.AppendLine("/* --------- */");
 
             var gs = controller.GroentijdenSets.FirstOrDefault();
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach (var fcm in controller.Fasen)
             {
-                string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
+                var s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
                 sb.Append(s);
                 sb.Append($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min}; ");
                 sb.Append($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG}; ");
@@ -435,7 +435,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersConflicten(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
@@ -445,8 +445,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (controller.InterSignaalGroep.Conflicten?.Count > 0)
             {
-                string prevfasefrom = "";
-                foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                var prevfasefrom = "";
+                foreach (var conflict in controller.InterSignaalGroep.Conflicten)
                 {
                     var ff = conflict.GetFaseFromDefine();
                     var ft = conflict.GetFaseToDefine();
@@ -468,18 +468,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if(controller.Fasen.Count > 0)
             { 
-                int[,] matrix = new int[controller.Fasen.Count, controller.Fasen.Count];
-                for (int i = 0; i < controller.Fasen.Count; ++i)
+                var matrix = new int[controller.Fasen.Count, controller.Fasen.Count];
+                for (var i = 0; i < controller.Fasen.Count; ++i)
                 {
-                    for (int j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
                         matrix[i, j] = -1;
                     }
                 }
 
-                for (int i = 0; i < controller.Fasen.Count; ++i)
+                for (var i = 0; i < controller.Fasen.Count; ++i)
                 {
-                    for (int j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
                         foreach (var cf in controller.InterSignaalGroep.Conflicten)
                         {
@@ -627,8 +627,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         sb.AppendLine();
 
-                        string prevfasefrom = "";
-                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
+                        var prevfasefrom = "";
+                        foreach (var conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
                         {
                             var ff = conflict.GetFaseFromDefine();
                             var ft = conflict.GetFaseToDefine();
@@ -657,7 +657,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersUitgangen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
@@ -669,13 +669,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersDetectors(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* detectie */");
             sb.AppendLine("/* -------- */");
 
-            int defmax = 0;
-            int namemax = 0;
+            var defmax = 0;
+            var namemax = 0;
             int? dbmax = 0;
             int? dhmax = 0;
             int? ogmax = 0;
@@ -704,12 +704,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             bgmax = bgmax.ToString().Length;
             tflmax = tflmax.ToString().Length;
 
-            int pad1 = "D_code[] ".Length + defmax;
-            int pad2 = "= \"\"; ".Length + namemax;
-            int pad3 = "TDB_max[] ".Length + defmax;
-            int pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
-            int pad5 = "TDH_max[] ".Length + defmax;
-            int pad6 = pad1 + pad2;
+            var pad1 = "D_code[] ".Length + defmax;
+            var pad2 = "= \"\"; ".Length + namemax;
+            var pad3 = "TDB_max[] ".Length + defmax;
+            var pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
+            var pad5 = "TDH_max[] ".Length + defmax;
+            var pad6 = pad1 + pad2;
             var pad7 = "TFL_max[] = ;".Length + defmax + tflmax;
 
             foreach (var dm in alldets)
@@ -851,7 +851,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersIngangen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
@@ -863,7 +863,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersHulpElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
@@ -875,7 +875,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersGeheugenElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
@@ -887,7 +887,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersTijdElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
@@ -899,7 +899,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersCounters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
@@ -911,7 +911,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersSchakelaars(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
@@ -924,7 +924,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersParameters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
@@ -936,12 +936,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersExtraData(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* extra data */");
             sb.AppendLine("/* ---------- */");
 
-            foreach(FaseCyclusModel fc in controller.Fasen)
+            foreach(var fc in controller.Fasen)
             {
                 switch(fc.Type)
                 {
@@ -965,7 +965,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersDS(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
@@ -990,7 +990,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersModulen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
@@ -1001,9 +1001,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (controller.ModuleMolen.Modules.Any(x => x.Fasen.Any()))
                 {
                     ml = true;
-                    foreach (ModuleModel mm in controller.ModuleMolen.Modules.Where(x => x.Fasen.Any()))
+                    foreach (var mm in controller.ModuleMolen.Modules.Where(x => x.Fasen.Any()))
                     {
-                        foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                        foreach (var mfcm in mm.Fasen)
                         {
                             sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                         }
@@ -1020,9 +1020,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (ml) sb.AppendLine();
                         ml = true;
                         sb.AppendLine($"/* modules reeks {r.Reeks} */");
-                        foreach (ModuleModel mm in r.Modules.Where(x => x.Fasen.Any()))
+                        foreach (var mm in r.Modules.Where(x => x.Fasen.Any()))
                         {
-                            foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                            foreach (var mfcm in mm.Fasen)
                             {
                                 var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
                                 sb.AppendLine($"{ts}PR{r.Reeks}[{mmNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
@@ -1044,7 +1044,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                  c.Data.VLOGSettings?.VLOGToepassen != true))
                 return "";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("#ifndef NO_VLOG");
             sb.AppendLine("/* VLOG */");

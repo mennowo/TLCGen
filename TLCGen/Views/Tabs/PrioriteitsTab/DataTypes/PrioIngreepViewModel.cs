@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
-using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -13,7 +12,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepViewModel : ViewModelBase
+    public class PrioIngreepViewModel : ViewModelBase
     {
         #region Fields
 
@@ -26,7 +25,14 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        [Browsable(false)]
         public PrioIngreepModel PrioIngreep { get; set; }
+
+        [Browsable(false)]
+        public string FaseCyclus => PrioIngreep.FaseCyclus;
+
+        private ObservableCollection<PrioIngreepMeldingenListViewModel> _meldingenLists;
+        public ObservableCollection<PrioIngreepMeldingenListViewModel> MeldingenLists => _meldingenLists ?? (_meldingenLists = new ObservableCollection<PrioIngreepMeldingenListViewModel>());
 
         [Category("Algemene opties")]
         [Description("Type voertuig")]
@@ -48,11 +54,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public bool IsTypeBus => Type == PrioIngreepVoertuigTypeEnum.Bus;
+        [Browsable(false)]
         public bool IsTypeBicycle => Type == PrioIngreepVoertuigTypeEnum.Fiets;
+        [Browsable(false)]
         public bool IsTypeTram => Type == PrioIngreepVoertuigTypeEnum.Tram;
+        [Browsable(false)]
         public bool IsTypeTruck => Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen;
 
+        [Browsable(false)]
         public string DisplayName => PrioIngreep.DisplayName;
 
         public string Naam
@@ -471,7 +482,7 @@ namespace TLCGen.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(NewLijnNummer))
             {
-                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
+                var nummer = new OVIngreepLijnNummerModel()
                 {
                     Nummer = NewLijnNummer, RitCategorie = "999"
                 };
@@ -479,7 +490,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
+                var nummer = new OVIngreepLijnNummerModel()
                 {
                     Nummer = "0", RitCategorie = "999"
                 };
@@ -496,7 +507,7 @@ namespace TLCGen.ViewModels
 
         void Add10LijnNummersCommand_Executed(object prm)
         {
-            for(int i = 0; i < 10; ++i)
+            for(var i = 0; i < 10; ++i)
             {
                 AddLijnNummerCommand.Execute(prm);
             }
@@ -561,13 +572,16 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVIngreepViewModel(PrioIngreepModel ovingreep)
+        public PrioIngreepViewModel(PrioIngreepModel ovingreep)
         {
             PrioIngreep = ovingreep;
             
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);
+
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData.Inmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x)).ToList()));
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData.Uitmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x)).ToList()));
         }
 
         #endregion // Constructor

@@ -32,14 +32,14 @@ namespace TLCGen.Extensions
         public EnumerationExtension(Type enumType)
         {
             if (enumType == null)
-                throw new ArgumentNullException("enumType");
+                throw new ArgumentNullException(nameof(enumType));
 
             EnumType = enumType;
         }
 
         public Type EnumType
         {
-            get { return _enumType; }
+            get => _enumType;
             private set
             {
                 if (_enumType == value)

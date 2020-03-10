@@ -10,8 +10,8 @@ namespace TLCGen.Dialogs
     {
         public string Explanation
         {
-            get { return (string)ExplanationLabel.Content; }
-            set { ExplanationLabel.Content = value; }
+            get => (string)ExplanationLabel.Content;
+            set => ExplanationLabel.Content = value;
         }
 
         public string Text

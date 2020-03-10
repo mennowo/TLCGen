@@ -152,10 +152,7 @@ namespace TLCGen.ViewModels
 
         public string FaseVan
         {
-            get
-            {
-                return _FaseVan;
-            }
+            get => _FaseVan;
             set
             {
                 _FaseVan = value;
@@ -169,10 +166,7 @@ namespace TLCGen.ViewModels
         
         public string FaseNaar
         {
-            get
-            {
-                return _FaseNaar;
-            }
+            get => _FaseNaar;
             set
             {
                 _FaseNaar = value;
@@ -341,7 +335,7 @@ namespace TLCGen.ViewModels
 
         public bool HasConflict
         {
-            get { return _HasConflict; }
+            get => _HasConflict;
             set
             {
                 _HasConflict = value;
@@ -352,7 +346,7 @@ namespace TLCGen.ViewModels
 
         public bool HasGarantieConflict
         {
-            get { return _HasGarantieConflict; }
+            get => _HasGarantieConflict;
             set
             {
                 _HasGarantieConflict = value;
@@ -362,7 +356,7 @@ namespace TLCGen.ViewModels
 
         public bool HasGelijkstart
         {
-            get { return _HasGelijkstart; }
+            get => _HasGelijkstart;
             set
             {
                 _HasGelijkstart = value;
@@ -373,7 +367,7 @@ namespace TLCGen.ViewModels
 
         public bool HasNaloop
         {
-            get { return _HasNaloop; }
+            get => _HasNaloop;
             set
             {
                 _HasNaloop = value;
@@ -384,7 +378,7 @@ namespace TLCGen.ViewModels
 
         public bool HasVoorstart
         {
-            get { return _HasVoorstart; }
+            get => _HasVoorstart;
             set
             {
                 _HasVoorstart = value;
@@ -395,7 +389,7 @@ namespace TLCGen.ViewModels
 
         public bool HasMeeaanvraag
         {
-            get { return _HasMeeaanvraag; }
+            get => _HasMeeaanvraag;
             set
             {
                 _HasMeeaanvraag = value;
@@ -406,7 +400,7 @@ namespace TLCGen.ViewModels
 
         public bool HasLateRelease
         {
-            get { return _HasLateRelease; }
+            get => _HasLateRelease;
             set
             {
                 _HasLateRelease = value;
@@ -418,7 +412,7 @@ namespace TLCGen.ViewModels
         private bool _HasOppositeVoorstart;
         public bool HasOppositeVoorstart
         {
-            get { return _HasOppositeVoorstart; }
+            get => _HasOppositeVoorstart;
             set
             {
                 _HasOppositeVoorstart = value;
@@ -432,7 +426,7 @@ namespace TLCGen.ViewModels
         private bool _HasOppositeNaloop;
         public bool HasOppositeNaloop
         {
-            get { return _HasOppositeNaloop; }
+            get => _HasOppositeNaloop;
             set
             {
                 _HasOppositeNaloop = value;
@@ -444,7 +438,7 @@ namespace TLCGen.ViewModels
         private bool _HasOppositeMeeaanvraag;
         public bool HasOppositeMeeaanvraag
         {
-            get { return _HasOppositeMeeaanvraag; }
+            get => _HasOppositeMeeaanvraag;
             set
             {
                 _HasOppositeMeeaanvraag = value;
@@ -456,7 +450,7 @@ namespace TLCGen.ViewModels
         private bool _HasOppositeLateRelease;
 	    public bool HasOppositeLateRelease
         {
-            get { return _HasOppositeLateRelease; }
+            get => _HasOppositeLateRelease;
             set
             {
                 _HasOppositeLateRelease = value;
@@ -492,25 +486,16 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool HasNoCoupling
-        {
-            get { return !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart || HasMeeaanvraag || HasLateRelease); }
-        }
+        public bool HasNoCoupling => !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart || HasMeeaanvraag || HasLateRelease);
 
         public bool ReferencesSelf
         {
             get; private set;
         }
 
-        public bool NotReferencingSelf
-        {
-            get { return !ReferencesSelf; }
-        }
+        public bool NotReferencingSelf => !ReferencesSelf;
 
-        public bool AllowCoupling
-        {
-            get { return !ReferencesSelf && !HasConflict && !HasGarantieConflict; }
-        }
+        public bool AllowCoupling => !ReferencesSelf && !HasConflict && !HasGarantieConflict;
 
         public Brush SynchronisatieIndicatorBrush
         {
@@ -550,7 +535,7 @@ namespace TLCGen.ViewModels
                     case IntersignaalGroepTypeEnum.GarantieConflict:
                         if (!string.IsNullOrEmpty(ConflictValue))
                         {
-                            if (!Int32.TryParse(ConflictValue, out int i))
+                            if (!Int32.TryParse(ConflictValue, out var i))
                             {
                                 switch (ConflictValue)
                                 {

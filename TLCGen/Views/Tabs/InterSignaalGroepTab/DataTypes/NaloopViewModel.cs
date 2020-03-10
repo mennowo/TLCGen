@@ -154,21 +154,14 @@ namespace TLCGen.ViewModels
                 if (TLCGenControllerDataProvider.Default.Controller != null && 
                     _detectorManager == null && _naloop?.FaseVan != null)
                 {
-                    var dets =
-                        TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            First(x => x.Naam == _naloop.FaseVan).
-                                Detectoren.
-                                Select(x => x.Naam).
-                                ToList();
                     _detectorManager = new ItemsManagerViewModel<NaloopDetectorModel, string>(
                         Detectoren,
-                        dets,
-                        x => { var md = new NaloopDetectorModel { Detector = x }; return md; },
-                        x => { return Detectoren.All(y => y.Detector != x); },
+                        ControllerAccessProvider.Default.AllDetectorStrings,
+                        x => new NaloopDetectorModel { Detector = x },
+                        x => Detectoren.All(y => y.Detector != x),
                         null,
-                        () => { RaisePropertyChanged(nameof(SelectedDetector)); },
-                        () => { RaisePropertyChanged(nameof(SelectedDetector)); }
-                        );
+                        () => RaisePropertyChanged(nameof(SelectedDetector)),
+                        () => RaisePropertyChanged(nameof(SelectedDetector)));
                 }
                 return _detectorManager;
             }
@@ -309,14 +302,12 @@ namespace TLCGen.ViewModels
                 Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             }
 
-            _detectorManager = null;
-            RaisePropertyChanged(nameof(DetectorManager));
+            _detectorManager.Refresh();
         }
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            _detectorManager = null;
-            RaisePropertyChanged(nameof(DetectorManager));
+            _detectorManager.Refresh();
         }
         
         #endregion // TLCGen Events

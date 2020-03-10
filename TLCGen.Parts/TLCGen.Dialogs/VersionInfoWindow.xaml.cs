@@ -29,7 +29,7 @@ namespace TLCGen.Dialogs
         {
             if (_index >= 0 && _index < _versionData.Count)
             {
-                MemoryStream stream = new MemoryStream(Encoding.Default.GetBytes(_versionData[_index].Item2));
+                var stream = new MemoryStream(Encoding.Default.GetBytes(_versionData[_index].Item2));
                 this.VersionInfoTB.SelectAll();
                 this.VersionInfoTB.Selection.Load(stream, DataFormats.Rtf);
                 this.VersionLabel.Content = _versionData[_index].Item1.ToString();

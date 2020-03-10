@@ -128,7 +128,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // voor niet-voetgangers
                 if (fc.AantalRijstroken.HasValue && fc.Type != FaseTypeEnum.Voetganger)
                 {
-                    for (int str = 1; str <= fc.AantalRijstroken; ++str)
+                    for (var str = 1; str <= fc.AantalRijstroken; ++str)
                     {
                         // verzamelen relevante detectoren: op deze rijstrook, met aanvraag functie
                         var dets = fc.Detectoren.Where(x =>
@@ -155,7 +155,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             kopLang = true;
                         }
 
-                        int det = 0;
+                        var det = 0;
                         if (str > 1)
                         {
                             sb.AppendLine(" ||");
@@ -432,7 +432,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

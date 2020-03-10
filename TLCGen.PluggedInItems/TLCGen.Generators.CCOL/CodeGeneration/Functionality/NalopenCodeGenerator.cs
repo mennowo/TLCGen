@@ -216,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         foreach (var nl in c.InterSignaalGroep.Nalopen)
                         {
-                            string vn = nl.FaseVan + nl.FaseNaar;
+                            var vn = nl.FaseVan + nl.FaseNaar;
                             switch (nl.Type)
                             {
 #warning This only works for pedestrians
@@ -300,7 +300,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sgn != null && sgn.Type == FaseTypeEnum.Voetganger)
                             {
                                 sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in nl.Detectoren)
                                 {
                                     if (i < 0) sb.Append(" || ");

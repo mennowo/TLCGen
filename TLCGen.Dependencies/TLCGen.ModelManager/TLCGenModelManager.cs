@@ -240,10 +240,10 @@ namespace TLCGen.ModelManagement
             }
 
             // Version 0.7.4.0
-            // Prioriteisingrepen hebben nu een unieke naam per fase
             checkVer = Version.Parse("0.7.4.0");
             if (v < checkVer)
             {
+                // Prioriteisingrepen hebben nu een unieke naam per fase
                 foreach (var prio in controller.PrioData.PrioIngrepen)
                 {
                     if (string.IsNullOrWhiteSpace(prio.Naam))
@@ -257,6 +257,15 @@ namespace TLCGen.ModelManagement
                         {
                             m.Naam = DefaultsProvider.Default.GetMeldingShortcode(m);
                         }
+                    }
+                }
+
+                // Detectoren bij fasen hebben nu een expliciete link met de fase
+                foreach (var sg in controller.Fasen)
+                {
+                    foreach (var d in sg.Detectoren)
+                    {
+                        d.FaseCyclus = sg.Naam;
                     }
                 }
             }
@@ -499,6 +508,8 @@ namespace TLCGen.ModelManagement
             {
                 foreach (var fcm in message.AddedFasen)
                 {
+                    Controller.Fasen.Add(fcm);
+
                     // PT Conflict prms
                     if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
                     {
@@ -526,6 +537,8 @@ namespace TLCGen.ModelManagement
             {
                 foreach (var fcm in message.RemovedFasen)
                 {
+                    Controller.Fasen.Remove(fcm);
+
                     // PT Conflict prms
                     if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
                     {

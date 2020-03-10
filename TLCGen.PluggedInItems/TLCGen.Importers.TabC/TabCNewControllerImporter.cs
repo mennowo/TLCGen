@@ -13,10 +13,7 @@ namespace TLCGen.Importers.TabC
     {
         public ControllerModel Controller
         {
-            get
-            {
-                throw new NotSupportedException();
-            }
+            get => throw new NotSupportedException();
 
             set
             {
@@ -24,8 +21,8 @@ namespace TLCGen.Importers.TabC
             }
         }
 
-        public bool ImportsIntoExisting { get { return false; } }
-        public string Name { get { return "Importeer tab.c (nieuwe regeling starten)"; } }
+        public bool ImportsIntoExisting => false;
+        public string Name => "Importeer tab.c (nieuwe regeling starten)";
 
         public string GetPluginName()
         {
@@ -39,14 +36,14 @@ namespace TLCGen.Importers.TabC
                 throw new NullReferenceException("TabC importer: Controller parsed is not null, which it should be for importing into new.");
             }
 
-			OpenFileDialog openFileDialog = new OpenFileDialog
+			var openFileDialog = new OpenFileDialog
 			{
 				CheckFileExists = true,
 				Title = "Selecteer tab.c file voor importeren",
 				Filter = "Import files|*tab.c;*.ccol|Alle files|*.*"
 			};
 
-			ControllerModel newc = new ControllerModel();
+			var newc = new ControllerModel();
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -55,16 +52,16 @@ namespace TLCGen.Importers.TabC
                     DefaultsProvider.Default.SetDefaultsOnModel(newc.Data);
                     newc.Data.GarantieOntruimingsTijden = false;
 
-                    string[] lines = File.ReadAllLines(openFileDialog.FileName);
+                    var lines = File.ReadAllLines(openFileDialog.FileName);
                     if (lines.Length <= 1)
                         throw new IndexOutOfRangeException("Het bestand heeft minder dan 2 regels.");
 
                     // Build a list of the Phases with conflicts from the tab.c file
-                    TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines, true);
+                    var NewData = TabCImportHelper.GetNewData(lines, true);
                     if (NewData == null) return null;
 
                     NewData.Fasen.BubbleSort();
-                    foreach (FaseCyclusModel fcm in NewData.Fasen)
+                    foreach (var fcm in NewData.Fasen)
                     {
                         newc.Fasen.Add(fcm);
                         var fcdm = new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam };
@@ -72,7 +69,7 @@ namespace TLCGen.Importers.TabC
                         newc.ModuleMolen.FasenModuleData.Add(fcdm);
                     }
                     NewData.Conflicten.BubbleSort();
-                    foreach (ConflictModel cm in NewData.Conflicten)
+                    foreach (var cm in NewData.Conflicten)
                     {
                         newc.InterSignaalGroep.Conflicten.Add(cm);
                     }

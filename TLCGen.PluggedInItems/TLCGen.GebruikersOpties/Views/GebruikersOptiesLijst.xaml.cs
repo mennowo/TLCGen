@@ -12,8 +12,8 @@ namespace TLCGen.GebruikersOpties
     {
         public bool ShowNaam
         {
-            get { return (bool)GetValue(ShowNaamProperty); }
-            set { SetValue(ShowNaamProperty, value); }
+            get => (bool)GetValue(ShowNaamProperty);
+            set => SetValue(ShowNaamProperty, value);
         }
 
         public static readonly DependencyProperty ShowNaamProperty =
@@ -21,8 +21,8 @@ namespace TLCGen.GebruikersOpties
         
         public bool ShowInstelling
         {
-            get { return (bool)GetValue(ShowInstellingProperty); }
-            set { SetValue(ShowInstellingProperty, value); }
+            get => (bool)GetValue(ShowInstellingProperty);
+            set => SetValue(ShowInstellingProperty, value);
         }
 
         public static readonly DependencyProperty ShowInstellingProperty =
@@ -30,8 +30,8 @@ namespace TLCGen.GebruikersOpties
 
         public bool ShowDummy
         {
-            get { return (bool)GetValue(ShowDummyProperty); }
-            set { SetValue(ShowDummyProperty, value); }
+            get => (bool)GetValue(ShowDummyProperty);
+            set => SetValue(ShowDummyProperty, value);
         }
 
         public static readonly DependencyProperty ShowDummyProperty =
@@ -39,8 +39,8 @@ namespace TLCGen.GebruikersOpties
 
         public bool ShowType
         {
-            get { return (bool)GetValue(ShowTypeProperty); }
-            set { SetValue(ShowTypeProperty, value); }
+            get => (bool)GetValue(ShowTypeProperty);
+            set => SetValue(ShowTypeProperty, value);
         }
 
         public static readonly DependencyProperty ShowTypeProperty =
@@ -48,8 +48,8 @@ namespace TLCGen.GebruikersOpties
 
         public ICollection GridItemsSource
         {
-            get { return (Array)GetValue(ConflictMatrixProperty); }
-            set { SetValue(ConflictMatrixProperty, value); }
+            get => (Array)GetValue(ConflictMatrixProperty);
+            set => SetValue(ConflictMatrixProperty, value);
         }
 
         public static readonly DependencyProperty ConflictMatrixProperty =
@@ -57,8 +57,8 @@ namespace TLCGen.GebruikersOpties
 
         public object GridSelectedItem
         {
-            get { return (object)GetValue(GridSelectedItemProperty); }
-            set { SetValue(GridSelectedItemProperty, value); }
+            get => (object)GetValue(GridSelectedItemProperty);
+            set => SetValue(GridSelectedItemProperty, value);
         }
 
         public static readonly DependencyProperty GridSelectedItemProperty =
@@ -66,8 +66,8 @@ namespace TLCGen.GebruikersOpties
 
         public IList GridSelectedItems
         {
-            get { return (IList)GetValue(GridSelectedItemsProperty); }
-            set { SetValue(GridSelectedItemsProperty, value); }
+            get => (IList)GetValue(GridSelectedItemsProperty);
+            set => SetValue(GridSelectedItemsProperty, value);
         }
         
         public static readonly DependencyProperty GridSelectedItemsProperty =

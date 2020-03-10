@@ -66,35 +66,32 @@ namespace FloodFill
 
         public bool Slow
         {
-            get { return slow; }
-            set { slow = value; }
+            get => slow;
+            set => slow = value;
         }
 
         public Color FillColor
         {
-            get { return fillColor; }
-            set { fillColor = value; }
+            get => fillColor;
+            set => fillColor = value;
         }
 
         public bool FillDiagonally
         {
-            get { return fillDiagonally; }
-            set { fillDiagonally = value; }
+            get => fillDiagonally;
+            set => fillDiagonally = value;
         }
 
         public byte[] Tolerance
         {
-            get { return tolerance; }
-            set { tolerance = value; }
+            get => tolerance;
+            set => tolerance = value;
         }
 
         public EditableBitmap Bitmap
         {
-            get { return bitmap; }
-            set 
-            { 
-                bitmap = value;
-            }
+            get => bitmap;
+            set => bitmap = value;
         }
 
         public abstract void FloodFill(Point pt);

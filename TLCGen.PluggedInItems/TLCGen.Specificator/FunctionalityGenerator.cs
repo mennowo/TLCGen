@@ -658,7 +658,7 @@ namespace TLCGen.Specificator
 
             var table = new Table();
 
-            TableProperties props = new TableProperties(
+            var props = new TableProperties(
                 new TableBorders(
                 new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
                 new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },

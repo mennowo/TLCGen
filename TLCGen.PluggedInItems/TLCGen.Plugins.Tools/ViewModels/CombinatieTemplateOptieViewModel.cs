@@ -61,7 +61,7 @@ namespace TLCGen.Plugins.Tools
         {
             get
             {
-                if(int.TryParse(Replace, out int i))
+                if(int.TryParse(Replace, out var i))
                 {
                     return i;
                 }

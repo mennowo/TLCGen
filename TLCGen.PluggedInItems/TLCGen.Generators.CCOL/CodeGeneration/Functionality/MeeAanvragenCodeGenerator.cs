@@ -106,14 +106,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
-                    bool hasdetafh = false;
+                    var hasdetafh = false;
                     if(c.InterSignaalGroep.Meeaanvragen.Count > 0)
                     {
                         hasdetafh = c.InterSignaalGroep.Meeaanvragen.Any(x => x.DetectieAfhankelijk);

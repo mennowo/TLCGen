@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
         
         public DetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedDetectoren
         {
-            get { return _SelectedDetectoren; }
+            get => _SelectedDetectoren;
             set
             {
                 _SelectedDetectoren = value;
@@ -95,7 +95,7 @@ namespace TLCGen.ViewModels
 
 	    public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

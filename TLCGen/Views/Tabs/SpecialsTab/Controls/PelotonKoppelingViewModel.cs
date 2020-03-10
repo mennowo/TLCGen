@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
 
         public string KoppelingNaam
         {
-            get { return PelotonKoppeling.KoppelingNaam; }
+            get => PelotonKoppeling.KoppelingNaam;
             set
             {
                 if (NameSyntaxChecker.IsValidCName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
@@ -63,7 +63,7 @@ namespace TLCGen.ViewModels
 
         public string GekoppeldeSignaalGroep
         {
-            get { return PelotonKoppeling.GekoppeldeSignaalGroep; }
+            get => PelotonKoppeling.GekoppeldeSignaalGroep;
             set
             {
                 if (value != null)
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
 
         public int Meetperiode
         {
-            get { return PelotonKoppeling.Meetperiode; }
+            get => PelotonKoppeling.Meetperiode;
             set
             {
                 PelotonKoppeling.Meetperiode = value;
@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
 
         public int Verschuiving
         {
-            get { return PelotonKoppeling.Verschuiving; }
+            get => PelotonKoppeling.Verschuiving;
             set
             {
                 PelotonKoppeling.Verschuiving = value;
@@ -96,7 +96,7 @@ namespace TLCGen.ViewModels
 
         public int MaximaalHiaat
         {
-            get { return PelotonKoppeling.MaximaalHiaat; }
+            get => PelotonKoppeling.MaximaalHiaat;
             set
             {
                 PelotonKoppeling.MaximaalHiaat = value;
@@ -106,7 +106,7 @@ namespace TLCGen.ViewModels
 
         public int MinimaalAantalVoertuigen
         {
-            get { return PelotonKoppeling.MinimaalAantalVoertuigen; }
+            get => PelotonKoppeling.MinimaalAantalVoertuigen;
             set
             {
                 PelotonKoppeling.MinimaalAantalVoertuigen = value;
@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
 
         public int TijdTotAanvraag
         {
-            get { return PelotonKoppeling.TijdTotAanvraag; }
+            get => PelotonKoppeling.TijdTotAanvraag;
             set
             {
                 PelotonKoppeling.TijdTotAanvraag = value;
@@ -126,7 +126,7 @@ namespace TLCGen.ViewModels
 
         public int TijdTotRetourWachtgroen
         {
-            get { return PelotonKoppeling.TijdTotRetourWachtgroen; }
+            get => PelotonKoppeling.TijdTotRetourWachtgroen;
             set
             {
                 PelotonKoppeling.TijdTotRetourWachtgroen = value;
@@ -136,7 +136,7 @@ namespace TLCGen.ViewModels
 
         public int TijdRetourWachtgroen
         {
-            get { return PelotonKoppeling.TijdRetourWachtgroen; }
+            get => PelotonKoppeling.TijdRetourWachtgroen;
             set
             {
                 PelotonKoppeling.TijdRetourWachtgroen = value;
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
 
         public int MaxTijdToepassenRetourWachtgroen
         {
-            get { return PelotonKoppeling.MaxTijdToepassenRetourWachtgroen; }
+            get => PelotonKoppeling.MaxTijdToepassenRetourWachtgroen;
             set
             {
                 PelotonKoppeling.MaxTijdToepassenRetourWachtgroen = value;
@@ -156,7 +156,7 @@ namespace TLCGen.ViewModels
         
         public NooitAltijdAanUitEnum ToepassenAanvraag
         {
-            get { return PelotonKoppeling.ToepassenAanvraag; }
+            get => PelotonKoppeling.ToepassenAanvraag;
             set
             {
                 PelotonKoppeling.ToepassenAanvraag = value;
@@ -167,7 +167,7 @@ namespace TLCGen.ViewModels
 
         public NooitAltijdAanUitEnum ToepassenMeetkriterium
         {
-            get { return PelotonKoppeling.ToepassenMeetkriterium; }
+            get => PelotonKoppeling.ToepassenMeetkriterium;
             set
             {
                 PelotonKoppeling.ToepassenMeetkriterium = value;
@@ -177,7 +177,7 @@ namespace TLCGen.ViewModels
 
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen
         {
-            get { return PelotonKoppeling.ToepassenRetourWachtgroen; }
+            get => PelotonKoppeling.ToepassenRetourWachtgroen;
             set
             {
                 PelotonKoppeling.ToepassenRetourWachtgroen = value;
@@ -223,7 +223,7 @@ namespace TLCGen.ViewModels
 
         public string PTPKruising
         {
-            get { return PelotonKoppeling.PTPKruising; }
+            get => PelotonKoppeling.PTPKruising;
             set
             {
                 if (value != null)
@@ -237,7 +237,7 @@ namespace TLCGen.ViewModels
 
         public HalfstarGekoppeldWijzeEnum KoppelWijze
         {
-            get { return PelotonKoppeling.KoppelWijze; }
+            get => PelotonKoppeling.KoppelWijze;
             set
             {
                 PelotonKoppeling.KoppelWijze = value;
@@ -247,7 +247,7 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingRichtingEnum Richting
         {
-            get { return PelotonKoppeling.Richting; }
+            get => PelotonKoppeling.Richting;
             set
             {
                 PelotonKoppeling.Richting = value;
@@ -269,7 +269,7 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingTypeEnum Type
         {
-            get { return PelotonKoppeling.Type; }
+            get => PelotonKoppeling.Type;
             set
             {
                 PelotonKoppeling.Type = value;

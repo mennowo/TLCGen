@@ -97,7 +97,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 return null;
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             switch(type)
             {
                 case CCOLCodeTypeEnum.RegCTop:

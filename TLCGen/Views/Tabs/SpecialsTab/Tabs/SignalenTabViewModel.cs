@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
         void AddWaarschuwingsGroepCommand_Executed(object prm)
         {
             var grm = new WaarschuwingsGroepModel();
-            int i = WaarschuwingsGroepen.Count + 1;
+            var i = WaarschuwingsGroepen.Count + 1;
             grm.Naam = "groep" + i;
             while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, grm.Naam, TLCGenObjectTypeEnum.WaarschuwingsGroep))
             {
@@ -148,7 +148,7 @@ namespace TLCGen.ViewModels
 
         void RemoveWaarschuwingsGroepCommand_Executed(object prm)
         {
-            int id = WaarschuwingsGroepen.IndexOf(SelectedWaarschuwingsGroep);
+            var id = WaarschuwingsGroepen.IndexOf(SelectedWaarschuwingsGroep);
             WaarschuwingsGroepen.Remove(SelectedWaarschuwingsGroep);
             SelectedWaarschuwingsGroep = null;
             if(WaarschuwingsGroepen.Count > 0)
@@ -169,7 +169,7 @@ namespace TLCGen.ViewModels
 
         void AddRatelTikkerCommand_Executed(object prm)
         {
-            int id = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
+            var id = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
             var rtm = new RatelTikkerModel()
             {
                 FaseCyclus = SelectedRatelTikkerFaseToAdd
@@ -221,8 +221,8 @@ namespace TLCGen.ViewModels
 
         void RemoveRatelTikkerCommand_Executed(object prm)
         {
-            int id = RatelTikkers.IndexOf(SelectedRatelTikker);
-            int id2 = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
+            var id = RatelTikkers.IndexOf(SelectedRatelTikker);
+            var id2 = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
             RatelTikkers.Remove(SelectedRatelTikker);
             UpdateSelectables();
             SelectedRatelTikker = null;
@@ -286,7 +286,7 @@ namespace TLCGen.ViewModels
                 _ControllerDetectoren.Add(dm.Naam);
             }
 
-            string tempfc = SelectedRatelTikkerFaseToAdd;
+            var tempfc = SelectedRatelTikkerFaseToAdd;
             SelectableRatelTikkerFasen.Clear();
             if (ControllerFasen.Count > 0 && RatelTikkers.Count > 0)
             {

@@ -84,7 +84,7 @@ namespace TLCGen.Plugins
             var iaddin = addin as ITLCGenPlugin;
 
             // Loop the settings data, to see if we have settings for this Generator
-            foreach (AddinSettingsModel addindata in customdata.AddinSettings)
+            foreach (var addindata in customdata.AddinSettings)
             {
                 if (addindata.Naam == iaddin.GetPluginName())
                 {
@@ -92,19 +92,19 @@ namespace TLCGen.Plugins
                     var dllprops = addintype.GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
                     // Loop the saved settings, and load if applicable
-                    foreach (AddinSettingsPropertyModel dataprop in addindata.Properties)
+                    foreach (var dataprop in addindata.Properties)
                     {
                         foreach (var propinfo in dllprops)
                         {
                             // Only load here, if it is a controller specific setting
-                            TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenCustomSettingAttribute));
+                            var propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenCustomSettingAttribute));
                             if (propinfo.Name == dataprop.Naam)
                             {
                                 if (propattr != null && propattr.SettingType == TLCGenCustomSettingAttribute.SettingTypeEnum.Application)
                                 {
                                     try
                                     {
-                                        string type = propinfo.PropertyType.ToString();
+                                        var type = propinfo.PropertyType.ToString();
                                         switch (type)
                                         {
                                             case "System.Double":
@@ -241,9 +241,9 @@ namespace TLCGen.Plugins
             if (!Directory.Exists(pluginpath)) return;
 
             // Find all plugin DLL's
-            foreach (String file in Directory.GetFiles(pluginpath))
+            foreach (var file in Directory.GetFiles(pluginpath))
             {
-                string _file = file;
+                var _file = file;
                 if (Path.GetExtension(_file).ToLower() == ".dll")
                 {
                     try
@@ -253,7 +253,7 @@ namespace TLCGen.Plugins
                         assemblyInstance = Assembly.LoadFrom(_file);
                         var types = assemblyInstance.GetTypes();
                         var bFound = false;
-                        foreach (Type type in types)
+                        foreach (var type in types)
                         {
                             // Find TLCGenPluginAttribute attribute, and if found, continue
                             var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));

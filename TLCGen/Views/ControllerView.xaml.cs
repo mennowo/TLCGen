@@ -20,7 +20,7 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool b = (bool)value;
+            var b = (bool)value;
             if (b)
                 return 1;
             else

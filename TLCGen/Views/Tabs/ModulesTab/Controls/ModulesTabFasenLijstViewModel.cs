@@ -31,14 +31,14 @@ namespace TLCGen.ViewModels
 
         public ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;
                 Fasen.Clear();
                 if (_Controller != null)
                 {
-                    foreach (FaseCyclusModel fcm in Controller.Fasen)
+                    foreach (var fcm in Controller.Fasen)
                     {
                         Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
                     }
@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
 
         public FaseCyclusModuleViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
@@ -70,12 +70,12 @@ namespace TLCGen.ViewModels
         
         public ModuleViewModel SelectedModule
         {
-            get { return _SelectedModule; }
+            get => _SelectedModule;
             set
             {
                 _SelectedModule = value;
                 _SelectedModuleFase = null;
-                foreach (FaseCyclusModuleViewModel fcmvm in Fasen)
+                foreach (var fcmvm in Fasen)
                 {
                     fcmvm.ModuleVM = value;
                     fcmvm.ModuleFaseVM = null;
@@ -96,7 +96,7 @@ namespace TLCGen.ViewModels
 
         public ModuleFaseCyclusViewModel SelectedModuleFase
         {
-            get { return _SelectedModuleFase; }
+            get => _SelectedModuleFase;
             set
             {
                 _SelectedModuleFase = value;
@@ -143,15 +143,15 @@ namespace TLCGen.ViewModels
 
         void AddRemoveFaseCommand_Executed(object prm)
         {
-            FaseCyclusModuleViewModel fcmvm = prm as FaseCyclusModuleViewModel;
+            var fcmvm = prm as FaseCyclusModuleViewModel;
             SelectedFaseCyclus = fcmvm;
             if (SelectedModule != null)
             {
                 if (fcmvm.CanBeAdded && !fcmvm.IsIn)
                 {
-                    ModuleFaseCyclusModel mfcm = new ModuleFaseCyclusModel();
+                    var mfcm = new ModuleFaseCyclusModel();
                     mfcm.FaseCyclus = fcmvm.Naam;
-                    ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
+                    var mfcvm = new ModuleFaseCyclusViewModel(mfcm);
                     SelectedModule.Fasen.Add(mfcvm);
                     SelectedModule.Fasen.BubbleSort();
                 }
@@ -167,7 +167,7 @@ namespace TLCGen.ViewModels
             {
                 if (fcmvm.CanBeAdded && !fcmvm.IsIn)
                 {
-                    ModuleFaseCyclusAlternatiefModel afcm = new ModuleFaseCyclusAlternatiefModel();
+                    var afcm = new ModuleFaseCyclusAlternatiefModel();
                     afcm.FaseCyclus = fcmvm.Naam;
                     if (SelectedModuleFase.Alternatieven.Any())
                     {
@@ -185,7 +185,7 @@ namespace TLCGen.ViewModels
                     SelectedModuleFase.Alternatieven.BubbleSort();
                 }
             }
-            foreach (FaseCyclusModuleViewModel _fcmvm in Fasen)
+            foreach (var _fcmvm in Fasen)
             {
                 if (!_Controller.Data.MultiModuleReeksen && _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam)) ||
                     _Controller.MultiModuleMolens.Any(y => y.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam))))

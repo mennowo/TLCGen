@@ -54,7 +54,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public ControllerViewModel ControllerVM
         {
-            get { return _ControllerVM; }
+            get => _ControllerVM;
             set
             {
                 _ControllerVM = value;
@@ -85,10 +85,7 @@ namespace TLCGen.ViewModels
         /// Boolean used by the View to determine of a Controller has been loaded.
         /// This is used in the View to enable/disable appropriate UI elementents.
         /// </summary>
-        public bool HasController
-        {
-            get { return TLCGenControllerDataProvider.Default.Controller != null; }
-        }
+        public bool HasController => TLCGenControllerDataProvider.Default.Controller != null;
 
         /// <summary>
         /// A string to be used in the View as the title of the program.
@@ -150,7 +147,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public IGeneratorViewModel SelectedGenerator
         {
-            get { return _SelectedGenerator; }
+            get => _SelectedGenerator;
             set
             {
                 _SelectedGenerator = value;
@@ -186,13 +183,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool IsPluginMenuVisible
-        {
-            get
-            {
-                return _PluginMenuItems?.Count > 0;
-            }
-        }
+        public bool IsPluginMenuVisible => _PluginMenuItems?.Count > 0;
 
         public bool ShowAlertMessage
         {
@@ -384,7 +375,7 @@ namespace TLCGen.ViewModels
         {
             if (TLCGenControllerDataProvider.Default.NewController())
             {
-                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
 
                 // This allows plugins to reset their content
                 ControllerVM.Controller = null;
@@ -435,7 +426,7 @@ namespace TLCGen.ViewModels
 
         private void SaveAsFileCommand_Executed(object prm)
         {
-            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+            var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
             if (TLCGenControllerDataProvider.Default.SaveControllerAs())
             {
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
@@ -455,7 +446,7 @@ namespace TLCGen.ViewModels
 
         private void CloseFileCommand_Executed(object prm)
         {
-            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+            var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
             if (TLCGenControllerDataProvider.Default.CloseController())
             {
                 DefaultsProvider.Default.Controller = null;
@@ -568,7 +559,7 @@ namespace TLCGen.ViewModels
             // Request to process all synchronisation data from matrix to model
             Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
-            string s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
+            var s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
             if (s == null)
             {
                 SelectedGenerator.Generator.GenerateController();
@@ -596,7 +587,7 @@ namespace TLCGen.ViewModels
 
         private void ShowSettingsWindowCommand_Executed(object obj)
         {
-            Settings.Views.TLCGenSettingsWindow settingswin = new Settings.Views.TLCGenSettingsWindow
+            var settingswin = new Settings.Views.TLCGenSettingsWindow
             {
                 DataContext = new TLCGenSettingsViewModel(),
                 Owner = Application.Current.MainWindow
@@ -623,7 +614,7 @@ namespace TLCGen.ViewModels
             foreach (var f in files)
             {
                 var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
-                string text = reader.ReadToEnd();
+                var text = reader.ReadToEnd();
                 vfiles.Add(new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")), text));
             }
             var infoW = new VersionInfoWindow(ControllerVersion, vfiles)
@@ -679,33 +670,33 @@ namespace TLCGen.ViewModels
         private void SaveGeneratorControllerSettingsToModel()
         {
             //SettingsVM.Settings.CustomData.AddinSettings.Clear();
-            foreach (IGeneratorViewModel genvm in Generators)
+            foreach (var genvm in Generators)
             {
-                ITLCGenGenerator gen = genvm.Generator;
-                AddinSettingsModel gendata = new AddinSettingsModel
+                var gen = genvm.Generator;
+                var gendata = new AddinSettingsModel
                 {
                     Naam = gen.GetGeneratorName()
                 };
-                Type t = gen.GetType();
+                var t = gen.GetType();
                 // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
                 var dllprops = t.GetProperties().Where(
                     prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
-                foreach (PropertyInfo propertyInfo in dllprops)
+                foreach (var propertyInfo in dllprops)
                 {
                     if (propertyInfo.CanRead)
                     {
-                        TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenCustomSettingAttribute));
+                        var propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenCustomSettingAttribute));
                         if (propattr.SettingType == TLCGenCustomSettingAttribute.SettingTypeEnum.Application)
                         {
                             try
                             {
 
-                                string name = propertyInfo.Name;
+                                var name = propertyInfo.Name;
                                 var v = propertyInfo.GetValue(gen);
                                 if (v != null)
                                 {
-                                    string value = v.ToString();
-                                    AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel
+                                    var value = v.ToString();
+                                    var prop = new AddinSettingsPropertyModel
                                     {
                                         Naam = name,
                                         Setting = value
@@ -747,7 +738,7 @@ namespace TLCGen.ViewModels
         {
             if (TLCGenControllerDataProvider.Default.SetController(cm))
             {
-                string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                var filename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 SetControllerForStatics(cm);
                 ControllerVM.Controller = cm;
                 return true;
@@ -759,7 +750,7 @@ namespace TLCGen.ViewModels
         {
             if (TLCGenControllerDataProvider.Default.OpenController(filename))
             {
-                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
@@ -790,7 +781,7 @@ namespace TLCGen.ViewModels
 
         public void CheckCommandLineArgs()
         {
-            string[] args = Environment.GetCommandLineArgs();
+            var args = Environment.GetCommandLineArgs();
 
             if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
             {
@@ -849,6 +840,7 @@ namespace TLCGen.ViewModels
                 MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
 
                 // Load application settings and defaults
+                ControllerAccessProvider.Default.Setup();
                 TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
                 SettingsProvider.Default.LoadApplicationSettings();
                 DefaultsProvider.Default.LoadSettings();
@@ -872,7 +864,7 @@ namespace TLCGen.ViewModels
                 var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
                 foreach (var part in parts)
                 {
-                    ITLCGenPlugin instpl = part.Item2;
+                    var instpl = part.Item2;
                     TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
                     var flags = Enum.GetValues(typeof(TLCGenPluginElems));
                     foreach (TLCGenPluginElems elem in flags)
@@ -888,7 +880,7 @@ namespace TLCGen.ViewModels
                                     ((ITLCGenHasSettings)instpl).LoadSettings();
                                     break;
                                 case TLCGenPluginElems.Importer:
-                                    MenuItem mi = new MenuItem
+                                    var mi = new MenuItem
                                     {
                                         Header = instpl.GetPluginName(),
                                         Command = ImportControllerCommand,
@@ -978,7 +970,7 @@ namespace TLCGen.ViewModels
             {
                 TLCGenSplashScreenHelper.Hide();
 
-                string message = "Er is een onverwachte fout opgetreden.\n\n";
+                var message = "Er is een onverwachte fout opgetreden.\n\n";
                 message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
                 var win = new UnhandledExceptionWindow
                 {

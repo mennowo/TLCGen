@@ -19,7 +19,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            foreach (FaseCyclusModel fcm in c.Fasen)
+            foreach (var fcm in c.Fasen)
             {
                 if (fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                     fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
@@ -54,14 +54,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Vaste aanvragen */");
                     sb.AppendLine($"{ts}/* --------------- */");
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchAan ||
                             fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchUit)

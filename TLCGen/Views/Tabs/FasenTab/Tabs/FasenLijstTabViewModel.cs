@@ -23,30 +23,18 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
-        private bool _IsSorting = false;
         private IList _SelectedFaseCycli = new ArrayList();
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<FaseCyclusViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<FaseCyclusViewModel>();
-                }
-                return _Fasen;
-            }
-        }
+        public ObservableCollection<FaseCyclusViewModel> Fasen => ControllerAccessProvider.Default.AllSignalGroups;
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
@@ -57,7 +45,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedFaseCycli
         {
-            get { return _SelectedFaseCycli; }
+            get => _SelectedFaseCycli;
             set
             {
                 _SelectedFaseCycli = value;
@@ -131,7 +119,7 @@ namespace TLCGen.ViewModels
             var inext = 0;
             foreach (var fcvm in Fasen)
             {
-                if (int.TryParse(fcvm.Naam, out int inewname))
+                if (int.TryParse(fcvm.Naam, out var inewname))
                 {
                     inext = inewname > inext ? inewname : inext;
                 }
@@ -146,19 +134,17 @@ namespace TLCGen.ViewModels
             fcm.Naam = newname;
             fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
-            var fcvm1 = new FaseCyclusViewModel(fcm);
-            Fasen.Add(fcvm1);
+            
+            // This will cause the model to be updated
+            Messenger.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
         }
 
-        bool AddNewFaseCommand_CanExecute(object prm)
-        {
-            return Fasen != null;
-        }
+        bool AddNewFaseCommand_CanExecute(object prm) => Fasen != null;
 
         void RemoveFaseCommand_Executed(object prm)
         {
-            bool changed = false;
-            List<FaseCyclusModel> remfcs = new List<FaseCyclusModel>();
+            var changed = false;
+            var remfcs = new List<FaseCyclusModel>();
             if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 0)
             {
                 changed = true;
@@ -180,14 +166,7 @@ namespace TLCGen.ViewModels
 
             if(changed)
             {
-                Fasen.CollectionChanged -= Fasen_CollectionChanged;
-                Fasen.Clear();
-                foreach (var fc in _Controller.Fasen)
-                {
-                    Fasen.Add(new FaseCyclusViewModel(fc));
-                }
-                Fasen.CollectionChanged += Fasen_CollectionChanged;
-                Messenger.Default.Send(new FasenChangedMessage(null, remfcs));
+                Messenger.Default.Send(new FasenChangingMessage(null, remfcs));
             }
 
         }
@@ -203,17 +182,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Overzicht";
-            }
-        }
+        public override string DisplayName => "Overzicht";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -225,7 +198,7 @@ namespace TLCGen.ViewModels
         {
             if (!Fasen.IsSorted())
             {
-                _IsSorting = true;
+                Fasen.CollectionChanged -= Fasen_CollectionChanged;
                 Fasen.BubbleSort();
                 _Controller.Fasen.Clear();
                 foreach(var fcvm in Fasen)
@@ -233,26 +206,24 @@ namespace TLCGen.ViewModels
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
                 }
                 Messenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
-                _IsSorting = false;
+                Fasen.CollectionChanged += Fasen_CollectionChanged;
             }
             return true;
         }
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
                 base.Controller = value;
+                // TODO these kind of actions should happen elsewhere
                 Fasen.CollectionChanged -= Fasen_CollectionChanged;
                 Fasen.Clear();
                 if (base.Controller != null)
                 {
-                    foreach (FaseCyclusModel fcm in base.Controller.Fasen)
+                    foreach (var fcm in base.Controller.Fasen)
                     {
                         var fcvm = new FaseCyclusViewModel(fcm);
                         fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
@@ -266,23 +237,6 @@ namespace TLCGen.ViewModels
         #endregion // TabItem Overrides
 
         #region TLCGen Event handling
-
-        private void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
-        {
-            foreach (var fcm in Fasen)
-            {
-                fcm.UpdateHasKopmax();
-            }
-        }
-
-        private void OnFaseDetectorVeiligheidsGroenChanged(FaseDetectorVeiligheidsGroenChangedMessage message)
-        {
-            foreach (var fcm in Fasen)
-            {
-                fcm.UpdateHasVeiligheidsGroen();
-            }
-        }
-
         #endregion // TLCGen Event handling
 
         #region Event handling
@@ -311,7 +265,6 @@ namespace TLCGen.ViewModels
             {
                 foreach (FaseCyclusViewModel fcvm in e.NewItems)
                 {
-                    _Controller.Fasen.Add(fcvm.FaseCyclus);
                     fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
                 }
             }
@@ -319,34 +272,11 @@ namespace TLCGen.ViewModels
             {
                 foreach (FaseCyclusViewModel fcvm in e.OldItems)
                 {
-                    _Controller.Fasen.Remove(fcvm.FaseCyclus);
+                    fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
                 }
             }
-
-            List<FaseCyclusModel> removedfasen = new List<FaseCyclusModel>();
-            if (e.OldItems != null)
-            {
-                foreach (FaseCyclusViewModel item in e.OldItems)
-                {
-                    removedfasen.Add(item.FaseCyclus);
-                }
-            }
-
-            List<FaseCyclusModel> addedfasen = new List<FaseCyclusModel>();
-            if (e.NewItems != null)
-            {
-                foreach (FaseCyclusViewModel item in e.NewItems)
-                {
-                    addedfasen.Add(item.FaseCyclus);
-                }
-            }
-
-            if (!_IsSorting)
-            {
-                Messenger.Default.Send(new FasenChangingMessage(addedfasen, removedfasen));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                Messenger.Default.Send(new ControllerDataChangedMessage());
-            }
+            Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -386,8 +316,6 @@ namespace TLCGen.ViewModels
 
         public FasenLijstTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
-            Messenger.Default.Register(this, new Action<FaseDetectorVeiligheidsGroenChangedMessage>(OnFaseDetectorVeiligheidsGroenChanged));
         }
 
         #endregion // Constructor

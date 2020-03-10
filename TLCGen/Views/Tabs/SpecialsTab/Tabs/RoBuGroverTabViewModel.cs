@@ -35,14 +35,11 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public RoBuGroverModel RoBuGrover
-        {
-            get { return _Controller.RoBuGrover; }
-        }
+        public RoBuGroverModel RoBuGrover => _Controller.RoBuGrover;
 
         public bool AutomaticallySetSelectableSignalGroups
         {
-            get { return _AutomaticallySetSelectableSignalGroups; }
+            get => _AutomaticallySetSelectableSignalGroups;
             set
             {
                 _AutomaticallySetSelectableSignalGroups = value;
@@ -53,7 +50,7 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverConflictGroepViewModel SelectedConflictGroep
         {
-            get { return _SelectedConflictGroep; }
+            get => _SelectedConflictGroep;
             set
             {
                 var oldval = _SelectedConflictGroep;
@@ -65,17 +62,17 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverSignaalGroepInstellingenViewModel SelectedSignaalGroepInstelling
         {
-            get { return _SelectedSignaalGroepInstelling; }
+            get => _SelectedSignaalGroepInstelling;
             set
             {
                 _SelectedSignaalGroepInstelling = value;
-                RaisePropertyChanged<object>("SelectedSignaalGroepInstelling", null, null, true);
+                RaisePropertyChanged<object>(nameof(SelectedSignaalGroepInstelling), null, null, true);
             }
         }
 
         public RoBuGroverTabFaseViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
@@ -107,14 +104,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public RoBuGroverInstellingenViewModel RoBuGroverInstellingen
-        {
-            get
-            {
-                return _roBuGroverInstellingenInstellingen ?? (_roBuGroverInstellingenInstellingen =
-                           new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover));
-            }
-        }
+        public RoBuGroverInstellingenViewModel RoBuGroverInstellingen =>
+            _roBuGroverInstellingenInstellingen ?? (_roBuGroverInstellingenInstellingen =
+                new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover));
 
         #endregion // Properties
 
@@ -170,7 +162,7 @@ namespace TLCGen.ViewModels
 
         private void AddConflictGroepCommand_Executed(object obj)
         {
-            RoBuGroverConflictGroepModel cgm = new RoBuGroverConflictGroepModel();
+            var cgm = new RoBuGroverConflictGroepModel();
             ConflictGroepen.Add(new RoBuGroverConflictGroepViewModel(cgm));
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
@@ -234,7 +226,7 @@ namespace TLCGen.ViewModels
                     {
                         var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
                         if(addfc.Type != FaseTypeEnum.Fiets || addfc.Type == FaseTypeEnum.Voetganger)
-                        foreach (DetectorModel dm in addfc.Detectoren)
+                        foreach (var dm in addfc.Detectoren)
                         {
                             if (dm.Type == DetectorTypeEnum.Lang)
                             {
@@ -279,7 +271,7 @@ namespace TLCGen.ViewModels
                 }
                 MessengerInstance.Send(new ControllerDataChangedMessage());
             }
-            foreach (RoBuGroverTabFaseViewModel tfc in Fasen)
+            foreach (var tfc in Fasen)
             {
                 tfc.UpdateConflictGroepInfo();
             }
@@ -327,10 +319,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen TabItem overrides
 
-        public override string DisplayName
-        {
-            get { return "RoBuGrover"; }
-        }
+        public override string DisplayName => "RoBuGrover";
 
         public override void OnSelected()
         {
@@ -339,10 +328,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

@@ -16,8 +16,8 @@ namespace TLCGen.Controls
 
         public FrameworkElement InfoPopup
         {
-            get { return (FrameworkElement)GetValue(InfoPopupProperty); }
-            set { SetValue(InfoPopupProperty, value); }
+            get => (FrameworkElement)GetValue(InfoPopupProperty);
+            set => SetValue(InfoPopupProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InfoText.  This enables animation, styling, binding, etc...
@@ -27,7 +27,7 @@ namespace TLCGen.Controls
         private static void OnInfoPopupChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ie = (InfoElement)d;
-            Border b = new Border();
+            var b = new Border();
             b.Padding = new Thickness(2);
             b.Background = Brushes.Beige;
             b.BorderBrush = Brushes.DarkGray;

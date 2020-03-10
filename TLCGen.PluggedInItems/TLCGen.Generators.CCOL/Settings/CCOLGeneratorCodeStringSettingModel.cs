@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.Settings
         private string _Setting;
         public string Setting
         {
-            get { return _Setting; }
+            get => _Setting;
             set
             {
                 if(!string.IsNullOrWhiteSpace(value))

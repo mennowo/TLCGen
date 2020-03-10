@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
 
         public PTPKoppelingViewModel SelectedPTPKoppeling
         {
-            get { return _SelectedPTPKoppeling; }
+            get => _SelectedPTPKoppeling;
             set
             {
                 _SelectedPTPKoppeling = value;
@@ -130,17 +130,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "PTP";
-            }
-        }
+        public override string DisplayName => "PTP";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -167,10 +161,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
@@ -180,7 +171,7 @@ namespace TLCGen.ViewModels
 
                     PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
                     PTPKoppelingen.Clear();
-                    foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
+                    foreach (var ptp in _Controller.PTPData.PTPKoppelingen)
                     {
                         PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
                     }

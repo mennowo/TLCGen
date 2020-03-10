@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
 
         public DetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
@@ -74,9 +74,9 @@ namespace TLCGen.ViewModels
 
         private void GenerateSimulationValuesCommand_Executed(object obj)
         {
-            Random rd = new Random();
+            var rd = new Random();
             
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 var max = 3;
                 var numbers = new List<int> { 200, 100, 50 };
@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
                 n = rd.Next(2);
                 var q4 = numbersLow[n];
 
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (var dm in fcm.Detectoren)
                 {
                     dm.Simulatie.Q1 = q1;
                     dm.Simulatie.Q2 = q2;
@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
                     dm.Simulatie.FCNr = fcm.Naam;
                 }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
+            foreach (var dm in _Controller.Detectoren)
             {
                 var max = 3;
                 var numbers = new List<int> { 200, 100, 50 };
@@ -183,16 +183,16 @@ namespace TLCGen.ViewModels
         {
             foreach (var d in Detectoren) d.PropertyChanged -= Detector_PropertyChanged;
             Detectoren.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (var dm in fcm.Detectoren)
                 {
                     var dvm = new DetectorViewModel(dm);
                     dvm.PropertyChanged += Detector_PropertyChanged;
                     Detectoren.Add(dvm);
                 }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
+            foreach (var dm in _Controller.Detectoren)
             {
                 var dvm = new DetectorViewModel(dm);
                 dvm.PropertyChanged += Detector_PropertyChanged;
@@ -214,17 +214,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Simulatie";
-            }
-        }
+        public override string DisplayName => "Simulatie";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

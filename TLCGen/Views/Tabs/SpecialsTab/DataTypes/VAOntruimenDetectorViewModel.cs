@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _VAOntruimenDetector.Detector; }
+            get => _VAOntruimenDetector.Detector;
             set
             {
                 _VAOntruimenDetector.Detector = value;

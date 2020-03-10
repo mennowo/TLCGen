@@ -164,7 +164,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (!risModel.RISToepassen) return "";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             var lanes = risModel.RISFasen.SelectMany(x => x.LaneData);
 

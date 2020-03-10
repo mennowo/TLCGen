@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
         #region Properties
 
         public ObservableCollection<T1> ItemsInCollection { get; }
-        public List<T2> AllAvailableItems { get; }
+        public IEnumerable<T2> AllAvailableItems { get; private set; }
         public ObservableCollection<T2> SelectableItems { get; }
         public ObservableCollection<T2> RemovableItems { get; }
 
@@ -101,7 +101,7 @@ namespace TLCGen.ViewModels
 
         private void AddItemCommand_Executed()
         {
-            T1 d = _getItemToAdd(SelectedItemToAdd);
+            var d = _getItemToAdd(SelectedItemToAdd);
             ItemsInCollection.Add(d);
             SelectedItem = d;
             Refresh();
@@ -117,7 +117,7 @@ namespace TLCGen.ViewModels
         {
             if(_selectedItem != null)
             {
-                int i = ItemsInCollection.IndexOf(_selectedItem);
+                var i = ItemsInCollection.IndexOf(_selectedItem);
                 ItemsInCollection.Remove(_selectedItem);
                 if(i < (ItemsInCollection.Count - 1))
                 {
@@ -134,7 +134,7 @@ namespace TLCGen.ViewModels
             }
             else if (SelectedItemToRemove != null && _getItemToRemove != null)
             {
-                T1 d = _getItemToRemove(SelectedItemToRemove);
+                var d = _getItemToRemove(SelectedItemToRemove);
                 ItemsInCollection.Remove(d);
             }
             Refresh();
@@ -142,10 +142,10 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Command functionality
+        
+        #region Public Methods
 
-        #region Private Methods
-
-        private void Refresh()
+        public void Refresh()
         {
             var sdta = SelectedItemToAdd;
             SelectedItemToAdd = null;
@@ -153,17 +153,14 @@ namespace TLCGen.ViewModels
             SelectedItemToRemove = null;
 
             SelectableItems.Clear();
+            RemovableItems.Clear();
             foreach (var d in AllAvailableItems)
             {
                 if (_isItemSelectable(d))
                 {
                     SelectableItems.Add(d);
                 }
-            }
-            RemovableItems.Clear();
-            foreach (var d in AllAvailableItems)
-            {
-                if (!_isItemSelectable(d))
+                else
                 {
                     RemovableItems.Add(d);
                 }
@@ -185,7 +182,13 @@ namespace TLCGen.ViewModels
             }
         }
 
-        #endregion // Private Methods
+        public void UpdateAvailableItems(IEnumerable<T2> allAvailableItems)
+        {
+            AllAvailableItems = allAvailableItems;
+            Refresh();
+        }
+
+        #endregion // Public Methods
 
         #region Constructor
 
@@ -210,7 +213,7 @@ namespace TLCGen.ViewModels
         /// <param name="afterItemRemovedAction">Things to do after removing an item</param>
         public ItemsManagerViewModel(
             ObservableCollection<T1> items,
-            List<T2> allAvaiableItems,
+            IEnumerable<T2> allAvaiableItems,
             Func<T2, T1> getItemsToAddFunc, 
             Predicate<T2> isItemSelectablePredicate,
             Func<T2, T1> getItemtoRemoveFunc = null,

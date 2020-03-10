@@ -11,28 +11,28 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<OVIngreepViewModel> _ingrepen;
-        private OVIngreepViewModel _selectedIngreep;
+        private ObservableCollection<PrioIngreepViewModel> _ingrepen;
+        private PrioIngreepViewModel _selectedIngreep;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<OVIngreepViewModel> Ingrepen
+        public ObservableCollection<PrioIngreepViewModel> Ingrepen
         {
             get
             {
                 if (_ingrepen == null)
                 {
-                    _ingrepen = new ObservableCollection<OVIngreepViewModel>();
+                    _ingrepen = new ObservableCollection<PrioIngreepViewModel>();
                 }
                 return _ingrepen;
             }
         }
 
-        public OVIngreepViewModel SelectedIngreep
+        public PrioIngreepViewModel SelectedIngreep
         {
-            get { return _selectedIngreep; }
+            get => _selectedIngreep;
             set
             {
                 _selectedIngreep = value;
@@ -64,13 +64,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "In- en uitmeldingen";
-            }
-        }
+        public override string DisplayName => "In- en uitmeldingen";
 
         public override bool CanBeEnabled()
         {
@@ -83,7 +77,7 @@ namespace TLCGen.ViewModels
             SelectedIngreep = null;
             foreach (var ov in _Controller.PrioData.PrioIngrepen)
             {
-                var ovvm = new OVIngreepViewModel(ov);
+                var ovvm = new PrioIngreepViewModel(ov);
                 Ingrepen.Add(ovvm);
             }
             SelectedIngreep = Ingrepen.FirstOrDefault();
@@ -100,7 +94,7 @@ namespace TLCGen.ViewModels
             if (msg.RequestingObject is PrioIngreepInUitMeldingViewModel ||
                 msg.RequestingObject is PrioIngreepInUitMeldingenDataViewModel)
             {
-                msg.FaseCyclus = SelectedIngreep.PrioIngreep.FaseCyclus;
+                msg.FaseCyclus = SelectedIngreep?.PrioIngreep.FaseCyclus;
             }
         }
 

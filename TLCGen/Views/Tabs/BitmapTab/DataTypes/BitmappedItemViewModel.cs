@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public string Naam
         {
-            get { return _Naam; }
+            get => _Naam;
             set
             {
                 _Naam = value;
@@ -64,10 +64,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public bool HasCoordinates
         {
-            get
-            {
-                return Coordinates?.Count > 0;
-            }
+            get => Coordinates?.Count > 0;
             set
             {
                 if (!value)
@@ -100,16 +97,16 @@ namespace TLCGen.ViewModels
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
-                List<BitmapCoordinaatModel> coords = new List<BitmapCoordinaatModel>();
+                var coords = new List<BitmapCoordinaatModel>();
                 foreach (Point p in e.OldItems)
                 {
-                    foreach (BitmapCoordinaatModel bmcm in _IOElement.BitmapCoordinaten)
+                    foreach (var bmcm in _IOElement.BitmapCoordinaten)
                     {
                         if (p.X == bmcm.X && p.Y == bmcm.Y)
                             coords.Add(bmcm);
                     }
                 }
-                foreach (BitmapCoordinaatModel bmcm in coords)
+                foreach (var bmcm in coords)
                     _IOElement.BitmapCoordinaten.Remove(bmcm);
             }
             Messenger.Default.Send(new ControllerDataChangedMessage());
@@ -124,7 +121,7 @@ namespace TLCGen.ViewModels
             _Naam = naam;
             IOType = t;
 
-            foreach (BitmapCoordinaatModel coord in _IOElement.BitmapCoordinaten)
+            foreach (var coord in _IOElement.BitmapCoordinaten)
             {
                 Coordinates.Add(new Point(coord.X, coord.Y));
             }

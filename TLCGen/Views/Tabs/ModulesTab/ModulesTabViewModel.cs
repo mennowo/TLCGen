@@ -18,10 +18,10 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (DrawingImage)dict["ModulesTabDrawingImage"];
             }
@@ -39,17 +39,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Modulen";
-            }
-        }
+        public override string DisplayName => "Modulen";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

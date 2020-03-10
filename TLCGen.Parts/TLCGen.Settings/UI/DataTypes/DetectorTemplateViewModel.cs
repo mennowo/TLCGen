@@ -96,7 +96,7 @@ namespace TLCGen.Settings
 
         public string Naam
         {
-            get { return _Template.Naam; }
+            get => _Template.Naam;
             set
             {
                 _Template.Naam = value;
@@ -106,7 +106,7 @@ namespace TLCGen.Settings
 
         public string Replace
         {
-            get { return _Template.Replace; }
+            get => _Template.Replace;
             set
             {
                 _Template.Replace = value;
@@ -117,7 +117,7 @@ namespace TLCGen.Settings
         private DetectorModel _SelectedDetector;
         public DetectorModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
@@ -160,7 +160,7 @@ namespace TLCGen.Settings
         private string _SelectedDetectorTypeString;
         public string SelectedDetectorTypeString
         {
-            get { return _SelectedDetectorTypeString; }
+            get => _SelectedDetectorTypeString;
             set
             {
                 _SelectedDetectorTypeString = value;
@@ -274,9 +274,10 @@ namespace TLCGen.Settings
 
         private void AddDetectorCommand_Executed(object prm)
         {
-            DetectorModel d = new DetectorModel();
-            d.Naam = Replace + "_" + (Detectoren.Count + 1);
-            d.Rijstrook = 1;
+            var d = new DetectorModel
+            {
+                FaseCyclus = Replace, Naam = Replace + "_" + (Detectoren.Count + 1), Rijstrook = 1
+            };
             Detectoren.Add(d);
         }
 

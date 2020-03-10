@@ -21,110 +21,110 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public bool RoBuGrover
         {
-            get { return _RoBuGrover.RoBuGrover; }
+            get => _RoBuGrover.RoBuGrover;
             set
             {
                 _RoBuGrover.RoBuGrover = value;
-                RaisePropertyChanged<object>("RoBuGrover", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RoBuGrover), broadcast: true);
             }
         }
 
         [Description("Minimale cyclustijd")]
         public int MinimaleCyclustijd
         {
-            get { return _RoBuGrover.MinimaleCyclustijd; }
+            get => _RoBuGrover.MinimaleCyclustijd;
             set
             {
                 _RoBuGrover.MinimaleCyclustijd = value;
-                RaisePropertyChanged<object>("MinimaleCyclustijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MinimaleCyclustijd), broadcast: true);
             }
         }
 
         [Description("Maximale cyclustijd")]
         public int MaximaleCyclustijd
         {
-            get { return _RoBuGrover.MaximaleCyclustijd; }
+            get => _RoBuGrover.MaximaleCyclustijd;
             set
             {
                 _RoBuGrover.MaximaleCyclustijd = value;
-                RaisePropertyChanged<object>("MaximaleCyclustijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MaximaleCyclustijd), broadcast: true);
             }
         }
 
         [Description("Groentijd verschil")]
         public int GroentijdVerschil
         {
-            get { return _RoBuGrover.GroentijdVerschil; }
+            get => _RoBuGrover.GroentijdVerschil;
             set
             {
                 _RoBuGrover.GroentijdVerschil = value;
-                RaisePropertyChanged<object>("GroentijdVerschil", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroentijdVerschil), broadcast: true);
             }
         }
 
         [Description("Methode RobuGrover")]
         public RoBuGroverMethodeEnum MethodeRoBuGrover
         {
-            get { return _RoBuGrover.MethodeRoBuGrover; }
+            get => _RoBuGrover.MethodeRoBuGrover;
             set
             {
                 _RoBuGrover.MethodeRoBuGrover = value;
-                RaisePropertyChanged<object>("MethodeRoBuGrover", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MethodeRoBuGrover), broadcast: true);
             }
         }
 
         [Description("Mate ophogen groentijd")]
         public int GroenOphoogFactor
         {
-            get { return _RoBuGrover.GroenOphoogFactor; }
+            get => _RoBuGrover.GroenOphoogFactor;
             set
             {
                 _RoBuGrover.GroenOphoogFactor = value;
-                RaisePropertyChanged<object>("GroenOphoogFactor", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroenOphoogFactor), broadcast: true);
             }
         }
 
         [Description("Mate verlagen groentijd")]
         public int GroenVerlaagFactor
         {
-            get { return _RoBuGrover.GroenVerlaagFactor; }
+            get => _RoBuGrover.GroenVerlaagFactor;
             set
             {
                 _RoBuGrover.GroenVerlaagFactor = value;
-                RaisePropertyChanged<object>("GroenVerlaagFactor", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroenVerlaagFactor), broadcast: true);
             }
         }
 
         [Description("Mate verlagen bij overslag")]
         public int GroenVerlaagFactorNietPrimair
         {
-            get { return _RoBuGrover.GroenVerlaagFactorNietPrimair; }
+            get => _RoBuGrover.GroenVerlaagFactorNietPrimair;
             set
             {
                 _RoBuGrover.GroenVerlaagFactorNietPrimair = value;
-                RaisePropertyChanged<object>("GroenVerlaagFactorNietPrimair", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroenVerlaagFactorNietPrimair), broadcast: true);
             }
         }
 
         [Description("Ophogen tijdens groen")]
         public bool OphogenTijdensGroen
         {
-            get { return _RoBuGrover.OphogenTijdensGroen; }
+            get => _RoBuGrover.OphogenTijdensGroen;
             set
             {
                 _RoBuGrover.OphogenTijdensGroen = value;
-                RaisePropertyChanged<object>("OphogenTijdensGroen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(OphogenTijdensGroen), broadcast: true);
             }
         }
 
         [Description("RoBuGrover venster in testomgeving")]
         public bool RoBuGroverVenster
         {
-            get { return _RoBuGrover.RoBuGroverVenster; }
+            get => _RoBuGrover.RoBuGroverVenster;
             set
             {
                 _RoBuGrover.RoBuGroverVenster = value;
-                RaisePropertyChanged<object>("RoBuGroverVenster", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RoBuGroverVenster), broadcast: true);
             }
         }
 

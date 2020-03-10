@@ -126,7 +126,7 @@ namespace TLCGen.Specificator
 
         public ICommand RemoveParagraafCommand => _removeParagraafCommand ?? (_removeParagraafCommand = new RelayCommand(() =>
         {
-            int index = SpecialsParagrafen.IndexOf(SelectedSpecialsParagraaf);
+            var index = SpecialsParagrafen.IndexOf(SelectedSpecialsParagraaf);
             SpecialsParagrafen.Remove(SelectedSpecialsParagraaf);
             SelectedSpecialsParagraaf = null;
             if (SpecialsParagrafen.Count > 0)
@@ -146,8 +146,8 @@ namespace TLCGen.Specificator
 
         public ICommand MoveParagraafUpCommand => _moveParagraafUpCommand ?? (_moveParagraafUpCommand = new RelayCommand(() =>
         {
-            int index = -1;
-            foreach (SpecificatorSpecialsParagraafViewModel mvm in SpecialsParagrafen)
+            var index = -1;
+            foreach (var mvm in SpecialsParagrafen)
             {
                 ++index;
                 if (mvm == SelectedSpecialsParagraaf)
@@ -157,7 +157,7 @@ namespace TLCGen.Specificator
             }
             if (index >= 1)
             {
-                SpecificatorSpecialsParagraafViewModel mvm = SelectedSpecialsParagraaf;
+                var mvm = SelectedSpecialsParagraaf;
                 SelectedSpecialsParagraaf = null;
                 SpecialsParagrafen.Remove(mvm);
                 SpecialsParagrafen.Insert(index - 1, mvm);
@@ -168,8 +168,8 @@ namespace TLCGen.Specificator
 
         public ICommand MoveParagraafDownCommand => _moveParagraafDownCommand ?? (_moveParagraafDownCommand = new RelayCommand(() =>
         {
-            int index = -1;
-            foreach (SpecificatorSpecialsParagraafViewModel mvm in SpecialsParagrafen)
+            var index = -1;
+            foreach (var mvm in SpecialsParagrafen)
             {
                 ++index;
                 if (mvm == SelectedSpecialsParagraaf)
@@ -179,7 +179,7 @@ namespace TLCGen.Specificator
             }
             if (index >= 0 && (index <= (SpecialsParagrafen.Count - 2)))
             {
-                SpecificatorSpecialsParagraafViewModel mvm = SelectedSpecialsParagraaf;
+                var mvm = SelectedSpecialsParagraaf;
                 SelectedSpecialsParagraaf = null;
                 SpecialsParagrafen.Remove(mvm);
                 SpecialsParagrafen.Insert(index + 1, mvm);

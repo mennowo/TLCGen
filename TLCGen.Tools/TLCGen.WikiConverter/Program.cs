@@ -17,7 +17,7 @@ namespace TLCGen.WikiConverter
     {
         static void Main(string[] args)
         {
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             using (var s = new StreamReader(@"C:\Users\menno\Documents\temp\codingconnected.wordpress.2018-09-11.xml", Encoding.GetEncoding(65001), true))
             {
                 doc.Load(s);
@@ -25,7 +25,7 @@ namespace TLCGen.WikiConverter
 
             var mainNode = doc.DocumentElement.FirstChild;
 
-            Dictionary<string, List<string>> Categories = new Dictionary<string, List<string>>();
+            var Categories = new Dictionary<string, List<string>>();
             
             foreach (XmlNode node in mainNode.ChildNodes)
             {

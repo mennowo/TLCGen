@@ -16,8 +16,8 @@ namespace TLCGen.Views
 
         public Array SettingsList
         {
-            get { return (Array)GetValue(SettingsListProperty); }
-            set { SetValue(SettingsListProperty, value); }
+            get => (Array)GetValue(SettingsListProperty);
+            set => SetValue(SettingsListProperty, value);
         }
 
         public SettingsDataGrid()

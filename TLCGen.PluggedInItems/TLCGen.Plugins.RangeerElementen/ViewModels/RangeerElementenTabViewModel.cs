@@ -211,14 +211,14 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
         {
             var sb = new StringBuilder();
 
-            int pad1 = "ISMAX".Length;
+            var pad1 = "ISMAX".Length;
             if (RangeerElementen.Any())
             {
                 pad1 = RangeerElementen.Max(x => (_plugin.Dpf + x.Element).Length);
             }
             if (_plugin.Controller.SelectieveDetectoren.Any())
             {
-                int _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
+                var _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             var ovdummies = _plugin.Controller.PrioData.GetAllDummyDetectors();
@@ -228,9 +228,9 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             }
             pad1 = pad1 + $"{_plugin.Ts}#define  ".Length;
 
-            int pad2 = _plugin.Controller.Fasen.Count.ToString().Length;
+            var pad2 = _plugin.Controller.Fasen.Count.ToString().Length;
 
-            int index = 0;
+            var index = 0;
             foreach (var dm in RangeerElementen)
             {
                 sb.Append($"{_plugin.Ts}#define {_plugin.Dpf}{dm.Element} ".PadRight(pad1));
@@ -252,8 +252,8 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            RangeerElementViewModel sourceItem = dropInfo.Data as RangeerElementViewModel;
-            RangeerElementViewModel targetItem = dropInfo.TargetItem as RangeerElementViewModel;
+            var sourceItem = dropInfo.Data as RangeerElementViewModel;
+            var targetItem = dropInfo.TargetItem as RangeerElementViewModel;
             if (sourceItem == null || targetItem == null) return;
             var i = RangeerElementen.IndexOf(targetItem);
             var j = RangeerElementen.IndexOf(sourceItem);

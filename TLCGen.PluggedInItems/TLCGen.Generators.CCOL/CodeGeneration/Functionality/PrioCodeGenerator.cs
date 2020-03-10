@@ -752,7 +752,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen) return null;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             var first = false;
 
             switch (type)

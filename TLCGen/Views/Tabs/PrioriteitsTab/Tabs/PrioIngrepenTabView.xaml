@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="TLCGen.Views.PrioIngrepenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance vm:PrioIngrepenTabViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/VariousIcons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/SpecialIcons.xaml" />
+                <ResourceDictionary>
+                    <BooleanToVisibilityConverter x:Key="Bool2Vis" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vm:FaseCyclusWithPrioViewModel}">
+                <Grid>
+                    <ct:SimplePropertyEditor BoundObject="{Binding}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PrioIngreepViewModel}">
+                <local:PrioIngreepView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PrioIngreepMeldingenListViewModel}">
+                <Grid>
+                    <ct:SimplePropertyEditor BoundObject="{Binding}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PrioIngreepInUitMeldingViewModel}">
+                <local:PrioIngreepInUitMeldingView />
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Content="Items" />
+        <TreeView ItemsSource="{Binding Path=Fasen}" Grid.Row="1" Grid.Column="0">
+            <i:Interaction.Behaviors>
+                <helpers:BindableSelectedItemBehavior SelectedItem="{Binding SelectedObject,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            </i:Interaction.Behaviors>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type vm:FaseCyclusWithPrioViewModel}" ItemsSource="{Binding Path=Ingrepen}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource SignalGroupIconDrawingImage}" Width="14" Height="14" />
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding Path=Naam}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type vm:PrioIngreepViewModel}" ItemsSource="{Binding Path=MeldingenLists}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource BusIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBus,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource TramIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTram,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource TruckIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTruck,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource BicycleIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBicycle,Converter={StaticResource Bool2Vis}}" />
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding Path=Naam}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type vm:PrioIngreepMeldingenListViewModel}" ItemsSource="{Binding Path=Meldingen}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource InkomendIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=IsInmeldingenList,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource UitgaandIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=IsUitmeldingenList,Converter={StaticResource Bool2Vis}}" />
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding Path=Naam}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type vm:PrioIngreepInUitMeldingViewModel}" ItemsSource="{Binding Path=MeldingBijstoring}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource KARIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasKAR,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource SDIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasSD,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource SDInpIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasInpSD,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource DetIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasDet,Converter={StaticResource Bool2Vis}}" />
+                        <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding Path=Naam}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" />
+        <Label Grid.Row="0" Grid.Column="2" Content="Instellingen" />
+        <Grid Grid.Column="2" Grid.Row="1">
+            <ContentControl Background="Red" Content="{Binding Path=SelectedObject}">
+            </ContentControl>
+        </Grid>
+    </Grid>
+</UserControl>

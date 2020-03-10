@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
 
         public string StatusText
         {
-            get { return _statusText; }
+            get => _statusText;
             set
             {
                 _statusText = value;
@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
 
         public string AlertText
         {
-            get { return _alertText; }
+            get => _alertText;
             set
             {
                 _alertText = value;

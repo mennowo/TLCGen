@@ -82,7 +82,7 @@ namespace TLCGen.ViewModels
                                 new FaseCyclusAlternatiefPerBlokViewModel(
                                     new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam }));
                         }
-                        for (int i = 0; i < _numberOfModules; i++)
+                        for (var i = 0; i < _numberOfModules; i++)
                         {
                             foreach (var fc in AlternatievenPerBlok)
                             {
@@ -90,7 +90,7 @@ namespace TLCGen.ViewModels
                             }
                         }
                     }
-                    RaisePropertyChanged<object>("ToepassenAlternatievenPerBlok", true);
+                    RaisePropertyChanged<object>(nameof(ToepassenAlternatievenPerBlok), true);
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace TLCGen.ViewModels
             {
                 if(_numberOfModules < value)
                 {
-                    for (int i = _numberOfModules; i < value; i++)
+                    for (var i = _numberOfModules; i < value; i++)
                     {
                         foreach (var fc in AlternatievenPerBlok)
                         {
@@ -118,7 +118,7 @@ namespace TLCGen.ViewModels
                 }
                 else if (_numberOfModules > value)
                 {
-                    for (int i = value; i < _numberOfModules; i++)
+                    for (var i = value; i < _numberOfModules; i++)
                     {
                         foreach (var fc in AlternatievenPerBlok)
                         {

@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

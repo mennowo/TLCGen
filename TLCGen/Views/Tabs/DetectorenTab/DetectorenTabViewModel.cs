@@ -30,26 +30,20 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (ImageSource)dict["DetectorenTabDrawingImage"];
             }
         }
         
-        public override string DisplayName
-        {
-            get
-            {
-                return "Detectie/ingangen";
-            }
-        }
+        public override string DisplayName => "Detectie/ingangen";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

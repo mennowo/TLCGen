@@ -10,23 +10,20 @@ namespace TLCGen.Dialogs
     {
         public string DialogTitle
         {
-            get { return this.Title; }
-            set { this.Title = value; }
+            get => this.Title;
+            set => this.Title = value;
         }
 
         public string TemplateNaam
         {
-            get { return NameTB.Text; }
-            set
-            {
-                NameTB.Text = value;
-            }
+            get => NameTB.Text;
+            set => NameTB.Text = value;
         }
 
         public string TemplateReplace
         {
-            get { return ReplaceTB.Text; }
-            set { ReplaceTB.Text = value; }
+            get => ReplaceTB.Text;
+            set => ReplaceTB.Text = value;
         }
 
         public NewTemplateWindow()

@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
 
         public PeriodeViewModel SelectedPeriode
         {
-            get { return _SelectedPeriode; }
+            get => _SelectedPeriode;
             set
             {
                 _SelectedPeriode = value;
@@ -119,8 +119,8 @@ namespace TLCGen.ViewModels
 
         private void MovePeriodeUpCommand_Executed(object obj)
         {
-            int index = -1;
-            foreach (PeriodeViewModel mvm in Periodes)
+            var index = -1;
+            foreach (var mvm in Periodes)
             {
                 ++index;
                 if (mvm == SelectedPeriode)
@@ -130,7 +130,7 @@ namespace TLCGen.ViewModels
             }
             if (index >= 1 && Periodes[index - 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
-                PeriodeViewModel mvm = SelectedPeriode;
+                var mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index - 1, mvm);
@@ -144,8 +144,8 @@ namespace TLCGen.ViewModels
 
         private void MovePeriodeDownCommand_Executed(object obj)
         {
-            int index = -1;
-            foreach (PeriodeViewModel mvm in Periodes)
+            var index = -1;
+            foreach (var mvm in Periodes)
             {
                 ++index;
                 if (mvm == SelectedPeriode)
@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
             }
             if (index >= 0 && (index <= (Periodes.Count - 2)) && Periodes[index + 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
-                PeriodeViewModel mvm = SelectedPeriode;
+                var mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index + 1, mvm);
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
 
         void AddNewPeriodeCommand_Executed(object prm)
         {
-            PeriodeModel mm = new PeriodeModel();
+            var mm = new PeriodeModel();
             mm.Type = PeriodeTypeEnum.Overig;
             mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
 			var inewname = Periodes.Count;
@@ -179,11 +179,11 @@ namespace TLCGen.ViewModels
 	        }
 	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
 
-			PeriodeViewModel mvm = new PeriodeViewModel(mm);
+			var mvm = new PeriodeViewModel(mm);
 
             if(Periodes.Any(x => x.Type != PeriodeTypeEnum.Groentijden))
             {
-                int index = Periodes.Count(x => x.Type != PeriodeTypeEnum.Groentijden);
+                var index = Periodes.Count(x => x.Type != PeriodeTypeEnum.Groentijden);
                 Periodes.Insert(index, mvm);
             }
             else
@@ -217,17 +217,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Overig";
-            }
-        }
+        public override string DisplayName => "Overig";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -241,10 +235,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
@@ -257,7 +248,7 @@ namespace TLCGen.ViewModels
                 {
                     Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(base.Controller.PeriodenData.Perioden);
                     Periodes.CollectionChanged += Periodes_CollectionChanged;
-                    ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
+                    var view = CollectionViewSource.GetDefaultView(Periodes);
                     view.Filter = FilterPerioden;
                 }
                 else

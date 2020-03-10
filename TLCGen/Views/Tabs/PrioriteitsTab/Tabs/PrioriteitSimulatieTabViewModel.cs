@@ -37,13 +37,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Simulatie";
-            }
-        }
+        public override string DisplayName => "Simulatie";
 
         public override bool CanBeEnabled()
         {
@@ -57,7 +51,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;

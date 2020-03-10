@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;
@@ -61,7 +61,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public ITLCGenTabItem SelectedTab
         {
-            get { return _SelectedTab; }
+            get => _SelectedTab;
             set
             {
                 // Take actions for current 
@@ -137,15 +137,15 @@ namespace TLCGen.ViewModels
 
         private void OnUpdateTabsEnabled(UpdateTabsEnabledMessage message)
         {
-            foreach(ITLCGenTabItem item in TabItems)
+            foreach(var item in TabItems)
             {
                 if(item.CanBeEnabled())
                 {
                     item.IsEnabled = true;
                     if(item is TLCGenMainTabItemViewModel)
                     {
-                        TLCGenMainTabItemViewModel tab = item as TLCGenMainTabItemViewModel;
-                        foreach(ITLCGenTabItem item2 in tab.TabItems)
+                        var tab = item as TLCGenMainTabItemViewModel;
+                        foreach(var item2 in tab.TabItems)
                         {
                             if(item2.CanBeEnabled())
                             {
@@ -192,7 +192,7 @@ namespace TLCGen.ViewModels
         {
             var tabs = new SortedDictionary<int, ITLCGenTabItem>();
             var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
-            int plugindex = 100;
+            var plugindex = 100;
             foreach(var part in parts)
             {
                 if((part.Item1 & TLCGenPluginElems.TabControl) == TLCGenPluginElems.TabControl)

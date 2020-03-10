@@ -18,11 +18,11 @@ namespace TLCGen.Extensions
 
         public static T GetVisualChild<T>(Visual parent) where T : Visual
         {
-            T child = default(T);
-            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < numVisuals; i++)
+            var child = default(T);
+            var numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (var i = 0; i < numVisuals; i++)
             {
-                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
+                var v = (Visual)VisualTreeHelper.GetChild(parent, i);
                 child = v as T;
                 if (child == null)
                 {
@@ -38,7 +38,7 @@ namespace TLCGen.Extensions
 
         public static DataGridRow GetRow(this DataGrid grid, int index)
         {
-            DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(index);
+            var row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(index);
             if (row == null)
             {
                 // May be virtualized, bring into view and try again.
@@ -53,7 +53,7 @@ namespace TLCGen.Extensions
         {
             if (row != null)
             {
-                DataGridCellsPresenter presenter = GetVisualChild<DataGridCellsPresenter>(row);
+                var presenter = GetVisualChild<DataGridCellsPresenter>(row);
 
                 if (presenter == null)
                 {
@@ -61,7 +61,7 @@ namespace TLCGen.Extensions
                     presenter = GetVisualChild<DataGridCellsPresenter>(row);
                 }
 
-                DataGridCell cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
+                var cell = (DataGridCell)presenter.ItemContainerGenerator.ContainerFromIndex(column);
                 return cell;
             }
             return null;
@@ -69,7 +69,7 @@ namespace TLCGen.Extensions
 
         public static DataGridCell GetCell(this DataGrid grid, int row, int column)
         {
-            DataGridRow gridRow = GetRow(grid, row);
+            var gridRow = GetRow(grid, row);
             return GetCell(grid, gridRow, column);
         }
 

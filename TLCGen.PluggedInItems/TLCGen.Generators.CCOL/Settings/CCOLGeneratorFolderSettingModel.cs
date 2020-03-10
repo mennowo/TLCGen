@@ -11,7 +11,7 @@ namespace TLCGen.Generators.CCOL.Settings
         public string Default { get; set; }
         public string Setting
         {
-            get { return _Setting; }
+            get => _Setting;
             set
             {
                 if(value != null && value.EndsWith(";"))

@@ -51,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -162,7 +162,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var cf in fasen)
                             { 
                                 sb.Append($"{ts}if(");
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in va.VADetectoren)
                                 {
                                     if (i != 0)

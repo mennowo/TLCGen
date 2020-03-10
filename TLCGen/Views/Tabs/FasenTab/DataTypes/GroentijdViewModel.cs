@@ -16,33 +16,21 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public GroentijdModel Groentijd
-        {
-            get { return _Groentijd; }
-        }
+        public GroentijdModel Groentijd => _Groentijd;
 
         public string FaseCyclus
         {
-            get
-            {
-                return _Groentijd.FaseCyclus;
-            }
-            set
-            {
-                _Groentijd.FaseCyclus = value;
-            }
+            get => _Groentijd.FaseCyclus;
+            set => _Groentijd.FaseCyclus = value;
         }
 
         public int? Waarde
         {
-            get
-            {
-                return _Groentijd.Waarde;
-            }
+            get => _Groentijd.Waarde;
             set
             {
                 _Groentijd.Waarde = value;
-                RaisePropertyChanged<object>("Waarde", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Waarde), broadcast: true);
                 MessengerInstance.Send(new GroentijdChangedMessage());
             }
         }
@@ -65,11 +53,11 @@ namespace TLCGen.ViewModels
                 throw new InvalidCastException();
             else
             {
-                string myFase = FaseCyclus;
-                string hisFase = mgvm.FaseCyclus;
+                var myFase = FaseCyclus;
+                var hisFase = mgvm.FaseCyclus;
                 if (myFase.Length < hisFase.Length) myFase = myFase.PadLeft(hisFase.Length, '0');
                 else if (hisFase.Length < myFase.Length) hisFase = hisFase.PadLeft(myFase.Length, '0');
-                int i = myFase.CompareTo(hisFase);
+                var i = myFase.CompareTo(hisFase);
                 return i;
             }
         }

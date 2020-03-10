@@ -18,10 +18,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public RoBuGroverConflictGroepModel ConflictGroep
-        {
-            get { return _ConflictGroep; }
-        }
+        public RoBuGroverConflictGroepModel ConflictGroep => _ConflictGroep;
 
         public ObservableCollectionAroundList<RoBuGroverConflictGroepFaseViewModel, RoBuGroverConflictGroepFaseModel> Fasen
         {
@@ -31,11 +28,11 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverConflictGroepFaseViewModel SelectedFase
         {
-            get { return _SelectedFase; }
+            get => _SelectedFase;
             set
             {
                 _SelectedFase = value;
-                RaisePropertyChanged<object>("SelectedFase", broadcast: true);
+                RaisePropertyChanged<object>(nameof(SelectedFase), broadcast: true);
             }
         }
 

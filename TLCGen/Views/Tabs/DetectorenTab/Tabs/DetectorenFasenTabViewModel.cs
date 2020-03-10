@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
 
         public DetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedDetectoren
         {
-            get { return _SelectedDetectoren; }
+            get => _SelectedDetectoren;
             set
             {
                 _SelectedDetectoren = value;
@@ -229,7 +229,7 @@ namespace TLCGen.ViewModels
 
         void AddDetectorCommand_Executed(object prm)
         {
-            var _dm = new DetectorModel();
+            var _dm = new DetectorModel {FaseCyclus = SelectedFaseNaam};
             var newname = "1";
             foreach (var dm in _SelectedFase.Detectoren)
             {
@@ -326,7 +326,7 @@ namespace TLCGen.ViewModels
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

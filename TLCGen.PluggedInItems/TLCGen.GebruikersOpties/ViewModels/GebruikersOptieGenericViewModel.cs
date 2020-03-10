@@ -111,28 +111,16 @@ namespace TLCGen.GebruikersOpties
         }
 
         [XmlIgnore]
-        public bool HasInstelling
-        {
-            get
-            {
-                return
-                    ObjectType == TLCGenObjectTypeEnum.CCOLCounter ||
-                    ObjectType == TLCGenObjectTypeEnum.CCOLParameter ||
-                    ObjectType == TLCGenObjectTypeEnum.CCOLSchakelaar ||
-                    ObjectType == TLCGenObjectTypeEnum.CCOLTimer;
-            }
-        }
+        public bool HasInstelling =>
+            ObjectType == TLCGenObjectTypeEnum.CCOLCounter ||
+            ObjectType == TLCGenObjectTypeEnum.CCOLParameter ||
+            ObjectType == TLCGenObjectTypeEnum.CCOLSchakelaar ||
+            ObjectType == TLCGenObjectTypeEnum.CCOLTimer;
 
         [XmlIgnore]
-        public bool HasType
-        {
-            get
-            {
-                return
-                    ObjectType == TLCGenObjectTypeEnum.CCOLParameter ||
-                    ObjectType == TLCGenObjectTypeEnum.CCOLTimer;
-            }
-        }
+        public bool HasType =>
+            ObjectType == TLCGenObjectTypeEnum.CCOLParameter ||
+            ObjectType == TLCGenObjectTypeEnum.CCOLTimer;
 
         #endregion // Properties
 

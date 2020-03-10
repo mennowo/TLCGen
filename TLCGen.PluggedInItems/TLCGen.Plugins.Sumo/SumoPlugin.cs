@@ -34,7 +34,7 @@ namespace TLCGen.Plugins.Sumo
         private ControllerModel _Controller;
         public ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;
@@ -47,13 +47,7 @@ namespace TLCGen.Plugins.Sumo
             }
         }
 
-        public string DisplayName
-        {
-            get
-            {
-                return "Sumo";
-            }
-        }
+        public string DisplayName => "Sumo";
 
         public string GetPluginName()
         {
@@ -142,19 +136,13 @@ namespace TLCGen.Plugins.Sumo
             }
         }
 
-        public ImageSource Icon
-        {
-            get
-            {
-                //ResourceDictionary dict = new ResourceDictionary();
-                //Uri u = new Uri("pack://application:,,,/" +
-                //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                //    ";component/" + "Resources/Icon.xaml");
-                //dict.Source = u;
-                //return (DrawingImage)dict["AdditorIconDrawingImage"];
-                return null;
-            }
-        }
+        //ResourceDictionary dict = new ResourceDictionary();
+        //Uri u = new Uri("pack://application:,,,/" +
+        //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+        //    ";component/" + "Resources/Icon.xaml");
+        //dict.Source = u;
+        //return (DrawingImage)dict["AdditorIconDrawingImage"];
+        public ImageSource Icon => null;
 
         public bool CanBeEnabled()
         {
@@ -225,8 +213,8 @@ namespace TLCGen.Plugins.Sumo
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_MyModel);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_MyModel);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -259,7 +247,7 @@ namespace TLCGen.Plugins.Sumo
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

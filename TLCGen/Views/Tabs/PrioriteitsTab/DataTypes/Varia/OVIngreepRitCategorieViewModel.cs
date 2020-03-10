@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
 
         public OVIngreepRitCategorieModel RitCategorie
         {
-            get { return _RitCategorie; }
+            get => _RitCategorie;
             set
             {
                 _RitCategorie = value;
@@ -26,11 +26,11 @@ namespace TLCGen.ViewModels
 
         public string Nummer
         {
-            get { return _RitCategorie.Nummer; }
+            get => _RitCategorie.Nummer;
             set
             {
                 _RitCategorie.Nummer = value;
-                RaisePropertyChanged<object>("Nummer", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Nummer), broadcast: true);
             }
         }
 

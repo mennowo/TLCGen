@@ -31,10 +31,10 @@ namespace TLCGen.Views
             var fasen = (ObservableCollection<SignaalPlanFaseViewModel>)FasenDG.ItemsSource;
             if (fasen == null || fasen.Count == 0) return;
 
-            int i = 0;
+            var i = 0;
 
-            int iXleft = 30;
-            int iFCHSize = 14;
+            var iXleft = 30;
+            var iFCHSize = 14;
 
             phaseGrid.Children.Clear();
             phaseGrid.Width = FasenDG.ActualWidth;
@@ -45,7 +45,7 @@ namespace TLCGen.Views
                 foreach (var fc in fasen)
                 {
                     var fcA = TLCGen.DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
-                    phasereal p = new phasereal();
+                    var p = new phasereal();
                     p.iCycleTime = ct;
                     p.Name = fc.FaseCyclus;
                     p.iStartGreen = fc.B1;
@@ -55,7 +55,7 @@ namespace TLCGen.Views
                     if (p.iStartGreen > 0 || p.iEndGreen > 0)
                         phases.Add(p);
                 }
-                foreach (phasereal p in phases)
+                foreach (var p in phases)
                 {
                     p.baseline.Stroke = System.Windows.Media.Brushes.Black;
                     p.yellow1.Stroke = System.Windows.Media.Brushes.Yellow;
@@ -85,7 +85,7 @@ namespace TLCGen.Views
                 }
 
                 i = 0;
-                foreach (phasereal p in phases)
+                foreach (var p in phases)
                 {
                     p.fctextbox.Foreground = Brushes.Black;
                     p.green1line.Stroke = System.Windows.Media.Brushes.Green;
@@ -102,12 +102,12 @@ namespace TLCGen.Views
                     p.baseline.X2 = phaseGrid.Width - 10;
                     p.baseline.Y2 = 10 + i * iFCHSize;
 
-                    double max = phaseGrid.Width - 10;
-                    double start = (((double)(p.iStartGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
-                    double end = (((double)(p.iEndGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
-                    double endyellow = (((double)(p.iEndYellow) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
-                    double cmom = (((double)(p.iMinGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
-                    double one = (double)(phaseGrid.Width - 10 - iXleft) / (double)p.iCycleTime;
+                    var max = phaseGrid.Width - 10;
+                    var start = (((double)(p.iStartGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
+                    var end = (((double)(p.iEndGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
+                    var endyellow = (((double)(p.iEndYellow) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
+                    var cmom = (((double)(p.iMinGreen - 1) / (double)p.iCycleTime) * (double)(phaseGrid.Width - 10 - iXleft));
+                    var one = (double)(phaseGrid.Width - 10 - iXleft) / (double)p.iCycleTime;
 
                     if (start < end)
                     {
@@ -195,7 +195,7 @@ namespace TLCGen.Views
         private int _iEndGreen;
         public int iEndGreen
         {
-            get { return _iEndGreen; }
+            get => _iEndGreen;
             set
             {
                 _iEndGreen = value;
@@ -209,10 +209,7 @@ namespace TLCGen.Views
         private int _iEndYellow;
         public int iEndYellow
         {
-            get
-            {
-                return _iEndYellow;
-            }
+            get => _iEndYellow;
             set
             {
                 if (value > iCycleTime)
@@ -236,7 +233,7 @@ namespace TLCGen.Views
 
         public int CompareTo(object obj)
         {
-            phasereal p = (phasereal)obj;
+            var p = (phasereal)obj;
             return Name.CompareTo(p.Name);
         }
     }

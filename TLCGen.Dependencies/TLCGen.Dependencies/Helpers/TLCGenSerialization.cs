@@ -21,7 +21,7 @@ namespace TLCGen.Helpers
             if (string.IsNullOrWhiteSpace(data))
                 return default(T);
 
-            T t = default(T);
+            var t = default(T);
 
             try
             {
@@ -45,10 +45,10 @@ namespace TLCGen.Helpers
 
         public static bool Serialize<T>(string file, T t)
         {
-            bool result = true;
+            var result = true;
             try
             {
-                using (FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(file, FileMode.Create, FileAccess.Write))
                 {
                     var serializer = new XmlSerializer(typeof(T));
                     serializer.Serialize(fs, t);
@@ -67,11 +67,11 @@ namespace TLCGen.Helpers
             if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
                 return default(T);
 
-            T t = default(T);
+            var t = default(T);
 
             try
             {
-                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 {
                     var serializer = new XmlSerializer(typeof(T));
                     t = (T)serializer.Deserialize(fs);
@@ -97,7 +97,7 @@ namespace TLCGen.Helpers
         public static T SerializeFromXmlDocument<T>(XmlDocument doc)
         {
             T t;
-            using (XmlReader r = XmlReader.Create(new StringReader(doc.InnerXml)))
+            using (var r = XmlReader.Create(new StringReader(doc.InnerXml)))
             {
                 var serializer = new XmlSerializer(typeof(T));
                 t = (T)serializer.Deserialize(r);
@@ -107,11 +107,11 @@ namespace TLCGen.Helpers
 
         public static XmlDocument SerializeToXmlDocument<T>(T t)
         {
-            XmlDocument doc = new XmlDocument();
-            XPathNavigator nav = doc.CreateNavigator();
-            using (XmlWriter w = nav.AppendChild())
+            var doc = new XmlDocument();
+            var nav = doc.CreateNavigator();
+            using (var w = nav.AppendChild())
             {
-                XmlSerializer ser = new XmlSerializer(typeof(T));
+                var ser = new XmlSerializer(typeof(T));
                 ser.Serialize(w, t);
             }
 
@@ -127,11 +127,11 @@ namespace TLCGen.Helpers
             if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
                 return default(T);
 
-            T t = default(T);
+            var t = default(T);
 
             try
             {
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
                 using (var gz = new GZipStream(fs, CompressionMode.Decompress))
                 {
                     var serializer = new XmlSerializer(typeof(T));
@@ -153,10 +153,10 @@ namespace TLCGen.Helpers
 
         public static bool SerializeGZip<T>(string file, T t)
         {
-            bool result = true;
+            var result = true;
             try
             {
-                FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write);
+                var fs = new FileStream(file, FileMode.Create, FileAccess.Write);
                 using (var gz = new GZipStream(fs, CompressionMode.Compress))
                 {
                     var serializer = new XmlSerializer(typeof(T));

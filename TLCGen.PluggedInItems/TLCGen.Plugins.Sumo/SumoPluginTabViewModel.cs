@@ -50,7 +50,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.GenererenSumoCode = value;
-                    RaisePropertyChanged<object>("GenererenSumoCode", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(GenererenSumoCode), broadcast: true);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoPort = value;
-                    RaisePropertyChanged<object>("SumoPort", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoPort), broadcast: true);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoOrder = value;
-                    RaisePropertyChanged<object>("SumoOrder", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoOrder), broadcast: true);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdUur = value;
-                    RaisePropertyChanged<object>("StartTijdUur", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(StartTijdUur), broadcast: true);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdMinuut = value;
-                    RaisePropertyChanged<object>("StartTijdMinuut", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(StartTijdMinuut), broadcast: true);
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntNaam = value;
-                    RaisePropertyChanged<object>("SumoKruispuntNaam", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoKruispuntNaam), broadcast: true);
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntLinkMax = value;
-                    RaisePropertyChanged<object>("SumoKruispuntLinkMax", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoKruispuntLinkMax), broadcast: true);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.PrependIdToDetectors = value;
-                    RaisePropertyChanged<object>("PrependIdToDetectors", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(PrependIdToDetectors), broadcast: true);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.AutoStartSumo = value;
-                    RaisePropertyChanged<object>("AutoStartSumo", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(AutoStartSumo), broadcast: true);
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoHomePath = value;
-                    RaisePropertyChanged<object>("SumoHomePath", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoHomePath), broadcast: true);
                 }
             }
         }
@@ -180,7 +180,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoConfigPath = value;
-                    RaisePropertyChanged<object>("SumoConfigPath", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(SumoConfigPath), broadcast: true);
                 }
             }
         }

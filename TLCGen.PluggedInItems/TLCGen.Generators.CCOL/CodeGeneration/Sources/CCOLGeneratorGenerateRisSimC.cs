@@ -12,9 +12,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var risModel = c.RISData;
 
-            string _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
+            var _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* APPLICATIE RIS SIMULATIEPROGRAMMA */");
             sb.AppendLine("/* --------------------------------- */");

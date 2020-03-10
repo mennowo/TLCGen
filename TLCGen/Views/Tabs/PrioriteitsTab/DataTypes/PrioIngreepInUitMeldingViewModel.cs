@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TLCGen.Helpers;
@@ -18,6 +19,8 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+
+
         public string Naam
         {
             get => string.IsNullOrWhiteSpace(PrioIngreepInUitMelding.Naam) ? "geen_naam" : PrioIngreepInUitMelding.Naam;
@@ -30,12 +33,6 @@ namespace TLCGen.ViewModels
 
         public PrioIngreepInUitMeldingModel PrioIngreepInUitMelding { get; }
 
-        public ObservableCollection<string> Detectoren { get; }
-
-        public ObservableCollection<string> VecomDetectoren { get; }
-
-        public ObservableCollection<string> SelectieveDetectoren { get; }
-
         public ObservableCollection<string> AvailableInputs
         {
             get
@@ -43,13 +40,15 @@ namespace TLCGen.ViewModels
                 switch (Type)
                 {
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
-                        return Detectoren;
+                        return ControllerAccessProvider.Default.AllDetectorStrings;
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
-                        return SelectieveDetectoren;
+                        return ControllerAccessProvider.Default.AllSelectiveDetectorStrings;
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
-                        return VecomDetectoren;
+                        return ControllerAccessProvider.Default.AllVecomDetectorStrings;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
                 return null;
             }
@@ -233,81 +232,6 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
-        {
-            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
-            MessengerInstance.Send(msg);
-            if (msg.FaseCyclus == null) return;
-
-            var sd1 = PrioIngreepInUitMelding != null ? RelatedInput1 : "";
-            var sd2 = PrioIngreepInUitMelding != null ? RelatedInput2 : "";
-            
-            Detectoren.Clear();
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
-            {
-                Detectoren.Add(d.Naam);
-            }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
-            {
-                Detectoren.Add(d.Naam);
-            }
-
-            VecomDetectoren.Clear();
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.VecomDetector)))
-            {
-                VecomDetectoren.Add(d.Naam);
-            }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.VecomDetector))
-            {
-                VecomDetectoren.Add(d.Naam);
-            }
-
-            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
-            {
-                if (Detectoren.Contains(sd1))
-                {
-                    RelatedInput1 = sd1;
-                }
-                if (Detectoren.Contains(sd2))
-                {
-                    RelatedInput2 = sd2;
-                }
-            }
-
-            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)
-            {
-                if (VecomDetectoren.Contains(sd1))
-                {
-                    RelatedInput1 = sd1;
-                }
-                if (VecomDetectoren.Contains(sd2))
-                {
-                    RelatedInput2 = sd2;
-                }
-            }
-        }
-
-        private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
-        {
-            var sd = "";
-            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
-            {
-                sd = RelatedInput1;
-            }
-
-            SelectieveDetectoren.Clear();
-            foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.SelectieveDetectoren)
-            {
-                SelectieveDetectoren.Add(seld.Naam);
-            }
-
-            if (PrioIngreepInUitMelding != null && Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector &&
-                SelectieveDetectoren.Contains(sd))
-            {
-                RelatedInput1 = sd;
-            }
-        }
-
         #endregion // TLCGen events
 
         #region IViewModelWithItem
@@ -324,15 +248,6 @@ namespace TLCGen.ViewModels
         public PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMeldingModel oVIngreepMassaDetectieMelding)
         {
             PrioIngreepInUitMelding = oVIngreepMassaDetectieMelding;
-
-            Detectoren = new ObservableCollection<string>();
-            VecomDetectoren = new ObservableCollection<string>();
-            SelectieveDetectoren = new ObservableCollection<string>();
-
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
-            OnDetectorenChanged(null);
-            OnSelectieveDetectorenChanged(null);
 
             if (PrioIngreepInUitMelding.MeldingBijstoring != null)
             {

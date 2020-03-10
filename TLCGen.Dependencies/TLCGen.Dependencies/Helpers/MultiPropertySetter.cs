@@ -17,7 +17,7 @@ namespace TLCGen.Helpers
             {
                 if (!object.ReferenceEquals(item, sender))
                 {
-                    PropertyInfo prop = sender.GetType().GetProperty(propname, BindingFlags.Public | BindingFlags.Instance);
+                    var prop = sender.GetType().GetProperty(propname, BindingFlags.Public | BindingFlags.Instance);
                     if (prop != null && prop.CanWrite)
                     {
                         prop.SetValue(item, v, null);

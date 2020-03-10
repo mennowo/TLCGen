@@ -16,10 +16,7 @@ namespace TLCGen.ViewModels
 
         public ModuleFaseCyclusAlternatiefModel Alternatief { get; }
 
-        public string FaseCyclus
-        {
-            get { return Alternatief.FaseCyclus; }
-        }
+        public string FaseCyclus => Alternatief.FaseCyclus;
 
         public int AlternatieveGroenTijd
         {
@@ -27,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Alternatief.AlternatieveGroenTijd = value; 
-                RaisePropertyChanged<object>("AlternatieveGroenTijd", true);
+                RaisePropertyChanged<object>(nameof(AlternatieveGroenTijd), true);
                 foreach (var o in Others)
                 {
                     o.AlternatieveGroenTijd = value;

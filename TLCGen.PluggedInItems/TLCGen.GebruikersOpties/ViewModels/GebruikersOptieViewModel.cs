@@ -18,21 +18,21 @@ namespace TLCGen.GebruikersOpties
 
         public string Naam
         {
-            get { return GebruikersOptie.Naam; }
+            get => GebruikersOptie.Naam;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(ObjectType, value))
                     {
-                        string oldname = GebruikersOptie.Naam;
+                        var oldname = GebruikersOptie.Naam;
                         GebruikersOptie.Naam = value;
 
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
@@ -40,41 +40,41 @@ namespace TLCGen.GebruikersOpties
 
         public CCOLElementTypeEnum Type
         {
-            get { return GebruikersOptie.Type; }
+            get => GebruikersOptie.Type;
             set
             {
                 GebruikersOptie.Type = value;
-                RaisePropertyChanged<object>("Type", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }
 
         public int? Instelling
         {
-            get { return GebruikersOptie.Instelling; }
+            get => GebruikersOptie.Instelling;
             set
             {
                 GebruikersOptie.Instelling = value;
-                RaisePropertyChanged<object>("Instelling", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Instelling), broadcast: true);
             }
         }
 
         public bool Dummy
         {
-            get { return GebruikersOptie.Dummy; }
+            get => GebruikersOptie.Dummy;
             set
             {
                 GebruikersOptie.Dummy = value;
-                RaisePropertyChanged<object>("Dummy", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
             }
         }
 
         public string Commentaar
         {
-            get { return GebruikersOptie.Commentaar; }
+            get => GebruikersOptie.Commentaar;
             set
             {
                 GebruikersOptie.Commentaar = value;
-                RaisePropertyChanged<object>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
             }
         }
 

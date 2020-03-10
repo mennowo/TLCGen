@@ -41,13 +41,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Prioriteit";
-            }
-        }
+        public override string DisplayName => "Prioriteit";
 
         public override bool CanBeEnabled()
         {

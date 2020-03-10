@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
 
         public SelectieveDetectorViewModel SelectedSelectieveDetector
         {
-            get { return _SelectedSelectieveDetector; }
+            get => _SelectedSelectieveDetector;
             set
             {
                 _SelectedSelectieveDetector = value;
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedSelectieveDetectoren
         {
-            get { return _SelectedSelectieveDetectoren; }
+            get => _SelectedSelectieveDetectoren;
             set
             {
                 _SelectedSelectieveDetectoren = value;
@@ -108,18 +108,18 @@ namespace TLCGen.ViewModels
 
         void AddSelectieveDetectorCommand_Executed(object prm)
         {
-            SelectieveDetectorModel dm = new SelectieveDetectorModel();
-            int inewname = SelectieveDetectoren.Count + 1;
-            string newname = "s" + inewname.ToString("000");
+            var dm = new SelectieveDetectorModel();
+            var inewname = SelectieveDetectoren.Count + 1;
+            var newname = "s" + inewname.ToString("000");
             while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.SelectieveDetector, newname))
             {
                 inewname++;
                 newname = "s" + inewname.ToString("000");
             }
             dm.Naam = newname;
-            SelectieveDetectorViewModel dvm1 = new SelectieveDetectorViewModel(dm);
+            var dvm1 = new SelectieveDetectorViewModel(dm);
             SelectieveDetectoren.Add(dvm1);
-            Messenger.Default.Send(new SelectieveDetectorenChangedMessage());
+            Messenger.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
             SelectedSelectieveDetectoren.BubbleSort();
         }
 
@@ -130,18 +130,21 @@ namespace TLCGen.ViewModels
 
         void RemoveSelectieveDetectorCommand_Executed(object prm)
         {
-            bool changed = false;
+            var changed = false;
+            var removed = new List<SelectieveDetectorModel>();
             if (SelectedSelectieveDetectoren != null && SelectedSelectieveDetectoren.Count > 0)
             {
                 changed = true;
                 foreach (SelectieveDetectorViewModel ivm in SelectedSelectieveDetectoren)
                 {
+                    removed.Add(ivm.SelectieveDetector);
                     Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam);
                 }
             }
             else if (SelectedSelectieveDetector != null)
             {
                 changed = true;
+                removed.Add(SelectedSelectieveDetector.SelectieveDetector);
                 Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedSelectieveDetector.Naam);
             }
             RebuildSelectieveDetectorenList();
@@ -149,7 +152,7 @@ namespace TLCGen.ViewModels
 
             if (changed)
             {
-                Messenger.Default.Send(new SelectieveDetectorenChangedMessage());
+                Messenger.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
             }
         }
 
@@ -168,7 +171,7 @@ namespace TLCGen.ViewModels
         {
             SelectieveDetectoren.CollectionChanged -= SelectieveDetectoren_CollectionChanged;
             SelectieveDetectoren.Clear();
-            foreach (SelectieveDetectorModel dm in base.Controller.SelectieveDetectoren)
+            foreach (var dm in base.Controller.SelectieveDetectoren)
             {
                 var dvm = new SelectieveDetectorViewModel(dm);
                 dvm.PropertyChanged += SelectieveDetector_PropertyChanged;
@@ -182,17 +185,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Selectieve\ndetectie";
-            }
-        }
+        public override string DisplayName => "Selectieve\ndetectie";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -207,10 +204,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

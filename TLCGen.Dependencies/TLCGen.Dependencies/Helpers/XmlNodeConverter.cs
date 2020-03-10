@@ -13,16 +13,16 @@ namespace TLCGen.Helpers
     {
         public static T ConvertNode<T>(XmlNode node) where T : class
         {
-            MemoryStream stm = new MemoryStream();
+            var stm = new MemoryStream();
 
-            StreamWriter stw = new StreamWriter(stm);
+            var stw = new StreamWriter(stm);
             stw.Write(node.OuterXml);
             stw.Flush();
 
             stm.Position = 0;
 
-            XmlSerializer ser = new XmlSerializer(typeof(T));
-            T result = (ser.Deserialize(stm) as T);
+            var ser = new XmlSerializer(typeof(T));
+            var result = (ser.Deserialize(stm) as T);
 
             return result;
         }

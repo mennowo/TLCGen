@@ -17,11 +17,11 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _Fase.FaseCyclus; }
+            get => _Fase.FaseCyclus;
             set
             {
                 _Fase.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 

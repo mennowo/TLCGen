@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
 
         public ITLCGenTabItem SelectedTab
         {
-            get { return _SelectedTab; }
+            get => _SelectedTab;
             set
             {
                 // Take actions for current 
@@ -95,19 +95,13 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
-            set
-            {
-                //foreach (var tab in TabItems)
-                //{
-                //    tab.Controller = value;
-                //}
-                base.Controller = value;
-            }
+            //foreach (var tab in TabItems)
+            //{
+            //    tab.Controller = value;
+            //}
+            set => base.Controller = value;
         }
 
         #endregion // TabItem Overrides
@@ -118,7 +112,7 @@ namespace TLCGen.ViewModels
         {
             var tabs = new SortedDictionary<int, ITLCGenTabItem>();
             var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
-            int plugindex = 100;
+            var plugindex = 100;
             foreach (var part in parts)
             {
                 if ((part.Item1 & TLCGenPluginElems.TabControl) == TLCGenPluginElems.TabControl)

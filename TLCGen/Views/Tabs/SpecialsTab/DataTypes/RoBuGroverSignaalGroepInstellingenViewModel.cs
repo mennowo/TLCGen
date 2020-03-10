@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -13,7 +15,9 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private RoBuGroverFaseCyclusInstellingenModel _SignaalGroepInstellingen;
+        private readonly RoBuGroverFaseCyclusInstellingenModel _signaalGroepInstellingen;
+        private ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> _fileDetectorManager;
+        private ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> _hiaatDetectorManager;
 
         #endregion // Fields
 
@@ -21,149 +25,103 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverFileDetectorViewModel SelectedFileDetector
         {
-            get { return FileDetectorManager.SelectedItem; }
+            get => FileDetectorManager.SelectedItem;
             set
             {
                 FileDetectorManager.SelectedItem = value;
-                RaisePropertyChanged("SelectedFileDetector");
+                RaisePropertyChanged();
             }
         }
 
         public RoBuGroverHiaatDetectorViewModel SelectedHiaatDetector
         {
-            get { return HiaatDetectorManager.SelectedItem; }
+            get => HiaatDetectorManager.SelectedItem;
             set
             {
                 HiaatDetectorManager.SelectedItem = value;
-                RaisePropertyChanged("SelectedHiaatDetector");
+                RaisePropertyChanged();
             }
         }
 
         public string FaseCyclus
         {
-            get { return _SignaalGroepInstellingen.FaseCyclus; }
+            get => _signaalGroepInstellingen.FaseCyclus;
             set
             {
-                _SignaalGroepInstellingen.FaseCyclus = value;
-                RaisePropertyChanged("FaseCyclus");
+                _signaalGroepInstellingen.FaseCyclus = value;
+                RaisePropertyChanged();
             }
         }
+        
         public int MinGroenTijd
         {
-            get { return _SignaalGroepInstellingen.MinGroenTijd; }
+            get => _signaalGroepInstellingen.MinGroenTijd;
             set
             {
-                _SignaalGroepInstellingen.MinGroenTijd = value;
-                RaisePropertyChanged("MinGroenTijd");
+                _signaalGroepInstellingen.MinGroenTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
+
         public int MaxGroenTijd
         {
-            get { return _SignaalGroepInstellingen.MaxGroenTijd; }
+            get => _signaalGroepInstellingen.MaxGroenTijd;
             set
             {
-                _SignaalGroepInstellingen.MaxGroenTijd = value;
-                RaisePropertyChanged("MaxGroenTijd");
+                _signaalGroepInstellingen.MaxGroenTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public ObservableCollectionAroundList<RoBuGroverFileDetectorViewModel, RoBuGroverFileDetectorModel> FileDetectoren
         {
             get;
-            private set;
         }
 
         public ObservableCollectionAroundList<RoBuGroverHiaatDetectorViewModel, RoBuGroverHiaatDetectorModel> HiaatDetectoren
         {
             get;
-            private set;
         }
 
-        private ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> _FileDetectorManager;
-        public ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> FileDetectorManager
-        {
-            get
-            {
-                if (_FileDetectorManager == null)
-                {
-                    List<string> dets =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            Where(x => x.Naam == FaseCyclus).
-                            First().
-                            Detectoren.
-                            Select(x => x.Naam).
-                            ToList();
-                    _FileDetectorManager = new ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string>(
-                        FileDetectoren,
-                        dets,
-                        (x) => 
+        public ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> FileDetectorManager =>
+            _fileDetectorManager ?? (_fileDetectorManager =
+                new ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string>(
+                    FileDetectoren,
+                    ControllerAccessProvider.Default.AllSignalGroups.First(x => x.Naam == FaseCyclus)
+                        .FaseCyclus.Detectoren.Select(x => x.Naam).ToList(),
+                    x =>
+                    {
+                        var d = new RoBuGroverFileDetectorModel()
                         {
-                            var d = new RoBuGroverFileDetectorModel()
-                            {
-                                Detector = x
-                            };
-                            DefaultsProvider.Default.SetDefaultsOnModel(d);
-                            return new RoBuGroverFileDetectorViewModel(d);
-                        },
-                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
-                        (x) => { return SelectedFileDetector; },
-                        () => 
+                            Detector = x
+                        };
+                        DefaultsProvider.Default.SetDefaultsOnModel(d);
+                        return new RoBuGroverFileDetectorViewModel(d);
+                    },
+                    x => FileDetectoren.All(y => y.Detector != x),
+                    x => SelectedFileDetector,
+                    () => RaisePropertyChanged<object>(broadcast: true),
+                    () => RaisePropertyChanged<object>(broadcast: true)));
+        
+        public ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager =>
+            _hiaatDetectorManager ?? (_hiaatDetectorManager =
+                new ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string>(
+                    HiaatDetectoren,
+                    ControllerAccessProvider.Default.AllSignalGroups.First(x => x.Naam == FaseCyclus)
+                        .FaseCyclus.Detectoren.Select(x => x.Naam).ToList(),
+                    x =>
+                    {
+                        var d = new RoBuGroverHiaatDetectorModel()
                         {
-                            RaisePropertyChanged<object>(broadcast: true);
-                        },
-                        () => 
-                        {
-                            RaisePropertyChanged<object>(broadcast: true);
-                        }
-                        );
-                }
-                return _FileDetectorManager;
-            }
-        }
-
-        private ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> _HiaatDetectorManager;
-        public ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager
-        {
-            get
-            {
-                if (_HiaatDetectorManager == null)
-                {
-                    List<string> dets =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            Where(x => x.Naam == FaseCyclus).
-                            First().
-                            Detectoren.
-                            Select(x => x.Naam).
-                            ToList();
-                    _HiaatDetectorManager = new ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string>(
-                        HiaatDetectoren,
-                        dets,
-                        (x) =>
-                        {
-                            var d = new RoBuGroverHiaatDetectorModel()
-                            {
-                                Detector = x
-                            };
-                            DefaultsProvider.Default.SetDefaultsOnModel(d);
-                            return new RoBuGroverHiaatDetectorViewModel(d);
-                        },
-                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); },
-                        (x) => { return SelectedHiaatDetector; },
-                        () => 
-                        {
-                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                            RaisePropertyChanged("SelectedHiaatDetector");
-                        },
-                        () => 
-                        {
-                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                            RaisePropertyChanged("SelectedHiaatDetector");
-                        }
-                        );
-                }
-                return _HiaatDetectorManager;
-            }
-        }
+                            Detector = x
+                        };
+                        DefaultsProvider.Default.SetDefaultsOnModel(d);
+                        return new RoBuGroverHiaatDetectorViewModel(d);
+                    },
+                    x => HiaatDetectoren.All(y => y.Detector != x),
+                    x => SelectedHiaatDetector,
+                    OnHiaatDetectorListChanged,
+                    OnHiaatDetectorListChanged));
 
         #endregion Properties
 
@@ -177,6 +135,12 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
+        private void OnHiaatDetectorListChanged()
+        {
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+            RaisePropertyChanged(nameof(SelectedHiaatDetector));
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -185,12 +149,17 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(DetectorenChangedMessage msg)
         {
-            _FileDetectorManager = null;
-            _HiaatDetectorManager = null;
-            RaisePropertyChanged("FileDetectorManager");
-            RaisePropertyChanged("HiaatDetectorManager");
+            _fileDetectorManager?.Refresh();
+            _hiaatDetectorManager?.Refresh();
+        }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            if (msg.ObjectType != TLCGenObjectTypeEnum.Detector) return;
+            _fileDetectorManager?.Refresh();
+            _hiaatDetectorManager?.Refresh();
         }
 
         #endregion // TLCGen Events
@@ -199,7 +168,7 @@ namespace TLCGen.ViewModels
 
         public object GetItem()
         {
-            return _SignaalGroepInstellingen;
+            return _signaalGroepInstellingen;
         }
 
         #endregion // IViewModelWithItem
@@ -221,10 +190,13 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverSignaalGroepInstellingenViewModel(RoBuGroverFaseCyclusInstellingenModel signaalgroepinstellingen)
         {
-            _SignaalGroepInstellingen = signaalgroepinstellingen;
+            _signaalGroepInstellingen = signaalgroepinstellingen;
 
-            FileDetectoren = new ObservableCollectionAroundList<RoBuGroverFileDetectorViewModel, RoBuGroverFileDetectorModel>(_SignaalGroepInstellingen.FileDetectoren);
-            HiaatDetectoren = new ObservableCollectionAroundList<RoBuGroverHiaatDetectorViewModel, RoBuGroverHiaatDetectorModel>(_SignaalGroepInstellingen.HiaatDetectoren);
+            FileDetectoren = new ObservableCollectionAroundList<RoBuGroverFileDetectorViewModel, RoBuGroverFileDetectorModel>(_signaalGroepInstellingen.FileDetectoren);
+            HiaatDetectoren = new ObservableCollectionAroundList<RoBuGroverHiaatDetectorViewModel, RoBuGroverHiaatDetectorModel>(_signaalGroepInstellingen.HiaatDetectoren);
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

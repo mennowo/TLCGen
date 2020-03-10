@@ -832,7 +832,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (prio.FaseCyclus == fc.Naam)
                     {
-                        bool wissel = false;
+                        var wissel = false;
                         if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                         {
                             wissel = true;

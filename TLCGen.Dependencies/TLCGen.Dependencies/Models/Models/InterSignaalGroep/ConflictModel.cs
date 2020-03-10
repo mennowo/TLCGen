@@ -78,8 +78,8 @@ namespace TLCGen.Models
         {
             if(obj is ConflictModel)
             {
-                string s1 = (obj as ConflictModel).FaseVan;
-                string s2 = this.FaseVan;
+                var s1 = (obj as ConflictModel).FaseVan;
+                var s2 = this.FaseVan;
                 if (s1.Length < s2.Length) s1 = s1.PadLeft(s2.Length, '0');
                 else if (s2.Length < s1.Length) s2 = s2.PadLeft(s1.Length, '0');
 

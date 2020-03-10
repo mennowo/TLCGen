@@ -185,7 +185,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                 var sd = SelectedDefault.Snelheden.FirstOrDefault(x => x.Name == snelheid);
                 if (sd != null)
                 {
-                    for (int d = 0; d < DynamischHiaatDetectoren.Count; d++)
+                    for (var d = 0; d < DynamischHiaatDetectoren.Count; d++)
                     {
                         var od = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren).FirstOrDefault(x => x.Naam == DynamischHiaatDetectoren[d].DetectorName);
                         if(od != null && od.Rijstrook.HasValue && od.Rijstrook > 0 && od.Rijstrook <= 10)

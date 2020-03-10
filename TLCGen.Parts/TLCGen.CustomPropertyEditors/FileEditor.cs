@@ -11,14 +11,14 @@ namespace TLCGen.CustomPropertyEditors
 
         public FrameworkElement ResolveEditor(Xceed.Wpf.Toolkit.PropertyGrid.PropertyItem propertyItem)
         {
-            Grid g = new Grid();
-            ColumnDefinition cd1 = new ColumnDefinition();
-            ColumnDefinition cd2 = new ColumnDefinition();
+            var g = new Grid();
+            var cd1 = new ColumnDefinition();
+            var cd2 = new ColumnDefinition();
             cd1.Width = new GridLength(1, GridUnitType.Star);
             cd2.Width = GridLength.Auto;
             g.ColumnDefinitions.Add(cd1);
             g.ColumnDefinitions.Add(cd2);
-            Button b = new Button();
+            var b = new Button();
             b.Click += B_Click;
             b.Margin = new Thickness(2);
             b.Content = "...";
@@ -42,7 +42,7 @@ namespace TLCGen.CustomPropertyEditors
             var dialog = new System.Windows.Forms.SaveFileDialog();
             dialog.CheckFileExists = false;
             dialog.Filter = "XML files|*.xml";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            var result = dialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {

@@ -46,7 +46,7 @@ namespace TLCGen.ViewModels
 
         public IngangViewModel SelectedIngang
         {
-            get { return _SelectedIngang; }
+            get => _SelectedIngang;
             set
             {
                 _SelectedIngang = value;
@@ -56,7 +56,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedIngangen
         {
-            get { return _SelectedIngangen; }
+            get => _SelectedIngangen;
             set
             {
                 _SelectedIngangen = value;
@@ -109,15 +109,15 @@ namespace TLCGen.ViewModels
 
         void AddIngangCommand_Executed(object prm)
         {
-            IngangModel dm = new IngangModel();
-            string newname = "i001";
-            int inewname = 1;
-            foreach (IngangViewModel ivm in Ingangen)
+            var dm = new IngangModel();
+            var newname = "i001";
+            var inewname = 1;
+            foreach (var ivm in Ingangen)
             {
                 if (Regex.IsMatch(ivm.Naam, @"[0-9]+"))
                 {
-                    Match m = Regex.Match(ivm.Naam, @"[0-9]+");
-                    string next = m.Value;
+                    var m = Regex.Match(ivm.Naam, @"[0-9]+");
+                    var next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
                         newname = "i" + inewname.ToString("000");
@@ -131,7 +131,7 @@ namespace TLCGen.ViewModels
             }
             dm.Naam = newname;
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
-            IngangViewModel dvm1 = new IngangViewModel(dm);
+            var dvm1 = new IngangViewModel(dm);
             Ingangen.Add(dvm1);
             Messenger.Default.Send(new IngangenChangedMessage());
         }
@@ -143,7 +143,7 @@ namespace TLCGen.ViewModels
 
         void RemoveIngangCommand_Executed(object prm)
         {
-            bool changed = false;
+            var changed = false;
             if (SelectedIngangen != null && SelectedIngangen.Count > 0)
             {
                 changed = true;
@@ -181,7 +181,7 @@ namespace TLCGen.ViewModels
         {
             Ingangen.CollectionChanged -= Ingangen_CollectionChanged;
             Ingangen.Clear();
-            foreach (IngangModel dm in base.Controller.Ingangen)
+            foreach (var dm in base.Controller.Ingangen)
             {
                 var dvm = new IngangViewModel(dm);
                 dvm.PropertyChanged += Ingang_PropertyChanged;
@@ -195,17 +195,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Ingangen";
-            }
-        }
+        public override string DisplayName => "Ingangen";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -220,10 +214,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

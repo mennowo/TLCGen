@@ -69,8 +69,8 @@ namespace TLCGen.Specificator
 
         public static void SetDirtyFlag(WordprocessingDocument doc)
         {
-            DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
-            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
+            var settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
+            var updateFields = new UpdateFieldsOnOpen();
             updateFields.Val = new OnOffValue(true);
             settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
             settingsPart.Settings.Save();
@@ -81,7 +81,7 @@ namespace TLCGen.Specificator
             using (var doc = WordprocessingDocument.Open(filename, true))
             {
                 // Add a main document part. 
-                Body body = doc.MainDocumentPart.Document.Body;
+                var body = doc.MainDocumentPart.Document.Body;
                 body.RemoveAllChildren<Paragraph>();
 
                 //var gensWithElems = CCOLGenerator.GetAllGeneratorsWithElements(c);

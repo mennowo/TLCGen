@@ -64,7 +64,7 @@ namespace TLCGen.Importers.TabC
                 return null;
             }
 
-            TabCType tabCType = TabCType.UNKNOWN;
+            var tabCType = TabCType.UNKNOWN;
             if (lines.Any(x => ReTypeOTTO.IsMatch(x))) tabCType = TabCType.OTTO;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeTPA.IsMatch(x))) tabCType = TabCType.TPA;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeATB.IsMatch(x))) tabCType = TabCType.ATB;
@@ -445,7 +445,7 @@ namespace TLCGen.Importers.TabC
                         if (m.Success)
                         {
                             var name = m.Groups["name"].Value.ToLower().Replace("d", "");
-                            if (!outcome.Detectoren.Any(x => x.Naam == name))
+                            if (outcome.Detectoren.All(x => x.Naam != name))
                             {
                                 outcome.Detectoren.Add(new DetectorModel
                                 {
@@ -465,6 +465,7 @@ namespace TLCGen.Importers.TabC
                             if (fc.Naam.Length < d.Naam.Length &&
                                 Regex.IsMatch(d.Naam, $@"^[a-zA-Z]*{fc.Naam}"))
                             {
+                                d.FaseCyclus = fc.Naam; 
                                 fc.Detectoren.Add(d);
                                 assigned.Add(d);
                                 break;

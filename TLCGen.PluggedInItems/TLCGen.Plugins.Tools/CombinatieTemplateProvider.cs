@@ -17,15 +17,15 @@ namespace TLCGen.Plugins.Tools
         {
             var i = 0;
             if (obj == null) return i;
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
                 var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
                 if (ignore != null) continue;
 
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
 
                 // for ints
                 if (property.PropertyType == typeof(int))
@@ -57,12 +57,12 @@ namespace TLCGen.Plugins.Tools
         {
             var i = 0;
             if (obj == null) return i;
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
 
                 // for ints
                 if (property.PropertyType == typeof(string) && propValue != null)

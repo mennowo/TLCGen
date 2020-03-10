@@ -16,11 +16,11 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _Detector.Detector; }
+            get => _Detector.Detector;
             set
             {
                 _Detector.Detector = value;
-                RaisePropertyChanged<object>("Detector", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
             }
         }
 

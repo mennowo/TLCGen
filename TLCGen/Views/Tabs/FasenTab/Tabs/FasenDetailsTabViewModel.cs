@@ -10,32 +10,21 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<FaseCyclusViewModel> _Fasen;
-        private FaseCyclusViewModel _SelectedFaseCyclus;
+        private FaseCyclusViewModel _selectedFaseCyclus;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<FaseCyclusViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<FaseCyclusViewModel>();
-                }
-                return _Fasen;
-            }
-        }
+        public ObservableCollection<FaseCyclusViewModel> Fasen => ControllerAccessProvider.Default.AllSignalGroups;
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _selectedFaseCyclus;
             set
             {
-                _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                _selectedFaseCyclus = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -43,38 +32,16 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Details";
-            }
-        }
+        public override string DisplayName => "Details";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
         public override void OnSelected()
         {
-            var sel = SelectedFaseCyclus;
-            Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                var fcvm = new FaseCyclusViewModel(fcm);
-                if (sel != null && fcvm.Naam == sel.Naam)
-                {
-                    sel = null;
-                    SelectedFaseCyclus = fcvm;
-                }
-                Fasen.Add(fcvm);
-            }
-            if(SelectedFaseCyclus == null && Fasen.Any())
-            {
-                SelectedFaseCyclus = Fasen[0];
-            }
         }
 
         #endregion // TabItem Overrides

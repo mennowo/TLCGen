@@ -16,20 +16,20 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _FileDetector.Detector; }
+            get => _FileDetector.Detector;
             set
             {
                 _FileDetector.Detector = value;
-                RaisePropertyChanged<object>("Detector", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
             }
         }
         public int FileTijd
         {
-            get { return _FileDetector.FileTijd; }
+            get => _FileDetector.FileTijd;
             set
             {
                 _FileDetector.FileTijd = value;
-                RaisePropertyChanged<object>("FileTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FileTijd), broadcast: true);
             }
         }
 

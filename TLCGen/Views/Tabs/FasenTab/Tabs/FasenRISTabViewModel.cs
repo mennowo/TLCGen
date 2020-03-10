@@ -131,7 +131,7 @@ namespace TLCGen.ViewModels
                     }
                 }
                 UpdateRISLanes();
-                for (int l = 0; l < RISLanes.Count; l++)
+                for (var l = 0; l < RISLanes.Count; l++)
                 {
                     RISLanes[l].LaneID = l + 1;
                 }
@@ -243,7 +243,7 @@ namespace TLCGen.ViewModels
             foreach (var fc in Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
-                for (int i = 0; i < fc.AantalRijstroken; i++)
+                for (var i = 0; i < fc.AantalRijstroken; i++)
                 {
                     if (RISRequestLanes.All(x => x.SignalGroupName != fc.Naam || x.SignalGroupName == fc.Naam && x.RijstrookIndex != i + 1 || x.SignalGroupName == fc.Naam && x.RijstrookIndex == i + 1 && x.Type != t))
                     {
@@ -267,7 +267,7 @@ namespace TLCGen.ViewModels
             foreach (var fc in Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
-                for (int i = 0; i < fc.AantalRijstroken; i++)
+                for (var i = 0; i < fc.AantalRijstroken; i++)
                 {
                     if (RISExtendLanes.All(x => x.SignalGroupName != fc.Naam || x.SignalGroupName == fc.Naam && x.RijstrookIndex != i + 1 || x.SignalGroupName == fc.Naam && x.RijstrookIndex == i + 1 && x.Type != t))
                     {
@@ -310,7 +310,7 @@ namespace TLCGen.ViewModels
             {
                 fc = Controller.Fasen.FirstOrDefault(x => x.Naam == faseName);
             }
-            RISStationTypeEnum t = RISStationTypeEnum.UNKNOWN;
+            var t = RISStationTypeEnum.UNKNOWN;
             if (fc == null) return t;
             switch (fc.Type)
             {
@@ -351,7 +351,7 @@ namespace TLCGen.ViewModels
                 {
                     var risfc = new RISFaseCyclusDataViewModel(
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
-                    for (int i = 0; i < fc.AantalRijstroken; i++)
+                    for (var i = 0; i < fc.AantalRijstroken; i++)
                     {
                         var sitf = SystemITF;
                         if (HasMultipleSystemITF)
@@ -419,7 +419,7 @@ namespace TLCGen.ViewModels
                 else if (obj.AantalRijstroken < risfc.Lanes.Count)
                 {
                     var i = risfc.Lanes.Count - obj.AantalRijstroken;
-                    for (int j = 0; j < i; j++)
+                    for (var j = 0; j < i; j++)
                     {
                         if (risfc.Lanes.Any())
                         {
@@ -472,7 +472,7 @@ namespace TLCGen.ViewModels
                     {
                         var risfc = new RISFaseCyclusDataViewModel(
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
-                        for (int i = 0; i < fc.AantalRijstroken; i++)
+                        for (var i = 0; i < fc.AantalRijstroken; i++)
                         {
                             risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf }));
                         }
@@ -494,7 +494,7 @@ namespace TLCGen.ViewModels
                             else if (fc.AantalRijstroken < risfc.Lanes.Count)
                             {
                                 var i = risfc.Lanes.Count - fc.AantalRijstroken;
-                                for (int j = 0; j < i; j++)
+                                for (var j = 0; j < i; j++)
                                 {
                                     if (risfc.Lanes.Any())
                                         risfc.Lanes.Remove(risfc.Lanes.Last());

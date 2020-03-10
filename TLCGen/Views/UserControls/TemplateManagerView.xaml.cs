@@ -10,8 +10,8 @@ namespace TLCGen.Views
     {
         public string ParentItemName
         {
-            get { return (string)GetValue(ParentItemNameProperty); }
-            set { SetValue(ParentItemNameProperty, value); }
+            get => (string)GetValue(ParentItemNameProperty);
+            set => SetValue(ParentItemNameProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ApplyToItem.  This enables animation, styling, binding, etc...

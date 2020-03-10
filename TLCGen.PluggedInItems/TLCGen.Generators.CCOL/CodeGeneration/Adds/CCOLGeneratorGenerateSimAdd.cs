@@ -23,7 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSimAdd(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine(GenerateSimAddHeader(controller));
             sb.AppendLine();

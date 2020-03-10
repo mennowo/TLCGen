@@ -15,7 +15,7 @@ namespace TLCGen.Settings
     {
         public List<object> GetItems()
         {
-            List<object> items = new List<object>();
+            var items = new List<object>();
             foreach (var fc in Items)
             {
                 items.Add(fc);

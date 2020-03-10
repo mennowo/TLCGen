@@ -23,7 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            foreach (FaseCyclusModel fcm in c.Fasen)
+            foreach (var fcm in c.Fasen)
             {
                 // meeverlengen niet hard uit
                 if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
@@ -81,7 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -97,7 +97,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV1" : "ym_max_toV1";
                     var totigfuncCCOL = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_to" : "ym_max_tig";
 
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                         {
@@ -182,7 +182,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     var file = false;
                     var tts = ts;
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
                         {
@@ -217,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
 
                     var hard = false;
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.HardMeeverlengenFaseCycli.Any())
                         {

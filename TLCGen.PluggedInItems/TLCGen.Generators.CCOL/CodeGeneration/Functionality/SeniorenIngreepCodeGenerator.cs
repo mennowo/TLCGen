@@ -124,7 +124,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var dks = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen).ToList();
                         var dk1 = dks.FirstOrDefault();
-                        DetectorModel dk2 = ((dks.Count() > 1) ? dks[1] : null);
+                        var dk2 = ((dks.Count() > 1) ? dks[1] : null);
                         var nl_extra = c.InterSignaalGroep.Nalopen.Where(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.FaseVan == fc.Naam);
                         var extra_d = "";
                         sb.Append($"{ts}");

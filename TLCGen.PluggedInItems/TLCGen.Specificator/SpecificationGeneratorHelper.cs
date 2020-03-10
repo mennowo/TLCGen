@@ -17,7 +17,7 @@ namespace TLCGen.Specificator
     {
         public static string GetStyleIdFromStyleName(WordprocessingDocument doc, string styleName)
         {
-            StyleDefinitionsPart stylePart = doc.MainDocumentPart.StyleDefinitionsPart;
+            var stylePart = doc.MainDocumentPart.StyleDefinitionsPart;
             string styleId = stylePart.Styles.Descendants<StyleName>()
                 .Where(s => s.Val.Value.Equals(styleName) &&
                     (((Style)s.Parent).Type == StyleValues.Paragraph))
@@ -34,7 +34,7 @@ namespace TLCGen.Specificator
             }
 
             // Get the paragraph properties element of the paragraph.
-            ParagraphProperties pPr = p.Elements<ParagraphProperties>().First();
+            var pPr = p.Elements<ParagraphProperties>().First();
 
             pPr.ParagraphStyleId = new ParagraphStyleId() { Val = styleid };
         }
@@ -46,7 +46,7 @@ namespace TLCGen.Specificator
             if (numberingPart == null)
             {
                 numberingPart = doc.MainDocumentPart.AddNewPart<NumberingDefinitionsPart>("numbDef001");
-                Numbering element = new Numbering();
+                var element = new Numbering();
                 element.Save(numberingPart);
             }
             return numberingPart;
@@ -82,7 +82,7 @@ namespace TLCGen.Specificator
             }
             else
             {
-                AbstractNum lastAbstractNum = numberingPart.Numbering.Elements<AbstractNum>().Last();
+                var lastAbstractNum = numberingPart.Numbering.Elements<AbstractNum>().Last();
                 numberingPart.Numbering.InsertAfter(abstractNum1, lastAbstractNum);
             }
 
@@ -90,8 +90,8 @@ namespace TLCGen.Specificator
             // Open XML SDK Productity Tools validation test.  AbstractNum comes first and then NumberingInstance and we want to
             // insert this AFTER the last NumberingInstance and AFTER all the AbstractNum entries or we will get a validation error.
             var numberId = numberingPart.Numbering.Elements<NumberingInstance>().Count() + 1;
-            NumberingInstance numberingInstance1 = new NumberingInstance() { NumberID = numberId };
-            AbstractNumId abstractNumId1 = new AbstractNumId() { Val = abstractNumberId };
+            var numberingInstance1 = new NumberingInstance() { NumberID = numberId };
+            var abstractNumId1 = new AbstractNumId() { Val = abstractNumberId };
             numberingInstance1.Append(abstractNumId1);
 
             if (numberId == 1)
@@ -104,7 +104,7 @@ namespace TLCGen.Specificator
                 numberingPart.Numbering.InsertAfter(numberingInstance1, lastNumberingInstance);
             }
 
-            Body body = doc.MainDocumentPart.Document.Body;
+            var body = doc.MainDocumentPart.Document.Body;
 
             foreach (var item in list)
             {
@@ -117,15 +117,15 @@ namespace TLCGen.Specificator
                     Hanging = (360).ToString(),
                 };  // correct indentation 
 
-                ParagraphMarkRunProperties paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
+                var paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
                 if (item.Item2 % 2 == 0)
                 {
-                    RunFonts runFonts1 = new RunFonts() { Ascii = "Symbol", HighAnsi = "Symbol" };
+                    var runFonts1 = new RunFonts() { Ascii = "Symbol", HighAnsi = "Symbol" };
                     paragraphMarkRunProperties1.Append(runFonts1);
                 }
                 else
                 {
-                    RunFonts runFonts1 = new RunFonts() { Ascii = "Courier New", HighAnsi = "Courier New" };
+                    var runFonts1 = new RunFonts() { Ascii = "Courier New", HighAnsi = "Courier New" };
                     paragraphMarkRunProperties1.Append(runFonts1);
                 }
 
@@ -238,7 +238,7 @@ namespace TLCGen.Specificator
                      });
 
 
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (var stream = new FileStream(file, FileMode.Open))
             {
                 imagePart.FeedData(stream);
             }
@@ -249,9 +249,9 @@ namespace TLCGen.Specificator
         public static TableRow GetTableRow(string[] data, int[] widths = null, bool header = false, bool verticalText = false)
         {
             var tr = new TableRow();
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
-                string d = data[i];
+                var d = data[i];
                 var tc = new TableCell();
                 var run = new Run(new Text(d));
                 if (header) run.RunProperties = new RunProperties(new Bold());
@@ -312,9 +312,9 @@ namespace TLCGen.Specificator
 
         public static Table GetTable(List<List<string>> elements, bool firstRowVerticalText = false)
         {
-            Table table = new Table();
+            var table = new Table();
 
-            TableProperties props = new TableProperties(
+            var props = new TableProperties(
                 new TableBorders(
                 new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
                 new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },

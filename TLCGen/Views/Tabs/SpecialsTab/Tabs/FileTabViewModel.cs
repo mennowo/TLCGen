@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
 
         public FileIngreepViewModel SelectedFileIngreep
         {
-            get { return _SelectedFileIngreep; }
+            get => _SelectedFileIngreep;
             set
             {
                 _SelectedFileIngreep = value;
@@ -95,16 +95,16 @@ namespace TLCGen.ViewModels
 
         void AddNewFileIngreepCommand_Executed(object prm)
         {
-            FileIngreepModel fim = new FileIngreepModel();
+            var fim = new FileIngreepModel();
             DefaultsProvider.Default.SetDefaultsOnModel(fim);
-            int i = FileIngrepen.Count + 1;
+            var i = FileIngrepen.Count + 1;
             fim.Naam = "File" + i.ToString();
             while(!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam, TLCGenObjectTypeEnum.FileIngreep))
             {
                 ++i;
                 fim.Naam = "File" + i.ToString();
             }
-            FileIngreepViewModel fivm = new FileIngreepViewModel(fim);
+            var fivm = new FileIngreepViewModel(fim);
             FileIngrepen.Add(fivm);
 
             MessengerInstance.Send(new ControllerDataChangedMessage());
@@ -139,15 +139,12 @@ namespace TLCGen.ViewModels
 
         #region TLCGen TabItem overrides
 
-        public override string DisplayName
-        {
-            get { return "File"; }
-        }
+        public override string DisplayName => "File";
 
         public override void OnSelected()
         {
             _ControllerFasen = new List<string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 _ControllerFasen.Add(fcm.Naam);
             }
@@ -175,10 +172,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

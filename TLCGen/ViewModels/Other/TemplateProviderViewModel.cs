@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
         private T1 _SelectedTemplate;
         public T1 SelectedTemplate
         {
-            get { return _SelectedTemplate; }
+            get => _SelectedTemplate;
             set
             {
                 _SelectedTemplate = value;
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
         private T2 _ApplyToItem;
         public T2 ApplyToItem
         {
-            get { return _ApplyToItem; }
+            get => _ApplyToItem;
             set
             {
                 _ApplyToItem = value;
@@ -63,7 +63,7 @@ namespace TLCGen.ViewModels
         private IList<T2> _ApplyToItems;
         public IList<T2> ApplyToItems
         {
-            get { return _ApplyToItems; }
+            get => _ApplyToItems;
             set
             {
                 _ApplyToItems = value;
@@ -132,7 +132,7 @@ namespace TLCGen.ViewModels
 
         private void ApplyTo(T2 item, object obj)
         {
-            TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
+            var template = SelectedTemplate as TLCGenTemplateModel<T2>;
             var tempitem = template.GetItems()?.FirstOrDefault();
             // originalName: name of item if no argument was passed; otherwise, the argument
             // this allows for renaming items in lists belonging to an item
@@ -150,8 +150,8 @@ namespace TLCGen.ViewModels
                     var templateApplicableAttr = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(NoTemplateApplicableAttribute));
                     if (templateApplicableAttr != null) continue;
 
-                    object valueOriginal = prop.GetValue(item);
-                    object valueCloned = prop.GetValue(cloneditem);
+                    var valueOriginal = prop.GetValue(item);
+                    var valueCloned = prop.GetValue(cloneditem);
                     if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
                     {
                         prop.SetValue(item, valueCloned);
@@ -199,19 +199,19 @@ namespace TLCGen.ViewModels
 
         private void AddFromTemplateCommand_Executed(object obj)
         {
-            List<T2> items = new List<T2>();
-            TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
+            var items = new List<T2>();
+            var template = SelectedTemplate as TLCGenTemplateModel<T2>;
             
             // No data provided from view, but a replace value is needed for this template
             if(obj == null && !string.IsNullOrWhiteSpace(template.Replace))
             {
                 var dialog = new Dialogs.ApplyTemplateWindow();
                 dialog.ShowDialog();
-                string ApplyString = dialog.TemplateApplyString;
+                var ApplyString = dialog.TemplateApplyString;
                 if(!string.IsNullOrWhiteSpace(ApplyString))
                 {
-                    string list = ApplyString.Replace(" ", "");
-                    string[] elems = list.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    var list = ApplyString.Replace(" ", "");
+                    var elems = list.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var elem in elems)
                     {
                         var tempitems = template.GetItems();

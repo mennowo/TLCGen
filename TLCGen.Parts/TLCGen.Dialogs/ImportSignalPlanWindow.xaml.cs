@@ -53,9 +53,9 @@ namespace TLCGen.Dialogs
 								iState++;
 							else if (iState == 3 && !string.IsNullOrWhiteSpace(s))
 							{
-								string[] parts = s.Split('"');
-								string strPhase = parts[1];
-								bool found = false;
+								var parts = s.Split('"');
+								var strPhase = parts[1];
+								var found = false;
 								foreach (var fc in SignaalPlan.Fasen)
 								{
 									var nfc = fc.FaseCyclus.Replace("fc", "");

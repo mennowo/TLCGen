@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using TLCGen.Integrity;
 using TLCGen.Models.Enumerations;
 
@@ -24,6 +23,12 @@ namespace TLCGen.Models
         [VissimName]
         [Browsable(false)]
         public string VissimNaam { get; set; }
+
+        [RefersTo(TLCGenObjectTypeEnum.Fase)] 
+        [Browsable(false)]
+        [HasDefault(false)]
+        public string FaseCyclus { get; set; }
+
         public int? TDB { get; set; }
         public int? TDH { get; set; }
         public int? TOG { get; set; }

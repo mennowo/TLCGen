@@ -18,8 +18,8 @@ namespace TLCGen.Controls
 
         public Visibility SelectableItemsVisibility
         {
-            get { return (Visibility)GetValue(SelectableItemsVisibilityProperty); }
-            set { SetValue(SelectableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(SelectableItemsVisibilityProperty);
+            set => SetValue(SelectableItemsVisibilityProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectableDetectorsVisibility.  This enables animation, styling, binding, etc...
@@ -29,8 +29,8 @@ namespace TLCGen.Controls
 
         public Visibility RemovableItemsVisibility
         {
-            get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }
-            set { SetValue(RemovableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(RemovableItemsVisibilityProperty);
+            set => SetValue(RemovableItemsVisibilityProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for RemovableDetectorsVisibility.  This enables animation, styling, binding, etc...
@@ -39,8 +39,8 @@ namespace TLCGen.Controls
 
         public string Caption
         {
-            get { return (string)GetValue(CaptionProperty); }
-            set { SetValue(CaptionProperty, value); }
+            get => (string)GetValue(CaptionProperty);
+            set => SetValue(CaptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Caption.  This enables animation, styling, binding, etc...
@@ -49,8 +49,8 @@ namespace TLCGen.Controls
 
         public bool ShowCaption
         {
-            get { return (bool)GetValue(ShowCaptionProperty); }
-            set { SetValue(ShowCaptionProperty, value); }
+            get => (bool)GetValue(ShowCaptionProperty);
+            set => SetValue(ShowCaptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ShowCaption.  This enables animation, styling, binding, etc...
@@ -59,8 +59,8 @@ namespace TLCGen.Controls
 
         public Array SelectableItems
         {
-            get { return (Array)GetValue(SelectableItemsProperty); }
-            set { SetValue(SelectableItemsProperty, value); }
+            get => (Array)GetValue(SelectableItemsProperty);
+            set => SetValue(SelectableItemsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectableItems.  This enables animation, styling, binding, etc...
@@ -69,8 +69,8 @@ namespace TLCGen.Controls
 
         public Array RemovableItems
         {
-            get { return (Array)GetValue(RemovableItemsProperty); }
-            set { SetValue(RemovableItemsProperty, value); }
+            get => (Array)GetValue(RemovableItemsProperty);
+            set => SetValue(RemovableItemsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for RemovableItems.  This enables animation, styling, binding, etc...
@@ -79,8 +79,8 @@ namespace TLCGen.Controls
 
         public object SelectedItemToAdd
         {
-            get { return (object)GetValue(SelectedItemToAddProperty); }
-            set { SetValue(SelectedItemToAddProperty, value); }
+            get => (object)GetValue(SelectedItemToAddProperty);
+            set => SetValue(SelectedItemToAddProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedItemToAdd.  This enables animation, styling, binding, etc...
@@ -89,8 +89,8 @@ namespace TLCGen.Controls
 
         public object SelectedItemToRemove
         {
-            get { return (object)GetValue(SelectedItemToRemoveProperty); }
-            set { SetValue(SelectedItemToRemoveProperty, value); }
+            get => (object)GetValue(SelectedItemToRemoveProperty);
+            set => SetValue(SelectedItemToRemoveProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedItemToRemove.  This enables animation, styling, binding, etc...
@@ -99,8 +99,8 @@ namespace TLCGen.Controls
 
         public ICommand AddItemCommand
         {
-            get { return (ICommand)GetValue(AddItemCommandProperty); }
-            set { SetValue(AddItemCommandProperty, value); }
+            get => (ICommand)GetValue(AddItemCommandProperty);
+            set => SetValue(AddItemCommandProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for AddItemCommand.  This enables animation, styling, binding, etc...
@@ -109,8 +109,8 @@ namespace TLCGen.Controls
 
         public ICommand RemoveItemCommand
         {
-            get { return (ICommand)GetValue(RemoveItemCommandProperty); }
-            set { SetValue(RemoveItemCommandProperty, value); }
+            get => (ICommand)GetValue(RemoveItemCommandProperty);
+            set => SetValue(RemoveItemCommandProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for RemoveItemCommand.  This enables animation, styling, binding, etc...

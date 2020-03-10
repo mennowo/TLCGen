@@ -23,7 +23,7 @@ namespace TLCGen.Views.Resources
 
         public void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DependencyObject dep = (DependencyObject)e.OriginalSource;
+            var dep = (DependencyObject)e.OriginalSource;
 
             // iteratively traverse the visual tree
             while ((dep != null) &&
@@ -37,14 +37,14 @@ namespace TLCGen.Views.Resources
 
             if (dep is DataGridCell)
             {
-                DataGridCell cell = dep as DataGridCell;
+                var cell = dep as DataGridCell;
                 GridColumnFastEdit(cell, e);
             }
         }
 
         public void DataGrid_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            DependencyObject dep = (DependencyObject)e.OriginalSource;
+            var dep = (DependencyObject)e.OriginalSource;
 
             // iteratively traverse the visual tree
             while ((dep != null) &&
@@ -58,7 +58,7 @@ namespace TLCGen.Views.Resources
 
             if (dep is DataGridCell)
             {
-                DataGridCell cell = dep as DataGridCell;
+                var cell = dep as DataGridCell;
                 GridColumnFastEdit(cell, e);
             }
         }
@@ -68,7 +68,7 @@ namespace TLCGen.Views.Resources
             if (cell == null || cell.IsEditing || cell.IsReadOnly)
                 return;
 
-            DataGrid dataGrid = FindVisualParent<DataGrid>(cell);
+            var dataGrid = FindVisualParent<DataGrid>(cell);
             if (dataGrid == null)
                 return;
 
@@ -86,7 +86,7 @@ namespace TLCGen.Views.Resources
                 }
                 else
                 {
-                    DataGridRow row = FindVisualParent<DataGridRow>(cell);
+                    var row = FindVisualParent<DataGridRow>(cell);
                     if (row != null && !row.IsSelected)
                     {
                         row.IsSelected = true;
@@ -95,7 +95,7 @@ namespace TLCGen.Views.Resources
             }
             else
             {
-                ComboBox cb = cell.Content as ComboBox;
+                var cb = cell.Content as ComboBox;
                 if (cb != null)
                 {
                     //DataGrid dataGrid = FindVisualParent<DataGrid>(cell);
@@ -111,10 +111,10 @@ namespace TLCGen.Views.Resources
 
         private static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
-            UIElement parent = element;
+            var parent = element;
             while (parent != null)
             {
-                T correctlyTyped = parent as T;
+                var correctlyTyped = parent as T;
                 if (correctlyTyped != null)
                 {
                     return correctlyTyped;

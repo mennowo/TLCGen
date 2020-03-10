@@ -10,12 +10,9 @@ namespace TLCGen.ViewModels
 
 		public HalfstarPeriodeDataModel PeriodeData { get; }
 
-		public string Periode
-		{
-			get => PeriodeData.Periode;
-		}
+		public string Periode => PeriodeData.Periode;
 
-		public string Signaalplan
+        public string Signaalplan
 		{
 			get => PeriodeData.Signaalplan;
 			set

@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
         public abstract string DisplayName { get; }
         public virtual bool IsEnabled
         {
-            get { return _IsEnabled; }
+            get => _IsEnabled;
             set
             {
                 _IsEnabled = value;
@@ -28,11 +28,11 @@ namespace TLCGen.ViewModels
 
         public virtual System.Windows.Visibility Visibility { get; set; } = System.Windows.Visibility.Visible;
 
-        public virtual System.Windows.DataTemplate ContentDataTemplate { get { return null; } }
+        public virtual System.Windows.DataTemplate ContentDataTemplate => null;
 
         public virtual ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;

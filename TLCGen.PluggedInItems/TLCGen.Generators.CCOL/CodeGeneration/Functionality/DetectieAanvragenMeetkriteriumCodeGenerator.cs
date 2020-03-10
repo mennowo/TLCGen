@@ -75,14 +75,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var dets = c.Fasen.SelectMany(x => x.Detectoren).ToList();
             
             // Detectie aanvraag functie
-            foreach (DetectorModel dm in dets)
+            foreach (var dm in dets)
             {
                 if (dm.Aanvraag == DetectorAanvraagTypeEnum.Geen)
                     continue;
 
                 if (!dm.AanvraagHardOpStraat)
                 {
-                    int set = GetAanvraagSetting(dm);
+                    var set = GetAanvraagSetting(dm);
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
@@ -179,7 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -192,12 +192,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}/* Detectie aanvragen */");
                     sb.AppendLine($"{ts}/* ------------------ */");
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Any(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen && !x.ResetAanvraag))
                         {
                             sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
-                            foreach (DetectorModel dm in fcm.Detectoren)
+                            foreach (var dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
                                 {
@@ -216,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Any(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen && x.ResetAanvraag))
                         {
                             sb.AppendLine($"{ts}aanvraag_detectie_reset_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
-                            foreach (DetectorModel dm in fcm.Detectoren)
+                            foreach (var dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.ResetAanvraag)
                                 {
@@ -237,10 +237,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
-                        bool HasKopmax = false;
-                        foreach (DetectorModel dm in fcm.Detectoren)
+                        var HasKopmax = false;
+                        foreach (var dm in fcm.Detectoren)
                         {
                             if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                             {
@@ -262,7 +262,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             else
                                 sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, NG, ");
                         }
-                        foreach (DetectorModel dm in fcm.Detectoren)
+                        foreach (var dm in fcm.Detectoren)
                         {
                             if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                             {

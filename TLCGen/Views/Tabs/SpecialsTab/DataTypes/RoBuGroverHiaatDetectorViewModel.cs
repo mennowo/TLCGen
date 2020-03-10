@@ -16,20 +16,20 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _HiaatDetector.Detector; }
+            get => _HiaatDetector.Detector;
             set
             {
                 _HiaatDetector.Detector = value;
-                RaisePropertyChanged<object>("Detector", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
             }
         }
         public int HiaatTijd
         {
-            get { return _HiaatDetector.HiaatTijd; }
+            get => _HiaatDetector.HiaatTijd;
             set
             {
                 _HiaatDetector.HiaatTijd = value;
-                RaisePropertyChanged<object>("HiaatTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HiaatTijd), broadcast: true);
             }
         }
 

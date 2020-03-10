@@ -7,7 +7,7 @@ namespace TLCGen.Settings.Utilities
     {
         public static FaseTypeEnum GetFaseTypeFromNaam(string naam)
         {
-            int myfase = -1;
+            var myfase = -1;
             if (Int32.TryParse(naam, out myfase))
             {
                 myfase %= 100;

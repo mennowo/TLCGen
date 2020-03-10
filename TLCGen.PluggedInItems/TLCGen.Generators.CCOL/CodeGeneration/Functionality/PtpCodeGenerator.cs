@@ -49,26 +49,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var k in c.PTPData.PTPKoppelingen)
             {
-                for (int i = 1; i <= k.AantalsignalenIn; ++i)
+                for (var i = 1; i <= k.AantalsignalenIn; ++i)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                 }
-                for (int i = 1; i <= k.AantalsignalenIn; ++i)
+                for (var i = 1; i <= k.AantalsignalenIn; ++i)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"), 2, CCOLElementTimeTypeEnum.None, _prmiks, k.TeKoppelenKruispunt));
                 }
-                for (int i = 1; i <= k.AantalsignalenUit; ++i)
+                for (var i = 1; i <= k.AantalsignalenUit; ++i)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
                             _huks, k.TeKoppelenKruispunt));
                 }
-                for (int i = 1; i <= k.AantalsignalenUit; ++i)
+                for (var i = 1; i <= k.AantalsignalenUit; ++i)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -217,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

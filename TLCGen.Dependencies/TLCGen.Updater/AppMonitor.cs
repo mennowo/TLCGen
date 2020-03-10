@@ -61,7 +61,7 @@ namespace TLCGen.Updater
             // Try the GetModuleFileName method first since it's the fastest. 
             // May return ACCESS_DENIED (due to VM_READ flag) if the process is not owned by the current user.
             // Will fail if we are compiled as x86 and we're trying to open a 64 bit process...not allowed.
-            IntPtr hprocess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.Read, false, processid);
+            var hprocess = OpenProcess(ProcessAccessFlags.QueryInformation | ProcessAccessFlags.Read, false, processid);
             if (hprocess != IntPtr.Zero)
             {
                 try
@@ -83,7 +83,7 @@ namespace TLCGen.Updater
                 try
                 {
                     // Try this method for Vista or higher operating systems
-                    uint size = PathBufferSize;
+                    var size = PathBufferSize;
                     if ((Environment.OSVersion.Version.Major >= 6) &&
                      (QueryFullProcessImageName(hprocess, 0, _PathBuffer, ref size) && (size > 0)))
                     {
@@ -93,8 +93,8 @@ namespace TLCGen.Updater
                     // Try the GetProcessImageFileName method
                     if (GetProcessImageFileName(hprocess, _PathBuffer, PathBufferSize) > 0)
                     {
-                        string dospath = _PathBuffer.ToString();
-                        foreach (string drive in Environment.GetLogicalDrives())
+                        var dospath = _PathBuffer.ToString();
+                        foreach (var drive in Environment.GetLogicalDrives())
                         {
                             if (QueryDosDevice(drive.TrimEnd('\\'), _PathBuffer, PathBufferSize) > 0)
                             {
@@ -117,10 +117,10 @@ namespace TLCGen.Updater
 
         public static List<string> GetProcesses(string appExecutableName = null)
         {
-            List<string> results = new List<string>();
-            Process[] procArr = Process.GetProcesses();
+            var results = new List<string>();
+            var procArr = Process.GetProcesses();
             string tmp;
-            foreach (Process CurProc in procArr)
+            foreach (var CurProc in procArr)
             {
                 tmp = GetExecutablePath(CurProc.MainWindowHandle);
                 if (tmp != string.Empty)

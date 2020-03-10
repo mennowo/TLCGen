@@ -442,7 +442,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         sb.Append($"{ts}RT[{_tpf}{_tafv}{fm.Naam}] = ");
-                        int i = 0;
+                        var i = 0;
                         foreach (var fd in fm.FileDetectoren)
                         {
                             if (i != 0)
@@ -655,7 +655,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{tts}{{");
                             foreach (var ff in fm.TeDoserenSignaalGroepen)
                             {
-                                string grfunc = "";
+                                var grfunc = "";
                                 switch (c.Data.TypeGroentijden)
                                 {
                                     case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
@@ -701,7 +701,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{tts}{{");
                             foreach (var ff in fm.TeDoserenSignaalGroepen)
                             {
-                                string grfunc = "";
+                                var grfunc = "";
                                 switch (c.Data.TypeGroentijden)
                                 {
                                     case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;

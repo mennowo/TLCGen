@@ -96,7 +96,7 @@ namespace TLCGen.Settings
 
         public string Naam
         {
-            get { return _Template.Naam; }
+            get => _Template.Naam;
             set
             {
                 _Template.Naam = value;
@@ -106,7 +106,7 @@ namespace TLCGen.Settings
 
         public string Replace
         {
-            get { return _Template.Replace; }
+            get => _Template.Replace;
             set
             {
                 _Template.Replace = value;
@@ -114,18 +114,12 @@ namespace TLCGen.Settings
             }
         }
 
-        public bool IsReplaceAvailable
-        {
-            get
-            {
-                return Fasen.Count == 1;
-            }
-        }
+        public bool IsReplaceAvailable => Fasen.Count == 1;
 
         private FaseCyclusModel _SelectedFaseCyclus;
         public FaseCyclusModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
@@ -133,7 +127,7 @@ namespace TLCGen.Settings
                 FaseDetectoren.Clear();
                 if (value != null)
                 {
-                    foreach (DetectorModel d in value.Detectoren)
+                    foreach (var d in value.Detectoren)
                     {
                         FaseDetectoren.Add(d);
                     }
@@ -151,7 +145,7 @@ namespace TLCGen.Settings
         
         public string SelectedFaseCyclusDetectorNaam
         {
-            get { return _SelectedFaseCyclusDetector?.Naam; }
+            get => _SelectedFaseCyclusDetector?.Naam;
             set
             {
                 _SelectedFaseCyclusDetector.Naam = value;
@@ -162,7 +156,7 @@ namespace TLCGen.Settings
                 FaseDetectoren.Clear();
                 if (_SelectedFaseCyclus != null)
                 {
-                    foreach (DetectorModel d in _SelectedFaseCyclus.Detectoren)
+                    foreach (var d in _SelectedFaseCyclus.Detectoren)
                     {
                         FaseDetectoren.Add(d);
                     }
@@ -177,7 +171,7 @@ namespace TLCGen.Settings
 
         public string SelectedFaseCyclusDetectorVissimNaam
         {
-            get { return _SelectedFaseCyclusDetector?.VissimNaam; }
+            get => _SelectedFaseCyclusDetector?.VissimNaam;
             set
             {
                 _SelectedFaseCyclusDetector.VissimNaam = value;
@@ -188,7 +182,7 @@ namespace TLCGen.Settings
         private DetectorModel _SelectedFaseCyclusDetector;
         public DetectorModel SelectedFaseCyclusDetector
         {
-            get { return _SelectedFaseCyclusDetector; }
+            get => _SelectedFaseCyclusDetector;
             set
             {
                 _SelectedFaseCyclusDetector = value;
@@ -259,7 +253,7 @@ namespace TLCGen.Settings
         private string _SelectedFaseCyclusTypeString;
         public string SelectedFaseCyclusTypeString
         {
-            get { return _SelectedFaseCyclusTypeString; }
+            get => _SelectedFaseCyclusTypeString;
             set
             {
                 _SelectedFaseCyclusTypeString = value;
@@ -296,7 +290,7 @@ namespace TLCGen.Settings
         private string _SelectedDetectorTypeString;
         public string SelectedDetectorTypeString
         {
-            get { return _SelectedDetectorTypeString; }
+            get => _SelectedDetectorTypeString;
             set
             {
                 _SelectedDetectorTypeString = value;
@@ -449,7 +443,7 @@ namespace TLCGen.Settings
 
         private void AddFaseCommand_Executed(object prm)
         {
-            FaseCyclusModel fc = new FaseCyclusModel();
+            var fc = new FaseCyclusModel();
             fc.Naam = "fase" + (Fasen.Count + 1);
             Fasen.Add(fc);
         }
@@ -472,9 +466,10 @@ namespace TLCGen.Settings
 
         private void AddFaseDetectorCommand_Executed(object prm)
         {
-            DetectorModel d = new DetectorModel();
-            d.Naam = "fase_" + (FaseDetectoren.Count + 1);
-            d.Rijstrook = 1;
+            var d = new DetectorModel
+            {
+                FaseCyclus = SelectedFaseCyclus.Naam, Naam = "fase_" + (FaseDetectoren.Count + 1), Rijstrook = 1
+            };
             FaseDetectoren.Add(d);
         }
 

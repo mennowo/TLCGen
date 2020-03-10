@@ -18,7 +18,7 @@ namespace TLCGen.Controls
 
         public bool SetReset
         {
-            get { return false; }
+            get => false;
             set
             {
                 if (value)
@@ -31,8 +31,8 @@ namespace TLCGen.Controls
 
         public RelayCommand ClickedCommand
         {
-            get { return (RelayCommand)GetValue(ClickedCommandProperty); }
-            set { SetValue(ClickedCommandProperty, value); }
+            get => (RelayCommand)GetValue(ClickedCommandProperty);
+            set => SetValue(ClickedCommandProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
@@ -53,7 +53,7 @@ namespace TLCGen.Controls
 
         public override UIElement Child
         {
-            get { return base.Child; }
+            get => base.Child;
             set
             {
                 if (value != null && value != this.Child)
@@ -67,10 +67,10 @@ namespace TLCGen.Controls
             this.child = element;
             if (child != null)
             {
-                TransformGroup group = new TransformGroup();
-                ScaleTransform st = new ScaleTransform();
+                var group = new TransformGroup();
+                var st = new ScaleTransform();
                 group.Children.Add(st);
-                TranslateTransform tt = new TranslateTransform();
+                var tt = new TranslateTransform();
                 group.Children.Add(tt);
                 child.RenderTransform = group;
                 child.RenderTransformOrigin = new System.Windows.Point(0.0, 0.0);
@@ -110,11 +110,11 @@ namespace TLCGen.Controls
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
 
-                double zoom = e.Delta > 0 ? .2 : -.2;
+                var zoom = e.Delta > 0 ? .2 : -.2;
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
 
-                System.Windows.Point relative = e.GetPosition(child);
+                var relative = e.GetPosition(child);
                 double abosuluteX;
                 double abosuluteY;
 
@@ -157,9 +157,9 @@ namespace TLCGen.Controls
 
                     if (ClickedCommand.CanExecute(null))
                     {
-                        PresentationSource source = PresentationSource.FromVisual(this);
+                        var source = PresentationSource.FromVisual(this);
 
-                        System.Drawing.Point p = new System.Drawing.Point();
+                        var p = new System.Drawing.Point();
 
                         if (source != null)
                         {
@@ -188,7 +188,7 @@ namespace TLCGen.Controls
                 if (child.IsMouseCaptured)
                 {
                     var tt = GetTranslateTransform(child);
-                    Vector v = start - e.GetPosition(this);
+                    var v = start - e.GetPosition(this);
                     tt.X = origin.X - v.X;
                     tt.Y = origin.Y - v.Y;
                 }
