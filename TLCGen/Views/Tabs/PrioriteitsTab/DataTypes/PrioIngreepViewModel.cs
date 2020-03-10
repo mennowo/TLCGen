@@ -9,6 +9,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -16,10 +17,17 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
-        private OVIngreepRitCategorieViewModel _SelectedRitCategorie;
-        private string _NewLijnNummer;
-        private string _NewRitCategorie;
+        private OVIngreepLijnNummerViewModel _selectedLijnNummer;
+        private OVIngreepRitCategorieViewModel _selectedRitCategorie;
+        private string _newLijnNummer;
+        private string _newRitCategorie;
+        private RelayCommand _addLijnNummerCommand;
+        private RelayCommand _add10LijnNummersCommand;
+        private RelayCommand _removeLijnNummerCommand;
+        private RelayCommand _removeIngreepCommand;
+        private readonly FaseCyclusWithPrioViewModel _parentIngreep;
+        private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
+        private PrioIngreepWisselDataViewModel _wisselData;
 
         #endregion // Fields
 
@@ -395,10 +403,10 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public OVIngreepLijnNummerViewModel SelectedLijnNummer
         {
-            get => _SelectedLijnNummer;
+            get => _selectedLijnNummer;
             set
             {
-                _SelectedLijnNummer = value;
+                _selectedLijnNummer = value;
                 RaisePropertyChanged(nameof(SelectedLijnNummer));
             }
         }
@@ -406,16 +414,15 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public string NewLijnNummer
         {
-            get => _NewLijnNummer;
+            get => _newLijnNummer;
             set
             {
-                _NewLijnNummer = value;
+                _newLijnNummer = value;
                 RaisePropertyChanged(nameof(NewLijnNummer));
             }
         }
-
+        
         [Browsable(false)]
-        private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
         public ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> LijnNummers =>
             _lijnNummers ?? (_lijnNummers = new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(PrioIngreep.LijnNummers));
 
@@ -430,114 +437,95 @@ namespace TLCGen.ViewModels
 
         public string Description => PrioIngreep.DisplayName;
 
+        public PrioIngreepWisselDataViewModel WisselData =>
+            _wisselData ?? (_wisselData = new PrioIngreepWisselDataViewModel(PrioIngreep.MeldingenData));
+        
         #endregion // Properties
 
         #region Commands
 
-        RelayCommand _AddLijnNummerCommand;
         public ICommand AddLijnNummerCommand
         {
             get
             {
-                if (_AddLijnNummerCommand == null)
-                {
-                    _AddLijnNummerCommand = new RelayCommand(AddLijnNummerCommand_Executed, AddLijnNummerCommand_CanExecute);
-                }
-                return _AddLijnNummerCommand;
+                return _addLijnNummerCommand ?? (_addLijnNummerCommand =
+                           new RelayCommand(() => 
+                           {
+                               if (!string.IsNullOrWhiteSpace(NewLijnNummer))
+                               {
+                                   var nummer = new OVIngreepLijnNummerModel()
+                                   {
+                                       Nummer = NewLijnNummer, RitCategorie = "999"
+                                   };
+                                   LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                               }
+                               else
+                               {
+                                   var nummer = new OVIngreepLijnNummerModel()
+                                   {
+                                       Nummer = "0", RitCategorie = "999"
+                                   };
+                                   LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                               }
+                               NewLijnNummer = "";
+                               GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+
+                           }, () => LijnNummers != null));
             }
         }
 
-        RelayCommand _Add10LijnNummersCommand;
         public ICommand Add10LijnNummersCommand
         {
             get
             {
-                if (_Add10LijnNummersCommand == null)
+                if (_add10LijnNummersCommand == null)
                 {
-                    _Add10LijnNummersCommand = new RelayCommand(Add10LijnNummersCommand_Executed, Add10LijnNummersCommand_CanExecute);
+                    _add10LijnNummersCommand = new RelayCommand(
+                        () =>
+                        {
+                            for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
+                        }, () => LijnNummers != null);
                 }
-                return _Add10LijnNummersCommand;
+                return _add10LijnNummersCommand;
             }
         }
 
 
-        RelayCommand _RemoveLijnNummerCommand;
+
         public ICommand RemoveLijnNummerCommand
         {
             get
             {
-                if (_RemoveLijnNummerCommand == null)
+                if (_removeLijnNummerCommand == null)
                 {
-                    _RemoveLijnNummerCommand = new RelayCommand(RemoveLijnNummerCommand_Executed, RemoveLijnNummerCommand_CanExecute);
+                    _removeLijnNummerCommand = new RelayCommand(() =>
+                    {
+                        if (SelectedLijnNummer != null)
+                        {
+                            LijnNummers.Remove(SelectedLijnNummer);
+                            SelectedLijnNummer = null;
+                        }
+                        else
+                        {
+                            LijnNummers.RemoveAt(LijnNummers.Count - 1);
+                        }
+                        GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                    }, () => LijnNummers != null && LijnNummers.Count > 0);
                 }
-                return _RemoveLijnNummerCommand;
+                return _removeLijnNummerCommand;
             }
         }
 
+        public ICommand RemoveIngreepCommand
+        {
+            get
+            {
+                return _removeIngreepCommand ?? (_removeIngreepCommand =
+                           new RelayCommand(() => { _parentIngreep.Ingrepen.Remove(this); }));
+            }
+        }
+        
         #endregion // Commands
-
-        #region Command functionality
-
-        void AddLijnNummerCommand_Executed(object prm)
-        {
-            if (!string.IsNullOrWhiteSpace(NewLijnNummer))
-            {
-                var nummer = new OVIngreepLijnNummerModel()
-                {
-                    Nummer = NewLijnNummer, RitCategorie = "999"
-                };
-                LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-            }
-            else
-            {
-                var nummer = new OVIngreepLijnNummerModel()
-                {
-                    Nummer = "0", RitCategorie = "999"
-                };
-                LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-            }
-            NewLijnNummer = "";
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        bool AddLijnNummerCommand_CanExecute(object prm)
-        {
-            return LijnNummers != null;
-        }
-
-        void Add10LijnNummersCommand_Executed(object prm)
-        {
-            for(var i = 0; i < 10; ++i)
-            {
-                AddLijnNummerCommand.Execute(prm);
-            }
-        }
-
-        bool Add10LijnNummersCommand_CanExecute(object prm)
-        {
-            return LijnNummers != null;
-        }
-
-        void RemoveLijnNummerCommand_Executed(object prm)
-        {
-            if (SelectedLijnNummer != null)
-            {
-                LijnNummers.Remove(SelectedLijnNummer);
-                SelectedLijnNummer = null;
-            }
-            else
-            {
-                LijnNummers.RemoveAt(LijnNummers.Count - 1);
-            }
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        bool RemoveLijnNummerCommand_CanExecute(object prm)
-        {
-            return LijnNummers != null && LijnNummers.Count > 0;
-        }
-
-        #endregion // Command functionality
 
         #region Private Methods
 
@@ -572,16 +560,17 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PrioIngreepViewModel(PrioIngreepModel ovingreep)
+        public PrioIngreepViewModel(PrioIngreepModel ovingreep, FaseCyclusWithPrioViewModel parentIngreep)
         {
             PrioIngreep = ovingreep;
+            _parentIngreep = parentIngreep;
             
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);
 
-            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData.Inmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x)).ToList()));
-            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData.Uitmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x)).ToList()));
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData));
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData));
         }
 
         #endregion // Constructor

@@ -164,11 +164,11 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenListViewModel.cs">
       <DependentUpon>PrioIngreepMeldingenListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepWisselDataViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Varia\OVIngreepRitCategorieViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepInUitMeldingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenDataViewModel.cs" />
     <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\IngangViewModel.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\SelectieveDetectorViewModel.cs" />
@@ -214,18 +214,6 @@
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabView.xaml.cs">
       <DependentUpon>PrioIngrepenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitIngrepenTabView.xaml.cs">
-      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitIngrepenTabViewModel.cs">
-      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitInUitmeldenTabView.xaml.cs">
-      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitInUitmeldenTabViewModel.cs">
-      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabViewModel.cs">
       <DependentUpon>PrioIngrepenTabView.xaml</DependentUpon>
@@ -678,14 +666,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitIngrepenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Old\PrioriteitInUitmeldenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,6 +16,9 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
     </UserControl.Resources>
+    <TabControl>
+        <TabItem Header="Ingreep">
+
     <Grid>
         <Label Content="Geen instellingen beschikbaar">
             <Label.Style>
@@ -44,7 +47,16 @@
                 
                 <!-- Algemeen -->
                 <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
-                <Label Content="Naam ingreep" />
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Naam ingreep" />
+                    <ct:InfoElement>
+                        <ct:InfoElement.InfoPopup>
+                            <TextBlock>
+                                Deze naam wordt tevens gebruikt bij genereren van code
+                            </TextBlock>
+                        </ct:InfoElement.InfoPopup>
+                    </ct:InfoElement>
+                </StackPanel>
                 <TextBox Text="{Binding Path=Naam}" Margin="2" />
                 <Label Content="Type voertuig" />
                 <ComboBox Margin="2"
@@ -140,41 +152,46 @@
                     <ct:InfoElement DockPanel.Dock="Right">
                         <ct:InfoElement.InfoPopup>
                             <TextBlock>
-                                Indien aangevinkt wordt <Underline>per lijnnummer</Underline> gecheckt<LineBreak />
-                                op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
-                                Daarbij geldt volgens de CVN-C interface:<LineBreak />
-                                10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
-                                12 = inrukrit naar remise, 13 = uitrukrit van remise
-                            </TextBlock>
-                        </ct:InfoElement.InfoPopup>
-                    </ct:InfoElement>
-                    <Label Content="Check op rit categorie" />
-                </DockPanel>
-                <CheckBox IsEnabled="{Binding Path=CheckLijnNummer}" 
-                          IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-                <DataGrid 
-                    AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                    ItemsSource="{Binding LijnNummers}" IsEnabled="{Binding Path=CheckLijnNummer}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" 
-                    Grid.ColumnSpan="2">
-                    <DataGrid.Resources>
-                        <DataGridTextColumn Binding="{Binding Path=RitCategorie}" Header="Ritcategorie" x:Key="RitCategorieCol"
-                                            Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
-                    </DataGrid.Resources>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Nummer}" Header="Lijnnummer" />
-                        <StaticResource ResourceKey="RitCategorieCol" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Orientation="Horizontal" IsEnabled="{Binding Path=CheckLijnNummer}" Grid.ColumnSpan="2" >
-                    <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
-                    <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
-                    <Button Content="+ 10" Command="{Binding Add10LijnNummersCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
-                    <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
-                </StackPanel>
-                <TextBlock Text="Overig" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
-                <Label Content="Check op wagen nummer" Grid.Row="1" />
-                <CheckBox IsChecked="{Binding Path=CheckWagenNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-            </ag:AutoGrid>
-        </Grid>
-    </Grid>
+                                        Indien aangevinkt wordt <Underline>per lijnnummer</Underline> gecheckt<LineBreak />
+                                        op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
+                                        Daarbij geldt volgens de CVN-C interface:<LineBreak />
+                                        10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
+                                        12 = inrukrit naar remise, 13 = uitrukrit van remise
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                            <Label Content="Check op rit categorie" />
+                        </DockPanel>
+                        <CheckBox IsEnabled="{Binding Path=CheckLijnNummer}" 
+                                  IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                        <DataGrid 
+                            AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                            ItemsSource="{Binding LijnNummers}" IsEnabled="{Binding Path=CheckLijnNummer}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" 
+                            Grid.ColumnSpan="2">
+                            <DataGrid.Resources>
+                                <DataGridTextColumn Binding="{Binding Path=RitCategorie}" Header="Ritcategorie" x:Key="RitCategorieCol"
+                                                    Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=Nummer}" Header="Lijnnummer" />
+                                <StaticResource ResourceKey="RitCategorieCol" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" IsEnabled="{Binding Path=CheckLijnNummer}" Grid.ColumnSpan="2" >
+                            <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
+                            <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                            <Button Content="+ 10" Command="{Binding Add10LijnNummersCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                            <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                        </StackPanel>
+                        <TextBlock Text="Overig" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
+                        <Label Content="Check op wagen nummer" Grid.Row="1" />
+                        <CheckBox IsChecked="{Binding Path=CheckWagenNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                    </ag:AutoGrid>
+                </Grid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Wissels">
+            <ct:SimplePropertyEditor BoundObject="{Binding Path=WisselData}" />
+        </TabItem>
+    </TabControl>
 </UserControl>

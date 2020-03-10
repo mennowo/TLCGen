@@ -1,11 +1,12 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -14,6 +15,8 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private PrioIngreepInUitMeldingViewModel _meldingBijstoring;
+        private RelayCommand _removeMeldingCommand;
+        private readonly object _parent;
 
         #endregion // Fields
 
@@ -173,7 +176,7 @@ namespace TLCGen.ViewModels
                     {
                         InUit = this.InUit
                     };
-                    MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring));
+                    MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring, this));
                 }
                 else
                 {
@@ -228,7 +231,32 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<PrioIngreepInUitMeldingViewModel> MeldingBijstoring { get; } = new ObservableCollection<PrioIngreepInUitMeldingViewModel>();
 
-        #endregion //Properties
+        #endregion // Properties
+
+        #region Commands
+
+        
+        public ICommand RemoveMeldingCommand
+        {
+            get
+            {
+                return _removeMeldingCommand ?? (_removeMeldingCommand =
+                           new RelayCommand(() =>
+                           {
+                               switch (_parent)
+                               {
+                                   case PrioIngreepInUitMeldingViewModel iu:
+                                       iu.MeldingBijstoring.Clear();
+                                       break;
+                                   case PrioIngreepMeldingenListViewModel list:
+                                       list.Meldingen.Remove(this);
+                                       break;
+                               }
+                           }));
+            }
+        }
+
+        #endregion // Commands
 
         #region TLCGen events
 
@@ -245,13 +273,14 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMeldingModel oVIngreepMassaDetectieMelding)
+        public PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMeldingModel oVIngreepMassaDetectieMelding, object parent)
         {
+            _parent = parent;
             PrioIngreepInUitMelding = oVIngreepMassaDetectieMelding;
 
             if (PrioIngreepInUitMelding.MeldingBijstoring != null)
             {
-                MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring));
+                MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring, this));
             }
         }
 

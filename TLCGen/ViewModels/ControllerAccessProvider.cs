@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Web.UI;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Extensions;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
+using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
     public interface IControllerAccessProvider
     {
+        ControllerModel Controller { get; }
         ObservableCollection<FaseCyclusViewModel> AllSignalGroups { get; }
         ObservableCollection<DetectorViewModel> AllDetectors { get; }
         ObservableCollection<DetectorViewModel> AllVecomDetectors { get; }
@@ -65,6 +64,8 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<string> AllSelectiveDetectorStrings =>
             _allSelectiveDetectorStrings ?? (_allSelectiveDetectorStrings = new ObservableCollection<string>());
+
+        public ControllerModel Controller { get; private set; }
 
         public void Setup()
         {
@@ -197,6 +198,8 @@ namespace TLCGen.ViewModels
             _allSelectiveDetectorStrings = null;
             _allVecomDetectors = null;
             _allVecomDetectorStrings = null;
+
+            Controller = obj.Controller;
 
             if (obj.Controller == null) return;
 

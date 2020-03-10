@@ -7,6 +7,7 @@
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepInUitMeldingViewModel}">
@@ -22,8 +23,17 @@
                 <Setter Property="Margin" Value="5" />
             </Style>
         </Grid.Resources>
-        <Label Content="Naam melding" />
-        <TextBox Text="{Binding Naam,UpdateSourceTrigger=PropertyChanged}" />
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Naam melding" />
+            <controls:InfoElement>
+                <controls:InfoElement.InfoPopup>
+                    <TextBlock>
+                        Deze naam wordt uitsluitend in de gebruikersinterface gebruikt
+                    </TextBlock>
+                </controls:InfoElement.InfoPopup>
+            </controls:InfoElement>
+        </StackPanel>
+        <TextBox Text="{Binding Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         <Label Content="Type" />
         <ComboBox
             SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
@@ -45,12 +55,12 @@
         <Label Content="Input 2" />
         <ComboBox
             IsEnabled="{Binding Path=HasInput2}" ItemsSource="{Binding Path=AvailableInputs}"
-            SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
         </ComboBox>
         <Label Content="Input 2 type" />
         <ComboBox
             IsEnabled="{Binding Path=HasInput2}"
-            SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+            SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
         </ComboBox>
         <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 

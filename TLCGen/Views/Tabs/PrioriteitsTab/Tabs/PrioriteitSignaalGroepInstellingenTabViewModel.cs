@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
-using TLCGen.ViewModels;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSignaalGroepInstellingenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

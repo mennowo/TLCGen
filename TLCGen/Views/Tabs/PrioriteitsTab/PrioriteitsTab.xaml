@@ -8,12 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type vm:PrioriteitIngrepenTabViewModel}">
-            <local:PrioriteitIngrepenTabView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:PrioriteitInUitmeldenTabViewModel}">
-            <local:PrioriteitInUitmeldenTabView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:HDIngrepenTabViewModel}">
             <local:HDIngrepenTabView />
         </DataTemplate>
