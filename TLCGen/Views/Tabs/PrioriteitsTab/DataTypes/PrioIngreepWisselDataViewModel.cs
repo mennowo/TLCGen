@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -9,6 +11,14 @@ namespace TLCGen.ViewModels
     public class PrioIngreepWisselDataViewModel : ViewModelBase
     {
         public PrioIngreepMeldingenDataModel PrioIngreepMeldingenData { get; }
+
+        [Browsable(false)]
+        public ICollectionView WisselDetectoren =>
+            ControllerAccessProvider.Default.GetCollectionView(DetectorTypeEnum.WisselStandDetector);
+
+        [Browsable(false)]
+        public ICollectionView WisselInputs =>
+            ControllerAccessProvider.Default.GetCollectionView(IngangTypeEnum.WisselContact);
 
         [Category("Anti jutter uitmelding")]
         [Description("Toepassen")]

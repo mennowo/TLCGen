@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -16,7 +17,7 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class FaseCyclusWithPrioViewModel : ViewModelBase
+    public class FaseCyclusWithPrioViewModel : ViewModelBase, IComparable
     {
         private RelayCommand _addIngreepCommand;
         private RelayCommand<PrioIngreepViewModel> _removeIngreepCommand;
@@ -149,9 +150,18 @@ namespace TLCGen.ViewModels
 
         #endregion // Public Methods
 
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            return string.Compare(Naam, ((FaseCyclusWithPrioViewModel)obj).Naam, StringComparison.Ordinal);
+        }
+        
+        #endregion // IComparable
+
         #region Constructor
 
-        public FaseCyclusWithPrioViewModel(string naam, List<PrioIngreepModel> ingrepen)
+        public FaseCyclusWithPrioViewModel(string naam, IEnumerable<PrioIngreepModel> ingrepen)
         {
             Naam = naam;
             Ingrepen = new ObservableCollection<PrioIngreepViewModel>(ingrepen.Select(x => new PrioIngreepViewModel(x, this)));

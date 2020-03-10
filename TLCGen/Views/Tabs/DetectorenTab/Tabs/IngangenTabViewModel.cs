@@ -133,7 +133,7 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             var dvm1 = new IngangViewModel(dm);
             Ingangen.Add(dvm1);
-            Messenger.Default.Send(new IngangenChangedMessage());
+            Messenger.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
         }
 
         bool AddIngangCommand_CanExecute(object prm)
@@ -144,11 +144,13 @@ namespace TLCGen.ViewModels
         void RemoveIngangCommand_Executed(object prm)
         {
             var changed = false;
+            var rems = new List<IngangModel>();
             if (SelectedIngangen != null && SelectedIngangen.Count > 0)
             {
                 changed = true;
                 foreach (IngangViewModel ivm in SelectedIngangen)
                 {
+                    rems.Add(ivm.Ingang);
                     Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam);
                 }
             }
@@ -156,13 +158,14 @@ namespace TLCGen.ViewModels
             {
                 changed = true;
                 Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedIngang.Naam);
+                rems.Add(SelectedIngang.Ingang);
             }
             RebuildIngangenList();
             MessengerInstance.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                Messenger.Default.Send(new IngangenChangedMessage());
+                Messenger.Default.Send(new IngangenChangedMessage(rems, null));
             }
         }
 

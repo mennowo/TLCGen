@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -16,11 +17,13 @@ namespace TLCGen.ViewModels
             get => Ingang.Naam;
             set
             {
-                if(TLCGenModelManager.Default.IsElementIdentifierUnique(Models.Enumerations.TLCGenObjectTypeEnum.Input, value))
+                if(TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Input, value))
                 {
+                    var oldname = Ingang.Naam;
                     Ingang.Naam = value;
+                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Input, oldname, value));
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -30,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Ingang.Omschrijving = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -40,7 +43,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Ingang.Type = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -56,7 +59,7 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            return this.Naam.CompareTo(((IngangViewModel)obj).Naam);
+            return string.Compare(this.Naam, ((IngangViewModel)obj).Naam, StringComparison.Ordinal);
         }
     }
 }

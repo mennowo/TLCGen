@@ -20,8 +20,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ObservableCollection<FaseCyclusWithPrioViewModel> _fasen;
-        private RelayCommand _removeItemCommand;
-        private RelayCommand _removeIngreepCommand;
         private object _selectedObject;
         private FaseCyclusWithPrioViewModel _selectedFaseCyclus;
         private PrioIngreepMeldingenListViewModel _selectedMeldingenList;
@@ -126,6 +124,26 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        public override ControllerModel Controller
+        {
+            get => _Controller;
+            set
+            {
+                _Controller = value;
+                if (_Controller == null) return;
+
+                _fasen = null;
+                foreach (var fcm in _Controller.Fasen)
+                {
+                    var fcvm = 
+                        new FaseCyclusWithPrioViewModel(
+                            fcm.Naam, 
+                            _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == fcm.Naam).ToList());
+                    Fasen.Add(fcvm);
+                }
+            }
+        }
+
         public override string DisplayName => "Ingrepen";
 
         public override bool CanBeEnabled()
@@ -135,25 +153,45 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            foreach (var fcm in _Controller.Fasen)
-            {
-                var fcvm = 
-                    new FaseCyclusWithPrioViewModel(
-                        fcm.Naam, 
-                        _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == fcm.Naam).ToList());
-                Fasen.Add(fcvm);
-            }
+            
         }
 
         #endregion // TabItem Overrides
 
         #region Private Methods
+
+        private void OnFasenChanged(FasenChangedMessage obj)
+        {
+            if (obj.RemovedFasen?.Any() == true)
+            {
+                foreach (var sg in obj.RemovedFasen)
+                {
+                    var vm = Fasen.FirstOrDefault(x => x.Naam == sg.Naam);
+                    if (vm == null) continue;
+                    Fasen.Remove(vm);
+                }
+            }
+            if (obj.AddedFasen?.Any() == true)
+            {
+                foreach (var sg in obj.AddedFasen)
+                {
+                    var fcvm = 
+                        new FaseCyclusWithPrioViewModel(
+                            sg.Naam, 
+                            _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == sg.Naam).ToList());
+                    Fasen.Add(fcvm);
+                }
+            }
+            Fasen.BubbleSort();
+        }
+
         #endregion // Private Methods
 
         #region Constructor
 
         public PrioIngrepenTabViewModel() : base()
         {
+            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

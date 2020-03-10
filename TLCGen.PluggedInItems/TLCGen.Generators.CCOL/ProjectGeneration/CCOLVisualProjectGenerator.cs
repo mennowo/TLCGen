@@ -169,7 +169,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 
             if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL95) return neededpps;
 
-            neededpps.Add(c.Data.Intergroen ? "CCOLTIG" : "NOTIGMAX");
+            neededpps.Add(c.Data.Intergroen ? "CCOLTIG" : "NO_TIGMAX");
 
             return neededpps;
         }
