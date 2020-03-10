@@ -22,8 +22,6 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-
-
         public string Naam
         {
             get => string.IsNullOrWhiteSpace(PrioIngreepInUitMelding.Naam) ? "geen_naam" : PrioIngreepInUitMelding.Naam;
@@ -50,6 +48,8 @@ namespace TLCGen.ViewModels
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                         return ControllerAccessProvider.Default.AllVecomDetectorStrings;
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -88,6 +88,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(HasInpSD));
                 RaisePropertyChanged(nameof(HasSD));
                 RaisePropertyChanged(nameof(HasKAR));
+                RaisePropertyChanged(nameof(HasRis));
             }
         }
 
@@ -95,6 +96,7 @@ namespace TLCGen.ViewModels
         public bool HasSD => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
         public bool HasInpSD => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector;
         public bool HasDet => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector;
+        public bool HasRis => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
 
         public bool TweedeInput
         {
@@ -230,6 +232,40 @@ namespace TLCGen.ViewModels
         }
 
         public ObservableCollection<PrioIngreepInUitMeldingViewModel> MeldingBijstoring { get; } = new ObservableCollection<PrioIngreepInUitMeldingViewModel>();
+
+        #region RIS
+
+        public int RisStart
+        {
+            get => PrioIngreepInUitMelding.RisStart;
+            set 
+            { 
+                PrioIngreepInUitMelding.RisStart = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public int RisEnd
+        {
+            get => PrioIngreepInUitMelding.RisEnd;
+            set 
+            { 
+                PrioIngreepInUitMelding.RisEnd = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool RisMatchSg
+        {
+            get => PrioIngreepInUitMelding.RisMatchSg;
+            set 
+            { 
+                PrioIngreepInUitMelding.RisMatchSg = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion
 
         #endregion // Properties
 

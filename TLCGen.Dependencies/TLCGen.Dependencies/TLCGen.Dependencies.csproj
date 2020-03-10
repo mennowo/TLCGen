@@ -54,6 +54,7 @@
     <Compile Include="FloodFill\QueueLinearFloodFiller.cs" />
     <Compile Include="GuiActions\GuiActionsManager.cs" />
     <Compile Include="Helpers\AddRemoveItemsManager.cs" />
+    <Compile Include="Helpers\Base64Encoding.cs" />
     <Compile Include="Helpers\BindableSelectedItemBehaviour.cs" />
     <Compile Include="Helpers\DeepCloner.cs" />
     <Compile Include="Helpers\DesignMode.cs" />

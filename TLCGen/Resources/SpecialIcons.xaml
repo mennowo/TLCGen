@@ -119,6 +119,33 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="UitgaandIconDrawingImage" Drawing="{StaticResource UitgaandIconDrawingGroup}" />
+  <Geometry x:Key="RISIconGeometry1">F1 M16,16z M0,0z M324.79832,510.47762C326.46862,508.60206 328.55482,508.44469 329.47632,508.3785 330.26581,508.3218 330.38183,509.57521 329.63205,509.66368 328.66012,509.77836 327.01421,509.99281 325.77292,511.39466 324.52162,512.8078 324.517,514.32113 324.53814,515.47469 324.55054,516.15063 323.20553,516.19461 323.19628,515.40239 323.18098,514.09055 323.14768,512.33106 324.79832,510.47762z</Geometry>
+  <Geometry x:Key="RISIconGeometry2">F1 M16,16z M0,0z M329.90515,510.83491C330.65426,510.84291 330.64052,512.0313 329.92885,512.07167 328.99613,512.12457 328.23512,512.19473 327.59238,512.95655 326.89289,513.78562 326.85486,514.28249 326.96969,515.36623 327.07137,516.3259 325.87515,516.27821 325.74963,515.65018 325.51996,514.501 325.5991,513.26331 326.68421,512.04326 327.69872,510.90259 328.74518,510.82184 329.90515,510.83491z</Geometry>
+  <DrawingGroup x:Key="RISIconDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup.Transform>
+      <TranslateTransform X="170.1361" Y="0" />
+    </DrawingGroup.Transform>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <DrawingGroup Opacity="1" Transform="0.660630001500945,0.750711663101661,-0.750711663101661,0.660630001500945,490.540835715525,-83.9789520204347">
+          <DrawingGroup Opacity="1" Transform="1,0,0,1,-0.87285009,-0.75416658">
+            <DrawingGroup Opacity="1" Transform="1.5218907,0,0,1.5218907,-157.49303,-277.72667">
+              <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource RISIconGeometry1}" />
+              <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource RISIconGeometry2}" />
+              <DrawingGroup Transform="0.660630001500945,-0.750711663101661,0.750711663101661,0.660630001500945,0,0">
+                <GeometryDrawing Brush="#FF000000">
+                  <GeometryDrawing.Geometry>
+                    <EllipseGeometry RadiusX="1.4415" RadiusY="1.4415" Center="-168.6946,587.3677" />
+                  </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+              </DrawingGroup>
+            </DrawingGroup>
+          </DrawingGroup>
+        </DrawingGroup>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="RISIconDrawingImage" Drawing="{StaticResource RISIconDrawingGroup}" />
   <Geometry x:Key="SignalGroupIconGeometry">F1 M32,32z M0,0z M-208.30222,344.52916C-208.30223,343.65913 -209.00792,342.95423 -209.87794,342.95423 -210.74795,342.95423 -211.45284,343.65913 -211.45284,344.52916L-211.45284,349.44732C-211.45284,350.31734 -210.74795,351.02225 -209.87794,351.02225 -209.00792,351.02225 -208.30223,350.31734 -208.30222,349.44732z</Geometry>
   <DrawingGroup x:Key="SignalGroupIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
     <DrawingGroup.Transform>

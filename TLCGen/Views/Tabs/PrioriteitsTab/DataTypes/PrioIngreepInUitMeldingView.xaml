@@ -13,73 +13,113 @@
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepInUitMeldingViewModel}">
     <UserControl.Resources>
         <local:IsInmeldingTypeConverter x:Key="IsInmConv" />
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
     </UserControl.Resources>
-    <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="13">
-        <Grid.Resources>
-            <Style TargetType="ComboBox">
-                <Setter Property="Margin" Value="2" />
-            </Style>
-            <Style TargetType="CheckBox">
-                <Setter Property="Margin" Value="5" />
-            </Style>
-        </Grid.Resources>
-        <StackPanel Orientation="Horizontal">
-            <Label Content="Naam melding" />
-            <controls:InfoElement>
-                <controls:InfoElement.InfoPopup>
-                    <TextBlock>
-                        Deze naam wordt uitsluitend in de gebruikersinterface gebruikt
-                    </TextBlock>
-                </controls:InfoElement.InfoPopup>
-            </controls:InfoElement>
-        </StackPanel>
-        <TextBox Text="{Binding Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-        <Label Content="Type" />
-        <ComboBox
-            SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
-        <Label Content="Input 1" />
-        <ComboBox
-            IsEnabled="{Binding Path=HasInput1}" ItemsSource="{Binding Path=AvailableInputs}"
-            SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-        </ComboBox>
-        <Label Content="Input 1 type" />
-        <ComboBox
-            IsEnabled="{Binding Path=HasInput1}"
-            SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
-        </ComboBox>
-        <CheckBox Content="2e input" IsEnabled="{Binding Path=CanHaveInput2}"
-                  IsChecked="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                  Grid.ColumnSpan="2" />
-        <Label Content="Input 2" />
-        <ComboBox
-            IsEnabled="{Binding Path=HasInput2}" ItemsSource="{Binding Path=AvailableInputs}"
-            SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-        </ComboBox>
-        <Label Content="Input 2 type" />
-        <ComboBox
-            IsEnabled="{Binding Path=HasInput2}"
-            SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
-        </ComboBox>
-        <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
-                  IsChecked="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Content="Geen OV aanw."
-                  Grid.ColumnSpan="2" />
-        <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
-                  IsChecked="{Binding AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" Content="Alleen bij rood"
-                  Grid.ColumnSpan="2" />
-        <CheckBox IsChecked="{Binding KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" Content="Wisselstand" 
-                  IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TabControl},Path=DataContext.HasWissel}" 
-                  Grid.ColumnSpan="2" />
-        <CheckBox IsChecked="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Anti jutter" 
-                  Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
-                  Grid.ColumnSpan="2" />
-        <Label Content="Anti jutter tijd" />
-        <TextBox
-                Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
-                Text="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" />
-        <CheckBox IsChecked="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Content="Opvang storing"
-                  Grid.ColumnSpan="2"  />
-    </wpfAutoGrid:AutoGrid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Generic UI -->
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="3">
+            <Label Content="Algemene instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Naam melding" />
+                <controls:InfoElement>
+                    <controls:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Deze naam wordt uitsluitend in de gebruikersinterface gebruikt
+                        </TextBlock>
+                    </controls:InfoElement.InfoPopup>
+                </controls:InfoElement>
+            </StackPanel>
+            <TextBox Text="{Binding Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Type" />
+            <ComboBox SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+        </wpfAutoGrid:AutoGrid>
+        <!-- TODO this should be split into multiple controls -->
+        <!-- UI for RIS -->
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="12" Grid.Row="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Type}" Value="RISVoorwaarde">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Label Content="RIS instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
+            <Label Content="Start" />
+            <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Eind" />
+            <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <CheckBox Content="Match SG"
+                      IsChecked="{Binding Path=RisMatchSg,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Grid.ColumnSpan="2" />
+        </wpfAutoGrid:AutoGrid>
+        <!-- UI for regular in and out: detection, VECOM, SD via input, KAR, etc. -->
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="13" Grid.Row="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Type}" Value="RISVoorwaarde">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Label Content="KAR/VECOM/detectie instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
+            <Label Content="Input 1" />
+            <ComboBox
+                IsEnabled="{Binding Path=HasInput1}" ItemsSource="{Binding Path=AvailableInputs}"
+                SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+            <Label Content="Input 1 type" />
+            <ComboBox
+                IsEnabled="{Binding Path=HasInput1}"
+                SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+            </ComboBox>
+            <CheckBox Content="2e input" IsEnabled="{Binding Path=CanHaveInput2}"
+                      IsChecked="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Grid.ColumnSpan="2" />
+            <Label Content="Input 2" />
+            <ComboBox
+                IsEnabled="{Binding Path=HasInput2}" ItemsSource="{Binding Path=AvailableInputs}"
+                SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+            <Label Content="Input 2 type" />
+            <ComboBox
+                IsEnabled="{Binding Path=HasInput2}"
+                SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+            </ComboBox>
+            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+                      IsChecked="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Content="Geen OV aanw."
+                      Grid.ColumnSpan="2" />
+            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+                      IsChecked="{Binding AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" Content="Alleen bij rood"
+                      Grid.ColumnSpan="2" />
+            <CheckBox IsChecked="{Binding KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" Content="Wisselstand" 
+                      IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TabControl},Path=DataContext.HasWissel}" 
+                      Grid.ColumnSpan="2" />
+            <CheckBox IsChecked="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Anti jutter" 
+                      Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                      Grid.ColumnSpan="2" />
+            <Label Content="Anti jutter tijd" />
+            <TextBox
+                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                    Text="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox IsChecked="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Content="Opvang storing"
+                      Grid.ColumnSpan="2"  />
+        </wpfAutoGrid:AutoGrid>
+    </Grid>
 </UserControl>

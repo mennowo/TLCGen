@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
+using TLCGen.Dependencies.Helpers;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -193,24 +194,10 @@ namespace TLCGen.ViewModels
                 }
                 controller.Data.Versies.Clear();
                 vm.Controller = controller;
-                vm.ControllerPluginData = EncodeTo64(pluginData.OuterXml);
+                vm.ControllerPluginData = Base64Encoding.EncodeTo64(pluginData.OuterXml);
             }
             var vvm = new VersieViewModel(vm);
             Versies?.Add(vvm);
-        }
-
-        static public string EncodeTo64(string toEncode)
-        {
-            var toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            var returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
-        }
-
-        static public string DecodeFrom64(string encodedData)
-        {
-            var encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            var returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
         }
 
         bool AddVersieCommand_CanExecute()
@@ -236,7 +223,7 @@ namespace TLCGen.ViewModels
             if (SelectedVersie.VersieEntry.ControllerPluginData != null)
             {
                 pluginXmlDoc = new XmlDocument();
-                pluginXmlDoc.LoadXml(DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
+                pluginXmlDoc.LoadXml(Base64Encoding.DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
             }
 
             var iIndex = Versies.IndexOf(SelectedVersie);

@@ -14,6 +14,8 @@ namespace TLCGen.Models
         public PrioIngreepInUitMeldingTypeEnum InUit { get; set; }
         public PrioIngreepInUitMeldingVoorwaardeTypeEnum Type { get; set; }
 
+        #region Reguliere IO (detectie, Vecom, SD via ingang, wissels)
+
         [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
         public string RelatedInput1 { get; set; }
@@ -34,6 +36,16 @@ namespace TLCGen.Models
 
         public bool OpvangStoring { get; set; }
         public PrioIngreepInUitMeldingModel MeldingBijstoring { get; set; }
+
+        #endregion
+
+        #region RIS
+
+        public int RisStart { get; set; }
+        public int RisEnd { get; set; }
+        public bool RisMatchSg { get; set; }
+
+        #endregion
 
         [Browsable(false)]
         public DetectorModel DummyKARMelding { get; set; } = null;

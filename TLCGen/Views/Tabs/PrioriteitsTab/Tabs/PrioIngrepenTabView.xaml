@@ -119,6 +119,7 @@
                         <Image Source="{StaticResource SDIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasSD,Converter={StaticResource Bool2Vis}}" />
                         <Image Source="{StaticResource SDInpIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasInpSD,Converter={StaticResource Bool2Vis}}" />
                         <Image Source="{StaticResource DetIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasDet,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource RISIconDrawingImage}" Width="14" Height="14" Visibility="{Binding Path=HasRis,Converter={StaticResource Bool2Vis}}" />
                         <TextBlock Margin="5" VerticalAlignment="Center" Text="{Binding Path=Naam}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
