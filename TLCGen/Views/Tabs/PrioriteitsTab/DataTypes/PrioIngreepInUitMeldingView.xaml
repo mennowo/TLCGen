@@ -12,7 +12,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepInUitMeldingViewModel}">
     <UserControl.Resources>
-        <local:IsInmeldingTypeConverter x:Key="IsInmConv" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
+        <local:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="2" />
         </Style>
@@ -24,9 +25,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <!-- Alert -->
+        <TextBlock Background="LightGoldenrodYellow" Padding="5" Visibility="{Binding Path=ShowAlertMessage,Converter={StaticResource BoolToVisConv}}">
+            <Run Foreground="Red" FontWeight="Bold">Let op! </Run>
+            Prioriteit via de RIS vergt gebruik van speciale CCOL bestanden en libraries.
+        </TextBlock>
         <!-- Generic UI -->
-        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="3">
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" Grid.Row="1" RowCount="3">
             <Label Content="Algemene instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Naam melding" />
@@ -45,7 +52,7 @@
         </wpfAutoGrid:AutoGrid>
         <!-- TODO this should be split into multiple controls -->
         <!-- UI for RIS -->
-        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="12" Grid.Row="1">
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="12" Grid.Row="2">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -57,16 +64,16 @@
                 </Style>
             </Grid.Style>
             <Label Content="RIS instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
-            <Label Content="Start" />
-            <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <Label Content="Eind" />
-            <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <CheckBox Content="Match SG"
+            <Label Content="Start" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <Label Content="Eind" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <CheckBox Content="Match SG" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                       IsChecked="{Binding Path=RisMatchSg,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                       Grid.ColumnSpan="2" />
         </wpfAutoGrid:AutoGrid>
         <!-- UI for regular in and out: detection, VECOM, SD via input, KAR, etc. -->
-        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="13" Grid.Row="1">
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="13" Grid.Row="2">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
@@ -102,21 +109,21 @@
                 SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
             </ComboBox>
-            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" 
                       IsChecked="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Content="Geen OV aanw."
                       Grid.ColumnSpan="2" />
-            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+            <CheckBox Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" 
                       IsChecked="{Binding AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" Content="Alleen bij rood"
                       Grid.ColumnSpan="2" />
             <CheckBox IsChecked="{Binding KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" Content="Wisselstand" 
                       IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=TabControl},Path=DataContext.HasWissel}" 
                       Grid.ColumnSpan="2" />
             <CheckBox IsChecked="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Anti jutter" 
-                      Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                      Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                       Grid.ColumnSpan="2" />
-            <Label Content="Anti jutter tijd" />
+            <Label Content="Anti jutter tijd" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <TextBox
-                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                    Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                     Text="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" />
             <CheckBox IsChecked="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Content="Opvang storing"
                       Grid.ColumnSpan="2"  />

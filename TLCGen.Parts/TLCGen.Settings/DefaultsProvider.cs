@@ -81,8 +81,8 @@ namespace TLCGen.Settings
                     return "sd";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     return "vecio";
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
-                //    return "ris";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
+                    return "ris";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

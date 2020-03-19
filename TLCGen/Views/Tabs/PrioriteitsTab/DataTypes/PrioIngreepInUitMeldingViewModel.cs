@@ -71,6 +71,8 @@ namespace TLCGen.ViewModels
         public bool CanHaveInput2 => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
             Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
 
+        public bool ShowAlertMessage => Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
+        
         public PrioIngreepInUitMeldingVoorwaardeTypeEnum Type
         {
             get => PrioIngreepInUitMelding.Type;
@@ -89,6 +91,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(HasSD));
                 RaisePropertyChanged(nameof(HasKAR));
                 RaisePropertyChanged(nameof(HasRis));
+                RaisePropertyChanged(nameof(ShowAlertMessage));
             }
         }
 

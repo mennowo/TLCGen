@@ -10,6 +10,30 @@ using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
+    public static class PrioCodeGeneratorHelper
+    {
+        public static string GetDetectorTypeSCHString(PrioIngreepInUitMeldingVoorwaardeInputTypeEnum type)
+        {
+            switch (type)
+            {
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
+                    return "SD";
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
+                    return "D";
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
+                    return "DB";
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
+                    return "SDB";
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
+                    return "ED";
+                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
+                    return "ETDH";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
     [CCOLCodePieceGenerator]
     public class PrioCodeGenerator : CCOLCodePieceGeneratorBase
     {
@@ -83,6 +107,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schcovuber;
         private CCOLGeneratorCodeStringSettingModel _prmkarsg;
         private CCOLGeneratorCodeStringSettingModel _prmkarsghd;
+        private CCOLGeneratorCodeStringSettingModel _hrisprio;
+        private CCOLGeneratorCodeStringSettingModel _prmrisstart;
+        private CCOLGeneratorCodeStringSettingModel _prmrisend;
+        private CCOLGeneratorCodeStringSettingModel _schrismatchsg;
+        private CCOLGeneratorCodeStringSettingModel _tris;
+        private CCOLGeneratorCodeStringSettingModel _trismax;
 
 #pragma warning restore 0649
 
@@ -96,33 +126,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _mwtvm;
         private string _prmwtvnhaltmin;
-        //private string _hrisprio;
+        private string _prmrislaneid;
 
         #endregion // Fields
 
         #region Properties
         #endregion // Properties
-
-        private string GetDetectorTypeSCHString(PrioIngreepInUitMeldingVoorwaardeInputTypeEnum type)
-        {
-            switch (type)
-            {
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                    return "SD";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                    return "D";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                    return "DB";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                    return "SDB";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                    return "ED";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                    return "ETDH";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
 
         public List<CCOLElement> GetMeldingElements(PrioIngreepModel ov, PrioIngreepInUitMeldingModel melding, bool addHov)
         {
@@ -150,16 +159,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var he = $"{hov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             var ti = $"{tov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             var sw = $"{schov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
+                melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
                 he = he + melding.RelatedInput1;
                 ti = ti + melding.RelatedInput1;
-                sw = sw + melding.RelatedInput1 + GetDetectorTypeSCHString(melding.RelatedInput1Type);
+                sw = sw + melding.RelatedInput1 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput1Type);
                 if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector && melding.TweedeInput)
                 {
                     he = he + melding.RelatedInput2;
                     ti = ti + melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2 + GetDetectorTypeSCHString(melding.RelatedInput2Type);
+                    sw = sw + melding.RelatedInput2 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput2Type);
                 }
             }
 
@@ -392,6 +402,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovminrood}{CCOLCodeHelper.GetPriorityName(ov)}", ov.MinimaleRoodtijd, CCOLElementTimeTypeEnum.TE_type, _tovminrood, ov.FaseCyclus, ov.Type.GetDescription()));
                 }
+
+                var inRis = ov.MeldingenData.Inmeldingen.Where(x =>
+                    x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
+                var uitRis = ov.MeldingenData.Inmeldingen.Where(x =>
+                    x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
+
+                if (inRis.Any() || uitRis.Any())
+                {
+                    foreach (var inR in inRis)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}", inR.RisStart, CCOLElementTimeTypeEnum.None, _prmrisstart, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}", inR.RisEnd, CCOLElementTimeTypeEnum.None, _prmrisend, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}", inR.RisMatchSg ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrismatchsg, ov.FaseCyclus));
+                    }
+                    foreach (var inR in uitRis)
+                    {
+
+                    }
+                }
             }
 
             /* Variables for HD */
@@ -435,6 +464,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thdin}{hd.FaseCyclus}opt", hd.OpticomInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thdin, hd.FaseCyclus, "Opticom"));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhdinuit}{hd.FaseCyclus}opt", 1, CCOLElementTimeTypeEnum.SCH_type, _schhdinuit, hd.FaseCyclus, "Opticom"));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}opt", _hhduit, hd.FaseCyclus, "Opticom"));
+                }
+            }
+
+            // RIS prms per fase
+            var ovRis = c.PrioData.PrioIngrepen
+                .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                            x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                .ToList();
+            if (ovRis.Any())
+            {
+                foreach (var ov in ovRis)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tris}{ov.FaseCyclus}{ov.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, _tris, ov.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trismax}{ov.FaseCyclus}{ov.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, _trismax, ov.FaseCyclus));
                 }
             }
 
@@ -597,16 +640,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             var ti = $"{_tpf}{tov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
             var sw = $"{_schpf}{schov}{CCOLCodeHelper.GetPriorityName(ov)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
+                melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
-                he = he + melding.RelatedInput1;
-                ti = ti + melding.RelatedInput1;
-                sw = sw + melding.RelatedInput1 + GetDetectorTypeSCHString(melding.RelatedInput1Type);
+                he += melding.RelatedInput1;
+                ti += melding.RelatedInput1;
+                sw = sw + melding.RelatedInput1 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput1Type);
                 if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector && melding.TweedeInput)
                 {
-                    he = he + melding.RelatedInput2;
-                    ti = ti + melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2 + GetDetectorTypeSCHString(melding.RelatedInput2Type);
+                    he += melding.RelatedInput2;
+                    ti += melding.RelatedInput2;
+                    sw = sw + melding.RelatedInput2 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput2Type);
                 }
             }
             if (otherHov != null) he = otherHov;
@@ -736,9 +780,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
                     break;
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISInput:
-                //    sb.AppendLine($" {(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "SH" : "EH")}[{_hpf}{_hrisprio}{melding.RelatedInput1}];");
-                //    break;
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
+                    switch (melding.InUit)
+                    {
+                        case PrioIngreepInUitMeldingTypeEnum.Inmelding:
+                            var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
+                            var first = true;
+                            if (risFc != null)
+                            {
+                                sb.AppendLine();
+                                foreach (var lane in risFc.LaneData)
+                                {
+                                    if (!first) sb.AppendLine(" ||");
+                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief({_fcpf}{ov.FaseCyclus}, {lane.SystemITF}, PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], RIS_BUS, PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], SCH[{_schpf}{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}])");
+                                    first = false;
+                                }
+                                sb.AppendLine(";");
+                            }
+                            break;
+                        case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
+                            sb.AppendLine($"ris_uitmelding_selectief({_fcpf}{ov.FaseCyclus});");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    break;
             }
             sb.AppendLine($"{ts}}}");
             if (melding.OpvangStoring && melding.MeldingBijstoring != null && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
@@ -984,7 +1050,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($";");
                         }
                     }
+
+                    #region RIS extra code
+
+                    var ovRis = c.PrioData.PrioIngrepen
+                        .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                    x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                        .ToList();
+                    if (ovRis.Any())
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Verstuur SSM */");
+                        foreach (var ov in ovRis)
+                        {
+                            sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
+                        }
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Vasthouden laatste seconden granted */");
+                        foreach (var ov in ovRis)
+                        {
+                            sb.AppendLine($"{ts}ris_ym(prioFC{ov.FaseCyclus}{ov.Naam}, {_tpf}{_tris}{ov.FaseCyclus}{ov.Naam}, {_tpf}{_trismax}{ov.FaseCyclus}{ov.Naam});");
+                        }
+                        sb.AppendLine();
+                    }
+
+                    #endregion // RIS extra code
                     
+                    #region HD meldingen
+
                     // Inmelding HD
                     foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom))
                     {
@@ -1072,6 +1165,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(";");
                         }
                     }
+                    
+                    #endregion // HD meldingen
 
                     return sb.ToString();
 
@@ -1202,7 +1297,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _mwtvm = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtvm");
             _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
-            //_hrisprio = CCOLGeneratorSettingsProvider.Default.GetElementName("hrisprio");
+            _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
 
             return base.SetSettings(settings);
         }

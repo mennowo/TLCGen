@@ -10,6 +10,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -121,16 +122,13 @@ namespace TLCGen.ModelManagement
         public bool CheckVersionOrder(ControllerModel controller)
         {
             var vc = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
-            var vp = Assembly.GetEntryAssembly().GetName().Version;
-            if(vc > vp)
-            {
-                MessageBox.Show($"Dit bestand is gemaakt met een nieuwere versie van TLCGen,\n" +
-                                $"en kan met deze versie niet worden geopend.\n\n" +
-                                $"Versie TLCGen: {vp}\n" +
-                                $"Versie bestand: {vc}", "Versies komen niet overeen");
-                return false;
-            }
-            return true;
+            var vp = Assembly.GetEntryAssembly()?.GetName().Version;
+            if (vc <= vp) return true;
+            TLCGenDialogProvider.Default.ShowMessageBox($"Dit bestand is gemaakt met een nieuwere versie van TLCGen,\n" +
+                            $"en kan met deze versie niet worden geopend.\n\n" +
+                            $"Versie TLCGen: {vp}\n" +
+                            $"Versie bestand: {vc}", "Versies komen niet overeen", MessageBoxButton.OK);
+            return false;
         }
 
         /// <summary>
@@ -183,14 +181,29 @@ namespace TLCGen.ModelManagement
                     var ovaddtext = File.ReadAllLines(ovAddFile);
                     if (ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingPrio_Add.*")))
                     {
-                        MessageBox.Show($"Let op! Deze versie van TLCGen maakt een functie\n" +
+                        TLCGenDialogProvider.Default.ShowMessageBox("Let op! Deze versie van TLCGen maakt een functie\n" +
                                     $"'PostAfhandelingPrio' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
-                                    $"de functie 'PostAfhandelingPrio_Add' aangeroepen, die echter\n" +
+                                    "de functie 'PostAfhandelingPrio_Add' aangeroepen, die echter\n" +
                                     $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingPrio_Add ontbreekt.\n\n" +
                                     "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingPrio'," +
-                                    "want die wordt niet aangeroepen.");
+                                    "want die wordt niet aangeroepen.", MessageBoxButton.OK);
                     }
                 }
+            }
+
+            // Moving old data around
+            if (_pluginDataToMove.Any())
+            {
+                var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
+                if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
+                var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
+                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
+                else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
+                var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
+                if (rtdData != null && rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
+                if (rtdData != null && rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
+                var prioData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "PrioData")?.Item2;
+                if (prioData != null) controller.PrioData = (PrioriteitDataModel)prioData;
             }
 
             var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
@@ -199,12 +212,9 @@ namespace TLCGen.ModelManagement
             var checkVer = Version.Parse("0.2.3.0");
             if(v < checkVer)
             {
-                foreach (var s in controller.Data.SegmentenDisplayBitmapData)
+                foreach (var s in controller.Data.SegmentenDisplayBitmapData.Where(s => s.Naam.StartsWith("segm")))
                 {
-                    if (s.Naam.StartsWith("segm"))
-                    {
-                        s.Naam = s.Naam.Replace("segm", "");
-                    }
+                    s.Naam = s.Naam.Replace("segm", "");
                 }
             }
 
@@ -270,19 +280,6 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            if (_pluginDataToMove.Any())
-            {
-                var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
-                if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
-                var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
-                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
-                else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
-                var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
-                if (rtdData != null && rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
-                if (rtdData != null && rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
-                var prioData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "PrioData")?.Item2;
-                if (prioData != null) controller.PrioData = (PrioriteitDataModel)prioData;
-            }
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)

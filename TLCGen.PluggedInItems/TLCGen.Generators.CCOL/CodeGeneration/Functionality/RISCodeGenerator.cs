@@ -24,11 +24,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            return base.SetSettings(settings);
-        }
-
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
