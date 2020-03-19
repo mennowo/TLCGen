@@ -536,7 +536,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     }
                     return result2;
-            
+
+                case CCOLCodeTypeEnum.PrioCInUitMelden:
+                    var result3 = new List<Tuple<string, string, string>>();
+                    if (c.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                                         x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)))
+                    {
+                        result3.Add(new Tuple<string, string, string>("int", "i", "0"));
+                    }
+                    return result3;
+
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -792,7 +801,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 foreach (var lane in risFc.LaneData)
                                 {
                                     if (!first) sb.AppendLine(" ||");
-                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief({_fcpf}{ov.FaseCyclus}, {lane.SystemITF}, PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], RIS_BUS, PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], SCH[{_schpf}{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}])");
+                                    var itf = c.RISData.HasMultipleSystemITF
+                                        ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : 0;
+                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief({_fcpf}{ov.FaseCyclus}, SYSTEM_ITF{itf + 1}, PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], RIS_BUS, PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], SCH[{_schpf}{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}])");
                                     first = false;
                                 }
                                 sb.AppendLine(";");
@@ -1071,6 +1082,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}ris_ym(prioFC{ov.FaseCyclus}{ov.Naam}, {_tpf}{_tris}{ov.FaseCyclus}{ov.Naam}, {_tpf}{_trismax}{ov.FaseCyclus}{ov.Naam});");
                         }
+                        sb.AppendLine();
+                        /* printf buffers  */
+                        sb.AppendLine($"{ts}#ifndef AUTOMAAT");
+                        sb.AppendLine($"{ts}{ts}/* RIS_PRIOREQUEST_AP */");
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < 5; ++i) {{");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(40, i+3, \"                                                     \");");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}xyprintf(40, 1, \"RIS_PRIOREQUEST_AP                                \");");
+                        sb.AppendLine($"{ts}{ts}xyprintf(40, 2, \"sg id------------------ sequenceNumber-requestType\");");
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < RIS_PRIOREQUEST_AP_NUMBER; ++i) {{");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(40, i+3, \"%s\", RIS_PRIOREQUEST_AP[i].signalGroup);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(43, i+3, \"%s\", RIS_PRIOREQUEST_AP[i].id);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(64, i+3, \"%d\", RIS_PRIOREQUEST_AP[i].sequenceNumber);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(79, i+3, \"%d\", RIS_PRIOREQUEST_AP[i].requestType);");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}/* RIS_PRIOREQUEST_AP */");
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < 5; i++) {{");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(40, i+10, \"                                                                          \");");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}xyprintf(40, 8, \"RIS_PRIOREQUEST_EX_AP                                             \");");
+                        sb.AppendLine($"{ts}{ts}xyprintf(40, 9, \"   id------------------ sequenceNumber-prioState-prioControlState\");");
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < RIS_PRIOREQUEST_EX_AP_NUMBER; ++i) {{");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(43, i+10, \"%s\", RIS_PRIOREQUEST_EX_AP[i].id);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(64, i+10, \"%d\", RIS_PRIOREQUEST_EX_AP[i].sequenceNumber);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(79, i+10, \"%d\", RIS_PRIOREQUEST_EX_AP[i].prioState);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(89, i+10, \"%d\", RIS_PRIOREQUEST_EX_AP[i].prioControlState);");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}#endif /* #ifndef AUTOMAAT */");
                         sb.AppendLine();
                     }
 
