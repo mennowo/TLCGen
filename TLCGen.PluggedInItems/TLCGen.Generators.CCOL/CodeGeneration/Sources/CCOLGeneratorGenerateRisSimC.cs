@@ -116,14 +116,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var i = 15;
             foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
-                sb.AppendLine($"{ts}xyprintf(0, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
+                sb.AppendLine($"{ts}xyprintf(30, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
                 ++i;
             }
             sb.AppendLine($"");
             sb.AppendLine($"{ts}/* Display aantal ItsStations en PrioRequests */");
             sb.AppendLine($"{ts}/* ------------------------------------------ */  ");
-            sb.AppendLine($"{ts}xyprintf(0, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
-            sb.AppendLine($"{ts}xyprintf(0, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}xyprintf(30, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}xyprintf(30, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
             sb.AppendLine($"{ts}#endif");
 
             sb.AppendLine("}");
