@@ -40,6 +40,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged<object>(nameof(PrioIngreepType), broadcast: true);
+                RaisePropertyChanged(nameof(HasPrio));
             }
         }
 

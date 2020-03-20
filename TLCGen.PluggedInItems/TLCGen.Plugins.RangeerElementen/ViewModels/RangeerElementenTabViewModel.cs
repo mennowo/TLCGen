@@ -1,11 +1,13 @@
-﻿using GalaSoft.MvvmLight;
-using GongSolutions.Wpf.DragDrop;
+﻿using System.Collections;
+using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -15,25 +17,36 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Plugins.RangeerElementen.ViewModels
 {
-    public class RangeerElementenTabViewModel : ViewModelBase, IDropTarget
+    public class RangeerElementenTabViewModel : ViewModelBase
     {
         #region Fields
 
         private RangeerElementenPlugin _plugin;
         private RelayCommand _moveUpCommand;
         private RelayCommand _moveDownCommand;
+        private RangeerElementViewModel _selectedRangeerElement;
+        private IList _selectedRangeerElements = new ArrayList();
 
         #endregion // Fields
         
         #region Properties
 
-        private RangeerElementViewModel _selectedRangeerElement;
         public RangeerElementViewModel SelectedRangeerElement
         {
             get => _selectedRangeerElement;
             set
             {
                 _selectedRangeerElement = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IList SelectedRangeerElements
+        {
+            get => _selectedRangeerElements;
+            set
+            {
+                _selectedRangeerElements = value;
                 RaisePropertyChanged();
             }
         }
@@ -68,6 +81,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 {
                     _plugin.UpdateModel();
                     RangeerElementen.Rebuild();
+                    RangeerElementen.BubbleSort();
                 }
                 else
                 {
@@ -85,30 +99,74 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
 
         private bool MoveUpCommand_canExecute()
         {
-            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) > 0;
+            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) > 0 
+                   || SelectedRangeerElements != null && SelectedRangeerElements.Count > 0;
         }
 
         private void MoveUpCommand_executed()
         {
-            var i = RangeerElementen.IndexOf(SelectedRangeerElement);
-            if (i > 0)
-                RangeerElementen.Move(i, i - 1);
+            if (SelectedRangeerElements != null && SelectedRangeerElements.Count > 0)
+            {
+                foreach (RangeerElementViewModel elem in SelectedRangeerElements)
+                {
+                    var i = RangeerElementen.IndexOf(elem);
+                    if (i > 0)
+                        RangeerElementen.Move(i, i - 1);
+                    else
+                        break;
+                }
+            }
+            else
+            {
+                var i = RangeerElementen.IndexOf(SelectedRangeerElement);
+                if (i > 0)
+                    RangeerElementen.Move(i, i - 1);
+            }
             RangeerElementen.RebuildList();
         }
-
 
         public ICommand MoveDownCommand => _moveDownCommand ?? (_moveDownCommand = new RelayCommand(MoveDownCommand_executed, MoveDownCommand_canExecute));
 
         private bool MoveDownCommand_canExecute()
         {
-            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) < RangeerElementen.Count - 1;
+            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) < RangeerElementen.Count - 1
+                   || SelectedRangeerElements != null && SelectedRangeerElements.Count > 0;
         }
 
         private void MoveDownCommand_executed()
         {
-            var i = RangeerElementen.IndexOf(SelectedRangeerElement);
-            if (i < RangeerElementen.Count - 1)
-                RangeerElementen.Move(i, i + 1);
+            if (SelectedRangeerElements != null && SelectedRangeerElements.Count > 0)
+            {
+                var ok = true;
+                var list = new List<RangeerElementViewModel>();
+                foreach (RangeerElementViewModel elem in SelectedRangeerElements)
+                {
+                    if (RangeerElementen.IndexOf(elem) + 1 >= RangeerElementen.Count)
+                    {
+                        ok = false;
+                        break;
+                    }
+                    list.Add(elem);
+                }
+                if(!ok) return;
+
+                list.Reverse();
+                foreach (var elem in list)
+                {
+                    var i = RangeerElementen.IndexOf(elem);
+                    if (i < RangeerElementen.Count - 1)
+                        RangeerElementen.Move(i, i + 1);
+                    else
+                        break;
+                }
+            }
+            else
+            {
+                var i = RangeerElementen.IndexOf(SelectedRangeerElement);
+                if (i < RangeerElementen.Count - 1)
+                    RangeerElementen.Move(i, i + 1);
+            }
+
             RangeerElementen.RebuildList();
         }
 
@@ -118,6 +176,8 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
 
         private void OnDetectorenenChanged(DetectorenChangedMessage msg)
         {
+            if (!RangeerElementenToepassen) return;
+            
             if (msg.RemovedDetectoren != null && msg.RemovedDetectoren.Any())
             {
                 foreach (var d in msg.RemovedDetectoren)
@@ -242,25 +302,6 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
         }
 
         #endregion // Private Methods 
-
-        #region IDropTarget
-
-        void IDropTarget.DragOver(IDropInfo dropInfo)
-        {
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
-        }
-
-        void IDropTarget.Drop(IDropInfo dropInfo)
-        {
-            RangeerElementViewModel sourceItem = dropInfo.Data as RangeerElementViewModel;
-            RangeerElementViewModel targetItem = dropInfo.TargetItem as RangeerElementViewModel;
-            if (sourceItem == null || targetItem == null) return;
-            var i = RangeerElementen.IndexOf(targetItem);
-            var j = RangeerElementen.IndexOf(sourceItem);
-            RangeerElementen.Move(j, i);
-        }
-
-        #endregion
 
         #region Public Methods
 

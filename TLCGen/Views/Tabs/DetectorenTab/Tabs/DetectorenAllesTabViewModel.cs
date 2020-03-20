@@ -27,33 +27,25 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ObservableCollection<DetectorViewModel> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                    _Detectoren = new ObservableCollection<DetectorViewModel>();
-                return _Detectoren;
-            }
-        }
-        
+        public ObservableCollection<DetectorViewModel> Detectoren => _Detectoren ?? (_Detectoren = new ObservableCollection<DetectorViewModel>());
+
         public DetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged("SelectedDetector");
+                RaisePropertyChanged();
             }
         }
 
         public IList SelectedDetectoren
         {
-            get { return _SelectedDetectoren; }
+            get => _SelectedDetectoren;
             set
             {
                 _SelectedDetectoren = value;
-                RaisePropertyChanged("SelectedDetectoren");
+                RaisePropertyChanged();
             }
         }
 
@@ -95,7 +87,7 @@ namespace TLCGen.ViewModels
 
 	    public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

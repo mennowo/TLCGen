@@ -723,6 +723,8 @@ namespace TLCGen.ViewModels
 
         private void OnFileNameChanged(ControllerFileNameChangedMessage message)
         {
+            if (message.NewFileName == null) return;
+            
             _ControllerFileName = message.NewFileName;
             SetBitmapFileName();
             RefreshMyBitmapImage();

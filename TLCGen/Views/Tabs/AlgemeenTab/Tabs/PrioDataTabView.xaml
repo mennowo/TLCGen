@@ -13,7 +13,7 @@
         <Label Content="Type prioriteitsingreep" />
         <ComboBox Margin="5"
                   ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepTypeEnum}}}"
-                  SelectedItem="{Binding Path=PrioData.PrioIngreepType}" />
+                  SelectedItem="{Binding Path=PrioData.PrioIngreepType,UpdateSourceTrigger=PropertyChanged}" />
         <ct:SimplePropertyEditor IsEnabled="{Binding Path=PrioData.HasPrio}" BoundObject="{Binding Path=PrioData}" Margin="2" />
     </StackPanel>
 </UserControl>

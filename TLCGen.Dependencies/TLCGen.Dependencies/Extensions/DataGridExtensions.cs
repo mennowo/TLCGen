@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -11,6 +7,53 @@ using System.Windows.Media;
 
 namespace TLCGen.Extensions
 {
+    public static class ListViewExtensions
+    {
+        #region SelectedItemsListProperty
+
+        public static readonly DependencyProperty SelectedItemsListProperty = DependencyProperty.RegisterAttached(
+            "SelectedItemsList",
+            typeof(IList),
+            typeof(ListViewExtensions),
+            new PropertyMetadata(default(IList), OnSelectedItemsListChanged),
+            OnValidateSelectedItemsList);
+
+        public static void SetSelectedItemsList(this ListView element, IList value)
+        {
+            element.SetValue(SelectedItemsListProperty, value);
+        }
+
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForType(typeof(ListView))]
+        public static Array GetSelectedItemsList(this ListView element)
+        {
+            return (Array)element.GetValue(SelectedItemsListProperty);
+        }
+
+        private static void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listView = (ListView)sender;
+            listView.SetSelectedItemsList(listView.SelectedItems);
+        }
+
+        private static void OnSelectedItemsListChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var listView = (ListView)d;
+            if (e.OldValue == null)
+            {
+                // Sign up for changes to the ListView’s selected items to enable a two-way binding effect
+                listView.SelectionChanged += ListView_SelectionChanged;
+            }
+        }
+
+        private static bool OnValidateSelectedItemsList(object value)
+        {
+            return true;
+        }
+
+        #endregion // SelectedItemsListProperty
+    }
+
     public static class DataGridExtensions
     {
 

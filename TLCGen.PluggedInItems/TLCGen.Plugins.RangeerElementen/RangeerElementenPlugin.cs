@@ -21,8 +21,8 @@ namespace TLCGen.Plugins.RangeerElementen
     {
         #region Fields
 
-        private RangeerElementenTabViewModel _RangeerElementenVM;
-        private RangeerElementenDataModel _RangeerElementenModel;
+        private readonly RangeerElementenTabViewModel _rangeerElementenVm;
+        private RangeerElementenDataModel _rangeerElementenModel;
 
 #pragma warning disable 0649
         // private CCOLGeneratorCodeStringSettingModel _prm...;
@@ -48,8 +48,8 @@ namespace TLCGen.Plugins.RangeerElementen
                 _controller = value;
                 if (_controller == null)
                 {
-                    _RangeerElementenModel = new RangeerElementenDataModel();
-                    _RangeerElementenVM.RangeerElementenModel = _RangeerElementenModel;
+                    _rangeerElementenModel = new RangeerElementenDataModel();
+                    _rangeerElementenVm.RangeerElementenModel = _rangeerElementenModel;
                 }
                 UpdateModel();
             }
@@ -76,7 +76,7 @@ namespace TLCGen.Plugins.RangeerElementen
                 {
                     _ContentDataTemplate = new DataTemplate();
                     var tab = new FrameworkElementFactory(typeof(RangeerElementenTabView));
-                    tab.SetValue(RangeerElementenTabView.DataContextProperty, _RangeerElementenVM);
+                    tab.SetValue(RangeerElementenTabView.DataContextProperty, _rangeerElementenVm);
                     _ContentDataTemplate.VisualTree = tab;
                 }
                 return _ContentDataTemplate;
@@ -121,28 +121,28 @@ namespace TLCGen.Plugins.RangeerElementen
 
         public void GetXmlFromDocument(XmlDocument document)
         {
-            _RangeerElementenModel = null;
+            _rangeerElementenModel = null;
 
             foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
                 if (node.LocalName == "RangeerTLCGenElementenData")
                 {
-                    _RangeerElementenModel = XmlNodeConverter.ConvertNode<RangeerElementenDataModel>(node);
+                    _rangeerElementenModel = XmlNodeConverter.ConvertNode<RangeerElementenDataModel>(node);
                     break;
                 }
             }
 
-            if (_RangeerElementenModel == null)
+            if (_rangeerElementenModel == null)
             {
-                _RangeerElementenModel = new RangeerElementenDataModel();
+                _rangeerElementenModel = new RangeerElementenDataModel();
             }
-            _RangeerElementenVM.RangeerElementenModel = _RangeerElementenModel;
-            _RangeerElementenVM.RaisePropertyChanged("");
+            _rangeerElementenVm.RangeerElementenModel = _rangeerElementenModel;
+            _rangeerElementenVm.RaisePropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_RangeerElementenModel);
+            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_rangeerElementenModel);
             XmlNode node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
@@ -153,7 +153,7 @@ namespace TLCGen.Plugins.RangeerElementen
 
         public void UpdateTLCGenMessaging()
         {
-            _RangeerElementenVM.UpdateMessaging();
+            _rangeerElementenVm.UpdateMessaging();
         }
 
         #endregion // ITLCGenPlugMessaging
@@ -177,18 +177,18 @@ namespace TLCGen.Plugins.RangeerElementen
 
         internal void UpdateModel()
         {
-            if (_controller != null && _RangeerElementenModel != null && _RangeerElementenModel.RangeerElementenToepassen)
+            if (_controller != null && _rangeerElementenModel != null && _rangeerElementenModel.RangeerElementenToepassen)
             {
                 foreach (var d in Controller.GetAllDetectors())
                 {
-                    if (_RangeerElementenVM.RangeerElementen.All(x => x.Element != d.Naam))
+                    if (_rangeerElementenVm.RangeerElementen.All(x => x.Element != d.Naam))
                     {
                         var dvm = new RangeerElementViewModel(new RangeerElementModel { Element = d.Naam });
-                        _RangeerElementenVM.RangeerElementen.Add(dvm);
+                        _rangeerElementenVm.RangeerElementen.Add(dvm);
                     }
                 }
                 var rems = new List<RangeerElementViewModel>();
-                foreach (var d in _RangeerElementenVM.RangeerElementen)
+                foreach (var d in _rangeerElementenVm.RangeerElementen)
                 {
                     if (Controller.GetAllDetectors().All(x => x.Naam != d.Element))
                     {
@@ -197,9 +197,9 @@ namespace TLCGen.Plugins.RangeerElementen
                 }
                 foreach (var sg in rems)
                 {
-                    _RangeerElementenVM.RangeerElementen.Remove(sg);
+                    _rangeerElementenVm.RangeerElementen.Remove(sg);
                 }
-                _RangeerElementenVM.RaisePropertyChanged("");
+                _rangeerElementenVm.RaisePropertyChanged("");
             }
         }
 
@@ -210,7 +210,7 @@ namespace TLCGen.Plugins.RangeerElementen
         public RangeerElementenPlugin()
         {
             IsEnabled = true;
-            _RangeerElementenVM = new RangeerElementenTabViewModel(this);
+            _rangeerElementenVm = new RangeerElementenTabViewModel(this);
         }
 
         #endregion // Constructor

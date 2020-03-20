@@ -481,6 +481,8 @@ namespace TLCGen.Generators.CCOL
 
         private void OnControllerFileNameChanged(Messaging.Messages.ControllerFileNameChangedMessage msg)
         {
+            if (msg.NewFileName == null) return;
+
             ControllerFileName = msg.NewFileName;
         }
 

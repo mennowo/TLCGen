@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Plugins.RangeerElementen"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:extensions="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              mc:Ignorable="d" Name="root"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -25,7 +26,7 @@
             dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
             dd:DragDrop.UseDefaultEffectDataTemplate="True"
             dd:DragDrop.UseDefaultDragAdorner="True"
-            dd:DragDrop.DropHandler="{Binding}"
+            extensions:ListViewExtensions.SelectedItemsList="{Binding Path=SelectedRangeerElements,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding Path=SelectedRangeerElement,UpdateSourceTrigger=PropertyChanged}"
             ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ItemsSource="{Binding Path=RangeerElementen}" Margin="2" Grid.Row="2" AlternationCount="2">
