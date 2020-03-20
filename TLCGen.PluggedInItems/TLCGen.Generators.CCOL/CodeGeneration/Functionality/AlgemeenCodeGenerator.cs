@@ -23,6 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmzz;
 #pragma warning restore 0649
         string _mperiod;
+        string _prmfb;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -203,7 +204,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
                         sb.AppendLine($"{ts}{ts}for (int i = 0; i < FCMAX; ++i)");
                         sb.AppendLine($"{ts}{ts}{{");
-                        sb.AppendLine($"{ts}{ts}{ts}if (TFB_timer[i] + 3 > PRM[prmfb])");
+                        sb.AppendLine($"{ts}{ts}{ts}if (TFB_timer[i] + 3 > PRM[{_prmpf}{_prmfb}])");
                         sb.AppendLine($"{ts}{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}{ts}{ts}stuffkey(F5KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}}}");
@@ -356,6 +357,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
+            _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
             return base.SetSettings(settings);
         }

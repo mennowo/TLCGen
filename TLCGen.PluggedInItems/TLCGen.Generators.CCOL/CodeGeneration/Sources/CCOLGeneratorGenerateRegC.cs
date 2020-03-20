@@ -613,12 +613,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
             var _schbmfix = CCOLGeneratorSettingsProvider.Default.GetElementName("schbmfix");
             var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
+            var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
+            var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}PreApplication();");
             sb.AppendLine();
-            sb.AppendLine($"{ts}TFB_max = PRM[prmfb];");
+            sb.AppendLine($"{ts}TFB_max = PRM[{_prmpf}{_prmfb}];");
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
 
@@ -707,13 +709,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (!controller.Data.MultiModuleReeksen)
                 {
-                    sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PRML, ML);");
+                    sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PRML, ML);");
                 }
                 else
                 {
                     foreach(var r in controller.MultiModuleMolens)
                     {
-                        sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PR{r.Reeks}, {r.Reeks});");
+                        sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PR{r.Reeks}, {r.Reeks});");
                     }
                 }
             }
