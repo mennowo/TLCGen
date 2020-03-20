@@ -18,8 +18,10 @@ namespace TLCGen.Importers.TabC
         public List<FaseCyclusModel> Fasen { get; set; }
         public List<ConflictModel> Conflicten { get; set; }
         public List<VoorstartModel> Voorstarten { get; set; }
+        public List<MeeaanvraagModel> MeeAanvragen { get; set; }
         public List<GelijkstartModel> Gelijkstarten { get; set; }
         public List<LateReleaseModel> LateReleases { get; set; }
+        public List<NaloopModel> Nalopen { get; set; }
 
         public string KruisingNaam { get; set; }
         public string KruisingStraat1 { get; set; }
@@ -35,7 +37,10 @@ namespace TLCGen.Importers.TabC
             Gelijkstarten = new List<GelijkstartModel>();
             Voorstarten = new List<VoorstartModel>();
             LateReleases = new List<LateReleaseModel>();
+            MeeAanvragen = new List<MeeaanvraagModel>();
+            Nalopen = new List<NaloopModel>();
         }
+
     }
 
     public static class TabCImportHelper
@@ -79,6 +84,7 @@ namespace TLCGen.Importers.TabC
             var importD = false;
             var importT = false;
             var importG = false;
+            var importNalopen = false;
             var importDeelconf = "";
             if (TLCGenDialogProvider.Default.ShowDialogs)
             {
@@ -97,6 +103,7 @@ namespace TLCGen.Importers.TabC
                 importT = dlg.ImportTijden;
                 outcome.Garantie = importG = dlg.ImportGarantie;
                 importDeelconf = dlg.ImportDeelconflicten;
+                importNalopen = dlg.ImportNalopen;
             }
             else
             {
@@ -165,7 +172,7 @@ namespace TLCGen.Importers.TabC
                 if (m.Success)
                 {
                     var name = m.Groups["name"].Value.Replace("fc", "");
-                    if (!outcome.Fasen.Any(x => x.Naam == name))
+                    if (outcome.Fasen.All(x => x.Naam != name))
                     {
                         var fcm = new FaseCyclusModel
                         {
@@ -217,6 +224,7 @@ namespace TLCGen.Importers.TabC
             {
                 clines = lines;
             }
+
             foreach (var l in clines)
             {
                 var m = confRegex.Match(l);
@@ -243,6 +251,7 @@ namespace TLCGen.Importers.TabC
                         }
                     }
                 }
+
                 if (importG)
                 {
                     m = gconfRegex.Match(l);
@@ -270,6 +279,7 @@ namespace TLCGen.Importers.TabC
                         }
                     }
                 }
+
                 if (intergroen)
                 {
                     m = geelRegex.Match(l);
@@ -296,119 +306,211 @@ namespace TLCGen.Importers.TabC
                         var fc1 = m.Groups["fc1"].Value;
                         var fc2 = m.Groups["fc2"].Value;
                         var conf = m.Groups["conf"].Value;
-                        if (int.TryParse(conf, out var iconf) && !outcome.Conflicten.Any(x => x.FaseVan == fc1 && x.FaseNaar == fc2))
+                        if (int.TryParse(conf, out var iconf) &&
+                            !outcome.Conflicten.Any(x => x.FaseVan == fc1 && x.FaseNaar == fc2))
                         {
                             var nfc1 = outcome.Fasen.FirstOrDefault(x => x.Naam == fc1);
                             var nfc2 = outcome.Fasen.FirstOrDefault(x => x.Naam == fc2);
-                            // deelconflicten auto verkeer: gelijkstart
-                            if ((nfc1.Type == FaseTypeEnum.Auto || nfc1.Type == FaseTypeEnum.OV) &&
-                                (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
-                            {
-                                var gs = outcome.Gelijkstarten.FirstOrDefault(x => x.FaseNaar == fc1 && x.FaseVan == fc2);
-                                if (gs != null)
-                                {
-                                    gs.GelijkstartOntruimingstijdFaseNaar = iconf;
-                                }
-                                else
-                                {
 
-                                    outcome.Gelijkstarten.Add(new GelijkstartModel
+                            var skip = false;
+                            if (int.TryParse(nfc1.Naam, out var iFc1) && int.TryParse(nfc2.Naam, out var iFc2))
+                            {
+                                if (iFc1 > 60 && iFc1 < 80 || iFc2 > 60 && iFc2 < 80) skip = true;
+                            }
+
+                            if (!skip)
+                            {
+                                // deelconflicten auto verkeer: gelijkstart
+                                if ((nfc1.Type == FaseTypeEnum.Auto || nfc1.Type == FaseTypeEnum.OV) &&
+                                    (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
+                                {
+                                    var gs = outcome.Gelijkstarten.FirstOrDefault(x =>
+                                        x.FaseNaar == fc1 && x.FaseVan == fc2);
+                                    if (gs != null)
                                     {
-                                        FaseVan = fc1,
-                                        FaseNaar = fc2,
-                                        DeelConflict = true,
-                                        GelijkstartOntruimingstijdFaseVan = iconf
-                                    });
+                                        gs.GelijkstartOntruimingstijdFaseNaar = iconf;
+                                    }
+                                    else
+                                    {
+                                        outcome.Gelijkstarten.Add(new GelijkstartModel
+                                        {
+                                            FaseVan = fc1,
+                                            FaseNaar = fc2,
+                                            DeelConflict = true,
+                                            GelijkstartOntruimingstijdFaseVan = iconf
+                                        });
+                                    }
+                                }
+                                // deelconflicten auto <> langzaam
+                                else if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
+                                         (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV) ||
+                                         (nfc2.Type != FaseTypeEnum.Auto && nfc2.Type != FaseTypeEnum.OV) &&
+                                         (nfc1.Type == FaseTypeEnum.Auto || nfc1.Type == FaseTypeEnum.OV))
+                                {
+                                    switch (importDeelconf)
+                                    {
+                                        case "Voorstarten":
+                                            var vs = outcome.Voorstarten.FirstOrDefault(x =>
+                                                x.FaseNaar == fc1 && x.FaseVan == fc2 ||
+                                                x.FaseVan == fc1 && x.FaseNaar == fc2);
+                                            // langzaam > auto
+                                            if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
+                                                (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
+                                            {
+                                                if (vs != null)
+                                                {
+                                                    vs.VoorstartTijd = iconf;
+                                                }
+                                                else
+                                                {
+                                                    outcome.Voorstarten.Add(new VoorstartModel
+                                                    {
+                                                        FaseVan = fc1,
+                                                        FaseNaar = fc2,
+                                                        VoorstartTijd = iconf,
+                                                        VoorstartOntruimingstijd = 0
+                                                    });
+                                                    outcome.MeeAanvragen.Add(new MeeaanvraagModel
+                                                    {
+                                                        FaseVan = fc2,
+                                                        FaseNaar = fc1,
+                                                        Type = MeeaanvraagTypeEnum.RoodVoorAanvraag,
+                                                        AanUit = AltijdAanUitEnum.SchAan
+                                                    });
+                                                }
+                                            }
+                                            // auto > langzaam
+                                            else
+                                            {
+                                                if (vs != null)
+                                                {
+                                                    vs.VoorstartOntruimingstijd = iconf;
+                                                }
+                                                else
+                                                {
+                                                    outcome.Voorstarten.Add(new VoorstartModel
+                                                    {
+                                                        FaseVan = fc2,
+                                                        FaseNaar = fc1,
+                                                        VoorstartTijd = 0,
+                                                        VoorstartOntruimingstijd = iconf
+                                                    });
+                                                    outcome.MeeAanvragen.Add(new MeeaanvraagModel
+                                                    {
+                                                        FaseVan = fc1,
+                                                        FaseNaar = fc2,
+                                                        Type = MeeaanvraagTypeEnum.RoodVoorAanvraag,
+                                                        AanUit = AltijdAanUitEnum.SchAan
+                                                    });
+                                                }
+                                            }
+
+                                            break;
+                                        case "Late release":
+                                            var lr = outcome.LateReleases.FirstOrDefault(x =>
+                                                x.FaseNaar == fc1 && x.FaseVan == fc2 ||
+                                                x.FaseVan == fc1 && x.FaseNaar == fc2);
+                                            // langzaam > auto
+                                            if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
+                                                (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
+                                            {
+                                                if (lr != null)
+                                                {
+                                                    lr.LateReleaseTijd = iconf;
+                                                }
+                                                else
+                                                {
+                                                    outcome.LateReleases.Add(new LateReleaseModel
+                                                    {
+                                                        FaseVan = fc1,
+                                                        FaseNaar = fc2,
+                                                        LateReleaseTijd = iconf,
+                                                        LateReleaseOntruimingstijd = 0
+                                                    });
+                                                }
+                                            }
+                                            // auto > langzaam
+                                            else
+                                            {
+                                                if (lr != null)
+                                                {
+                                                    lr.LateReleaseOntruimingstijd = iconf;
+                                                }
+                                                else
+                                                {
+                                                    outcome.LateReleases.Add(new LateReleaseModel
+                                                    {
+                                                        FaseVan = fc2,
+                                                        FaseNaar = fc1,
+                                                        LateReleaseTijd = 0,
+                                                        LateReleaseOntruimingstijd = iconf
+                                                    });
+                                                }
+                                            }
+
+                                            break;
+                                    }
                                 }
                             }
-                            // deelconflicten auto <> langzaam
-                            else if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
-                                     (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV) ||
-                                     (nfc2.Type != FaseTypeEnum.Auto && nfc2.Type != FaseTypeEnum.OV) &&
-                                     (nfc1.Type == FaseTypeEnum.Auto || nfc1.Type == FaseTypeEnum.OV))
+                        }
+                    }
+                }
+            }
+
+            if (importNalopen)
+            {
+                foreach (var fc in outcome.Fasen)
+                {
+                    if (int.TryParse(fc.Naam, out var iFc))
+                    {
+                        // Auto
+                        if (iFc % 100 > 0 && iFc % 100 <= 12)
+                        {
+                            foreach (var fc2 in outcome.Fasen)
                             {
-                                switch (importDeelconf)
+                                if (int.TryParse(fc2.Naam, out var iFc2))
                                 {
-                                    case "Voorstarten":
-                                        var vs = outcome.Voorstarten.FirstOrDefault(x => x.FaseNaar == fc1 && x.FaseVan == fc2 || x.FaseVan == fc1 && x.FaseNaar == fc2);
-                                        // langzaam > auto
-                                        if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
-                                            (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
+                                    if (iFc2 > iFc && (iFc2 - iFc) == 60)
+                                    {
+                                        var nm = new NaloopModel
                                         {
-                                            if (vs != null)
-                                            {
-                                                vs.VoorstartTijd = iconf;
-                                            }
-                                            else
-                                            {
-                                                outcome.Voorstarten.Add(new VoorstartModel
-                                                {
-                                                    FaseVan = fc1,
-                                                    FaseNaar = fc2,
-                                                    VoorstartTijd = iconf,
-                                                    VoorstartOntruimingstijd = 0
-                                                });
-                                            }
-                                        }
-                                        // auto > langzaam
-                                        else
+                                            DetectieAfhankelijk = fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop),
+                                            Detectoren = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop).Select(x => new NaloopDetectorModel{ Detector = x.Naam, Type = NaloopDetectorTypeEnum.Hiaat }).ToList(),
+                                            FaseVan = fc.Naam, 
+                                            FaseNaar = fc2.Naam, 
+                                            InrijdenTijdensGroen = false, 
+                                            MaximaleVoorstart = null, 
+                                            Type = NaloopTypeEnum.EindeGroen
+                                        };
+                                        SetNaloopTijden(nm);
+                                        outcome.Nalopen.Add(nm);
+                                    }
+                                }
+                            }
+                        }
+                        // Voetganger
+                        if (iFc % 100 > 30 && iFc % 100 < 40)
+                        {
+                            foreach (var fc2 in outcome.Fasen)
+                            {
+                                if (int.TryParse(fc2.Naam, out var iFc2))
+                                {
+                                    if (iFc % 2 == 1 && iFc2 % 2 == 0 && iFc2 - iFc == 1 || 
+                                        iFc % 2 == 0 && iFc2 % 2 == 1 && iFc2 - iFc == -1)
+                                    {
+                                        var nm = new NaloopModel
                                         {
-                                            if (vs != null)
-                                            {
-                                                vs.VoorstartOntruimingstijd = iconf;
-                                            }
-                                            else
-                                            {
-                                                outcome.Voorstarten.Add(new VoorstartModel
-                                                {
-                                                    FaseVan = fc2,
-                                                    FaseNaar = fc1,
-                                                    VoorstartTijd = 0,
-                                                    VoorstartOntruimingstijd = iconf
-                                                });
-                                            }
-                                        }
-                                        break;
-                                    case "Late release":
-                                        var lr = outcome.LateReleases.FirstOrDefault(x => x.FaseNaar == fc1 && x.FaseVan == fc2 || x.FaseVan == fc1 && x.FaseNaar == fc2);
-                                        // langzaam > auto
-                                        if ((nfc1.Type != FaseTypeEnum.Auto && nfc1.Type != FaseTypeEnum.OV) &&
-                                            (nfc2.Type == FaseTypeEnum.Auto || nfc2.Type == FaseTypeEnum.OV))
-                                        {
-                                            if (lr != null)
-                                            {
-                                                lr.LateReleaseTijd = iconf;
-                                            }
-                                            else
-                                            {
-                                                outcome.LateReleases.Add(new LateReleaseModel
-                                                {
-                                                    FaseVan = fc1,
-                                                    FaseNaar = fc2,
-                                                    LateReleaseTijd = iconf,
-                                                    LateReleaseOntruimingstijd = 0
-                                                });
-                                            }
-                                        }
-                                        // auto > langzaam
-                                        else
-                                        {
-                                            if (lr != null)
-                                            {
-                                                lr.LateReleaseOntruimingstijd = iconf;
-                                            }
-                                            else
-                                            {
-                                                outcome.LateReleases.Add(new LateReleaseModel
-                                                {
-                                                    FaseVan = fc2,
-                                                    FaseNaar = fc1,
-                                                    LateReleaseTijd = 0,
-                                                    LateReleaseOntruimingstijd = iconf
-                                                });
-                                            }
-                                        }
-                                        break;
+                                            DetectieAfhankelijk = fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBuiten),
+                                            Detectoren = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.KnopBuiten).Select(x => new NaloopDetectorModel{ Detector = x.Naam, Type = NaloopDetectorTypeEnum.Hiaat }).ToList(),
+                                            FaseVan = fc.Naam, 
+                                            FaseNaar = fc2.Naam, 
+                                            InrijdenTijdensGroen = false, 
+                                            MaximaleVoorstart = null, 
+                                            Type = NaloopTypeEnum.StartGroen
+                                        };
+                                        SetNaloopTijden(nm);
+                                        outcome.Nalopen.Add(nm);
+                                    }
                                 }
                             }
                         }
@@ -718,6 +820,61 @@ namespace TLCGen.Importers.TabC
                     return DetectorTypeEnum.Knop;
             }
             return DetectorTypeEnum.Overig;
+        }
+
+        private static void SetNaloopTijden(NaloopModel nm)
+        {
+            var _naloop = nm;
+            _naloop.Tijden = new List<NaloopTijdModel>();
+            switch (_naloop.Type)
+            {
+                case NaloopTypeEnum.StartGroen:
+                    if(_naloop.VasteNaloop)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroen });
+                    }
+                    if (_naloop.DetectieAfhankelijk)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroenDetectie });
+                    }
+                    break;
+                case NaloopTypeEnum.EindeGroen:
+                    if (_naloop.VasteNaloop)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    }
+                    if (_naloop.DetectieAfhankelijk)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
+                    }
+                    if (_naloop.VasteNaloop)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroen });
+                    }
+                    if (_naloop.DetectieAfhankelijk)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroenDetectie });
+                    }
+                    break;
+                case NaloopTypeEnum.CyclischVerlengGroen:
+                    if (_naloop.VasteNaloop)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    }
+                    if (_naloop.DetectieAfhankelijk)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
+                    }
+                    if (_naloop.VasteNaloop)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroen });
+                    }
+                    if (_naloop.DetectieAfhankelijk)
+                    {
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroenDetectie });
+                    }
+                    break;
+            }
         }
     }
 }

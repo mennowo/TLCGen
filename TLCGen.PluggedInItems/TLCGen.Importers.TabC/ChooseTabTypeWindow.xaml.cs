@@ -97,6 +97,7 @@ namespace TLCGen.Importers.TabC
         public string ImportDeelconflicten { get; private set; }
         public bool ImportDetectoren { get; private set; }
         public bool ImportTijden { get; private set; }
+        public bool ImportNalopen { get; private set; }
         public bool ImportGarantie
         {
             get => _importGarantie;
@@ -124,6 +125,7 @@ namespace TLCGen.Importers.TabC
         {
             ImportDetectoren = ImportDetCheck.IsChecked == true;
             ImportTijden = ImportTijdCheck.IsChecked == true;
+            ImportNalopen = ImportNalopenCheck.IsChecked == true;
             Intergroen = IntergroenCheck.IsChecked == true;
             ImportGarantie = ImportGarantieCheck.IsChecked == true;
             if (ImportDeelconflictenCheck.IsChecked == true)

@@ -515,6 +515,30 @@
       </Data>
     </Default>
     <Default>
+      <DefaultName>VecomDetector</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>VecomDetector</Selector1>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
+        <TOG xsi:nil="true"/>
+        <TBG xsi:nil="true"/>
+        <TFL xsi:nil="true"/>
+        <CFL xsi:nil="true"/>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>VecomDetector</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
       <DefaultName>Overig</DefaultName>
       <Category>Detector</Category>
       <Selector1>Overig</Selector1>
