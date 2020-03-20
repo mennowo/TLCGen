@@ -131,14 +131,8 @@ namespace TLCGen.Generators.CCOL
                 {
                     foreach (var pf in userSettings.Prefixes)
                     {
-                        foreach (var pf2 in CCOLGeneratorSettingsProvider.Default.Settings.Prefixes)
-                        {
-                            if (pf.Default == pf2.Default)
-                            {
-                                pf2.Setting = pf.Setting;
-                                break;
-                            }
-                        }
+                        var pf2 = CCOLGeneratorSettingsProvider.Default.Settings.Prefixes.FirstOrDefault(x => pf.Default == x.Default);
+                        if (pf2 != null) pf2.Setting = pf.Setting;
                     }
                 }
 
@@ -168,6 +162,7 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
+            CCOLGeneratorSettingsProvider.Default.Reset();
             _generator.LoadSettings();
 
             if (_alwaysOverwriteSourcesMenuItem == null)

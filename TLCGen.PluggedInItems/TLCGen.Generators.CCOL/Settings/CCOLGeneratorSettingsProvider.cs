@@ -20,29 +20,20 @@ namespace TLCGen.Generators.CCOL.Settings
 
         public Dictionary<string, string> CCOLElementNames { get; set; }
 
-        private CCOLGeneratorSettingsModel _settings;
-        public CCOLGeneratorSettingsModel Settings
-        {
-            get => _settings;
-	        set
-            {
-                _settings = value;
-                
-                // Build dictionary with all available settings
-                CCOLElementNames.Clear();
-                foreach (var s in _settings.CodePieceGeneratorSettings)
-                {
-                    foreach(var ss in s.Item2.Settings)
-                    {
-                        CCOLElementNames.Add(GetPrefix(ss.Type) + ss.Default, ss.Setting);
-                    }
-                }
-            }
-        }
+        public CCOLGeneratorSettingsModel Settings { get; set; }
 
         public void Reset()
         {
             _lastItemDescription = new Dictionary<CCOLElementTypeEnum, string>();
+            // Build dictionary with all available settings
+            CCOLElementNames.Clear();
+            foreach (var s in Settings.CodePieceGeneratorSettings)
+            {
+                foreach(var ss in s.Item2.Settings)
+                {
+                    CCOLElementNames.Add(GetPrefix(ss.Type) + ss.Default, ss.Setting);
+                }
+            }
         }
 
 		public string GetElementDescription(string description, CCOLElementTypeEnum type, params string [] elementnames)
