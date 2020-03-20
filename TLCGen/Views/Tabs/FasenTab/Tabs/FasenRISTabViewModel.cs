@@ -10,6 +10,7 @@ using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;
 using System.Collections.Generic;
+using TLCGen.Dependencies.Messaging.Messages;
 
 namespace TLCGen.ViewModels
 {
@@ -437,6 +438,14 @@ namespace TLCGen.ViewModels
             UpdateRISLanes();
         }
 
+        private void OnSystemITFChanged(SystemITFChangedMessage msg)
+        {
+            foreach (var l in RISLanes)
+            {
+                if (l.SystemITF == msg.OldSystemITF) l.SystemITF = msg.NewdSystemITF;
+            }
+        }
+
         #endregion // TLCGen messaging
 
         #region Private Methods 
@@ -572,6 +581,7 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
+            MessengerInstance.Register<SystemITFChangedMessage>(this, OnSystemITFChanged);
         }
 
         #endregion // Constructor

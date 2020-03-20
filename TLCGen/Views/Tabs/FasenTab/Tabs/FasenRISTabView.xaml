@@ -127,8 +127,23 @@
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
                         <ct:SpecialDataGrid.Resources>
-                            <DataGridTextColumn Binding="{Binding Path=SystemITF}" Header="SystemITF" x:Key="SystemITFCol"
-                                                Visibility="{Binding Path=DataContext.HasMultipleSystemITF,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}" />
+                            <DataGridTemplateColumn Header="SystemITF" Width="Auto" MinWidth="35" x:Key="SystemITFCol"
+                                                    Visibility="{Binding Path=DataContext.HasMultipleSystemITF,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=SystemITF,Mode=OneWay}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.MultiSystemITF,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            DisplayMemberPath="SystemITF" SelectedValuePath="SystemITF"
+                                            SelectedValue="{Binding Path=SystemITF,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
                             <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
                                 <Style.Setters>
                                     <Setter Property="Background" Value="LightGray" />

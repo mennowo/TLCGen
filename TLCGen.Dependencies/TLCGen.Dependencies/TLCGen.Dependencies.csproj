@@ -108,6 +108,7 @@
     <Compile Include="Messaging\Messages\PTPKoppelingenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\SelectedConflictGroepChangedMessage.cs" />
     <Compile Include="Messaging\Messages\SelectieveDetectorenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\SystemITFChangedMessage.cs" />
     <Compile Include="Messaging\Messages\TemplatesChangedMessage.cs" />
     <Compile Include="Messaging\Messages\UpdateTabsEnabledMessage.cs" />
     <Compile Include="Messaging\OVIngreepMeldingChangingMessage.cs" />
