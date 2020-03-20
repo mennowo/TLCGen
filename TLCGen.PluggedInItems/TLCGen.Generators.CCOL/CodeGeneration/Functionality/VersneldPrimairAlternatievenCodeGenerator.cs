@@ -586,12 +586,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}if (SR[fc] && AG[fc])");
                         sb.AppendLine($"{ts}{ts}{{");
 
                         sb.AppendLine($"{ts}{ts}{ts}reset_FARML(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX);");
 
                         sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         if (c.HalfstarData.IsHalfstar)

@@ -226,25 +226,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (det > 1)
                         {
                             sb.AppendLine(" &&");
-                            if (!d.AanvraagHardOpStraat)
-                                {
-                                sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
-                            }
-                            else
-                            {
-                                sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                            }
+                            sb.Append(!d.AanvraagHardOpStraat
+                                ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
+                                : $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                         }
                         else
                         {
-                            if (!d.AanvraagHardOpStraat)
-                                {
-                                sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
-                            }
-                            else
-                            {
-                                sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                            }
+                            sb.Append(!d.AanvraagHardOpStraat
+                                ? $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
+                                : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                         }
                         if (!d.AanvraagHardOpStraat)
                         {
@@ -264,14 +254,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append(")");
                     }
                 }
-                if (fc.AanvraagBijDetectieStoringVertraagd)
-                {
-                    sb.AppendLine(");");
-                }
-                else
-                {
-                    sb.AppendLine(";");
-                }
+
+                sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ";");
             }
             foreach (var fc in c.Fasen.Where(x =>
                 x.AanvraagBijDetectieStoring &&
@@ -313,7 +297,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void PercentageGroen(StringBuilder sb, ControllerModel c, string ts1, string ts, bool halfstar)
         {
-            sb.AppendLine($"{ts1}/* percentage MG bij defect alle kop/lange lussen */");
+            var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "MG" : "VG";
+            sb.AppendLine($"{ts1}/* percentage {mg} bij defect alle kop/lange lussen */");
             sb.AppendLine($"{ts1}/* ---------------------------------------------- */");
             foreach (var fc in c.Fasen)
             {

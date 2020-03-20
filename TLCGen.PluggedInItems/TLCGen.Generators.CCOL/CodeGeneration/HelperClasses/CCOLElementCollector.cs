@@ -243,7 +243,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (data.Elements.Count == 0)
             {
                 var ct = CCOL.Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Counter);
-                data.Elements.Add(new CCOLElement() { Define = $"{ct}dummy", Naam = "dummy" });
+                data.Elements.Add(new CCOLElement { Define = $"{ct}dummy", Naam = "dummy" });
             }
 
             return data;
@@ -259,9 +259,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             };
 
             // Collect everything
-            var prm = CCOL.Settings.CCOLGeneratorSettingsProvider.Default.GetPrefix(Settings.CCOLGeneratorSettingTypeEnum.Parameter);
-            data.Elements.Add(new CCOLElement() { Define = $"{prm}fb", Naam = "FB", Instelling = controller.Data.Fasebewaking, TType = CCOLElementTimeTypeEnum.TS_type, Commentaar = "Instelling fasebewaking" });
-
             foreach(var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())

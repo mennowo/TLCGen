@@ -91,6 +91,12 @@
         <ElementGenerationOrder>10</ElementGenerationOrder>
         <Settings>
           <Setting>
+            <Default>fb</Default>
+            <Setting>fb</Setting>
+            <Type>Parameter</Type>
+            <Description>Instelling fasebewaking</Description>
+          </Setting>
+          <Setting>
             <Default>segm</Default>
             <Setting>segm</Setting>
             <Type>Uitgang</Type>

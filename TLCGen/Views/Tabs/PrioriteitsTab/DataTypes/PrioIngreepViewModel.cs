@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
-using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -13,7 +12,6 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepViewModel : ViewModelBase
     public class OVIngreepViewModel : ViewModelBase
     {
         #region Fields
