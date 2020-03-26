@@ -1667,7 +1667,7 @@
             <Default>uks</Default>
             <Setting>uks</Setting>
             <Type>Parameter</Type>
-            <Description>Isntelling uitgaande signalen naar _E1_</Description>
+            <Description>Instelling uitgaande signalen naar _E1_</Description>
           </Setting>
           <Setting>
             <Default>oke</Default>
