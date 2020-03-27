@@ -6,61 +6,125 @@
              xmlns:local="clr-namespace:TLCGen.Plugins.RangeerElementen"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:extensions="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
+             xmlns:viewModels="clr-namespace:TLCGen.Plugins.RangeerElementen.ViewModels"
              mc:Ignorable="d" Name="root"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:RangeerElementenTabViewModel}">
     <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <CheckBox 
-            IsChecked="{Binding Path=RangeerElementenToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Rangeren elementen toepassen" Margin="5" />
-        <Label Content="Instellingen rangeren detectie" Grid.Row="1" />
-        <ListView
-            IsEnabled="{Binding Path=RangeerElementenToepassen,Mode=OneWay}" Name="DetectorList"
-            dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
-            dd:DragDrop.UseDefaultEffectDataTemplate="True"
-            dd:DragDrop.UseDefaultDragAdorner="True"
-            extensions:ListViewExtensions.SelectedItemsList="{Binding Path=SelectedRangeerElements,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding Path=SelectedRangeerElement,UpdateSourceTrigger=PropertyChanged}"
-            ScrollViewer.VerticalScrollBarVisibility="Disabled"
-            ItemsSource="{Binding Path=RangeerElementen}" Margin="2" Grid.Row="2" AlternationCount="2">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                            <Setter Property="Background" Value="LightGray" />
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                            <Setter Property="Background" Value="DarkGray" />
-                        </Trigger>
-                    </Style.Triggers>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="MinWidth" Value="120"/>
-                    <Setter Property="MaxWidth" Value="120"/>
-                    <Setter Property="Margin" Value="2"/>
-                    <Setter Property="Padding" Value="0"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <Button Content="Omhoog" Margin="1" Command="{Binding Path=MoveUpCommand}" />
-            <Button Content="Omlaag" Margin="1" Command="{Binding Path=MoveDownCommand}" />
-        </StackPanel>  
+        <TabControl Grid.Row="0">
+            <TabItem Header="Detectoren">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox 
+                        IsChecked="{Binding Path=RangeerElementenToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Rangeren detectoren toepassen" Margin="5" />
+                    <Label Content="Instellingen rangeren detectie" Grid.Row="1" />
+                    <ListView
+                        IsEnabled="{Binding Path=RangeerElementenToepassen,Mode=OneWay}" Name="DetectorList"
+                        dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                        dd:DragDrop.UseDefaultDragAdorner="True"
+                        extensions:ListViewExtensions.SelectedItemsList="{Binding Path=SelectedRangeerDetectors,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding Path=SelectedRangeerDetector,UpdateSourceTrigger=PropertyChanged}"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding Path=RangeerDetectors}" Margin="2" Grid.Row="2" AlternationCount="2">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                        <Setter Property="Background" Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                        <Setter Property="Background" Value="DarkGray" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="MinWidth" Value="120"/>
+                                <Setter Property="MaxWidth" Value="120"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3">
+                        <Button Content="Omhoog" Margin="1" Command="{Binding Path=MoveDetectorUpCommand}" />
+                        <Button Content="Omlaag" Margin="1" Command="{Binding Path=MoveDetectorDownCommand}" />
+                    </StackPanel>  
+                </Grid>
+            </TabItem>
+            <TabItem Header="Fasen">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox 
+                        IsChecked="{Binding Path=RangeerSignaalGroepenToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Rangeren signaalgroepen toepassen" Margin="5" />
+                    <Label Content="Instellingen rangeren signaalgroepen" Grid.Row="1" />
+                    <ListView
+                        IsEnabled="{Binding Path=RangeerSignaalGroepenToepassen,Mode=OneWay}" Name="FasenList"
+                        dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                        dd:DragDrop.UseDefaultDragAdorner="True"
+                        extensions:ListViewExtensions.SelectedItemsList="{Binding Path=SelectedRangeerSignalGroups,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding Path=SelectedRangeerSignalGroup,UpdateSourceTrigger=PropertyChanged}"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding Path=RangeerSignalGroups}" Margin="2" Grid.Row="2" AlternationCount="2">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                        <Setter Property="Background" Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                        <Setter Property="Background" Value="DarkGray" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="MinWidth" Value="120"/>
+                                <Setter Property="MaxWidth" Value="120"/>
+                                <Setter Property="Margin" Value="2"/>
+                                <Setter Property="Padding" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=SignalGroup}" Margin="5" Background="Transparent" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3">
+                        <Button Content="Omhoog" Margin="1" Command="{Binding Path=MoveSignalGroupUpCommand}" />
+                        <Button Content="Omlaag" Margin="1" Command="{Binding Path=MoveSignalGroupDownCommand}" />
+                    </StackPanel>  
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

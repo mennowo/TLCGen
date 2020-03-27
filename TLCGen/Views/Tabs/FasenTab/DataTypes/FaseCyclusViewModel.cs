@@ -698,14 +698,7 @@ namespace TLCGen.ViewModels
         {
             if (!(obj is FaseCyclusViewModel fcvm))
                 throw new InvalidCastException();
-            else
-            {
-                string myName = Naam;
-                string hisName = fcvm.Naam;
-                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
-                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
-                return myName.CompareTo(hisName);
-            }
+            return TLCGenIntegrityChecker.CompareSignalGroups(this.Naam, fcvm.Naam);
         }
 
         #endregion // IComparable

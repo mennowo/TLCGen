@@ -7,6 +7,38 @@ using TLCGen.Plugins.RangeerElementen.Models;
 
 namespace TLCGen.Plugins.RangeerElementen.ViewModels
 {
+    public class RangeerSignalGroupViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    {
+        private readonly RangeerSignaalGroepModel _signalGroup;
+
+        public string SignalGroup
+        {
+
+            get => _signalGroup.SignaalGroep;
+            set
+            {
+                _signalGroup.SignaalGroep = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public object GetItem()
+        {
+            return _signalGroup;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (!(obj is RangeerSignalGroupViewModel relem)) throw new InvalidCastException();
+            return TLCGenIntegrityChecker.CompareSignalGroups(SignalGroup, relem.SignalGroup);
+        }
+
+        public RangeerSignalGroupViewModel(RangeerSignaalGroepModel signalGroup)
+        {
+            _signalGroup = signalGroup;
+        }
+    }
+
     public class RangeerElementViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         private readonly RangeerElementModel _element;

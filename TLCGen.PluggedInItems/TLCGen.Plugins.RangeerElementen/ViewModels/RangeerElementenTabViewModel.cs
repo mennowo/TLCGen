@@ -12,6 +12,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
+using TLCGen.Models;
 using TLCGen.Plugins.RangeerElementen.Models;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
@@ -21,55 +22,91 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
     {
         #region Fields
 
-        private RangeerElementenPlugin _plugin;
-        private RelayCommand _moveUpCommand;
-        private RelayCommand _moveDownCommand;
-        private RangeerElementViewModel _selectedRangeerElement;
-        private IList _selectedRangeerElements = new ArrayList();
+        private readonly RangeerElementenPlugin _plugin;
+        private RangeerElementenDataModel _rangeerElementenModel;
+        private RelayCommand _moveDetectorUpCommand;
+        private RelayCommand _moveDetectorDownCommand;
+        private RelayCommand _moveSignalGroupUpCommand;
+        private RelayCommand _moveSignalGroupDownCommand;
+        private RangeerElementViewModel _selectedRangeerDetector;
+        private RangeerSignalGroupViewModel _selectedRangeerSignalGroup; 
+        private IList _selectedRangeerDetectors = new ArrayList();
+        private IList _selectedRangeerSignalGroups = new ArrayList();
 
         #endregion // Fields
         
         #region Properties
 
-        public RangeerElementViewModel SelectedRangeerElement
+        public RangeerElementViewModel SelectedRangeerDetector
         {
-            get => _selectedRangeerElement;
+            get => _selectedRangeerDetector;
             set
             {
-                _selectedRangeerElement = value;
+                _selectedRangeerDetector = value;
                 RaisePropertyChanged();
             }
         }
 
-        public IList SelectedRangeerElements
+        public IList SelectedRangeerDetectors
         {
-            get => _selectedRangeerElements;
+            get => _selectedRangeerDetectors;
             set
             {
-                _selectedRangeerElements = value;
+                _selectedRangeerDetectors = value;
                 RaisePropertyChanged();
             }
         }
 
-        private RangeerElementenDataModel _rangeerElementenModel;
+        public RangeerSignalGroupViewModel SelectedRangeerSignalGroup
+        {
+            get => _selectedRangeerSignalGroup;
+            set
+            {
+                _selectedRangeerSignalGroup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IList SelectedRangeerSignalGroups
+        {
+            get => _selectedRangeerSignalGroups;
+            set
+            {
+                _selectedRangeerSignalGroups = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public RangeerElementenDataModel RangeerElementenModel
         {
             get => _rangeerElementenModel;
             set
             {
                 _rangeerElementenModel = value;
-                if (RangeerElementen != null) RangeerElementen.CollectionChanged -= RangeerElementen_CollectionChanged;
-                RangeerElementen = new ObservableCollectionAroundList<RangeerElementViewModel, RangeerElementModel>(_rangeerElementenModel.RangeerElementen);
-                RangeerElementen.CollectionChanged += RangeerElementen_CollectionChanged;
+                if (RangeerDetectors != null) RangeerDetectors.CollectionChanged -= RangeerElementen_CollectionChanged;
+                RangeerDetectors = new ObservableCollectionAroundList<RangeerElementViewModel, RangeerElementModel>(_rangeerElementenModel.RangeerElementen);
+                RangeerDetectors.CollectionChanged += RangeerElementen_CollectionChanged;
+
+                if (RangeerSignalGroups != null) RangeerSignalGroups.CollectionChanged -= RangeerSignalGroups_CollectionChanged;
+                RangeerSignalGroups = new ObservableCollectionAroundList<RangeerSignalGroupViewModel, RangeerSignaalGroepModel>(_rangeerElementenModel.RangeerSignaalGroepen);
+                RangeerSignalGroups.CollectionChanged += RangeerSignalGroups_CollectionChanged;
             }
         }
 
         private void RangeerElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            RangeerDetectors.RebuildList();
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
-        public ObservableCollectionAroundList<RangeerElementViewModel, RangeerElementModel> RangeerElementen { get; private set; }
+        private void RangeerSignalGroups_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            RangeerSignalGroups.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        public ObservableCollectionAroundList<RangeerElementViewModel, RangeerElementModel> RangeerDetectors { get; private set; }
+        public ObservableCollectionAroundList<RangeerSignalGroupViewModel, RangeerSignaalGroepModel> RangeerSignalGroups { get; private set; }
 
         public bool RangeerElementenToepassen
         {
@@ -80,12 +117,32 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 if (value)
                 {
                     _plugin.UpdateModel();
-                    RangeerElementen.Rebuild();
-                    RangeerElementen.BubbleSort();
+                    RangeerDetectors.RebuildList();
+                    RangeerDetectors.BubbleSort();
                 }
                 else
                 {
-                    RangeerElementen.RemoveAll();
+                    RangeerDetectors.RemoveAll();
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool RangeerSignaalGroepenToepassen
+        {
+            get => _rangeerElementenModel.RangeerSignaalGroepenToepassen;
+            set
+            {
+                _rangeerElementenModel.RangeerSignaalGroepenToepassen = value;
+                if (value)
+                {
+                    _plugin.UpdateModel();
+                    RangeerSignalGroups.RebuildList();
+                    RangeerSignalGroups.BubbleSort();
+                }
+                else
+                {
+                    RangeerSignalGroups.RemoveAll();
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }
@@ -95,53 +152,53 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
 
         #region Commands
 
-        public ICommand MoveUpCommand => _moveUpCommand ?? (_moveUpCommand = new RelayCommand(MoveUpCommand_executed, MoveUpCommand_canExecute));
+        public ICommand MoveDetectorUpCommand => _moveDetectorUpCommand ?? (_moveDetectorUpCommand = new RelayCommand(MoveDetectorUpCommand_executed, MoveDetectorUpCommand_canExecute));
 
-        private bool MoveUpCommand_canExecute()
+        private bool MoveDetectorUpCommand_canExecute()
         {
-            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) > 0 
-                   || SelectedRangeerElements != null && SelectedRangeerElements.Count > 0;
+            return SelectedRangeerDetector != null && RangeerDetectors.IndexOf(SelectedRangeerDetector) > 0 
+                   || SelectedRangeerDetectors != null && SelectedRangeerDetectors.Count > 0;
         }
 
-        private void MoveUpCommand_executed()
+        private void MoveDetectorUpCommand_executed()
         {
-            if (SelectedRangeerElements != null && SelectedRangeerElements.Count > 0)
+            if (SelectedRangeerDetectors != null && SelectedRangeerDetectors.Count > 0)
             {
-                foreach (RangeerElementViewModel elem in SelectedRangeerElements)
+                foreach (RangeerElementViewModel elem in SelectedRangeerDetectors)
                 {
-                    var i = RangeerElementen.IndexOf(elem);
+                    var i = RangeerDetectors.IndexOf(elem);
                     if (i > 0)
-                        RangeerElementen.Move(i, i - 1);
+                        RangeerDetectors.Move(i, i - 1);
                     else
                         break;
                 }
             }
             else
             {
-                var i = RangeerElementen.IndexOf(SelectedRangeerElement);
+                var i = RangeerDetectors.IndexOf(SelectedRangeerDetector);
                 if (i > 0)
-                    RangeerElementen.Move(i, i - 1);
+                    RangeerDetectors.Move(i, i - 1);
             }
-            RangeerElementen.RebuildList();
+            RangeerDetectors.RebuildList();
         }
 
-        public ICommand MoveDownCommand => _moveDownCommand ?? (_moveDownCommand = new RelayCommand(MoveDownCommand_executed, MoveDownCommand_canExecute));
+        public ICommand MoveDetectorDownCommand => _moveDetectorDownCommand ?? (_moveDetectorDownCommand = new RelayCommand(MoveDetectorDownCommand_executed, MoveDetectorDownCommand_canExecute));
 
-        private bool MoveDownCommand_canExecute()
+        private bool MoveDetectorDownCommand_canExecute()
         {
-            return SelectedRangeerElement != null && RangeerElementen.IndexOf(SelectedRangeerElement) < RangeerElementen.Count - 1
-                   || SelectedRangeerElements != null && SelectedRangeerElements.Count > 0;
+            return SelectedRangeerDetector != null && RangeerDetectors.IndexOf(SelectedRangeerDetector) < RangeerDetectors.Count - 1
+                   || SelectedRangeerDetectors != null && SelectedRangeerDetectors.Count > 0;
         }
 
-        private void MoveDownCommand_executed()
+        private void MoveDetectorDownCommand_executed()
         {
-            if (SelectedRangeerElements != null && SelectedRangeerElements.Count > 0)
+            if (SelectedRangeerDetectors != null && SelectedRangeerDetectors.Count > 0)
             {
                 var ok = true;
                 var list = new List<RangeerElementViewModel>();
-                foreach (RangeerElementViewModel elem in SelectedRangeerElements)
+                foreach (RangeerElementViewModel elem in SelectedRangeerDetectors)
                 {
-                    if (RangeerElementen.IndexOf(elem) + 1 >= RangeerElementen.Count)
+                    if (RangeerDetectors.IndexOf(elem) + 1 >= RangeerDetectors.Count)
                     {
                         ok = false;
                         break;
@@ -153,28 +210,104 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 list.Reverse();
                 foreach (var elem in list)
                 {
-                    var i = RangeerElementen.IndexOf(elem);
-                    if (i < RangeerElementen.Count - 1)
-                        RangeerElementen.Move(i, i + 1);
+                    var i = RangeerDetectors.IndexOf(elem);
+                    if (i < RangeerDetectors.Count - 1)
+                        RangeerDetectors.Move(i, i + 1);
                     else
                         break;
                 }
             }
             else
             {
-                var i = RangeerElementen.IndexOf(SelectedRangeerElement);
-                if (i < RangeerElementen.Count - 1)
-                    RangeerElementen.Move(i, i + 1);
+                var i = RangeerDetectors.IndexOf(SelectedRangeerDetector);
+                if (i < RangeerDetectors.Count - 1)
+                    RangeerDetectors.Move(i, i + 1);
             }
 
-            RangeerElementen.RebuildList();
+            RangeerDetectors.RebuildList();
+        }
+
+        
+        public ICommand MoveSignalGroupUpCommand => _moveSignalGroupUpCommand ?? (_moveSignalGroupUpCommand = new RelayCommand(MoveSignalGroupUpCommand_executed, MoveSignalGroupUpCommand_canExecute));
+
+        private bool MoveSignalGroupUpCommand_canExecute()
+        {
+            return SelectedRangeerSignalGroup != null && RangeerSignalGroups.IndexOf(SelectedRangeerSignalGroup) > 0 
+                   || SelectedRangeerSignalGroups != null && SelectedRangeerSignalGroups.Count > 0;
+        }
+
+        private void MoveSignalGroupUpCommand_executed()
+        {
+            if (SelectedRangeerSignalGroups != null && SelectedRangeerSignalGroups.Count > 0)
+            {
+                foreach (RangeerSignalGroupViewModel elem in SelectedRangeerSignalGroups)
+                {
+                    var i = RangeerSignalGroups.IndexOf(elem);
+                    if (i > 0)
+                        RangeerSignalGroups.Move(i, i - 1);
+                    else
+                        break;
+                }
+            }
+            else
+            {
+                var i = RangeerSignalGroups.IndexOf(SelectedRangeerSignalGroup);
+                if (i > 0)
+                    RangeerSignalGroups.Move(i, i - 1);
+            }
+            RangeerSignalGroups.RebuildList();
+        }
+
+        public ICommand MoveSignalGroupDownCommand => _moveSignalGroupDownCommand ?? (_moveSignalGroupDownCommand = new RelayCommand(MoveSignalGroupDownCommand_executed, MoveSignalGroupDownCommand_canExecute));
+
+        private bool MoveSignalGroupDownCommand_canExecute()
+        {
+            return SelectedRangeerSignalGroup != null && RangeerSignalGroups.IndexOf(SelectedRangeerSignalGroup) < RangeerSignalGroups.Count - 1
+                   || SelectedRangeerSignalGroups != null && SelectedRangeerSignalGroups.Count > 0;
+        }
+
+        private void MoveSignalGroupDownCommand_executed()
+        {
+            if (SelectedRangeerSignalGroups != null && SelectedRangeerSignalGroups.Count > 0)
+            {
+                var ok = true;
+                var list = new List<RangeerSignalGroupViewModel>();
+                foreach (RangeerSignalGroupViewModel elem in SelectedRangeerSignalGroups)
+                {
+                    if (RangeerSignalGroups.IndexOf(elem) + 1 >= RangeerSignalGroups.Count)
+                    {
+                        ok = false;
+                        break;
+                    }
+                    list.Add(elem);
+                }
+                if(!ok) return;
+
+                list.Reverse();
+                foreach (var elem in list)
+                {
+                    var i = RangeerSignalGroups.IndexOf(elem);
+                    if (i < RangeerSignalGroups.Count - 1)
+                        RangeerSignalGroups.Move(i, i + 1);
+                    else
+                        break;
+                }
+            }
+            else
+            {
+                var i = RangeerSignalGroups.IndexOf(SelectedRangeerSignalGroup);
+                if (i < RangeerSignalGroups.Count - 1)
+                    RangeerSignalGroups.Move(i, i + 1);
+            }
+
+            RangeerSignalGroups.RebuildList();
         }
 
         #endregion // Commands
 
         #region TLCGen messaging
 
-        private void OnDetectorenenChanged(DetectorenChangedMessage msg)
+        private void OnDetectorenChanged(DetectorenChangedMessage msg)
         {
             if (!RangeerElementenToepassen) return;
             
@@ -182,10 +315,10 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             {
                 foreach (var d in msg.RemovedDetectoren)
                 {
-                    var RangeerElementenFc = RangeerElementen.FirstOrDefault(x => x.Element == d.Naam);
+                    var RangeerElementenFc = RangeerDetectors.FirstOrDefault(x => x.Element == d.Naam);
                     if (RangeerElementenFc != null)
                     {
-                        RangeerElementen.Remove(RangeerElementenFc);
+                        RangeerDetectors.Remove(RangeerElementenFc);
                     }
                 }
             }
@@ -193,9 +326,36 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             {
                 foreach (var d in msg.AddedDetectoren)
                 {
-                    var RangeerElementenfc = new RangeerElementViewModel(
+                    var rangeerElementenD = new RangeerElementViewModel(
                                 new RangeerElementModel { Element = d.Naam });
-                    RangeerElementen.Add(RangeerElementenfc);
+                    RangeerDetectors.Add(rangeerElementenD);
+                }
+            }
+        }
+
+        
+        private void OnFasenChanged(FasenChangedMessage msg)
+        {
+            if (!RangeerSignaalGroepenToepassen) return;
+            
+            if (msg.RemovedFasen != null && msg.RemovedFasen.Any())
+            {
+                foreach (var rFc in msg.RemovedFasen)
+                {
+                    var rangeerElementenFc = RangeerSignalGroups.FirstOrDefault(x => x.SignalGroup == rFc.Naam);
+                    if (rangeerElementenFc != null)
+                    {
+                        RangeerSignalGroups.Remove(rangeerElementenFc);
+                    }
+                }
+            }
+            if (msg.AddedFasen != null && msg.AddedFasen.Any())
+            {
+                foreach (var d in msg.AddedFasen)
+                {
+                    var RangeerElementenFc = new RangeerSignalGroupViewModel(
+                        new RangeerSignaalGroepModel { SignaalGroep = d.Naam });
+                    RangeerSignalGroups.Add(RangeerElementenFc);
                 }
             }
         }
@@ -205,7 +365,12 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Detector)
             {
                 TLCGenModelManager.Default.ChangeNameOnObject(RangeerElementenModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Detector);
-                RangeerElementen.Rebuild();
+                RangeerDetectors.Rebuild();
+            }
+            if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
+            {
+                TLCGenModelManager.Default.ChangeNameOnObject(RangeerElementenModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
+                RangeerSignalGroups.Rebuild();
             }
         }
 
@@ -218,37 +383,68 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             {
                 var sb = new StringBuilder();
                 var lines = File.ReadAllLines(sysFile);
-                var inserted = false;
-                var detectieFound = false;
+                var insertedD = false;
+                var insertedSg = false;
+                var foundD = false;
+                var foundSg = false;
                 foreach (var l in lines)
                 {
-                    if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z_]+\s+[0-9]+.*"))
+                    if (!insertedSg)
                     {
-                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
+                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Fcpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
                         if (m.Success)
                         {
-                            detectieFound = true;
-                            var rd = RangeerElementen.FirstOrDefault(x => _plugin.Dpf + x.Element == m.Groups["def"].Value);
+                            foundSg = true;
+                            var rd = RangeerSignalGroups.FirstOrDefault(x => _plugin.Fcpf + x.SignalGroup == m.Groups["def"].Value);
                             if (rd != null)
                             {
                                 continue;
                             }
                         }
                     }
-                    if (!inserted && detectieFound &&
-                        (Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, $@"\s*#if\s+!defined\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, $@"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
-                         Regex.IsMatch(l, $@"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
+                    if (!insertedSg && foundSg &&
+                        (Regex.IsMatch(l, @"\s*#ifndef\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, @"\s*#if\s+!defined\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, @"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
+                         Regex.IsMatch(l, @"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
+                    {
+                        sb.Append(GetNewSignalGroupDefines());
+                        insertedSg = true;
+                    }
+                    if (!insertedSg && Regex.IsMatch(l, @"\s*#define\s+FCMAX.*"))
+                    {
+                        sb.Append(GetNewSignalGroupDefines());
+                        insertedSg = true;
+                    }
+
+                    if (!insertedD)
+                    {
+                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
+                        if (m.Success)
+                        {
+                            foundD = true;
+                            var rd = RangeerDetectors.FirstOrDefault(x => _plugin.Dpf + x.Element == m.Groups["def"].Value);
+                            if (rd != null)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    if (!insertedD && foundD &&
+                        (Regex.IsMatch(l, @"\s*#ifndef\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, @"\s*#if\s+!defined\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, @"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
+                         Regex.IsMatch(l, @"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
                     {
                         sb.Append(GetNewDetectorDefines());
-                        inserted = true;
+                        insertedD = true;
                     }
-                    if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+DPMAX.*"))
+                    if (!insertedD && Regex.IsMatch(l, @"\s*#define\s+DPMAX.*"))
                     {
                         sb.Append(GetNewDetectorDefines());
-                        inserted = true;
+                        insertedD = true;
                     }
+
                     sb.AppendLine(l);
                 }
                 try
@@ -271,14 +467,14 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
         {
             var sb = new StringBuilder();
 
-            int pad1 = "ISMAX".Length;
-            if (RangeerElementen.Any())
+            var pad1 = "ISMAX".Length;
+            if (RangeerDetectors.Any())
             {
-                pad1 = RangeerElementen.Max(x => (_plugin.Dpf + x.Element).Length);
+                pad1 = RangeerDetectors.Max(x => (_plugin.Dpf + x.Element).Length);
             }
             if (_plugin.Controller.SelectieveDetectoren.Any())
             {
-                int _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
+                var _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             var ovdummies = _plugin.Controller.PrioData.GetAllDummyDetectors();
@@ -288,12 +484,37 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             }
             pad1 = pad1 + $"{_plugin.Ts}#define  ".Length;
 
-            int pad2 = _plugin.Controller.Fasen.Count.ToString().Length;
+            var pad2 = _plugin.Controller.GetAllDetectors().Count().ToString().Length;
 
-            int index = 0;
-            foreach (var dm in RangeerElementen)
+            var index = 0;
+            foreach (var dm in RangeerDetectors)
             {
                 sb.Append($"{_plugin.Ts}#define {_plugin.Dpf}{dm.Element} ".PadRight(pad1));
+                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                ++index;
+            }
+
+            return sb.ToString();
+        }
+
+        
+        private string GetNewSignalGroupDefines()
+        {
+            var sb = new StringBuilder();
+
+            var pad1 = "FCMAX".Length;
+            if (RangeerSignalGroups.Any())
+            {
+                pad1 = RangeerSignalGroups.Max(x => (_plugin.Fcpf + x.SignalGroup).Length);
+            }
+            pad1 = pad1 + $"{_plugin.Ts}#define  ".Length;
+
+            var pad2 = _plugin.Controller.Fasen.Count.ToString().Length;
+
+            var index = 0;
+            foreach (var dm in RangeerSignalGroups)
+            {
+                sb.Append($"{_plugin.Ts}#define {_plugin.Fcpf}{dm.SignalGroup} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }
@@ -307,7 +528,8 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
 
         public void UpdateMessaging()
         {
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenenChanged);
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<ControllerCodeGeneratedMessage>(this, OnGenerated);
         }

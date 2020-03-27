@@ -33,6 +33,7 @@ namespace TLCGen.Plugins.RangeerElementen
         #region Properties
 
         public string Dpf => _dpf;
+        public string Fcpf => _fcpf;
         public string Ts { get; set; }
 
         #endregion // Properties
@@ -142,8 +143,8 @@ namespace TLCGen.Plugins.RangeerElementen
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_rangeerElementenModel);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_rangeerElementenModel);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -177,28 +178,63 @@ namespace TLCGen.Plugins.RangeerElementen
 
         internal void UpdateModel()
         {
-            if (_controller != null && _rangeerElementenModel != null && _rangeerElementenModel.RangeerElementenToepassen)
+            if (_controller != null && _rangeerElementenModel != null)
             {
-                foreach (var d in Controller.GetAllDetectors())
+                // detectie
+                if (_rangeerElementenModel.RangeerElementenToepassen)
                 {
-                    if (_rangeerElementenVm.RangeerElementen.All(x => x.Element != d.Naam))
+                    foreach (var d in Controller.GetAllDetectors())
                     {
-                        var dvm = new RangeerElementViewModel(new RangeerElementModel { Element = d.Naam });
-                        _rangeerElementenVm.RangeerElementen.Add(dvm);
+                        if (_rangeerElementenVm.RangeerDetectors.All(x => x.Element != d.Naam))
+                        {
+                            var dvm = new RangeerElementViewModel(new RangeerElementModel {Element = d.Naam});
+                            _rangeerElementenVm.RangeerDetectors.Add(dvm);
+                        }
+                    }
+
+                    var rems = new List<RangeerElementViewModel>();
+                    foreach (var d in _rangeerElementenVm.RangeerDetectors)
+                    {
+                        if (Controller.GetAllDetectors().All(x => x.Naam != d.Element))
+                        {
+                            rems.Add(d);
+                        }
+                    }
+
+                    foreach (var sg in rems)
+                    {
+                        _rangeerElementenVm.RangeerDetectors.Remove(sg);
                     }
                 }
-                var rems = new List<RangeerElementViewModel>();
-                foreach (var d in _rangeerElementenVm.RangeerElementen)
+
+                // signaalgroepen
+                if (_rangeerElementenModel.RangeerSignaalGroepenToepassen)
                 {
-                    if (Controller.GetAllDetectors().All(x => x.Naam != d.Element))
+                    foreach (var fc in Controller.Fasen)
                     {
-                        rems.Add(d);
+                        if (_rangeerElementenVm.RangeerSignalGroups.All(x => x.SignalGroup != fc.Naam))
+                        {
+                            var dvm = new RangeerSignalGroupViewModel(new RangeerSignaalGroepModel
+                                {SignaalGroep = fc.Naam});
+                            _rangeerElementenVm.RangeerSignalGroups.Add(dvm);
+                        }
+                    }
+
+                    var remsSg = new List<RangeerSignalGroupViewModel>();
+                    foreach (var sg in _rangeerElementenVm.RangeerSignalGroups)
+                    {
+                        if (Controller.Fasen.All(x => x.Naam != sg.SignalGroup))
+                        {
+                            remsSg.Add(sg);
+                        }
+                    }
+
+                    foreach (var sg in remsSg)
+                    {
+                        _rangeerElementenVm.RangeerSignalGroups.Remove(sg);
                     }
                 }
-                foreach (var sg in rems)
-                {
-                    _rangeerElementenVm.RangeerElementen.Remove(sg);
-                }
+
                 _rangeerElementenVm.RaisePropertyChanged("");
             }
         }

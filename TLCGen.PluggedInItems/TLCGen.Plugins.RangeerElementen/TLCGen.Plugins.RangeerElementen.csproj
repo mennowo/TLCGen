@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Models\RangeerElementenDataModel.cs" />
     <Compile Include="Models\RangeerElementModel.cs" />
+    <Compile Include="Models\RangeerSignaalGroepModel.cs" />
     <Compile Include="RangeerElementenTabView.xaml.cs">
       <DependentUpon>RangeerElementenTabView.xaml</DependentUpon>
     </Compile>
