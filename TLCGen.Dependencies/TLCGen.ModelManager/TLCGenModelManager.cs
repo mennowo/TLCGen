@@ -152,6 +152,21 @@ namespace TLCGen.ModelManagement
         
         public void CorrectModelByVersion(ControllerModel controller, string filename)
         {
+            // move data
+            if (_pluginDataToMove.Any())
+            {
+                var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
+                if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
+                var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
+                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
+                else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
+                var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
+                if (rtdData != null && rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
+                if (rtdData != null && rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
+                var prioData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "PrioData")?.Item2;
+                if (prioData != null) controller.PrioData = (PrioriteitDataModel)prioData;
+            }
+
             // correct segment items
             foreach(var s in controller.Data.SegmentenDisplayBitmapData)
             {
@@ -251,20 +266,6 @@ namespace TLCGen.ModelManagement
                         prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
                     }
                 }
-            }
-
-            if (_pluginDataToMove.Any())
-            {
-                var risData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "RISData")?.Item2;
-                if (risData != null && (controller.RISData == null || controller.RISData.RISFasen.Count == 0)) controller.RISData = (RISDataModel)risData;
-                var dhData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsDenHaagData")?.Item2;
-                if (dhData != null && (controller.AlternatievenPerBlokData == null || controller.AlternatievenPerBlokData.AlternatievenPerBlok?.Count == 0)) controller.AlternatievenPerBlokData = (AlternatievenPerBlokModel)dhData;
-                else if (controller.AlternatievenPerBlokData == null) controller.AlternatievenPerBlokData = new AlternatievenPerBlokModel();
-                var rtdData = (Dictionary<string, bool>)_pluginDataToMove.FirstOrDefault(x => x.Item1 == "SpecialsRotterdamData")?.Item2;
-                if (rtdData != null && rtdData.ContainsKey("ToevoegenOVM")) controller.Data.ToevoegenOVM = rtdData["ToevoegenOVM"];
-                if (rtdData != null && rtdData.ContainsKey("PrmLoggingTfbMax")) controller.Data.PrmLoggingTfbMax = rtdData["PrmLoggingTfbMax"];
-                var prioData = _pluginDataToMove.FirstOrDefault(x => x.Item1 == "PrioData")?.Item2;
-                if (prioData != null) controller.PrioData = (PrioriteitDataModel)prioData;
             }
         }
 
