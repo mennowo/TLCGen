@@ -199,12 +199,46 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public StarPeriodeDataModel DefaultProgramma
+        public string DefaultProgramma
         {
             get => Controller.StarData.DefaultProgramma;
             set
             {
                 Controller.StarData.DefaultProgramma = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool ProgrammaSturingViaKlok
+        {
+            get => Controller.StarData.ProgrammaSturingViaKlok;
+            set
+            {
+                Controller.StarData.ProgrammaSturingViaKlok = value;
+                if (!value) ProgrammaSturingViaParameter = true;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public bool ProgrammaSturingViaParameter
+        {
+            get => Controller.StarData.ProgrammaSturingViaParameter;
+            set
+            {
+                Controller.StarData.ProgrammaSturingViaParameter = value;
+                if (!value) ProgrammaSturingViaKlok = true;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public StarPeriodeDataViewModel SelectedPeriode { get; set; }
+
+        public bool ProgrammaTijdenInParameters
+        {
+            get => Controller.StarData.ProgrammaTijdenInParameters;
+            set
+            {
+                Controller.StarData.ProgrammaTijdenInParameters = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -234,7 +268,7 @@ namespace TLCGen.ViewModels
                             return new StarProgrammaViewModel(prog);
                         }, null);
                 }
-
+                _programmaManager.SelectedItem = Programmas.FirstOrDefault();
                 return _programmaManager;
             }
         }
@@ -276,13 +310,8 @@ namespace TLCGen.ViewModels
                     Perioden = new ObservableCollectionAroundList<StarPeriodeDataViewModel, StarPeriodeDataModel>(value.StarData.PeriodenData);
                     UpdatePeriodenData();
                 }
-                else
-                {
-                }
             }
         }
-
-        public StarPeriodeDataViewModel SelectedPeriode { get; set; }
 
         #endregion // TLCGen TabItem overrides
 
@@ -335,7 +364,7 @@ namespace TLCGen.ViewModels
 
         private void UpdatePeriodenData()
         {
-            foreach (var per in Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+            foreach (var per in Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.StarRegelen))
             {
                 if (Perioden.All(x => x.Periode != per.Naam))
                 {
@@ -343,7 +372,9 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            var rems = Perioden.Where(x => Controller.PeriodenData.Perioden.All(x2 => x2.Naam != x.Periode));
+            var rems = Perioden
+                .Where(x => Controller.PeriodenData.Perioden.All(x2 => x2.Type != PeriodeTypeEnum.StarRegelen || x2.Naam != x.Periode))
+                .ToList();
             foreach (var r in rems) Perioden.Remove(r);
 
             Perioden.RebuildList();
@@ -358,6 +389,7 @@ namespace TLCGen.ViewModels
         {
             MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             MessengerInstance.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
+            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 
         #endregion // Constructor

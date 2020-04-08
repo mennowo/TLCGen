@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLGeneratorCodeStringSettingModel _prmetkp;
         private CCOLGeneratorCodeStringSettingModel _prmdckp;
         private CCOLGeneratorCodeStringSettingModel _mperiod;
+        private CCOLGeneratorCodeStringSettingModel _mperiodstar;
         private CCOLGeneratorCodeStringSettingModel _hperiod;
         private CCOLGeneratorCodeStringSettingModel _prmperrt;
         private CCOLGeneratorCodeStringSettingModel _prmperrta;
@@ -49,6 +50,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case PeriodeTypeEnum.Groentijden:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{iper}", _usper, per.Commentaar));
                         _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{iper++}"));
+                        break;
+                    case PeriodeTypeEnum.StarRegelen:
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.Commentaar));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{per.Naam}"));
                         break;
                     case PeriodeTypeEnum.Overig:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.Commentaar));
@@ -90,6 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case PeriodeTypeEnum.RateltikkersDimmen: pertypeandnum = _prmperrtdim + iperrtdim.ToString(); iperrtdim++; break;
                     case PeriodeTypeEnum.BellenActief: pertypeandnum = _prmperbel + iperbel.ToString(); iperbel++; break;
                     case PeriodeTypeEnum.BellenDimmen: pertypeandnum = _prmperbeldim + iperbeldim.ToString(); iperbeldim++; break;
+                    case PeriodeTypeEnum.StarRegelen: pertypeandnum = per.Naam; break;
                     case PeriodeTypeEnum.Overig: pertypeandnum = _prmpero + per.Naam; break;
                     case PeriodeTypeEnum.Groentijden:
                         break;
@@ -209,6 +215,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiod}] = {iper};");
                         ++iper;
                     }
+
+                    iper = 0;
+                    foreach (var kpm in c.PeriodenData.Perioden)
+                    {
+                        if (kpm.Type != PeriodeTypeEnum.StarRegelen) continue;
+                        var comm = kpm.Commentaar ?? "";
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* klokperiode star regelen: {comm} */");
+                        sb.AppendLine($"{ts}/* -------------------------{new string('-', comm.Length)} */");
+                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{kpm.Naam}], PRM[{_prmpf}{_prmetkp}{kpm.Naam}]) &&");
+                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{kpm.Naam}]))");
+                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiodstar}] = {iper};");
+                        ++iper;
+                    }
+
                     var iperrt = 1;
                     var iperrta = 1;
                     var iperrtdim = 1;
@@ -389,12 +410,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* ------------------- */");
                     iper = 0;
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
-                    foreach (var per in c.PeriodenData.Perioden)
+                    foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
                     {
-                        if(per.Type == PeriodeTypeEnum.Groentijden)
-                        {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{iper}] = (MM[{_mpf}{_mperiod}] == {iper++});");
-                        }
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{iper}] = (MM[{_mpf}{_mperiod}] == {iper++});");
+                    }
+                    iper = 0;
+                    foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.StarRegelen))
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{per.Naam}] = (MM[{_mpf}{_mperiodstar}] == {iper++});");
                     }
                     if(c.PeriodenData.Perioden.Count > 0)
                     {

@@ -10,9 +10,12 @@ namespace TLCGen.Models
     public class StarDataModel
     {
         public bool ToepassenStar { get; set; }
+        public bool ProgrammaSturingViaParameter { get; set; } = true;
+        public bool ProgrammaSturingViaKlok { get; set; }
+        public bool ProgrammaTijdenInParameters { get; set; }
         [XmlElement(ElementName = "Programma")]
         public List<StarProgrammaModel> Programmas { get; set; }
-        public StarPeriodeDataModel DefaultProgramma { get; set; }
+        public string DefaultProgramma { get; set; }
         public List<StarPeriodeDataModel> PeriodenData { get; set; }
 
         public StarDataModel()

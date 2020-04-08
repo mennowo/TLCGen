@@ -13,9 +13,27 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <CheckBox Margin="5" Content="Toepassen star regelen" IsChecked="{Binding Path=ToepassenStar,UpdateSourceTrigger=PropertyChanged}" />
-        <TabControl Grid.Row="1" IsEnabled="{Binding Path=ToepassenStar}">
-            <TabItem Header="Programma's">
+        <TabControl Grid.Row="1">
+            <TabItem Header="Instellingen star regelen">
+                <StackPanel>
+                    <CheckBox Margin="5" Content="Toepassen star regelen" IsChecked="{Binding Path=ToepassenStar,UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox Margin="5" Content="Programma tijden in parameters" IsChecked="{Binding Path=ProgrammaTijdenInParameters,UpdateSourceTrigger=PropertyChanged}" 
+                              IsEnabled="{Binding Path=ToepassenStar}" />
+                    <Label Content="Programmasturing:" IsEnabled="{Binding Path=ToepassenStar}" />
+                    <CheckBox Margin="5" Content="Klok" IsChecked="{Binding Path=ProgrammaSturingViaKlok,UpdateSourceTrigger=PropertyChanged}" 
+                              IsEnabled="{Binding Path=ToepassenStar}" />
+                    <CheckBox Margin="5" Content="Parameter" IsChecked="{Binding Path=ProgrammaSturingViaParameter,UpdateSourceTrigger=PropertyChanged}" 
+                              IsEnabled="{Binding Path=ToepassenStar}" />
+                    <Label Content="Default star programma:" IsEnabled="{Binding Path=ProgrammaSturingViaParameter}" />
+                    <ComboBox 
+                        ItemsSource="{Binding Path=DataContext.Programmas,ElementName=Root}" 
+                        SelectedValuePath="Naam"
+                        DisplayMemberPath="Naam"
+                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                        SelectedValue="{Binding Path=DefaultProgramma,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Programma's" IsEnabled="{Binding Path=ToepassenStar}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -37,7 +55,7 @@
                     </ListView>
                     <local:ItemsManagerView 
                         AddableItemsVisibility="Collapsed"
-                        Grid.Row="2" Grid.Column="0" Caption="Toevoegen/verwijderen programma's" 
+                        Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Caption="Toevoegen/verwijderen programma's" 
                         DataContext="{Binding Path=ProgrammaManager}" />
 
                     <Grid Grid.Row="0" Grid.Column="1" >
@@ -72,20 +90,14 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Perioden">
+            <TabItem Header="Perioden" IsEnabled="{Binding Path=ProgrammaSturingViaKlok}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Default star plan" />
-                        <ComboBox
-                            Margin="2" ItemsSource="{Binding Path=DataContext.Programmas,ElementName=Root}" 
-                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                            DisplayMemberPath="Naam"
-                            SelectedValuePath="Naam"
-                            SelectedValue="{Binding Path=DefaultProgramma,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                        <Label Content="Geef per periode het starre programma op; daarbuiten geldt het default programma" />
                     </StackPanel>
                     <DataGrid ItemsSource="{Binding Path=Perioden}" Grid.Row="1"
                               SelectedItem="{Binding Path=SelectedPeriode}"

@@ -933,46 +933,6 @@ namespace TLCGen.ViewModels
                     if (Application.Current != null && Application.Current.MainWindow != null)
                         Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
                 }
-
-#if !DEBUG
-                Application.Current.DispatcherUnhandledException += (o, e) =>
-                {
-                    string message = "Er is een onverwachte fout opgetreden.\n\n";
-                    if (TLCGenControllerDataProvider.Default.Controller != null)
-                    {
-                        try
-                        {
-                            string t = TLCGenControllerDataProvider.Default.ControllerFileName;
-                            if (string.IsNullOrWhiteSpace(TLCGenControllerDataProvider.Default.ControllerFileName))
-                            {
-                                TLCGenControllerDataProvider.Default.ControllerFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TLC_recoverysave.tlc");
-                            }
-                            TLCGenControllerDataProvider.Default.ControllerFileName =
-                            System.IO.Path.Combine(
-                                System.IO.Path.GetDirectoryName(TLCGenControllerDataProvider.Default.ControllerFileName),
-                                DateTime.Now.ToString("yyyyMMdd-HHmmss-", System.Globalization.CultureInfo.InvariantCulture) +
-                                System.IO.Path.GetFileName(TLCGenControllerDataProvider.Default.ControllerFileName));
-                            TLCGenControllerDataProvider.Default.SaveController();
-                            message += "De huidige regeling is hier opgeslagen:\n" + TLCGenControllerDataProvider.Default.ControllerFileName + "\n\n";
-                            if (t != null)
-                            {
-                                TLCGenControllerDataProvider.Default.ControllerFileName = t;
-                            }
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
-                    var win = new TLCGen.Dialogs.UnhandledExceptionWindow();
-                    win.DialogTitle = "Onverwachte fout in TLCGen";
-                    win.DialogMessage = message;
-                    win.DialogExpceptionText = e.Exception.ToString();
-                    win.Owner = Application.Current.MainWindow;
-                    win.ShowDialog();
-                };
-#endif
             }
             catch (Exception e)
             {

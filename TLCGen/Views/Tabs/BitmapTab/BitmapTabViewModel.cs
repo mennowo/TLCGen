@@ -321,8 +321,7 @@ namespace TLCGen.ViewModels
 
         void ImportDplCCommand_Executed(object prm)
         {
-            var dlg = new ImportDplCWindow(_Controller);
-            dlg.Owner = Application.Current.MainWindow;
+            var dlg = new ImportDplCWindow(_Controller) {Owner = Application.Current.MainWindow};
             dlg.ShowDialog();
             LoadBitmap();
         }
@@ -458,6 +457,7 @@ namespace TLCGen.ViewModels
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
+                    case PeriodeTypeEnum.StarRegelen:
                     case PeriodeTypeEnum.Overig:
                         per.BitmapDataRelevant = true;
                         per.BitmapNaam = per.Naam;

@@ -82,6 +82,10 @@ namespace TLCGen.ViewModels
                 {
                     Type = PeriodeTypeEnum.RateltikkersDimmen;
                 }
+                else if (value == PeriodeTypeEnum.StarRegelen.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.StarRegelen;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Unknown period type: " + value);
