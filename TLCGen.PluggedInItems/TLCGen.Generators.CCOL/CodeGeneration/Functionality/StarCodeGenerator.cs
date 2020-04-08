@@ -14,13 +14,48 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmstarstart;
         private CCOLGeneratorCodeStringSettingModel _prmstareind;
         private CCOLGeneratorCodeStringSettingModel _prmstarprog;
-        private CCOLGeneratorCodeStringSettingModel _prmstar;
+        private CCOLGeneratorCodeStringSettingModel _prmstarprogdef;
         private CCOLGeneratorCodeStringSettingModel _schstar;
+        private CCOLGeneratorCodeStringSettingModel _prmstarcyclustijd;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
+
+            if (!c.StarData.ToepassenStar || !c.StarData.Programmas.Any()) return;
+
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schstar}", 0, CCOLElementTimeTypeEnum.SCH_type, _schstar));
+
+            if (c.StarData.ProgrammaSturingViaParameter)
+            {
+                var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == c.StarData.DefaultProgramma);
+                var iDp = dp == null ? 0 : c.StarData.Programmas.IndexOf(dp);
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprogdef}", iDp, CCOLElementTimeTypeEnum.SCH_type, _prmstarprogdef));
+            }
+
+            if (c.StarData.ProgrammaTijdenInParameters)
+            {
+                foreach (var pr in c.StarData.Programmas)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarcyclustijd}", pr.Cyclustijd, CCOLElementTimeTypeEnum.TS_type, _prmstarcyclustijd, pr.Naam));
+                    foreach (var f in pr.Fasen)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}", f.Start1, CCOLElementTimeTypeEnum.None, _prmstarstart, "1", f.FaseCyclus, pr.Naam));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}", f.Eind1, CCOLElementTimeTypeEnum.None, _prmstareind, "1", f.FaseCyclus, pr.Naam));
+                        if (f.Start2.HasValue && f.Eind2.HasValue)
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}", f.Start2.Value, CCOLElementTimeTypeEnum.None, _prmstarstart, "2", f.FaseCyclus, pr.Naam));
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}", f.Eind2.Value, CCOLElementTimeTypeEnum.None, _prmstareind, "2", f.FaseCyclus, pr.Naam));
+                        }
+                    }
+                }
+            }
+
+            if (c.StarData.ProgrammaSturingViaKlok)
+            {
+                // ...
+            }
         }
 
         public override bool HasCCOLElements() => true;

@@ -2081,10 +2081,16 @@
             <Description>Inschakelen star programma</Description>
           </Setting>
           <Setting>
-            <Default>star</Default>
-            <Setting>star</Setting>
+            <Default>starprogdef</Default>
+            <Setting>starprogdef</Setting>
             <Type>Parameter</Type>
-            <Description>Noodprogramma keuze via parameter</Description>
+            <Description>Default star programma</Description>
+          </Setting>
+          <Setting>
+            <Default>starcyclustijd</Default>
+            <Setting>ctijd</Setting>
+            <Type>Parameter</Type>
+            <Description>Cyclustijd star programma _E1_</Description>
           </Setting>
           <Setting>
             <Default>starprog</Default>
