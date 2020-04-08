@@ -11,7 +11,7 @@ using TLCGen.Plugins.RangeerElementen.ViewModels;
 
 namespace TLCGen.Plugins.RangeerElementen
 {
-    [TLCGenTabItem(-1, TabItemTypeEnum.DetectieTab)]
+    [TLCGenTabItem(-1, TabItemTypeEnum.SpecialsTab)]
     [TLCGenPlugin(
         TLCGenPluginElems.TabControl |
         TLCGenPluginElems.XMLNodeWriter |

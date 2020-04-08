@@ -1,9 +1,5 @@
 ﻿using ICSharpCode.AvalonEdit;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
@@ -17,8 +13,8 @@ namespace TLCGen.Plugins.Tools
 
         public string GiveMeTheText
         {
-            get { return (string)GetValue(GiveMeTheTextProperty); }
-            set { SetValue(GiveMeTheTextProperty, value); }
+            get => (string)GetValue(GiveMeTheTextProperty);
+            set => SetValue(GiveMeTheTextProperty, value);
         }
 
         protected override void OnAttached()
@@ -37,8 +33,7 @@ namespace TLCGen.Plugins.Tools
 
         private void AssociatedObjectOnTextChanged(object sender, EventArgs eventArgs)
         {
-            var textEditor = sender as TextEditor;
-            if (textEditor != null)
+            if (sender is TextEditor textEditor)
             {
                 if (textEditor.Document != null)
                     GiveMeTheText = textEditor.Document.Text;
@@ -50,19 +45,16 @@ namespace TLCGen.Plugins.Tools
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             var behavior = dependencyObject as AvalonEditBehaviour;
-            if (behavior.AssociatedObject != null)
+            var editor = behavior?.AssociatedObject;
+            if (editor?.Document != null && dependencyPropertyChangedEventArgs.NewValue != null)
             {
-                var editor = behavior.AssociatedObject as TextEditor;
-                if (editor.Document != null && dependencyPropertyChangedEventArgs.NewValue != null)
+                var caretOffset = editor.CaretOffset;
+                editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
+                try
                 {
-                    var caretOffset = editor.CaretOffset;
-                    editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
-                    try
-                    {
-                        editor.CaretOffset = caretOffset;
-                    }
-                    catch { }
+                    editor.CaretOffset = caretOffset;
                 }
+                catch { }
             }
         }
     }

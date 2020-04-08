@@ -1,6 +1,13 @@
-TLCGen=0.7.4.0
+TLCGen=0.7.6.0
+MiniTD=1.0.0.0
+YAVV=0.5.0.0
 RN==TLCGen
+TLCGen versie: 0.7.6.0
+- Rangeren signaalgroepen mogelijk
+- Rangeer elementen verplaatst naar "Specials"
+- Fix voor naamgeving prio ingrepen bij openen bestaande regeling
 TLCGen versie: 0.7.4.0
+- Variabel aantal ingrepen per signaalgroep
 - Verbeterde UI voor rangeren detectoren
 - Uitbreiding import met default meeaanvragen
 - Diverse kleinere fixes
