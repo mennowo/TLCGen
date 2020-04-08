@@ -2068,6 +2068,45 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="StarCodeGenerator">
+      <CodePieceData>
+        <ClassName>StarCodeGenerator</ClassName>
+        <Description>Star regelen</Description>
+        <ElementGenerationOrder>330</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>star</Default>
+            <Setting>star</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Inschakelen star programma</Description>
+          </Setting>
+          <Setting>
+            <Default>star</Default>
+            <Setting>star</Setting>
+            <Type>Parameter</Type>
+            <Description>Noodprogramma keuze via parameter</Description>
+          </Setting>
+          <Setting>
+            <Default>starprog</Default>
+            <Setting>starprog</Setting>
+            <Type>Parameter</Type>
+            <Description>Noodprogramma bij periode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>starstart</Default>
+            <Setting>start</Setting>
+            <Type>Parameter</Type>
+            <Description>Start realisatie _E1_ fase _E2_ star programma _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>stareind</Default>
+            <Setting>eind</Setting>
+            <Type>Parameter</Type>
+            <Description>Einde realisatie _E1_ fase _E2_ star programma _E3_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="VAOntruimenCodeGenerator">
       <CodePieceData>
         <ClassName>VAOntruimenCodeGenerator</ClassName>

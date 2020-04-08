@@ -11,10 +11,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class StarCodeGenerator : CCOLCodePieceGeneratorBase
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _prmstart;
-        private CCOLGeneratorCodeStringSettingModel _prmeind;
+        private CCOLGeneratorCodeStringSettingModel _prmstarstart;
+        private CCOLGeneratorCodeStringSettingModel _prmstareind;
         private CCOLGeneratorCodeStringSettingModel _prmstarprog;
         private CCOLGeneratorCodeStringSettingModel _prmstar;
+        private CCOLGeneratorCodeStringSettingModel _schstar;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
