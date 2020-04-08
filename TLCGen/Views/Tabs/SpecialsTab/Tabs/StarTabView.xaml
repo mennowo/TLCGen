@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="TLCGen.Views.StarTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" Name="Root"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:StarTabViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <CheckBox Margin="5" Content="Toepassen star regelen" IsChecked="{Binding Path=ToepassenStar,UpdateSourceTrigger=PropertyChanged}" />
+        <TabControl Grid.Row="1" IsEnabled="{Binding Path=ToepassenStar}">
+            <TabItem Header="Programma's">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=Programmas}" Margin="2"
+                              SelectedItem="{Binding Path=ProgrammaManager.SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Naam}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <local:ItemsManagerView 
+                        AddableItemsVisibility="Collapsed"
+                        Grid.Row="2" Grid.Column="0" Caption="Toevoegen/verwijderen programma's" 
+                        DataContext="{Binding Path=ProgrammaManager}" />
+
+                    <Grid Grid.Row="0" Grid.Column="1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Programma" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ProgrammaManager.SelectedItem.Naam}" Margin="2" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Cyclustijd" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=ProgrammaManager.SelectedItem.Cyclustijd}" Margin="2" />
+                    </Grid>
+                    <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=ProgrammaManager.SelectedItem.Fasen}"
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="2">
+                        <DataGrid.RowHeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.FaseNaam}"/>
+                            </DataTemplate>
+                        </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Start1,UpdateSourceTrigger=PropertyChanged}" Header="Start 1" />
+                            <DataGridTextColumn Binding="{Binding Eind1,UpdateSourceTrigger=PropertyChanged}" Header="Eind 1" />
+                            <DataGridTextColumn Binding="{Binding Start2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Start 2" />
+                            <DataGridTextColumn Binding="{Binding Eind2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Eind 2" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Perioden">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Default star plan" />
+                        <ComboBox
+                            Margin="2" ItemsSource="{Binding Path=DataContext.Programmas,ElementName=Root}" 
+                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                            DisplayMemberPath="Naam"
+                            SelectedValuePath="Naam"
+                            SelectedValue="{Binding Path=DefaultProgramma,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                    </StackPanel>
+                    <DataGrid ItemsSource="{Binding Path=Perioden}" Grid.Row="1"
+                              SelectedItem="{Binding Path=SelectedPeriode}"
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.RowHeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.Periode}"/>
+                            </DataTemplate>
+                        </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Programma" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=StarProgramma}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.Programmas,ElementName=Root}" 
+                                            SelectedValuePath="Naam"
+                                            DisplayMemberPath="Naam"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=StarProgramma,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

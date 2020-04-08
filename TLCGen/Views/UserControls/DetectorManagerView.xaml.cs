@@ -15,38 +15,45 @@ namespace TLCGen.Views
 
         public Visibility InsertableItemsVisibility
         {
-            get { return (Visibility)GetValue(InsertableItemsVisibilityProperty); }
-            set { SetValue(InsertableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(InsertableItemsVisibilityProperty);
+            set => SetValue(InsertableItemsVisibilityProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for InsertableDetectorsVisibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty InsertableItemsVisibilityProperty =
-            DependencyProperty.Register("InsertableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("InsertableItemsVisibility", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+
+        public Visibility AddableItemsVisibility
+        {
+            get => (Visibility)GetValue(AddableItemsVisibilityProperty);
+            set => SetValue(AddableItemsVisibilityProperty, value);
+        }
+
+        public static readonly DependencyProperty AddableItemsVisibilityProperty =
+            DependencyProperty.Register("AddableItemsVisibility", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Visible));
+
 
         public Visibility RemovableItemsVisibility
         {
-            get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }
-            set { SetValue(RemovableItemsVisibilityProperty, value); }
+            get => (Visibility)GetValue(RemovableItemsVisibilityProperty);
+            set => SetValue(RemovableItemsVisibilityProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for RemovableDetectorsVisibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RemovableItemsVisibilityProperty =
-            DependencyProperty.Register("RemovableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("RemovableItemsVisibility", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
 
         public string Caption
         {
-            get { return (string)GetValue(CaptionProperty); }
-            set { SetValue(CaptionProperty, value); }
+            get => (string)GetValue(CaptionProperty);
+            set => SetValue(CaptionProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for Caption.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CaptionProperty =
             DependencyProperty.Register("Caption", typeof(string), typeof(ItemsManagerView), new PropertyMetadata("Items"));
 
         public bool ShowCaption
         {
-            get { return (bool)GetValue(ShowCaptionProperty); }
-            set { SetValue(ShowCaptionProperty, value); }
+            get => (bool)GetValue(ShowCaptionProperty);
+            set => SetValue(ShowCaptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ShowCaption.  This enables animation, styling, binding, etc...

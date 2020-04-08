@@ -67,6 +67,8 @@ namespace TLCGen.Models
         public SignalenDataModel Signalen { get; set; }
 		
 		public HalfstarDataModel HalfstarData { get; set; }
+		
+        public StarDataModel StarData { get; set; }
 
 		public CustomDataModel CustomData { get; set; }
 
@@ -99,6 +101,7 @@ namespace TLCGen.Models
             PelotonKoppelingenData = new PelotonKoppelingenDataModel();
             RISData = new RISDataModel();
             AlternatievenPerBlokData = new AlternatievenPerBlokModel();
+            StarData = new StarDataModel();
         }
 
         #endregion // Constructor

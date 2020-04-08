@@ -253,6 +253,7 @@
     <Compile Include="Models\Models\Signalen\RatelTikkerModel.cs" />
     <Compile Include="Models\Models\Signalen\SignalenDataModel.cs" />
     <Compile Include="Models\Models\Signalen\WaarschuwingsGroepModel.cs" />
+    <Compile Include="Models\Models\Star\StarDataModel.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinaatModel.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinatenDataModel.cs" />
     <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />
@@ -292,6 +293,7 @@
   <ItemGroup>
     <None Include="paket.references" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

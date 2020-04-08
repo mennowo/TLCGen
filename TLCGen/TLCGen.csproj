@@ -322,6 +322,7 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabViewModel.cs">
       <DependentUpon>FileTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarOVIngreepViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\HalfstarTabView.xaml.cs">
       <DependentUpon>HalfstarTabView.xaml</DependentUpon>
     </Compile>
@@ -519,6 +520,10 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\StarTabView.xaml.cs">
+      <DependentUpon>StarTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\StarTabViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabViewModel.cs">
       <DependentUpon>VAOntruimenTabView.xaml</DependentUpon>
     </Compile>
@@ -830,6 +835,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\StarTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

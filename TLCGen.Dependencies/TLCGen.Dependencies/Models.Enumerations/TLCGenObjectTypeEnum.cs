@@ -21,6 +21,7 @@
         Module,
         SelectieveDetector,
         PelotonKoppeling,
-        PrioriteitsIngreep
+        PrioriteitsIngreep,
+        StarProgramma
     }
 }

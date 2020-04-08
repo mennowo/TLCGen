@@ -29,6 +29,9 @@
         <DataTemplate DataType="{x:Type vm:HalfstarTabViewModel}">
             <local:HalfstarViewTab />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:StarTabViewModel}">
+            <local:StarTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 
