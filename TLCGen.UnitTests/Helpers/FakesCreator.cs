@@ -20,8 +20,7 @@ namespace TLCGen.UnitTests
 
         public static IMessenger CreateMessenger(ControllerModel controller = null)
         {
-            var _messenger = Substitute.For<IMessenger>();
-            return _messenger;
+            return Substitute.For<IMessenger>();
         }
 
         public static IDefaultsProvider CreateDefaultsProvider()
@@ -55,7 +54,7 @@ namespace TLCGen.UnitTests
         {
             var _modelmanager = Substitute.For<ITLCGenModelManager>();
             _modelmanager.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, "")
-                .ReturnsForAnyArgs(x => TLCGenIntegrityChecker.IsElementNaamUnique(m, (string)x[1], TLCGenObjectTypeEnum.Fase));
+                .ReturnsForAnyArgs(x => TLCGenIntegrityChecker.IsElementNaamUnique(m, (string)x[1], (TLCGenObjectTypeEnum)x[0]));
             return _modelmanager;
         }
 

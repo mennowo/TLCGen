@@ -177,6 +177,7 @@ namespace TLCGen.Models
         {
             FixatieData = new FixatieModel();
             Versies = new List<VersieModel>();
+            VLOGSettings = new VLOGSettingsDataModel();
             SegmentenDisplayBitmapData = new List<SegmentDisplayElementModel>();
             ModulenDisplayBitmapData = new List<ModuleDisplayElementModel>();
         }

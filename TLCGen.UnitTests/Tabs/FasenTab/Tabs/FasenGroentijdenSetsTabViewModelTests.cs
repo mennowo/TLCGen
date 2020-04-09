@@ -252,9 +252,11 @@ namespace TLCGen.UnitTests
         public void OnNameChanged_FaseRenamedHigherThanOthers_FaseNamedCorrectlyInGroentijdenSet()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -279,24 +281,22 @@ namespace TLCGen.UnitTests
         public void OnNameChanged_FaseRenamedHigherThanOthers_FaseNamedCorrectlyForDisplay()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel();
-            vm.Controller = model;
-            var vmfasen = new FasenLijstTabViewModel();
-            vmfasen.Controller = model;
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
+            var vm = new FasenGroentijdenSetsTabViewModel {Controller = model};
+            var vmfasen = new FasenLijstTabViewModel {Controller = model};
 
             vm.AddGroentijdenSetCommand.Execute(null);
-            string oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "07";
-            vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
-
+            
             Assert.AreEqual(
                 new string[5] { "01", "02", "04", "05", "07" },
                 vm.FasenNames.ToArray());
@@ -306,9 +306,11 @@ namespace TLCGen.UnitTests
         public void OnNameChanged_FaseRenamedLowerThanOthers_FaseNamedCorrectlyInGroentijdenSet()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "07" });
@@ -333,9 +335,11 @@ namespace TLCGen.UnitTests
         public void OnNameChanged_FaseRenamedLowerThanOthers_FaseNamedCorrectlyForDisplay()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "07" });
@@ -360,11 +364,11 @@ namespace TLCGen.UnitTests
         public void FaseAddedToModel_TwoGroentijdenSetsInModel_FaseAddedToBothSets()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
-            TLCGenModelManager.OverrideDefault(FakesCreator.CreateModelManager(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
@@ -383,24 +387,26 @@ namespace TLCGen.UnitTests
             Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
             Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
             Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("07", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("09", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
             Assert.AreEqual(6, model.GroentijdenSets[1].Groentijden.Count);
             Assert.AreEqual("03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
             Assert.AreEqual("04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
             Assert.AreEqual("05", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
             Assert.AreEqual("06", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("07", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("09", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
         }
 
         [Test]
         public void FaseRemovedFromModel_TwoGroentijdenSetsInModel_FaseRemovedFromBothSets()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
@@ -412,9 +418,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
 
             vmfasen.SelectedFaseCyclus = vmfasen.Fasen[2];
-            var remfc = vmfasen.Fasen[2].FaseCyclus;
             vmfasen.RemoveFaseCommand.Execute(null);
-            vm.OnFasenChanged(new FasenChangedMessage(null, new List<FaseCyclusModel> { remfc }));
 
             Assert.AreEqual(4, model.GroentijdenSets[0].Groentijden.Count);
             Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);

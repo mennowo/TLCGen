@@ -40,6 +40,8 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
   </ItemGroup>
@@ -56,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Build\BuildTests.cs" />
     <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
     <Compile Include="Plugins\TabCImporterTests.cs" />
@@ -92,6 +95,10 @@
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
       <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
       <Name>TLCGen.Importers.TabC</Name>
@@ -101,6 +108,7 @@
       <Name>TLCGen</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

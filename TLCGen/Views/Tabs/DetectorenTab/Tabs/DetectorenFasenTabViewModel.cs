@@ -230,28 +230,12 @@ namespace TLCGen.ViewModels
         void AddDetectorCommand_Executed(object prm)
         {
             var _dm = new DetectorModel();
-            var newname = "1";
-            foreach (var dm in _SelectedFase.Detectoren)
+            var inewname = 1;
+            var newname = inewname.ToString();
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, _SelectedFase.Naam + newname))
             {
-                if (Regex.IsMatch(dm.Naam, @"[0-9]$"))
-                {
-                    var m = Regex.Match(dm.Naam, @"[0-9]$");
-                    var next = m.Value;
-                    if (next == "0")
-                    {
-                        m = Regex.Match(dm.Naam, @"[0-9][0-9]$");
-                        next = m.Value;
-                    }
-                    if (int.TryParse(next, out var inewname))
-                    {
-                        newname = inewname.ToString();
-                        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, _SelectedFase.Naam + newname))
-                        {
-                            inewname++;
-                            newname = inewname.ToString();
-                        }
-                    }
-                }
+                inewname++;
+                newname = inewname.ToString();
             }
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;

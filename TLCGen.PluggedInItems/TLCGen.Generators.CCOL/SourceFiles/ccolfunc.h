@@ -16,7 +16,6 @@
 #endif
 
 #include "uitstuur.h"
-#include "fixatie.h"
 
 void aanvraag_detectie_reset_prm_va_arg(count fc, ...);
 void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, count tav, mulv schrga);

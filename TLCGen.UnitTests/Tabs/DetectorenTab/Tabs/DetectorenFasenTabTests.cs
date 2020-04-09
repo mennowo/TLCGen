@@ -58,7 +58,7 @@ namespace TLCGen.UnitTests
 		    DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(FakesCreator.CreateModelManager(model));
 
-            vm.OnSelected();
+            vm.OnSelected(); 
 			vm.AddDetectorCommand.Execute(null);
 
 		    Assert.AreEqual(3, vm.Detectoren.Count);

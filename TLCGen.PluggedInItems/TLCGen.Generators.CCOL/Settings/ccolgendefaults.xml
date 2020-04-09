@@ -7,20 +7,27 @@
     <CCOLResPath>C:\Personal Applications\CCOL80\WIN32\RES;</CCOLResPath>
     <CCOLPreprocessorDefinitions></CCOLPreprocessorDefinitions>
   </VisualSettings>
-  <VisualSettings>
+  <VisualSettings9>
     <CCOLIncludesPaden>C:\Personal Applications\CCOL90\WIN32\INCLUDE;C:\Personal Applications\CCOL90\INCLUDE;</CCOLIncludesPaden>
     <CCOLLibsPath>C:\Personal Applications\CCOL90\WIN32\LIB;</CCOLLibsPath>
     <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
     <CCOLResPath>C:\Personal Applications\CCOL90\WIN32\RES;</CCOLResPath>
     <CCOLPreprocessorDefinitions></CCOLPreprocessorDefinitions>
-  </VisualSettings>
-  <VisualSettings>
+  </VisualSettings9>
+  <VisualSettings95>
     <CCOLIncludesPaden>C:\Personal Applications\CCOL95\WIN32\INCLUDE;C:\Personal Applications\CCOL95\INCLUDE;</CCOLIncludesPaden>
     <CCOLLibsPath>C:\Personal Applications\CCOL95\WIN32\LIB;</CCOLLibsPath>
     <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
     <CCOLResPath>C:\Personal Applications\CCOL95\WIN32\RES;</CCOLResPath>
     <CCOLPreprocessorDefinitions>CCOLTIG;</CCOLPreprocessorDefinitions>
-  </VisualSettings>
+  </VisualSettings95>
+  <VisualSettings100>
+    <CCOLIncludesPaden>C:\Personal Applications\CCOL100\WIN32\INCLUDE;C:\Personal Applications\CCOL100\INCLUDE;</CCOLIncludesPaden>
+    <CCOLLibsPath>C:\Personal Applications\CCOL100\WIN32\LIB;</CCOLLibsPath>
+    <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
+    <CCOLResPath>C:\Personal Applications\CCOL100\WIN32\RES;</CCOLResPath>
+    <CCOLPreprocessorDefinitions>CCOLTIG;</CCOLPreprocessorDefinitions>
+  </VisualSettings100>
   <Prefixes>
     <Prefix>
       <Default>fc</Default>
@@ -1122,6 +1129,12 @@
             <Setting>period</Setting>
             <Type>GeheugenElement</Type>
             <Description>Onthouden actieve periode</Description>
+          </Setting>
+          <Setting>
+            <Default>periodstar</Default>
+            <Setting>periodstar</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden actieve periode star regelen</Description>
           </Setting>
           <Setting>
             <Default>period</Default>

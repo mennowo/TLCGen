@@ -1,18 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace TLCGen.Helpers
 {
     public static class ResourceReader
     {
-        public static string GetResourceTextFile(string filename, object callingObject)
+        public static string GetResourceTextFile(string filename, object callingObject, Type type = null)
         {
-            string result = string.Empty;
+            string result;
 
-            var t = callingObject.GetType();
-            using (Stream stream = t.Assembly.
+            if (type == null) type = callingObject.GetType();
+            using (var stream = type.Assembly.
                        GetManifestResourceStream(filename))
             {
-                using (StreamReader sr = new StreamReader(stream))
+                using (var sr = new StreamReader(stream ?? throw new InvalidOperationException()))
                 {
                     result = sr.ReadToEnd();
                 }

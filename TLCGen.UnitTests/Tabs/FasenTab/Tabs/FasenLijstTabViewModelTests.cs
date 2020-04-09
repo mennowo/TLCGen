@@ -3,10 +3,12 @@ using NUnit.Framework;
 using TLCGen.ViewModels;
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
+using TLCGen.DataAccess;
 using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.Models.Enumerations;
 using TLCGen.Integrity;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.UnitTests
 {
@@ -48,10 +50,11 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_5thFaseCorrectlyNamed()
         {
             var model = new ControllerModel();
+            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
-            vm.Controller = model;
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            var vm = new FasenLijstTabViewModel {Controller = model};
 
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
@@ -177,7 +180,10 @@ namespace TLCGen.UnitTests
         public void RenameFase_LowerThanOthers_SortsCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(new Messenger());
+            DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "07" });

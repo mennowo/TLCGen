@@ -54,7 +54,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.StarData.ProgrammaSturingViaKlok)
             {
-                // ...
+                foreach (var p in c.StarData.PeriodenData)
+                {
+                    var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == p.StarProgramma);
+                    var iDp = dp == null ? 0 : c.StarData.Programmas.IndexOf(dp);
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprog}", iDp, CCOLElementTimeTypeEnum.None, _prmstarprog, p.Periode));
+                }
             }
         }
 

@@ -19,6 +19,8 @@ namespace TLCGen.Generators.CCOL
     [TLCGenPlugin(TLCGenPluginElems.Generator | TLCGenPluginElems.HasSettings | TLCGenPluginElems.MenuControl | TLCGenPluginElems.PlugMessaging)]
     public class CCOLCodeGeneratorPlugin : ITLCGenGenerator, ITLCGenHasSettings, ITLCGenMenuItem, ITLCGenPlugMessaging
     {
+        private static bool _noView;
+
         #region ITLCGenGenerator
 
         private readonly CCOLGenerator _generator;
@@ -165,45 +167,53 @@ namespace TLCGen.Generators.CCOL
             CCOLGeneratorSettingsProvider.Default.Reset();
             _generator.LoadSettings();
 
-            if (_alwaysOverwriteSourcesMenuItem == null)
+            if (!_noView)
             {
-                _alwaysOverwriteSourcesMenuItem = new MenuItem
-                {
-                    Header = "Altijd overschrijven bronbestanden"
-                };
-            }
-            _alwaysOverwriteSourcesMenuItem.IsChecked =
-                CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
 
-            if (_alterAddHeadersWhileGeneratingMenuItem == null)
-            {
-                _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
+                if (_alwaysOverwriteSourcesMenuItem == null)
                 {
-                    Header = "Bijwerken add headers tijdens genereren"
-                };
-            }
-            _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
-                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+                    _alwaysOverwriteSourcesMenuItem = new MenuItem
+                    {
+                        Header = "Altijd overschrijven bronbestanden"
+                    };
+                }
 
-            if (_alterAddFunctionsWhileGeneratingMenuItem == null)
-            {
-                _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
-                {
-                    Header = "Bijwerken functies in add files tijdens genereren"
-                };
-            }
-            _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
-                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
+                _alwaysOverwriteSourcesMenuItem.IsChecked =
+                    CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
 
-            if (_replaceRepeatingCommentsTextWithPeriodsMenuItem == null)
-            {
-                _replaceRepeatingCommentsTextWithPeriodsMenuItem = new MenuItem
+                if (_alterAddHeadersWhileGeneratingMenuItem == null)
                 {
-                    Header = "Herhalend commentaar vervangen door ..."
-                };
+                    _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
+                    {
+                        Header = "Bijwerken add headers tijdens genereren"
+                    };
+                }
+
+                _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
+                    CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+
+                if (_alterAddFunctionsWhileGeneratingMenuItem == null)
+                {
+                    _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
+                    {
+                        Header = "Bijwerken functies in add files tijdens genereren"
+                    };
+                }
+
+                _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
+                    CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
+
+                if (_replaceRepeatingCommentsTextWithPeriodsMenuItem == null)
+                {
+                    _replaceRepeatingCommentsTextWithPeriodsMenuItem = new MenuItem
+                    {
+                        Header = "Herhalend commentaar vervangen door ..."
+                    };
+                }
+
+                _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
+                    CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
             }
-            _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
-                CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
         }
 
         public void SaveSettings()
@@ -467,7 +477,7 @@ namespace TLCGen.Generators.CCOL
 
         public static string GetVersion()
         {
-            return Assembly.GetEntryAssembly().GetName().Version.ToString();
+            return _noView ? "UnitTest" : Assembly.GetEntryAssembly()?.GetName().Version.ToString();
         }
 
         #endregion // Static Public Methods
@@ -489,12 +499,15 @@ namespace TLCGen.Generators.CCOL
 
         #region Constructor
 
-        public CCOLCodeGeneratorPlugin()
+        public CCOLCodeGeneratorPlugin(bool noView = false)
         {
-            GeneratorView = new CCOLGeneratorView();
+            _noView = noView;
             _generator = new CCOLGenerator();
             _myVm = new CCOLGeneratorViewModel(this, _generator);
-            GeneratorView.DataContext = _myVm;
+            if (!noView)
+            {
+                GeneratorView = new CCOLGeneratorView {DataContext = _myVm};
+            }
 
 	        var filesDef = Directory.GetFiles(
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\VisualTemplates"),

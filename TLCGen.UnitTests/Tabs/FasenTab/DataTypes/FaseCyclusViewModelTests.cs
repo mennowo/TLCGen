@@ -2,7 +2,9 @@
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using NUnit.Framework;
+using TLCGen.DataAccess;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -19,25 +21,32 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
             var messengermock = FakesCreator.CreateMessenger();
             Messenger.OverrideDefault(messengermock);
             var model = new ControllerModel();
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
             var vm = new FaseCyclusViewModel(model.Fasen[2])
             {
                 Naam = "07"
             };
-            messengermock.Received().Send(Arg.Is<NameChangedMessage>(x => x.OldName == "03" && x.NewName == "07"));
+
+            messengermock.Received().Send(Arg.Is<NameChangingMessage>(x => x.OldName == "03" && x.NewName == "07"));
         }
 
         [Test]
         public void FaseCyclusViewModel_NameChanged_DetectorNamesAlsoChanged()
         {
-            var messengermock = FakesCreator.CreateMessenger();
-            Messenger.OverrideDefault(messengermock);
-
             var model = new ControllerModel();
+            Messenger.OverrideDefault(new Messenger());
+            SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
+            DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+
             model.Fasen.Add(new FaseCyclusModel
             {
                 Naam = "01",
@@ -47,8 +56,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
                     new DetectorModel { Naam = "01_2", VissimNaam = "012"}
                 }
             });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.Naam = "05";
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {Naam = "05"};
 
             Assert.AreEqual("05_1", vm.FaseCyclus.Detectoren[0].Naam);
             Assert.AreEqual("051", vm.FaseCyclus.Detectoren[0].VissimNaam);
@@ -81,9 +89,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "31", Type = FaseTypeEnum.Voetganger, MeeverlengenType = MeeVerlengenTypeEnum.Voetganger });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.Type = FaseTypeEnum.Fiets;
-            
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {Type = FaseTypeEnum.Fiets};
+
             Assert.AreEqual(MeeVerlengenTypeEnum.Default, vm.MeeverlengenType);
         }
 
@@ -95,8 +102,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TFG = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TFG = -10};
 
             Assert.AreEqual(40, vm.TFG);
         }
@@ -109,8 +115,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TFG = 30;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TFG = 30};
 
             Assert.AreEqual(40, vm.TFG);
         }
@@ -123,9 +128,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG = 20;
-            
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG = 20};
+
             Assert.AreEqual(30, vm.TGG);
         }
 
@@ -137,9 +141,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG = 20;
-            
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG = 20};
+
             Assert.AreEqual(30, vm.TGG);
         }
 
@@ -151,8 +154,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG = 60;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG = 60};
 
             Assert.AreEqual(60, vm.TFG);
         }
@@ -165,8 +167,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG_min = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG_min = -10};
 
             Assert.AreEqual(30, vm.TGG_min);
         }
@@ -179,8 +180,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG_min = 45;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG_min = 45};
 
             Assert.AreEqual(45, vm.TGG);
         }
@@ -193,8 +193,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGG_min = 60;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGG_min = 60};
 
             Assert.AreEqual(60, vm.TGG);
             Assert.AreEqual(60, vm.TFG);
@@ -208,8 +207,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 20, TRG_min = 10});
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TRG = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TRG = -10};
 
             Assert.AreEqual(10, vm.TRG);
         }
@@ -222,8 +220,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 20, TRG_min = 10 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TRG = 5;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TRG = 5};
 
             Assert.AreEqual(10, vm.TRG);
         }
@@ -236,8 +233,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 40, TRG_min = 20 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TRG_min = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TRG_min = -10};
 
             Assert.AreEqual(20, vm.TRG_min);
         }
@@ -250,8 +246,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 40, TRG_min = 20 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TRG_min = 50;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TRG_min = 50};
 
             Assert.AreEqual(50, vm.TRG);
         }
@@ -264,8 +259,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 20, TGL_min = 10 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGL = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGL = -10};
 
             Assert.AreEqual(10, vm.TGL);
         }
@@ -278,8 +272,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 20, TGL_min = 10 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGL = 5;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGL = 5};
 
             Assert.AreEqual(10, vm.TGL);
         }
@@ -292,8 +285,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 40, TGL_min = 20 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGL_min = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGL_min = -10};
 
             Assert.AreEqual(20, vm.TGL_min);
         }
@@ -306,8 +298,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 40, TGL_min = 20 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.TGL_min = 50;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {TGL_min = 50};
 
             Assert.AreEqual(50, vm.TGL);
         }
@@ -320,8 +311,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, Kopmax = 80});
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.Kopmax = -10;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {Kopmax = -10};
 
             Assert.AreEqual(80, vm.Kopmax);
         }
@@ -334,8 +324,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.AantalRijstroken = -1;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {AantalRijstroken = -1};
 
             Assert.AreEqual(3, vm.AantalRijstroken);
         }
@@ -348,8 +337,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.HiaatKoplusBijDetectieStoring = true;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {HiaatKoplusBijDetectieStoring = true};
 
             Assert.AreEqual(25, vm.VervangendHiaatKoplus);
         }
@@ -362,8 +350,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
-            var vm = new FaseCyclusViewModel(model.Fasen[0]);
-            vm.PercentageGroenBijDetectieStoring = true;
+            var vm = new FaseCyclusViewModel(model.Fasen[0]) {PercentageGroenBijDetectieStoring = true};
 
             Assert.AreEqual(65, vm.PercentageGroenBijStoring);
         }

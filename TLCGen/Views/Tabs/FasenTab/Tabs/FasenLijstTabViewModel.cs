@@ -131,7 +131,7 @@ namespace TLCGen.ViewModels
             var inext = 0;
             foreach (var fcvm in Fasen)
             {
-                if (int.TryParse(fcvm.Naam, out int inewname))
+                if (int.TryParse(fcvm.Naam, out var inewname))
                 {
                     inext = inewname > inext ? inewname : inext;
                 }
@@ -157,8 +157,8 @@ namespace TLCGen.ViewModels
 
         void RemoveFaseCommand_Executed(object prm)
         {
-            bool changed = false;
-            List<FaseCyclusModel> remfcs = new List<FaseCyclusModel>();
+            var changed = false;
+            var remfcs = new List<FaseCyclusModel>();
             if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 0)
             {
                 changed = true;
@@ -187,7 +187,7 @@ namespace TLCGen.ViewModels
                     Fasen.Add(new FaseCyclusViewModel(fc));
                 }
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
-                Messenger.Default.Send(new FasenChangedMessage(null, remfcs));
+                Messenger.Default.Send(new FasenChangingMessage(null, remfcs));
             }
 
         }
@@ -252,7 +252,7 @@ namespace TLCGen.ViewModels
                 Fasen.Clear();
                 if (base.Controller != null)
                 {
-                    foreach (FaseCyclusModel fcm in base.Controller.Fasen)
+                    foreach (var fcm in base.Controller.Fasen)
                     {
                         var fcvm = new FaseCyclusViewModel(fcm);
                         fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
@@ -323,7 +323,7 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            List<FaseCyclusModel> removedfasen = new List<FaseCyclusModel>();
+            var removedfasen = new List<FaseCyclusModel>();
             if (e.OldItems != null)
             {
                 foreach (FaseCyclusViewModel item in e.OldItems)
@@ -332,7 +332,7 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            List<FaseCyclusModel> addedfasen = new List<FaseCyclusModel>();
+            var addedfasen = new List<FaseCyclusModel>();
             if (e.NewItems != null)
             {
                 foreach (FaseCyclusViewModel item in e.NewItems)
