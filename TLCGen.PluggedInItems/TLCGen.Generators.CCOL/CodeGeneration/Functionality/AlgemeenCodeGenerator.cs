@@ -192,7 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}TBG_max[i]=NG;");
                         sb.AppendLine($"{ts}{ts}TOG_max[i]=NG;");
                         sb.AppendLine($"{ts}{ts}TFL_max[i]=NG;");
-                        sb.AppendLine($"{ts}{ts}CFG_max[i]=NG;");
+                        sb.AppendLine($"{ts}{ts}CFL_max[i]=NG;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine("#endif");
 
