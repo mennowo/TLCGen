@@ -152,6 +152,12 @@ namespace TLCGen.ModelManagement
         
         public void CorrectModelByVersion(ControllerModel controller, string filename)
         {
+            // no version?
+            if (controller.Data.TLCGenVersie == null)
+            {
+                controller.Data.TLCGenVersie = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+
             // move data
             if (_pluginDataToMove.Any())
             {
@@ -289,6 +295,9 @@ namespace TLCGen.ModelManagement
 
             // get version
             var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
+            
+            if (vi == null || string.IsNullOrWhiteSpace(vi.InnerText)) return;
+
             var v = Version.Parse(vi.InnerText);
 
             // In version 0.2.2.0, the OVIngreepModel object was changed

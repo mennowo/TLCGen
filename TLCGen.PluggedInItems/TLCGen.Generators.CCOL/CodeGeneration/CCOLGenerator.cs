@@ -292,6 +292,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
                     }
 
+                    if (c.StarData.ToepassenStar)
+                    {
+                        CopySourceIfNeeded(c, "starfunc.c", sourcefilepath);
+                    }
+
                     foreach (var pl in PieceGenerators)
                     {
                         var fs = pl.GetSourcesToCopy();

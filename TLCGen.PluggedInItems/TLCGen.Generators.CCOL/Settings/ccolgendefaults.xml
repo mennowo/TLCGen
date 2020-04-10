@@ -2094,6 +2094,12 @@
             <Description>Inschakelen star programma</Description>
           </Setting>
           <Setting>
+            <Default>starprog</Default>
+            <Setting>starprog</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden actief star programma</Description>
+          </Setting>
+          <Setting>
             <Default>starprogdef</Default>
             <Setting>starprogdef</Setting>
             <Type>Parameter</Type>

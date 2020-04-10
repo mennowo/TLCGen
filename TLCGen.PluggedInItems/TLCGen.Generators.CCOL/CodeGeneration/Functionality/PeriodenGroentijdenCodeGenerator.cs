@@ -40,6 +40,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var iperbel = 1;
             var iperbeldim = 1;
 
+            if (c.StarData.ToepassenStar && c.StarData.ProgrammaSturingViaKlok)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mperiodstar}", _mperiodstar));
+            }
+
             // outputs
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
             _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_uspf}{_usperdef}"));
@@ -216,7 +221,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         ++iper;
                     }
 
-                    iper = 0;
+                    iper = 1; // start at 1 for star, so 0 can be 'not star'
                     foreach (var kpm in c.PeriodenData.Perioden)
                     {
                         if (kpm.Type != PeriodeTypeEnum.StarRegelen) continue;
