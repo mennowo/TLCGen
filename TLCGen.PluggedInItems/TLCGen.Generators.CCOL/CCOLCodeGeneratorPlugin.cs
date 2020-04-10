@@ -499,6 +499,10 @@ namespace TLCGen.Generators.CCOL
 
         #region Constructor
 
+        public CCOLCodeGeneratorPlugin() : this(false)
+        {
+        }
+
         public CCOLCodeGeneratorPlugin(bool noView = false)
         {
             _noView = noView;
