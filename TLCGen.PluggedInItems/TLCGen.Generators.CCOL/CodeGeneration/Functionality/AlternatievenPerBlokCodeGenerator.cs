@@ -71,7 +71,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts} */");
                         foreach (var fc in c.Fasen)
                         {
-                            sb.AppendLine($"{ts}if(!(PRM[{_prmpf}{_prmaltb}{fc.Naam}] & (1 << ML))) PAR[{_fcpf}{fc.Naam}] = FALSE;");
+                            if (c.Data.MultiModuleReeksen)
+                            {
+                                var reeks = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc.Naam)));
+                                if (reeks != null)
+                                {
+                                    sb.AppendLine($"{ts}if (!(PRM[{_prmpf}{_prmaltb}{fc.Naam}] & (1 << {reeks.Reeks}))) PAR[{_fcpf}{fc.Naam}] = FALSE;");
+                                }
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}if (!(PRM[{_prmpf}{_prmaltb}{fc.Naam}] & (1 << ML))) PAR[{_fcpf}{fc.Naam}] = FALSE;");
+                            }
                         }
                     }
                     return sb.ToString();
