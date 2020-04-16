@@ -66,7 +66,7 @@
                 <Label Content="Blokkeren prio na ingreep" />
                 <TextBox Text="{Binding Path=BlokkeertijdNaPrioIngreep,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                 <Label Content="Bezettijd OV gehinderd" />
-                <TextBox Text="{Binding Path=BezettijdOVGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                <TextBox Text="{Binding Path=BezettijdPrioGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                 <DockPanel Grid.Row="2">
                     <ct:InfoElement DockPanel.Dock="Right">
                         <ct:InfoElement.InfoPopup>

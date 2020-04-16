@@ -87,10 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
-            var controllerdets = controller.Detectoren;
-            var ovdummydets = controller.PrioData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+            var alldets = controller.GetAllDetectors().Concat(controller.PrioData.GetAllDummyDetectors());
 
             foreach (var dm in alldets)
             {

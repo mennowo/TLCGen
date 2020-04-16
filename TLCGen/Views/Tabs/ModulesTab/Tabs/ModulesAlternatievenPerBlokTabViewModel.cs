@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
                 if (_Controller != null && _Controller.AlternatievenPerBlokData != null)
                 {
                     AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Controller.AlternatievenPerBlokData.AlternatievenPerBlok);
-                    _numberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
+                    _numberOfModules = _Controller.Data.MultiModuleReeksen ? (!_Controller.MultiModuleMolens.Any() ? 0 : _Controller.MultiModuleMolens.Max(x => x.Modules.Count)) : _Controller.ModuleMolen.Modules.Count;
                     if (ToepassenAlternatievenPerBlok)
                     {
                         foreach (var fc in Controller.Fasen)
@@ -90,7 +90,7 @@ namespace TLCGen.ViewModels
                             }
                         }
                     }
-                    RaisePropertyChanged<object>("ToepassenAlternatievenPerBlok", true);
+                    RaisePropertyChanged<object>(nameof(ToepassenAlternatievenPerBlok), true);
                 }
             }
         }
