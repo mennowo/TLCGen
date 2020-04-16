@@ -17,7 +17,7 @@
                             Visibility="{Binding Path=ShowNaam, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridTextColumn x:Key="InstellingColumn" Binding="{Binding Path=Instelling,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Instelling" 
                             Visibility="{Binding Path=ShowInstelling, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridTextColumn x:Key="DummyColumn" Binding="{Binding Path=Dummy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Dummy" 
+        <DataGridCheckBoxColumn x:Key="DummyColumn" Binding="{Binding Path=Dummy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Dummy" 
                             Visibility="{Binding Path=ShowDummy, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridComboBoxColumn x:Key="TypeColumn" Header="Type" 
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
