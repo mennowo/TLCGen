@@ -47,6 +47,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 101;
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
+                    return 101;
                 default:
                     return 0;
             }
@@ -59,6 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAlternatieven:
+                case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     if (c.AlternatievenPerBlokData?.ToepassenAlternatievenPerBlok == true)
                     {
                         sb.AppendLine($"{ts}/* BLOKGEBONDEN ALTERNATIEF */");
