@@ -88,11 +88,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.AppendLine();
 	        if (c.HalfstarData.IsHalfstar)
 	        {
-		        sb.AppendLine("/* signaalplannen*/");
+		        sb.AppendLine("/* signaalplannen */");
 		        sb.AppendLine("/* -------------- */");
 		        sb.AppendLine($"{ts}#define PLMAX1 {c.HalfstarData.SignaalPlannen.Count} /* aantal signaalplannen */");
 		        sb.AppendLine();
 	        }
+            if (c.StarData.ToepassenStar)
+            {
+                sb.AppendLine("/* starre programma's */");
+                sb.AppendLine("/* ------------------ */");
+                var pr = 0;
+                foreach (var programma in c.StarData.Programmas)
+                {
+                    sb.AppendLine($"{ts}#define STAR{pr + 1} {pr} /* programma {programma.Naam} */");
+                    ++pr;
+                }
+                sb.AppendLine($"{ts}#define STARMAX {c.StarData.Programmas.Count} /* aantal starre programmas */");
+                sb.AppendLine();
+            }
 	        sb.AppendLine("/* Aantal perioden voor max groen */");
             sb.AppendLine("/* ------- */");
 			// Here: +1 to allow room for default period in arrays made with this value

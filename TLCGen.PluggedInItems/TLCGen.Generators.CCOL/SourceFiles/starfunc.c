@@ -1,6 +1,8 @@
-count star_cyclustimer;
+#include "starfunc.h"
 
-void update_cyclustimer(count cyclustijd)
+static count star_cyclustimer;
+
+static void update_cyclustimer(count cyclustijd)
 {	
 	star_cyclustimer -= 1;
 	star_cyclustimer += TS;
@@ -58,5 +60,24 @@ void star_reset_bits()
 		RT[i] = FALSE;
 		HT[i] = FALSE;
 		AT[i] = FALSE;
+	}
+}
+
+void star_regelen()
+{
+	int fc;
+	int p = star_programma - 1;
+
+	if (p < 0) p = 0;
+
+	update_cyclustimer(STAR_ctijd[p]);
+
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		if (periode(STAR_ctijd[p], star_cyclustimer, STAR_start1[p][fc], STAR_eind1[p][fc])) commando_groen(fc);
+		if (STAR_start2[fc] != 0 && STAR_eind2[fc] != 0)
+		{
+			if (periode(STAR_ctijd[p], star_cyclustimer, STAR_start2[p][fc], STAR_eind2[p][fc])) commando_groen(fc);
+		}
 	}
 }

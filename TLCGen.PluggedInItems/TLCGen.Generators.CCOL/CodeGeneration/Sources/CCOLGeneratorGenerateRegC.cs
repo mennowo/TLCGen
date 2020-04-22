@@ -615,6 +615,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
             var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
             var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
+            var _schstar = CCOLGeneratorSettingsProvider.Default.GetElementName("schstar");
+            var _mstarprog = CCOLGeneratorSettingsProvider.Default.GetElementName("mstarprog");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
@@ -626,9 +628,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var hsts = controller.HalfstarData.IsHalfstar ? ts + ts : ts;
 
+            if (controller.StarData.ToepassenStar)
+            {
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0)");
+                sb.AppendLine($"{ts}{{");
+                sb.AppendLine($"{ts}{ts}star_instellingen();");
+                sb.AppendLine($"{ts}{ts}star_regelen();");
+                sb.AppendLine($"{ts}}}");
+                sb.AppendLine($"{ts}else");
+                sb.AppendLine($"{ts}{{");
+            }
             if (controller.HalfstarData.IsHalfstar)
             {
-                sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                sb.Append(ts);
+                if (controller.StarData.ToepassenStar)
+                {
+                    sb.Append("else ");
+                }
+                sb.AppendLine($"if (IH[{_hpf}{_hplact}])");
                 sb.AppendLine($"{ts}{{");
                 switch (controller.Data.TypeGroentijden)
                 {
@@ -672,13 +689,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{hsts}FileVerwerking();");
             sb.AppendLine($"{hsts}DetectieStoring();");
 
-            if (controller.HalfstarData.IsHalfstar)
+            if (controller.HalfstarData.IsHalfstar || controller.StarData.ToepassenStar)
             {
                 sb.AppendLine($"{ts}}}");
             }
 
-            if (controller.PrioData.PrioIngrepen.Count > 0 ||
-                controller.PrioData.HDIngrepen.Count > 0)
+            if ((controller.PrioData.PrioIngrepen.Count > 0 ||
+                 controller.PrioData.HDIngrepen.Count > 0)
+                && !controller.StarData.ToepassenStar)
             {
                 if (controller.HalfstarData.IsHalfstar)
                 {
@@ -705,7 +723,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}AfhandelingPrio();");
                 }
             }
-            if (controller.Data.FixatieData.FixatieMogelijk)
+            if (controller.Data.FixatieData.FixatieMogelijk && !controller.StarData.ToepassenStar)
             {
                 if (!controller.Data.MultiModuleReeksen)
                 {

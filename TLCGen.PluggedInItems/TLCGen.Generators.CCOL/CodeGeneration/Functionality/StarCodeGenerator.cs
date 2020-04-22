@@ -33,8 +33,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.StarData.ProgrammaSturingViaParameter)
             {
                 var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == c.StarData.DefaultProgramma);
-                var iDp = dp == null ? 0 : c.StarData.Programmas.IndexOf(dp);
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprogdef}", iDp, CCOLElementTimeTypeEnum.SCH_type, _prmstarprogdef));
+                var iDp = dp == null ? -1 : c.StarData.Programmas.IndexOf(dp);
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprogdef}", iDp + 1, CCOLElementTimeTypeEnum.SCH_type, _prmstarprogdef));
             }
 
             if (c.StarData.ProgrammaTijdenInParameters)
@@ -60,8 +60,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var p in c.StarData.PeriodenData)
                 {
                     var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == p.StarProgramma);
-                    var iDp = dp == null ? 0 : c.StarData.Programmas.IndexOf(dp);
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprog}", iDp, CCOLElementTimeTypeEnum.None, _prmstarprog, p.Periode));
+                    var iDp = dp == null ? -1 : c.StarData.Programmas.IndexOf(dp);
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprog}{p.Periode}", iDp + 1, CCOLElementTimeTypeEnum.None, _prmstarprog, p.Periode));
                 }
             }
         }
@@ -72,6 +72,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.TabCIncludes:
+                    return 100;
                 case CCOLCodeTypeEnum.RegCIncludes:
                 case CCOLCodeTypeEnum.RegCTop:
                     return 100;
@@ -96,8 +98,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.TabCIncludes:
+                    sb.AppendLine($"{ts}#include \"starvar.h\" /* Variabelen t.b.v. star regelen */");
+                    break;
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine($"{ts}#include \"starfunc.c\" /* Functies t.b.v. star regelen */");
+                    sb.AppendLine($"{ts}#include \"starvar.c\" /* Variabelen t.b.v. star regelen */");
                     break;
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{ts}extern count star_cyclustimer;");
@@ -125,7 +131,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.StarData.ProgrammaSturingViaKlok)
                     {
                         sb.AppendLine($"{ts}{ts}/* Actief star programma o.b.v. kloksturing */");
-                        sb.AppendLine($"{ts}{ts}if (MM[{_mpf}{_mperiodstar}] != 0) MM[{_mpf}{_mstarprog}] = MM[{_mpf}{_mperiodstar}];");
+                        sb.AppendLine($"{ts}{ts}switch (MM[{_mpf}{_mperiodstar}])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        int iPeriode = 1;
+                        foreach (var periode in c.StarData.PeriodenData)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}case {iPeriode++}:");
+                            sb.AppendLine($"{ts}{ts}{ts}{ts}MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprog}{periode.Periode}];");
+                            sb.AppendLine($"{ts}{ts}{ts}{ts}break;");
+                        }
+                        sb.AppendLine($"{ts}{ts}{ts}default:");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}break;");
+                        sb.AppendLine($"{ts}{ts}}}");
                     }
                     if (c.StarData.ProgrammaSturingViaParameter)
                     {
@@ -134,6 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmstarprogdef}] != 0) MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprogdef}];");
                     }
                     sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");
 
                     break;
 

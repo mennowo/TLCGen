@@ -267,8 +267,8 @@ namespace TLCGen.ViewModels
                             foreach (var fc in Controller.Fasen) prog.Fasen.Add(new StarProgrammaFase{FaseCyclus = fc.Naam});
                             return new StarProgrammaViewModel(prog);
                         }, null);
+                    _programmaManager.SelectedItem = Programmas.FirstOrDefault();
                 }
-                _programmaManager.SelectedItem = Programmas.FirstOrDefault();
                 return _programmaManager;
             }
         }

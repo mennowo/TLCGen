@@ -45,6 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string _schpf;
         private string _prmpf;
         private string _hpf;
+        private string _mpf;
 
         private string ts => CCOLGeneratorSettingsProvider.Default.Settings.TabSpace ?? "";
 
@@ -84,6 +85,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
                     _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
                     _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+                    _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
                     _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
                     _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
 
@@ -295,6 +297,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (c.StarData.ToepassenStar)
                     {
                         CopySourceIfNeeded(c, "starfunc.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "starfunc.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "starvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "starvar.h", sourcefilepath);
                     }
 
                     foreach (var pl in PieceGenerators)

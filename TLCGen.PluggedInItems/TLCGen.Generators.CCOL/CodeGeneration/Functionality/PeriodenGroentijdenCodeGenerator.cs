@@ -228,7 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         var comm = kpm.Commentaar ?? "";
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* klokperiode star regelen: {comm} */");
-                        sb.AppendLine($"{ts}/* -------------------------{new string('-', comm.Length)} */");
+                        sb.AppendLine($"{ts}/* --------------------------{new string('-', comm.Length)} */");
                         sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{kpm.Naam}], PRM[{_prmpf}{_prmetkp}{kpm.Naam}]) &&");
                         sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{kpm.Naam}]))");
                         sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiodstar}] = {iper};");

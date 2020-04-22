@@ -35,10 +35,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateTabCControlDefaults(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParameters(controller));
-            if(controller.HalfstarData.IsHalfstar && controller.HalfstarData.SignaalPlannen.Any())
+            if (controller.HalfstarData.IsHalfstar && controller.HalfstarData.SignaalPlannen.Any())
             {
                 sb.AppendLine();
                 sb.Append(GenerateHstCSignaalPlanInstellingen(controller));
+            }
+            if (controller.StarData.ToepassenStar && controller.StarData.Programmas.Any())
+            {
+                sb.AppendLine();
+                sb.Append(GenerateTabCStarPlanInstellingen(controller));
             }
 
             return sb.ToString();
@@ -1126,6 +1131,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine("#endif /* NO_VLOG */");
+
+            return sb.ToString();
+        }
+
+        private string GenerateTabCStarPlanInstellingen(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void star_instellingen(void)");
+            sb.AppendLine("{");
+
+            sb.AppendLine($"{ts}/* STARRE PROGRAMMA INSTELLINGEN */");
+            sb.AppendLine($"{ts}/* ============================= */");
+            sb.AppendLine();
+            int pr = 1;
+            foreach (var programma in controller.StarData.Programmas)
+            {
+                sb.AppendLine($"{ts}/* {programma.Naam} */");
+                sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = {programma.Cyclustijd};");
+                foreach (var sg in programma.Fasen)
+                {
+                    sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
+                    if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
+                    {
+                        sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
+                    }
+                }
+                ++pr;
+                sb.AppendLine();
+            }
+		    
+            sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }

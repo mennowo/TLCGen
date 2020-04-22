@@ -46,7 +46,7 @@
                     </Grid.ColumnDefinitions>
 
                     <ListView Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=Programmas}" Margin="2"
-                              SelectedItem="{Binding Path=ProgrammaManager.SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+                              SelectedItem="{Binding Path=ProgrammaManager.SelectedItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=Naam}" />
@@ -58,8 +58,9 @@
                         Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Caption="Toevoegen/verwijderen programma's" 
                         DataContext="{Binding Path=ProgrammaManager}" />
 
-                    <Grid Grid.Row="0" Grid.Column="1" >
+                    <Grid Grid.Row="0" Grid.Column="1" DataContext="{Binding Path=ProgrammaManager.SelectedItem}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -68,26 +69,26 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Label Content="Programma" />
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ProgrammaManager.SelectedItem.Naam}" Margin="2" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Naam}" Margin="2" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Cyclustijd" />
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=ProgrammaManager.SelectedItem.Cyclustijd}" Margin="2" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Cyclustijd}" Margin="2" />
+                        <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Fasen}"
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="2">
+                            <DataGrid.RowHeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.FaseNaam}"/>
+                                </DataTemplate>
+                            </DataGrid.RowHeaderTemplate>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Start1,UpdateSourceTrigger=PropertyChanged}" Header="Start 1" />
+                                <DataGridTextColumn Binding="{Binding Eind1,UpdateSourceTrigger=PropertyChanged}" Header="Eind 1" />
+                                <DataGridTextColumn Binding="{Binding Start2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Start 2" />
+                                <DataGridTextColumn Binding="{Binding Eind2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Eind 2" />
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
-                    <DataGrid Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=ProgrammaManager.SelectedItem.Fasen}"
-                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="2">
-                        <DataGrid.RowHeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                      AncestorType={x:Type DataGridRow}}, 
-                                      Path=Item.FaseNaam}"/>
-                            </DataTemplate>
-                        </DataGrid.RowHeaderTemplate>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Start1,UpdateSourceTrigger=PropertyChanged}" Header="Start 1" />
-                            <DataGridTextColumn Binding="{Binding Eind1,UpdateSourceTrigger=PropertyChanged}" Header="Eind 1" />
-                            <DataGridTextColumn Binding="{Binding Start2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Start 2" />
-                            <DataGridTextColumn Binding="{Binding Eind2,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" Header="Eind 2" />
-                        </DataGrid.Columns>
-                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Perioden" IsEnabled="{Binding Path=ProgrammaSturingViaKlok}">
