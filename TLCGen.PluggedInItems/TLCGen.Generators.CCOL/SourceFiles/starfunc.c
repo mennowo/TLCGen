@@ -68,7 +68,7 @@ void star_regelen()
 	int fc;
 	int p = star_programma - 1;
 
-	if (p < 0) p = 0;
+	if (p < 0 || p >= STARMAX) p = 0;
 
 	update_cyclustimer(STAR_ctijd[p]);
 
