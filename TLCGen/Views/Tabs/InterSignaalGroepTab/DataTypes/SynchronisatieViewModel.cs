@@ -48,6 +48,38 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public object SelectedObject
+        {
+            get
+            {
+                switch (DisplayType)
+                {
+                    case IntersignaalGroepTypeEnum.Conflict:
+                        break;
+                    case IntersignaalGroepTypeEnum.GarantieConflict:
+                        break;
+                    case IntersignaalGroepTypeEnum.Gelijkstart:
+                        return GelijkstartVM;
+                    case IntersignaalGroepTypeEnum.Voorstart:
+                        break;
+                    case IntersignaalGroepTypeEnum.Naloop:
+                        break;
+                    case IntersignaalGroepTypeEnum.Meeaanvraag:
+                        break;
+                    case IntersignaalGroepTypeEnum.LateRelease:
+                        break;
+                    case IntersignaalGroepTypeEnum.SomeConflict:
+                        break;
+                    case IntersignaalGroepTypeEnum.SomeSynchronisatie:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                return null;
+            }
+        }
+
         public NaloopViewModel NaloopVM => _NaloopVM ?? (_NaloopVM = new NaloopViewModel(_Naloop));
 
 	    public MeeaanvraagViewModel MeeaanvraagVM => _MeeaanvraagVM ?? (_MeeaanvraagVM = new MeeaanvraagViewModel(_Meeaanvraag));
@@ -133,6 +165,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(ConflictBackground));
                 RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
                 RaisePropertyChanged(nameof(DisplayTypeTimings));
+                RaisePropertyChanged(nameof(SelectedObject));
             }
         }
 

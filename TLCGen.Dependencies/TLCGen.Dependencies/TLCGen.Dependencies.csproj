@@ -157,6 +157,7 @@
     <Compile Include="Models.Enumerations\RoBuGroverMethodeEnum.cs" />
     <Compile Include="Models.Enumerations\SegmentDisplayTypeEnum.cs" />
     <Compile Include="Models.Enumerations\SelectieveDetectorTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\SynchronisatiesTypeEnum.cs" />
     <Compile Include="Models.Enumerations\TLCGenObjectTypeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGLogModeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGMonModeEnum.cs" />

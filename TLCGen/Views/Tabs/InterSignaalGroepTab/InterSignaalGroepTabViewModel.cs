@@ -12,6 +12,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.ViewModels.Enums;
 
@@ -44,7 +45,7 @@ namespace TLCGen.ViewModels
 
         public IntersignaalGroepTypeEnum DisplayType
         {
-            get { return _DisplayType; }
+            get => _DisplayType;
             set
             {
                 _DisplayType = value;
@@ -79,13 +80,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// Returns the collection of FaseCyclusViewModel from the main ControllerViewModel
         /// </summary>
-        public IReadOnlyList<FaseCyclusModel> Fasen
-        {
-            get
-            {
-                return _Controller.Fasen;
-            }
-        }
+        public IReadOnlyList<FaseCyclusModel> Fasen => _Controller.Fasen;
 
         public string TijdenLabel => _Controller?.Data?.Intergroen == true ? "Intergroen tijden" : "Ontruimingstijden";
 
@@ -115,7 +110,7 @@ namespace TLCGen.ViewModels
 
         public GarantieTijdConvertHelper SelectedGarantieTijdenConvertValue
         {
-            get { return _SelectedGarantieTijdenConvertValue; }
+            get => _SelectedGarantieTijdenConvertValue;
             set
             {
                 _SelectedGarantieTijdenConvertValue = value;
@@ -125,10 +120,7 @@ namespace TLCGen.ViewModels
 
         public SynchronisatieViewModel SelectedSynchronisatie
         {
-            get
-            {
-                return _SelectedSynchronisatie;
-            }
+            get => _SelectedSynchronisatie;
             set
             {
                 _SelectedSynchronisatie = value;
@@ -186,23 +178,34 @@ namespace TLCGen.ViewModels
         /// </summary>
         public bool MatrixChanged
         {
-            get { return _MatrixChanged; }
+            get => _MatrixChanged;
             set
             {
                 if (value)
-                    RaisePropertyChanged("MatrixChanged", _MatrixChanged, value, true);
+                    RaisePropertyChanged(nameof(MatrixChanged), _MatrixChanged, true, true);
                 _MatrixChanged = value;
             }
         }
 
         public bool UseGarantieOntruimingsTijden
         {
-            get { return _Controller?.Data?.GarantieOntruimingsTijden ?? false; }
+            get => _Controller?.Data?.GarantieOntruimingsTijden ?? false;
             set
             {
                 _Controller.Data.GarantieOntruimingsTijden = value;
                 MatrixChanged = true;
-                RaisePropertyChanged("UseGarantieOntruimingsTijden", _Controller.Data.GarantieOntruimingsTijden, value, true);
+                RaisePropertyChanged(nameof(UseGarantieOntruimingsTijden), _Controller.Data.GarantieOntruimingsTijden, value, true);
+            }
+        }
+
+        public SynchronisatiesTypeEnum SynchronisatiesType
+        {
+            get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.SyncFunc;
+            set
+            {
+                _Controller.Data.SynchronisatiesType = value;
+                MatrixChanged = true;
+                RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
             }
         }
 
@@ -369,17 +372,11 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "InterSignaalGroep";
-            }
-        }
+        public override string DisplayName => "InterSignaalGroep";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -416,10 +413,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
