@@ -15,6 +15,7 @@
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:SynchronisatiesTabViewModel}">
     <UserControl.Resources>
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
@@ -30,20 +31,20 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Vertical">
                     <RadioButton Content="{Binding Path=TijdenLabel,Mode=OneWay}" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Conflict}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Conflict},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="{Binding Path=GarantieTijdenLabel,Mode=OneWay}" GroupName="SynchronisatieType" Margin="5"
                                  IsEnabled="{Binding Path=UseGarantieOntruimingsTijden}"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="Gelijkstarten" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Gelijkstart}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Gelijkstart},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="Voorstarten" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Voorstart}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Voorstart},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="Nalopen" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="Meeaanvragen" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Meeaanvraag}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Meeaanvraag},UpdateSourceTrigger=PropertyChanged}" />
                     <RadioButton Content="Late release" GroupName="SynchronisatieType" Margin="5"
-                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.LateRelease}}" />
+                                 IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.LateRelease},UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <Border BorderBrush="Black" BorderThickness="0.25" Grid.Column="1" >
                     <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -53,7 +54,7 @@
                         </Grid.RowDefinitions>
                         <local:ConflictMatrixDataGrid 
                             ConflictMatrix="{Binding Path=ConflictMatrix,Mode=OneWay}" 
-                            GridSelectedItem="{Binding Path=SelectedSynchronisatie,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
+                            GridSelectedItem="{Binding Path=SelectedSynchronisatie,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                             Grid.ColumnSpan="2" HorizontalAlignment="Left" />
                     </Grid>
                 </Border>
@@ -62,17 +63,11 @@
 
                 <Grid Grid.Column="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <CheckBox 
-                        IsEnabled="{Binding Path=SelectedSynchronisatie.IsEnabled}"
-                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeSynchronisatie}}"
-                        IsChecked="{Binding Path=SelectedSynchronisatie.IsCoupled,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Actief" />
-
-                    <Grid Grid.Row="0" Grid.RowSpan="2"
-                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict}}" >
+                    <Grid Grid.Row="0"
+                          Visibility="{Binding Path=ShowGarantieTijdenConverter,Converter={StaticResource BooleanToVisibilityConverter}}" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -99,25 +94,8 @@
                         </StackPanel>
                     </Grid>
                     
-                    <ContentControl Grid.Row="1" Content="{Binding Path=SelectedSynchronisatie.SelectedObject}" >
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type vm:GelijkstartViewModel}">
-                                <local:GelijkstartView />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:VoorstartViewModel}">
-                                <local:VoorstartView />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:NaloopViewModel}">
-                                <local:NaloopView />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:MeeaanvraagViewModel}">
-                                <local:MeeAanvraagView />
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:LateReleaseViewModel}">
-                                <local:LateReleaseView />
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>
+                    <local:SynchronisatieView DataContext="{Binding Path=SelectedSynchronisatie}" />
+
                 </Grid>
             </Grid>
         </TabItem>

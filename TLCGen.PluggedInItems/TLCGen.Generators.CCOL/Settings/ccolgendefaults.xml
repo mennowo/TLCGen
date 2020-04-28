@@ -98,6 +98,12 @@
         <ElementGenerationOrder>10</ElementGenerationOrder>
         <Settings>
           <Setting>
+            <Default>mad</Default>
+            <Setting>mad</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement onthouden melding meeaanvraag detector _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>fb</Default>
             <Setting>fb</Setting>
             <Type>Parameter</Type>
@@ -751,12 +757,6 @@
             <Setting>ma</Setting>
             <Type>Schakelaar</Type>
             <Description>Meeaanvraag van _E1_ naar _E2_ actief</Description>
-          </Setting>
-          <Setting>
-            <Default>mad</Default>
-            <Setting>mad</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement onthouden melding meeaanvraag detector _E1_</Description>
           </Setting>
           <Setting>
             <Default>typema</Default>
@@ -1849,6 +1849,57 @@
             <Setting>nlrt</Setting>
             <Type>Timer</Type>
             <Description>Nalooptijd rateltikker fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="RealFuncCodeGenerator">
+      <CodePieceData>
+        <ClassName>RealFuncCodeGenerator</ClassName>
+        <Description>Synchronisaties middels realfunc</Description>
+        <ElementGenerationOrder>340</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>los</Default>
+            <Setting>los</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan los realiseren fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>los</Default>
+            <Setting>los</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden toestaan los realiseren fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inl</Default>
+            <Setting>inl</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden inlopen toestaan fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inl</Default>
+            <Setting>inl</Setting>
+            <Type>Timer</Type>
+            <Description>Inloop tijd fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>realvs</Default>
+            <Setting>vs</Setting>
+            <Type>Timer</Type>
+            <Description>Voorstarttijd fase _E1_ op fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>reallr</Default>
+            <Setting>lr</Setting>
+            <Type>Timer</Type>
+            <Description>Late release tijd fase _E1_ naar fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>realtijd</Default>
+            <Setting>realtijd</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Realisatie tijd fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

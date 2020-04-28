@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -24,6 +25,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
+
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return;
 
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
@@ -79,7 +82,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc ||
+                        c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
@@ -105,10 +109,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             // return if no sync
-            if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc 
+                || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                 return null;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -240,10 +245,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasSettings()
-        {
-            return true;
-        }
+        public override bool HasSettings() => true;
 
         #region Constructor
         #endregion // Constructor

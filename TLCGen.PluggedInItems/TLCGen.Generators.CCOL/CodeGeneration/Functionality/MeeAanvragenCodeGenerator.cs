@@ -13,10 +13,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schma;
-        private CCOLGeneratorCodeStringSettingModel _hmad;
         private CCOLGeneratorCodeStringSettingModel _prmtypema;
         private CCOLGeneratorCodeStringSettingModel _tuitgestma;
 #pragma warning restore 0649
+        private string _hmad;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -24,21 +24,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
             {
-                if (ma.DetectieAfhankelijk)
-                {
-                    foreach(var dm in ma.Detectoren)
-                    {
-                        var elem =
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_hmad}{dm.MeeaanvraagDetector}",
-                                _hmad, dm.MeeaanvraagDetector);
-                        if (_myElements.Count == 0 || _myElements.All(x => x.Naam != elem.Naam))
-                        {
-                            _myElements.Add(elem);
-                        }
-                    }
-                }
-
                 if (ma.AanUit != AltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
@@ -52,7 +37,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if ((ma.Type == MeeaanvraagTypeEnum.Startgroen || ma.TypeInstelbaarOpStraat) &&
                     ma.Uitgesteld)
                 {
-
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}",
@@ -113,31 +97,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
-                    bool hasdetafh = false;
-                    if(c.InterSignaalGroep.Meeaanvragen.Count > 0)
-                    {
-                        hasdetafh = c.InterSignaalGroep.Meeaanvragen.Any(x => x.DetectieAfhankelijk);
-                    }
-                    if(hasdetafh)
-                    {
-                        sb.AppendLine($"{ts}/* Bewaar meldingen van detectie voor het zetten van een meeaanvraag */");
-                        var mads = new List<Tuple<string, string>>();
-                        foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
-                        {
-                            if (!ma.DetectieAfhankelijk) continue;
-                            foreach(var d in ma.Detectoren)
-                            {
-                                if(!mads.Any(x => x.Item1 == ma.FaseVan && x.Item2 == d.MeeaanvraagDetector))
-                                {
-                                    mads.Add(new Tuple<string, string>(ma.FaseVan, d.MeeaanvraagDetector));
-                                }
-                            }
-                        }
-                        foreach (var mad in mads)
-                        {
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}] = SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
-                        }
-                    }
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
                         var tts = ts;
@@ -294,9 +253,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasSettings()
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            return true;
+            _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+
+            return base.SetSettings(settings);
         }
     }
 }
