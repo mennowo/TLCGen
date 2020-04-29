@@ -82,8 +82,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     var fcs = c.Fasen.Where(x => x.SeniorenIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                                          x.Detectoren.Any(x2 => x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)).ToList();
-                    if (!fcs.Any()) return base.GetFunctionLocalVariables(c, type);
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return !fcs.Any() 
+                        ? base.GetFunctionLocalVariables(c, type) 
+                        : new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -95,6 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return 80;
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     return 50;
             }
@@ -118,36 +120,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}    if (US_type[fc] & VTG_type) RW[fc] &= ~BIT7;");
                     sb.AppendLine($"{ts}}}");
                     break;
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     sb.AppendLine($"{ts}/* Seniorengroen (percentage van TFG extra als WG) */");
                     foreach(var fc in fcs)
                     {
                         var dks = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen).ToList();
                         var dk1 = dks.FirstOrDefault();
-                        DetectorModel dk2 = ((dks.Count() > 1) ? dks[1] : null);
-                        var nl_extra = c.InterSignaalGroep.Nalopen.Where(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.FaseVan == fc.Naam);
-                        var extra_d = "";
+                        var dk2 = dks.Count > 1 ? dks[1] : null;
+                        var nlExtra = c.InterSignaalGroep.Nalopen.Where(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.FaseVan == fc.Naam);
+                        var extraD = "";
                         sb.Append($"{ts}");
                         if (fc.SeniorenIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                         {
                             sb.Append($"if (SCH[{_schpf}{_schsi}{fc.Naam}]) ");
                         }
-                        if (nl_extra.Any())
+                        if (nlExtra.Any())
                         {
-                            foreach(var nl in nl_extra)
+                            foreach(var nl in nlExtra)
                             {
                                 var tnl = _tnlsg;
                                 if (nl.DetectieAfhankelijk)
                                 {
                                     tnl = _tnlsgd;
                                 }
-                                extra_d += _tpf + tnl + nl.FaseVan + nl.FaseNaar + ", ";
+                                extraD += _tpf + tnl + nl.FaseVan + nl.FaseNaar + ", ";
                             }
-                            extra_d += "END";
+                            extraD += "END";
                         }
                         else
                         {
-                            extra_d = "END";
+                            extraD = "END";
                         }
                         sb.AppendLine($"SeniorenGroen({_fcpf}{fc.Naam}, " +
                             $"{(dk1 != null ? $"{_dpf}{dk1.Naam}" : "NG")}, " +
@@ -157,7 +160,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             $"{_prmpf}{_prmsiexgrperc}{fc.Naam}, " + 
                             $"{_hpf}{_hsiexgr}{fc.Naam}, " +
                             $"{_tpf}{_tsiexgr}{fc.Naam}, " +
-                            $"{extra_d});");
+                            $"{extraD});");
                     }
                     break;
             }
