@@ -38,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmfb}", c.Data.Fasebewaking, CCOLElementTimeTypeEnum.TS_type, _prmfb));
 
             // Onthouden drukknop meldingen
-            _madets = c.InterSignaalGroep.Meeaanvragen.Where(x => x.DetectieAfhankelijk).SelectMany(x => x.Detectoren).Select(x => x.MeeaanvraagDetector).ToList();
+            var madets = c.InterSignaalGroep.Meeaanvragen.Where(x => x.DetectieAfhankelijk).SelectMany(x => x.Detectoren).Select(x => x.MeeaanvraagDetector).ToList();
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
@@ -56,12 +56,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var mdr2A = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
                     var mdr2B = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
 
-                    if (mdr1A != null) _madets.Add(mdr1A.Naam);
-                    if (mdr1B != null) _madets.Add(mdr1B.Naam);
-                    if (mdr2A != null) _madets.Add(mdr2A.Naam);
-                    if (mdr2B != null) _madets.Add(mdr2B.Naam);
+                    if (mdr1A != null) madets.Add(mdr1A.Naam);
+                    if (mdr1B != null) madets.Add(mdr1B.Naam);
+                    if (mdr2A != null) madets.Add(mdr2A.Naam);
+                    if (mdr2B != null) madets.Add(mdr2B.Naam);
                 }
             }
+
+            _madets = madets.Distinct().ToList();
             _madets.Sort();
             foreach (var dm in _madets.Distinct())
             {

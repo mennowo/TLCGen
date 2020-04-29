@@ -62,7 +62,7 @@ namespace TLCGen.Models
             return result;
         }
 
-        public static (List<GroenSyncModel>, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)>, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWayPedestrians) OrderSyncs(ControllerModel c, GroenSyncDataModel groenSyncData)
+        public static (List<GroenSyncModel> oneWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWayPedestrians) OrderSyncs(ControllerModel c, GroenSyncDataModel groenSyncData)
         {
             var oneWay = new List<GroenSyncModel>();
             var twoWay = new List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)>();

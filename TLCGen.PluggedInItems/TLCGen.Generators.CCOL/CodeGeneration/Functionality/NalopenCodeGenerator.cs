@@ -288,7 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
-                        {
+                    {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");
                         sb.AppendLine($"{ts}/* --------------------------------------------- */");
                         foreach (var nl in c.InterSignaalGroep.Nalopen)

@@ -238,7 +238,7 @@ Task("DeployDev")
 
                 transferResult = session.PutFiles(
 				  outputDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\"), 
-				  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Dev/", false, transferOptions);
+				  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/DevRealFunc/", false, transferOptions);
                 transferResult.Check();
 
                 // Print results
@@ -251,7 +251,7 @@ Task("DeployDev")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 Task("Default")
-    .IsDependentOn("PackPortable");
+    .IsDependentOn("DeployDev");
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////

@@ -25,6 +25,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hmad;
         private GroenSyncDataModel _groenSyncData;
         private List<string> _fasenMetSync;
+        private (List<GroenSyncModel> oneWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWay,
+            List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWayPedestrians) _sortedSyncs;
 
         #endregion // Fields
 
@@ -35,13 +37,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc) return;
 
             _groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
-            var (oneWay, twoWay, twoWayPedestrians) = GroenSyncDataModel.OrderSyncs(c, _groenSyncData);
+            _sortedSyncs = GroenSyncDataModel.OrderSyncs(c, _groenSyncData);
             _fasenMetSync = _groenSyncData.GroenSyncFasen.Select(x => x.FaseVan)
                 .Concat(_groenSyncData.GroenSyncFasen.Select(x => x.FaseNaar)).Distinct()
                 .ToList();
             _fasenMetSync.Sort();
 
-            foreach (var model in oneWay)
+            foreach (var model in _sortedSyncs.oneWay)
             {
                 var max = model.Waarde < 0 ? _treallr : _trealvs;
                 _myElements.Add(
@@ -54,7 +56,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             var helps = new List<string>();
 
-            foreach (var (m1, m2, gelijkstart) in twoWayPedestrians)
+            foreach (var (m1, m2, gelijkstart) in _sortedSyncs.twoWayPedestrians)
             {
                 if (gelijkstart) continue;
 
@@ -159,6 +161,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 80;
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 30;
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                    return 70;
 				default:
                     return 0;
             }
@@ -174,6 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 return null;
 
             var sb = new StringBuilder();
+            var first = true;
 
             switch (type)
             {
@@ -182,15 +188,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
 
-                    // Order
-                    var (oneWay, twoWay, twoWayPedestrians) = GroenSyncDataModel.OrderSyncs(c, _groenSyncData);
-
                     // TODO test and check logic
-                    var threeWayPedestrians = GetThreeWayPedestirans(twoWayPedestrians);
+                    var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);
 
                     // Two-way negative pedestrians
                     var startDuringRed = false;
-                    foreach (var (m1, _, gelijkstart) in twoWayPedestrians)
+                    foreach (var (m1, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                     {
                         if (gelijkstart) continue;
 
@@ -218,7 +221,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd */");
-                        foreach (var (m1, _, gelijkstart) in twoWayPedestrians)
+                        foreach (var (m1, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
                             if (gelijkstart) continue;
 
@@ -234,21 +237,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
-                    foreach (var model in oneWay)
+                    foreach (var model in _sortedSyncs.oneWay)
                     {
                         var max = model.Waarde < 0 ? _treallr : _trealvs;
                         var dir = model.Waarde < 0 ? "TRUE" : "FALSE";
                         sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{model.FaseVan}, {_fcpf}{model.FaseNaar}, T_max[{_tpf}{max}{model.FaseVan}{model.FaseNaar}], {dir});");
                     }
-                    foreach (var (m1, m2, _) in twoWay)
+                    foreach (var (m1, m2, _) in _sortedSyncs.twoWay)
                     {
                         if (m1.Waarde != 0 || m2.Waarde != 0) continue;
                         sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{m1.FaseVan}, {_fcpf}{m1.FaseNaar}, 0, FALSE);");
                         sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{m2.FaseVan}, {_fcpf}{m2.FaseNaar}, 0, FALSE);");
                     }
                     sb.AppendLine();
-                    var first = true;
-                    foreach (var (m1, _, gelijkstart) in twoWayPedestrians)
+                    foreach (var (m1, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                     {
                         if (gelijkstart) continue;
 
@@ -263,8 +265,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* Fictieve ontruiming */");
                     foreach (var fotModel in _groenSyncData.FictieveConflicten)
                     {
-                        var ow = oneWay.FirstOrDefault(x => x.FaseVan == fotModel.FaseVan && x.FaseNaar == fotModel.FaseNaar);
-                        var tw = twoWay.FirstOrDefault(x => x.m1.FaseVan == fotModel.FaseVan && x.m1.FaseNaar == fotModel.FaseNaar || x.m2.FaseVan == fotModel.FaseVan && x.m2.FaseNaar == fotModel.FaseNaar);
+                        var ow = _sortedSyncs.oneWay.FirstOrDefault(x => x.FaseVan == fotModel.FaseVan && x.FaseNaar == fotModel.FaseNaar);
+                        var tw = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fotModel.FaseVan && x.m1.FaseNaar == fotModel.FaseNaar || x.m2.FaseVan == fotModel.FaseVan && x.m2.FaseNaar == fotModel.FaseNaar);
                         if (ow == null && tw.m1 == null || tw.m1 != null && (tw.m1.Waarde != 0 || tw.m2.Waarde != 0)) continue;
                         
                         var max = ow != null ? ow.Waarde < 0 ? _treallr : _trealvs : null;
@@ -298,6 +300,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Uitvoeren synchronisaties */");
                     sb.AppendLine($"{ts}Synchroniseer();");
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                    foreach (var (m1, m2, gelijkstart) in _sortedSyncs.twoWayPedestrians)
+                    {
+                        if (gelijkstart) continue;
+                        
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* Bij inlopen, inlopende richting in WG houden t.b.v. eventuele aanvraag naloop in tegenrichting */");
+                            first = false;
+                        }
+                        sb.AppendLine($"{ts}RW[{_fcpf}{m1.FaseVan}] |= T[{_tpf}{_tinl}{m1.FaseVan}{m1.FaseNaar}] ? BIT2 : 0;");
+                        sb.AppendLine($"{ts}RW[{_fcpf}{m2.FaseVan}] |= T[{_tpf}{_tinl}{m2.FaseVan}{m2.FaseNaar}] ? BIT2 : 0;");
+                    }
+                    return sb.ToString();
+
                 default:
                     return null;
             }

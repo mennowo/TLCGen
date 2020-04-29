@@ -30,6 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _hplact;
 	    private string _hnla;
 	    private string _schgs;
+	    private string _hlos;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -47,6 +48,41 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLElementTimeTypeEnum.None,
                         _prmmlfpr,
                         fc.FaseCyclus));
+            }
+
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
+                var sortedSyncs = GroenSyncDataModel.OrderSyncs(c, groenSyncData);
+                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                {
+                    // Only do this for pedestrians with sync
+                    var sync = sortedSyncs.twoWayPedestrians?.FirstOrDefault(x =>
+                        x.m1.FaseVan == nl.FaseVan && x.m1.FaseNaar == nl.FaseNaar
+                        || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
+                    if (sync == null) continue;
+
+                    string hnl;
+                    switch (nl.Type)
+                    {
+                        case NaloopTypeEnum.StartGroen:
+                            hnl = _tnlsg;
+                            break;
+                        case NaloopTypeEnum.EindeGroen:
+                            hnl = _tnleg;
+                            break;
+                        case NaloopTypeEnum.CyclischVerlengGroen:
+                            hnl = _tnlcv;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{hnl}{nl.FaseVan}{nl.FaseNaar}", 0, CCOLElementTimeTypeEnum.None,
+                            CCOLElementTypeEnum.HulpElement, ""));
+                }
             }
 
             // Alternatieven
@@ -290,37 +326,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                        var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                        List<Tuple<string, List<string>>> gelijkstarttuples = null;
                         var yes = false;
-                        foreach (var gs in gelijkstarttuples.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc) // TODO how is this with REALFUNC?
                         {
-                            if (gs.Item2.Count > 1)
+                            gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                            foreach (var gs in gelijkstarttuples.Where(x =>
+                                c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
                             {
-                                yes = true;
-                                var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseNaar == gs.Item1 || x.FaseVan == gs.Item1);
-                                sb.Append($"{ts}");
-                                if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
-                                sb.Append($"RR[{_fcpf}{gs.Item1}] |= R[{_fcpf}{gs.Item1}] && ");
-                                if (gs.Item2.Count > 1) sb.Append("(");
-                                var i = 0;
-                                foreach (var ofc in gs.Item2)
+                                if (gs.Item2.Count > 1)
                                 {
-                                    if (ofc == gs.Item1)
+                                    yes = true;
+                                    var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x =>
+                                        x.FaseNaar == gs.Item1 || x.FaseVan == gs.Item1);
+                                    sb.Append($"{ts}");
+                                    if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd)
+                                        sb.Append(
+                                            $"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
+                                    sb.Append($"RR[{_fcpf}{gs.Item1}] |= R[{_fcpf}{gs.Item1}] && ");
+                                    if (gs.Item2.Count > 1) sb.Append("(");
+                                    var i = 0;
+                                    foreach (var ofc in gs.Item2)
                                     {
-                                        continue;
+                                        if (ofc == gs.Item1)
+                                        {
+                                            continue;
+                                        }
+
+                                        if (i > 0) sb.Append(" || ");
+                                        sb.Append($"(RR[{_fcpf}{ofc}] & BIT5)");
+                                        ++i;
                                     }
 
-                                    if (i > 0) sb.Append(" || ");
-                                    sb.Append($"(RR[{_fcpf}{ofc}] & BIT5)");
-                                    ++i;
+                                    if (gs.Item2.Count > 1) sb.Append(")");
+                                    sb.AppendLine(" ? BIT5 : 0;");
                                 }
-                                if (gs.Item2.Count > 1) sb.Append(")");
-                                sb.AppendLine(" ? BIT5 : 0;");
                             }
-                        }
-                        if (yes)
-                        {
-                            sb.AppendLine();
+
+                            if (yes)
+                            {
+                                sb.AppendLine();
+                            }
                         }
 
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
@@ -334,105 +380,218 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
 
-                        foreach (var fc in c.ModuleMolen.FasenModuleData)
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                         {
-                            Tuple<string, List<string>> hasgs = null;
-                            foreach (var gs in gelijkstarttuples)
+                            foreach (var fc in c.ModuleMolen.FasenModuleData)
                             {
-                                if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                                Tuple<string, List<string>> hasgs = null;
+                                foreach (var gs in gelijkstarttuples)
                                 {
-                                    hasgs = gs;
-                                    break;
+                                    if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                                    {
+                                        hasgs = gs;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (hasgs != null)
-                            {
-                                sb.Append(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
-                                foreach (var ofc in hasgs.Item2)
-                                {
-                                    sb.Append(ofc);
-                                }
-                                sb.Append($"]) && SCH[{_schpf}{_schaltg}");
-                                foreach (var ofc in hasgs.Item2)
-                                {
-                                    sb.Append(ofc);
-                                }
-                                sb.AppendLine("];");
-                            }
-                            else
-                            {
-                                sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
-                            }
-                        }
-                        sb.AppendLine();
 
-                        if (c.InterSignaalGroep.Nalopen.Count > 0)
-                        {
-                            if (c.InterSignaalGroep.Nalopen.Any(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
-                            {
-                                sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
-                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                if (hasgs != null)
                                 {
-                                    var hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == nl.FaseVan && x.Item2.Count > 1);
-                                    if (hasgs != null)
+                                    sb.Append(
+                                        $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                    foreach (var ofc in hasgs.Item2)
                                     {
-                                        sb.Append(
-                                            $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}] && ({maxtartotig}({_fcpf}{nl.FaseNaar}) >= (PRM[{_prmpf}{_prmaltp}");
-                                        foreach (var ofc in hasgs.Item2)
-                                        {
-                                            sb.Append(ofc);
-                                        }
-                                        sb.AppendLine($"] + TNL_PAR[{_fcpf}{nl.FaseNaar}]));");
+                                        sb.Append(ofc);
                                     }
-                                    else
+
+                                    sb.Append($"]) && SCH[{_schpf}{_schaltg}");
+                                    foreach (var ofc in hasgs.Item2)
                                     {
-                                        sb.AppendLine(
-                                            $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}] && ({maxtartotig}({_fcpf}{nl.FaseNaar}) >= (PRM[{_prmpf}{_prmaltp}{nl.FaseVan}] + TNL_PAR[{_fcpf}{nl.FaseNaar}]));");
+                                        sb.Append(ofc);
                                     }
+
+                                    sb.AppendLine("];");
                                 }
-                                sb.AppendLine();
-                            }
-                            
-                            sb.AppendLine($"{ts}/* Verzorgen PAR voor naloop richtingen */");
-                            if (c.InterSignaalGroep.Nalopen.Any(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
-                            {
-                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                else
                                 {
                                     sb.AppendLine(
-                                        $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseVan}] || FG[{_fcpf}{nl.FaseVan}];");
+                                        $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
+                            }
+
+                            sb.AppendLine();
+
+                            if (c.InterSignaalGroep.Nalopen.Count > 0)
+                            {
+                                if (c.InterSignaalGroep.Nalopen.Any(x =>
+                                    c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                {
+                                    sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
+                                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                                        c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                    {
+                                        var hasgs = gelijkstarttuples?.FirstOrDefault(x =>
+                                            x.Item1 == nl.FaseVan && x.Item2.Count > 1);
+                                        if (hasgs != null)
+                                        {
+                                            sb.Append(
+                                                $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}] && ({maxtartotig}({_fcpf}{nl.FaseNaar}) >= (PRM[{_prmpf}{_prmaltp}");
+                                            foreach (var ofc in hasgs.Item2)
+                                            {
+                                                sb.Append(ofc);
+                                            }
+
+                                            sb.AppendLine($"] + TNL_PAR[{_fcpf}{nl.FaseNaar}]));");
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine(
+                                                $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}] && ({maxtartotig}({_fcpf}{nl.FaseNaar}) >= (PRM[{_prmpf}{_prmaltp}{nl.FaseVan}] + TNL_PAR[{_fcpf}{nl.FaseNaar}]));");
+                                        }
+                                    }
+
+                                    sb.AppendLine();
+                                }
+
+                                sb.AppendLine($"{ts}/* Verzorgen PAR voor naloop richtingen */");
+                                if (c.InterSignaalGroep.Nalopen.Any(x =>
+                                    c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                {
+                                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                                        c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                    {
+                                        sb.AppendLine(
+                                            $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseVan}] || FG[{_fcpf}{nl.FaseVan}];");
+                                    }
+
+                                    sb.AppendLine();
+                                }
+                            }
+                        }
+                        else // Realfunc
+                        {
+                            var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
+                            var sortedSyncs = GroenSyncDataModel.OrderSyncs(c, groenSyncData);
+
+                            foreach (var model in sortedSyncs.twoWay)
+                            {
+
+                            }
+
+                            // PAR voetgangers
+                            // TODO andere typen???
+                            var first = true;
+                            var pars = new[]{ new List<string>(), new List<string>(), new List<string>() };
+                            foreach (var nl in c.InterSignaalGroep.Nalopen)
+                            {
+                                // Only do this for pedestrians with sync
+                                var sync = sortedSyncs.twoWayPedestrians.FirstOrDefault(x =>
+                                    x.m1.FaseVan == nl.FaseVan && x.m1.FaseNaar == nl.FaseNaar
+                                    || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
+                                if(sync.m1 == null) continue;
+
+                                string tnl;
+                                string hnl;
+                                switch (nl.Type)
+                                {
+                                    case NaloopTypeEnum.StartGroen:
+                                        tnl = nl.DetectieAfhankelijk ? _tnlsgd : _tnlsg;
+                                        hnl = _tnlsg;
+                                        break;
+                                    case NaloopTypeEnum.EindeGroen:
+                                        tnl = nl.DetectieAfhankelijk ? _tnlegd : _tnleg;
+                                        hnl = _tnleg;
+                                        break;
+                                    case NaloopTypeEnum.CyclischVerlengGroen:
+                                        tnl = nl.DetectieAfhankelijk ? _tnlcvd : _tnlcv;
+                                        hnl = _tnlcv;
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+
+                                pars[0].Add($"{ts}IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] = Naloop_OK({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar});");
+                                if (sync.gelijkstart)
+                                {
+                                    pars[1].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}];");
+                                    pars[2].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}];");
+                                }
+                                else
+                                {
+                                    pars[1].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] || IH[{_hpf}{_hlos}{nl.FaseVan}]);");
+                                    pars[2].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (PAR[{_fcpf}{nl.FaseNaar}] || IH[{_hpf}{_hlos}{nl.FaseVan}]);");
+                                }
+                            }
+
+                            if (pars[0].Count > 0)
+                            {
+                                sb.AppendLine($"{ts} /* Bepaal naloop voetgangers wel/niet toegestaan */");
+                                foreach (var s in pars[0]) sb.AppendLine(s);
+                                sb.AppendLine();
+                                sb.AppendLine($"{ts} /* PAR-correcties nalopen voetgagners stap 1: naloop past of los OK */");
+                                foreach (var s in pars[1]) sb.AppendLine(s);
                                 sb.AppendLine();
                             }
+
+                            sb.AppendLine($"{ts}/* PAR-correcties 10 keer checken ivm onderlinge afhankelijkheden */");
+                            sb.AppendLine($"{ts}for (fc = 0; fc < 10; ++fc)");
+                            sb.AppendLine($"{ts}{{");
+                            if(pars[2].Count > 0)
+                            {
+                                sb.AppendLine($"{ts}{ts}/* PAR-correcties nalopen voetgagners stap 2: beide PAR of los OK */");
+                                foreach (var s in pars[2]) sb.AppendLine(s);
+                                sb.AppendLine();
+                                foreach (var sync in sortedSyncs.oneWay)
+                                {
+                                    if (first)
+                                    {
+                                        sb.AppendLine($"{ts}/* PAR correcties eenzijdige synchronisaties */");
+                                        first = false;
+                                    }
+
+                                    sb.AppendLine($"{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
+                                }
+
+                                if (first == false) sb.AppendLine();
+                            }
+                            sb.AppendLine($"{ts}}}");
+
+
                         }
 
                         yes = false;
-                        foreach (var gs in gelijkstarttuples.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                         {
-                            if (gs.Item2.Count > 1)
+                            foreach (var gs in gelijkstarttuples.Where(x =>
+                                c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
                             {
-                                yes = true;
-                                var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseVan == gs.Item1 || x.FaseNaar == gs.Item1);
-                                sb.Append($"{ts}");
-                                if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
-
-                                sb.Append($"PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
-                                foreach (var ofc in gs.Item2)
+                                if (gs.Item2.Count > 1)
                                 {
-                                    if (ofc == gs.Item1)
-                                    {
-                                        continue;
-                                    }
-                                    sb.Append($" && (PAR[{_fcpf}{ofc}] || !A[{_fcpf}{ofc}])");
-                                }
-                                sb.AppendLine(";");
-                            }
-                        }
+                                    yes = true;
+                                    var gsInstance = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x =>
+                                        x.FaseVan == gs.Item1 || x.FaseNaar == gs.Item1);
+                                    sb.Append($"{ts}");
+                                    if (gsInstance != null && gsInstance.Schakelbaar != AltijdAanUitEnum.Altijd)
+                                        sb.Append(
+                                            $"if (SCH[{_schpf}{_schgs}{gsInstance.FaseVan}{gsInstance.FaseNaar}]) ");
 
-                        if (yes)
-                        {
-                            sb.AppendLine();
+                                    sb.Append($"PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
+                                    foreach (var ofc in gs.Item2)
+                                    {
+                                        if (ofc == gs.Item1)
+                                        {
+                                            continue;
+                                        }
+
+                                        sb.Append($" && (PAR[{_fcpf}{ofc}] || !A[{_fcpf}{ofc}])");
+                                    }
+
+                                    sb.AppendLine(";");
+                                }
+                            }
+                            if (yes)
+                            {
+                                sb.AppendLine();
+                            }
                         }
 
                         yes = false;
@@ -472,7 +631,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}langstwachtende_alternatief_modulen(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX);");
                         }
                     }
-                    else if (!c.Data.MultiModuleReeksen)
+                    else if (!c.Data.MultiModuleReeksen) // This is not yet supported for multi-ML
                     {
                         var r = c.ModuleMolen;
                         sb.AppendLine($"{ts}/* alternatieve realisaties */");
@@ -637,6 +796,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
+            _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
 
             return base.SetSettings(settings);
         }
