@@ -572,7 +572,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (matrix[i, k] > -2) matrix[i, k] = -2;
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
-                                    else
+                                    else if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                                     {
                                         if (matrix[i, k] > -3) matrix[i, k] = -3;
                                         if (matrix[k, i] > -3) matrix[k, i] = -3;
@@ -583,19 +583,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     break;
                                 case Models.Enumerations.NaloopTypeEnum.EindeGroen:
-                                    if (nl.InrijdenTijdensGroen)
+                                    if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                                     {
-                                        // TODO: eerst controleren
-                                        // Dit wordt gecorrigeerd in RegCInitApplication door NalopenCodeGenerator
-                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                        //if (matrix[i, k] > -4) matrix[i, k] = -2; // wordt gecorrigeerd naar -4
-                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        if (nl.InrijdenTijdensGroen)
+                                        {
+                                            // TODO: eerst controleren
+                                            // Dit wordt gecorrigeerd in RegCInitApplication door NalopenCodeGenerator
+                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                            //if (matrix[i, k] > -4) matrix[i, k] = -2; // wordt gecorrigeerd naar -4
+                                            if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        }
+                                        else
+                                        {
+                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                            if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        }
                                     }
                                     else
                                     {
-                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        if (matrix[i, k] > -2) matrix[i, k] = -2;
+                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
+
                                     break;
                             }
                         }

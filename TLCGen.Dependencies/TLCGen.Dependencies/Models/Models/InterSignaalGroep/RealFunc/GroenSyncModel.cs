@@ -4,7 +4,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class GroenSyncModel
+    public class GroenSyncModel : IFormattable
     {
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string FaseVan { get; set; }
@@ -13,5 +13,22 @@ namespace TLCGen.Models
         public string FaseNaar { get; set; }
 
         public int Waarde { get; set; }
+        
+        public override string ToString()
+        {
+            return FaseVan + FaseNaar;
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            switch (format)
+            {
+                case "naarvan": return FaseNaar + FaseVan;
+                case "van": return FaseNaar;
+                case "naar": return FaseVan;
+            }
+
+            return ToString();
+        }
     }
 }

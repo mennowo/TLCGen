@@ -40,14 +40,14 @@ namespace TLCGen.Models
 
             foreach (var vs in c.InterSignaalGroep.Voorstarten)
             {
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = vs.FaseVan, FaseNaar = vs.FaseNaar, Waarde = vs.VoorstartTijd });
-                result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = vs.FaseVan, FaseNaar = vs.FaseNaar, FictieveOntruimingsTijd = vs.VoorstartOntruimingstijd });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = vs.FaseVan, FaseNaar = vs.FaseNaar, Waarde = vs.VoorstartTijd * -1 });
+                result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = vs.FaseNaar, FaseNaar = vs.FaseVan, FictieveOntruimingsTijd = vs.VoorstartOntruimingstijd });
             }
 
             foreach (var lr in c.InterSignaalGroep.LateReleases)
             {
                 result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = lr.FaseVan, FaseNaar = lr.FaseNaar, Waarde = lr.LateReleaseTijd });
-                result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = lr.FaseVan, FaseNaar = lr.FaseNaar, FictieveOntruimingsTijd = lr.LateReleaseOntruimingstijd });
+                result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = lr.FaseNaar, FaseNaar = lr.FaseVan, FictieveOntruimingsTijd = lr.LateReleaseOntruimingstijd });
             }
 
             foreach (var nl in c.InterSignaalGroep.Nalopen)
