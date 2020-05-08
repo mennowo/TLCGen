@@ -458,8 +458,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
 

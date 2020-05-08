@@ -175,6 +175,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 80;
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 30;
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
+                    return 10;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 70;
@@ -320,10 +322,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Uitvoeren synchronisaties */");
-                    sb.AppendLine($"{ts}Synchroniseer_SP();");
-                    sb.AppendLine($"{ts}Synchroniseer_?();");
-                    sb.AppendLine($"{ts}Synchroniseer_FOT();");
-                    sb.AppendLine($"{ts}Synchroniseer_PG();");
+                    if (c.HalfstarData.IsHalfstar)
+                        sb.AppendLine($"{ts}Synchroniseer_SP(); /* synchronisatie intrekken tbv SP */");
+                    sb.AppendLine($"{ts}Synchroniseer_SG(); /* synchronisatie obv realtijd (startgroenmomenten) */");
+                    sb.AppendLine($"{ts}Synchroniseer_FO(); /* synchronisatie obv fictieve ontruiming */");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
+                    sb.AppendLine($"{ts}Synchroniseer_PG(); /* synchronisatie PG's */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMaxgroen:
