@@ -307,9 +307,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-
-                // TODO PARcorr, setMRLW
-
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     sb.AppendLine($"{ts}/* Reset synchronisatie BITs */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");

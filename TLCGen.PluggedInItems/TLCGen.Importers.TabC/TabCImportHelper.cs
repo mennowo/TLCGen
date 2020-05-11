@@ -114,14 +114,14 @@ namespace TLCGen.Importers.TabC
             // get meta data
             if (tabCType == TabCType.OTTO)
             {
-                var kNaamRegex = new Regex(@"^\s*/\*\sKruispunt\snaam:\s*(.*)\*/", RegexOptions.Compiled);
-                var kLocatieRegex = new Regex(@"^\s*/\*\sKruispunt\slocatie:\s*(.*)\*/", RegexOptions.Compiled);
+                var kNaamRegex = new Regex(@"^\s*/\*\sKruispunt\snaam:\s*(.*)\s*\*/", RegexOptions.Compiled);
+                var kLocatieRegex = new Regex(@"^\s*/\*\sKruispunt\slocatie:\s*(.*)\s*\*/", RegexOptions.Compiled);
                 foreach (var l in lines)
                 {
                     var naamM = kNaamRegex.Match(l);
                     if (naamM.Success && naamM.Groups.Count > 1)
                     {
-                        outcome.KruisingNaam = naamM.Groups[1].Value;
+                        outcome.KruisingNaam = naamM.Groups[1].Value.TrimEnd(' ');
                     }
                     else
                     {

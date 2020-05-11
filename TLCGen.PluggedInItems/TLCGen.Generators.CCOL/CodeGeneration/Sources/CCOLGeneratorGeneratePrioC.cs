@@ -710,7 +710,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.HalfstarData.IsHalfstar)
                 {
                     tts += ts;
-                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}])");
                     sb.AppendLine($"{ts}{{");
                 }
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
@@ -731,15 +731,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.Append($"]");
-                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
-                        sb.AppendLine($";");
+                        sb.AppendLine("];");
                     }
                     else
                     {
-                        sb.Append($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]");
-                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
-                        sb.AppendLine($";");
+                        sb.AppendLine($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                     }
                 }
                 if (c.HalfstarData.IsHalfstar)
