@@ -173,7 +173,7 @@ namespace TLCGen.ViewModels
         #endregion // Constructor
     }
 
-    [TLCGenTabItem(index: 7, type: TabItemTypeEnum.SpecialsTab)]
+    //[TLCGenTabItem(index: 7, type: TabItemTypeEnum.SpecialsTab)]
     public class StarTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

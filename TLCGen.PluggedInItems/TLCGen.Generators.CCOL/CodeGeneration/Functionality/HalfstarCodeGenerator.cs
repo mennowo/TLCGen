@@ -914,7 +914,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}YM[fc] &= ~YM_HALFSTAR;");
 					sb.AppendLine();
 
-                    foreach (var fc in c.Fasen)
+                    foreach (var fc in c.Fasen.Where(x => x.Meeverlengen != NooitAltijdAanUitEnum.Nooit))
                     {
                         var set_ym_pl_halfstar = "set_ym_pl_halfstar";
                         var set_ym_pl_halfstar_args = "";
@@ -942,7 +942,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 set_ym_pl_halfstar_args = ", 0, FCMAX";
                             }
                         }
-                        sb.AppendLine($"{ts}{set_ym_pl_halfstar}({_fcpf}{fc.Naam}, ({c.GetBoolV()})(SCH[{_schpf}{_schmv}{fc.Naam}]){set_ym_pl_halfstar_args});");
+
+                        switch (fc.Meeverlengen)
+                        {
+                            case NooitAltijdAanUitEnum.Altijd:
+                                sb.AppendLine($"{ts}{set_ym_pl_halfstar}({_fcpf}{fc.Naam}, TRUE{set_ym_pl_halfstar_args});");
+                                break;
+                            case NooitAltijdAanUitEnum.SchAan:
+                            case NooitAltijdAanUitEnum.SchUit:
+                                sb.AppendLine($"{ts}{set_ym_pl_halfstar}({_fcpf}{fc.Naam}, ({c.GetBoolV()})(SCH[{_schpf}{_schmv}{fc.Naam}]){set_ym_pl_halfstar_args});");
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
 
 					return sb.ToString();
