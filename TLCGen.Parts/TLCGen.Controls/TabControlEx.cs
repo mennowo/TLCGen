@@ -94,10 +94,10 @@ namespace TLCGen.Controls
                                 // If the new item is the same as the recently deleted one (i.e. a drag/drop event)
                                 // then cancel the deletion and reuse the ContentPresenter so it doesn't have to be 
                                 // redrawn. We do need to link the presenter to the new item though (using the Tag)
-                                ContentPresenter cp = FindChildContentPresenter(_deletedObject);
+                                var cp = FindChildContentPresenter(_deletedObject);
                                 if (cp != null)
                                 {
-                                    int index = _itemsHolder.Children.IndexOf(cp);
+                                    var index = _itemsHolder.Children.IndexOf(cp);
 
                                     (_itemsHolder.Children[index] as ContentPresenter).Tag =
                                         (item is TabItem) ? item : (this.ItemContainerGenerator.ContainerFromItem(item));
@@ -121,7 +121,7 @@ namespace TLCGen.Controls
                                 {
                                     if (_deletedObject != null)
                                     {
-                                        ContentPresenter cp = FindChildContentPresenter(_deletedObject);
+                                        var cp = FindChildContentPresenter(_deletedObject);
                                         if (cp != null)
                                         {
                                             this._itemsHolder.Children.Remove(cp);
@@ -161,7 +161,7 @@ namespace TLCGen.Controls
             }
 
             // generate a ContentPresenter if necessary
-            TabItem item = GetSelectedTabItem();
+            var item = GetSelectedTabItem();
             if (item != null)
             {
                 CreateChildContentPresenter(item);
@@ -186,7 +186,7 @@ namespace TLCGen.Controls
                 return null;
             }
 
-            ContentPresenter cp = FindChildContentPresenter(item);
+            var cp = FindChildContentPresenter(item);
 
             if (cp != null)
             {
@@ -246,7 +246,7 @@ namespace TLCGen.Controls
         /// <returns></returns>
         protected TabItem GetSelectedTabItem()
         {
-            object selectedItem = base.SelectedItem;
+            var selectedItem = base.SelectedItem;
             if (selectedItem == null)
             {
                 return null;

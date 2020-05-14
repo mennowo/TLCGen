@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Interop;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
@@ -61,7 +62,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public string SelectedFaseNaam
         {
-            get { return _SelectedFaseNaam; }
+            get => _SelectedFaseNaam;
             set
             {
                 _SelectedFaseNaam = value;
@@ -71,7 +72,7 @@ namespace TLCGen.ViewModels
 
         public FileIngreepTeDoserenSignaalGroepViewModel SelectedTeDoserenFase
         {
-            get { return _SelectedTeDoserenFase; }
+            get => _SelectedTeDoserenFase;
             set
             {
                 _SelectedTeDoserenFase = value;
@@ -81,7 +82,7 @@ namespace TLCGen.ViewModels
 
         public FileIngreepDetectorViewModel SelectedFileDetector
         {
-            get { return DetectorManager.SelectedItem; }
+            get => DetectorManager.SelectedItem;
             set
             {
                 DetectorManager.SelectedItem = value;
@@ -91,14 +92,14 @@ namespace TLCGen.ViewModels
 
         public string Naam
         {
-            get { return _FileIngreep.Naam; }
+            get => _FileIngreep.Naam;
             set
             {
 	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
 	            {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.FileIngreep, value))
                     {
-                        string oldname = _FileIngreep.Naam;
+                        var oldname = _FileIngreep.Naam;
 			            _FileIngreep.Naam = value;
 
 						// Notify the messenger
@@ -115,14 +116,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.MetingPerLus = value;
-                RaisePropertyChanged<object>("MetingPerLus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MetingPerLus), broadcast: true);
             }
         }
 
-        public bool MetingPerLusAvailable
-        {
-            get => _FileIngreep.FileDetectoren.Count > 1;
-        }
+        public bool MetingPerLusAvailable => _FileIngreep.FileDetectoren.Count > 1;
 
         public bool MetingPerStrookAvailable
         {
@@ -153,23 +151,23 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.MetingPerStrook = value;
-                RaisePropertyChanged<object>("MetingPerStrook", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MetingPerStrook), broadcast: true);
             }
         }
 
         public int AfvalVertraging
         {
-            get { return _FileIngreep.AfvalVertraging; }
+            get => _FileIngreep.AfvalVertraging;
             set
             {
                 _FileIngreep.AfvalVertraging = value;
-                RaisePropertyChanged<object>("AfvalVertraging", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AfvalVertraging), broadcast: true);
             }
         }
 
         public bool EerlijkDoseren
         {
-            get { return _FileIngreep.EerlijkDoseren; }
+            get => _FileIngreep.EerlijkDoseren;
             set
             {
                 _FileIngreep.EerlijkDoseren = value;
@@ -177,14 +175,14 @@ namespace TLCGen.ViewModels
                 {
                     if(TeDoserenSignaalGroepen.Count > 1)
                     {
-                        int dos = TeDoserenSignaalGroepen[0].DoseerPercentage;
+                        var dos = TeDoserenSignaalGroepen[0].DoseerPercentage;
                         foreach(var tdsg in TeDoserenSignaalGroepen)
                         {
                             tdsg.DoseerPercentageNoMessaging = dos;
                         }
                     }
                 }
-                RaisePropertyChanged<object>("EerlijkDoseren", broadcast: true);
+                RaisePropertyChanged<object>(nameof(EerlijkDoseren), broadcast: true);
             }
         }
 
@@ -223,8 +221,7 @@ namespace TLCGen.ViewModels
             get => _FileIngreep.AlternatieveGroentijdenSet;
             set
             {
-                _FileIngreep.AlternatieveGroentijdenSet = value;
-                if (_FileIngreep.AlternatieveGroentijdenSet == null) _FileIngreep.AlternatieveGroentijdenSet = "NG";
+                _FileIngreep.AlternatieveGroentijdenSet = value ?? "NG";
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -239,44 +236,28 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int MinimaalAantalMeldingenMax
-        {
-            get { return _FileIngreep.FileDetectoren.Count; }
-        }
+        public int MinimaalAantalMeldingenMax => _FileIngreep.FileDetectoren.Count;
 
-        private ItemsManagerViewModel<FileIngreepDetectorViewModel, string> _DetectorManager;
+        private ItemsManagerViewModel<FileIngreepDetectorViewModel, string> _detectorManager;
         public ItemsManagerViewModel<FileIngreepDetectorViewModel, string> DetectorManager
         {
             get
             {
-                if (_DetectorManager == null)
-                {
-                    var dets1 =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen
-                            .SelectMany(x => x.Detectoren)
-                            .Where(x => x.Type == DetectorTypeEnum.File)
-                            .Select(x => x.Naam);
-                    var dets2 =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren
-                            .Where(x => x.Type == DetectorTypeEnum.File)
-                            .Select(x => x.Naam);
-                    var dets = dets1.Concat(dets2).ToList();
-                    _DetectorManager = new ItemsManagerViewModel<FileIngreepDetectorViewModel, string>(
-                        FileDetectoren as ObservableCollection<FileIngreepDetectorViewModel>,
-                        dets,
-                        (x) => 
-                        {
-                            var fd = new FileIngreepDetectorModel { Detector = x };
-                            DefaultsProvider.Default.SetDefaultsOnModel(fd);
-                            var fdvm = new FileIngreepDetectorViewModel(fd); return fdvm;
-                        },
-                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
-                        null,
-                        () => { RaisePropertyChanged<object>("SelectedFileDetector", broadcast: true); },
-                        () => { RaisePropertyChanged<object>("SelectedFileDetector", broadcast: true); }
-                        );
-                }
-                return _DetectorManager;
+                if (_detectorManager != null) return _detectorManager;
+                _detectorManager = new ItemsManagerViewModel<FileIngreepDetectorViewModel, string>(
+                    FileDetectoren,
+                    ControllerAccessProvider.Default.AllDetectors.Where(x => x.Type == DetectorTypeEnum.File).Select(x => x.Naam),
+                    x => 
+                    {
+                        var fd = new FileIngreepDetectorModel { Detector = x };
+                        DefaultsProvider.Default.SetDefaultsOnModel(fd);
+                        var fdvm = new FileIngreepDetectorViewModel(fd); return fdvm;
+                    },
+                    x => FileDetectoren.All(y => y.Detector != x),
+                    null,
+                    () => RaisePropertyChanged<object>(nameof(SelectedFileDetector), broadcast: true),
+                    () => RaisePropertyChanged<object>(nameof(SelectedFileDetector), broadcast: true));
+                return _detectorManager;
             }
         }
 
@@ -284,56 +265,42 @@ namespace TLCGen.ViewModels
 
         #region Commands
         
-        public ICommand AddTeDoserenSignaalGroepCommand
-        {
-            get
-            {
-                if (_AddTeDoserenSignaalGroepCommand == null)
-                {
-                    _AddTeDoserenSignaalGroepCommand = new RelayCommand(AddNewTeDoserenSignaalGroepCommand_Executed, AddNewTeDoserenSignaalGroepCommand_CanExecute);
-                }
-                return _AddTeDoserenSignaalGroepCommand;
-            }
-        }
+        public ICommand AddTeDoserenSignaalGroepCommand =>
+            _AddTeDoserenSignaalGroepCommand ?? (_AddTeDoserenSignaalGroepCommand =
+                new RelayCommand(AddNewTeDoserenSignaalGroepCommand_Executed,
+                    AddNewTeDoserenSignaalGroepCommand_CanExecute));
 
-        public ICommand RemoveTeDoserenSignaalGroepCommand
-        {
-            get
-            {
-                if (_RemoveTeDoserenSignaalGroepCommand == null)
-                {
-                    _RemoveTeDoserenSignaalGroepCommand = new RelayCommand(RemoveTeDoserenSignaalGroepCommand_Executed, RemoveTeDoserenSignaalGroepCommand_CanExecute);
-                }
-                return _RemoveTeDoserenSignaalGroepCommand;
-            }
-        }
+        public ICommand RemoveTeDoserenSignaalGroepCommand =>
+            _RemoveTeDoserenSignaalGroepCommand ?? (_RemoveTeDoserenSignaalGroepCommand =
+                new RelayCommand(RemoveTeDoserenSignaalGroepCommand_Executed,
+                    RemoveTeDoserenSignaalGroepCommand_CanExecute));
 
         #endregion // Commands
 
         #region Command Functionality
-        
-        void AddNewTeDoserenSignaalGroepCommand_Executed(object prm)
+
+        private void AddNewTeDoserenSignaalGroepCommand_Executed(object prm)
         {
-            FileIngreepTeDoserenSignaalGroepModel dos = new FileIngreepTeDoserenSignaalGroepModel();
+            var dos = new FileIngreepTeDoserenSignaalGroepModel();
             DefaultsProvider.Default.SetDefaultsOnModel(dos);
             dos.FaseCyclus = SelectedFaseNaam;
             TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
             UpdateSelectables();
         }
 
-        bool AddNewTeDoserenSignaalGroepCommand_CanExecute(object prm)
+        private bool AddNewTeDoserenSignaalGroepCommand_CanExecute(object prm)
         {
             return !string.IsNullOrWhiteSpace(SelectedFaseNaam);
         }
 
-        void RemoveTeDoserenSignaalGroepCommand_Executed(object prm)
+        private void RemoveTeDoserenSignaalGroepCommand_Executed(object prm)
         {
             TeDoserenSignaalGroepen.Remove(SelectedTeDoserenFase);
             SelectedTeDoserenFase = null;
             UpdateSelectables();
         }
 
-        bool RemoveTeDoserenSignaalGroepCommand_CanExecute(object prm)
+        private bool RemoveTeDoserenSignaalGroepCommand_CanExecute(object prm)
         {
             return SelectedTeDoserenFase != null;
         }
@@ -380,12 +347,25 @@ namespace TLCGen.ViewModels
 
         public void OnDetectorenChanged(DetectorenChangedMessage message)
         {
-            _DetectorManager = null;
+            if (message.RemovedDetectoren?.Any(x => x.Type == DetectorTypeEnum.File) == true ||
+                message.AddedDetectoren?.Any(x => x.Type == DetectorTypeEnum.File) == true)
+            {
+                _detectorManager?.Refresh();
+            }
+        }
+
+        public void OnNameChanged(NameChangedMessage message)
+        {
+            if (message.ObjectType != TLCGenObjectTypeEnum.Detector) return;
+            _detectorManager?.Refresh();
         }
 
         public void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
         {
-            _DetectorManager = null;
+            if (message.OldType == DetectorTypeEnum.File || message.NewType == DetectorTypeEnum.File)
+            {
+                _detectorManager?.Refresh();
+            }
             if (message.NewType != DetectorTypeEnum.File)
             {
                 var d = FileDetectoren.FirstOrDefault(x => x.Detector == message.DetectorDefine);
@@ -404,6 +384,7 @@ namespace TLCGen.ViewModels
         {
             _FileIngreep = fileingreep;
 
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
 

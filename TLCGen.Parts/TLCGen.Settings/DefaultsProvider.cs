@@ -68,6 +68,26 @@ namespace TLCGen.Settings
             return t?.Setting ?? "UNKNOWN_VEHICLE_TYPE";
         }
 
+        
+        public string GetMeldingShortcode(PrioIngreepInUitMeldingModel melding)
+        {
+            switch (melding.Type)
+            {
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
+                    return "det";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                    return "kar";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                    return "sd";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
+                    return "vecio";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
+                    return "ris";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         #endregion // Public Methods
 
         #region Private Methods
@@ -76,7 +96,7 @@ namespace TLCGen.Settings
         {
             var type = from.GetType();
             var props = type.GetProperties();
-            foreach (PropertyInfo property in props)
+            foreach (var property in props)
             {
                 var att = (HasDefaultAttribute)property.GetCustomAttribute(typeof(HasDefaultAttribute));
                 var attMn = (ModelNameAttribute)property.GetCustomAttribute(typeof(ModelNameAttribute));
@@ -87,7 +107,7 @@ namespace TLCGen.Settings
                     if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) ||
                         !onlyvalues)
                     {
-                        object propValue = property.GetValue(from);
+                        var propValue = property.GetValue(from);
                         property.SetValue(to, propValue);
                     }
                 }
@@ -154,7 +174,7 @@ namespace TLCGen.Settings
             }
             else if(defs.Count() > 1)
             {
-                bool found = false;
+                var found = false;
                 if (selector1 == null && selector2 == null)
                 {
                     CopyAllProperties(defs.First().Data, model, onlyvalues);
@@ -251,7 +271,7 @@ namespace TLCGen.Settings
                     var defaultDefaults = DeserializeDefaultsFile(defsetfile);
                     foreach (var d in defaultDefaults.Defaults)
                     {
-                        bool found = false;
+                        var found = false;
                         foreach (var d2 in Defaults.Defaults)
                         {
                             if (d.DataType == d2.DataType &&
@@ -276,7 +296,7 @@ namespace TLCGen.Settings
                     var remDs = new List<TLCGenDefaultModel>();
                     foreach (var d in Defaults.Defaults)
                     {
-                        bool found = false;
+                        var found = false;
                         foreach (var d2 in defaultDefaults.Defaults)
                         {
                             if (d.DataType == d2.DataType &&
@@ -376,12 +396,12 @@ namespace TLCGen.Settings
 
 	    private object ConvertNode(XmlNode node, Type t)
         {
-            MemoryStream stm = new MemoryStream();
-            StreamWriter stw = new StreamWriter(stm);
+            var stm = new MemoryStream();
+            var stw = new StreamWriter(stm);
             stw.Write(node.OuterXml);
             stw.Flush();
             stm.Position = 0;
-            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(t);
+            var ser = new System.Xml.Serialization.XmlSerializer(t);
             var result = ser.Deserialize(stm);
             return result;
         }
@@ -395,9 +415,9 @@ namespace TLCGen.Settings
                     File.Delete(SettingsProvider.Default.Settings.DefaultsFileLocation);
                 }
 
-                using (FileStream fs = new FileStream(SettingsProvider.Default.Settings.DefaultsFileLocation, FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(SettingsProvider.Default.Settings.DefaultsFileLocation, FileMode.Create, FileAccess.Write))
                 {
-                    List<Type> et = new List<Type>();
+                    var et = new List<Type>();
                     foreach (var def in Defaults.Defaults)
                     {
                         if (!et.Contains(def.Data.GetType()))

@@ -22,10 +22,7 @@ namespace TLCGen.Dependencies.Providers
         public static ITLCGenDialogProvider Default
         {
             get => _default ?? (_default = new TLCGenDialogProvider(true));
-            set
-            {
-                _default = value;
-            }
+            set => _default = value;
         }
 
         public bool ShowDialogs { get; }

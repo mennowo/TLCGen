@@ -28,7 +28,7 @@ namespace TLCGen.UnitTests
             var vm = new FasenGroentijdenSetsTabViewModel();
             vm.Controller = model;
 
-            bool result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
+            var result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
 
             Assert.False(result);
         }
@@ -48,7 +48,7 @@ namespace TLCGen.UnitTests
         
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.SelectedSet = vm.GroentijdenSets[0];
-            bool result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
+            var result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
         
             Assert.True(result);
         }
@@ -66,7 +66,7 @@ namespace TLCGen.UnitTests
             var vm = new FasenGroentijdenSetsTabViewModel();
             vm.Controller = model;
         
-            bool result = vm.AddGroentijdenSetCommand.CanExecute(null);
+            var result = vm.AddGroentijdenSetCommand.CanExecute(null);
         
             Assert.True(result);
         }
@@ -85,7 +85,7 @@ namespace TLCGen.UnitTests
             vm.Controller = model;
         
             vm.AddGroentijdenSetCommand.Execute(null);
-            bool result = vm.AddGroentijdenSetCommand.CanExecute(null);
+            var result = vm.AddGroentijdenSetCommand.CanExecute(null);
         
             Assert.True(result);
         }
@@ -158,7 +158,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
         
             Assert.AreEqual(5, model.GroentijdenSets.Count);
-            for (int i = 0; i < 5; ++i)
+            for (var i = 0; i < 5; ++i)
             {
                 Assert.AreEqual(5, model.GroentijdenSets[i].Groentijden.Count);
                 Assert.AreEqual("01", model.GroentijdenSets[i].Groentijden[0].FaseCyclus);
@@ -268,7 +268,7 @@ namespace TLCGen.UnitTests
             vmfasen.Controller = model;
         
             vm.AddGroentijdenSetCommand.Execute(null);
-            string oldname = vmfasen.Fasen[2].Naam;
+            var oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "07";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
             
@@ -322,7 +322,7 @@ namespace TLCGen.UnitTests
             vmfasen.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
-            string oldname = vmfasen.Fasen[2].Naam;
+            var oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "02";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
@@ -351,7 +351,7 @@ namespace TLCGen.UnitTests
             vmfasen.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
-            string oldname = vmfasen.Fasen[2].Naam;
+            var oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "02";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 

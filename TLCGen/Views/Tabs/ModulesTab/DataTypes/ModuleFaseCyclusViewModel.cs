@@ -15,15 +15,9 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ModuleFaseCyclusModel ModuleFaseCyclus
-        {
-            get { return _ModuleFaseCyclus; }
-        }
+        public ModuleFaseCyclusModel ModuleFaseCyclus => _ModuleFaseCyclus;
 
-        public string FaseCyclusNaam
-        {
-            get { return _ModuleFaseCyclus.FaseCyclus; }
-        }
+        public string FaseCyclusNaam => _ModuleFaseCyclus.FaseCyclus;
 
         public ObservableCollectionAroundList<ModuleFaseCyclusAlternatiefViewModel, ModuleFaseCyclusAlternatiefModel> Alternatieven
         {

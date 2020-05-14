@@ -29,7 +29,7 @@ namespace TLCGen.Settings
         private DetectorTemplateViewModel _SelectedDetectorTemplate;
         public DetectorTemplateViewModel SelectedDetectorTemplate
         {
-            get { return _SelectedDetectorTemplate; }
+            get => _SelectedDetectorTemplate;
             set
             {
                 _SelectedDetectorTemplate = value;
@@ -82,6 +82,7 @@ namespace TLCGen.Settings
             };
             var dm = new DetectorModel
             {
+                FaseCyclus = "fase",
                 Naam = "fase_1"
             };
             DefaultsProvider.Default.SetDefaultsOnModel(dm, "Auto");

@@ -93,10 +93,7 @@ namespace TLCGen.ViewModels
         public AltijdAanUitEnum SchakelbaarNoMessaging
         {
             get => _gelijkstart.Schakelbaar;
-            set
-            {
-                _gelijkstart.Schakelbaar = value;
-            }
+            set => _gelijkstart.Schakelbaar = value;
         }
 
         public string Comment1 =>

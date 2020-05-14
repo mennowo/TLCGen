@@ -19,12 +19,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
-                    int i = 0;
+                    var i = 0;
                     foreach(var fc in c.Fasen)
                     {
                         foreach(var d in fc.Detectoren)

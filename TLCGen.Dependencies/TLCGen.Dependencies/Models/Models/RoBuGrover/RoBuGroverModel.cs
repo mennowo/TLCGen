@@ -30,10 +30,7 @@ namespace TLCGen.Models
         [XmlIgnore]
         [Browsable(false)]
         [HasDefault(false)]
-        public bool BitmapDataRelevant
-        {
-            get { return ConflictGroepen.Count > 0; }
-        }
+        public bool BitmapDataRelevant => ConflictGroepen.Count > 0;
 
         [Browsable(false)]
         [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]

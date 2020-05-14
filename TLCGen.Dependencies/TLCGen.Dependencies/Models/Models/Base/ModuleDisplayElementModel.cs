@@ -14,10 +14,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Naam
         {
-            get
-            {
-                return _Naam;
-            }
+            get => _Naam;
             set
             {
                 _Naam = value;

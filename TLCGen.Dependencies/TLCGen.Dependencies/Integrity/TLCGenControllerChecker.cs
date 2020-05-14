@@ -17,7 +17,7 @@ namespace TLCGen.Integrity
             if (controller == null)
                 throw new NullReferenceException();
 
-            foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
+            foreach (var cm in controller.InterSignaalGroep.Conflicten)
             {
                 if (cm.FaseVan == fase1 && cm.FaseNaar == fase2)
                     return true;

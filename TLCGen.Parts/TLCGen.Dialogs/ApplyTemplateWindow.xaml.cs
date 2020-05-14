@@ -10,17 +10,14 @@ namespace TLCGen.Dialogs
     {
         public string DialogTitle
         {
-            get { return this.Title; }
-            set { this.Title = value; }
+            get => this.Title;
+            set => this.Title = value;
         }
 
         public string TemplateApplyString
         {
-            get { return ElementsTB.Text; }
-            set
-            {
-                ElementsTB.Text = value;
-            }
+            get => ElementsTB.Text;
+            set => ElementsTB.Text = value;
         }
 
         public ApplyTemplateWindow()

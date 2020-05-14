@@ -715,7 +715,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var pad1 = data.DefineMaxWidth + $"{ts}#define  ".Length;
             var pad2 = data.Elements.Count.ToString().Length;
-            int pad3 = data.CommentsMaxWidth;
+            var pad3 = data.CommentsMaxWidth;
             var index = 0;
 
             foreach (var elem in data.Elements)
@@ -818,17 +818,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GetAllElementsTabCLines(CCOLElemListData data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            int pad1 = ts.Length + data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
-            int pad2 = data.NameMaxWidth + 6;  // 6: space = space " " ;
-            int pad3 = data.CCOLSettingWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
-            int pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
-            int pad5 = data.CCOLTTypeWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
-            int pad6 = data.CommentsMaxWidth;
-            int pad7 = data.TTypeMaxWidth + 4; // 4: ' = ;'
+            var pad1 = ts.Length + data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
+            var pad2 = data.NameMaxWidth + 6;  // 6: space = space " " ;
+            var pad3 = data.CCOLSettingWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
+            var pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
+            var pad5 = data.CCOLTTypeWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
+            var pad6 = data.CommentsMaxWidth;
+            var pad7 = data.TTypeMaxWidth + 4; // 4: ' = ;'
 
-            foreach (CCOLElement elem in data.Elements)
+            foreach (var elem in data.Elements)
             {
                 if (elem.Dummy)
                     continue;
@@ -915,8 +915,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 OrderedPieceGenerators.Add((CCOLCodeTypeEnum)type, new SortedDictionary<int, ICCOLCodePieceGenerator>());
             }
 
-            Assembly ccolgen = typeof(CCOLGenerator).Assembly;
-            foreach (Type type in ccolgen.GetTypes())
+            var ccolgen = typeof(CCOLGenerator).Assembly;
+            foreach (var type in ccolgen.GetTypes())
             {
                 // Find CCOLCodePieceGenerator attribute, and if found, continue
                 var attr = (CCOLCodePieceGeneratorAttribute)Attribute.GetCustomAttribute(type, typeof(CCOLCodePieceGeneratorAttribute));

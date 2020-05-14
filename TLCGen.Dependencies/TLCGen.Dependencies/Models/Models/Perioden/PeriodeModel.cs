@@ -47,7 +47,7 @@ namespace TLCGen.Models
         {
             get
             {
-                int hours = StartTijd.Hours;
+                var hours = StartTijd.Hours;
                 if(StartTijd.Days == 1)
                 {
                     hours = 24;
@@ -55,11 +55,11 @@ namespace TLCGen.Models
                 return hours.ToString("00") + ":" + StartTijd.Minutes.ToString("00"); }
             set
             {
-                string[] parts = value.Split(':');
+                var parts = value.Split(':');
                 if (parts.Length != 2)
                     throw new IndexOutOfRangeException("SerializedStartTijd must have two parts seperated by a colon");
-                int hours = Int32.Parse(parts[0]);
-                int days = 0;
+                var hours = Int32.Parse(parts[0]);
+                var days = 0;
                 if (hours == 24)
                 {
                     hours = 0;
@@ -74,7 +74,7 @@ namespace TLCGen.Models
         {
             get
             {
-                int hours = EindTijd.Hours;
+                var hours = EindTijd.Hours;
                 if (EindTijd.Days == 1)
                 {
                     hours = 24;
@@ -83,11 +83,11 @@ namespace TLCGen.Models
             }
             set
             {
-                string[] parts = value.Split(':');
+                var parts = value.Split(':');
                 if (parts.Length != 2)
 					throw new IndexOutOfRangeException("SerializedEindTijd must have two parts seperated by a colon");
-				int hours = Int32.Parse(parts[0]);
-                int days = 0;
+				var hours = Int32.Parse(parts[0]);
+                var days = 0;
                 if (hours == 24)
                 {
                     hours = 0;

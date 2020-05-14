@@ -108,7 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                 return null;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

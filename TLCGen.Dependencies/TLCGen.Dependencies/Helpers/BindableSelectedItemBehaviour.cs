@@ -33,15 +33,9 @@ namespace TLCGen.Helpers
         /// </summary>
         public object SelectedItem
         {
-            get
-            {
-                return this.GetValue(SelectedItemProperty);
-            }
+            get => this.GetValue(SelectedItemProperty);
 
-            set
-            {
-                this.SetValue(SelectedItemProperty, value);
-            }
+            set => this.SetValue(SelectedItemProperty, value);
         }
 
         /// <summary>

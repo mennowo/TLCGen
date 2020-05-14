@@ -1601,6 +1601,49 @@
             <Type>Schakelaar</Type>
             <Description>Weergeven wijzigingen PRIO_teller via CIF_UBER</Description>
           </Setting>
+
+          <Setting>
+            <Default>risprio</Default>
+            <Setting>risprio</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risprio</Default>
+            <Setting>risprio</Setting>
+            <Type>HulpElement</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risstart</Default>
+            <Setting>risstart</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risend</Default>
+            <Setting>risend</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>rismatchsg</Default>
+            <Setting>rismatchsg</Setting>
+            <Type>Schakelaar</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>ris</Default>
+            <Setting>ris</Setting>
+            <Type>Timer</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>rismax</Default>
+            <Setting>rismax</Setting>
+            <Type>Timer</Type>
+            <Description></Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

@@ -16,24 +16,24 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _VAOntruimenNaarFase.FaseCyclus; }
+            get => _VAOntruimenNaarFase.FaseCyclus;
             set
             {
                 _VAOntruimenNaarFase.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         public int VAOntruimingsTijd
         {
-            get { return _VAOntruimenNaarFase.VAOntruimingsTijd; }
+            get => _VAOntruimenNaarFase.VAOntruimingsTijd;
             set
             {
                 if (value >= 0)
                 {
                     _VAOntruimenNaarFase.VAOntruimingsTijd = value;
                 }
-                RaisePropertyChanged<object>("VAOntruimingsTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VAOntruimingsTijd), broadcast: true);
             }
         }
 

@@ -53,7 +53,7 @@ int iKPrioriteitsOpties[FCMAX];
 int iStartGroen[prioFCMAX];
 int iBijzonderRealiseren[prioFCMAX];
 int iWachtOpKonflikt[prioFCMAX];
-bool bMagEerst[FCMAX];
+boolv bMagEerst[FCMAX];
 int iAantalPrioriteitsInmeldingen[prioFCMAX];
 int iRijTijdScenario[prioFCMAX];
 int iRTSOngehinderd[prioFCMAX];
@@ -70,6 +70,7 @@ int *iInPrioriteitsOpties[prioFCMAX];
 int *iInRijTimer[prioFCMAX];
 int *iInGroenBewakingsTimer[prioFCMAX];
 int *iInOnderMaximumVerstreken[prioFCMAX];
+int *iInMaxWachtTijdOverschreden[prioFCMAX]; /*@@@ DSC*/
 int *iInID[prioFCMAX];
 
 int iM_RealisatieTijd[FCMAX*FCMAX];
@@ -79,6 +80,7 @@ int iM_InRijTimer[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InGroenBewakingsTimer[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InOnderMaximumVerstreken[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InID[prioFCMAX * MAX_AANTAL_INMELDINGEN];
+int iM_InMaxWachtTijdOverschreden[prioFCMAX * MAX_AANTAL_INMELDINGEN]; /*@@@ DSC*/
 
 int prioKFC_MAX[prioFCMAX];
 int prioGKFC_MAX[prioFCMAX];
@@ -127,6 +129,7 @@ void PrioInit(void)
         iInRijTimer[prio1]               = iM_InRijTimer+(prio1*MAX_AANTAL_INMELDINGEN);
         iInGroenBewakingsTimer[prio1]    = iM_InGroenBewakingsTimer+(prio1*MAX_AANTAL_INMELDINGEN);
         iInOnderMaximumVerstreken[prio1] = iM_InOnderMaximumVerstreken+(prio1*MAX_AANTAL_INMELDINGEN);
+        iInMaxWachtTijdOverschreden[prio1] = iM_InMaxWachtTijdOverschreden+(prio1*MAX_AANTAL_INMELDINGEN);/*@@@ DSC*/
         iInID[prio1]                     = iM_InID+(prio1*MAX_AANTAL_INMELDINGEN);
         iPrioriteit[prio1]               = FALSE;
         iAantalInmeldingen[prio1]        = 0;
@@ -288,13 +291,13 @@ void PrioTimers(void)
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
-        Z[fc] &= ~PRIO_Z_BIT;
+        Z[fc]  &= ~PRIO_Z_BIT;
         FM[fc] &= ~PRIO_FM_BIT;
         RW[fc] &= ~PRIO_RW_BIT;
         RR[fc] &= ~PRIO_RR_BIT;
         YV[fc] &= ~PRIO_YV_BIT;
-		YM[fc] &= ~PRIO_YM_BIT;
-		MK[fc] &= ~PRIO_MK_BIT;
+	YM[fc] &= ~PRIO_YM_BIT;
+	MK[fc] &= ~PRIO_MK_BIT;
         PP[fc] &= ~PRIO_PP_BIT;
         RTFB &= ~PRIO_RTFB_BIT;
 
@@ -572,6 +575,7 @@ void PrioInmeldenID(int prio,
         iInGroenBewakingsTimer[prio][inm]    = iGBT;
         iInID[prio][inm]                     = iID;
         iInOnderMaximumVerstreken[prio][inm] = iOnderMaximumVerstreken[prio];
+        iInMaxWachtTijdOverschreden[prio][inm] = iMaximumWachtTijdOverschreden[prio];/*@@@ DSC: bijhouden of bij inmelding wachttijdcriterium overschreden was*/
         if (iPO & poNoodDienst)
         {
             VLOG_mon5[fc].inmhd = TRUE;
@@ -614,7 +618,7 @@ void PrioInmelden(int prio,
 void PrioUitmeldenIndex(int prio,
                       int inm,
                       int iUitmelding,
-                      bool bGeforceerd)
+                      boolv bGeforceerd)
 {
     int i;
     int fc = iFC_PRIOix[prio];
@@ -650,6 +654,7 @@ void PrioUitmeldenIndex(int prio,
             iInGroenBewakingsTimer[prio][i]    = iInGroenBewakingsTimer[prio][i+1];
             iInID[prio][i]                     = iInID[prio][i+1];
             iInOnderMaximumVerstreken[prio][i] = iInOnderMaximumVerstreken[prio][i+1];
+            iInMaxWachtTijdOverschreden[prio][i] = iInMaxWachtTijdOverschreden[prio][i+1]; /*@@@ DSC*/
         }
         (iAantalInmeldingen[prio])--;
         iSelDetFout[prio] = FALSE;
@@ -919,12 +924,14 @@ void PrioriteitsToekenning(void)
         iGroenBewakingsTimer[prio] = iGroenBewakingsTijd[prio];
         for (inm = 0; inm < iAantalInmeldingen[prio]; ++inm)
         {
-            if (!G[fc])
+           /* wijz. Cyril Ondermaximum resetten niet op !G maar SG omdat anders als de richting bij prio= direct weer terug komt   */
+           if (SG[fc] || kg(fc))
             {
-                iInOnderMaximumVerstreken[prio][inm] = 0;
-            }
+              iInOnderMaximumVerstreken[prio][inm] = 0;
+              iInMaxWachtTijdOverschreden[prio][inm] = 0;
+           }
             iPrioriteitsOpties[prio] |= iInPrioriteitsOpties[prio][inm] & poAanvraag;
-            if (!iSelDetFout[prio] && !iInOnderMaximumVerstreken[prio][inm] ||
+            if (!iSelDetFout[prio] && !iInOnderMaximumVerstreken[prio][inm] && !iInMaxWachtTijdOverschreden[prio][inm] ||/*@@@ DSC*/
                 iInPrioriteitsOpties[prio][inm] & poNoodDienst)
             {
                 (iAantalPrioriteitsInmeldingen[prio])++;
@@ -1778,11 +1785,11 @@ void PrioGroenVasthouden(void)
             fc = iFC_PRIOix[prio];
             if (iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio])
             {
-				if (MG[fc]) YM[fc] |= PRIO_YM_BIT; /* toevoeging Ane, 2019-08-05: aangepast van RW naar YM door Menno */
-                YV[fc] |= PRIO_YV_BIT;
-                /* 15-02-2017 Werner : FM bit van alternatieven intrekken, om 'flipperen' te voorkomen */ 
-                /*                     we willen het groen vasthouden en niet be?indigen!              */
-                FM[fc] &= ~BIT5;
+               if (MG[fc]) YM[fc] |= PRIO_YM_BIT; /* toevoeging Ane, 2019-08-05: aangepast van RW naar YM door Menno */
+               YV[fc] |= PRIO_YV_BIT;
+               /* 15-02-2017 Werner : FM bit van alternatieven intrekken, om 'flipperen' te voorkomen */ 
+               /*                     we willen het groen vasthouden en niet be?indigen!              */
+               FM[fc] &= ~BIT5;
             }
         }
     }
@@ -2122,6 +2129,10 @@ void PrioDebug(int ov)
             if (y < Y_MAX)
             {
                 xyprintf(1, y, "OnderMaximumVerstreken=%4d ", iInOnderMaximumVerstreken[ov][inm]);    ++y;
+            }
+            if (y < Y_MAX)
+            {
+                xyprintf(1, y, "MaxWachtTijdOverschred=%4d ", iInMaxWachtTijdOverschreden[ov][inm]);    ++y;
             }
             if (y < Y_MAX)
             {

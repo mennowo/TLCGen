@@ -23,18 +23,12 @@ namespace FloodFill
         /// <summary>
         /// Gets the pixel format size in bytes (not bits, as with Image.GetPixelFormatSize()).
         /// </summary>
-        public int PixelFormatSize
-        {
-            get { return pixelFormatSize; }
-        }
+        public int PixelFormatSize => pixelFormatSize;
 
         /// <summary>
         /// Gets the stride of the bitmap.
         /// </summary>
-        public int Stride
-        {
-            get { return stride; }
-        }
+        public int Stride => stride;
 
         /// <summary>
         /// Gets the underlying <see cref="System.Drawing.Bitmap"/>
@@ -42,17 +36,14 @@ namespace FloodFill
         /// </summary>
         public Bitmap Bitmap
         {
-            get { return bitmap; }
-            set { bitmap = value; }
+            get => bitmap;
+            set => bitmap = value;
         }
 
         /// <summary>
         /// Gets an array that contains the bitmap bit buffer.
         /// </summary>
-        public byte[] Bits
-        {
-            get { return byteArray.bits; }
-        }
+        public byte[] Bits => byteArray.bits;
 
         private EditableBitmap owner;
 
@@ -61,22 +52,13 @@ namespace FloodFill
         /// This property's value will be null if this EditableBitmap is not a view on another 
         /// <see cref="EditableBitmap"/>.
         /// </summary>
-        public EditableBitmap Owner
-        {
-            get { return owner; }
-        }
+        public EditableBitmap Owner => owner;
 
 
         /// <summary>
         /// Gets a safe pointer to the buffer containing the bitmap bits.
         /// </summary>
-        public IntPtr BitPtr
-        {
-            get
-            {
-                return byteArray.bitPtr;
-            }
-        }
+        public IntPtr BitPtr => byteArray.bitPtr;
 
         /// <summary>
         /// Creates a new EditableBitmap with the specified pixel format, 
@@ -91,7 +73,7 @@ namespace FloodFill
             //It does NOT copy EXIF properties, multiple frames, etc.
             //In places where preserving them is necessary, it must 
             //be done manually.
-            Graphics g = Graphics.FromImage(bitmap);
+            var g = Graphics.FromImage(bitmap);
             g.DrawImageUnscaledAndClipped(source, new Rectangle(0, 0, source.Width, source.Height));
             g.Dispose();
         }
@@ -112,7 +94,7 @@ namespace FloodFill
             //It does NOT copy EXIF properties, multiple frames, etc.
             //In places where preserving them is necessary, it must 
             //be done manually.
-            Graphics g = Graphics.FromImage(bitmap);
+            var g = Graphics.FromImage(bitmap);
             g.DrawImage(source, 0, 0, newWidth,newHeight);
             g.Dispose();
         }
@@ -136,7 +118,7 @@ namespace FloodFill
         {
             pixelFormatSize = Image.GetPixelFormatSize(format) / 8;
             stride = width * pixelFormatSize;
-            int padding=(stride % 4);
+            var padding=(stride % 4);
             stride += padding==0?0:4 - padding;//pad out to multiple of 4
             byteArray=new SharedPinnedByteArray(stride * height);
             bitmap = new Bitmap(width, height, stride, format, byteArray.bitPtr);
@@ -188,20 +170,14 @@ namespace FloodFill
         /// If this <see cref="EditableBitmap"/> is a view on another <see cref="EditableBitmap"/> instance,
         /// this property gets the index where the pixels that are within the view's pixel area start.
         /// </summary>
-        public int StartOffset
-        {
-            get { return startOffset; }
-        }
+        public int StartOffset => startOffset;
 
         #endregion
 
 
         private bool disposed;
 
-        public bool Disposed
-        {
-            get { return disposed; }
-        }
+        public bool Disposed => disposed;
 
 
         #region IDisposable Members

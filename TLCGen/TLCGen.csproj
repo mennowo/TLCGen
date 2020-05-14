@@ -99,6 +99,7 @@
     <Compile Include="TLCGenSplashScreenView.xaml.cs">
       <DependentUpon>TLCGenSplashScreenView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ControllerAccessProvider.cs" />
     <Compile Include="ViewModels\IntersignaalGroepTypeEnum.cs" />
     <Compile Include="ViewModels\TLCGenMainTabItemViewModel.cs" />
     <Compile Include="ViewModels\TLCGenTabItemViewModel.cs" />
@@ -148,9 +149,26 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenPerBlokTabViewModel.cs">
       <DependentUpon>ModulesAlternatievenPerBlokTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\OVIngreepRitCategorieViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenDataViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\FaseCyclusWithPrioView.xaml.cs">
+      <DependentUpon>FaseCyclusWithPrioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\FaseCyclusWithPrioViewModel.cs">
+      <DependentUpon>FaseCyclusWithPrioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingViewModel.cs">
+      <DependentUpon>PrioIngreepInUitMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenListView.xaml.cs">
+      <DependentUpon>PrioIngreepMeldingenListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenListViewModel.cs">
+      <DependentUpon>PrioIngreepMeldingenListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepWisselDataViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Varia\OVIngreepRitCategorieViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingView.xaml.cs">
+      <DependentUpon>PrioIngreepInUitMeldingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\IngangViewModel.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\SelectieveDetectorViewModel.cs" />
@@ -172,17 +190,17 @@
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\GelijkstartViewModel.cs">
       <DependentUpon>GelijkstartView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDFaseDataOverviewViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDFaseDataOverviewViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepView.xaml.cs">
       <DependentUpon>PrioIngreepView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepViewModel.cs">
       <DependentUpon>PrioIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDIngrepenTabViewModel.cs">
       <DependentUpon>HDIngrepenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabView.xaml.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDOverzichtTabView.xaml.cs">
       <DependentUpon>HDOverzichtTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitsTab.xaml.cs">
@@ -191,20 +209,14 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\PrioriteitTabViewModel.cs">
       <DependentUpon>PrioriteitsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDOverzichtTabViewModel.cs">
       <DependentUpon>HDOverzichtTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml.cs">
-      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabView.xaml.cs">
+      <DependentUpon>PrioIngrepenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabViewModel.cs">
-      <DependentUpon>PrioriteitIngrepenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabView.xaml.cs">
-      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabViewModel.cs">
-      <DependentUpon>PrioriteitInUitmeldenTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabViewModel.cs">
+      <DependentUpon>PrioIngrepenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSignaalGroepInstellingenTabView.xaml.cs">
       <DependentUpon>PrioriteitSignaalGroepInstellingenTabView.xaml</DependentUpon>
@@ -275,12 +287,12 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesVooruitRealisatiesTabViewModel.cs">
       <DependentUpon>ModulesVooruitRealisatiesTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDIngreepViewModel.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepSignaalGroepParametersViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Varia\OVIngreepLijnNummerViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Varia\PrioIngreepSignaalGroepParametersViewModel.cs" />
     <Compile Include="Views\Tabs\PeriodenTab\DataTypes\PeriodeViewModel.cs" />
     <Compile Include="Views\Tabs\PeriodenTab\PeriodenTabViewModel.cs">
       <DependentUpon>PeriodenTab.xaml</DependentUpon>
@@ -448,7 +460,7 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabView.xaml.cs">
       <DependentUpon>FileTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepView.xaml.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDIngreepView.xaml.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
@@ -480,7 +492,7 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
       <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabView.xaml.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\HD\HDIngrepenTabView.xaml.cs">
       <DependentUpon>HDIngrepenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\PeriodenTab.xaml.cs">
@@ -578,6 +590,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\SpecialIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\VariousIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -634,7 +650,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\HDOverzichtTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\FaseCyclusWithPrioView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\HD\HDOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -642,11 +670,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitIngrepenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitInUitmeldenTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -734,7 +758,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\HDIngreepView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\HD\HDIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -786,7 +810,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\HDIngrepenTabView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\HD\HDIngrepenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

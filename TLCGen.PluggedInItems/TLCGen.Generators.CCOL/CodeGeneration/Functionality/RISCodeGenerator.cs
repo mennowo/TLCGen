@@ -5,6 +5,7 @@ using System.Text;
 using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -22,11 +23,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool HasSettings()
         {
             return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            return base.SetSettings(settings);
         }
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -164,7 +160,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (!risModel.RISToepassen) return "";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             var lanes = risModel.RISFasen.SelectMany(x => x.LaneData);
 
@@ -203,6 +199,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
+                    sb.AppendLine($"{ts}/* RIS aanvragen */");
                     foreach (var l in risModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
                         var sitf = "SYSTEM_ITF";
@@ -222,6 +219,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], {(risModel.NietCheckenOpSignaalgroep ? "FALSE" : "TRUE")})) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
+
+                    var ovRis = c.PrioData.PrioIngrepen
+                        .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                    x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                        .ToList();
+                    if (ovRis.Any())
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Ris PRIO: verstuur SSM */");
+                        foreach (var ov in ovRis)
+                        {
+                            sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
+                        }
+                    }
+
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:

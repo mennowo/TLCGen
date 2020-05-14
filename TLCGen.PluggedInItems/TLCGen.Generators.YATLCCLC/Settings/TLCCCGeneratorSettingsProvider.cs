@@ -31,11 +31,8 @@ namespace TLCGen.Generators.TLCCC.Settings
         private TLCCCGeneratorSettingsModel _Settings;
         public TLCCCGeneratorSettingsModel Settings
         {
-            get { return _Settings; }
-            set
-            {
-                _Settings = value;
-            }
+            get => _Settings;
+            set => _Settings = value;
         }
 
         public string GetPrefix(TLCCCElementTypeEnum type)

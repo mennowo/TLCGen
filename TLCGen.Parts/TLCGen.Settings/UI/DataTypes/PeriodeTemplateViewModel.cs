@@ -93,7 +93,7 @@ namespace TLCGen.Settings
 
         public string Naam
         {
-            get { return _Template.Naam; }
+            get => _Template.Naam;
             set
             {
                 _Template.Naam = value;
@@ -104,7 +104,7 @@ namespace TLCGen.Settings
         private PeriodeModel _SelectedPeriode;
         public PeriodeModel SelectedPeriode
         {
-            get { return _SelectedPeriode; }
+            get => _SelectedPeriode;
             set
             {
                 _SelectedPeriode = value;
@@ -176,7 +176,7 @@ namespace TLCGen.Settings
         
         private void AddPeriodeCommand_Executed(object prm)
         {
-            PeriodeModel d = new PeriodeModel();
+            var d = new PeriodeModel();
             d.Naam = "per" + (Perioden.Count + 1);
             Perioden.Add(d);
         }

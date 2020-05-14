@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
 
         public DetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get => _SelectedDetector;
             set
             {
                 _SelectedDetector = value;
@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
 
         public IList SelectedDetectoren
         {
-            get { return _SelectedDetectoren; }
+            get => _SelectedDetectoren;
             set
             {
                 _SelectedDetectoren = value;
@@ -140,15 +140,15 @@ namespace TLCGen.ViewModels
 
         void AddDetectorCommand_Executed(object prm)
         {
-            DetectorModel dm = new DetectorModel();
-            string newname = "001";
-            int inewname = 1;
-            foreach (DetectorViewModel dvm in Detectoren)
+            var dm = new DetectorModel();
+            var newname = "001";
+            var inewname = 1;
+            foreach (var dvm in Detectoren)
             {
                 if (Regex.IsMatch(dvm.Naam, @"[0-9]+"))
                 {
-                    Match m = Regex.Match(dvm.Naam, @"[0-9]+");
-                    string next = m.Value;
+                    var m = Regex.Match(dvm.Naam, @"[0-9]+");
+                    var next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
                         newname = inewname.ToString("000");
@@ -163,7 +163,7 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             dm.AanvraagDirect = false; // Not possible / allowed on loose detector
-            DetectorViewModel dvm1 = new DetectorViewModel(dm);
+            var dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
             Detectoren.BubbleSort();
@@ -176,7 +176,7 @@ namespace TLCGen.ViewModels
 
         void RemoveDetectorCommand_Executed(object prm)
         {
-            bool changed = false;
+            var changed = false;
             var remDets = new List<DetectorModel>();
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
@@ -218,7 +218,7 @@ namespace TLCGen.ViewModels
         {
             Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
             Detectoren.Clear();
-            foreach (DetectorModel dm in base.Controller.Detectoren)
+            foreach (var dm in base.Controller.Detectoren)
             {
                 var dvm = new DetectorViewModel(dm);
                 dvm.PropertyChanged += Detector_PropertyChanged;
@@ -232,17 +232,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Extra detectie";
-            }
-        }
+        public override string DisplayName => "Extra detectie";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -257,10 +251,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

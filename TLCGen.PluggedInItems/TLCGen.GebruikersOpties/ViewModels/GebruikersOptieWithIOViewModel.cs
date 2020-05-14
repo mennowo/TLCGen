@@ -18,31 +18,25 @@ namespace TLCGen.GebruikersOpties
 
         #region Properties
 
-        public GebruikersOptieWithIOModel GebruikersOptieWithIO
-        {
-            get
-            {
-                return _GebruikersOptieWithOI;
-            }
-        }
+        public GebruikersOptieWithIOModel GebruikersOptieWithIO => _GebruikersOptieWithOI;
 
         public string Naam
         {
-            get { return _GebruikersOptieWithOI.Naam; }
+            get => _GebruikersOptieWithOI.Naam;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(ObjectType, value))
                     {
-                        string oldname = _GebruikersOptieWithOI.Naam;
+                        var oldname = _GebruikersOptieWithOI.Naam;
                         _GebruikersOptieWithOI.Naam = value;
 
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
@@ -52,7 +46,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Dummy = value;
-                RaisePropertyChanged<object>("Dummy", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
             }
         }
 
@@ -60,11 +54,11 @@ namespace TLCGen.GebruikersOpties
 
         public string Commentaar
         {
-            get { return _GebruikersOptieWithOI.Commentaar; }
+            get => _GebruikersOptieWithOI.Commentaar;
             set
             {
                 _GebruikersOptieWithOI.Commentaar = value;
-                RaisePropertyChanged<object>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
             }
         }
 

@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
 
         public OVIngreepLijnNummerModel LijnNummer
         {
-            get { return _LijnNummer; }
+            get => _LijnNummer;
             set
             {
                 _LijnNummer = value;
@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
 
         public string Nummer
         {
-            get { return _LijnNummer.Nummer; }
+            get => _LijnNummer.Nummer;
             set
             {
                 _LijnNummer.Nummer = value;
@@ -36,7 +36,7 @@ namespace TLCGen.ViewModels
 
         public string RitCategorie
         {
-            get { return _LijnNummer.RitCategorie; }
+            get => _LijnNummer.RitCategorie;
             set
             {
                 _LijnNummer.RitCategorie = value;

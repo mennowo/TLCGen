@@ -14,7 +14,7 @@ namespace TLCGen.Plugins.Timings
     {
         internal void GenerateFcTimingsC(ControllerModel c, TimingsDataModel model, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* DEFINITIE FCTMING FUNCTIES */");
             sb.AppendLine("/* -------------------------- */");
             sb.AppendLine();

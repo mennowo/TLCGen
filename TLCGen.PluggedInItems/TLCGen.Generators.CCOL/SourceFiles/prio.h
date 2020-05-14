@@ -37,16 +37,16 @@ typedef enum
 
 #if !defined VLOGMON5STRUCTURE
 typedef struct {
-	bool voorinov;
-	bool inmov;
-	bool uitmov;
-	bool uitmbewov;
-	bool foutuitmov;
-	bool uituitmov;
-	bool voorinhd;
-	bool inmhd;
-	bool uitmhd;
-	bool uitmbewhd;
+	boolv voorinov;
+	boolv inmov;
+	boolv uitmov;
+	boolv uitmbewov;
+	boolv foutuitmov;
+	boolv uituitmov;
+	boolv voorinhd;
+	boolv inmhd;
+	boolv uitmhd;
+	boolv uitmbewhd;
 } VLOG_MON5_STRUCT;
 extern VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 #define VLOGMON5STRUCTURE
@@ -92,7 +92,7 @@ void PrioUitmelden(int ov,
 void PrioUitmeldenIndex(int ov,
 	int inm,
 	int iUitmelding,
-	bool bGeforceerd);
+	boolv bGeforceerd);
 void PrioUitmeldenID(int ov,
 	int iUitmelding,
 	int iID);
@@ -105,10 +105,10 @@ void PrioRijTijdScenario(int ov,
 void PrioCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
 void PrioCcol(void);
 void KonfliktTijden(void);
-void SKVoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit);
-void SKGelijkStarten(bool period, count fc1, count fc2, bool bit, bool overslag_sg);
-void SKFietsVoetganger(bool period, count fcfts, count fcvtg, bool bit);
-void SKFictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool bit);
+void SKVoorStarten(boolv period, count fcvs, count fcls, count tvs, boolv bit);
+void SKGelijkStarten(boolv period, count fc1, count fc2, boolv bit, boolv overslag_sg);
+void SKFietsVoetganger(boolv period, count fcfts, count fcvtg, boolv bit);
+void SKFictiefOntruimen(boolv period, count fcv, count fcn, count tftofcvfcn, boolv bit);
 int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC);
 void TegenHoudenStartGroen(int fc, int iStartGroenFC);
 void AfkappenStartGroen(int fc, int iStartGr);

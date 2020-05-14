@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Xml;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
@@ -62,6 +63,7 @@ namespace TLCGen.DataAccess
 	        private set
             {
                 _Controller = value;
+                Messenger.Default.Send(new ControllerLoadedMessage(Controller));
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
                 {
                     pl.Item2.Controller = value;
@@ -81,19 +83,13 @@ namespace TLCGen.DataAccess
         public string ControllerFileName
         {
             get => _ControllerFileName;
-		    set
-            {
-                _ControllerFileName = value;
-            }
+		    set => _ControllerFileName = value;
         }
 
         public bool ControllerHasChanged
         {
             get => _ControllerHasChanged;
-	        set
-            {
-                _ControllerHasChanged = value;
-            }
+	        set => _ControllerHasChanged = value;
         }
 
         #endregion // Properties
@@ -137,7 +133,7 @@ namespace TLCGen.DataAccess
         {
             if(!CheckChanged())
             {
-                string lastfilename = ControllerFileName;
+                var lastfilename = ControllerFileName;
                 ControllerFileName = null;
                 SetController(null);
                 return true;
@@ -160,8 +156,8 @@ namespace TLCGen.DataAccess
                 else
                 {
 
-                    string lastfilename = ControllerFileName;
-                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    var lastfilename = ControllerFileName;
+                    var openFileDialog = new OpenFileDialog
                     {
                         CheckFileExists = true,
                         Filter = "TLCGen files|*.tlc;*.tlcgz"
@@ -240,7 +236,7 @@ namespace TLCGen.DataAccess
                 Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
                 // Check data integrity: do not save wrong data
-                string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
+                var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
                 if (s != null)
                 {
                     System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
@@ -294,7 +290,7 @@ namespace TLCGen.DataAccess
             Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
             // Check data integrity: do not save wrong data
-            string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
+            var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
             if (s != null)
             {
                 System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
@@ -302,7 +298,7 @@ namespace TLCGen.DataAccess
             }
 
             // Save data to disk, update saved state
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            var saveFileDialog = new SaveFileDialog()
             {
                 OverwritePrompt = true,
                 Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz"
@@ -315,7 +311,7 @@ namespace TLCGen.DataAccess
             }
             if (saveFileDialog.ShowDialog() == true)
             {
-                string lastfilename = ControllerFileName;
+                var lastfilename = ControllerFileName;
                 ControllerFileName = saveFileDialog.FileName;
 
                 SaveController();
@@ -360,7 +356,7 @@ namespace TLCGen.DataAccess
         {
             if (Controller != null && ControllerHasChanged)
             {
-                System.Windows.MessageBoxResult r = System.Windows.MessageBox.Show("Wijzigingen opslaan?", "De regeling is gewijzigd. Opslaan?", System.Windows.MessageBoxButton.YesNoCancel);
+                var r = System.Windows.MessageBox.Show("Wijzigingen opslaan?", "De regeling is gewijzigd. Opslaan?", System.Windows.MessageBoxButton.YesNoCancel);
                 if (r == System.Windows.MessageBoxResult.Yes)
                 {
                     SaveController();

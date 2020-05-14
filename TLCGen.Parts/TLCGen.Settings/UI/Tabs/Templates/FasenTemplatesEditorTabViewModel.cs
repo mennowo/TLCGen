@@ -29,7 +29,7 @@ namespace TLCGen.Settings
         private FaseCyclusTemplateViewModel _SelectedFaseCyclusTemplate;
         public FaseCyclusTemplateViewModel SelectedFaseCyclusTemplate
         {
-            get { return _SelectedFaseCyclusTemplate; }
+            get => _SelectedFaseCyclusTemplate;
             set
             {
                 _SelectedFaseCyclusTemplate = value;

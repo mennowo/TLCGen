@@ -34,22 +34,16 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (ImageSource)dict["AlgemeenTabDrawingImage"];
             }
         }
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Algemeen";
-            }
-        }
+        public override string DisplayName => "Algemeen";
 
         public override void OnSelected()
         {
@@ -62,7 +56,7 @@ namespace TLCGen.ViewModels
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

@@ -49,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

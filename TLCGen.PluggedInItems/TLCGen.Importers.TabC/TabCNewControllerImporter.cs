@@ -13,10 +13,7 @@ namespace TLCGen.Importers.TabC
     {
         public ControllerModel Controller
         {
-            get
-            {
-                throw new NotSupportedException();
-            }
+            get => throw new NotSupportedException();
 
             set
             {

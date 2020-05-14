@@ -17,13 +17,13 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _faseCyclus.FaseCyclus; }
-            set { _faseCyclus.FaseCyclus = value; }
+            get => _faseCyclus.FaseCyclus;
+            set => _faseCyclus.FaseCyclus = value;
         }
 
         public int BitWiseBlokAlternatief
         {
-            get { return _faseCyclus.BitWiseBlokAlternatief; }
+            get => _faseCyclus.BitWiseBlokAlternatief;
             set
             {
                 _faseCyclus.BitWiseBlokAlternatief = value;

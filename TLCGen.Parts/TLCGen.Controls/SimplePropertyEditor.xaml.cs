@@ -14,7 +14,7 @@ namespace TLCGen.Controls
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            bool ok = value != null;
+            var ok = value != null;
             return ok ? new ValidationResult(true, "") : new ValidationResult(false, "string may not be null");
         }
     }
@@ -25,7 +25,7 @@ namespace TLCGen.Controls
         {
             var ok = false;
             if (value != null)
-                ok = int.TryParse((string)value, out int i);
+                ok = int.TryParse((string)value, out var i);
             return ok ? new ValidationResult(true, "") : new ValidationResult(false, "not int");
         }
     }
@@ -34,7 +34,7 @@ namespace TLCGen.Controls
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            var ok = string.IsNullOrEmpty((string)value) || int.TryParse((string)value, out int i);
+            var ok = string.IsNullOrEmpty((string)value) || int.TryParse((string)value, out var i);
             return ok ? new ValidationResult(true, "") : new ValidationResult(false, "not int");
         }
     }
@@ -49,8 +49,8 @@ namespace TLCGen.Controls
 
         public string NoObjectFoundDescription
         {
-            get { return (string)GetValue(NoObjectFoundDescriptionProperty); }
-            set { SetValue(NoObjectFoundDescriptionProperty, value); }
+            get => (string)GetValue(NoObjectFoundDescriptionProperty);
+            set => SetValue(NoObjectFoundDescriptionProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for NoObjectFoundDescription.  This enables animation, styling, binding, etc...
@@ -59,8 +59,8 @@ namespace TLCGen.Controls
 
         public object BoundObject
         {
-            get { return (object)GetValue(BoundObjectProperty); }
-            set { SetValue(BoundObjectProperty, value); }
+            get => (object)GetValue(BoundObjectProperty);
+            set => SetValue(BoundObjectProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for BoundObject.  This enables animation, styling, binding, etc...
@@ -283,8 +283,8 @@ namespace TLCGen.Controls
 
         public PropertyDescriptionPlacementEnum DescriptionPlacement
         {
-            get { return (PropertyDescriptionPlacementEnum)GetValue(DescriptionPlacementProperty); }
-            set { SetValue(DescriptionPlacementProperty, value); }
+            get => (PropertyDescriptionPlacementEnum)GetValue(DescriptionPlacementProperty);
+            set => SetValue(DescriptionPlacementProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for DescriptionPlacement.  This enables animation, styling, binding, etc...
@@ -295,8 +295,8 @@ namespace TLCGen.Controls
 
         public HorizontalAlignment HorizontalDescriptionPlacement
         {
-            get { return (HorizontalAlignment)GetValue(HorizontalDescriptionPlacementProperty); }
-            set { SetValue(HorizontalDescriptionPlacementProperty, value); }
+            get => (HorizontalAlignment)GetValue(HorizontalDescriptionPlacementProperty);
+            set => SetValue(HorizontalDescriptionPlacementProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for HorizontalDescriptionPlacement.  This enables animation, styling, binding, etc...
@@ -308,8 +308,8 @@ namespace TLCGen.Controls
 
         public bool CheckBrowsable
         {
-            get { return (bool)GetValue(CheckBrowsableProperty); }
-            set { SetValue(CheckBrowsableProperty, value); }
+            get => (bool)GetValue(CheckBrowsableProperty);
+            set => SetValue(CheckBrowsableProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CheckBrowsable.  This enables animation, styling, binding, etc...
@@ -320,8 +320,8 @@ namespace TLCGen.Controls
 
         public bool CheckHasDefault
         {
-            get { return (bool)GetValue(CheckHasDefaultProperty); }
-            set { SetValue(CheckHasDefaultProperty, value); }
+            get => (bool)GetValue(CheckHasDefaultProperty);
+            set => SetValue(CheckHasDefaultProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CheckHasDefault.  This enables animation, styling, binding, etc...

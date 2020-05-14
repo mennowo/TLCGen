@@ -10,13 +10,13 @@ namespace TLCGen.Views
         {
             if (item != null && item is TLCGenTabItemViewModel)
             {
-                TLCGenTabItemViewModel vm = item as TLCGenTabItemViewModel;
+                var vm = item as TLCGenTabItemViewModel;
                 if (vm != null)
                 {
-                    string vmname = vm.GetType().Name;
-                    Window window = System.Windows.Application.Current.MainWindow;
-                    DataTemplate t = new DataTemplate();
-                    string s = vmname.Remove(vmname.Length - 5);
+                    var vmname = vm.GetType().Name;
+                    var window = System.Windows.Application.Current.MainWindow;
+                    var t = new DataTemplate();
+                    var s = vmname.Remove(vmname.Length - 5);
                     var uc = window.FindName("TLCGen.Views." + s);
                     t.VisualTree = new FrameworkElementFactory(uc.GetType());
                     return t;

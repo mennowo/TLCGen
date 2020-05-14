@@ -24,7 +24,7 @@ namespace TLCGen.Controls
             {
                 if (!int.TryParse(text, out hours)) return null;
             }
-            int days = 0;
+            var days = 0;
             if (hours == 24)
             {
                 days = 1;
@@ -48,9 +48,9 @@ namespace TLCGen.Controls
             if (!this.Value.HasValue)
                 return string.Empty;
 
-            int days = this.Value.Value.Days;
-            int hours = this.Value.Value.Hours;
-            int mins = this.Value.Value.Minutes;
+            var days = this.Value.Value.Days;
+            var hours = this.Value.Value.Hours;
+            var mins = this.Value.Value.Minutes;
             if (days == 1)
                 hours = 24;
 

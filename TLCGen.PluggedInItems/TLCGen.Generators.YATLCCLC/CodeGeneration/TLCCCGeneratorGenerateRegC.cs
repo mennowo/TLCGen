@@ -7,7 +7,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
     {
         private string GenerateRegC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* APPLICATION SETTINGS */");
             sb.AppendLine("/* -------------------- */");
             sb.AppendLine();
@@ -30,7 +30,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateRegCDefines(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("#define CIF_PUBLIC");
             sb.AppendLine("#define NO_CIF_MON");
@@ -40,7 +40,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateRegCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
@@ -51,7 +51,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateRegCDefinitions(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("static char running = TRUE;");
             sb.AppendLine();
@@ -76,7 +76,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateRegCApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("s_int16 applicatieprogramma(s_int16 state)");
             sb.AppendLine("{");
@@ -150,7 +150,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateRegCApplicationExit(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void application_exit(void)");
             sb.AppendLine("{");

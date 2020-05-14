@@ -16,31 +16,31 @@ namespace TLCGen.ViewModels
 
         public string Naam
         {
-            get { return _WaarschuwingsGroep.Naam; }
+            get => _WaarschuwingsGroep.Naam;
             set
             {
                 _WaarschuwingsGroep.Naam = value;
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
         public bool Lichten
         {
-            get { return _WaarschuwingsGroep.Lichten; }
+            get => _WaarschuwingsGroep.Lichten;
             set
             {
                 _WaarschuwingsGroep.Lichten = value;
-                RaisePropertyChanged<object>("Lichten", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Lichten), broadcast: true);
             }
         }
 
         public bool Bellen
         {
-            get { return _WaarschuwingsGroep.Bellen; }
+            get => _WaarschuwingsGroep.Bellen;
             set
             {
                 _WaarschuwingsGroep.Bellen = value;
-                RaisePropertyChanged<object>("Bellen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Bellen), broadcast: true);
                 // cause a check, so rtbel will be hidden or shown in the bitmap tab
                 MessengerInstance.Send(new Messaging.Messages.ModelManagerMessageBase());
             }
@@ -48,14 +48,14 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclusVoorAansturing
         {
-            get { return _WaarschuwingsGroep.FaseCyclusVoorAansturing; }
+            get => _WaarschuwingsGroep.FaseCyclusVoorAansturing;
             set
             {
                 if(value != null)
                 {
                     _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
                 }
-                RaisePropertyChanged<object>("FaseCyclusVoorAansturing", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclusVoorAansturing), broadcast: true);
             }
         }
 

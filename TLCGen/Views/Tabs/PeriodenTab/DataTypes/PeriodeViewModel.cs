@@ -20,14 +20,11 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public PeriodeModel Periode
-        {
-            get { return _Periode; }
-        }
-        
+        public PeriodeModel Periode => _Periode;
+
         public string Naam
         {
-            get { return _Periode.Naam; }
+            get => _Periode.Naam;
             set
             {
 	            var oldName = _Periode.Naam;
@@ -97,7 +94,7 @@ namespace TLCGen.ViewModels
 
         public PeriodeTypeEnum Type
         {
-            get { return _Periode.Type; }
+            get => _Periode.Type;
             set
             {
                 _Periode.Type = value;
@@ -105,10 +102,10 @@ namespace TLCGen.ViewModels
                 {
                     GroentijdenSet = null;
                     DefaultsProvider.Default.SetDefaultsOnModel(_Periode, _Periode.Type.ToString(), null, false);
-                    string name = _Periode.Naam;
-                    string newname = _Periode.Naam;
+                    var name = _Periode.Naam;
+                    var newname = _Periode.Naam;
                     _Periode.Naam = "";
-                    int i = 0;
+                    var i = 0;
                     while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, newname))
                     {
                         newname = name + (i++);
@@ -123,7 +120,7 @@ namespace TLCGen.ViewModels
 
         public PeriodeDagCodeEnum DagCode
         {
-            get { return _Periode.DagCode; }
+            get => _Periode.DagCode;
             set
             {
                 _Periode.DagCode = value;
@@ -133,7 +130,7 @@ namespace TLCGen.ViewModels
         
         public TimeSpan StartTijd
         {
-            get { return _Periode.StartTijd; }
+            get => _Periode.StartTijd;
             set
             {
                 _Periode.StartTijd = value;
@@ -144,7 +141,7 @@ namespace TLCGen.ViewModels
 
         public TimeSpan EindTijd
         {
-            get { return _Periode.EindTijd; }
+            get => _Periode.EindTijd;
             set
             {
                 _Periode.EindTijd = value;
@@ -157,7 +154,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                int hours = StartTijd.Hours;
+                var hours = StartTijd.Hours;
                 if (StartTijd.Days == 1)
                 {
                     hours = 24;
@@ -170,7 +167,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                int hours = EindTijd.Hours;
+                var hours = EindTijd.Hours;
                 if (EindTijd.Days == 1)
                 {
                     hours = 24;
@@ -181,7 +178,7 @@ namespace TLCGen.ViewModels
 
         public string GroentijdenSet
         {
-            get { return _Periode.GroentijdenSet; }
+            get => _Periode.GroentijdenSet;
             set
             {
                 if(value != null)
@@ -192,13 +189,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool IsPeriodeForGroentijdenSet
-        {
-            get
-            {
-                return Type == PeriodeTypeEnum.Groentijden;
-            }
-        }
+        public bool IsPeriodeForGroentijdenSet => Type == PeriodeTypeEnum.Groentijden;
 
         #endregion // Properties
 

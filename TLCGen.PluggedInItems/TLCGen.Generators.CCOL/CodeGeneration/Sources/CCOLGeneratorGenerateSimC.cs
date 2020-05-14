@@ -9,7 +9,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateSimC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* SIMULATIE APPLICATIE */");
             sb.AppendLine("/* -------------------- */");
             sb.AppendLine();
@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSimCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
@@ -44,7 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSimCExtraDefines(ControllerModel controller, int lnkmax)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"#define LNKMAX1 {lnkmax} /* aantal links */");
 
@@ -53,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSimCSimulationDefaults(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* Default waarden */");
             sb.AppendLine("/* --------------- */");
@@ -72,7 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSimCSimulationParameters(ControllerModel controller, out int lnkmax)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void simulation_parameters(void)");
             sb.AppendLine("{");
@@ -85,7 +85,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Link parameters */");
             sb.AppendLine($"{ts}/* --------------- */");
 
-            int index = 0;
+            var index = 0;
             var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
             var controllerdets = controller.Detectoren;
             var ovdummydets = controller.PrioData.GetAllDummyDetectors();

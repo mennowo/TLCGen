@@ -24,11 +24,8 @@ namespace TLCGen.Settings
         private TLCGenTemplatesModel _Templates;
         public TLCGenTemplatesModel Templates
         {
-            get { return _Templates; }
-            set
-            {
-                _Templates = value;
-            }
+            get => _Templates;
+            set => _Templates = value;
         }
 
         public static ITemplatesProvider Default

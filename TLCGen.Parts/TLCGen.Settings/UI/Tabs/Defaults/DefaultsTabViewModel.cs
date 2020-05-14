@@ -32,7 +32,7 @@ namespace TLCGen.Settings
 
         public TLCGenDefaultModel SelectedFaseCyclusDefault
         {
-            get { return _SelectedFaseCyclusDefault; }
+            get => _SelectedFaseCyclusDefault;
             set
             {
                 _SelectedFaseCyclusDefault = value;
@@ -54,7 +54,7 @@ namespace TLCGen.Settings
 
         public TLCGenDefaultModel SelectedDetectorDefault
         {
-            get { return _SelectedDetectorDefault; }
+            get => _SelectedDetectorDefault;
             set
             {
                 _SelectedDetectorDefault = value;
@@ -76,7 +76,7 @@ namespace TLCGen.Settings
 
         public TLCGenDefaultModel SelectedOtherDefault
         {
-            get { return _SelectedOtherDefault; }
+            get => _SelectedOtherDefault;
             set
             {
                 _SelectedOtherDefault = value;

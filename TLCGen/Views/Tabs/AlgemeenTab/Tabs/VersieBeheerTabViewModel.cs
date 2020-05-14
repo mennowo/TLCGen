@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
+using TLCGen.Dependencies.Helpers;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -29,7 +30,7 @@ namespace TLCGen.ViewModels
 
         public VersieViewModel SelectedVersie
         {
-            get { return _SelectedVersie; }
+            get => _SelectedVersie;
             set
             {
                 _SelectedVersie = value;
@@ -56,7 +57,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMajor = value;
-                RaisePropertyChanged<object>("HuidigeVersieMajor", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HuidigeVersieMajor), broadcast: true);
             }
         }
 
@@ -66,7 +67,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMinor = value;
-                RaisePropertyChanged<object>("HuidigeVersieMinor", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HuidigeVersieMinor), broadcast: true);
             }
         }
 
@@ -76,7 +77,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieRevision = value;
-                RaisePropertyChanged<object>("HuidigeVersieRevision", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HuidigeVersieRevision), broadcast: true);
             }
         }
 
@@ -86,7 +87,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AanmakenVerionSysh = value;
-                RaisePropertyChanged<object>("AanmakenVerionSysh", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AanmakenVerionSysh), broadcast: true);
             }
         }
 
@@ -96,7 +97,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.StoreCurrentController = value;
-                RaisePropertyChanged<object>("StoreCurrentController", broadcast: true);
+                RaisePropertyChanged<object>(nameof(StoreCurrentController), broadcast: true);
             }
         }
 
@@ -162,11 +163,11 @@ namespace TLCGen.ViewModels
                 {
                     var majver = m.Groups[1].Value;
                     var midver = m.Groups[2].Value;
-                    if (int.TryParse(majver, out int nextmajver))
+                    if (int.TryParse(majver, out var nextmajver))
                     {
                         nextmajor = nextmajver;
                     }
-                    if (int.TryParse(midver, out int nextmidver))
+                    if (int.TryParse(midver, out var nextmidver))
                     {
                         nextminor = nextmidver + 1;
                         nextver = m.Groups[1].Value + "." + (nextmidver + 1).ToString() + ".0";
@@ -193,24 +194,10 @@ namespace TLCGen.ViewModels
                 }
                 controller.Data.Versies.Clear();
                 vm.Controller = controller;
-                vm.ControllerPluginData = EncodeTo64(pluginData.OuterXml);
+                vm.ControllerPluginData = Base64Encoding.EncodeTo64(pluginData.OuterXml);
             }
             var vvm = new VersieViewModel(vm);
             Versies?.Add(vvm);
-        }
-
-        static public string EncodeTo64(string toEncode)
-        {
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            string returnValue = System.Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
-        }
-
-        static public string DecodeFrom64(string encodedData)
-        {
-            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
-            string returnValue = System.Text.ASCIIEncoding.ASCII.GetString(encodedDataAsBytes);
-            return returnValue;
         }
 
         bool AddVersieCommand_CanExecute()
@@ -236,11 +223,11 @@ namespace TLCGen.ViewModels
             if (SelectedVersie.VersieEntry.ControllerPluginData != null)
             {
                 pluginXmlDoc = new XmlDocument();
-                pluginXmlDoc.LoadXml(DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
+                pluginXmlDoc.LoadXml(Base64Encoding.DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
             }
 
             var iIndex = Versies.IndexOf(SelectedVersie);
-            for (int i = 0; i <= iIndex; i++)
+            for (var i = 0; i <= iIndex; i++)
             {
                 var ve = DeepCloner.DeepClone(Versies[i].VersieEntry);
                 c.Data.Versies.Add(ve);
@@ -308,17 +295,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Versiebeheer";
-            }
-        }
+        public override string DisplayName => "Versiebeheer";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -328,10 +309,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
@@ -340,9 +318,9 @@ namespace TLCGen.ViewModels
                 {
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
-                    foreach (VersieModel vm in _Controller.Data.Versies)
+                    foreach (var vm in _Controller.Data.Versies)
                     {
-                        VersieViewModel vvm = new VersieViewModel(vm);
+                        var vvm = new VersieViewModel(vm);
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;

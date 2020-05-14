@@ -22,10 +22,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// The name of the PhaseCyclus
         /// </summary>
-        public string FaseCyclusNaam
-        {
-            get { return _FaseCyclusNaam; }
-        }
+        public string FaseCyclusNaam => _FaseCyclusNaam;
 
         /// <summary>
         /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
@@ -41,7 +38,7 @@ namespace TLCGen.ViewModels
 
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
-                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
+                        var request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
                         Messenger.Default.Send(request);
                         if (request.Handled && !request.IsConflicting)
                             return false;
@@ -74,10 +71,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// Indicates that the property ModuleVM has no value
         /// </summary>
-        public bool NoConflictGroepAvailable
-        {
-            get { return _SelectedConflictGroep == null; }
-        }
+        public bool NoConflictGroepAvailable => _SelectedConflictGroep == null;
 
         #endregion // Properties
 

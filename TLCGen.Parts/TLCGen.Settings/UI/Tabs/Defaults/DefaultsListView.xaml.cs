@@ -18,8 +18,8 @@ namespace TLCGen.Settings.Views
 
         public TLCGenDefaultModel SelectedDefault
         {
-            get { return (TLCGenDefaultModel)GetValue(SelectedDefaultProperty); }
-            set { SetValue(SelectedDefaultProperty, value); }
+            get => (TLCGenDefaultModel)GetValue(SelectedDefaultProperty);
+            set => SetValue(SelectedDefaultProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedDefault.  This enables animation, styling, binding, etc...
@@ -30,8 +30,8 @@ namespace TLCGen.Settings.Views
 
         public ObservableCollection<TLCGenDefaultModel> Defaults
         {
-            get { return (ObservableCollection<TLCGenDefaultModel>)GetValue(DefaultsProperty); }
-            set { SetValue(DefaultsProperty, value); }
+            get => (ObservableCollection<TLCGenDefaultModel>)GetValue(DefaultsProperty);
+            set => SetValue(DefaultsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Defaults.  This enables animation, styling, binding, etc...

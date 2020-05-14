@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
 
         private VAOntruimenFaseModel _VAOntruimenFase;
         private Dictionary<string, int> _ConflicterendeFasen;
-
+        private ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> _detectorManager;
         private ObservableCollection<string> _VAOntruimenMatrixColumnHeaders;
         private ObservableCollection<string> _VAOntruimenMatrixRowHeaders;
 
@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _VAOntruimenFase.FaseCyclus; }
+            get => _VAOntruimenFase.FaseCyclus;
             set
             {
                 _VAOntruimenFase.FaseCyclus = value;
@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
 
         public int VAOntrMax
         {
-            get { return _VAOntruimenFase.VAOntrMax; }
+            get => _VAOntruimenFase.VAOntrMax;
             set
             {
                 _VAOntruimenFase.VAOntrMax = value;
@@ -199,20 +199,9 @@ namespace TLCGen.ViewModels
         public ObservableCollectionAroundList<VAOntruimenDetectorViewModel, VAOntruimenDetectorModel> VAOntruimenDetectoren
         {
             get;
-            private set;
         }
 
-        public Dictionary<string, int> ConflicterendeFasen
-        {
-            get
-            {
-                if (_ConflicterendeFasen == null)
-                {
-                    _ConflicterendeFasen = new Dictionary<string, int>();
-                }
-                return _ConflicterendeFasen;
-            }
-        }
+        public Dictionary<string, int> ConflicterendeFasen => _ConflicterendeFasen ?? (_ConflicterendeFasen = new Dictionary<string, int>());
 
         public VAOntruimenNaarFaseViewModel[,] VAOntruimenMatrix
         {
@@ -220,47 +209,24 @@ namespace TLCGen.ViewModels
             set;
         }
 
-        public ObservableCollection<string> VAOntruimenMatrixColumnHeaders
-        {
-            get
-            {
-                if (_VAOntruimenMatrixColumnHeaders == null)
-                {
-                    _VAOntruimenMatrixColumnHeaders = new ObservableCollection<string>();
-                }
-                return _VAOntruimenMatrixColumnHeaders;
-            }
-        }
+        public ObservableCollection<string> VAOntruimenMatrixColumnHeaders =>
+            _VAOntruimenMatrixColumnHeaders ??
+            (_VAOntruimenMatrixColumnHeaders = new ObservableCollection<string>());
 
-        public ObservableCollection<string> VAOntruimenMatrixRowHeaders
-        {
-            get
-            {
-                if (_VAOntruimenMatrixRowHeaders == null)
-                {
-                    _VAOntruimenMatrixRowHeaders = new ObservableCollection<string>();
-                }
-                return _VAOntruimenMatrixRowHeaders;
-            }
-        }
-
-        private ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> _DetectorManager;
+        public ObservableCollection<string> VAOntruimenMatrixRowHeaders =>
+            _VAOntruimenMatrixRowHeaders ??
+            (_VAOntruimenMatrixRowHeaders = new ObservableCollection<string>());
 
         public ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
         {
             get
             {
-                if (_DetectorManager == null)
+                if (_detectorManager == null)
                 {
-                    List<string> dets =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.
-                            GetAllDetectors().
-                            Select(x => x.Naam).
-                            ToList();
-                    _DetectorManager = new ItemsManagerViewModel<VAOntruimenDetectorViewModel, string>(
+                    _detectorManager = new ItemsManagerViewModel<VAOntruimenDetectorViewModel, string>(
                         VAOntruimenDetectoren,
-                        dets,
-                        (x) =>
+                        ControllerAccessProvider.Default.AllDetectorStrings,
+                        x =>
                         {
                             var vad = new VAOntruimenDetectorModel()
                             {
@@ -272,30 +238,14 @@ namespace TLCGen.ViewModels
                             }
                             return new VAOntruimenDetectorViewModel(vad);
                         },
-                        (x) =>
-                        {
-                            return !VAOntruimenDetectoren.Where(y => y.Detector == x).Any();
-                        },
-                        (x) =>
-                        {
-                            VAOntruimenDetectorViewModel dvm = null;
-                            foreach (var d in VAOntruimenDetectoren)
-                            {
-                                if (d.Detector == x)
-                                {
-                                    dvm = d;
-                                    break;
-                                }
-                            }
-                            return dvm;
-                        },
-                        () => { Refresh(); },
-                        () => { Refresh(); }
-                        );
+                        x => VAOntruimenDetectoren.All(y => y.Detector != x),
+                        x => VAOntruimenDetectoren.FirstOrDefault(d => d.Detector == x),
+                        Refresh,
+                        Refresh);
                 }
-                return _DetectorManager;
+                return _detectorManager;
             }
-            private set { _DetectorManager = value; }
+            private set => _detectorManager = value;
         }
 
         public ObservableCollection<string> WisselDetectoren { get; }
@@ -328,10 +278,10 @@ namespace TLCGen.ViewModels
 
             VAOntruimenMatrix = new VAOntruimenNaarFaseViewModel[ConflicterendeFasen.Count, VAOntruimenDetectoren.Count];
 
-            for (int d = 0; d < VAOntruimenDetectoren.Count; ++d)
+            for (var d = 0; d < VAOntruimenDetectoren.Count; ++d)
             {
                 VAOntruimenMatrixColumnHeaders.Add(VAOntruimenDetectoren[d].Detector);
-                for (int cfc = 0; cfc < VAOntruimenDetectoren[d].ConflicterendeFasen.Count; ++cfc)
+                for (var cfc = 0; cfc < VAOntruimenDetectoren[d].ConflicterendeFasen.Count; ++cfc)
                 {
                     VAOntruimenMatrixRowHeaders.Add(VAOntruimenDetectoren[d].ConflicterendeFasen[cfc].FaseCyclus);
                     VAOntruimenMatrix[cfc, d] = VAOntruimenDetectoren[d].ConflicterendeFasen[cfc];
@@ -360,16 +310,15 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
-            _DetectorManager = null;
-            RaisePropertyChanged("DetectorManager");
+            _detectorManager?.Refresh();
 
             //var sd1 = "";
             //var sd2 = "";
-            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            //if (KijkNaarWisselstand && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
             //{
             //    sd1 = Wissel1Detector;
             //}
-            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            //if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
             //{
             //    sd2 = Wissel2Detector;
             //}
@@ -423,6 +372,12 @@ namespace TLCGen.ViewModels
             //}
         }
 
+        private void OnNameChanged(NameChangedMessage obj)
+        {
+            if (obj.ObjectType != TLCGenObjectTypeEnum.Detector) return;
+            _detectorManager?.Refresh();
+        }
+
         #endregion // TLCGen Events
 
         #region IViewModelWithItem
@@ -455,12 +410,12 @@ namespace TLCGen.ViewModels
             WisselInputs = new ObservableCollection<string>();
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             OnDetectorenChanged(null);
             OnIngangenChanged(null);
 
             Refresh();
         }
-
 
         #endregion // Constructor
     }

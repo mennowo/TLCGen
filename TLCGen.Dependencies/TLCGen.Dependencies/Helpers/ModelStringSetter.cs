@@ -14,17 +14,17 @@ namespace TLCGen.Helpers
         public static void SetStringInModel(object obj, string oldstring, string newstring)
         {
             if (obj == null || oldstring == null || newstring == null) return;
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var objType = obj.GetType();
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
                 var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
                 if (ignore != null) continue;
 
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
                 if (property.PropertyType == typeof(string))
                 {
-                    string propString = (string)propValue;
+                    var propString = (string)propValue;
                     if (propString == oldstring)
                     {
                         property.SetValue(obj, newstring);
@@ -51,17 +51,17 @@ namespace TLCGen.Helpers
         public static void ReplaceStringInModel(object obj, string oldstring, string newstring)
         {
             if (obj == null || oldstring == null || newstring == null) return;
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var objType = obj.GetType();
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
                 var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
                 if (ignore != null) continue;
 
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
                 if (property.PropertyType == typeof(string))
                 {
-                    string propString = (string)propValue;
+                    var propString = (string)propValue;
                     if (propString != null && propString.Contains(oldstring))
                     {
                         property.SetValue(obj, propString.Replace(oldstring, newstring));

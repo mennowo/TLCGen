@@ -9,7 +9,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
     {
         private string GenerateTabC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* APPLICATION SETTINGS */");
             sb.AppendLine("/* -------------------- */");
             sb.AppendLine();
@@ -26,7 +26,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateTabCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
@@ -37,7 +37,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
         private string GenerateTabCApplicationInit(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void application_init(SIGNALGROUP signalgroups[], DETECTOR detectors[], OUTGOING_SIGNAL os[], MODULEMILL * modulemill, MODULE modules[], CLOCK * clock)");
             sb.AppendLine("{");

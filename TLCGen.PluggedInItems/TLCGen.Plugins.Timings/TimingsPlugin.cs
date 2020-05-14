@@ -143,8 +143,8 @@ namespace TLCGen.Plugins.Timings
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_timingsModel);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_timingsModel);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -229,7 +229,7 @@ namespace TLCGen.Plugins.Timings
         {
             if (_controller.Data.CCOLVersie <= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {

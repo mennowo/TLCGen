@@ -12,8 +12,8 @@ namespace TLCGen.Controls
 
         public string Folder
         {
-            get { return (string)GetValue(FolderProperty); }
-            set { SetValue(FolderProperty, value); }
+            get => (string)GetValue(FolderProperty);
+            set => SetValue(FolderProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
@@ -22,8 +22,8 @@ namespace TLCGen.Controls
 
         public string ChooseDialogTitle
         {
-            get { return (string)GetValue(ChooseDialogTitleProperty); }
-            set { SetValue(ChooseDialogTitleProperty, value); }
+            get => (string)GetValue(ChooseDialogTitleProperty);
+            set => SetValue(ChooseDialogTitleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ChooseDialogTitle.  This enables animation, styling, binding, etc...
@@ -32,8 +32,8 @@ namespace TLCGen.Controls
 
         public bool EnsurePathExists
         {
-            get { return (bool)GetValue(EnsurePathExistsProperty); }
-            set { SetValue(EnsurePathExistsProperty, value); }
+            get => (bool)GetValue(EnsurePathExistsProperty);
+            set => SetValue(EnsurePathExistsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for EnsurePathExists.  This enables animation, styling, binding, etc...
@@ -47,7 +47,7 @@ namespace TLCGen.Controls
 
         private void SelectStdFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            CommonOpenFileDialog ofd = new CommonOpenFileDialog
+            var ofd = new CommonOpenFileDialog
             {
                 IsFolderPicker = true,
                 Title = ChooseDialogTitle,

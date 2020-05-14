@@ -44,9 +44,9 @@ namespace TLCGen.Plugins.Sumo
         // ******************************************************************
         public bool Register()
         {
-            int virtualKeyCode = KeyInterop.VirtualKeyFromKey(Key);
+            var virtualKeyCode = KeyInterop.VirtualKeyFromKey(Key);
             Id = virtualKeyCode + ((int)KeyModifiers * 0x10000);
-            bool result = RegisterHotKey(IntPtr.Zero, Id, (UInt32)KeyModifiers, (UInt32)virtualKeyCode);
+            var result = RegisterHotKey(IntPtr.Zero, Id, (UInt32)KeyModifiers, (UInt32)virtualKeyCode);
 
             if (_dictHotKeyToCalBackProc == null)
             {
@@ -63,7 +63,7 @@ namespace TLCGen.Plugins.Sumo
         // ******************************************************************
         public void Unregister()
         {
-            if (_dictHotKeyToCalBackProc.TryGetValue(Id, out HotKey hotKey))
+            if (_dictHotKeyToCalBackProc.TryGetValue(Id, out var hotKey))
             {
                 UnregisterHotKey(IntPtr.Zero, Id);
                 _dictHotKeyToCalBackProc.Remove(Id);
@@ -77,7 +77,7 @@ namespace TLCGen.Plugins.Sumo
             {
                 if (msg.message == WmHotKey)
                 {
-                    if (_dictHotKeyToCalBackProc.TryGetValue((int)msg.wParam, out HotKey hotKey))
+                    if (_dictHotKeyToCalBackProc.TryGetValue((int)msg.wParam, out var hotKey))
                     {
                         if (hotKey.Action != null)
                         {

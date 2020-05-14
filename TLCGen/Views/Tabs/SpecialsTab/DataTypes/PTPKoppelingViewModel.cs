@@ -283,14 +283,11 @@ namespace TLCGen.ViewModels
             },
             () => SelectedKoppelSignaalUit != null));
 
-        public PTPKoppelingModel PTPKoppeling
-        {
-            get { return _PTPKoppeling; }
-        }
+        public PTPKoppelingModel PTPKoppeling => _PTPKoppeling;
 
         public string TeKoppelenKruispunt
         {
-            get { return _PTPKoppeling.TeKoppelenKruispunt; }
+            get => _PTPKoppeling.TeKoppelenKruispunt;
             set
             {
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, value))
@@ -331,7 +328,7 @@ namespace TLCGen.ViewModels
 
         public int AantalsignalenIn
         {
-            get { return _PTPKoppeling.AantalsignalenIn; }
+            get => _PTPKoppeling.AantalsignalenIn;
             set
             {
                 _PTPKoppeling.AantalsignalenIn = value;
@@ -343,7 +340,7 @@ namespace TLCGen.ViewModels
 
         public int AantalsignalenUit
         {
-            get { return _PTPKoppeling.AantalsignalenUit; }
+            get => _PTPKoppeling.AantalsignalenUit;
             set
             {
                 _PTPKoppeling.AantalsignalenUit = value;
@@ -358,11 +355,11 @@ namespace TLCGen.ViewModels
             KoppelSignalenUitBeschikbaar.Clear();
             KoppelSignalenIn.Clear();
             KoppelSignalenUit.Clear();
-            for (int i = 0; i < AantalsignalenIn; i++)
+            for (var i = 0; i < AantalsignalenIn; i++)
             {
                 KoppelSignalenIn.Add(new PTPKoppelSignaalViewModel { Count = i + 1 });
             }
-            for (int i = 0; i < AantalsignalenUit; i++)
+            for (var i = 0; i < AantalsignalenUit; i++)
             {
                 KoppelSignalenUit.Add(new PTPKoppelSignaalViewModel { Count = i + 1 });
             }
@@ -396,7 +393,7 @@ namespace TLCGen.ViewModels
 
         public int PortnummerSimuatieOmgeving
         {
-            get { return _PTPKoppeling.PortnummerSimuatieOmgeving; }
+            get => _PTPKoppeling.PortnummerSimuatieOmgeving;
             set
             {
                 _PTPKoppeling.PortnummerSimuatieOmgeving = value;
@@ -406,31 +403,31 @@ namespace TLCGen.ViewModels
 
         public int PortnummerAutomaatOmgeving
         {
-            get { return _PTPKoppeling.PortnummerAutomaatOmgeving; }
+            get => _PTPKoppeling.PortnummerAutomaatOmgeving;
             set
             {
                 _PTPKoppeling.PortnummerAutomaatOmgeving = value;
-                RaisePropertyChanged<object>("PortnummerAutomaatOmgeving", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PortnummerAutomaatOmgeving), broadcast: true);
             }
         }
 
         public int NummerSource
         {
-            get { return _PTPKoppeling.NummerSource; }
+            get => _PTPKoppeling.NummerSource;
             set
             {
                 _PTPKoppeling.NummerSource = value;
-                RaisePropertyChanged<object>("NummerSource", broadcast: true);
+                RaisePropertyChanged<object>(nameof(NummerSource), broadcast: true);
             }
         }
 
         public int NummerDestination
         {
-            get { return _PTPKoppeling.NummerDestination; }
+            get => _PTPKoppeling.NummerDestination;
             set
             {
                 _PTPKoppeling.NummerDestination = value;
-                RaisePropertyChanged<object>("NummerDestination", broadcast: true);
+                RaisePropertyChanged<object>(nameof(NummerDestination), broadcast: true);
             }
         }
 
@@ -443,13 +440,13 @@ namespace TLCGen.ViewModels
         public PTPKoppelingViewModel(PTPKoppelingModel kop)
         {
             _PTPKoppeling = kop;
-            ICollectionView ksIn = CollectionViewSource.GetDefaultView(KoppelSignalenInBeschikbaar);
+            var ksIn = CollectionViewSource.GetDefaultView(KoppelSignalenInBeschikbaar);
             if (ksIn != null && ksIn.CanSort == true)
             {
                 ksIn.SortDescriptions.Clear();
                 ksIn.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
             }
-            ICollectionView ksUit = CollectionViewSource.GetDefaultView(KoppelSignalenUitBeschikbaar);
+            var ksUit = CollectionViewSource.GetDefaultView(KoppelSignalenUitBeschikbaar);
             if (ksUit != null && ksUit.CanSort == true)
             {
                 ksUit.SortDescriptions.Clear();

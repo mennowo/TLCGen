@@ -16,12 +16,9 @@ namespace FloodFill
         /// <summary>
         /// Returns the number of items currently in the queue.
         /// </summary>
-        public int Count
-        {
-            get { return size; }
-        }
+        public int Count => size;
 
-		public FloodFillRangeQueue():this(10000)
+        public FloodFillRangeQueue():this(10000)
 		{
 
 		}
@@ -34,17 +31,14 @@ namespace FloodFill
         }
 
         /// <summary>Gets the <see cref="FloodFillRange"/> at the beginning of the queue.</summary>
-        public FloodFillRange First 
-		{
-			get { return array[head]; }
-		}
+        public FloodFillRange First => array[head];
 
         /// <summary>Adds a <see cref="FloodFillRange"/> to the end of the queue.</summary>
         public void Enqueue(ref FloodFillRange r) 
 		{
 			if (size+head == array.Length) 
 			{
-                FloodFillRange[] newArray = new FloodFillRange[2 * array.Length];
+                var newArray = new FloodFillRange[2 * array.Length];
                 Array.Copy(array, head, newArray, 0, size);
 				array = newArray;
                 head = 0;
@@ -55,7 +49,7 @@ namespace FloodFill
         /// <summary>Removes and returns the <see cref="FloodFillRange"/> at the beginning of the queue.</summary>
         public FloodFillRange Dequeue() 
 		{
-            FloodFillRange range = new FloodFillRange();
+            var range = new FloodFillRange();
             if (size>0)
             {
                 range = array[head];

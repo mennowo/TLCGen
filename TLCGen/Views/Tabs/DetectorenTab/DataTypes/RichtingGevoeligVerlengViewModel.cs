@@ -18,10 +18,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public RichtingGevoeligVerlengModel RichtingGevoeligVerleng
-        {
-            get { return _RichtingGevoeligVerleng; }
-        }
+        public RichtingGevoeligVerlengModel RichtingGevoeligVerleng => _RichtingGevoeligVerleng;
 
         public ObservableCollection<string> Detectoren
         {
@@ -37,61 +34,61 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _RichtingGevoeligVerleng.FaseCyclus; }
+            get => _RichtingGevoeligVerleng.FaseCyclus;
             set
             {
                 _RichtingGevoeligVerleng.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         public string VanDetector
         {
-            get { return _RichtingGevoeligVerleng.VanDetector; }
+            get => _RichtingGevoeligVerleng.VanDetector;
             set
             {
                 _RichtingGevoeligVerleng.VanDetector = value;
-                RaisePropertyChanged<object>("VanDetector", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VanDetector), broadcast: true);
             }
         }
 
         public string NaarDetector
         {
-            get { return _RichtingGevoeligVerleng.NaarDetector; }
+            get => _RichtingGevoeligVerleng.NaarDetector;
             set
             {
                 _RichtingGevoeligVerleng.NaarDetector = value;
-                RaisePropertyChanged<object>("NaarDetector", broadcast: true);
+                RaisePropertyChanged<object>(nameof(NaarDetector), broadcast: true);
             }
         }
 
         public int MaxTijdsVerschil
         {
-            get { return _RichtingGevoeligVerleng.MaxTijdsVerschil; }
+            get => _RichtingGevoeligVerleng.MaxTijdsVerschil;
             set
             {
                 _RichtingGevoeligVerleng.MaxTijdsVerschil = value;
-                RaisePropertyChanged<object>("MaxTijdsVerschil", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MaxTijdsVerschil), broadcast: true);
             }
         }
 
         public int VerlengTijd
         {
-            get { return _RichtingGevoeligVerleng.VerlengTijd; }
+            get => _RichtingGevoeligVerleng.VerlengTijd;
             set
             {
                 _RichtingGevoeligVerleng.VerlengTijd = value;
-                RaisePropertyChanged<object>("VerlengTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VerlengTijd), broadcast: true);
             }
         }
 
         public RichtingGevoeligVerlengenTypeEnum TypeVerlengen
         {
-            get { return _RichtingGevoeligVerleng.TypeVerlengen; }
+            get => _RichtingGevoeligVerleng.TypeVerlengen;
             set
             {
                 _RichtingGevoeligVerleng.TypeVerlengen = value;
-                RaisePropertyChanged<object>("TypeVerlengen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TypeVerlengen), broadcast: true);
             }
         }
 

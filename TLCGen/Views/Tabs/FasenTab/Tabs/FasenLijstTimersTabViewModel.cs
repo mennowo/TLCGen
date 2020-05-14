@@ -14,43 +14,33 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<FaseCyclusViewModel> _Fasen;
-        private FaseCyclusViewModel _SelectedFaseCyclus;
-        private IList _SelectedFaseCycli = new ArrayList();
+        private FaseCyclusViewModel _selectedFaseCyclus;
+        private IList _selectedFaseCycli = new ArrayList();
+        private volatile bool _settingMultiple = false;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<FaseCyclusViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<FaseCyclusViewModel>();
-                }
-                return _Fasen;
-            }
-        }
+        public ObservableCollection<FaseCyclusViewModel> Fasen => ControllerAccessProvider.Default.AllSignalGroups;
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get => _SelectedFaseCyclus;
+            get => _selectedFaseCyclus;
 	        set
             {
-                _SelectedFaseCyclus = value;
+                _selectedFaseCyclus = value;
                 RaisePropertyChanged();
             }
         }
 
         public IList SelectedFaseCycli
         {
-            get => _SelectedFaseCycli;
+            get => _selectedFaseCycli;
 	        set
             {
-                _SelectedFaseCycli = value;
-                _SettingMultiple = false;
+                _selectedFaseCycli = value;
+                _settingMultiple = false;
                 RaisePropertyChanged();
             }
         }
@@ -59,73 +49,36 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override ControllerModel Controller
-        {
-            get => base.Controller;
-	        set
-            {
-                base.Controller = value;
-                if (value != null)
-                {
-                    UpdateFasen();
-                }
-            }
-        }
-
         public override string DisplayName => "Tijden";
 
 	    public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
         public override void OnSelected()
         {
-            
         }
 
         #endregion // TabItem Overrides
 
         #region TLCGen Event handling
-
-        private void OnFasenChanged(FasenChangedMessage message)
-        {
-            UpdateFasen();
-        }
-        
-        private void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
-        {
-            foreach (var fcm in Fasen)
-            {
-                fcm.UpdateHasKopmax();
-            }
-        }
-
-        private void OnFaseDetectorVeiligheidsGroenChanged(FaseDetectorVeiligheidsGroenChangedMessage message)
-        {
-            foreach (var fcm in Fasen)
-            {
-                fcm.UpdateHasVeiligheidsGroen();
-            }
-        }
-
         #endregion // TLCGen Event handling
 
         #region Event Handling
 
-        private volatile bool _SettingMultiple = false;
         private void FaseCyclus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+            if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
                 return;
 
             if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 1)
             {
-                _SettingMultiple = true;
+                _settingMultiple = true;
                 MultiPropertySetter.SetPropertyForAllItems<FaseCyclusViewModel>(sender, e.PropertyName, SelectedFaseCycli);
             }
-            _SettingMultiple = false;
+            _settingMultiple = false;
         }
 
         #endregion // Event Handling
@@ -136,35 +89,12 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
-        private void UpdateFasen()
-        {
-            var sel = SelectedFaseCyclus;
-
-            foreach (var fcvm in Fasen)
-            {
-                fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
-            }
-
-            Fasen.Clear();
-            foreach (var fcm in _Controller.Fasen)
-            {
-                var fcvm = new FaseCyclusViewModel(fcm);
-                if (sel != null && fcvm.Naam == sel.Naam)
-                    SelectedFaseCyclus = fcvm;
-                Fasen.Add(fcvm);
-                fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
-            }
-        }
-
         #endregion // Private Methods
 
         #region Constructor
 
         public FasenLijstTimersTabViewModel() : base()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
-            MessengerInstance.Register(this, new Action<FaseDetectorVeiligheidsGroenChangedMessage>(OnFaseDetectorVeiligheidsGroenChanged));
         }
 
         #endregion // Constructor

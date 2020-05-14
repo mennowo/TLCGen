@@ -12,169 +12,284 @@
              mc:Ignorable="d" 
              x:Name="Root"
              d:DesignHeight="1000" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance vm:OVIngreepViewModel}">
+             d:DataContext="{d:DesignInstance vm:PrioIngreepViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
     </UserControl.Resources>
-    <Grid>
-        <Label Content="Geen instellingen beschikbaar">
-            <Label.Style>
-                <Style TargetType="Label">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Label.Style>
-        </Label>
-        <Grid>
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+    <TabControl>
+        <TabItem Header="Ingreep">
+            <Grid>
+                <Label Content="Geen instellingen beschikbaar">
+                    <Label.Style>
+                        <Style TargetType="Label">
                             <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
-            <ag:AutoGrid Columns="Auto,*" RowCount="34">
-                
-                <!-- Algemeen -->
-                <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
-                <Label Content="Naam ingreep" />
-                <TextBox Text="{Binding Path=Naam}" Margin="2" />
-                <Label Content="Type voertuig" />
-                <ComboBox Margin="2"
-                    SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepVoertuigTypeEnum}}}" />
-                
-                <!-- Tijden -->
-                <TextBlock Text="Tijden" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
-                <Label Content="Rijtijd ongehinderd" />
-                <TextBox Text="{Binding Path=RijTijdOngehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Rijtijd beperkt gehinderd" />
-                <TextBox Text="{Binding Path=RijTijdBeperktgehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Rijtijd gehinderd" />
-                <TextBox Text="{Binding Path=RijTijdGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Ondermaximum" />
-                <TextBox Text="{Binding Path=OnderMaximum,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Groenbewaking" />
-                <TextBox Text="{Binding Path=GroenBewaking,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Blokkeren prio na ingreep" />
-                <TextBox Text="{Binding Path=BlokkeertijdNaPrioIngreep,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Bezettijd OV gehinderd" />
-                <TextBox Text="{Binding Path=BezettijdPrioGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <DockPanel Grid.Row="2">
-                    <ct:InfoElement DockPanel.Dock="Right">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=Root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <ag:AutoGrid Columns="Auto,*" RowCount="35">
+                        <!-- Algemeen -->
+                        <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Naam ingreep" />
+                            <ct:InfoElement>
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Deze naam wordt tevens gebruikt bij genereren van code
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
+                        <TextBox Text="{Binding Path=Naam}" Margin="2" />
+                        <Label Content="Type voertuig" />
+                        <ComboBox Margin="2"
+                            SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepVoertuigTypeEnum}}}" />
+                        
+                        <!-- Tijden -->
+                        <TextBlock Text="Tijden" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
+                        <Label Content="Rijtijd ongehinderd" />
+                        <TextBox Text="{Binding Path=RijTijdOngehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Rijtijd beperkt gehinderd" />
+                        <TextBox Text="{Binding Path=RijTijdBeperktgehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Rijtijd gehinderd" />
+                        <TextBox Text="{Binding Path=RijTijdGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Ondermaximum" />
+                        <TextBox Text="{Binding Path=OnderMaximum,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Groenbewaking" />
+                        <TextBox Text="{Binding Path=GroenBewaking,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Blokkeren prio na ingreep" />
+                        <TextBox Text="{Binding Path=BlokkeertijdNaPrioIngreep,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Bezettijd OV gehinderd" />
+                        <TextBox Text="{Binding Path=BezettijdPrioGehinderd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <DockPanel Grid.Row="2">
+                            <ct:InfoElement DockPanel.Dock="Right">
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Deze waarde wordt gebruikt voor de noodaanvraag (indien van<LineBreak/>
+                                        toepassing), alsook voor inmeldingen waarvoor 'Alleen bij <LineBreak/>
+                                        rood' is aangevinkt.
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                            <Label Content="Minimale roodtijd" />
+                        </DockPanel>
+                        <TextBox Text="{Binding Path=MinimaleRoodtijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        
+                        <!-- Prioriteitsopties -->
+                        <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
+                        <Label Content="Afkappen conflicten" />
+                        <CheckBox
+                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
+                        <Label Content="Afkappen conflicterend OV" />
+                        <CheckBox
+                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflictenPrio}" />
+                        <Label Content="Vasthouden groen" />
+                        <CheckBox
+                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
+                        <Label Content="Tussendoor realiseren" />
+                        <CheckBox
+                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
+                        
+                        <TextBlock Text="Inmelden/aanvragen koplus" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
+                        <Label Content="Koplus" />
+                        <ComboBox Margin="2"
+                            SelectedItem="{Binding Path=Koplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.Detectoren}" />
+                        <Label Content="Versneld inmelden" />
+                        <ComboBox Margin="2" IsEnabled="{Binding HasKoplus,Mode=OneWay}"
+                            SelectedItem="{Binding Path=VersneldeInmeldingKoplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                        <Label Content="Noodaanvraag" />
+                        <CheckBox IsEnabled="{Binding HasKoplus,Mode=OneWay}"
+                            Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                        <Label Content="Wisselstand" />
+                        <CheckBox IsEnabled="{Binding HasWisselstand,Mode=OneWay}"
+                            Margin="5" IsChecked="{Binding Path=KoplusKijkNaarWisselstand}" />
+                        
+                        <TextBlock Text="Geconditioneerde prioriteit" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
+                        <Label Content="Toepassen" />
+                        <ComboBox Margin="2"
+                            SelectedItem="{Binding Path=GeconditioneerdePrioriteit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                        <Label Content="Prioriteit te vroeg" />
+                        <TextBox IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
+                            Text="{Binding Path=GeconditioneerdePrioTeVroeg,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="Prioriteit op tijd" />
+                        <TextBox 
+                            IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
+                            Text="{Binding Path=GeconditioneerdePrioOpTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label 
+                            IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
+                            Content="Prioriteit te laat" />
+                        <TextBox 
+                            IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
+                            Text="{Binding Path=GeconditioneerdePrioTeLaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        
+                        <TextBlock Text="Lijnnummers" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
+                        <Label Content="Check op lijnnummer" />
+                        <CheckBox IsChecked="{Binding Path=CheckLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                        <Label Content="Prioriteit voor alle lijnen" Grid.Row="1" />
+                        <CheckBox IsChecked="{Binding Path=AlleLijnen,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckLijnNummer}" Margin="5" />
+                        <DockPanel>
+                            <ct:InfoElement DockPanel.Dock="Right">
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Indien aangevinkt wordt <Underline>per lijnnummer</Underline> gecheckt<LineBreak />
+                                        op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
+                                        Daarbij geldt volgens de CVN-C interface:<LineBreak />
+                                        10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
+                                        12 = inrukrit naar remise, 13 = uitrukrit van remise
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                            <Label Content="Check op rit categorie" />
+                        </DockPanel>
+                        <CheckBox IsEnabled="{Binding Path=CheckLijnNummer}" 
+                                  IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                        <DataGrid 
+                            AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                            ItemsSource="{Binding LijnNummers}" IsEnabled="{Binding Path=CheckLijnNummer}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" 
+                            Grid.ColumnSpan="2">
+                            <DataGrid.Resources>
+                                <DataGridTextColumn Binding="{Binding Path=RitCategorie}" Header="Ritcategorie" x:Key="RitCategorieCol"
+                                                    Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=Nummer}" Header="Lijnnummer" />
+                                <StaticResource ResourceKey="RitCategorieCol" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" IsEnabled="{Binding Path=CheckLijnNummer}" Grid.ColumnSpan="2" >
+                            <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
+                            <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                            <Button Content="+ 10" Command="{Binding Add10LijnNummersCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                            <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                        </StackPanel>
+                        <TextBlock Text="Overig" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
+                        <Label Content="Check op wagen nummer" Grid.Row="1" />
+                        <CheckBox IsChecked="{Binding Path=CheckWagenNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                    </ag:AutoGrid>
+                </Grid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Overig/wissels" DataContext="{Binding Path=WisselData}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label Content="Anti jutter uitmelding" />
+                <CheckBox IsChecked="{Binding Path=AntiJutterVoorAlleUitmeldingen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="0" Grid.Column="1" />
+
+                <Label Content="Anti jutter tijd uitmelding" Grid.Row="1" />
+                <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=AntiJutterVoorAlleUitmeldingen}" Margin="2"
+                     Text="{Binding Path=AntiJutterTijdVoorAlleUitmeldingen,UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label Content="Wissel 1 aanwezig"  Grid.Row="2" />
+                <CheckBox IsChecked="{Binding Path=Wissel1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Grid.Column="1" Grid.Row="2" Margin="5" />
+
+                <Label Content="Wissel 1 type" Grid.Row="3" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel1}" Margin="2"
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
+                    SelectedItem="{Binding Path=Wissel1Type}" Grid.Row="3" Grid.Column="1" />
+
+                <Label Content="Wissel 1 ingang" Grid.Row="4" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource Bool2VisConv}}" />
+                <Label Content="Wissel 1 detector" Grid.Row="4" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource Bool2VisConv}}" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel1}" Margin="2" SelectedValuePath="Naam" DisplayMemberPath="Naam"
+                    ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource Bool2VisConv}}"
+                    SelectedValue="{Binding Path=Wissel1Input}" Grid.Row="4" Grid.Column="1" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel1}" Margin="2"
+                    ItemsSource="{Binding Path=WisselDetectoren}" SelectedValuePath="Naam" DisplayMemberPath="Naam"
+                    Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource Bool2VisConv}}"
+                    SelectedValue="{Binding Path=Wissel1Detector}" Grid.Row="4" Grid.Column="1" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="5" >
+                    <Label Content="Wissel 1 voorwaarde" />
+                    <ct:InfoElement>
                         <ct:InfoElement.InfoPopup>
                             <TextBlock>
-                                Deze waarde wordt gebruikt voor de noodaanvraag (indien van<LineBreak/>
-                                toepassing), alsook voor inmeldingen waarvoor 'Alleen bij <LineBreak/>
-                                rood' is aangevinkt.
+                                Indien aangevinkt: de detector/ingang moet WAAR zijn<LineBreak />
+                                Indien <Underline>niet</Underline> aangevinkt: de detector/ingang moet ONWAAR zijn<LineBreak />
+                                Merk op: de polariteit is in CCOL schakelbaar
                             </TextBlock>
                         </ct:InfoElement.InfoPopup>
                     </ct:InfoElement>
-                    <Label Content="Minimale roodtijd" />
-                </DockPanel>
-                <TextBox Text="{Binding Path=MinimaleRoodtijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                
-                <!-- Prioriteitsopties -->
-                <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
-                <Label Content="Afkappen conflicten" />
-                <CheckBox
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
-                <Label Content="Afkappen conflicterend OV" />
-                <CheckBox
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflictenOV}" />
-                <Label Content="Vasthouden groen" />
-                <CheckBox
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
-                <Label Content="Tussendoor realiseren" />
-                <CheckBox
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
-                
-                <TextBlock Text="Inmelden/aanvragen koplus" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
-                <Label Content="Koplus" />
-                <ComboBox Margin="2"
-                    SelectedItem="{Binding Path=Koplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.Detectoren}" />
-                <Label Content="Versneld inmelden" />
-                <ComboBox Margin="2" IsEnabled="{Binding HasKoplus,Mode=OneWay}"
-                    SelectedItem="{Binding Path=VersneldeInmeldingKoplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
-                <Label Content="Noodaanvraag" />
-                <CheckBox IsEnabled="{Binding HasKoplus,Mode=OneWay}"
-                    Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
-                <Label Content="Wisselstand" />
-                <CheckBox IsEnabled="{Binding HasWisselstand,Mode=OneWay}"
-                    Margin="5" IsChecked="{Binding Path=KoplusKijkNaarWisselstand}" />
-                
-                <TextBlock Text="Geconditioneerde prioriteit" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
-                <Label Content="Toepassen" />
-                <ComboBox Margin="2"
-                    SelectedItem="{Binding Path=GeconditioneerdePrioriteit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
-                <Label Content="Prioriteit te vroeg" />
-                <TextBox IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
-                    Text="{Binding Path=GeconditioneerdePrioTeVroeg,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label Content="Prioriteit op tijd" />
-                <TextBox 
-                    IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
-                    Text="{Binding Path=GeconditioneerdePrioOpTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <Label 
-                    IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
-                    Content="Prioriteit te laat" />
-                <TextBox 
-                    IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
-                    Text="{Binding Path=GeconditioneerdePrioTeLaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                
-                <TextBlock Text="Lijnnummers" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
-                <Label Content="Check op lijnnummer" />
-                <CheckBox IsChecked="{Binding Path=CheckLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-                <Label Content="Prioriteit voor alle lijnen" Grid.Row="1" />
-                <CheckBox IsChecked="{Binding Path=AlleLijnen,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckLijnNummer}" Margin="5" />
-                <DockPanel>
-                    <ct:InfoElement DockPanel.Dock="Right">
-                        <ct:InfoElement.InfoPopup>
-                            <TextBlock>
-                                Indien aangevinkt wordt <Underline>per lijnnummer</Underline> gecheckt<LineBreak />
-                                op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
-                                Daarbij geldt volgens de CVN-C interface:<LineBreak />
-                                10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
-                                12 = inrukrit naar remise, 13 = uitrukrit van remise
-                            </TextBlock>
-                        </ct:InfoElement.InfoPopup>
-                    </ct:InfoElement>
-                    <Label Content="Check op rit categorie" />
-                </DockPanel>
-                <CheckBox IsEnabled="{Binding Path=CheckLijnNummer}" 
-                          IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-                <DataGrid 
-                    AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                    ItemsSource="{Binding LijnNummers}" IsEnabled="{Binding Path=CheckLijnNummer}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" 
-                    Grid.ColumnSpan="2">
-                    <DataGrid.Resources>
-                        <DataGridTextColumn Binding="{Binding Path=RitCategorie}" Header="Ritcategorie" x:Key="RitCategorieCol"
-                                            Visibility="{Binding Path=DataContext.CheckRitCategorie,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
-                    </DataGrid.Resources>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Nummer}" Header="Lijnnummer" />
-                        <StaticResource ResourceKey="RitCategorieCol" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Orientation="Horizontal" IsEnabled="{Binding Path=CheckLijnNummer}" Grid.ColumnSpan="2" >
-                    <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
-                    <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
-                    <Button Content="+ 10" Command="{Binding Add10LijnNummersCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
-                    <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
                 </StackPanel>
-                <TextBlock Text="Overig" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
-                <Label Content="Check op wagen nummer" Grid.Row="1" />
-                <CheckBox IsChecked="{Binding Path=CheckWagenNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
-            </ag:AutoGrid>
-        </Grid>
-    </Grid>
+
+                <CheckBox IsChecked="{Binding Path=Wissel1Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                          IsEnabled="{Binding Path=Wissel1}"
+                          Grid.Column="1" Grid.Row="5" Margin="5" />
+
+                <Label Content="Wissel 2 aanwezig" Grid.Row="6" />
+                <CheckBox IsChecked="{Binding Path=Wissel2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Grid.Column="1" Grid.Row="6" Margin="5" />
+
+                <Label Content="Wissel 2 type" Grid.Row="7" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel2}" Margin="2"
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepInUitDataWisselTypeEnum}}}"
+                    SelectedItem="{Binding Path=Wissel2Type}" Grid.Row="7" Grid.Column="1" />
+
+                <Label Content="Wissel 2 ingang" Grid.Row="8" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource Bool2VisConv}}" />
+                <Label Content="Wissel 2 detector" Grid.Row="8" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource Bool2VisConv}}" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel2}" Margin="2" SelectedValuePath="Naam" DisplayMemberPath="Naam"
+                    ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource Bool2VisConv}}"
+                    SelectedValue="{Binding Path=Wissel2Input}" Grid.Row="8" Grid.Column="1" />
+                <ComboBox 
+                    IsEnabled="{Binding Path=Wissel2}" Margin="2" SelectedValuePath="Naam" DisplayMemberPath="Naam"
+                    ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource Bool2VisConv}}"
+                    SelectedValue="{Binding Path=Wissel2Detector}" Grid.Row="8" Grid.Column="1" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="9" >
+                    <Label Content="Wissel 2 voorwaarde" />
+                    <ct:InfoElement>
+                        <ct:InfoElement.InfoPopup>
+                            <TextBlock>
+                                Indien aangevinkt: de detector/ingang moet WAAR zijn<LineBreak />
+                                Indien <Underline>niet</Underline> aangevinkt: de detector/ingang moet ONWAAR zijn<LineBreak/>
+                                Merk op: de polariteit is in CCOL schakelbaar
+                            </TextBlock>
+                        </ct:InfoElement.InfoPopup>
+                    </ct:InfoElement>
+                </StackPanel>
+                <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                          IsEnabled="{Binding Path=Wissel2}"
+                          Grid.Column="1" Grid.Row="9" Margin="5" />
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>

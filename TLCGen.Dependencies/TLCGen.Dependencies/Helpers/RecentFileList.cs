@@ -66,7 +66,7 @@ namespace TLCGen.Helpers
 
         public event EventHandler<MenuClickEventArgs> MenuClick;
 
-        public List<string> RecentFiles { get { return Persister.RecentFiles(MaxNumberOfFiles); } }
+        public List<string> RecentFiles => Persister.RecentFiles(MaxNumberOfFiles);
 
         #endregion // Public Properties
 
@@ -601,7 +601,7 @@ namespace TLCGen.Helpers
                 bool _IsStreamOwned = true;
                 Stream _Stream = null;
 
-                public Stream Stream { get { return _Stream; } }
+                public Stream Stream => _Stream;
 
                 public static implicit operator Stream(SmartStream me) { return me.Stream; }
 

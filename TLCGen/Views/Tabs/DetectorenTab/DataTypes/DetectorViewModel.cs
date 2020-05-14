@@ -53,7 +53,7 @@ namespace TLCGen.ViewModels
                     if (DefaultsProvider.Default.Controller.Fasen.Any(x => x.Naam == value))
                     {
                         var f = DefaultsProvider.Default.Controller.Fasen.First(x => x.Naam == value);
-                        for (int i = 0; i < f.AantalRijstroken; ++i)
+                        for (var i = 0; i < f.AantalRijstroken; ++i)
                         {
                             _rijstroken.Add(i + 1);
                         }
@@ -71,7 +71,7 @@ namespace TLCGen.ViewModels
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, value))
                     {
-                        string oldname = _detector.Naam;
+                        var oldname = _detector.Naam;
 
                         _detector.Naam = value;
                         

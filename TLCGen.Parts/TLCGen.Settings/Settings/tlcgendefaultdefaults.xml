@@ -46,7 +46,6 @@
         <TGL>30</TGL>
         <TGL_min>30</TGL_min>
         <Kopmax>80</Kopmax>
-        <OVIngreep>false</OVIngreep>
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
@@ -75,7 +74,6 @@
         <TGL>30</TGL>
         <TGL_min>30</TGL_min>
         <Kopmax>80</Kopmax>
-        <OVIngreep>false</OVIngreep>
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
@@ -103,7 +101,6 @@
         <TGL>30</TGL>
         <TGL_min>30</TGL_min>
         <Kopmax>80</Kopmax>
-        <OVIngreep>false</OVIngreep>
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
@@ -131,7 +128,6 @@
         <TGL>30</TGL>
         <TGL_min>30</TGL_min>
         <Kopmax>80</Kopmax>
-        <OVIngreep>false</OVIngreep>
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
@@ -208,9 +204,9 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>Conflict OV</DefaultName>
+      <DefaultName>Conflict van prioriteit</DefaultName>
       <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Dependencies</DataType>
+      <DataType>TLCGen.Models.PioIngreepSignaalGroepParametersModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
@@ -709,8 +705,9 @@
     <Default>
       <DefaultName>OV ingreep</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.OVIngreepModel,TLCGen.Dependencies</DataType>
+      <DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
       <Data>
+        <Naam />
         <FaseCyclus />
         <Type>Bus</Type>
         <VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
@@ -722,7 +719,7 @@
         <RijTijdGehinderd>60</RijTijdGehinderd>
         <OnderMaximum>150</OnderMaximum>
         <GroenBewaking>300</GroenBewaking>
-        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
+        <BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
         <MinimaleRoodtijd>70</MinimaleRoodtijd>
         <AfkappenConflicten>true</AfkappenConflicten>
         <AfkappenConflictenOV>false</AfkappenConflictenOV>
@@ -733,7 +730,7 @@
         <GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
         <GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
         <GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
-        <OVInmeldingBitmapData />
+        <PrioInmeldingBitmapData />
         <GeconditioneerdePrioTeVroegBitmapData />
         <GeconditioneerdePrioOpTijdBitmapData />
         <GeconditioneerdePrioTeLaatBitmapData />
@@ -926,11 +923,11 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>OV instellingen</DefaultName>
+      <DefaultName>Prioriteit instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.OVDataModel,TLCGen.Dependencies</DataType>
+      <DataType>TLCGen.Models.PrioriteitDataModel,TLCGen.Dependencies</DataType>
       <Data>
-        <OVIngreepType>Uitgebreid</OVIngreepType>
+        <PrioIngreepType>Geen</PrioIngreepType>
         <CheckOpDSIN>false</CheckOpDSIN>
         <MaxWachttijdAuto>120</MaxWachttijdAuto>
         <MaxWachttijdFiets>90</MaxWachttijdFiets>
@@ -946,9 +943,9 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>OV meldingen instellingen</DefaultName>
+      <DefaultName>Prio meldingen instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.OVIngreepMeldingenDataModel,TLCGen.Dependencies</DataType>
+      <DataType>TLCGen.Models.PrioIngreepMeldingenDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <AntiJutterVoorAlleUitmeldingen>true</AntiJutterVoorAlleUitmeldingen>
         <AntiJutterTijdVoorAlleUitmeldingen>15</AntiJutterTijdVoorAlleUitmeldingen>

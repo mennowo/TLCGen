@@ -101,8 +101,8 @@ namespace TLCGen.Models
         {
             if(obj is FaseCyclusModel)
             {
-                string s1 = (obj as FaseCyclusModel).Naam;
-                string s2 = this.Naam;
+                var s1 = (obj as FaseCyclusModel).Naam;
+                var s2 = this.Naam;
                 if (s1.Length < s2.Length) s1 = s1.PadLeft(s2.Length, '0');
                 else if (s2.Length < s1.Length) s2 = s2.PadLeft(s1.Length, '0');
 

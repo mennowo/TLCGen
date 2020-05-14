@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _Detector.Detector; }
+            get => _Detector.Detector;
             set
             {
                 _Detector.Detector = value;
@@ -26,31 +26,31 @@ namespace TLCGen.ViewModels
 
         public int BezetTijd
         {
-            get { return _Detector.BezetTijd; }
+            get => _Detector.BezetTijd;
             set
             {
                 _Detector.BezetTijd = value;
-                RaisePropertyChanged<object>("BezetTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(BezetTijd), broadcast: true);
             }
         }
 
         public int RijTijd
         {
-            get { return _Detector.RijTijd; }
+            get => _Detector.RijTijd;
             set
             {
                 _Detector.RijTijd = value;
-                RaisePropertyChanged<object>("RijTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijd), broadcast: true);
             }
         }
 
         public int AfvalVertraging
         {
-            get { return _Detector.AfvalVertraging; }
+            get => _Detector.AfvalVertraging;
             set
             {
                 _Detector.AfvalVertraging = value;
-                RaisePropertyChanged<object>("AfvalVertraging", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AfvalVertraging), broadcast: true);
             }
         }
 

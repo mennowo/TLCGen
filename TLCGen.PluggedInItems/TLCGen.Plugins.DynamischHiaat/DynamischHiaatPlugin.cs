@@ -159,8 +159,8 @@ namespace TLCGen.Plugins.DynamischHiaat
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_myModel);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_myModel);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -210,7 +210,7 @@ namespace TLCGen.Plugins.DynamischHiaat
         {
             _myElements = new List<CCOLElement>();
 
-            bool warning = false;
+            var warning = false;
             foreach (var msg in _myModel.SignaalGroepenMetDynamischHiaat.Where(x => x.HasDynamischHiaat))
             {
                 var ofc = c.Fasen.FirstOrDefault(x => x.Naam == msg.SignalGroupName);
@@ -278,7 +278,7 @@ namespace TLCGen.Plugins.DynamischHiaat
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             var sgs = _myModel.SignaalGroepenMetDynamischHiaat.Where(x => x.HasDynamischHiaat);
             if (!sgs.Any()) return "";
@@ -319,7 +319,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                         var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
                         if (ofc == null) continue;
                         sb.AppendLine($"{ts}hiaattijden_verlenging(IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {(c.Data.ExtraMeeverlengenInWG ? "TRUE" : "FALSE")}, {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
-                        for (int i = 0; i < ofc.AantalRijstroken; i++)
+                        for (var i = 0; i < ofc.AantalRijstroken; i++)
                         {
                             foreach(var dd in sg.DynamischHiaatDetectoren)
                             {

@@ -34,14 +34,14 @@ namespace TLCGen.ViewModels
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
                 SelectedHDIngreep = null;
                 if (_SelectedFaseCyclus != null)
                 {
-                    foreach (HDIngreepModel hdm in _Controller.PrioData.HDIngrepen)
+                    foreach (var hdm in _Controller.PrioData.HDIngrepen)
                     {
                         if (hdm.FaseCyclus == SelectedFaseCyclus.Naam)
                         {
@@ -75,7 +75,7 @@ namespace TLCGen.ViewModels
                     SelectedFaseCyclus.HDIngreep = value;
                     if (value)
                     {
-                        HDIngreepModel hd = new HDIngreepModel();
+                        var hd = new HDIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
                         hd.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.PrioData.HDIngrepen.Add(hd);
@@ -98,13 +98,13 @@ namespace TLCGen.ViewModels
                     MessengerInstance.Send(new PrioIngrepenChangedMessage());
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
-                RaisePropertyChanged<object>("SelectedFaseCyclusHDIngreep", null, null, true);
+                RaisePropertyChanged<object>(nameof(SelectedFaseCyclusHDIngreep), null, null, true);
             }
         }
 
         public HDIngreepViewModel SelectedHDIngreep
         {
-            get { return _SelectedHDIngreep; }
+            get => _SelectedHDIngreep;
             set
             {
                 _SelectedHDIngreep = value;
@@ -116,13 +116,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "HD ingrepen";
-            }
-        }
+        public override string DisplayName => "HD ingrepen";
 
         public override bool CanBeEnabled()
         {

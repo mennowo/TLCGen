@@ -20,7 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            foreach (FaseCyclusModel fcm in c.Fasen)
+            foreach (var fcm in c.Fasen)
             {
                 if (fcm.Wachtgroen != NooitAltijdAanUitEnum.Nooit &&
                     fcm.Wachtgroen != NooitAltijdAanUitEnum.Altijd)
@@ -62,14 +62,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Wachtstand groen aanvragen */");
                     sb.AppendLine($"{ts}/* -------------------------- */");
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
@@ -83,7 +83,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine();
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
@@ -128,7 +128,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT1;  /* reset BIT-sturing */");
                     sb.AppendLine();
 
-                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)

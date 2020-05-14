@@ -21,41 +21,41 @@ namespace TLCGen.ViewModels
 
         public RateltikkerTypeEnum Type
         {
-            get { return _RatelTikker.Type; }
+            get => _RatelTikker.Type;
             set
             {
                 _RatelTikker.Type = value;
-                RaisePropertyChanged<object>("Type", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }
 
         public int NaloopTijd
         {
-            get { return _RatelTikker.NaloopTijd; }
+            get => _RatelTikker.NaloopTijd;
             set
             {
                 _RatelTikker.NaloopTijd = value;
-                RaisePropertyChanged<object>("NaloopTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(NaloopTijd), broadcast: true);
             }
         }
 
         public string FaseCyclus
         {
-            get { return _RatelTikker.FaseCyclus; }
+            get => _RatelTikker.FaseCyclus;
             set
             {
                 _RatelTikker.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         public RatelTikkerDetectorViewModel SelectedDetector
         {
-            get { return DetectorManager.SelectedItem; }
+            get => DetectorManager.SelectedItem;
             set
             {
                 DetectorManager.SelectedItem = value;
-                RaisePropertyChanged("SelectedDetector");
+                RaisePropertyChanged();
             }
         }
 
@@ -71,27 +71,18 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_DetectorManager == null)
-                {
-                    List<string> dets =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen
-                            .SelectMany(x => x.Detectoren)
-                            .Where(x => x.Type == DetectorTypeEnum.Knop ||
-                                        x.Type == DetectorTypeEnum.KnopBinnen ||
-                                        x.Type == DetectorTypeEnum.KnopBuiten)
-                            .Select(x => x.Naam).
-                            ToList();
-                    _DetectorManager = new ItemsManagerViewModel<RatelTikkerDetectorViewModel, string>(
-                        Detectoren as ObservableCollection<RatelTikkerDetectorViewModel>,
-                        dets,
-                        (x) => { var rtd = new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel { Detector = x }); return rtd; },
-                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); },
-                        null,
-                        () => { RaisePropertyChanged<object>("SelectedDetector", broadcast: true); },
-                        () => { RaisePropertyChanged<object>("SelectedDetector", broadcast: true); }
-                        );
-                }
-                return _DetectorManager;
+                return _DetectorManager ?? (_DetectorManager =
+                           new ItemsManagerViewModel<RatelTikkerDetectorViewModel, string>(
+                               Detectoren,
+                               ControllerAccessProvider.Default.AllDetectors.Where(x =>
+                                   x.Type == DetectorTypeEnum.Knop ||
+                                   x.Type == DetectorTypeEnum.KnopBinnen ||
+                                   x.Type == DetectorTypeEnum.KnopBuiten).Select(x => x.Naam),
+                               x => new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel{Detector = x}),
+                               x => Detectoren.All(y => y.Detector != x),
+                               null,
+                               () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true),
+                               () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true)));
             }
         }
 
@@ -126,12 +117,13 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage msg)
         {
-            _DetectorManager = null;
+            _DetectorManager?.Refresh();
         }
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            _DetectorManager = null;
+            if (msg.ObjectType != TLCGenObjectTypeEnum.Detector) return;
+            _DetectorManager?.Refresh();
         }
 
         #endregion // TLCGen messaging
@@ -147,6 +139,5 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Constructor
-
     }
 }

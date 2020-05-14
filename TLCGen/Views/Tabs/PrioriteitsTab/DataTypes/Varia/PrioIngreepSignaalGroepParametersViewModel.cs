@@ -14,7 +14,7 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return Parameters.FaseCyclus; }
+            get => Parameters.FaseCyclus;
             set
             {
                 Parameters.FaseCyclus = value;
@@ -24,66 +24,66 @@ namespace TLCGen.ViewModels
 
         public int AantalKerenNietAfkappen
         {
-            get { return Parameters.AantalKerenNietAfkappen; }
+            get => Parameters.AantalKerenNietAfkappen;
             set
             {
                 Parameters.AantalKerenNietAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("AantalKerenNietAfkappen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AantalKerenNietAfkappen), broadcast: true);
             }
         }
         public int MinimumGroentijdConflictOVRealisatie
         {
-            get { return Parameters.MinimumGroentijdConflictOVRealisatie; }
+            get => Parameters.MinimumGroentijdConflictOVRealisatie;
             set
             {
                 Parameters.MinimumGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("MinimumGroentijdConflictOVRealisatie", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MinimumGroentijdConflictOVRealisatie), broadcast: true);
             }
         }
 
         public int PercMaxGroentijdConflictOVRealisatie
         {
-            get { return Parameters.PercMaxGroentijdConflictOVRealisatie; }
+            get => Parameters.PercMaxGroentijdConflictOVRealisatie;
             set
             {
                 Parameters.PercMaxGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("PercMaxGroentijdConflictOVRealisatie", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PercMaxGroentijdConflictOVRealisatie), broadcast: true);
             }
         }
 
         public int PercMaxGroentijdVoorTerugkomen
         {
-            get { return Parameters.PercMaxGroentijdVoorTerugkomen; }
+            get => Parameters.PercMaxGroentijdVoorTerugkomen;
             set
             {
                 Parameters.PercMaxGroentijdVoorTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("PercMaxGroentijdVoorTerugkomen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PercMaxGroentijdVoorTerugkomen), broadcast: true);
             }
         }
 
         public int OndergrensNaTerugkomen
         {
-            get { return Parameters.OndergrensNaTerugkomen; }
+            get => Parameters.OndergrensNaTerugkomen;
             set
             {
                 Parameters.OndergrensNaTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("OndergrensNaTerugkomen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(OndergrensNaTerugkomen), broadcast: true);
             }
         }
 
         public int OphoogpercentageNaAfkappen
         {
-            get { return Parameters.OphoogpercentageNaAfkappen; }
+            get => Parameters.OphoogpercentageNaAfkappen;
             set
             {
                 Parameters.OphoogpercentageNaAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("OphoogpercentageNaAfkappen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(OphoogpercentageNaAfkappen), broadcast: true);
             }
         }
 

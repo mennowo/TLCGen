@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
 
         public string SelectedFaseNaam
         {
-            get { return _SelectedFaseNaam; }
+            get => _SelectedFaseNaam;
             set
             {
                 _SelectedFaseNaam = value;
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
 
         public VAOntruimenFaseViewModel SelectedVAOntruimenFase
         {
-            get { return _SelectedVAOntruimenFase; }
+            get => _SelectedVAOntruimenFase;
             set
             {
                 _SelectedVAOntruimenFase = value;
@@ -96,10 +96,10 @@ namespace TLCGen.ViewModels
                 {
                     if (ControllerFasen.Contains(SelectedFaseNaam))
                     {
-                        VAOntruimenFaseModel vam = new VAOntruimenFaseModel();
+                        var vam = new VAOntruimenFaseModel();
                         vam.FaseCyclus = SelectedFaseNaam;
                         
-                        VAOntruimenFaseViewModel vavm = new VAOntruimenFaseViewModel(vam);
+                        var vavm = new VAOntruimenFaseViewModel(vam);
 
                         SelectedVAOntruimenFase = vavm;
                         VAOntruimenFasen.Add(vavm);
@@ -112,10 +112,7 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged();
             }
-            get
-            {
-                return SelectedVAOntruimenFase != null;
-            }
+            get => SelectedVAOntruimenFase != null;
         }
 
         public ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel> VAOntruimenFasen
@@ -150,9 +147,9 @@ namespace TLCGen.ViewModels
 
         private void UpdateFasen()
         {
-            string temp = SelectedFaseNaam;
+            var temp = SelectedFaseNaam;
             ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 ControllerFasen.Add(fcm.Naam);
             }
@@ -174,10 +171,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen TabItem overrides
 
-        public override string DisplayName
-        {
-            get { return "VA ontruimen"; }
-        }
+        public override string DisplayName => "VA ontruimen";
 
         public override void OnSelected()
         {
@@ -186,10 +180,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

@@ -10,9 +10,9 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration.HelperClasses
         public string CCOLSetting { get; set; }
         public string CCOLTType { get; set; }
 
-        public int CCOLCodeWidth { get { return CCOLCode == null ? 0 : CCOLCode.Length; } }
-        public int CCOLSettingWidth { get { return CCOLSetting == null ? 0 : CCOLSetting.Length; } }
-        public int CCOLTTypeWidth { get { return CCOLTType == null ? 0 : CCOLTType.Length; } }
+        public int CCOLCodeWidth => CCOLCode == null ? 0 : CCOLCode.Length;
+        public int CCOLSettingWidth => CCOLSetting == null ? 0 : CCOLSetting.Length;
+        public int CCOLTTypeWidth => CCOLTType == null ? 0 : CCOLTType.Length;
 
         public int DefineMaxWidth { get; set; }
         public int NameMaxWidth { get; set; }

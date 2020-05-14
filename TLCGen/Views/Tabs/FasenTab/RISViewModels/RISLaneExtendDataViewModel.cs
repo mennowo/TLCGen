@@ -81,7 +81,7 @@ namespace TLCGen.ViewModels
             var fc = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == SignalGroupName);
             if (fc == null) return;
             Rijstroken = new List<int>();
-            for (int i = 0; i < fc.AantalRijstroken; ++i)
+            for (var i = 0; i < fc.AantalRijstroken; ++i)
             {
                 Rijstroken.Add(i + 1);
             }

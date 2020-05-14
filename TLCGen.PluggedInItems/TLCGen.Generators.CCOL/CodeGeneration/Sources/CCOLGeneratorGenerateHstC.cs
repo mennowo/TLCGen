@@ -11,7 +11,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
 			if(!c.HalfstarData.IsHalfstar) return null;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* HALFSTARRE APPLICATIE */");
             sb.AppendLine("/* --------------------- */");
             sb.AppendLine();
@@ -47,7 +47,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 	    private string GenerateHstCExtraDefines(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             
             return sb.ToString();
         }

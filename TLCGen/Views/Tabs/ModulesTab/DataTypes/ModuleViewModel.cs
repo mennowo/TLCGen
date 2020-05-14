@@ -18,21 +18,18 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ModuleModel Module
-        {
-            get { return _Module; }
-        }
+        public ModuleModel Module => _Module;
 
         public string Naam
         {
-            get { return _Module.Naam; }
+            get => _Module.Naam;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     _Module.Naam = value;
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
@@ -78,7 +75,7 @@ namespace TLCGen.ViewModels
         public void RemoveFase(ModuleFaseCyclusViewModel fc)
         {
             ModuleFaseCyclusViewModel _fc = null;
-            foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
+            foreach (var fc1 in Fasen)
             {
                 if(fc1.FaseCyclusNaam == fc.FaseCyclusNaam)
                 {
@@ -91,7 +88,7 @@ namespace TLCGen.ViewModels
         public void RemoveFase(string fcdefine)
         {
             ModuleFaseCyclusViewModel _fc = null;
-            foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
+            foreach (var fc1 in Fasen)
             {
                 if (fc1.FaseCyclusNaam == fcdefine)
                 {
@@ -109,10 +106,10 @@ namespace TLCGen.ViewModels
         {
             _Module = module;
 
-            foreach (ModuleFaseCyclusModel mfcm in module.Fasen)
+            foreach (var mfcm in module.Fasen)
             {
                 // Create ViewModel
-                ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
+                var mfcvm = new ModuleFaseCyclusViewModel(mfcm);
 
                 // Add to list
                 Fasen.Add(mfcvm);

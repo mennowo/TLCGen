@@ -44,7 +44,7 @@ namespace TLCGen.ViewModels
 
         public override bool IsEnabled
         {
-            get { return _Controller?.ModuleMolen?.LangstWachtendeAlternatief == true; }
+            get => _Controller?.ModuleMolen?.LangstWachtendeAlternatief == true;
             set { }
         }
 

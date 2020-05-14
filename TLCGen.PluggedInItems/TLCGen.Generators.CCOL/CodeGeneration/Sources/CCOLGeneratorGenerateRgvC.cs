@@ -14,30 +14,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 return null;
             }
 
-            string _prmrgv = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrgv");
-            string _prmmin_tcyclus = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmin_tcyclus");
-            string _prmmax_tcyclus = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmax_tcyclus");
-            string _prmmintvg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmintvg");
-            string _prmmaxtvg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmaxtvg");
-            string _prmtvg_omhoog = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_omhoog");
-            string _prmtvg_omlaag = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_omlaag");
-            string _prmtvg_verschil = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_verschil");
-            string _prmtvg_npr_omlaag = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_npr_omlaag");
-            string _hprreal = CCOLGeneratorSettingsProvider.Default.GetElementName("hprreal");
-            string _schrgv = CCOLGeneratorSettingsProvider.Default.GetElementName("schrgv");
-            string _schrgv_snel = CCOLGeneratorSettingsProvider.Default.GetElementName("schrgv_snel");
-            string _tfd = CCOLGeneratorSettingsProvider.Default.GetElementName("tfd");
-            string _thd = CCOLGeneratorSettingsProvider.Default.GetElementName("thd");
-            string _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
-            string _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
-            string _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
-            string _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            var _prmrgv = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrgv");
+            var _prmmin_tcyclus = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmin_tcyclus");
+            var _prmmax_tcyclus = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmax_tcyclus");
+            var _prmmintvg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmintvg");
+            var _prmmaxtvg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmaxtvg");
+            var _prmtvg_omhoog = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_omhoog");
+            var _prmtvg_omlaag = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_omlaag");
+            var _prmtvg_verschil = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_verschil");
+            var _prmtvg_npr_omlaag = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtvg_npr_omlaag");
+            var _hprreal = CCOLGeneratorSettingsProvider.Default.GetElementName("hprreal");
+            var _schrgv = CCOLGeneratorSettingsProvider.Default.GetElementName("schrgv");
+            var _schrgv_snel = CCOLGeneratorSettingsProvider.Default.GetElementName("schrgv_snel");
+            var _tfd = CCOLGeneratorSettingsProvider.Default.GetElementName("tfd");
+            var _thd = CCOLGeneratorSettingsProvider.Default.GetElementName("thd");
+            var _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            var _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            var _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+            var _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
 
-            string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+            var _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
 
             var fasenMetRgv = c.Fasen.Where(x => c.RoBuGrover.SignaalGroepInstellingen.Any(x2 => x2.FaseCyclus == x.Naam));
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* IMPLEMENTATIE ROBUGROVER */");
             sb.AppendLine("/* ------------------------ */");
             sb.AppendLine();
@@ -235,7 +235,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
                 sb.Append($"{l}(");
-                int i = 0;
+                var i = 0;
                 foreach (var d in fc.FileDetectoren)
                 {
                     if(i > 0)
@@ -301,7 +301,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         sb.AppendLine($"{ts}RT[{_tpf}{_thd}{_dpf}{d.Detector}] = D[{_dpf}{d.Detector}];");
                     }
-                    for (int i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
+                    for (var i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
                         if (!faseMetRgv.Detectoren.Any(x => x.Rijstrook == i)) continue;
                         var first = true;
@@ -382,7 +382,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* correctie verlenggroentijden t.o.v. de maximum gewenste cyclustijd */");
             sb.AppendLine($"{ts}/* ------------------------------------------------------------------ */");
 
-            StringBuilder sb2 = new StringBuilder();
+            var sb2 = new StringBuilder();
             sb2.AppendLine($"{ts}#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
             foreach(var gr in c.RoBuGrover.ConflictGroepen)
             {
@@ -414,7 +414,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var gr in c.RoBuGrover.ConflictGroepen)
             {
                 sb.Append($"{ts}{ts}TC_string$[teller++] = \"");
-                int i = 0;
+                var i = 0;
                 foreach (var fc in gr.Fasen)
                 {
                     sb.Append($"{fc.FaseCyclus}");

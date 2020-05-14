@@ -40,7 +40,7 @@ namespace TLCGen.Generators.CCOL.Settings
 		{
 			if (description == null) return null;
             var descr = description;
-            int i = 1;
+            var i = 1;
 			foreach(var e in elementnames)
 			{
                 if (e == null) continue;
@@ -60,10 +60,10 @@ namespace TLCGen.Generators.CCOL.Settings
                 var re2 = new Regex(@"[a-zA-Z0-9\(\)]");
                 var words = descr.Split(' ');
                 var lastWords = _lastItemDescription[type].Split(' ');
-                bool isSame = true;
+                var isSame = true;
                 if (words.Length == lastWords.Length)
                 {
-                    for (int j = 0; j < words.Length; j++)
+                    for (var j = 0; j < words.Length; j++)
                     {
                         if (!(words[j] == lastWords[j] || /*words[j].Length == lastWords[j].Length &&*/ re.IsMatch(words[j])))
                         {
@@ -74,7 +74,7 @@ namespace TLCGen.Generators.CCOL.Settings
                     if (isSame)
                     {
                         descr = "";
-                        for (int j = 0; j < words.Length; j++)
+                        for (var j = 0; j < words.Length; j++)
                         {
                             if (descr != "") descr += ".";
                             if (words[j] == lastWords[j])

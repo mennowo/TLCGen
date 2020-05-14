@@ -9,20 +9,20 @@ namespace TLCGen.Dialogs
     {
         public string DialogTitle
         {
-            get { return this.Title; }
-            set { this.Title = value; }
+            get => this.Title;
+            set => this.Title = value;
         }
 
         public string DialogMessage
         {
-            get { return (string)MessageLabel.Content; }
-            set { MessageLabel.Content = value; }
+            get => (string)MessageLabel.Content;
+            set => MessageLabel.Content = value;
         }
 
         public string DialogExpceptionText
         {
-            get { return (string)ExceptionTextTB.Text; }
-            set { ExceptionTextTB.Text = value; }
+            get => (string)ExceptionTextTB.Text;
+            set => ExceptionTextTB.Text = value;
         }
 
         public UnhandledExceptionWindow()

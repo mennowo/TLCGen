@@ -32,9 +32,9 @@ namespace TLCGen.Dialogs
                     var items = l.Split(new[] { ';', ',' });
                     if (items.Length > 1 && _controller.Fasen.Any(x => x.Naam == items[0]))
                     {
-                        for (int img = 1; img < items.Length; ++img)
+                        for (var img = 1; img < items.Length; ++img)
                         {
-                            if((img - 1) < _controller.GroentijdenSets.Count && int.TryParse(items[img], out int mgWaarde))
+                            if((img - 1) < _controller.GroentijdenSets.Count && int.TryParse(items[img], out var mgWaarde))
                             {
                                 var mgSet = _controller.GroentijdenSets[img - 1];
                                 var mgSetFc = mgSet.Groentijden.FirstOrDefault(x => x.FaseCyclus == items[0]);

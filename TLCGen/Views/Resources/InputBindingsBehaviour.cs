@@ -36,7 +36,7 @@ namespace TLCGen.Views
             }
 
             // Move input bindings from the FrameworkElement to the window.
-            for (int i = frameworkElement.InputBindings.Count - 1; i >= 0; i--)
+            for (var i = frameworkElement.InputBindings.Count - 1; i >= 0; i--)
             {
                 var inputBinding = (InputBinding)frameworkElement.InputBindings[i];
                 window.InputBindings.Add(inputBinding);

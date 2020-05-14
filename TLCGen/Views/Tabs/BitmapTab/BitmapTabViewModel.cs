@@ -64,10 +64,10 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                System.Windows.ResourceDictionary dict = new System.Windows.ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
+                var dict = new System.Windows.ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (System.Windows.Media.ImageSource)dict["BitmapTabDrawingImage"];
             }
@@ -123,12 +123,12 @@ namespace TLCGen.ViewModels
 
         public BitmappedItemViewModel SelectedItem
         {
-            get { return _SelectedItem; }
+            get => _SelectedItem;
             set
             {
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
-                    foreach(Point p in _SelectedItem.Coordinates)
+                    foreach(var p in _SelectedItem.Coordinates)
                         if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                             FillMyBitmap(p, GetFillColor(false));
                     RefreshMyBitmapImage();
@@ -136,7 +136,7 @@ namespace TLCGen.ViewModels
                 _SelectedItem = value;
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
-                    foreach (Point p in _SelectedItem.Coordinates)
+                    foreach (var p in _SelectedItem.Coordinates)
                         if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                             FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
 
         public TabItem SelectedTab
         {
-            get { return _SelectedTab; }
+            get => _SelectedTab;
             set
             {
                 _SelectedTab = value;
@@ -155,20 +155,17 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public BitmapImage MyBitmap
-        {
-            get { return _MyBitmap; }
-        }
+        public BitmapImage MyBitmap => _MyBitmap;
 
         public string BitmapFileName
         {
-            get { return _BitmapFileName; }
-            set { _BitmapFileName = value; }
+            get => _BitmapFileName;
+            set => _BitmapFileName = value;
         }
 
         public string ControllerFileName
         {
-            get { return _ControllerFileName; }
+            get => _ControllerFileName;
             set
             {
                 _ControllerFileName = value;
@@ -210,13 +207,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Bitmap";
-            }
-        }
+        public override string DisplayName => "Bitmap";
 
         public override bool OnSelectedPreview()
         {
@@ -251,16 +242,16 @@ namespace TLCGen.ViewModels
 
         void SetCoordinatesCommand_Executed(object prm)
         {
-            Point p = (Point)prm;
+            var p = (Point)prm;
 
-            Color c = _EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
+            var c = _EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
 
             if(c.ToArgb().Equals(GetFillColor(true).ToArgb()))
             {
                 if (SelectedItem.HasCoordinates)
                 {
-                    List<Point> coords = new List<Point>();
-                    foreach (Point pp in SelectedItem.Coordinates)
+                    var coords = new List<Point>();
+                    foreach (var pp in SelectedItem.Coordinates)
                     {
                         if (pp.X <= _EditableBitmap.Bitmap.Width && pp.Y <= _EditableBitmap.Bitmap.Height)
                         {
@@ -276,7 +267,7 @@ namespace TLCGen.ViewModels
                             }
                         }
                     }
-                    foreach(Point pp in coords)
+                    foreach(var pp in coords)
                         SelectedItem.Coordinates.Remove(pp);
                 }
             }
@@ -310,7 +301,7 @@ namespace TLCGen.ViewModels
 
         private void ResetBitmapCommand_Executed(object obj)
         {
-            TLCGen.Controls.ZoomViewbox zb = obj as TLCGen.Controls.ZoomViewbox;
+            var zb = obj as TLCGen.Controls.ZoomViewbox;
             zb?.Reset();
         }
 
@@ -378,14 +369,14 @@ namespace TLCGen.ViewModels
             BitmappedItemViewModel bivm = null;
             if (attr != null)
             {
-                bool cond = true;
+                var cond = true;
                 if (!string.IsNullOrWhiteSpace(attr.DisplayConditionProperty))
                 {
                     cond = (bool)objType.GetProperty(attr.DisplayConditionProperty).GetValue(obj);
                 }
                 if (cond)
                 {
-                    string name = attr.DisplayName;
+                    var name = attr.DisplayName;
                     if (!string.IsNullOrWhiteSpace(attr.DisplayNameProperty))
                     {
                         name = name + (string)objType.GetProperty(attr.DisplayNameProperty).GetValue(obj);
@@ -450,8 +441,8 @@ namespace TLCGen.ViewModels
             OverigeUitgangen.Clear();
             OverigeIngangen.Clear();
             
-            bool[] done = new bool[20];
-            for(int d = 0; d < 20; ++d) done[d] = false;
+            var done = new bool[20];
+            for(var d = 0; d < 20; ++d) done[d] = false;
             foreach(var per in _Controller.PeriodenData.Perioden)
             {
                 switch(per.Type)
@@ -526,7 +517,7 @@ namespace TLCGen.ViewModels
 
         private BitmappedItemViewModel GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum type, string itemname)
         {
-            List<PeriodeModel> pers = new List<PeriodeModel>();
+            var pers = new List<PeriodeModel>();
             if(_Controller.PeriodenData.Perioden.Count > 0)
             {
                 foreach(var p in _Controller.PeriodenData.Perioden)
@@ -554,7 +545,7 @@ namespace TLCGen.ViewModels
             {
                 try
                 {
-                    using (Bitmap bitmap = new Bitmap(_BitmapFileName))
+                    using (var bitmap = new Bitmap(_BitmapFileName))
                     {
                         _EditableBitmap = new EditableBitmap(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                         CorrectCoordinates();
@@ -585,7 +576,7 @@ namespace TLCGen.ViewModels
 
         private Color GetFillColor(bool selected)
         {
-            Color c = new Color();
+            var c = new Color();
             switch (SelectedItem.IOType)
             {
                 case BitmappedItemTypeEnum.Fase:
@@ -619,7 +610,7 @@ namespace TLCGen.ViewModels
                 return;
             }
 
-            using (MemoryStream memory = new MemoryStream())
+            using (var memory = new MemoryStream())
             {
                 _MyBitmap = new BitmapImage();
                 _EditableBitmap.Bitmap.Save(memory, ImageFormat.Bmp);
@@ -659,11 +650,11 @@ namespace TLCGen.ViewModels
 
         private void FillAllIO()
         {
-            foreach (BitmappedItemViewModel bivm in Fasen)
+            foreach (var bivm in Fasen)
             {
                 if (bivm.HasCoordinates)
                 {
-                    foreach (Point p in bivm.Coordinates)
+                    foreach (var p in bivm.Coordinates)
                     {
                         if(p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                         {
@@ -672,11 +663,11 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            foreach (BitmappedItemViewModel bivm in Detectoren)
+            foreach (var bivm in Detectoren)
             {
                 if (bivm.HasCoordinates)
                 {
-                    foreach (Point p in bivm.Coordinates)
+                    foreach (var p in bivm.Coordinates)
                     {
                         if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                         {
@@ -685,11 +676,11 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            foreach (BitmappedItemViewModel bivm in OverigeUitgangen)
+            foreach (var bivm in OverigeUitgangen)
             {
                 if (bivm.HasCoordinates)
                 {
-                    foreach (Point p in bivm.Coordinates)
+                    foreach (var p in bivm.Coordinates)
                     {
                         if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                         {
@@ -698,11 +689,11 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            foreach (BitmappedItemViewModel bivm in OverigeIngangen)
+            foreach (var bivm in OverigeIngangen)
             {
                 if (bivm.HasCoordinates)
                 {
-                    foreach (Point p in bivm.Coordinates)
+                    foreach (var p in bivm.Coordinates)
                     {
                         if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
                         {
@@ -734,7 +725,7 @@ namespace TLCGen.ViewModels
         {
             if (request.Coordinates?.Count > 0)
             {
-                foreach (Point p in request.Coordinates)
+                foreach (var p in request.Coordinates)
                 {
                     FillDefaultColor(p);
                 }

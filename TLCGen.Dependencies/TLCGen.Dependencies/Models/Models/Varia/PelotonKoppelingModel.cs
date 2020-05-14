@@ -78,7 +78,7 @@ namespace TLCGen.Models
         {
             var signalen = new List<KoppelSignaalModel>();
             if (IsIntern) return signalen;
-            int id = 1;
+            var id = 1;
             switch (Type)
             {
                 case PelotonKoppelingTypeEnum.DenHaag:

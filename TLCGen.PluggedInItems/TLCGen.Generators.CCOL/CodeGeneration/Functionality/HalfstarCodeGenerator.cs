@@ -115,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach (var fc in hsd.FaseCyclusInstellingen)
                     {
-                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
+                        var hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
                         if (hasgs != null)
                         {
                             var namealtphst = _prmaltphst + string.Join(string.Empty, hasgs.Item2);
@@ -129,7 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var fc in hsd.FaseCyclusInstellingen)
                     {
-                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
+                        var hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
                         if (hasgs != null)
                         {
                             var namealtghst = _schaltghst + string.Join(string.Empty, hasgs.Item2);
@@ -186,7 +186,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var times = new []{ fcpl.A1, fcpl.B1, fcpl.C1, fcpl.D1, fcpl.E1, fcpl.A2, fcpl.B2, fcpl.C2, fcpl.D2, fcpl.E2 };
                             var moments = new [] { "A", "B", "C", "D", "E", "A", "B", "C", "D", "E" };
                             var realisation = 1;
-                            for (int i = 0; i < 10; ++i)
+                            for (var i = 0; i < 10; ++i)
                             {
                                 if (i == 5) realisation = 2;
                                 _myElements.Add(new CCOLElement(
@@ -594,7 +594,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mmaster}] = TRUE;");
 							sb.AppendLine();
 							sb.Append($"{ts}{ts}if      ");
-							int i = 0;
+							var i = 0;
 							foreach (var pl in c.HalfstarData.SignaalPlannen)
 							{
 								if (i > 0)
@@ -1288,7 +1288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}short pl = 0;");
                         sb.AppendLine($"{ts}{ts}short error = FALSE;");
-                        for (int pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
+                        for (var pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
                         {
                             var ppl = c.HalfstarData.SignaalPlannen[pl];
                             if (!c.HalfstarData.SignaalPlannen[pl].Fasen.Any()) continue;
@@ -1299,7 +1299,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine($"{ts}{ts}if (!error)");
                         sb.AppendLine($"{ts}{ts}{{");
-                        for (int pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
+                        for (var pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
                         {
                             var ppl = c.HalfstarData.SignaalPlannen[pl];
                             if (!c.HalfstarData.SignaalPlannen[pl].Fasen.Any()) continue;

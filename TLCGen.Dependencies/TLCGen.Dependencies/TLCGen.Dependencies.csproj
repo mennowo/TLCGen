@@ -54,6 +54,7 @@
     <Compile Include="FloodFill\QueueLinearFloodFiller.cs" />
     <Compile Include="GuiActions\GuiActionsManager.cs" />
     <Compile Include="Helpers\AddRemoveItemsManager.cs" />
+    <Compile Include="Helpers\Base64Encoding.cs" />
     <Compile Include="Helpers\BindableSelectedItemBehaviour.cs" />
     <Compile Include="Helpers\DeepCloner.cs" />
     <Compile Include="Helpers\DesignMode.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Messaging\Messages\ControllerFileNameChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ControllerHasOVChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ControllerIntergreenTimesTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerLoadedMessage.cs" />
     <Compile Include="Messaging\Messages\ControllerProjectGeneratedMessage.cs" />
     <Compile Include="Messaging\Messages\DetectorenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\DetectorenExtraListChangedMessage.cs" />

@@ -129,21 +129,21 @@ namespace TLCGen.Models
             switch (SegmentDisplayType)
             {
                 case SegmentDisplayTypeEnum.EnkelDisplay:
-                    for (int i = 1; i <= 7; ++i)
+                    for (var i = 1; i <= 7; ++i)
                     {
                         SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = i.ToString() });
                     }
                     break;
                 case SegmentDisplayTypeEnum.DrieCijferDisplay:
-                    for (int i = 1; i <= 7; ++i)
+                    for (var i = 1; i <= 7; ++i)
                     {
                         SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "a" + i });
                     }
-                    for (int i = 1; i <= 7; ++i)
+                    for (var i = 1; i <= 7; ++i)
                     {
                         SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "b" + i });
                     }
-                    for (int i = 1; i <= 7; ++i)
+                    for (var i = 1; i <= 7; ++i)
                     {
                         SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "c" + i });
                     }
@@ -162,7 +162,7 @@ namespace TLCGen.Models
         {
             if(SegmentenDisplayBitmapData?.Count == 0)
             {
-                for (int i = 1; i <= 7; ++i)
+                for (var i = 1; i <= 7; ++i)
                 {
                     SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segm" + i });
                 }

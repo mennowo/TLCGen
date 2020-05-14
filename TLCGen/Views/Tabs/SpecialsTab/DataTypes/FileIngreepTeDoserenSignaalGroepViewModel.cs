@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _TeDoserenSignaalGroep.FaseCyclus; }
+            get => _TeDoserenSignaalGroep.FaseCyclus;
             set
             {
                 _TeDoserenSignaalGroep.FaseCyclus = value;
@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
 
         public int DoseerPercentage
         {
-            get { return _TeDoserenSignaalGroep.DoseerPercentage; }
+            get => _TeDoserenSignaalGroep.DoseerPercentage;
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;

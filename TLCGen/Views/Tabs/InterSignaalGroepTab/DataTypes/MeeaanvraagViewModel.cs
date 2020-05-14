@@ -148,31 +148,24 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private ItemsManagerViewModel<MeeaanvraagDetectorModel, string> _DetectorManager;
+        private ItemsManagerViewModel<MeeaanvraagDetectorModel, string> _detectorManager;
         public ItemsManagerViewModel<MeeaanvraagDetectorModel, string> DetectorManager
         {
             get
             {
                 if (TLCGenControllerDataProvider.Default.Controller != null &&
-                    _DetectorManager == null && _Meeaanvraag != null && _Meeaanvraag.FaseVan != null)
+                    _detectorManager == null && _Meeaanvraag?.FaseVan != null)
                 {
-                    List<string> dets = 
-                        TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            First(x => x.Naam == _Meeaanvraag.FaseVan).
-                            Detectoren.
-                            Select(x => x.Naam).
-                            ToList();
-                    _DetectorManager = new ItemsManagerViewModel<MeeaanvraagDetectorModel, string>(
+                    _detectorManager = new ItemsManagerViewModel<MeeaanvraagDetectorModel, string>(
                         Detectoren,
-                        dets,
-                        x => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },
-                        x => { return Detectoren.All(y => y.MeeaanvraagDetector != x); },
+                        ControllerAccessProvider.Default.AllDetectorStrings,
+                        x => new MeeaanvraagDetectorModel{ MeeaanvraagDetector = x },
+                        x => Detectoren.All(y => y.MeeaanvraagDetector != x),
                         null,
-                        () => { RaisePropertyChanged(nameof(SelectedDetector)); },
-                        () => { RaisePropertyChanged(nameof(SelectedDetector)); }
-                        );
+                        () => RaisePropertyChanged(nameof(SelectedDetector)),
+                        () => RaisePropertyChanged(nameof(SelectedDetector)));
                 }
-                return _DetectorManager;
+                return _detectorManager;
             }
         }
 
@@ -205,18 +198,24 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
-            _DetectorManager = null;
-            RaisePropertyChanged("DetectorManager");
+            _detectorManager.Refresh();
 
             if (Detectoren?.Count == 0)
                 return;
 
+            if (Detectoren == null) return;
             Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
-            foreach (MeeaanvraagDetectorModel ndm in _Meeaanvraag.Detectoren)
+            foreach (var ndm in _Meeaanvraag.Detectoren)
             {
                 Detectoren.Add(ndm);
             }
+
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+        }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            _detectorManager.Refresh();
         }
 
         #endregion // TLCGen Events
@@ -233,6 +232,7 @@ namespace TLCGen.ViewModels
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
 
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 
         #endregion // Constructor

@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
 
         public PeriodeViewModel SelectedPeriode
         {
-            get { return _SelectedPeriode; }
+            get => _SelectedPeriode;
             set
             {
                 _SelectedPeriode = value;
@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
 
         public string DefaultPeriodeGroentijdenSet
         {
-            get { return _Controller?.PeriodenData.DefaultPeriodeGroentijdenSet; }
+            get => _Controller?.PeriodenData.DefaultPeriodeGroentijdenSet;
             set
             {
                 if (value != null)
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
 
         public string DefaultPeriodeNaam
         {
-            get { return _Controller?.PeriodenData.DefaultPeriodeNaam; }
+            get => _Controller?.PeriodenData.DefaultPeriodeNaam;
             set
             {
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, value))
@@ -257,17 +257,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Groentijden";
-            }
-        }
+        public override string DisplayName => "Groentijden";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -285,10 +279,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

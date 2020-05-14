@@ -12,7 +12,6 @@ namespace TLCGen.ViewModels
 		#region Fields
 
 		private FaseCyclusModel _faseCyclus;
-		private OVIngreepViewModel _OVIngreep;
 		private HDIngreepViewModel _HDIngreep;
 		private ControllerModel _controller;
 		private HDOverzichtTabViewModel _overVM;

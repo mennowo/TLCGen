@@ -13,8 +13,8 @@ namespace TLCGen.Views
 
         public bool ShowFuncties
         {
-            get { return (bool)GetValue(ShowFunctiesProperty); }
-            set { SetValue(ShowFunctiesProperty, value); }
+            get => (bool)GetValue(ShowFunctiesProperty);
+            set => SetValue(ShowFunctiesProperty, value);
         }
 
         public static readonly DependencyProperty ShowFunctiesProperty =
@@ -23,8 +23,8 @@ namespace TLCGen.Views
 
         public bool ShowTijden
         {
-            get { return (bool)GetValue(ShowTijdenProperty); }
-            set { SetValue(ShowTijdenProperty, value); }
+            get => (bool)GetValue(ShowTijdenProperty);
+            set => SetValue(ShowTijdenProperty, value);
         }
 
         public static readonly DependencyProperty ShowTijdenProperty =
@@ -33,8 +33,8 @@ namespace TLCGen.Views
 
         public bool ShowReset
         {
-            get { return (bool)GetValue(ShowResetProperty); }
-            set { SetValue(ShowResetProperty, value); }
+            get => (bool)GetValue(ShowResetProperty);
+            set => SetValue(ShowResetProperty, value);
         }
 
         public static readonly DependencyProperty ShowResetProperty =
@@ -42,8 +42,8 @@ namespace TLCGen.Views
 
         public bool ShowVeiligheidsGroen
         {
-            get { return (bool)GetValue(ShowVeiligheidsGroenProperty); }
-            set { SetValue(ShowVeiligheidsGroenProperty, value); }
+            get => (bool)GetValue(ShowVeiligheidsGroenProperty);
+            set => SetValue(ShowVeiligheidsGroenProperty, value);
         }
 
         public static readonly DependencyProperty ShowVeiligheidsGroenProperty =
@@ -52,8 +52,8 @@ namespace TLCGen.Views
 
         public bool ShowStoring
         {
-            get { return (bool)GetValue(ShowStoringProperty); }
-            set { SetValue(ShowStoringProperty, value); }
+            get => (bool)GetValue(ShowStoringProperty);
+            set => SetValue(ShowStoringProperty, value);
         }
 
         public static readonly DependencyProperty ShowStoringProperty =
@@ -61,8 +61,8 @@ namespace TLCGen.Views
 
         public bool ShowRijstrook
         {
-            get { return (bool)GetValue(ShowRijstrookProperty); }
-            set { SetValue(ShowRijstrookProperty, value); }
+            get => (bool)GetValue(ShowRijstrookProperty);
+            set => SetValue(ShowRijstrookProperty, value);
         }
 
         public static readonly DependencyProperty ShowRijstrookProperty =
@@ -70,8 +70,8 @@ namespace TLCGen.Views
 
         public bool ShowFaseCyclus
         {
-            get { return (bool)GetValue(ShowFaseCyclusProperty); }
-            set { SetValue(ShowFaseCyclusProperty, value); }
+            get => (bool)GetValue(ShowFaseCyclusProperty);
+            set => SetValue(ShowFaseCyclusProperty, value);
         }
 
         public static readonly DependencyProperty ShowFaseCyclusProperty =
@@ -79,8 +79,8 @@ namespace TLCGen.Views
 
         public bool ShowAanvraagVerlengen
         {
-            get { return (bool)GetValue(ShowAanvraagVerlengenProperty); }
-            set { SetValue(ShowAanvraagVerlengenProperty, value); }
+            get => (bool)GetValue(ShowAanvraagVerlengenProperty);
+            set => SetValue(ShowAanvraagVerlengenProperty, value);
         }
 
         public static readonly DependencyProperty ShowAanvraagVerlengenProperty =
@@ -89,8 +89,8 @@ namespace TLCGen.Views
 
         public bool ShowAanvraagVerlengenHard
         {
-            get { return (bool)GetValue(ShowAanvraagVerlengenHardProperty); }
-            set { SetValue(ShowAanvraagVerlengenHardProperty, value); }
+            get => (bool)GetValue(ShowAanvraagVerlengenHardProperty);
+            set => SetValue(ShowAanvraagVerlengenHardProperty, value);
         }
 
         public static readonly DependencyProperty ShowAanvraagVerlengenHardProperty =
@@ -111,13 +111,13 @@ namespace TLCGen.Views
 
         public void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DataGridCell cell = sender as DataGridCell;
+            var cell = sender as DataGridCell;
             GridColumnFastEdit(cell, e);
         }
 
         public void DataGridCell_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            DataGridCell cell = sender as DataGridCell;
+            var cell = sender as DataGridCell;
             GridColumnFastEdit(cell, e);
         }
 
@@ -126,7 +126,7 @@ namespace TLCGen.Views
             if (cell == null || cell.IsEditing || cell.IsReadOnly)
                 return;
 
-            DataGrid dataGrid = FindVisualParent<DataGrid>(cell);
+            var dataGrid = FindVisualParent<DataGrid>(cell);
             if (dataGrid == null)
                 return;
 
@@ -144,7 +144,7 @@ namespace TLCGen.Views
                 }
                 else
                 {
-                    DataGridRow row = FindVisualParent<DataGridRow>(cell);
+                    var row = FindVisualParent<DataGridRow>(cell);
                     if (row != null && !row.IsSelected)
                     {
                         row.IsSelected = true;
@@ -153,7 +153,7 @@ namespace TLCGen.Views
             }
             else
             {
-                ComboBox cb = cell.Content as ComboBox;
+                var cb = cell.Content as ComboBox;
                 if (cb != null)
                 {
                     //DataGrid dataGrid = FindVisualParent<DataGrid>(cell);
@@ -169,10 +169,10 @@ namespace TLCGen.Views
 
         private static T FindVisualParent<T>(UIElement element) where T : UIElement
         {
-            UIElement parent = element;
+            var parent = element;
             while (parent != null)
             {
-                T correctlyTyped = parent as T;
+                var correctlyTyped = parent as T;
                 if (correctlyTyped != null)
                 {
                     return correctlyTyped;

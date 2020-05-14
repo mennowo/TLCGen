@@ -78,10 +78,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
             sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
+            var ris = c.RISData.RISToepassen && 
+                      c.PrioData.PrioIngrepen
+                          .Any(x => 
+                              x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                              x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
+            if (ris) sb.AppendLine($"{ts}#include \"risappl.h\"   /* RIS routines                   */");
             sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"cif.inc\"    /* interface                         */");
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine($"{ts}{ts}#include \"xyprintf.h\" /* Printen debuginfo                 */");
+            if (ris) sb.AppendLine($"{ts}#include \"rissimvar.h\"   /* RIS routines                  */");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
@@ -832,7 +839,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (prio.FaseCyclus == fc.Naam)
                     {
-                        bool wissel = false;
+                        var wissel = false;
                         if (prio.KoplusKijkNaarWisselstand && prio.HasOVIngreepWissel())
                         {
                             wissel = true;

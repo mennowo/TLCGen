@@ -22,7 +22,7 @@ namespace TLCGen.ViewModels
 
         public ModuleMolenViewModel ModuleMolenVM
         {
-            get { return _ModuleMolenVM; }
+            get => _ModuleMolenVM;
             set
             {
                 _ModuleMolenVM = value;
@@ -30,10 +30,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ModulesTabFasenLijstViewModel FasenLijstVM
-        {
-            get { return _FasenLijstVM; }
-        }
+        public ModulesTabFasenLijstViewModel FasenLijstVM => _FasenLijstVM;
 
         public string SelectedModuleReeks
         {
@@ -75,7 +72,7 @@ namespace TLCGen.ViewModels
 
         public bool ModulenInParameters
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.ModulenInParameters; }
+            get => _Controller?.Data == null ? false : _Controller.Data.ModulenInParameters;
             set
             {
                 if (_Controller?.Data != null)
@@ -88,7 +85,7 @@ namespace TLCGen.ViewModels
 
         public bool LangstWachtendeAlternatief
         {
-            get { return _Controller?.ModuleMolen == null ? false : _Controller.ModuleMolen.LangstWachtendeAlternatief; }
+            get => _Controller?.ModuleMolen == null ? false : _Controller.ModuleMolen.LangstWachtendeAlternatief;
             set
             {
                 if (_Controller?.ModuleMolen != null)
@@ -107,17 +104,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Modules";
-            }
-        }
+        public override string DisplayName => "Modules";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -136,10 +127,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

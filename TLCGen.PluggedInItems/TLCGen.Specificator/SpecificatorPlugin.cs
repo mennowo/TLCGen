@@ -34,10 +34,7 @@ namespace TLCGen.Specificator
 
         public string ControllerFileName { get; set; }
 
-        public SpecificatorDataModel Data
-        {
-            get => _data ?? (_data = new SpecificatorDataModel());
-        }
+        public SpecificatorDataModel Data => _data ?? (_data = new SpecificatorDataModel());
 
         public SpecificatorViewModel SpecificatorVM { get; }
         public SpecificatorTabViewModel SpecificatorTabVM { get; }
@@ -120,13 +117,7 @@ namespace TLCGen.Specificator
             }
         }
 
-        public string DisplayName
-        {
-            get
-            {
-                return "Specificator";
-            }
-        }
+        public string DisplayName => "Specificator";
 
         private bool _IsEnabled;
         private ControllerModel _controller;
@@ -134,26 +125,17 @@ namespace TLCGen.Specificator
 
         public bool IsEnabled
         {
-            get { return _IsEnabled; }
-            set
-            {
-                _IsEnabled = value;
-            }
+            get => _IsEnabled;
+            set => _IsEnabled = value;
         }
 
-        public ImageSource Icon
-        {
-            get
-            {
-                //ResourceDictionary dict = new ResourceDictionary();
-                //Uri u = new Uri("pack://application:,,,/" +
-                //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                //    ";component/" + "GebruikersOptiesIcon.xaml");
-                //dict.Source = u;
-                //return (DrawingImage)dict["GebruikersOptiesTabDrawingImage"];
-                return null;
-            }
-        }
+        //ResourceDictionary dict = new ResourceDictionary();
+        //Uri u = new Uri("pack://application:,,,/" +
+        //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+        //    ";component/" + "GebruikersOptiesIcon.xaml");
+        //dict.Source = u;
+        //return (DrawingImage)dict["GebruikersOptiesTabDrawingImage"];
+        public ImageSource Icon => null;
 
         public bool CanBeEnabled()
         {
@@ -191,7 +173,7 @@ namespace TLCGen.Specificator
 
         public void GetXmlFromDocument(XmlDocument document)
         {
-            bool found = false;
+            var found = false;
             foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
                 if (node.LocalName == "Specificator")
@@ -210,8 +192,8 @@ namespace TLCGen.Specificator
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(Data);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(Data);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 

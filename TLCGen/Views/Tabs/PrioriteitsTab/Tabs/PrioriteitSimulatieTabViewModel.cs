@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSimulatieTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
@@ -37,13 +37,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Simulatie";
-            }
-        }
+        public override string DisplayName => "Simulatie";
 
         public override bool CanBeEnabled()
         {
@@ -57,7 +51,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;

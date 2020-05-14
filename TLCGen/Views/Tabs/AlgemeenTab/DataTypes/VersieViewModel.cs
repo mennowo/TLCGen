@@ -10,41 +10,41 @@ namespace TLCGen.ViewModels
 
         public string Versie
         {
-            get { return VersieEntry.Versie; }
+            get => VersieEntry.Versie;
             set
             {
                 VersieEntry.Versie = value;
-                RaisePropertyChanged<object>("Versie", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Versie), broadcast: true);
             }
         }
 
         public DateTime Datum
         {
-            get { return VersieEntry.Datum; }
+            get => VersieEntry.Datum;
             set
             {
                 VersieEntry.Datum = value;
-                RaisePropertyChanged<object>("Datum", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Datum), broadcast: true);
             }
         }
 
         public string Ontwerper
         {
-            get { return VersieEntry.Ontwerper; }
+            get => VersieEntry.Ontwerper;
             set
             {
                 VersieEntry.Ontwerper = value;
-                RaisePropertyChanged<object>("Ontwerper", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Ontwerper), broadcast: true);
             }
         }
 
         public string Commentaar
         {
-            get { return VersieEntry.Commentaar; }
+            get => VersieEntry.Commentaar;
             set
             {
                 VersieEntry.Commentaar = value;
-                RaisePropertyChanged<object>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
             }
         }
 

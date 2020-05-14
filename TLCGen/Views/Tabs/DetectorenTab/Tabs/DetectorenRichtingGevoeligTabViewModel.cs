@@ -112,7 +112,7 @@ namespace TLCGen.ViewModels
 
         public string SelectedFaseAanvraag
         {
-            get { return _SelectedFaseAanvraag; }
+            get => _SelectedFaseAanvraag;
             set
             {
                 _SelectedFaseAanvraag = value;
@@ -144,7 +144,7 @@ namespace TLCGen.ViewModels
         }
         public string SelectedDetectorAanvraag1
         {
-            get { return _SelectedDetectorAanvraag1; }
+            get => _SelectedDetectorAanvraag1;
             set
             {
                 _SelectedDetectorAanvraag1 = value;
@@ -153,7 +153,7 @@ namespace TLCGen.ViewModels
         }
         public string SelectedDetectorAanvraag2
         {
-            get { return _SelectedDetectorAanvraag2; }
+            get => _SelectedDetectorAanvraag2;
             set
             {
                 _SelectedDetectorAanvraag2 = value;
@@ -163,7 +163,7 @@ namespace TLCGen.ViewModels
 
         public string SelectedFaseVerleng
         {
-            get { return _SelectedFaseVerleng; }
+            get => _SelectedFaseVerleng;
             set
             {
                 _SelectedFaseVerleng = value;
@@ -195,7 +195,7 @@ namespace TLCGen.ViewModels
         }
         public string SelectedDetectorVerleng1
         {
-            get { return _SelectedDetectorVerleng1; }
+            get => _SelectedDetectorVerleng1;
             set
             {
                 _SelectedDetectorVerleng1 = value;
@@ -204,7 +204,7 @@ namespace TLCGen.ViewModels
         }
         public string SelectedDetectorVerleng2
         {
-            get { return _SelectedDetectorVerleng2; }
+            get => _SelectedDetectorVerleng2;
             set
             {
                 _SelectedDetectorVerleng2 = value;
@@ -227,7 +227,7 @@ namespace TLCGen.ViewModels
 
         public RichtingGevoeligeAanvraagViewModel SelectedRichtingGevoeligeAanvraag
         {
-            get { return _SelectedRichtingGevoeligeAanvraag; }
+            get => _SelectedRichtingGevoeligeAanvraag;
             set
             {
                 _SelectedRichtingGevoeligeAanvraag = value;
@@ -238,7 +238,7 @@ namespace TLCGen.ViewModels
 
         public RichtingGevoeligVerlengViewModel SelectedRichtingGevoeligVerleng
         {
-            get { return _SelectedRichtingGevoeligVerleng; }
+            get => _SelectedRichtingGevoeligVerleng;
             set
             {
                 _SelectedRichtingGevoeligVerleng = value;
@@ -387,17 +387,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Richting\ngevoelig";
-            }
-        }
+        public override string DisplayName => "Richting\ngevoelig";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -405,10 +399,10 @@ namespace TLCGen.ViewModels
         {
             Fasen.Clear();
             AlleDetectoren.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(fcm.Naam);
-                foreach(DetectorModel dm in fcm.Detectoren)
+                foreach(var dm in fcm.Detectoren)
                 {
                     AlleDetectoren.Add(dm.Naam);
                 }
@@ -417,10 +411,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

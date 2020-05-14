@@ -81,7 +81,7 @@ namespace TLCGen.GebruikersOpties
 
         public GebruikersOptiesModel MyGebruikersOpties
         {
-            get { return _MyGebruikersOpties; }
+            get => _MyGebruikersOpties;
             set
             {
                 _MyGebruikersOpties = value;
@@ -104,7 +104,7 @@ namespace TLCGen.GebruikersOpties
 
         public int SelectedTabIndex
         {
-            get { return _SelectedTabIndex; }
+            get => _SelectedTabIndex;
             set
             {
                 _SelectedTabIndex = value;
@@ -211,7 +211,7 @@ namespace TLCGen.GebruikersOpties
 
         void AddNewGebruikersOptieCommand_Executed()
         {
-            int index = -1;
+            var index = -1;
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
@@ -221,7 +221,7 @@ namespace TLCGen.GebruikersOpties
 
                 var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
                 o.PropertyChanged += Optie_PropertyChanged;
-                int i = 1;
+                var i = 1;
                 while (string.IsNullOrEmpty(o.Naam))
                 {
                     o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count + i);
@@ -247,7 +247,7 @@ namespace TLCGen.GebruikersOpties
 
                 var o = new GebruikersOptieViewModel(new GebruikersOptieModel());
                 o.PropertyChanged += Optie_PropertyChanged;
-                int i = 1;
+                var i = 1;
                 while (string.IsNullOrEmpty(o.Naam))
                 {
                     o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count + i);
@@ -300,7 +300,7 @@ namespace TLCGen.GebruikersOpties
 
         void RemoveGebruikersOptieCommand_Executed()
         {
-            int index = 0;
+            var index = 0;
             if (SelectedOpties != null && SelectedOpties.Count > 0)
             {
                 if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
@@ -356,7 +356,7 @@ namespace TLCGen.GebruikersOpties
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
                 var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
-                int c = list.Count;
+                var c = list.Count;
                 if (index >= c) index = c - 1;
                 if (index >= 0)
                     SelectedOptie = list[index];
@@ -366,7 +366,7 @@ namespace TLCGen.GebruikersOpties
             else
             {
                 var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
-                int c = list.Count;
+                var c = list.Count;
                 if (index >= c) index = c - 1;
                 if (index >= 0)
                     SelectedOptie = list[index];
@@ -386,7 +386,7 @@ namespace TLCGen.GebruikersOpties
         {
             var optie = SelectedOptie;
 
-            int index = -1;
+            var index = -1;
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
@@ -458,8 +458,8 @@ namespace TLCGen.GebruikersOpties
         {
             var optie = SelectedOptie;
 
-            int index = -1;
-            int max = -1;
+            var index = -1;
+            var max = -1;
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
@@ -467,7 +467,7 @@ namespace TLCGen.GebruikersOpties
                 max = list.Count - 1;
                 if (SelectedOpties != null && SelectedOpties.Count > 0)
                 {
-                    for (int i = SelectedOpties.Count - 1; i >= 0; --i)
+                    for (var i = SelectedOpties.Count - 1; i >= 0; --i)
                     {
                         index = list.IndexOf(SelectedOpties[i] as GebruikersOptieWithIOViewModel);
                         if (index >= 0 && index < max)
@@ -496,7 +496,7 @@ namespace TLCGen.GebruikersOpties
                 max = list.Count - 1;
                 if (SelectedOpties != null && SelectedOpties.Count > 0)
                 {
-                    for (int i = SelectedOpties.Count - 1; i >= 0; --i)
+                    for (var i = SelectedOpties.Count - 1; i >= 0; --i)
                     {
                         index = list.IndexOf(SelectedOpties[i] as GebruikersOptieViewModel);
                         if (index >= 0 && index < max)
@@ -684,7 +684,7 @@ namespace TLCGen.GebruikersOpties
         private ControllerModel _Controller;
         public ControllerModel Controller
         {
-            get { return _Controller; }
+            get => _Controller;
             set
             {
                 _Controller = value;
@@ -710,13 +710,7 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
-        public string DisplayName
-        {
-            get
-            {
-                return "Gebruikersopties";
-            }
-        }
+        public string DisplayName => "Gebruikersopties";
 
         public string GetPluginName()
         {
@@ -728,7 +722,7 @@ namespace TLCGen.GebruikersOpties
 
         public bool IsEnabled
         {
-            get { return _IsEnabled; }
+            get => _IsEnabled;
             set
             {
                 _IsEnabled = value;
@@ -740,10 +734,10 @@ namespace TLCGen.GebruikersOpties
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/GebruikersOptiesIcon.xaml");
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/GebruikersOptiesIcon.xaml");
                 dict.Source = u;
                 return (DrawingImage)dict["GebruikersOptiesTabDrawingImage"];
             }
@@ -787,7 +781,7 @@ namespace TLCGen.GebruikersOpties
 
         public void GetXmlFromDocument(XmlDocument document)
         {
-            bool found = false;
+            var found = false;
             foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
                 if (node.LocalName == "GebruikersOpties")
@@ -834,8 +828,8 @@ namespace TLCGen.GebruikersOpties
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(MyGebruikersOpties);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(MyGebruikersOpties);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -845,7 +839,7 @@ namespace TLCGen.GebruikersOpties
 
         public List<IOElementModel> GetOutputItems()
         {
-            List<IOElementModel> items = new List<IOElementModel>();
+            var items = new List<IOElementModel>();
             foreach (var v in Uitgangen)
             {
                 items.Add(v.GebruikersOptieWithIO as IOElementModel);
@@ -855,7 +849,7 @@ namespace TLCGen.GebruikersOpties
 
         public List<IOElementModel> GetInputItems()
         {
-            List<IOElementModel> items = new List<IOElementModel>();
+            var items = new List<IOElementModel>();
             foreach (var v in Ingangen)
             {
                 items.Add(v.GebruikersOptieWithIO as IOElementModel);

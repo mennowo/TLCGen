@@ -7,7 +7,7 @@ namespace TLCGen.Helpers
     {
         public static string GetResourceTextFile(string filename, object callingObject, Type type = null)
         {
-            string result;
+            var result = string.Empty;
 
             if (type == null) type = callingObject.GetType();
             using (var stream = type.Assembly.

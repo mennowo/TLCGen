@@ -54,11 +54,8 @@ namespace TLCGen.Integrity
         private ControllerModel _Controller;
         public ControllerModel Controller
         {
-            set { _Controller = value; }
-            get
-            {
-                return _Controller;
-            }
+            set => _Controller = value;
+            get => _Controller;
         }
 
         #endregion // Properties
@@ -106,17 +103,17 @@ namespace TLCGen.Integrity
 		private void RemoveFromController(object obj, string remObject)
 		{
 			if (obj == null) return;
-			Type objType = obj.GetType();
-			PropertyInfo[] properties = objType.GetProperties();
-			foreach (PropertyInfo property in properties)
+			var objType = obj.GetType();
+			var properties = objType.GetProperties();
+			foreach (var property in properties)
 			{
                 var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
                 if (ignore != null) continue;
 
-                Type propType = property.PropertyType;
+                var propType = property.PropertyType;
 				if (!(propType == typeof(string)) && !propType.IsValueType)
 				{
-					object propValue = property.GetValue(obj);
+					var propValue = property.GetValue(obj);
 					var elems = propValue as IList;
 					if (elems != null)
 					{
@@ -135,21 +132,21 @@ namespace TLCGen.Integrity
 									{
 										if (_attr.ReferProperty1 != null)
 										{
-											string val1 = (string)_t.GetProperty(_attr.ReferProperty1).GetValue(item);
+											var val1 = (string)_t.GetProperty(_attr.ReferProperty1).GetValue(item);
 											if (val1 == remObject)
 											{
 												t.GetMethod("Add").Invoke(remitems, new[] { item });
 											}
 											else if (_attr.ReferProperty2 != null)
 											{
-												string val2 = (string)_t.GetProperty(_attr.ReferProperty2).GetValue(item);
+												var val2 = (string)_t.GetProperty(_attr.ReferProperty2).GetValue(item);
 												if (val2 == remObject)
 												{
 													t.GetMethod("Add").Invoke(remitems, new[] { item });
 												}
                                                 else if (_attr.ReferProperty3 != null)
                                                 {
-                                                    string val3 = (string)_t.GetProperty(_attr.ReferProperty3).GetValue(item);
+                                                    var val3 = (string)_t.GetProperty(_attr.ReferProperty3).GetValue(item);
                                                     if (val3 == remObject)
                                                     {
                                                         t.GetMethod("Add").Invoke(remitems, new[] { item });
@@ -284,7 +281,7 @@ namespace TLCGen.Integrity
             {
                 foreach(var mfc in hd.MeerealiserendeFaseCycli)
                 {
-                    bool ok = false;
+                    var ok = false;
                     foreach (var hd2 in c.PrioData.HDIngrepen)
                     {
                         if(hd != hd2 && mfc.FaseCyclus == hd2.FaseCyclus)

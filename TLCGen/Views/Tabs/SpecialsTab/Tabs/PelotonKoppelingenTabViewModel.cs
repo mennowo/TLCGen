@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingViewModel SelectedPelotonKoppeling
         {
-            get { return _selectedPelotonKoppeling; }
+            get => _selectedPelotonKoppeling;
             set
             {
                 _selectedPelotonKoppeling = value;
@@ -132,7 +132,7 @@ namespace TLCGen.ViewModels
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
             if (PTPKruisingenNames.Any()) Peloton.PTPKruising = PTPKruisingenNames.First();
             Peloton.KoppelingNaam = "KOP1";
-            int i = 1;
+            var i = 1;
             while(!TLCGen.Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, Peloton.KoppelingNaam, Models.Enumerations.TLCGenObjectTypeEnum.PelotonKoppeling))
             {
                 ++i;
@@ -184,17 +184,11 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Peloton\nKoppeling";
-            }
-        }
+        public override string DisplayName => "Peloton\nKoppeling";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 
@@ -214,10 +208,7 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {

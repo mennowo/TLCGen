@@ -16,21 +16,21 @@ namespace TLCGen.ViewModels
 
         public HDIngreepMeerealiserendeFaseCyclusModel FaseCyclus
         {
-            get { return _FaseCyclus; }
+            get => _FaseCyclus;
             set
             {
                 _FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         public string Fase
         {
-            get { return _FaseCyclus.FaseCyclus; }
+            get => _FaseCyclus.FaseCyclus;
             set
             {
                 _FaseCyclus.FaseCyclus = value;
-                RaisePropertyChanged<object>("Fase", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Fase), broadcast: true);
             }
         }
 

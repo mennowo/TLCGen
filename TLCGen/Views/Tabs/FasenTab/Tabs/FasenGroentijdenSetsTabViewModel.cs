@@ -437,7 +437,7 @@ namespace TLCGen.ViewModels
         public void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
         {
             RaisePropertyChanged(nameof(DisplayName));
-            bool isdef = false;
+            var isdef = false;
             foreach (var setvm in GroentijdenSets)
             {
                 if(_Controller.PeriodenData.DefaultPeriodeGroentijdenSet == setvm.Naam)

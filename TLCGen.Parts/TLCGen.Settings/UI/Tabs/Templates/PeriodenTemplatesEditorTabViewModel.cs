@@ -29,7 +29,7 @@ namespace TLCGen.Settings
         private PeriodeTemplateViewModel _SelectedPeriodeTemplate;
         public PeriodeTemplateViewModel SelectedPeriodeTemplate
         {
-            get { return _SelectedPeriodeTemplate; }
+            get => _SelectedPeriodeTemplate;
             set
             {
                 _SelectedPeriodeTemplate = value;

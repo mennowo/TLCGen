@@ -26,11 +26,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public string Reeks
-        {
-            get => _ModuleMolen.Reeks;
-
-        }
+        public string Reeks => _ModuleMolen.Reeks;
 
         public ObservableCollection<ModuleViewModel> Modules
         {
@@ -45,7 +41,7 @@ namespace TLCGen.ViewModels
         }
         public ModuleViewModel SelectedModule
         {
-            get { return _SelectedModule; }
+            get => _SelectedModule;
             set
             {
                 _SelectedModule = value;
@@ -65,7 +61,7 @@ namespace TLCGen.ViewModels
 
         public ModuleFaseCyclusViewModel SelectedModuleFase
         {
-            get { return _SelectedModuleFase; }
+            get => _SelectedModuleFase;
             set
             {
                 _SelectedModuleFase = null;
@@ -85,26 +81,23 @@ namespace TLCGen.ViewModels
 
         public bool LangstWachtendeAlternatief
         {
-            get { return _ModuleMolen == null ? false : _ModuleMolen.LangstWachtendeAlternatief; }
+            get => _ModuleMolen == null ? false : _ModuleMolen.LangstWachtendeAlternatief;
             set
             {
                 if (_ModuleMolen != null)
                 {
                     _ModuleMolen.LangstWachtendeAlternatief = value;
-                    RaisePropertyChanged<object>("LangstWachtendeAlternatief", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
                     RaisePropertyChanged("NotLangstWachtendeAlternatief");
                 }
             }
         }
 
-        public bool NotLangstWachtendeAlternatief
-        {
-            get => _ModuleMolen == null ? false : !_ModuleMolen.LangstWachtendeAlternatief;
-        }
+        public bool NotLangstWachtendeAlternatief => _ModuleMolen == null ? false : !_ModuleMolen.LangstWachtendeAlternatief;
 
         public string WachtModule
         {
-            get { return _ModuleMolen?.WachtModule; }
+            get => _ModuleMolen?.WachtModule;
             set
             {
                 if (_reloading) return;
@@ -183,8 +176,8 @@ namespace TLCGen.ViewModels
 
         private void MoveModuleUpCommand_Executed(object obj)
         {
-            int index = -1;
-            foreach(ModuleViewModel mvm in Modules)
+            var index = -1;
+            foreach(var mvm in Modules)
             {
                 ++index;
                 if(mvm == SelectedModule)
@@ -194,7 +187,7 @@ namespace TLCGen.ViewModels
             }
             if(index >= 1)
             {
-                ModuleViewModel mvm = SelectedModule;
+                var mvm = SelectedModule;
                 SelectedModule = null;
                 Modules.Remove(mvm);
                 Modules.Insert(index - 1, mvm);
@@ -205,8 +198,8 @@ namespace TLCGen.ViewModels
 
         private void MoveModuleDownCommand_Executed(object obj)
         {
-            int index = -1;
-            foreach (ModuleViewModel mvm in Modules)
+            var index = -1;
+            foreach (var mvm in Modules)
             {
                 ++index;
                 if (mvm == SelectedModule)
@@ -216,7 +209,7 @@ namespace TLCGen.ViewModels
             }
             if (index >= 0 && (index <= (Modules.Count - 2)))
             {
-                ModuleViewModel mvm = SelectedModule;
+                var mvm = SelectedModule;
                 SelectedModule = null;
                 Modules.Remove(mvm);
                 Modules.Insert(index + 1, mvm);
@@ -226,11 +219,11 @@ namespace TLCGen.ViewModels
 
         void AddNewModuleCommand_Executed(object prm)
         {
-            ModuleModel mm = new ModuleModel
+            var mm = new ModuleModel
             {
                 Naam = Reeks + (Modules.Count + 1).ToString()
             };
-            ModuleViewModel mvm = new ModuleViewModel(mm);
+            var mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
             SelectedModule = mvm;
             MessengerInstance.Send(new ModulesChangedMessage());
@@ -243,7 +236,7 @@ namespace TLCGen.ViewModels
 
         void RemoveModuleCommand_Executed(object prm)
         {
-            int index = Modules.IndexOf(SelectedModule);
+            var index = Modules.IndexOf(SelectedModule);
             Modules.Remove(SelectedModule);
             SelectedModule = null;
             if (Modules.Count > 0)
@@ -274,9 +267,9 @@ namespace TLCGen.ViewModels
             _reloading = true;
             Modules.CollectionChanged -= Modules_CollectionChanged;
             Modules.Clear();
-            foreach (ModuleModel mm in _ModuleMolen.Modules)
+            foreach (var mm in _ModuleMolen.Modules)
             {
-                ModuleViewModel mvm = new ModuleViewModel(mm);
+                var mvm = new ModuleViewModel(mm);
                 Modules.Add(mvm);
             }
             Modules.CollectionChanged += Modules_CollectionChanged;
@@ -308,14 +301,14 @@ namespace TLCGen.ViewModels
             {
                 // Rebuild the mill in the model: needed to allow reordering
                 _ModuleMolen.Modules.Clear();
-                foreach (ModuleViewModel mvm in Modules)
+                foreach (var mvm in Modules)
                 {
                     _ModuleMolen.Modules.Add(mvm.Module);
                 }
 
                 // Update Module names
-                int i = 1;
-                foreach (ModuleViewModel mvm in Modules)
+                var i = 1;
+                foreach (var mvm in Modules)
                 {
                     mvm.Naam = Reeks + i.ToString();
                     ++i;

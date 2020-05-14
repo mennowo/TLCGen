@@ -12,7 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateSysH(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* ALGEMENE APPLICATIEFILE */");
             sb.AppendLine("/* ----------------------- */");
             sb.AppendLine();
@@ -127,22 +127,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHFasen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* fasecycli */");
             sb.AppendLine("/* --------- */");
 
-            int pad1 = "FCMAX".Length;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            var pad1 = "FCMAX".Length;
+            foreach (var fcm in controller.Fasen)
             {
                 if (fcm.GetDefine().Length > pad1) pad1 = fcm.GetDefine().Length;
             }
             pad1 = pad1 + $"{ts}#define  ".Length;
 
-            int pad2 = controller.Fasen.Count.ToString().Length;
+            var pad2 = controller.Fasen.Count.ToString().Length;
 
-            int index = 0;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            var index = 0;
+            foreach (var fcm in controller.Fasen)
             {
                 sb.Append($"{ts}#define {fcm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
@@ -248,7 +248,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHIngangen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
@@ -260,7 +260,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHHulpElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
@@ -272,7 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHGeheugenElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
@@ -284,7 +284,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHTijdElementen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
@@ -296,7 +296,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         
         private string GenerateSysHCounters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
@@ -308,7 +308,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHSchakelaars(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
@@ -320,7 +320,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHParameters(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
@@ -332,12 +332,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateSysHDS(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
 
-            int index = 0;
+            var index = 0;
             var isvecom = controller.SelectieveDetectoren.Any();
             // Geen VECOM? Dan alleen een dummy lus tbv KAR
             if (!isvecom)

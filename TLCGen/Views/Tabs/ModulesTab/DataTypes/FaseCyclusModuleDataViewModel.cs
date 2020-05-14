@@ -16,51 +16,51 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _ModuleFaseData.FaseCyclus; }
+            get => _ModuleFaseData.FaseCyclus;
             set
             {
                 _ModuleFaseData.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         public int ModulenVooruit
         {
-            get { return _ModuleFaseData.ModulenVooruit; }
+            get => _ModuleFaseData.ModulenVooruit;
             set
             {
                 _ModuleFaseData.ModulenVooruit = value;
-                RaisePropertyChanged<object>("ModulenVooruit", broadcast: true);
+                RaisePropertyChanged<object>(nameof(ModulenVooruit), broadcast: true);
             }
         }
 
         public bool AlternatiefToestaan
         {
-            get { return _ModuleFaseData.AlternatiefToestaan; }
+            get => _ModuleFaseData.AlternatiefToestaan;
             set
             {
                 _ModuleFaseData.AlternatiefToestaan = value;
-                RaisePropertyChanged<object>("AlternatiefToestaan", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AlternatiefToestaan), broadcast: true);
             }
         }
 
         public int AlternatieveRuimte
         {
-            get { return _ModuleFaseData.AlternatieveRuimte; }
+            get => _ModuleFaseData.AlternatieveRuimte;
             set
             {
                 _ModuleFaseData.AlternatieveRuimte = value;
-                RaisePropertyChanged<object>("AlternatieveRuimte", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AlternatieveRuimte), broadcast: true);
             }
         }
 
         public int AlternatieveGroenTijd
         {
-            get { return _ModuleFaseData.AlternatieveGroenTijd; }
+            get => _ModuleFaseData.AlternatieveGroenTijd;
             set
             {
                 _ModuleFaseData.AlternatieveGroenTijd = value;
-                RaisePropertyChanged<object>("AlternatieveGroenTijd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AlternatieveGroenTijd), broadcast: true);
             }
         }
 

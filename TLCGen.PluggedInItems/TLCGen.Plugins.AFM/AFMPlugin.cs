@@ -135,8 +135,8 @@ namespace TLCGen.Plugins.AFM
 
         public void SetXmlInDocument(XmlDocument document)
         {
-            XmlDocument doc = TLCGenSerialization.SerializeToXmlDocument(_afmModel);
-            XmlNode node = document.ImportNode(doc.DocumentElement, true);
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_afmModel);
+            var node = document.ImportNode(doc.DocumentElement, true);
             document.DocumentElement.AppendChild(node);
         }
 
@@ -236,7 +236,7 @@ namespace TLCGen.Plugins.AFM
         {
             if (!_afmModel.AFMToepassen || !_afmModel.AFMFasen.Any()) return "";
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             var dFcs = _afmModel.AFMFasen.Where(x => x.DummyFaseCyclus != "NG").Select(x => x.DummyFaseCyclus);
 
@@ -244,7 +244,7 @@ namespace TLCGen.Plugins.AFM
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     sb.AppendLine("/* Ten behoeve van AFM */");
-                    int index = 0;
+                    var index = 0;
                     foreach (var fc in _afmModel.AFMFasen)
                     {
                         sb.AppendLine($"#define AFM_{_fcpf}{fc.FaseCyclus} {index++}");
@@ -333,7 +333,7 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC, {_prmpf}AFM_TCgem);");
                     sb.AppendLine($"{ts}{ts}if (!PRM[{_prmpf}AFM_Test] && !IS[{_ispf}fix])");
                     sb.AppendLine($"{ts}{ts}{{");
-                    string _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+                    var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
                     foreach (var fc in _afmModel.AFMFasen)
                     {
                         var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
@@ -352,7 +352,7 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine();
 
-                    string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+                    var _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
                     foreach (var dummyFc in dFcs)
                     {
                         foreach (var fi in c.FileIngrepen)
@@ -383,7 +383,7 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    string _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
+                    var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
                     sb.AppendLine($"{ts}if ((CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) && !CIF_IS[{_ispf}{_isfix}] && T[{_tpf}AFMLeven])");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}PRM[{_prmpf}AFM_Beinvloedbaar] = 1;");

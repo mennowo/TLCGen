@@ -33,26 +33,20 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "Resources/TabIcons.xaml");
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
+                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (ImageSource)dict["FasenTabDrawingImage"];
             }
         }
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Fasen";
-            }
-        }
+        public override string DisplayName => "Fasen";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get => true;
             set { }
         }
 

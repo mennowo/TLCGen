@@ -31,16 +31,13 @@ namespace TLCGen.Generators.CCOL
 
         #region Properties
 
-        public CCOLGenerator CodeGenerator
-        {
-            get { return _codeGenerator; }
-        }
+        public CCOLGenerator CodeGenerator => _codeGenerator;
 
-		public ObservableCollection<string> VisualProjects { get; }
+        public ObservableCollection<string> VisualProjects { get; }
 
         public string SelectedVisualProject
         {
-            get { return _SelectedVisualProject; }
+            get => _SelectedVisualProject;
             set
             {
                 _SelectedVisualProject = value;
@@ -50,7 +47,7 @@ namespace TLCGen.Generators.CCOL
 
         public bool VisualCBEnabled
         {
-            get { return _VisualCBEnabled; }
+            get => _VisualCBEnabled;
             set
             {
                 _VisualCBEnabled = value;

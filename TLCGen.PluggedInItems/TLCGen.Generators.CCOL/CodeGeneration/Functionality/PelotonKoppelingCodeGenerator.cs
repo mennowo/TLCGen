@@ -481,7 +481,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                     {
-                        bool first = true;
+                        var first = true;
                         foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                         {
                             if (pk.Type == PelotonKoppelingTypeEnum.RHDHV && pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit)

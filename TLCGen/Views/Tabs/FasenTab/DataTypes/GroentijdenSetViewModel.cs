@@ -20,17 +20,14 @@ namespace TLCGen.ViewModels
 
         public string Naam
         {
-            get
-            {
-                return _GroentijdenSet.Naam;
-            }
+            get => _GroentijdenSet.Naam;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.GroenTijdenSet, value))
                     {
-                        string oldname = _GroentijdenSet.Naam;
+                        var oldname = _GroentijdenSet.Naam;
                         _GroentijdenSet.Naam = value;
 
                         // Notify the messenger
@@ -44,10 +41,7 @@ namespace TLCGen.ViewModels
 
         public GroentijdenTypeEnum Type
         {
-            get
-            {
-                return _GroentijdenSet.Type;
-            }
+            get => _GroentijdenSet.Type;
             set
             {
                 _GroentijdenSet.Type = value;
@@ -65,13 +59,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public GroentijdenSetModel GroentijdenSet
-        {
-            get
-            {
-                return _GroentijdenSet;
-            }
-        }
+        public GroentijdenSetModel GroentijdenSet => _GroentijdenSet;
 
         public ObservableCollectionAroundList<GroentijdViewModel, GroentijdModel> Groentijden
         {

@@ -27,14 +27,14 @@ namespace TLCGen.Views
 
         public Array ConflictMatrix
         {
-            get { return (Array)GetValue(ConflictMatrixProperty); }
-            set { SetValue(ConflictMatrixProperty, value); }
+            get => (Array)GetValue(ConflictMatrixProperty);
+            set => SetValue(ConflictMatrixProperty, value);
         }
 
         public object GridSelectedItem
         {
-            get { return (object)GetValue(GridSelectedItemProperty); }
-            set { SetValue(GridSelectedItemProperty, value); }
+            get => (object)GetValue(GridSelectedItemProperty);
+            set => SetValue(GridSelectedItemProperty, value);
         }
         
         public static readonly DependencyProperty GridSelectedItemProperty =
@@ -66,7 +66,7 @@ namespace TLCGen.Views
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
+            var dg = sender as DataGrid;
             if (dg != null)
             {
                 if (_previousRow != null) _previousRow.HeaderStyle = null;
@@ -108,7 +108,7 @@ namespace TLCGen.Views
                     _previousRow = row;
                     var col = dg.SelectedCells[0].Column as DataGridColumn;
                     _previousCol = col;
-                    DataGridCell cell = dg.GetCell(row.GetIndex(), col.DisplayIndex);
+                    var cell = dg.GetCell(row.GetIndex(), col.DisplayIndex);
                     dg.BeginEdit();
                 }
             }
@@ -156,7 +156,7 @@ namespace TLCGen.Views
         {
 	        if (parameter != null)
 	        {
-		        IntersignaalGroepTypeEnum e = (IntersignaalGroepTypeEnum)parameter;
+		        var e = (IntersignaalGroepTypeEnum)parameter;
 		        switch(e)
 		        {
 			        case IntersignaalGroepTypeEnum.Conflict:

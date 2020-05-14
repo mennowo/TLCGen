@@ -25,7 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             _myElements = new List<CCOLElement>();
 
-            foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
+            foreach (var rga in c.RichtingGevoeligeAanvragen)
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -41,7 +41,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
+            foreach (var rgv in c.RichtingGevoeligVerlengen)
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -90,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -107,7 +107,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
                     }
 
-                    foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
+                    foreach (var rga in c.RichtingGevoeligeAanvragen)
                     {
                         if (!rga.ResetAanvraag)
                         {
@@ -130,7 +130,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         var first = gr.First();
                         sb.AppendLine($"{ts}MeetKriteriumRGprm((count) {_fcpf}{first.FaseCyclus}, (count) {_tpf}{_tkm}{first.FaseCyclus},");
-                        foreach (RichtingGevoeligVerlengModel rgv in gr)
+                        foreach (var rgv in gr)
                         {
                             sb.AppendLine($"{ts}{ts}({c.GetBoolV()}) RichtingVerlengen({_fcpf}{rgv.FaseCyclus}, {_dpf}{rgv.VanDetector}, {_dpf}{rgv.NaarDetector},");
                             sb.AppendLine($"{ts}{ts}                         {_tpf}{_trgr}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}, {_tpf}{_trgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector},");

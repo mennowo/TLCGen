@@ -12,9 +12,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var risModel = c.RISData;
 
-            string _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
+            var _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* APPLICATIE RIS SIMULATIEPROGRAMMA */");
             sb.AppendLine("/* --------------------------------- */");
@@ -107,7 +107,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
-                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Snelheid}, {s.Afstand}, 1);");
+                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
                 }
             }
             sb.AppendLine($"");
@@ -116,14 +116,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var i = 15;
             foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
-                sb.AppendLine($"{ts}xyprintf(30, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
+                sb.AppendLine($"{ts}xyprintf(40, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
                 ++i;
             }
             sb.AppendLine($"");
             sb.AppendLine($"{ts}/* Display aantal ItsStations en PrioRequests */");
             sb.AppendLine($"{ts}/* ------------------------------------------ */  ");
-            sb.AppendLine($"{ts}xyprintf(30, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
-            sb.AppendLine($"{ts}xyprintf(30, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}xyprintf(40, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}xyprintf(40, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
             sb.AppendLine($"{ts}#endif");
 
             sb.AppendLine("}");

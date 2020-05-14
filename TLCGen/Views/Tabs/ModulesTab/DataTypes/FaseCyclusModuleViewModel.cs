@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public ModuleViewModel ModuleVM
         {
-            get { return _ModuleVM; }
+            get => _ModuleVM;
             set
             {
                 _ModuleVM = value;
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
 
         public ModuleFaseCyclusViewModel ModuleFaseVM
         {
-            get { return _ModuleFaseVM; }
+            get => _ModuleFaseVM;
             set
             {
                 _ModuleFaseVM = value;
@@ -52,10 +52,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// The name of the PhaseCyclus
         /// </summary>
-        public string Naam
-        {
-            get { return _FaseCyclus.Naam; }
-        }
+        public string Naam => _FaseCyclus.Naam;
 
         /// <summary>
         /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
@@ -66,9 +63,9 @@ namespace TLCGen.ViewModels
             {
                 if (_ModuleVM != null)
                 {
-                    foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
+                    foreach (var mfcvm in _ModuleVM.Fasen)
                     {
-                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Naam, mfcvm.FaseCyclusNaam);
+                        var request = new IsFasenConflictingRequest(this.Naam, mfcvm.FaseCyclusNaam);
                         Messenger.Default.Send(request);
                         if (request.Handled && request.IsConflicting)
                             return false;
@@ -77,7 +74,7 @@ namespace TLCGen.ViewModels
                 if (_ModuleFaseVM != null)
                 {
                     if (_ModuleFaseVM.FaseCyclusNaam == Naam) return false;
-                    IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Naam, _ModuleFaseVM.FaseCyclusNaam);
+                    var request = new IsFasenConflictingRequest(this.Naam, _ModuleFaseVM.FaseCyclusNaam);
                     Messenger.Default.Send(request);
                     if (request.Handled && request.IsConflicting)
                         return false;
@@ -95,7 +92,7 @@ namespace TLCGen.ViewModels
             {
                 if (_ModuleVM != null)
                 {
-                    foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
+                    foreach (var mfcvm in _ModuleVM.Fasen)
                     {
                         if (mfcvm.FaseCyclusNaam == this.Naam)
                             return true;

@@ -17,6 +17,11 @@ namespace TLCGen.Integrity
             return string.Compare(sg1Name, sg2Name, StringComparison.Ordinal);
         }
 
+        public static int CompareDetectors(string d1name, string d2name)
+        {
+            return CompareDetectors(d1name, d2name, null, null);
+        }
+
         public static int CompareDetectors(string d1name, string d2name, string d1fcname, string d2fcname)
         {
             var myName = d1fcname == null ? d1name : d1name.Replace(d1fcname, "");

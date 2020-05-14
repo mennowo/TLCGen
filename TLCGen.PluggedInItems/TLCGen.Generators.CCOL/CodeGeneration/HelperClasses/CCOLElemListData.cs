@@ -10,9 +10,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public string CCOLSetting { get; set; }
         public string CCOLTType { get; set; }
 
-        public int CCOLCodeWidth { get { return CCOLCode == null ? 0 : CCOLCode.Length; } }
-        public int CCOLSettingWidth { get { return CCOLSetting == null ? 0 : CCOLSetting.Length; } }
-        public int CCOLTTypeWidth { get { return CCOLTType == null ? 0 : CCOLTType.Length; } }
+        public int CCOLCodeWidth => CCOLCode == null ? 0 : CCOLCode.Length;
+        public int CCOLSettingWidth => CCOLSetting == null ? 0 : CCOLSetting.Length;
+        public int CCOLTTypeWidth => CCOLTType == null ? 0 : CCOLTType.Length;
 
         public int TTypeMaxWidth { get; set; }
         public int DefineMaxWidth { get; set; }
@@ -22,7 +22,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public void SetMax()
         {
-            foreach (CCOLElement elem in this.Elements)
+            foreach (var elem in this.Elements)
             {
                 if (elem.Define?.Length > this.DefineMaxWidth) this.DefineMaxWidth = elem.Define.Length;
                 if (elem.Naam?.Length > this.NameMaxWidth) this.NameMaxWidth = elem.Naam.Length;

@@ -10,7 +10,7 @@
 
         public int Van
         {
-            get { return _Van; }
+            get => _Van;
             set
             {
                 if (value >= MinVan && value <= Tot)
@@ -23,7 +23,7 @@
 
         public int Tot
         {
-            get { return _Tot; }
+            get => _Tot;
             set
             {
                 if (value >= Van)
@@ -36,7 +36,7 @@
 
         public int Verschil
         {
-            get { return _Verschil; }
+            get => _Verschil;
             set
             {
                 _Verschil = value;
@@ -46,7 +46,7 @@
 
         public int MinVan
         {
-            get { return _MinVan; }
+            get => _MinVan;
             set
             {
                 _MinVan = value;
