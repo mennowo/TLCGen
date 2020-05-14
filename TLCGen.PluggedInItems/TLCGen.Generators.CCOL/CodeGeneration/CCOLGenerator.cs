@@ -10,6 +10,7 @@ using TLCGen.Dependencies.Providers;
 using TLCGen.Generators.CCOL.ProjectGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -292,6 +293,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (c.RISData.RISToepassen)
                     {
                         CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_prio.h", sourcefilepath);
                     }
 
                     if (c.StarData.ToepassenStar)

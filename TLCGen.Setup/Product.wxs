@@ -176,6 +176,8 @@
         <File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
         <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.c" />
         <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.h" />
+        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A3A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.c" />
+        <File Id="fil2C2767D07BD36C11862CF72D0CF6B577" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
         <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
         <File Id="fil29C62D038F3BAA50853B269B2F63837H" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.c" />

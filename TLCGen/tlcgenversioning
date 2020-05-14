@@ -1,7 +1,10 @@
-TLCGen=0.7.7.0
+TLCGen=0.7.8.0
 MiniTD=1.0.0.0
 YAVV=0.5.0.0
 RN==TLCGen
+TLCGen versie: 0.7.8.0
+- Nieuwe UI voor prioriteit
+- Prio via RIS
 TLCGen versie: 0.7.7.0
 - Diverse kleine bug fixes
 TLCGen versie: 0.7.6.0

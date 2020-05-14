@@ -135,6 +135,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#ifndef NO_RIS");
                 sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
                 sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
+                sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.c\" /* RIS extra functies */");
                 sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
                 sb.AppendLine($"{ts}{ts}#endif");
