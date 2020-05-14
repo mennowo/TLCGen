@@ -301,11 +301,11 @@ namespace TLCGen.ModelManagement
                 {
                     foreach (var m in prio.MeldingenData.Inmeldingen.Where(m => string.IsNullOrWhiteSpace(m.Naam)))
                     {
-                        m.Naam = prio.FaseCyclus + DefaultsProvider.Default.GetMeldingShortcode(m) + "in";
+                        m.Naam = prio.FaseCyclus + prio.Naam + DefaultsProvider.Default.GetMeldingShortcode(m) + "in";
                     }
                     foreach (var m in prio.MeldingenData.Uitmeldingen.Where(m => string.IsNullOrWhiteSpace(m.Naam)))
                     {
-                        m.Naam = prio.FaseCyclus + DefaultsProvider.Default.GetMeldingShortcode(m) + "uit";
+                        m.Naam = prio.FaseCyclus + prio.Naam + DefaultsProvider.Default.GetMeldingShortcode(m) + "uit";
                     }
                 }
             }

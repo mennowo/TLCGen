@@ -44,6 +44,8 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        private readonly List<Tuple<Version, string>> VersionFiles = new List<Tuple<Version, string>>();
+
         public List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts { get; }
 
         /// <summary>
@@ -606,18 +608,7 @@ namespace TLCGen.ViewModels
 
         private void ShowVersionInfoCommand_Executed(object obj)
         {
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            var folderName = $"{executingAssembly.GetName().Name}.Resources.VersionInfo";
-            var files = executingAssembly.GetManifestResourceNames().Where(r => r.StartsWith(folderName) && r.EndsWith(".rtf")).ToList();
-            files.Sort();
-            var vfiles = new List<Tuple<Version, string>>();
-            foreach (var f in files)
-            {
-                var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
-                var text = reader.ReadToEnd();
-                vfiles.Add(new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")), text));
-            }
-            var infoW = new VersionInfoWindow(ControllerVersion, vfiles)
+            var infoW = new VersionInfoWindow(ControllerVersion, VersionFiles)
             {
                 Owner = Application.Current.MainWindow
             };
@@ -765,14 +756,7 @@ namespace TLCGen.ViewModels
                     Arguments = TLCGenControllerDataProvider.Default.ControllerFileName
                 };
                 JumpList.AddToRecentCategory(jumpTask);
-                if (Version.Parse(ControllerVersion) < Version.Parse(CurrentVersion))
-                {
-                    ShowAlertMessage = true;
-                }
-                else
-                {
-                    ShowAlertMessage = false;
-                }
+                ShowAlertMessage = Version.Parse(ControllerVersion) < VersionFiles.Max(x => x.Item1);
                 return true;
             }
             if (filename != null) FileOpenFailed?.Invoke(this, filename);
@@ -848,16 +832,28 @@ namespace TLCGen.ViewModels
 
                 TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
                 TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+                
+                var executingAssembly = Assembly.GetExecutingAssembly();
 
                 // Load available applicationparts and plugins
-                var assms = Assembly.GetExecutingAssembly();
-                var types = from t in assms.GetTypes()
+                var types = from t in executingAssembly.GetTypes()
                             where t.IsClass && t.Namespace == "TLCGen.ViewModels"
                             select t;
                 TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
                 TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
                 TLCGenSplashScreenHelper.ShowText("Laden plugins...");
                 TLCGenPluginManager.Default.LoadPlugins(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
+
+                // Load version info
+                var folderName = $"{executingAssembly.GetName().Name}.Resources.VersionInfo";
+                var files = executingAssembly.GetManifestResourceNames().Where(r => r.StartsWith(folderName) && r.EndsWith(".rtf")).ToList();
+                files.Sort();
+                foreach (var f in files)
+                {
+                    var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
+                    var text = reader.ReadToEnd();
+                    VersionFiles.Add(new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")), text));
+                }
 
                 // Instantiate all parts
                 ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();

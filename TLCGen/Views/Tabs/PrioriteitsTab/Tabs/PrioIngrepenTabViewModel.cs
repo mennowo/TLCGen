@@ -185,6 +185,25 @@ namespace TLCGen.ViewModels
             Fasen.BubbleSort();
         }
 
+        private void OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived(PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage obj)
+        {
+            foreach (var sg in Fasen)
+            {
+                foreach (var ingreep in sg.Ingrepen)
+                {
+                    foreach (var prioIngreepInUitMeldingViewModel in ingreep.MeldingenLists.SelectMany(x => x.Meldingen))
+                    {
+                        if (ReferenceEquals(obj.RequestingObject, prioIngreepInUitMeldingViewModel))
+                        {
+                            obj.FaseCyclus = sg.Naam;
+                            obj.Ingreep = ingreep.Naam;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion // Private Methods
 
         #region Constructor
@@ -192,6 +211,7 @@ namespace TLCGen.ViewModels
         public PrioIngrepenTabViewModel() : base()
         {
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            MessengerInstance.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
         }
 
         #endregion // Constructor

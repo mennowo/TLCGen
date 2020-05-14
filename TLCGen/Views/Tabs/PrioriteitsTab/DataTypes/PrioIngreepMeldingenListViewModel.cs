@@ -11,6 +11,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
@@ -54,12 +55,11 @@ namespace TLCGen.ViewModels
             {
                 case PrioIngreepInUitMeldingTypeEnum.Inmelding:
                     m.InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding;
-                    // TODO do this elsewhere
+                    m.InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding;
                     PrioIngreepMeldingenData.Inmeldingen.Add(m);
                     break;
                 case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
                     m.InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding;
-                    // TODO do this elsewhere
                     PrioIngreepMeldingenData.Uitmeldingen.Add(m);
                     break;
                 default:
@@ -67,9 +67,13 @@ namespace TLCGen.ViewModels
             }
 
             Meldingen.Add(new PrioIngreepInUitMeldingViewModel(m, this));
-            var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
+            m.Naam = msg.FaseCyclus 
+                     + msg.Ingreep 
+                     + DefaultsProvider.Default.GetMeldingShortcode(m)
+                     + (MeldingType == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
             MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, m));
         }));
 

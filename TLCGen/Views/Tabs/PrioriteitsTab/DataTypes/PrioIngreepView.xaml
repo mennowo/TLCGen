@@ -50,7 +50,9 @@
                             <ct:InfoElement>
                                 <ct:InfoElement.InfoPopup>
                                     <TextBlock>
-                                        Deze naam wordt tevens gebruikt bij genereren van code
+                                        Deze naam wordt gebruikt bij genereren van code,<LineBreak/>
+                                        en wordt dan verbonden met de naam van de fase: bv. 05tram<LineBreak/>
+                                        De naam moet uniek zijn per fase
                                     </TextBlock>
                                 </ct:InfoElement.InfoPopup>
                             </ct:InfoElement>

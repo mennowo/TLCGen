@@ -6,6 +6,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
@@ -14,7 +15,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private PrioIngreepInUitMeldingViewModel _meldingBijstoring;
         private RelayCommand _removeMeldingCommand;
         private readonly object _parent;
 
@@ -82,9 +82,13 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged("");
 
-                var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+                var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
                 MessengerInstance.Send(msg);
                 if (msg.FaseCyclus == null) return;
+                Naam = msg.FaseCyclus 
+                       + msg.Ingreep 
+                       + DefaultsProvider.Default.GetMeldingShortcode(PrioIngreepInUitMelding)
+                       + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
                 MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
                 RaisePropertyChanged(nameof(HasDet));
                 RaisePropertyChanged(nameof(HasInpSD));
@@ -176,7 +180,6 @@ namespace TLCGen.ViewModels
                 PrioIngreepInUitMelding.OpvangStoring = value;
                 if (value)
                 {
-                    _meldingBijstoring = null;
                     PrioIngreepInUitMelding.MeldingBijstoring = new PrioIngreepInUitMeldingModel()
                     {
                         InUit = this.InUit
@@ -187,7 +190,6 @@ namespace TLCGen.ViewModels
                 {
                     MeldingBijstoring.Clear();
                     PrioIngreepInUitMelding.MeldingBijstoring = null;
-                    _meldingBijstoring = null;
                 }
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(MeldingBijstoring));
@@ -285,7 +287,7 @@ namespace TLCGen.ViewModels
                                switch (_parent)
                                {
                                    case PrioIngreepInUitMeldingViewModel iu:
-                                       iu.MeldingBijstoring.Clear();
+                                       iu.OpvangStoring = false;
                                        break;
                                    case PrioIngreepMeldingenListViewModel list:
                                        list.Meldingen.Remove(this);

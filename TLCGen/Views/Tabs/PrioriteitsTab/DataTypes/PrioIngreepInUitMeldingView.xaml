@@ -40,7 +40,7 @@
                 <controls:InfoElement>
                     <controls:InfoElement.InfoPopup>
                         <TextBlock>
-                            Deze naam wordt uitsluitend in de gebruikersinterface gebruikt
+                            Deze naam wordt momenteel uitsluitend in de gebruikersinterface gebruikt.
                         </TextBlock>
                     </controls:InfoElement.InfoPopup>
                 </controls:InfoElement>
