@@ -802,8 +802,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (!first) sb.AppendLine(" ||");
                                     var itf = c.RISData.HasMultipleSystemITF
-                                        ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : 0;
-                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief({_fcpf}{ov.FaseCyclus}, SYSTEM_ITF{itf + 1}, PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], RIS_BUS, PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], SCH[{_schpf}{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}])");
+                                        ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
+                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief({_fcpf}{ov.FaseCyclus}, SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], RIS_BUS, PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], SCH[{_schpf}{_schrismatchsg}{CCOLCodeHelper.GetPriorityName(ov)}])");
                                     first = false;
                                 }
                                 sb.AppendLine(";");

@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2016 Gemeente Rotterdam, CodingConnected e.U., Menno van der Woude
+Copyright (c) 2016-2020 Gemeente Rotterdam, Gemeente Den Haag, Gemeente 
+Amsterdam, Gemeente Utrecht, CodingConnected e.U., Menno van der Woude
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
