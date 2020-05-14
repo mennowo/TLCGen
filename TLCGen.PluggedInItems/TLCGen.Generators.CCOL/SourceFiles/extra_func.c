@@ -716,7 +716,7 @@ void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, c
 
 	if (((fix != NG && CIF_IS[fix]) || (RR_T_wacht > 0)) && MM[mmwtm])         /* fixatie of prio-ingreep terwijl wachttijdlantaarn aan staat  */
 	{
-		if (MM[mmwtm] > 1)       MM[mmwtm] = MM[mmwtv] - Knipper_1Hz;     /* bij aantal leds groter dan 1 = actuele ledje laten knipperen */
+		if (MM[mmwtv] > 1)       MM[mmwtm] = MM[mmwtv] - Knipper_1Hz;     /* bij aantal leds groter dan 1 = actuele ledje laten knipperen */
 		else                     MM[mmwtm] = MM[mmwtv] + Knipper_1Hz;     /* bij ??n leds de voorgaande led, zodat de wtv niet uitgaat    */
 	}
 	else                        MM[mmwtm] = MM[mmwtv];            /* anders berekende aantal leds gewoon overnemen                */
