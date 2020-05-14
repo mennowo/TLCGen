@@ -281,14 +281,6 @@ namespace TLCGen.ModelManagement
                     {
                         prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
                     }
-
-                    foreach (var m in prio.MeldingenData.Inmeldingen)
-                    {
-                        if (string.IsNullOrWhiteSpace(m.Naam))
-                        {
-                            m.Naam = DefaultsProvider.Default.GetMeldingShortcode(m);
-                        }
-                    }
                 }
 
                 // Detectoren bij fasen hebben nu een expliciete link met de fase
@@ -297,6 +289,23 @@ namespace TLCGen.ModelManagement
                     foreach (var d in sg.Detectoren)
                     {
                         d.FaseCyclus = sg.Naam;
+                    }
+                }
+            }
+
+            checkVer = Version.Parse("0.7.8.0");
+            if (v < checkVer)
+            {
+                // Prioriteismeldingen hebben nu een naam die wordt weergegeven in de UI
+                foreach (var prio in controller.PrioData.PrioIngrepen)
+                {
+                    foreach (var m in prio.MeldingenData.Inmeldingen.Where(m => string.IsNullOrWhiteSpace(m.Naam)))
+                    {
+                        m.Naam = prio.FaseCyclus + DefaultsProvider.Default.GetMeldingShortcode(m) + "in";
+                    }
+                    foreach (var m in prio.MeldingenData.Uitmeldingen.Where(m => string.IsNullOrWhiteSpace(m.Naam)))
+                    {
+                        m.Naam = prio.FaseCyclus + DefaultsProvider.Default.GetMeldingShortcode(m) + "uit";
                     }
                 }
             }

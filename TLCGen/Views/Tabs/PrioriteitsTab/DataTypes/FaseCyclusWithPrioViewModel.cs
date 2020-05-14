@@ -17,7 +17,35 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class FaseCyclusWithPrioViewModel : ViewModelBase, IComparable
+    public class PrioItemViewModel : ViewModelBase
+    {
+        private bool _isExpanded;
+        private bool _isSelected;
+
+        [Browsable(false)]
+        public virtual bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                _isExpanded = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        [Browsable(false)]
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value; 
+                RaisePropertyChanged();
+            }
+        }
+    }
+
+    public class FaseCyclusWithPrioViewModel : PrioItemViewModel, IComparable
     {
         private RelayCommand _addIngreepCommand;
         private RelayCommand<PrioIngreepViewModel> _removeIngreepCommand;
@@ -41,6 +69,24 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public ObservableCollection<PrioIngreepViewModel> Ingrepen { get; }
+
+        [Browsable(false)]
+        public override bool IsExpanded
+        {
+            get => base.IsExpanded;
+            set
+            {
+                base.IsExpanded = value;
+                foreach (var ingreep in Ingrepen)
+                {
+                    ingreep.IsExpanded = value;
+                    foreach (var list in ingreep.MeldingenLists)
+                    {
+                        list.IsExpanded = value;
+                    }
+                }
+            }
+        }
 
         #endregion // Proprerties
 

@@ -15,7 +15,7 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepMeldingenListViewModel : ViewModelBase
+    public class PrioIngreepMeldingenListViewModel : PrioItemViewModel
     {
         #region Fields
 

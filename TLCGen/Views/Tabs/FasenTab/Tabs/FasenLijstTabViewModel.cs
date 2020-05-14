@@ -300,13 +300,9 @@ namespace TLCGen.ViewModels
                     addedfasen.Add(item.FaseCyclus);
                 }
             }
-
-            if (!_IsSorting)
-            {
-                Messenger.Default.Send(new FasenChangingMessage(addedfasen, removedfasen));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                Messenger.Default.Send(new ControllerDataChangedMessage());
-            }
+            
+            Messenger.Default.Send(new FasenChangingMessage(addedfasen, removedfasen));
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
