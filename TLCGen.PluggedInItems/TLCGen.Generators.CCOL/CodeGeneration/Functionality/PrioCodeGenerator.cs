@@ -405,7 +405,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 var inRis = ov.MeldingenData.Inmeldingen.Where(x =>
                     x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
-                var uitRis = ov.MeldingenData.Inmeldingen.Where(x =>
+                var uitRis = ov.MeldingenData.Uitmeldingen.Where(x =>
                     x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
 
                 if (inRis.Any() || uitRis.Any())
@@ -1070,12 +1070,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         .ToList();
                     if (ovRis.Any())
                     {
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}/* Verstuur SSM */");
-                        foreach (var ov in ovRis)
-                        {
-                            sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
-                        }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Vasthouden laatste seconden granted */");
                         foreach (var ov in ovRis)
