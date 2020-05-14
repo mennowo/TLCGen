@@ -7,7 +7,6 @@
 #include "prio.h"
 
 void ris_verstuur_ssm(int prioFcsrm);
-boolv kg(count i);
 void ris_ym(int prioFcsrm, count tym, count tym_max);
 
 #endif // EXTRA_FUNC_RIS

@@ -107,32 +107,6 @@ void ris_verstuur_ssm(int prioFcsrm) { /* @@@ CCA */
    }
 }
 
-/* KG */ /*CCA@@@*/
-/* kg() tests G for the conflicting phasecycles.
- * kg() returns TRUE if an "G[]" is detected, otherwise FALSE.
- * kg() can be used in the function application().
- */
-
-#if !defined (CCOLFUNC)
-
-
-boolv kg(count i)
-{
-   register count n, j;
-
-#ifndef NO_GGCONFLICT
-   for (n=0; n<GKFC_MAX[i]; n++) {
-#else
-   for (n=0; n<KFC_MAX[i]; n++) {
-#endif
-      j=KF_pointer[i][n];
-      if (G[j])  return (TRUE);
-   }
-   return (FALSE);
-   }
-
-#endif
-
 void ris_ym(int prioFcsrm, count tym, count tym_max) { /* @@@ CCA */
 /* Moet eigengelijk gebueren op basis van ETA. Nu op basis van rijtijd (op ongeveer 250 meter dus onnauwkeurig). Optie om uit te werken op basis van aanwezigheid voertuig x meter voor de stopstreep met granted?
  */

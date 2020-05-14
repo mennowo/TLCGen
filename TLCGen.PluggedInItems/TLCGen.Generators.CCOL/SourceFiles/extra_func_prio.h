@@ -12,10 +12,9 @@ bool DSIMelding_HD_V1(count dir, count meldingtype, bool check_sirene);
 void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat);
 void PRIO_teller(count cov, count scov);
 
-rif_bool ris_inmelding_selectief(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup);
-rif_bool ris_uitmelding_selectief(count fc);
-void ris_ym(int prioFcsrm, count tym, count tym_max);
-void ris_verstuur_ssm(int prioFcsrm);
+#if !defined (CCOLFUNC)
+boolv kg(count i);
+#endif
 
 #ifdef CCOL_IS_SPECIAL
 void reset_DSI_message(void);

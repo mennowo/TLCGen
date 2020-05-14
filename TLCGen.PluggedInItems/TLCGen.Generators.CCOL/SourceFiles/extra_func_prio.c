@@ -352,3 +352,27 @@ bool WDNST_check_uit(count fc)
 }
 
 #endif // PRIO_CHECK_WAGENNMR
+
+/* KG */ /*CCA@@@*/
+/* kg() tests G for the conflicting phasecycles.
+ * kg() returns TRUE if an "G[]" is detected, otherwise FALSE.
+ * kg() can be used in the function application().
+ */
+#if !defined (CCOLFUNC)
+
+boolv kg(count i)
+{
+   register count n, j;
+
+#ifndef NO_GGCONFLICT
+   for (n = 0; n < GKFC_MAX[i]; ++n) {
+#else
+   for (n = 0; n < KFC_MAX[i]; ++n) {
+#endif
+      j = KF_pointer[i][n];
+      if (G[j]) return TRUE;
+   }
+   return FALSE;
+}
+
+#endif
