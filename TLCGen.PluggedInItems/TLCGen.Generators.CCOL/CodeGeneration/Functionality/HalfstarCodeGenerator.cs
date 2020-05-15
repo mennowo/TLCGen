@@ -28,8 +28,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _hiks;
         private string _prmxnl;
         private string _hnla;
-        private string _hovin;
-        private string _hovuit;
+        private string _hprioin;
+        private string _hpriouit;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -1720,8 +1720,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
 
-            _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
+            _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
 
             return base.SetSettings(settings);
 		}

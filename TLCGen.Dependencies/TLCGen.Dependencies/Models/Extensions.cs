@@ -19,6 +19,11 @@ namespace TLCGen.Models
             return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren).Where(predicate);
         }
 
+        public static FaseCyclusModel GetFaseCyclus(this ControllerModel c, string naam)
+        {
+            return c.Fasen.FirstOrDefault(x => x.Naam == naam);
+        }
+
         public static bool HasOVIngreepVecomIO(this PrioIngreepModel ov)
         {
             return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)) ||

@@ -1,0 +1,257 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using TLCGen.Extensions;
+using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
+using TLCGen.Models;
+using TLCGen.Plugins;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+
+namespace TLCGen.ViewModels
+{
+    public class NevenMeldingViewModel : ViewModelBase, IViewModelWithItem
+    {
+        #region Properties
+
+        public NevenMeldingModel NevenMelding { get; }
+
+        public string FaseCyclus1
+        {
+            get => NevenMelding.FaseCyclus1;
+            set
+            {
+                NevenMelding.FaseCyclus1 = value;
+                if (FaseCyclus2 == value) FaseCyclus2 = null;
+                if (FaseCyclus3 == value) FaseCyclus3 = null;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public string FaseCyclus2
+        {
+            get => NevenMelding.FaseCyclus2;
+            set
+            {
+                NevenMelding.FaseCyclus2 = value; 
+                if (FaseCyclus1 == value) FaseCyclus1 = null;
+                if (FaseCyclus3 == value) FaseCyclus3 = null;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public string FaseCyclus3
+        {
+            get => NevenMelding.FaseCyclus3;
+            set
+            {
+                NevenMelding.FaseCyclus3 = value; 
+                if (FaseCyclus1 == value) FaseCyclus1 = null;
+                if (FaseCyclus2 == value) FaseCyclus2 = null;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public int BezetTijdLaag
+        {
+            get => NevenMelding.BezetTijdLaag;
+            set
+            {
+                NevenMelding.BezetTijdLaag = value; 
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public int BezetTijdHoog
+        {
+            get => NevenMelding.BezetTijdHoog;
+            set
+            {
+                NevenMelding.BezetTijdHoog = value; 
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return NevenMelding;
+        }
+
+        #endregion // IViewModelWithItem
+
+        #region Constructor
+
+        public NevenMeldingViewModel(NevenMeldingModel nevenMelding)
+        {
+            NevenMelding = nevenMelding;
+        }
+        
+        #endregion // Constructor
+    }
+
+    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.PrioriteitTab)]
+    public class PrioriteitSpecialsTabViewModel : TLCGenTabItemViewModel
+    {
+        
+        #region Fields
+
+        private RelayCommand _addNevenMeldingCommand;
+        private RelayCommand _removeNevenMeldingCommand;
+        private ObservableCollectionAroundList<NevenMeldingViewModel, NevenMeldingModel> _nevenMeldingen;
+        private NevenMeldingViewModel _selectedNevenMelding;
+        private ObservableCollection<string> _selectableFasen = new ObservableCollection<string>();
+        private ObservableCollection<string> _selectableFasen1 = new ObservableCollection<string>();
+
+        #endregion // Fields
+
+        #region Properties
+
+        public ObservableCollectionAroundList<NevenMeldingViewModel, NevenMeldingModel> NevenMeldingen
+        {
+            get => _nevenMeldingen;
+            private set
+            {
+                _nevenMeldingen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public NevenMeldingViewModel SelectedNevenMelding
+        {
+            get => _selectedNevenMelding;
+            set
+            {
+                _selectedNevenMelding = value; 
+                RaisePropertyChanged();
+                UpdateSelectables();
+            }
+        }
+        
+        public ObservableCollection<string> SelectableFasen1
+        {
+            get => _selectableFasen1;
+            private set
+            {
+                _selectableFasen1 = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> SelectableFasen
+        {
+            get => _selectableFasen;
+            private set
+            {
+                _selectableFasen = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion // Properties
+
+        #region TabItem Overrides
+
+        public override string DisplayName => "Specials";
+
+        public override bool CanBeEnabled()
+        {
+            return _Controller?.PrioData?.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen;
+        }
+
+        public override void OnSelected()
+        {
+            UpdateSelectables();
+        }
+
+        public override ControllerModel Controller
+        {
+            get => _Controller;
+            set
+            {
+                _Controller = value;
+                if(_Controller != null)
+                {
+                    UpdateSelectables();
+                    NevenMeldingen = new ObservableCollectionAroundList<NevenMeldingViewModel, NevenMeldingModel>(_Controller.PrioData.NevenMeldingen);
+                }
+                else
+                {
+                }
+                RaisePropertyChanged("");
+            }
+        }
+
+        #endregion // TabItem Overrides
+
+        #region Commands
+        
+        public ICommand AddNevenMeldingCommand => _addNevenMeldingCommand ?? (_addNevenMeldingCommand = new RelayCommand(() =>
+        {
+            var nm = new NevenMeldingViewModel(new NevenMeldingModel
+            {
+                FaseCyclus3 = "NG"
+            });
+            NevenMeldingen.Add(nm);
+            SelectedNevenMelding = nm;
+        }));
+        
+        public ICommand RemoveNevenMeldingCommand => _removeNevenMeldingCommand ?? (_removeNevenMeldingCommand = new RelayCommand(() =>
+        {
+            NevenMeldingen.Remove(SelectedNevenMelding);
+            SelectedNevenMelding = NevenMeldingen.FirstOrDefault();
+        },
+        () => SelectedNevenMelding != null));
+
+        #endregion // Commands
+
+        #region Private methods
+
+        private void UpdateSelectables()
+        {
+            var fasen = new List<string> {"NG"};
+            var fasen1 = _Controller.Fasen.Where(x => x.NameAsInt >= 40 && x.NameAsInt < 60).Select(x => x.Naam).ToList();
+            fasen.AddRange(fasen1);
+            SelectableFasen.Clear();
+            SelectableFasen1.Clear();
+            SelectableFasen.AddRange(fasen);
+            SelectableFasen1.AddRange(fasen1);
+        }
+
+        #endregion // Private methods
+
+        #region Public methods
+
+        #endregion // Public methods
+
+        #region TLCGen events
+
+        public void OnPrioIngrepenChangedMessage(PrioIngrepenChangedMessage message)
+        {
+            // TODO
+        }
+
+        private void OnFasenChanged(FasenChangedMessage obj)
+        {
+            UpdateSelectables();
+        }
+
+        #endregion TLCGen events
+
+        #region Constructor
+
+        public PrioriteitSpecialsTabViewModel()
+        {
+            MessengerInstance.Register(this, new Action<PrioIngrepenChangedMessage>(OnPrioIngrepenChangedMessage));
+            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+        }
+
+        #endregion // Constructor
+    }
+}

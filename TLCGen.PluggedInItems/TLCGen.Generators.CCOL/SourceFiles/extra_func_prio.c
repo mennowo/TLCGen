@@ -376,3 +376,68 @@ boolv kg(count i)
 }
 
 #endif
+
+void NevenMelding(count ov1,      /* OV fasecyclus 1                */
+                  count ov2,      /* OV fasecyclus 2                */
+                  count ov3,      /* OV fasecyclus 3                */
+                  count d,        /* koplus                         */
+                  count prmrtbl,  /* Bezettijd laag tbv normaal     */
+                  count prmrtbh,  /* Bezettijd hoog tbv OV aanwezig */
+                  count hovss1,   /* hulpelement ov bij SS     fc1  */
+                  count hovss2,   /* hulpelement ov bij SS     fc2  */
+                  count hovss3,   /* hulpelement ov bij SS     fc3  */
+                  count hneven1,  /* hulpelement nevenmelding  fc1  */
+                  count hneven2,  /* hulpelement nevenmelding  fc2  */
+                  count hneven3,  /* hulpelement nevenmelding  fc3  */
+                  count prmrtn    /* rijtijd nevenmelding OK        */
+                  )
+{
+  /* ------------------------------------------------------------ */
+  /* FC-indices bepalen behorende bij OV-fc's                     */
+  /* ------------------------------------------------------------ */
+  count fc1;
+  count fc2;
+  count fc3;
+
+  fc1 =                    iFC_PRIOix[ov1];
+  fc2 =                    iFC_PRIOix[ov2];
+  fc3 = (ov3 == NG) ? NG : iFC_PRIOix[ov3];
+
+  /* ------------------------------------------------------------ */
+  /* Als koplus bezet, nevenmelding als geldt:                    */
+  /* - rood en niet garantierood                                  */
+  /* - en geen OV-voertuig aanwezig                               */
+  /* - en op andere richting wel OV-voertuig aanwezig             */
+  /* - en dit voertuig heeft stopstreep nog niet kunnen bereiken  */
+  /* ------------------------------------------------------------ */
+    IH[hneven1] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc2 */
+    IH[hneven2] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc1 */
+
+  if(fc3 != NG)
+  {
+    IH[hneven1] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc3 */
+    IH[hneven2] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc3 */
+    IH[hneven3] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc1 */
+    IH[hneven3] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc2 */
+  }
+
+  /* ------------------------------------------------------------ */
+  /* nevenmelding onthouden:                                      */
+  /* - zolang hiaattijd van koplus loopt                          */
+  /* - maar nooit langer onthouden dan t/m vastgroentijd          */
+  /* ------------------------------------------------------------ */
+    IH[hneven1] = IH[hneven1] && TDH[d] && (R[fc1] || VS[fc1] || FG[fc1]);
+    IH[hneven2] = IH[hneven2] && TDH[d] && (R[fc2] || VS[fc2] || FG[fc2]);
+
+  if(fc3 != NG)
+    IH[hneven3] = IH[hneven3] && TDH[d] && (R[fc3] || VS[fc3] || FG[fc3]);
+
+  /* ------------------------------------------------------------ */
+  /* Bezettijd instellen (tbv voorkomen valse aanvraag):          */
+  /* - Hoge waarde bij OV aanwezig bij stopstreep                 */
+  /* - Anders lage/normale waarde bij geen OV aanwezig            */
+  /* ------------------------------------------------------------ */
+  TDB_max[d] =                IH[hovss1] ||
+                              IH[hovss2] ||
+               (fc3 != NG) && IH[hovss3] ? PRM[prmrtbh] : PRM[prmrtbl];
+}

@@ -811,131 +811,124 @@ namespace TLCGen.ViewModels
             var tmpCurDir = Directory.GetCurrentDirectory();
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 
-            try
+            GuiActionsManager.SetStatusBarMessage = (string text) => { StatusBarVM.StatusText = text; };
+
+            MessengerInstance.Register(this,
+                new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+            MessengerInstance.Register(this, new Action<ControllerCodeGeneratedMessage>(OnControllerCodeGenerated));
+            MessengerInstance.Register(this,
+                new Action<ControllerProjectGeneratedMessage>(OnControllerProjectGenerated));
+            MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+
+            // Load application settings and defaults
+            ControllerAccessProvider.Default.Setup();
+            TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
+            SettingsProvider.Default.LoadApplicationSettings();
+            DefaultsProvider.Default.LoadSettings();
+            TemplatesProvider.Default.LoadSettings();
+
+            TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
+            TLCGenControllerDataProvider.Default.InjectDefaultAction(
+                x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+
+            var executingAssembly = Assembly.GetExecutingAssembly();
+
+            // Load available applicationparts and plugins
+            var types = from t in executingAssembly.GetTypes()
+                where t.IsClass && t.Namespace == "TLCGen.ViewModels"
+                select t;
+            TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
+            TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
+            TLCGenSplashScreenHelper.ShowText("Laden plugins...");
+            TLCGenPluginManager.Default.LoadPlugins(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
+
+            // Load version info
+            var folderName = $"{executingAssembly.GetName().Name}.Resources.VersionInfo";
+            var files = executingAssembly.GetManifestResourceNames()
+                .Where(r => r.StartsWith(folderName) && r.EndsWith(".rtf")).ToList();
+            files.Sort();
+            foreach (var f in files)
             {
-                GuiActionsManager.SetStatusBarMessage = (string text) =>
-                {
-                    StatusBarVM.StatusText = text;
-                };
-
-                MessengerInstance.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
-                MessengerInstance.Register(this, new Action<ControllerCodeGeneratedMessage>(OnControllerCodeGenerated));
-                MessengerInstance.Register(this, new Action<ControllerProjectGeneratedMessage>(OnControllerProjectGenerated));
-                MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
-
-                // Load application settings and defaults
-                ControllerAccessProvider.Default.Setup();
-                TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
-                SettingsProvider.Default.LoadApplicationSettings();
-                DefaultsProvider.Default.LoadSettings();
-                TemplatesProvider.Default.LoadSettings();
-
-                TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
-                TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
-                
-                var executingAssembly = Assembly.GetExecutingAssembly();
-
-                // Load available applicationparts and plugins
-                var types = from t in executingAssembly.GetTypes()
-                            where t.IsClass && t.Namespace == "TLCGen.ViewModels"
-                            select t;
-                TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
-                TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
-                TLCGenSplashScreenHelper.ShowText("Laden plugins...");
-                TLCGenPluginManager.Default.LoadPlugins(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
-
-                // Load version info
-                var folderName = $"{executingAssembly.GetName().Name}.Resources.VersionInfo";
-                var files = executingAssembly.GetManifestResourceNames().Where(r => r.StartsWith(folderName) && r.EndsWith(".rtf")).ToList();
-                files.Sort();
-                foreach (var f in files)
-                {
-                    var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
-                    var text = reader.ReadToEnd();
-                    VersionFiles.Add(new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")), text));
-                }
-
-                // Instantiate all parts
-                ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
-                var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
-                foreach (var part in parts)
-                {
-                    var instpl = part.Item2;
-                    TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
-                    var flags = Enum.GetValues(typeof(TLCGenPluginElems));
-                    foreach (TLCGenPluginElems elem in flags)
-                    {
-                        if ((part.Item1 & elem) == elem)
-                        {
-                            switch (elem)
-                            {
-                                case TLCGenPluginElems.Generator:
-                                    Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
-                                    break;
-                                case TLCGenPluginElems.HasSettings:
-                                    ((ITLCGenHasSettings)instpl).LoadSettings();
-                                    break;
-                                case TLCGenPluginElems.Importer:
-                                    var mi = new MenuItem
-                                    {
-                                        Header = instpl.GetPluginName(),
-                                        Command = ImportControllerCommand,
-                                        CommandParameter = instpl
-                                    };
-                                    ImportMenuItems.Add(mi);
-                                    break;
-                                case TLCGenPluginElems.IOElementProvider:
-                                    break;
-                                case TLCGenPluginElems.MenuControl:
-                                    PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
-                                    break;
-                                case TLCGenPluginElems.TabControl:
-                                    break;
-                                case TLCGenPluginElems.ToolBarControl:
-                                    break;
-                                case TLCGenPluginElems.XMLNodeWriter:
-                                    break;
-                                case TLCGenPluginElems.PlugMessaging:
-                                    (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
-                                    break;
-                                case TLCGenPluginElems.Switcher:
-                                    (instpl as ITLCGenSwitcher).ControllerSet += (sender, model) => { SetController(model); };
-                                    (instpl as ITLCGenSwitcher).FileNameSet += (sender, model) =>
-                                        {
-                                            TLCGenControllerDataProvider.Default.ControllerFileName = model;
-                                        };
-                                    break;
-                            }
-                        }
-                        TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);
-                    }
-                    ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
-                }
-                if (Generators.Count > 0) SelectedGenerator = Generators[0];
-
-                // Construct the ViewModel
-                ControllerVM = new ControllerViewModel();
-
-                if (!DesignMode.IsInDesignMode)
-                {
-                    if (Application.Current != null && Application.Current.MainWindow != null)
-                        Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
-                }
+                var reader = new StreamReader(executingAssembly.GetManifestResourceStream(f));
+                var text = reader.ReadToEnd();
+                VersionFiles.Add(
+                    new Tuple<Version, string>(Version.Parse(f.Replace($"{folderName}.", "").Replace(".rtf", "")),
+                        text));
             }
-            catch (Exception e)
-            {
-                TLCGenSplashScreenHelper.Hide();
 
-                var message = "Er is een onverwachte fout opgetreden.\n\n";
-                message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
-                var win = new UnhandledExceptionWindow
+            // Instantiate all parts
+            ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
+            var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default
+                .ApplicationPlugins);
+            foreach (var part in parts)
+            {
+                var instpl = part.Item2;
+                TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
+                var flags = Enum.GetValues(typeof(TLCGenPluginElems));
+                foreach (TLCGenPluginElems elem in flags)
                 {
-                    DialogTitle = "Onverwachte fout in TLCGen",
-                    DialogMessage = message,
-                    DialogExpceptionText = e.ToString(),
-                    Owner = Application.Current.MainWindow
-                };
-                win.ShowDialog();
+                    if ((part.Item1 & elem) == elem)
+                    {
+                        switch (elem)
+                        {
+                            case TLCGenPluginElems.Generator:
+                                Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                                break;
+                            case TLCGenPluginElems.HasSettings:
+                                ((ITLCGenHasSettings) instpl).LoadSettings();
+                                break;
+                            case TLCGenPluginElems.Importer:
+                                var mi = new MenuItem
+                                {
+                                    Header = instpl.GetPluginName(),
+                                    Command = ImportControllerCommand,
+                                    CommandParameter = instpl
+                                };
+                                ImportMenuItems.Add(mi);
+                                break;
+                            case TLCGenPluginElems.IOElementProvider:
+                                break;
+                            case TLCGenPluginElems.MenuControl:
+                                PluginMenuItems.Add(((ITLCGenMenuItem) instpl).Menu);
+                                break;
+                            case TLCGenPluginElems.TabControl:
+                                break;
+                            case TLCGenPluginElems.ToolBarControl:
+                                break;
+                            case TLCGenPluginElems.XMLNodeWriter:
+                                break;
+                            case TLCGenPluginElems.PlugMessaging:
+                                (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
+                                break;
+                            case TLCGenPluginElems.Switcher:
+                                (instpl as ITLCGenSwitcher).ControllerSet += (sender, model) =>
+                                {
+                                    SetController(model);
+                                };
+                                (instpl as ITLCGenSwitcher).FileNameSet += (sender, model) =>
+                                {
+                                    TLCGenControllerDataProvider.Default.ControllerFileName = model;
+                                };
+                                break;
+                        }
+                    }
+
+                    TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(),
+                        SettingsProvider.Default.Settings.CustomData);
+                }
+
+                ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
+            }
+
+            if (Generators.Count > 0) SelectedGenerator = Generators[0];
+
+            // Construct the ViewModel
+            ControllerVM = new ControllerViewModel();
+
+            if (!DesignMode.IsInDesignMode)
+            {
+                if (Application.Current != null && Application.Current.MainWindow != null)
+                    Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
             }
 
             Directory.SetCurrentDirectory(tmpCurDir);
@@ -1005,6 +998,7 @@ namespace TLCGen.ViewModels
             });
 #endif
         }
+
         #endregion // Constructor
 
         #region IDropTarget

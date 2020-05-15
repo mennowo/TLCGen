@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using Microsoft.Build.Framework.XamlTypes;
 using NUnit.Framework;
 using TLCGen.Generators.CCOL;
 using TLCGen.Generators.CCOL.ProjectGeneration;
@@ -17,6 +18,112 @@ namespace TLCGen.UnitTests.Build
     [TestFixture]
     public class BuildTests
     {
+        private ControllerModel GetEmptyController()
+        {
+            var c = new ControllerModel();
+
+            c.Data.SetSegmentOutputs();
+            c.Data.Naam = "TEST";
+            c.Data.CCOLVersie = CCOLVersieEnum.CCOL100;
+            c.Data.Intergroen = true;
+            
+            var groenSet = new GroentijdenSetModel {Type = GroentijdenTypeEnum.MaxGroentijden, Naam = "MG1"};
+            c.GroentijdenSets.Add(groenSet);
+            groenSet = new GroentijdenSetModel {Type = GroentijdenTypeEnum.MaxGroentijden, Naam = "MG2"};
+            c.GroentijdenSets.Add(groenSet);
+
+            
+            c.PeriodenData.DefaultPeriodeNaam = "dal";
+            c.PeriodenData.DefaultPeriodeGroentijdenSet = "MG1";
+
+            c.PeriodenData.Perioden.Add(new PeriodeModel
+            {
+                StartTijd = new TimeSpan(0, 0, 0),
+                EindTijd = new TimeSpan(24, 0, 0), 
+                Naam = "dag", 
+                GroentijdenSet = "MG1", 
+                Type = PeriodeTypeEnum.Groentijden,
+                DagCode = PeriodeDagCodeEnum.AlleDagen
+            });
+
+            c.PeriodenData.Perioden.Add(new PeriodeModel
+            {
+                StartTijd = new TimeSpan(6, 0, 0),
+                EindTijd = new TimeSpan(9, 0, 0), 
+                Naam = "ochtend", 
+                GroentijdenSet = "MG2", 
+                Type = PeriodeTypeEnum.Groentijden,
+                DagCode = PeriodeDagCodeEnum.Werkdagen
+            });
+
+            return c;
+        }
+
+        private static void AddFaseToController(ControllerModel c, string naam, FaseTypeEnum type, int ml)
+        {
+            var fc = new FaseCyclusModel
+            {
+                Naam = naam, Type = type,
+            };
+
+            switch (fc.Type)
+            {
+                case FaseTypeEnum.Auto:
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "1", Type = DetectorTypeEnum.Kop
+                    });
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "2", Type = DetectorTypeEnum.Lang
+                    });
+                    break;
+                case FaseTypeEnum.Fiets:
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "1", Type = DetectorTypeEnum.Kop
+                    });
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "2", Type = DetectorTypeEnum.Verweg
+                    });
+                    
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = "k" + naam, Type = DetectorTypeEnum.Knop
+                    });
+                    break;
+                case FaseTypeEnum.Voetganger:
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "1", Type = DetectorTypeEnum.KnopBuiten
+                    });
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "2", Type = DetectorTypeEnum.KnopBinnen
+                    });
+                    break;
+                case FaseTypeEnum.OV:
+                    fc.Detectoren.Add(new DetectorModel
+                    {
+                        Naam = naam + "1", Type = DetectorTypeEnum.Kop
+                    });
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            var i = Math.Max(1, c.ModuleMolen.Modules.Count);
+            while (ml > c.ModuleMolen.Modules.Count - 1)
+            {
+                c.ModuleMolen.Modules.Add(new ModuleModel{Naam = "ML" + i});
+                ++i;
+            }
+            c.ModuleMolen.Modules[ml].Fasen.Add(new ModuleFaseCyclusModel{FaseCyclus = naam});
+
+            c.Fasen.Add(fc);
+        }
+
         private ControllerModel GetBasicController()
         {
             var c = new ControllerModel();
@@ -227,6 +334,87 @@ namespace TLCGen.UnitTests.Build
 
             Assert.AreEqual(0, p.ExitCode);
         }
+
+        
+        [Test]
+        public void SimpleControllerWithPrioAndNevenMelding_Generated_BuildsSuccesfully()
+        {
+            var path = @"C:\temp\TLCGen_buildTests\basisMetPrioEnNevenMelding";
+            var output = new List<string>();
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            else
+            {
+                Directory.Delete(path, true);
+                Directory.CreateDirectory(path);
+            }
+            
+            var c = GetEmptyController();
+            AddFaseToController(c, "02", FaseTypeEnum.Auto, 0);
+            AddFaseToController(c, "05", FaseTypeEnum.Auto, 1);
+            AddFaseToController(c, "41", FaseTypeEnum.OV, 2);
+            AddFaseToController(c, "42", FaseTypeEnum.OV, 2);
+            c.Fasen[2].Detectoren.Clear();
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "02", FaseNaar = "05", Waarde = 20, GarantieWaarde = 20});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "05", FaseNaar = "02", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "02", FaseNaar = "41", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "02", FaseNaar = "42", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "05", FaseNaar = "41", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "05", FaseNaar = "42", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "41", FaseNaar = "02", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "42", FaseNaar = "02", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "41", FaseNaar = "05", Waarde = 50, GarantieWaarde = 50});
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel{FaseVan = "42", FaseNaar = "05", Waarde = 50, GarantieWaarde = 50});
+
+            c.PrioData.PrioIngreepType = PrioIngreepTypeEnum.GeneriekePrioriteit;
+            var ingreep = new PrioIngreepModel
+            {
+                FaseCyclus = "41",
+                Type = PrioIngreepVoertuigTypeEnum.Bus
+            };
+            ingreep.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding
+            });
+            ingreep.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding
+            });
+            c.PrioData.PrioIngrepen.Add(ingreep);
+            ingreep = new PrioIngreepModel
+            {
+                FaseCyclus = "42",
+                Type = PrioIngreepVoertuigTypeEnum.Bus
+            };
+            ingreep.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding
+            });
+            ingreep.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding
+            });
+            c.PrioData.PrioIngrepen.Add(ingreep);
+            c.PrioData.NevenMeldingen.Add(new NevenMeldingModel
+            {
+                FaseCyclus1 = "41", FaseCyclus2 = "42", FaseCyclus3 = "NG", BezetTijdHoog = 50, BezetTijdLaag = 20
+            });
+
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "02" });
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "05" });
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "41" });
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "42" });
+
+            GenerateController(path, c);
+
+            var p = BuildController(path, output);
+
+            Assert.AreEqual(0, p.ExitCode);
+        }
+
 
         [Test]
         public void SimpleControllerWithStar_Generated_BuildsSuccesfully()

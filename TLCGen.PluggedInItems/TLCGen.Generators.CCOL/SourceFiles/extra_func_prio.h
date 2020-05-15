@@ -27,3 +27,5 @@ bool WDNST_check_in(count fc);
 bool WDNST_check_uit(count fc);
 #endif
 #endif
+
+void NevenMelding(count ov1, count ov2, count ov3, count d, count prmrtbl, count prmrtbh, count hovss1, count hovss2, count hovss3, count hneven1, count hneven2, count hneven3, count prmrtn);

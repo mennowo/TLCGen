@@ -44,6 +44,8 @@ namespace TLCGen.Models
         public List<PrioIngreepModel> PrioIngrepen { get; set; }
         [XmlArrayItem(ElementName = "HDIngreep")]
         public List<HDIngreepModel> HDIngrepen { get; set; }
+        [XmlArrayItem(ElementName = "NevenMelding")]
+        public List<NevenMeldingModel> NevenMeldingen { get; set; }
         public List<PrioIngreepSignaalGroepParametersModel> PrioIngreepSignaalGroepParameters { get; set; }
         public bool PrioIngreepSignaalGroepParametersHard { get; set; }
 
@@ -86,9 +88,26 @@ namespace TLCGen.Models
             MaximaleWachttijdOverschredenBitmapData = new BitmapCoordinatenDataModel();
             PrioIngrepen = new List<PrioIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
+            NevenMeldingen = new List<NevenMeldingModel>();
             PrioIngreepSignaalGroepParameters = new List<PrioIngreepSignaalGroepParametersModel>();
         }
         
         #endregion // Constructor
+    }
+    
+    [Serializable]
+    public class NevenMeldingModel
+    {
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
+        public string FaseCyclus1 { get; set; }
+
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
+        public string FaseCyclus2 { get; set; }
+
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
+        public string FaseCyclus3 { get; set; }
+
+        public int BezetTijdLaag { get; set; }
+        public int BezetTijdHoog { get; set; }
     }
 }

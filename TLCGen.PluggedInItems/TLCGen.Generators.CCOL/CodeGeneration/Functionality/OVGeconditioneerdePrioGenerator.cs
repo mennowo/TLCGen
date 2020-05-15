@@ -13,9 +13,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         #region Fields
 
-        private string _hov;
-        private string _hovin;
-        private string _hovuit;
+        private string _hprio;
+        private string _hprioin;
+        private string _hpriouit;
         private string _cvc;
         private string _cvchd;
         private string _hplact;
@@ -129,7 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hovin}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hovuit}{CCOLCodeHelper.GetPriorityName(ov)}, &iAantInm{CCOLCodeHelper.GetPriorityName(ov)}, iKARInSTP{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hov}{CCOLCodeHelper.GetPriorityName(ov)}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
+                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov)}, &iAantInm{CCOLCodeHelper.GetPriorityName(ov)}, iKARInSTP{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(ov)}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
@@ -255,9 +255,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
-            _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            _hprio = CCOLGeneratorSettingsProvider.Default.GetElementName("hprio");
+            _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
+            _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");

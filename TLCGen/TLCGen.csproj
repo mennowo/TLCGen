@@ -106,6 +106,9 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSpecialsTabView.xaml.cs">
+      <DependentUpon>PrioriteitSpecialsTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\VLOGSettingsDataViewModel.cs" />
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\PrioDataTabViewModel.cs">
       <DependentUpon>PrioDataTabView.xaml</DependentUpon>
@@ -227,6 +230,7 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSimulatieTabViewModel.cs">
       <DependentUpon>PrioriteitSimulatieTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSpecialsTabViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingDetectorViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingView.xaml.cs">
       <DependentUpon>PelotonKoppelingView.xaml</DependentUpon>
@@ -615,6 +619,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSpecialsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

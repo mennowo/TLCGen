@@ -282,12 +282,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtohd");
             var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbghd");
             var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtghd");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hprio = CCOLGeneratorSettingsProvider.Default.GetElementName("hprio");
             var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
-            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
             var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio");
             var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
             var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
@@ -363,7 +359,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Index van het hulpelement voor de ingreep */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iH_PRIOix[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = {_hpf}{_hov}{CCOLCodeHelper.GetPriorityName(prio)};");
+                sb.AppendLine($"{ts}iH_PRIOix[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] = {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(prio)};");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
@@ -990,20 +986,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            var _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
-            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
-            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
             var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tovminrood");
             var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
-            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
-            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
@@ -1025,13 +1016,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* Pririteit-inmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}PrioInmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hovin}{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsNiveau[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], 0, 0);");
+                    sb.AppendLine($"{ts}PrioInmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsNiveau[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(prio)}], 0, 0);");
                 }
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Pririteit-uitmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}PrioUitmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hovuit}{CCOLCodeHelper.GetPriorityName(prio)}]);");
+                    sb.AppendLine($"{ts}PrioUitmelden(prioFC{CCOLCodeHelper.GetPriorityName(prio)}, SH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(prio)}]);");
                 }
                 sb.AppendLine();
             }
@@ -1311,11 +1302,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
             var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("trt");
             var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("trthd");
-            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
             var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hprio = CCOLGeneratorSettingsProvider.Default.GetElementName("hprio");
             var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
 
             sb.AppendLine("/* -------------------------------------------------------");
@@ -1325,7 +1315,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioCcol(void) {");
             foreach (var ov in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hov}{CCOLCodeHelper.GetPriorityName(ov)}, {_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(ov)});");
+                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(ov)}, {_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(ov)}, {_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(ov)});");
             }
             foreach(var hd in c.PrioData.HDIngrepen)
             {

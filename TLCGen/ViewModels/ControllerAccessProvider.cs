@@ -201,8 +201,13 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool _fasenChanging = false;
         private void OnSignalGroupsChanged(FasenChangedMessage obj)
         {
+            if (_fasenChanging) return;
+            
+            _fasenChanging = true;
+
             if (obj.RemovedFasen?.Any() == true)
             {
                 foreach (var sg in obj.RemovedFasen)
@@ -223,6 +228,8 @@ namespace TLCGen.ViewModels
             }
             AllSignalGroups.BubbleSort();
             AllSignalGroupStrings.BubbleSort();
+
+            _fasenChanging = false;
         }
 
         
@@ -246,8 +253,13 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool _detChanging = false;
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
+            if (_detChanging) return;
+
+            _detChanging = true;
+
             if (dmsg.RemovedDetectoren?.Any() == true)
             {
                 foreach (var d in dmsg.RemovedDetectoren)
@@ -273,6 +285,8 @@ namespace TLCGen.ViewModels
                 detectorsCollectionView.Value.Refresh();
             }
             RefreshVecomDetectors();
+
+            _detChanging = false;
         }
 
         private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)

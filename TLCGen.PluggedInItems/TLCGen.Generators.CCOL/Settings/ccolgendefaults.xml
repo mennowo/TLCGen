@@ -884,6 +884,39 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="NevenMeldingenCodeGenerator">
+      <CodePieceData>
+        <ClassName>NevenMeldingenCodeGenerator</ClassName>
+        <Description>Nevenmeldingen</Description>
+        <ElementGenerationOrder>340</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>tdbl</Default>
+            <Setting>tdbl</Setting>
+            <Type>Parameter</Type>
+            <Description>Bezettijd laag nevenmelding koplus _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>tdbh</Default>
+            <Setting>tdbh</Setting>
+            <Type>Parameter</Type>
+            <Description>Bezettijd hoog nevenmelding koplus _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovss</Default>
+            <Setting>ovss</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden aanwezigheid OV bij stopstreep fasecyclus _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>neven</Default>
+            <Setting>neven</Setting>
+            <Type>HulpElement</Type>
+            <Description>Actief zijn nevenmelding fasecyclus _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="OVGeconditioneerdePrioGenerator">
       <CodePieceData>
         <ClassName>OVGeconditioneerdePrioGenerator</ClassName>
@@ -1221,7 +1254,7 @@
             <Default>gb</Default>
             <Setting>gb</Setting>
             <Type>Timer</Type>
-            <Description>Groenbewaking OV fase _E1_</Description>
+            <Description>Groenbewaking prioriteit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>gbhd</Default>
@@ -1233,19 +1266,19 @@
             <Default>rto</Default>
             <Setting>rto</Setting>
             <Type>Parameter</Type>
-            <Description>Ongehinderde rijtijd OV fase _E1_</Description>
+            <Description>Ongehinderde rijtijd prioriteit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtbg</Default>
             <Setting>rtbg</Setting>
             <Type>Parameter</Type>
-            <Description>Beperkt gehinderde rijtijd OV fase _E1_</Description>
+            <Description>Beperkt gehinderde rijtijd prioriteit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtg</Default>
             <Setting>rtg</Setting>
             <Type>Parameter</Type>
-            <Description>Gehinderde rijtijd OV fase _E1_</Description>
+            <Description>Gehinderde rijtijd prioriteit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtohd</Default>
@@ -1269,19 +1302,19 @@
             <Default>blk</Default>
             <Setting>blk</Setting>
             <Type>Timer</Type>
-            <Description>Blokkeertijd na ingreep OV fase _E1_</Description>
+            <Description>Blokkeertijd na prioriteitsingreep fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>btovg</Default>
             <Setting>btovg</Setting>
             <Type>Timer</Type>
-            <Description>Timer bezettijd OV gehinderde rijtijd fase _E1_</Description>
+            <Description>Timer bezettijd prioriteit gehinderde rijtijd fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>ov</Default>
-            <Setting>ov</Setting>
+            <Default>prio</Default>
+            <Setting>prio</Setting>
             <Type>HulpElement</Type>
-            <Description>Bijhouden aanwezigheid OV fase _E1_</Description>
+            <Description>Bijhouden actief zijn prioriteit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>hd</Default>
@@ -1290,16 +1323,16 @@
             <Description>Bijhouden aanwezigheid HD fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>ovin</Default>
-            <Setting>ovin</Setting>
+            <Default>prioin</Default>
+            <Setting>prioin</Setting>
             <Type>HulpElement</Type>
-            <Description>OV inmelding fase _E1_ _E2_</Description>
+            <Description>Prioriteit inmelding fase _E1_ _E2_</Description>
           </Setting>
           <Setting>
-            <Default>ovuit</Default>
-            <Setting>ovuit</Setting>
+            <Default>priouit</Default>
+            <Setting>priouit</Setting>
             <Type>HulpElement</Type>
-            <Description>OV uitmelding _E1_ _E2_</Description>
+            <Description>Prioriteit uitmelding _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>hdin</Default>
@@ -1518,26 +1551,26 @@
             <Description>Minimale roodtijd vooraf aan inmelden mogelijk bij _E1_ (indien ingesteld per inmelding)</Description>
           </Setting>
           <Setting>
-            <Default>ovin</Default>
-            <Setting>ovin</Setting>
+            <Default>prioin</Default>
+            <Setting>prioin</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd inmelden _E1_ _E2_</Description>
           </Setting>
           <Setting>
-            <Default>ovin</Default>
-            <Setting>ovin</Setting>
+            <Default>prioin</Default>
+            <Setting>prioin</Setting>
             <Type>Schakelaar</Type>
             <Description>Inmelden _E1_ via _E2_ toestaan</Description>
           </Setting>
           <Setting>
-            <Default>ovuit</Default>
-            <Setting>ovuit</Setting>
+            <Default>priouit</Default>
+            <Setting>priouit</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd uitmelden _E1_</Description>
           </Setting>
           <Setting>
-            <Default>ovuit</Default>
-            <Setting>ovuit</Setting>
+            <Default>priouit</Default>
+            <Setting>priouit</Setting>
             <Type>Schakelaar</Type>
             <Description>Uitmelden _E1_ via _E2_ toestaan</Description>
           </Setting>
@@ -1601,7 +1634,6 @@
             <Type>Schakelaar</Type>
             <Description>Weergeven wijzigingen PRIO_teller via CIF_UBER</Description>
           </Setting>
-
           <Setting>
             <Default>risprio</Default>
             <Setting>risprio</Setting>
