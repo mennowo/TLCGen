@@ -48,9 +48,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <MenuItem Header="_File" >
-                <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" InputGestureText="Ctrl+N">
+        <Menu Grid.Row="0" AutomationProperties.AutomationId="mainMenu">
+            <MenuItem Header="_File" AutomationProperties.AutomationId="fileMenuItem">
+                <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" InputGestureText="Ctrl+N" AutomationProperties.AutomationId="newFileMenuItem">
                     <MenuItem.Icon>
                         <Image 
                             Width="16" Height="16"
@@ -86,7 +86,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <helpers:RecentFileList x:Name="RecentFileList" MaxNumberOfFiles="10" />
-                <MenuItem Background="Transparent" Header="Exit" Command="{Binding Path=ExitApplicationCommand}" InputGestureText="Alt+F4" >
+                <MenuItem Background="Transparent" Header="Exit" Command="{Binding Path=ExitApplicationCommand}" InputGestureText="Alt+F4" AutomationProperties.AutomationId="exitMenuItem">
                     <MenuItem.Icon>
                         <Image 
                             Width="16" Height="16"
@@ -109,7 +109,7 @@
         </Menu>
         <ToolBarTray Grid.Row="1" x:Name="MainToolBarTray">
             <ToolBar>
-                <Button Command="{Binding Path=NewFileCommand}" ToolTip="Nieuwe regeling (Ctrl-N)">
+                <Button Command="{Binding Path=NewFileCommand}" ToolTip="Nieuwe regeling (Ctrl-N)" AutomationProperties.AutomationId="newFileToolBarItem">
                     <Image Source="{StaticResource NewFileIconDrawingImage}" Width="16" Height="16" />
                 </Button>
                 <Button Command="{Binding Path=OpenFileCommand}" ToolTip="Openen regeling (Ctrl-O)">
@@ -138,8 +138,8 @@
             <Hyperlink Command="{Binding Path=ShowVersionInfoCommand}">hier</Hyperlink> voor informatie over <Bold>belangrijke aandachtspunten</Bold>. 
             Klik <Hyperlink Command="{Binding Path=HideAlertMessageCommand}">hier</Hyperlink> om deze melding te verbergen.
         </TextBlock>
-        <Grid Grid.Row="3" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}">
-            <vw:ControllerView DataContext="{Binding Path=ControllerVM}" />
+        <Grid Grid.Row="3" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}" AutomationProperties.AutomationId="mainGrid">
+            <vw:ControllerView DataContext="{Binding Path=ControllerVM}" AutomationProperties.AutomationId="controllerView" />
         </Grid>
         <vw:TLCGenStatusBar Grid.Row="4" DataContext="{Binding Path=StatusBarVM}" />
     </Grid>

@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -9,42 +11,88 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
+    public class TLCGenTabItemWithSelectionViewModel<T> : TLCGenTabItemViewModel where T : ViewModelBase
+    {
+        private T _selectedItem;
+        private volatile bool _settingMultiple = false;
+        private IList _selectedItems = new ArrayList();
+
+        public T SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IList SelectedItems
+        {
+            get => _selectedItems;
+            set
+            {
+                _selectedItems = value;
+                _settingMultiple = false;
+                RaisePropertyChanged();
+            }
+        }
+
+        
+        #region Event Handling
+
+        private void Item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedItems != null && SelectedItems.Count > 1)
+            {
+                _settingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<FaseCyclusViewModel>(sender, e.PropertyName, SelectedItems);
+            }
+            _settingMultiple = false;
+        }
+
+        #endregion // Event Handling
+
+        public override string DisplayName { get; }
+
+        public void InitCollection(ObservableCollection<T> collection)
+        {
+            collection.CollectionChanged += CollectionOnCollectionChanged;
+        }
+
+        private void CollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (T item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (T item in e.OldItems)
+                {
+                    item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+        }
+    }
+
     [TLCGenTabItem(index: 2, type: TabItemTypeEnum.FasenTab)]
-    public class FasenLijstTimersTabViewModel : TLCGenTabItemViewModel
+    public class FasenLijstTimersTabViewModel : TLCGenTabItemWithSelectionViewModel<FaseCyclusViewModel>
     {
         #region Fields
-
-        private FaseCyclusViewModel _selectedFaseCyclus;
-        private IList _selectedFaseCycli = new ArrayList();
-        private volatile bool _settingMultiple = false;
 
         #endregion // Fields
 
         #region Properties
 
         public ObservableCollection<FaseCyclusViewModel> Fasen => ControllerAccessProvider.Default.AllSignalGroups;
-
-        public FaseCyclusViewModel SelectedFaseCyclus
-        {
-            get => _selectedFaseCyclus;
-	        set
-            {
-                _selectedFaseCyclus = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public IList SelectedFaseCycli
-        {
-            get => _selectedFaseCycli;
-	        set
-            {
-                _selectedFaseCycli = value;
-                _settingMultiple = false;
-                RaisePropertyChanged();
-            }
-        }
-
+        
         #endregion // Properties
 
         #region TabItem Overrides
@@ -64,24 +112,8 @@ namespace TLCGen.ViewModels
         #endregion // TabItem Overrides
 
         #region TLCGen Event handling
+
         #endregion // TLCGen Event handling
-
-        #region Event Handling
-
-        private void FaseCyclus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
-                return;
-
-            if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 1)
-            {
-                _settingMultiple = true;
-                MultiPropertySetter.SetPropertyForAllItems<FaseCyclusViewModel>(sender, e.PropertyName, SelectedFaseCycli);
-            }
-            _settingMultiple = false;
-        }
-
-        #endregion // Event Handling
 
         #region Collection Changed
 
@@ -93,8 +125,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenLijstTimersTabViewModel() : base()
+        public FasenLijstTimersTabViewModel()
         {
+            InitCollection(ControllerAccessProvider.Default.AllSignalGroups);
         }
 
         #endregion // Constructor

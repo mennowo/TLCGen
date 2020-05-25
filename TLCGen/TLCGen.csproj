@@ -106,6 +106,7 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\NevenMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSpecialsTabView.xaml.cs">
       <DependentUpon>PrioriteitSpecialsTabView.xaml</DependentUpon>
     </Compile>
@@ -1055,7 +1056,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"

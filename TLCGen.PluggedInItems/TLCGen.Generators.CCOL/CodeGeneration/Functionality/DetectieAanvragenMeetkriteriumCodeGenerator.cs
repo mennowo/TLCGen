@@ -22,27 +22,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0169
 #pragma warning restore 0649
 
-        private int GetAanvraagSetting(DetectorModel dm)
-        {
-            var set = 0;
-            switch (dm.Aanvraag)
-            {
-                case DetectorAanvraagTypeEnum.Uit:
-                    set = 0;
-                    break;
-                case DetectorAanvraagTypeEnum.RnietTRG:
-                    set = 1;
-                    break;
-                case DetectorAanvraagTypeEnum.Rood:
-                    set = 2;
-                    break;
-                case DetectorAanvraagTypeEnum.RoodGeel:
-                    set = 3;
-                    break;
-            }
-            return set;
-        }
-
         private int GetVerlengenSetting(FaseCyclusModel fc, DetectorModel dm)
         {
             var dmVerl = (int)dm.Verlengen;
@@ -82,7 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (!dm.AanvraagHardOpStraat)
                 {
-                    var set = GetAanvraagSetting(dm);
+                    var set = CCOLCodeHelper.GetAanvraagSetting(dm);
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
@@ -209,7 +188,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     else if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.Aanvraag != DetectorAanvraagTypeEnum.Uit)
                                     {
-                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {CCOLCodeHelper.GetAanvraagSetting(dm)}, ");
                                     }
                                 }
                             }
@@ -230,7 +209,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     else if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.Aanvraag != DetectorAanvraagTypeEnum.Uit)
                                     {
-                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) {CCOLCodeHelper.GetAanvraagSetting(dm)}, ");
                                     }
                                 }
                             }

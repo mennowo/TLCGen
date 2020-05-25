@@ -109,5 +109,6 @@ namespace TLCGen.Models
 
         public int BezetTijdLaag { get; set; }
         public int BezetTijdHoog { get; set; }
+        public int Rijtijd { get; set; }
     }
 }

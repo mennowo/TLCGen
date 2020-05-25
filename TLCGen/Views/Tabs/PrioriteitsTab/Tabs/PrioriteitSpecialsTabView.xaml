@@ -65,6 +65,7 @@
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Binding="{Binding Path=BezetTijdLaag,UpdateSourceTrigger=PropertyChanged}" Header="Bezettijd laag" />
                         <DataGridTextColumn Binding="{Binding Path=BezetTijdHoog,UpdateSourceTrigger=PropertyChanged}" Header="Bezettijd hoog" />
+                        <DataGridTextColumn Binding="{Binding Path=Rijtijd,UpdateSourceTrigger=PropertyChanged}" Header="Rijtijd" />
                     </DataGrid.Columns>
                 </controls:SpecialDataGrid>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">

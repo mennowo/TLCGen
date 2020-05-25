@@ -25,7 +25,7 @@ namespace TLCGen.UnitTests
 
             vm.AddFaseCommand.Execute(null);
 
-            Assert.True(model.Fasen.Count == 1);
+            Assert.AreEqual(1, model.Fasen.Count);
         }
 
         [Test]
@@ -34,8 +34,7 @@ namespace TLCGen.UnitTests
             var model = new ControllerModel();
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             Messenger.OverrideDefault(FakesCreator.CreateMessenger());
-            var vm = new FasenLijstTabViewModel();
-            vm.Controller = model;
+            var vm = new FasenLijstTabViewModel {Controller = model};
 
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
@@ -43,7 +42,7 @@ namespace TLCGen.UnitTests
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
 
-            Assert.True(model.Fasen.Count == 5);
+            Assert.AreEqual(5, model.Fasen.Count);
         }
 
         [Test]

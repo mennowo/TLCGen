@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using TLCGen.DataAccess;
 using TLCGen.Dependencies.Providers;
@@ -7,6 +9,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using TLCGen.ViewModels;
 
 namespace TLCGen.UnitTests
 {
@@ -25,37 +28,46 @@ namespace TLCGen.UnitTests
 
         public static IDefaultsProvider CreateDefaultsProvider()
         {
-            var _defaultprovider = Substitute.For<IDefaultsProvider>();
-            _defaultprovider.Defaults = new TLCGenDefaultsModel();
-            _defaultprovider.Defaults.Defaults.Add(new TLCGenDefaultModel());
-            return _defaultprovider;
+            var defaultsProvider = Substitute.For<IDefaultsProvider>();
+            defaultsProvider.Defaults = new TLCGenDefaultsModel();
+            defaultsProvider.Defaults.Defaults.Add(new TLCGenDefaultModel());
+            return defaultsProvider;
         }
 
         public static ITLCGenControllerModifier CreateControllerModifier()
         {
-            var _controllermodifier = Substitute.For<ITLCGenControllerModifier>();
-            return _controllermodifier;
+            var controllerModifier = Substitute.For<ITLCGenControllerModifier>();
+            return controllerModifier;
         }
 
         public static ITLCGenControllerDataProvider CreateControllerDataProvider(ControllerModel m)
         {
-            var _controllermodifier = Substitute.For<ITLCGenControllerDataProvider>();
-            _controllermodifier.Controller.Returns(m);
-            return _controllermodifier;
+            var controllerDataProvider = Substitute.For<ITLCGenControllerDataProvider>();
+            controllerDataProvider.Controller.Returns(m);
+            return controllerDataProvider;
+        }
+
+        public static IControllerAccessProvider CreateControllerAccessProvider(ControllerModel m)
+        {
+            var allSgs = new ObservableCollection<FaseCyclusViewModel>(m.Fasen.Select(x => new FaseCyclusViewModel(x)));
+            var controllerAccessProvider = Substitute.For<IControllerAccessProvider>();
+            controllerAccessProvider.Controller.Returns(m);
+            controllerAccessProvider.AllSignalGroups.Returns(allSgs);
+            return controllerAccessProvider;
         }
 
         public static ITemplatesProvider CreateTemplatesProvider()
         {
-            var _templatesprovider = Substitute.For<ITemplatesProvider>();
-            return _templatesprovider;
+            var templatesProvider = Substitute.For<ITemplatesProvider>();
+            return templatesProvider;
         }
 
         public static ITLCGenModelManager CreateModelManager(ControllerModel m)
         {
-            var _modelmanager = Substitute.For<ITLCGenModelManager>();
-            _modelmanager.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, "")
+            var modelManager = Substitute.For<ITLCGenModelManager>();
+            modelManager.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, "")
                 .ReturnsForAnyArgs(x => TLCGenIntegrityChecker.IsElementNaamUnique(m, (string)x[1], (TLCGenObjectTypeEnum)x[0]));
-            return _modelmanager;
+            return modelManager;
         }
 
         public static ITLCGenDialogProvider CreateDialogProvider()

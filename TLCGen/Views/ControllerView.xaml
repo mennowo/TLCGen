@@ -19,7 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <ct:TabControlEx ItemsSource="{Binding Path=TabItems}" 
+        <ct:TabControlEx ItemsSource="{Binding Path=TabItems}" AutomationProperties.AutomationId="controllerViewMainTab"
                     SelectedItem="{Binding Path=SelectedTab,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     TabStripPlacement="Left"
                     HorizontalContentAlignment="Left">
@@ -29,7 +29,6 @@
                         <AdornerDecorator Margin="0">
                             <StackPanel Orientation="Horizontal" Margin="2">
                                 <Image 
-                                    Grid.Column="0" 
                                     Width="15" 
                                     Height="15" Margin="0,0,3,0" 
                                     Opacity="{Binding Path=IsEnabled,Converter={StaticResource OpacityConv}}"

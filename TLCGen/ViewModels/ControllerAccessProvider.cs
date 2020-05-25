@@ -43,13 +43,18 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _allDetectorStrings;
         private ObservableCollection<string> _allVecomDetectorStrings;
         private ObservableCollection<string> _allSelectiveDetectorStrings;
+        private readonly Dictionary<object, ICollectionView> _detectorsCollectionViews = new Dictionary<object, ICollectionView>();
         private bool _fasenChanging;
         private bool _detChanging;
         private static IControllerAccessProvider _default;
 
         public static IControllerAccessProvider Default => _default ?? (_default = new ControllerAccessProvider(Messenger.Default));
 
-        private Dictionary<object, ICollectionView> _detectorsCollectionViews;
+        public static void OverrideDefault(IControllerAccessProvider provider)
+        {
+            _default = provider;
+        }
+
 
         public ICollectionView GetCollectionView(object type)
         {
@@ -299,22 +304,19 @@ namespace TLCGen.ViewModels
 
         private void OnControllerLoaded(ControllerLoadedMessage obj)
         {
-            _allIngangen = null;
-            _allSignalGroups = null;
-            _allSignalGroupStrings = null;
-            _allDetectors = null;
-            _allDetectorStrings = null;
-            _allSelectiveDetectors = null;
-            _allSelectiveDetectorStrings = null;
-            _allVecomDetectors = null;
-            _allVecomDetectorStrings = null;
-            _detectorsCollectionViews = null;
-
+            AllIngangen.Clear();
+            AllSignalGroups.Clear();
+            AllSignalGroupStrings.Clear();
+            AllDetectors.Clear();
+            AllDetectorStrings.Clear();
+            AllSelectiveDetectors.Clear();
+            AllSelectiveDetectorStrings.Clear();
+            AllVecomDetectors.Clear();
+            AllVecomDetectorStrings.Clear();
+            
             Controller = obj.Controller;
 
             if (obj.Controller == null) return;
-
-            _detectorsCollectionViews = new Dictionary<object, ICollectionView>();
 
             foreach (var sg in obj.Controller.Fasen)
             {

@@ -25,8 +25,8 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding Path=TabItems}" 
-                    TabStripPlacement="Left"
+        <TabControl ItemsSource="{Binding Path=TabItems}" AutomationProperties.AutomationId="fasenTab"
+                    TabStripPlacement="Left" 
                     SelectedItem="{Binding Path=SelectedTab}">
             <TabControl.ItemTemplate>
                 <DataTemplate>

@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Windows;
 using System.Xml;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
@@ -239,7 +240,7 @@ namespace TLCGen.DataAccess
                 var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
                 if (s != null)
                 {
-                    System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
+                    MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
                     return false;
                 }
 
@@ -293,7 +294,7 @@ namespace TLCGen.DataAccess
             var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
             if (s != null)
             {
-                System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
+                MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
                 return false;
             }
 
@@ -356,14 +357,14 @@ namespace TLCGen.DataAccess
         {
             if (Controller != null && ControllerHasChanged)
             {
-                var r = System.Windows.MessageBox.Show("Wijzigingen opslaan?", "De regeling is gewijzigd. Opslaan?", System.Windows.MessageBoxButton.YesNoCancel);
-                if (r == System.Windows.MessageBoxResult.Yes)
+                var r = MessageBox.Show(Application.Current.MainWindow ?? throw new InvalidOperationException(), "Wijzigingen opslaan?", "De regeling is gewijzigd. Opslaan?", MessageBoxButton.YesNoCancel);
+                if (r == MessageBoxResult.Yes)
                 {
                     SaveController();
                     if (ControllerHasChanged)
                         return true;
                 }
-                else if (r == System.Windows.MessageBoxResult.Cancel)
+                else if (r == MessageBoxResult.Cancel)
                 {
                     return true;
                 }
@@ -384,7 +385,7 @@ namespace TLCGen.DataAccess
         public bool OpenDebug()
         {
             ControllerFileName = @"C:\Users\NL33478\Documents\Rotterdam - Vaanweg Oldegaerde\75040.tlc";
-            if (!System.IO.File.Exists(ControllerFileName))
+            if (!File.Exists(ControllerFileName))
             {
                 return false;
             }
@@ -427,7 +428,7 @@ namespace TLCGen.DataAccess
                 }
 
             }
-            Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
+            Messenger.Default.Send(new ControllerFileNameChangedMessage(Default.ControllerFileName, null));
             return true;
         }
 #endif

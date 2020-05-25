@@ -903,6 +903,12 @@
             <Description>Bezettijd hoog nevenmelding koplus _E1_</Description>
           </Setting>
           <Setting>
+            <Default>rtn</Default>
+            <Setting>rtn</Setting>
+            <Type>Parameter</Type>
+            <Description>Rijtijd nevenmelding _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>ovss</Default>
             <Setting>ovss</Setting>
             <Type>HulpElement</Type>

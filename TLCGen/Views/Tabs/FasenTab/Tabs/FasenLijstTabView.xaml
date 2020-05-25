@@ -10,12 +10,9 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-
-    <UserControl.Resources>
-        <helper:EnumDescriptionConverter x:Key="DescrConv" />
-    </UserControl.Resources>
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" AutomationProperties.AutomationId="fasenLijstTab"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:FasenLijstTabViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,7 +20,7 @@
         </Grid.RowDefinitions>
         <re:SpecialDataGrid
             ItemsSource="{Binding Path=Fasen}"
-            Grid.Row="0"
+            Grid.Row="0" AutomationProperties.AutomationId="fasenLijstDataGrid"
             SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
             ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             CanUserAddRows="False"
@@ -47,13 +44,6 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <!--<DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
-                <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
-                <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
-                <DataGridTextColumn Binding="{Binding Path=TRG}" Header="TRG" />
-                <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
-                <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
-                <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />-->
                 <DataGridComboBoxColumn Header="Vaste aanvr." 
                                         SelectedItemBinding="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
@@ -67,6 +57,6 @@
                 <DataGridTextColumn Header="# detectors" IsReadOnly="True" Binding="{Binding Path=DetectorCount}" Foreground="Gray" />
             </DataGrid.Columns>
         </re:SpecialDataGrid>
-        <local:FasenToevVerw Grid.Row="1" />
+        <local:FasenToevVerw Grid.Row="1" AutomationProperties.AutomationId="fasenLijstToevVerw" />
     </Grid>
 </UserControl>

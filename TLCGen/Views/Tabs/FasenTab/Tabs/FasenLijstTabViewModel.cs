@@ -279,7 +279,7 @@ namespace TLCGen.ViewModels
             {
                 foreach (FaseCyclusViewModel fcvm in e.OldItems)
                 {
-                    _Controller.Fasen.Remove(fcvm.FaseCyclus);
+                    fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
                 }
             }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -30,6 +31,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             return false;
+        }
+
+        public static int GetAanvraagSetting(DetectorModel dm)
+        {
+            var set = 0;
+            switch (dm.Aanvraag)
+            {
+                case DetectorAanvraagTypeEnum.Uit:
+                    set = 0;
+                    break;
+                case DetectorAanvraagTypeEnum.RnietTRG:
+                    set = 1;
+                    break;
+                case DetectorAanvraagTypeEnum.Rood:
+                    set = 2;
+                    break;
+                case DetectorAanvraagTypeEnum.RoodGeel:
+                    set = 3;
+                    break;
+            }
+            return set;
         }
 
         public static List<Tuple<string, List<string>>> GetFasenWithGelijkStarts(ControllerModel c)

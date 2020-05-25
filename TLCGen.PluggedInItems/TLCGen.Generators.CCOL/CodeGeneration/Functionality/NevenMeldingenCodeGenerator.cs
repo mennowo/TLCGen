@@ -17,12 +17,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _prmtdbl;
         private CCOLGeneratorCodeStringSettingModel _prmtdbh;
+        private CCOLGeneratorCodeStringSettingModel _prmrtn;
         private CCOLGeneratorCodeStringSettingModel _hovss;
         private CCOLGeneratorCodeStringSettingModel _hneven;
 #pragma warning restore 0649
-        private string _prmrto;
         private string _hpriouit;
         private string _hprioin;
+        private string _prmda;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -34,6 +35,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtdbl}{nm.Item2}", nm.Item1.BezetTijdLaag, CCOLElementTimeTypeEnum.TE_type, _prmtdbl, nm.Item2));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtdbh}{nm.Item2}", nm.Item1.BezetTijdHoog, CCOLElementTimeTypeEnum.TE_type, _prmtdbh, nm.Item2));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtn}{nm.Item3}", nm.Item1.Rijtijd, CCOLElementTimeTypeEnum.TE_type, _prmrtn, nm.Item3));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovss}{nm.Item1.FaseCyclus1}", _hovss, nm.Item1.FaseCyclus1));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovss}{nm.Item1.FaseCyclus2}", _hovss, nm.Item1.FaseCyclus2));
                 if (nm.Item1.FaseCyclus3 != "NG") _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovss}{nm.Item1.FaseCyclus3}", _hovss, nm.Item1.FaseCyclus3));
@@ -51,6 +53,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
                     return 30;
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return 90;
             }
             return 0;
         }
@@ -79,31 +83,89 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             var sb = new StringBuilder();
 
+            var nevenMeldingen = CombineNevenMeldingenAndHeadDet(c);
+
+            if (!nevenMeldingen.Any()) return "";
+
             switch (type)
             {
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
-                    var nevenMeldingen = CombineNevenMeldingenAndHeadDet(c);
                     sb.AppendLine($"{ts}/* Nevenmeldingen: OV bij stopstreep (koplus bezet raakt na voldoende rijtijd, tot hiaattijd op koplus valt) */");
                     foreach (var nm in nevenMeldingen)
                     {
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{nm.Item1.FaseCyclus1}] && (iRijTimer[prioFC{nm.Item1.FaseCyclus1}] >= PRM[{_prmpf}{_prmrto}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] && TDH[{_dpf}{nm.Item2}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{nm.Item1.FaseCyclus2}] && (iRijTimer[prioFC{nm.Item1.FaseCyclus2}] >= PRM[{_prmpf}{_prmrto}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] && TDH[{_dpf}{nm.Item2}];");
-                        if (nm.Item1.FaseCyclus3 != "NG") sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{nm.Item1.FaseCyclus3}] && (iRijTimer[prioFC{nm.Item1.FaseCyclus3}] >= PRM[{_prmpf}{_prmrto}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] && TDH[{_dpf}{nm.Item2}];");
+                        var ov1 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus1);
+                        var ov2 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus2);
+                        var ov3 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus3);
+
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov1)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov1)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] && TDH[{_dpf}{nm.Item2}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov2)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov2)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] && TDH[{_dpf}{nm.Item2}];");
+                        if (nm.Item1.FaseCyclus3 != "NG") sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov3)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov3)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] && TDH[{_dpf}{nm.Item2}];");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Nevenmeldingen: in- en uitmelden */");
                     foreach (var nm in nevenMeldingen)
                     {
-                        var prioFC3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : "prioFC" + nm.Item1.FaseCyclus3;
+                        var ov1 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus1);
+                        var ov2 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus2);
+                        var ov3 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus3);
+
+                        var prioFC3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : "prioFC" + CCOLCodeHelper.GetPriorityName(ov3);
                         var hovss3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : _hpf + _hovss + nm.Item1.FaseCyclus3;
                         var hneven3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : _hpf + _hneven + nm.Item1.FaseCyclus3;
-                        sb.AppendLine($"{ts}NevenMelding(prioFC{nm.Item1.FaseCyclus1}, prioFC{nm.Item1.FaseCyclus2}, {prioFC3}, {_dpf}{nm.Item2}, {_prmpf}{_prmtdbl}{nm.Item2}, {_prmpf}{_prmtdbh}{nm.Item2}, {_hpf}{_hovss}{nm.Item1.FaseCyclus1}, {_hpf}{_hovss}{nm.Item1.FaseCyclus2}, {hovss3}, {_hpf}{_hneven}{nm.Item1.FaseCyclus1}, {_hpf}{_hneven}{nm.Item1.FaseCyclus2}, {hneven3}, {_prmpf}{_prmrto}{nm.Item3});");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{nm.Item1.FaseCyclus1}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{nm.Item1.FaseCyclus2}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
-                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{nm.Item1.FaseCyclus3}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{nm.Item1.FaseCyclus1}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{nm.Item1.FaseCyclus2}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
-                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{nm.Item1.FaseCyclus3}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
+                        sb.AppendLine($"{ts}NevenMelding(prioFC{CCOLCodeHelper.GetPriorityName(ov1)}, prioFC{CCOLCodeHelper.GetPriorityName(ov2)}, {prioFC3}, {_dpf}{nm.Item2}, {_prmpf}{_prmtdbl}{nm.Item2}, {_prmpf}{_prmtdbh}{nm.Item2}, {_hpf}{_hovss}{nm.Item1.FaseCyclus1}, {_hpf}{_hovss}{nm.Item1.FaseCyclus2}, {hovss3}, {_hpf}{_hneven}{nm.Item1.FaseCyclus1}, {_hpf}{_hneven}{nm.Item1.FaseCyclus2}, {hneven3});");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov1)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov2)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
+                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov3)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov1)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov2)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
+                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov3)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
+                    }
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    sb.AppendLine($"{ts}/* Neven aanvragen */");
+                    foreach (var nm in nevenMeldingen)
+                    {
+                        var dm = c.GetAllDetectors(x => x.Naam == nm.Item2).FirstOrDefault();
+                        var fasen = new List<string> { nm.Item1.FaseCyclus1, nm.Item1.FaseCyclus2 };
+                        if (nm.Item1.FaseCyclus3 != "NG") fasen.Add(nm.Item1.FaseCyclus3);
+                        fasen.Remove(nm.Item3);
+                        foreach (var f in fasen)
+                        {
+                            sb.AppendLine(
+                                $"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{f}, ");
+
+                            if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
+                            {
+                                if (!dm.AanvraagHardOpStraat)
+                                {
+                                    sb.AppendLine(
+                                        $"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                                }
+                                else if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
+                                         dm.Aanvraag != DetectorAanvraagTypeEnum.Uit)
+                                {
+                                    sb.AppendLine(
+                                        $"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {CCOLCodeHelper.GetAanvraagSetting(dm)}, ");
+                                }
+                            }
+                        }
+
+                        sb.AppendLine($"{ts}{ts}(va_count) END);");
+                    } 
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Resetten neven aanvragen */");
+                    foreach (var nm in nevenMeldingen)
+                    {
+                        sb.AppendLine($"if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus2}] || TRG[{_fcpf}{nm.Item1.FaseCyclus2}]) && A[{_fcpf}{nm.Item1.FaseCyclus1}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus1}] &= ~BIT0;");
+                        sb.AppendLine($"if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus1}] || TRG[{_fcpf}{nm.Item1.FaseCyclus1}]) && A[{_fcpf}{nm.Item1.FaseCyclus2}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus2}] &= ~BIT0;");
+                    }
+
+                    foreach (var nm in nevenMeldingen)
+                    {
+                        sb.AppendLine($"{ts}RR[{_fcpf}{nm.Item1.FaseCyclus1}] &= ~BIT7; if(RA[{_fcpf}{nm.Item1.FaseCyclus1}] && !A[{_fcpf}{nm.Item1.FaseCyclus1}]) RR[{_fcpf}{nm.Item1.FaseCyclus1}] |= BIT7;");
+                        sb.AppendLine($"{ts}RR[{_fcpf}{nm.Item1.FaseCyclus2}] &= ~BIT7; if(RA[{_fcpf}{nm.Item1.FaseCyclus2}] && !A[{_fcpf}{nm.Item1.FaseCyclus2}]) RR[{_fcpf}{nm.Item1.FaseCyclus2}] |= BIT7;");
+                        if (nm.Item1.FaseCyclus3 != "NG") sb.AppendLine($"{ts}RR[{_fcpf}{nm.Item1.FaseCyclus3}] &= ~BIT7; if(RA[{_fcpf}{nm.Item1.FaseCyclus3}] && !A[{_fcpf}{nm.Item1.FaseCyclus3}]) RR[{_fcpf}{nm.Item1.FaseCyclus3}] |= BIT7;");
                     }
                     return sb.ToString();
             }
@@ -113,9 +175,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto");
             _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
+            _prmda = CCOLGeneratorSettingsProvider.Default.GetElementName("prmda");
 
             return base.SetSettings(settings);
         }

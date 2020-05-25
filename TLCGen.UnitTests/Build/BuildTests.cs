@@ -294,6 +294,29 @@ namespace TLCGen.UnitTests.Build
 
             Assert.AreEqual(0, p.ExitCode);
         }
+
+        [Test]
+        public void SimpleControllerCCOL9_Generated_BuildsSuccesfully()
+        {
+            var path = @"C:\temp\TLCGen_buildTests\basisCCOL9";
+            var output = new List<string>();
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            else
+            {
+                Directory.Delete(path, true);
+                Directory.CreateDirectory(path);
+            }
+            
+            var c = GetBasicController();
+            c.Data.CCOLVersie = CCOLVersieEnum.CCOL9;
+            c.Data.Intergroen = false;
+
+            GenerateController(path, c);
+
+            var p = BuildController(path, output);
+
+            Assert.AreEqual(0, p.ExitCode);
+        }
         
         [Test]
         public void SimpleControllerWithPrio_Generated_BuildsSuccesfully()
@@ -308,6 +331,7 @@ namespace TLCGen.UnitTests.Build
             }
             
             var c = GetBasicController();
+            
             c.PrioData.PrioIngreepType = PrioIngreepTypeEnum.GeneriekePrioriteit;
             var ingreep = new PrioIngreepModel
             {
@@ -335,6 +359,49 @@ namespace TLCGen.UnitTests.Build
             Assert.AreEqual(0, p.ExitCode);
         }
 
+        
+        [Test]
+        public void SimpleControllerWithPrioCCOL9_Generated_BuildsSuccesfully()
+        {
+            var path = @"C:\temp\TLCGen_buildTests\basisMetPrio";
+            var output = new List<string>();
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            else
+            {
+                Directory.Delete(path, true);
+                Directory.CreateDirectory(path);
+            }
+            
+            var c = GetBasicController();
+            c.Data.CCOLVersie = CCOLVersieEnum.CCOL9;
+            c.Data.Intergroen = false;
+
+            c.PrioData.PrioIngreepType = PrioIngreepTypeEnum.GeneriekePrioriteit;
+            var ingreep = new PrioIngreepModel
+            {
+                FaseCyclus = "02",
+                Type = PrioIngreepVoertuigTypeEnum.Bus
+            };
+            ingreep.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding
+            });
+            ingreep.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel
+            {
+                Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding
+            });
+            c.PrioData.PrioIngrepen.Add(ingreep);
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "02" });
+            c.PrioData.PrioIngreepSignaalGroepParameters.Add(new PrioIngreepSignaalGroepParametersModel{ FaseCyclus = "05" });
+
+            GenerateController(path, c);
+
+            var p = BuildController(path, output);
+
+            Assert.AreEqual(0, p.ExitCode);
+        }
         
         [Test]
         public void SimpleControllerWithPrioAndNevenMelding_Generated_BuildsSuccesfully()
@@ -368,7 +435,8 @@ namespace TLCGen.UnitTests.Build
             c.PrioData.PrioIngreepType = PrioIngreepTypeEnum.GeneriekePrioriteit;
             var ingreep = new PrioIngreepModel
             {
-                FaseCyclus = "41",
+                FaseCyclus = "41", 
+                Naam = "bus",
                 Type = PrioIngreepVoertuigTypeEnum.Bus
             };
             ingreep.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel
@@ -385,6 +453,7 @@ namespace TLCGen.UnitTests.Build
             ingreep = new PrioIngreepModel
             {
                 FaseCyclus = "42",
+                Naam = "bus",
                 Type = PrioIngreepVoertuigTypeEnum.Bus
             };
             ingreep.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel

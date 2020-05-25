@@ -392,8 +392,7 @@ void NevenMelding(count ov1,      /* OV fasecyclus 1                */
                   count hovss3,   /* hulpelement ov bij SS     fc3  */
                   count hneven1,  /* hulpelement nevenmelding  fc1  */
                   count hneven2,  /* hulpelement nevenmelding  fc2  */
-                  count hneven3,  /* hulpelement nevenmelding  fc3  */
-                  count prmrtn    /* rijtijd nevenmelding OK        */
+                  count hneven3  /* hulpelement nevenmelding  fc3  */
                   )
 {
   /* ------------------------------------------------------------ */

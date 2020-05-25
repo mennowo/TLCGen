@@ -14,11 +14,11 @@ namespace TLCGen.UnitTests
         {
             var model = new ControllerModel();
             TemplatesProvider.OverrideDefault(FakesCreator.CreateTemplatesProvider());
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
             var vm = new FasenLijstTimersTabViewModel {Controller = model};
 
             vm.OnSelected();
@@ -31,19 +31,19 @@ namespace TLCGen.UnitTests
         {
             var model = new ControllerModel();
             TemplatesProvider.OverrideDefault(FakesCreator.CreateTemplatesProvider());
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
             var vm = new FasenLijstTimersTabViewModel { Controller = model };
 
             vm.OnSelected();
-            vm.SelectedFaseCyclus = vm.Fasen[3];
+            vm.SelectedItem = vm.Fasen[3];
             vm.OnDeselected();
             vm.OnSelected();
 
-            Assert.True(object.ReferenceEquals(vm.SelectedFaseCyclus, vm.Fasen[3]));
+            Assert.True(object.ReferenceEquals(vm.SelectedItem, vm.Fasen[3]));
         }
 
         [Test]
@@ -51,15 +51,16 @@ namespace TLCGen.UnitTests
         {
             var model = new ControllerModel();
             TemplatesProvider.OverrideDefault(FakesCreator.CreateTemplatesProvider());
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "05", TGL = 30 });
+            ControllerAccessProvider.OverrideDefault(FakesCreator.CreateControllerAccessProvider(model));
             var vm = new FasenLijstTimersTabViewModel { Controller = model };
 
             vm.OnSelected();
-            vm.SelectedFaseCycli = new List<FaseCyclusViewModel>() { vm.Fasen[1], vm.Fasen[2], vm.Fasen[3] };
+            vm.SelectedItems = new List<FaseCyclusViewModel> { vm.Fasen[1], vm.Fasen[2], vm.Fasen[3] };
             vm.Fasen[3].TGL = 50;
 
             Assert.AreEqual(30, vm.Fasen[0].TGL);

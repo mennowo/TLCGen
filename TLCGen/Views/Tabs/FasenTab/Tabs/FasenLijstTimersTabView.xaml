@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:FasenLijstTimersTabViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -16,8 +15,8 @@
                   ItemsSource="{Binding Path=Fasen}"
                   Grid.Row="0"
             SelectionMode="Extended"
-                  SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
-                  ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding Path=SelectedItem,Mode=TwoWay}"
+                  ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
