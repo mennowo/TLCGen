@@ -93,6 +93,7 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "HardMeeverlengFaseCyclus")]
         public List<HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli { get; set; }
 
+        [HasDefault(false)]
         [Browsable(false)]
         public int NameAsInt
         {

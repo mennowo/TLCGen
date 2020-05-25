@@ -43,8 +43,9 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _allDetectorStrings;
         private ObservableCollection<string> _allVecomDetectorStrings;
         private ObservableCollection<string> _allSelectiveDetectorStrings;
-
-        public static IControllerAccessProvider _default;
+        private bool _fasenChanging;
+        private bool _detChanging;
+        private static IControllerAccessProvider _default;
 
         public static IControllerAccessProvider Default => _default ?? (_default = new ControllerAccessProvider(Messenger.Default));
 
@@ -201,7 +202,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private bool _fasenChanging = false;
         private void OnSignalGroupsChanged(FasenChangedMessage obj)
         {
             if (_fasenChanging) return;
@@ -253,7 +253,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private bool _detChanging = false;
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
             if (_detChanging) return;

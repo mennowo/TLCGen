@@ -283,25 +283,6 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            var removedfasen = new List<FaseCyclusModel>();
-            if (e.OldItems != null)
-            {
-                foreach (FaseCyclusViewModel item in e.OldItems)
-                {
-                    removedfasen.Add(item.FaseCyclus);
-                }
-            }
-
-            var addedfasen = new List<FaseCyclusModel>();
-            if (e.NewItems != null)
-            {
-                foreach (FaseCyclusViewModel item in e.NewItems)
-                {
-                    addedfasen.Add(item.FaseCyclus);
-                }
-            }
-            
-            Messenger.Default.Send(new FasenChangingMessage(addedfasen, removedfasen));
             Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 

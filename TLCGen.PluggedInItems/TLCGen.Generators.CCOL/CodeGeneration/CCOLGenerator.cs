@@ -429,7 +429,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 if(c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL100)
                 {
-                    File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+                    var text = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename));
+                    var rtext = Regex.Replace(text, @"(^|\s|\W)va_boolv", "$1va_bool");
+                    rtext = Regex.Replace(rtext, @"(^|\W)boolv(\W)", "$1bool$2");
+                    File.WriteAllText(Path.Combine(sourcefilepath, filename), rtext, Encoding.Default);
                 }
                 else // CCOL 10.0
                 {

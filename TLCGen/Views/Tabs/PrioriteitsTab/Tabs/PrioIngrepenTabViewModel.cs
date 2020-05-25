@@ -204,6 +204,15 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void OnNameChanged(NameChangedMessage obj)
+        {
+            if (obj.ObjectType != TLCGenObjectTypeEnum.Fase) return;
+            foreach (var faseWithPrio in Fasen)
+            {
+                if (obj.OldName == faseWithPrio.Naam) faseWithPrio.Naam = obj.NewName;
+            }
+        }
+
         #endregion // Private Methods
 
         #region Constructor
@@ -211,6 +220,7 @@ namespace TLCGen.ViewModels
         public PrioIngrepenTabViewModel() : base()
         {
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
         }
 

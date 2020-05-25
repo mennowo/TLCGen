@@ -49,6 +49,7 @@ namespace TLCGen.ViewModels
     {
         private RelayCommand _addIngreepCommand;
         private RelayCommand<PrioIngreepViewModel> _removeIngreepCommand;
+        private string _naam;
 
         #region Fields
         #endregion // Fields
@@ -65,7 +66,15 @@ namespace TLCGen.ViewModels
         public bool HasTruck => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
 
         [Browsable(false)]
-        public string Naam { get; }
+        public string Naam
+        {
+            get => _naam;
+            set
+            {
+                _naam = value; 
+                RaisePropertyChanged();
+            }
+        }
 
         [Browsable(false)]
         public ObservableCollection<PrioIngreepViewModel> Ingrepen { get; }

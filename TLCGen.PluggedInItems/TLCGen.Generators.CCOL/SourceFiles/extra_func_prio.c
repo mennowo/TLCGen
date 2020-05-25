@@ -369,7 +369,11 @@ boolv kg(count i)
 #else
    for (n = 0; n < KFC_MAX[i]; ++n) {
 #endif
+#if (CCOL_V >= 95)
       j = KF_pointer[i][n];
+#else
+      j = TO_pointer[i][n];
+#endif
       if (G[j]) return TRUE;
    }
    return FALSE;

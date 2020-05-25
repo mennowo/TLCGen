@@ -13,7 +13,7 @@ void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], c
 void PRIO_teller(count cov, count scov);
 
 #if !defined (CCOLFUNC)
-boolv kg(count i);
+bool kg(count i);
 #endif
 
 #ifdef CCOL_IS_SPECIAL
