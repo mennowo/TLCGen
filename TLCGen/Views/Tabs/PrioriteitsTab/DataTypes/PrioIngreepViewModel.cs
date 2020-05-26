@@ -81,7 +81,7 @@ namespace TLCGen.ViewModels
             {
                 var oldName = PrioIngreep.Naam;
                 var newName = PrioIngreep.FaseCyclus + value;
-                if (NameSyntaxChecker.IsValidCName(value) &&
+                if ((value == "" || NameSyntaxChecker.IsValidCName(value)) &&
                     Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(
                     DataAccess.TLCGenControllerDataProvider.Default.Controller, newName,
                     TLCGenObjectTypeEnum.PrioriteitsIngreep))

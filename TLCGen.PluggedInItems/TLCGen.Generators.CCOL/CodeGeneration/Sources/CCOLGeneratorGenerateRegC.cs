@@ -79,6 +79,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
+            sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"fcvar.c\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.c\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.c\"    /* uitgangs elementen                */");
@@ -130,6 +131,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
                 sb.AppendLine($"{ts}#endif");
             }
+            if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
+            {
+                sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
+                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
+                {
+                    sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
+                }
+                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
+            }
             if (controller.RISData.RISToepassen)
             {
                 sb.AppendLine($"{ts}#ifndef NO_RIS");
@@ -144,17 +154,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
-            sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
-            if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
-            {
-                sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
-                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
-                {
-                    sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
-                }
-                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
-            }
             sb.AppendLine();
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine("/*    #include \"ccdump.inc\" */");

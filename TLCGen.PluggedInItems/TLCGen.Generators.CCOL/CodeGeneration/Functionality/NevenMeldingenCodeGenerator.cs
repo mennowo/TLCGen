@@ -157,8 +157,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Resetten neven aanvragen */");
                     foreach (var nm in nevenMeldingen)
                     {
-                        sb.AppendLine($"if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus2}] || TRG[{_fcpf}{nm.Item1.FaseCyclus2}]) && A[{_fcpf}{nm.Item1.FaseCyclus1}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus1}] &= ~BIT0;");
-                        sb.AppendLine($"if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus1}] || TRG[{_fcpf}{nm.Item1.FaseCyclus1}]) && A[{_fcpf}{nm.Item1.FaseCyclus2}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus2}] &= ~BIT0;");
+                        if (nm.Item1.FaseCyclus3 == "NG") 
+                        {
+                            sb.AppendLine($"{ts}if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus2}] || TRG[{_fcpf}{nm.Item1.FaseCyclus2}]) && A[{_fcpf}{nm.Item1.FaseCyclus1}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus1}] &= ~BIT0;");
+                            sb.AppendLine($"{ts}if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus1}] || TRG[{_fcpf}{nm.Item1.FaseCyclus1}]) && A[{_fcpf}{nm.Item1.FaseCyclus2}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus2}] &= ~BIT0;");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus2}] || TRG[{_fcpf}{nm.Item1.FaseCyclus2}] || !R[{_fcpf}{nm.Item1.FaseCyclus3}] || TRG[{_fcpf}{nm.Item1.FaseCyclus3}]) && A[{_fcpf}{nm.Item1.FaseCyclus1}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus1}] &= ~BIT0;");
+                            sb.AppendLine($"{ts}if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus1}] || TRG[{_fcpf}{nm.Item1.FaseCyclus1}] || !R[{_fcpf}{nm.Item1.FaseCyclus3}] || TRG[{_fcpf}{nm.Item1.FaseCyclus3}]) && A[{_fcpf}{nm.Item1.FaseCyclus2}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus2}] &= ~BIT0;");
+                            sb.AppendLine($"{ts}if(ED[{_dpf}{nm.Item2}] && (!R[{_fcpf}{nm.Item1.FaseCyclus1}] || TRG[{_fcpf}{nm.Item1.FaseCyclus1}] || !R[{_fcpf}{nm.Item1.FaseCyclus2}] || TRG[{_fcpf}{nm.Item1.FaseCyclus2}]) && A[{_fcpf}{nm.Item1.FaseCyclus3}] & BIT0) A[{_fcpf}{nm.Item1.FaseCyclus3}] &= ~BIT0;");
+                        }
                     }
 
                     foreach (var nm in nevenMeldingen)

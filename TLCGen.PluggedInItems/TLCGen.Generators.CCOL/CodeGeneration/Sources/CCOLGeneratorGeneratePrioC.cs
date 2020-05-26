@@ -54,6 +54,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.InterSignaalGroep.Nalopen.Any())
             {
                 sb.AppendLine("#define NALOPEN");
+                sb.AppendLine("#define PRIO_ADDFILE");
                 sb.AppendLine();
             }
 
@@ -64,6 +65,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#ifndef PRACTICE_TEST");
             }
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
+            sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
+            sb.AppendLine($"{ts}#include \"prio.h\"     /* prio header                       */");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
@@ -83,12 +86,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                           .Any(x => 
                               x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
                               x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-            if (ris) sb.AppendLine($"{ts}#include \"risappl.h\"   /* RIS routines                   */");
-            sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
+            if (ris)
+            {
+                sb.AppendLine($"{ts}#ifndef NO_RIS");
+                sb.AppendLine($"{ts}{ts}#include \"risappl.h\"   /* RIS routines                     */");
+                sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.h\"   /* RIS routines              */");
+                sb.AppendLine($"{ts}#endif /* NO_RIS */");
+            }
             sb.AppendLine($"{ts}#include \"cif.inc\"    /* interface                         */");
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine($"{ts}{ts}#include \"xyprintf.h\" /* Printen debuginfo                 */");
-            if (ris) sb.AppendLine($"{ts}#include \"rissimvar.h\"   /* RIS routines                  */");
+            if (ris)
+            {
+                sb.AppendLine($"{ts}#include \"rissimvar.h\"   /* RIS routines                   */");
+            }
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
@@ -115,11 +126,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#define MAX_AANTAL_INMELDINGEN           10");
             sb.AppendLine("#define DEFAULT_MAX_WACHTTIJD           120");
             sb.AppendLine("#define NO_REALISEREN_TOEGESTAAN");
-            sb.AppendLine("#define PRIO_ADDFILE");
-            if (c.InterSignaalGroep.Nalopen.Any())
-            {
-                sb.AppendLine("#define NALOPEN");
-            }
 
             if (c.HalfstarData.IsHalfstar)
             {
@@ -919,7 +925,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     sb.Append($"{ts}PrioRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
                                     if (i < ll.Count)
                                     {
-                                        sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                        sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam}hd);");
                                         ++i;
                                     }
                                     else
@@ -936,7 +942,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     sb.Append($"{ts}PrioRijTijdScenario(hdFC{fc.Naam}, ");
                                     if (i < kl.Count)
                                     {
-                                        sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                        sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam}hd);");
                                         ++i;
                                     }
                                     else
@@ -1445,7 +1451,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine($"#include \"{c.Data.Naam}prio.add\"");
+            sb.AppendLine("#ifdef PRIO_ADDFILE");
+            sb.AppendLine($"{ts}#include \"{c.Data.Naam}prio.add\"");
+            sb.AppendLine("#endif /* PRIO_ADDFILE */");
 
             if (c.Data.PracticeOmgeving)
             {

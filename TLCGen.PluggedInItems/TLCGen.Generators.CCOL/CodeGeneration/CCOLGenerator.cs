@@ -293,8 +293,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (c.RISData.RISToepassen)
                     {
                         CopySourceIfNeeded(c, "risappl.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "extra_func_prio.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "extra_func_prio.h", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_ris.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "extra_func_ris.h", sourcefilepath);
                     }
 
                     if (c.StarData.ToepassenStar)
