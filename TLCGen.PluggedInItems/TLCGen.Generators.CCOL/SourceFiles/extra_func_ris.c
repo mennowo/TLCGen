@@ -1,5 +1,7 @@
 #include "extra_func_ris.h"
 
+#ifdef RIS_SSM
+
 void ris_verstuur_ssm(int prioFcsrm) { /* @@@ CCA */
 
   /* SSM berichten versturen 
@@ -106,6 +108,8 @@ void ris_verstuur_ssm(int prioFcsrm) { /* @@@ CCA */
       }
    }
 }
+
+#endif // RIS_SSM
 
 void ris_ym(int prioFcsrm, count tym, count tym_max) { /* @@@ CCA */
 /* Moet eigengelijk gebueren op basis van ETA. Nu op basis van rijtijd (op ongeveer 250 meter dus onnauwkeurig). Optie om uit te werken op basis van aanwezigheid voertuig x meter voor de stopstreep met granted?

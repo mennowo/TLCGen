@@ -134,17 +134,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
                 sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
-                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
-                {
-                    sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
-                }
-                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
             }
             if (controller.RISData.RISToepassen)
             {
                 sb.AppendLine($"{ts}#ifndef NO_RIS");
                 sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
                 sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
+                if (controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)) ||
+                    controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)))
+                {
+                    sb.AppendLine($"{ts}{ts}#define RIS_SSM  /* Gebruik in/uitmelden via RIS SSM */");
+                }
                 sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.c\" /* RIS extra functies */");
                 sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
@@ -154,6 +154,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
+            if(controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
+            {
+                if(controller.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
+                {
+                    sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
+                }
+                sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
+            }
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
             sb.AppendLine();
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
