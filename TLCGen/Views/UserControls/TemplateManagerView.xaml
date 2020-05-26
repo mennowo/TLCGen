@@ -12,9 +12,9 @@
                 <ComboBox ItemsSource="{Binding Path=Templates}" DisplayMemberPath="Naam"
                       SelectedItem="{Binding Path=SelectedTemplate}" MinWidth="175"
                       Margin="2" SelectedIndex="0" />
-                <Button Content="Toepassen" ToolTip="Toepassen template op geselecteerde item(s)"
+                <Button Content="Toepassen" ToolTip="Toepassen template op geselecteerde item(s)" AutomationProperties.AutomationId="templateManagerApplyButton"
                         Margin="0,2,2,2" Command="{Binding Path=ApplyTemplateCommand}" CommandParameter="{Binding ElementName=root,Path=ParentItemName,UpdateSourceTrigger=PropertyChanged}" />
-                <Button Content="Toevoegen" ToolTip="Toevoegen nieuwe item(s) o.b.v. template"
+                <Button Content="Toevoegen" ToolTip="Toevoegen nieuwe item(s) o.b.v. template" AutomationProperties.AutomationId="templateManagerAddButton"
                         Margin="0,2" Command="{Binding Path=AddFromTemplateCommand}" CommandParameter="{Binding ElementName=root,Path=ParentItemName,UpdateSourceTrigger=PropertyChanged}" />
             </WrapPanel>
         </StackPanel>

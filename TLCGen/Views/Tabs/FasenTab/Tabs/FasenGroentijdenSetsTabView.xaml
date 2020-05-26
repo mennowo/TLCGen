@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:dg2d="http://gu.se/DataGrid2D"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" AutomationProperties.AutomationId="fasenGroentijdenSetsTab"
              d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
         <DataTemplate x:Key="GroenMatrixCellTemplate">
@@ -51,6 +51,7 @@
         </DockPanel>
         <Grid Grid.Row="0">
             <DataGrid
+                      AutomationProperties.AutomationId="fasenGroentijdenSetsMatrix"
                       dg2d:ItemsSource.Array2DTransposed="{Binding GroentijdenMatrix}"
                       dg2d:Cell.Template="{StaticResource GroenMatrixCellTemplate}"
                       dg2d:Cell.EditingTemplate="{StaticResource GroenMatrixCellEditingTemplate}"
