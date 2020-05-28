@@ -282,8 +282,6 @@ namespace TLCGen.ViewModels
                     fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
                 }
             }
-
-            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

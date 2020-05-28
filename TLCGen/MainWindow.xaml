@@ -8,6 +8,8 @@
         xmlns:vm="clr-namespace:TLCGen.ViewModels"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+        xmlns:markdown="clr-namespace:Markdown.Xaml;assembly=Markdown.Xaml"
+        xmlns:models="clr-namespace:TLCGen.Models;assembly=TLCGen.ModelManagement"
         AllowDrop="True"
         dd:DragDrop.IsDropTarget="True"
         dd:DragDrop.DropHandler="{Binding}"
@@ -19,6 +21,22 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/MenuIcons.xaml" />
                 <ResourceDictionary>
+                    <markdown:Markdown x:Key="Markdown" >
+                        <markdown:Markdown.DocumentStyle>
+                            <Style TargetType="FlowDocument">
+                                <Setter Property="FontFamily" Value="Calibri" />
+                                <Setter Property="TextAlignment" Value="Left" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="PagePadding" Value="2" />
+                                <Setter Property="Background" Value="Lavender" />
+                                <Setter Property="PageWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth}" />
+                                <!--<Setter Property="MaxPageWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth}" />-->
+                            </Style>
+                        </markdown:Markdown.DocumentStyle>
+                    </markdown:Markdown>
+                    <markdown:TextToFlowDocumentConverter 
+                        x:Key="TextToFlowDocumentConverter" 
+                        Markdown="{StaticResource Markdown}"/>
                     <Style TargetType="Image">
                         <Style.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
@@ -42,6 +60,7 @@
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -138,9 +157,32 @@
             <Hyperlink Command="{Binding Path=ShowVersionInfoCommand}">hier</Hyperlink> voor informatie over <Bold>belangrijke aandachtspunten</Bold>. 
             Klik <Hyperlink Command="{Binding Path=HideAlertMessageCommand}">hier</Hyperlink> om deze melding te verbergen.
         </TextBlock>
-        <Grid Grid.Row="3" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}" AutomationProperties.AutomationId="mainGrid">
+        <ListBox Grid.Row="3" ItemsSource="{Binding Path=AlertMessages}" Visibility="{Binding Path=ShowAlertMessages,Converter={StaticResource Bool2VisConv}}"
+                 HorizontalContentAlignment="Stretch" Background="Lavender" Padding="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="models:ControllerAlertMessage">
+                    <DockPanel
+                                Visibility="{Binding Path=Shown,Converter={StaticResource Bool2VisConv}}" Background="{Binding Path=Background}">
+                        <ToggleButton DockPanel.Dock="Right" IsChecked="{Binding Path=Shown}" Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}" Width="25" Height="25" Grid.Column="1"
+                                      Background="Transparent" HorizontalAlignment="Right">
+                            <Image Source="{StaticResource ExitApplicationIconDrawingImage}" />
+                        </ToggleButton>
+                            <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Left">
+                            <FlowDocumentScrollViewer VerticalAlignment="Center" 
+                                                      VerticalScrollBarVisibility="Auto"
+                                                      ScrollViewer.CanContentScroll="False"
+                                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                      Document="{Binding Path=Message, Converter={StaticResource TextToFlowDocumentConverter}}" />
+                            </Grid>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="4" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}" AutomationProperties.AutomationId="mainGrid">
             <vw:ControllerView DataContext="{Binding Path=ControllerVM}" AutomationProperties.AutomationId="controllerView" />
         </Grid>
-        <vw:TLCGenStatusBar Grid.Row="4" DataContext="{Binding Path=StatusBarVM}" />
+        <vw:TLCGenStatusBar Grid.Row="5" DataContext="{Binding Path=StatusBarVM}" />
     </Grid>
 </Window>

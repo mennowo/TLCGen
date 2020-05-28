@@ -7,6 +7,7 @@ using System.Windows;
 using System.Xml;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;

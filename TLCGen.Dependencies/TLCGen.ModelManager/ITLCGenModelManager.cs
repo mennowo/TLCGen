@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Xml;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -8,6 +10,7 @@ namespace TLCGen.ModelManagement
     public interface ITLCGenModelManager
     {
         ControllerModel Controller { get; set; }
+        ObservableCollection<ControllerAlertMessage> ControllerAlerts { get; }
 
         bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false);
         void InjectDefaultAction(Action<object, string> setDefaultsAction);
@@ -19,5 +22,7 @@ namespace TLCGen.ModelManagement
         void ConvertToIntergroen(ControllerModel controller);
         void ConvertToOntruimingstijden(ControllerModel controller);
         void SetPrioOutputPerSignalGroup(ControllerModel controller, bool outputPerSg);
+        void UpdateControllerAlerts();
+        event EventHandler ControllerAlertsUpdated;
     }
 }

@@ -2,11 +2,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -32,6 +35,7 @@ namespace TLCGen.ModelManagement
         private Action<object, string> _setDefaultsAction;
 
         private List<Tuple<string, object>> _pluginDataToMove = new List<Tuple<string, object>>();
+        private ControllerModel _controller;
 
         #endregion // Fields
 
@@ -59,7 +63,13 @@ namespace TLCGen.ModelManagement
 
         public ControllerModel Controller
         {
-            get; set;
+            get => _controller;
+            set
+            {
+                _controller = value; 
+                ControllerAlerts.CollectionChanged += (sender, args) => ControllerAlertsUpdated?.Invoke(this, EventArgs.Empty);
+                UpdateControllerAlerts();
+            }
         }
 
         #endregion // Properties
@@ -527,6 +537,53 @@ namespace TLCGen.ModelManagement
                 TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier, objectType) : 
                 TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
         }
+        
+        public ObservableCollection<ControllerAlertMessage> ControllerAlerts { get; } = new ObservableCollection<ControllerAlertMessage>();
+
+        public void UpdateControllerAlerts()
+        {
+            if (Controller == null)
+            {
+                foreach (var m in ControllerAlerts) m.PropertyChanged -= AlertMsgOnPropertyChanged;
+                ControllerAlerts.Clear();
+                return;
+            }
+            if (Controller.Fasen.Any(x => x.WachttijdVoorspeller))
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.WachttijdVoorspeller))
+                {
+                    var msg = new ControllerAlertMessage
+                    {
+                        Background = Brushes.Lavender,
+                        Shown = true,
+                        Message = "***Let op!*** De gegenereerde CCOL code voor wachttijdvoorspellers is momenteel uitsluitend geschikt voor test doeleinden.",
+                        Type = ControllerAlertType.WachttijdVoorspeller
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.WachttijdVoorspeller);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
+        }
+
+        private void AlertMsgOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Shown")
+            {
+                UpdateControllerAlerts();
+                ControllerAlertsUpdated?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler ControllerAlertsUpdated;
 
         #endregion // Public Methods
 

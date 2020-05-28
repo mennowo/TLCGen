@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Net;
 using GalaSoft.MvvmLight.Threading;
+using TLCGen.Dependencies.Providers;
 
 namespace TLCGen.ViewModels
 {
@@ -199,6 +201,10 @@ namespace TLCGen.ViewModels
         public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         public string ControllerVersion => ControllerVM?.Controller?.Data?.TLCGenVersie;
+
+        public ObservableCollection<ControllerAlertMessage> AlertMessages => TLCGenModelManager.Default.ControllerAlerts;
+
+        public bool ShowAlertMessages => AlertMessages.Any(x => x.Shown);
 
         #endregion // Properties
 
@@ -387,8 +393,8 @@ namespace TLCGen.ViewModels
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("ProgramTitle");
-                RaisePropertyChanged("HasController");
+                RaisePropertyChanged(nameof(HasController));
+                RaisePropertyChanged(nameof(ProgramTitle));
                 ShowAlertMessage = false;
             }
         }
@@ -433,7 +439,7 @@ namespace TLCGen.ViewModels
             {
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("ProgramTitle");
+                RaisePropertyChanged(nameof(ProgramTitle));
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
@@ -453,10 +459,11 @@ namespace TLCGen.ViewModels
             {
                 DefaultsProvider.Default.Controller = null;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                RaisePropertyChanged("HasController");
-                RaisePropertyChanged("ProgramTitle");
+                RaisePropertyChanged(nameof(HasController));
+                RaisePropertyChanged(nameof(ProgramTitle));
                 GuiActionsManager.SetStatusBarMessage("");
                 ShowAlertMessage = false;
+                SetControllerForStatics(null);
             }
         }
 
@@ -493,7 +500,7 @@ namespace TLCGen.ViewModels
                 var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
                 if (s1 != null)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling", MessageBoxButton.OK);
                     return;
                 }
                 // Import to clone of original (so we can discard if wrong)
@@ -503,7 +510,7 @@ namespace TLCGen.ViewModels
                 // Do nothing if the importer returned nothing
                 if (c2 == null)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Importeren is afgebroken door de gebruiker", "Importeren afgebroken");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Importeren is afgebroken door de gebruiker", "Importeren afgebroken", MessageBoxButton.OK);
                     return;
                 }
 
@@ -511,7 +518,7 @@ namespace TLCGen.ViewModels
                 s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                 if (s1 != null)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
                     return;
                 }
                 SetController(c2);
@@ -534,7 +541,7 @@ namespace TLCGen.ViewModels
                 var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
                 if (s1 != null)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
                     return;
                 }
                 TLCGenControllerDataProvider.Default.CloseController();
@@ -569,7 +576,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                TLCGenDialogProvider.Default.ShowMessageBox(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling");
+                TLCGenDialogProvider.Default.ShowMessageBox(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling", MessageBoxButton.OK);
             }
         }
 
@@ -933,6 +940,8 @@ namespace TLCGen.ViewModels
 
             Directory.SetCurrentDirectory(tmpCurDir);
 
+            TLCGenModelManager.Default.ControllerAlertsUpdated += (sender, args) => RaisePropertyChanged(nameof(ShowAlertMessages));
+
 #if !DEBUG
             // Find out if there is a newer version available via online check
             Task.Run(() =>
@@ -1032,4 +1041,5 @@ namespace TLCGen.ViewModels
 
         #endregion // IDropTarget
     }
+
 }

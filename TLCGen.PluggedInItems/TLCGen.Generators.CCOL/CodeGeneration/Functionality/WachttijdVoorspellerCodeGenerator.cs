@@ -389,7 +389,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                        sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1 || G[{_fcpf}{fc.Naam}]) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
                     }
                     if (c.Data.FixatieMogelijk)
                     {

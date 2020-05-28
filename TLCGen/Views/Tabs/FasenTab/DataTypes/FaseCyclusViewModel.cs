@@ -9,6 +9,7 @@ using TLCGen.DataAccess;
 using TLCGen.Settings;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
@@ -503,6 +504,7 @@ namespace TLCGen.ViewModels
             {
                 FaseCyclus.WachttijdVoorspeller = value;
                 RaisePropertyChanged<object>(nameof(WachttijdVoorspeller), broadcast: true);
+                TLCGenModelManager.Default.UpdateControllerAlerts();
             }
         }
 

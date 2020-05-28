@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerAlertMessage.cs" />
     <Compile Include="ITLCGenModelManager.cs" />
     <Compile Include="TLCGenModelManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
