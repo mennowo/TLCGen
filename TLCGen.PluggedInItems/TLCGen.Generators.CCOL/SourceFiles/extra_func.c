@@ -144,6 +144,9 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
  *
  *  YM[fc05]= ym_max_to(fc05,0) || CIF_IS[is_fix];
  *  fc05 blijft meeverlengen met ontruimingstijd van fc32 naar fc08.
+ *
+ *  LET OP! Er is geen speciale ym_max_tigV1 tbv integroen, ym_max_toV1
+ *  is ook geschikt voor integroen
  */
 bool ym_max_toV1(count i, mulv to_verschil)
 {
