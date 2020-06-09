@@ -111,7 +111,7 @@ void control_realisation_timers(void)
         }
         if (GL[fc] || TRG[fc])
         {
-            R_timer[fc][fc] = TGL_max[fc] - TGL_timer[fc] + TRG_max[fc] - TRG_timer[fc];
+            R_timer[fc][fc] = TGL_max[fc] - TGL_timer[fc] + TRG_max[fc] - (TRG[fc] ? TRG_timer[fc] : 0);
         }
         else
         {
@@ -308,7 +308,7 @@ void VoorStarten_correctionKR(bool period, count fcvs, count fcls, count tvs)
 
         if ((A[fcvs] && !G[fcvs] || GL[fcvs] || TRG[fcvs]) && !BL[fcvs])
         {
-            correction_realisation_timers(fcvs, fcls, GL[fcvs] || TRG[fcvs] ? TGL_max[fcvs] - TGL_timer[fcvs] + TRG_max[fcvs] - TRG_timer[fcvs] + T_max[tvs] :
+            correction_realisation_timers(fcvs, fcls, GL[fcvs] || TRG[fcvs] ? TGL_max[fcvs] - TGL_timer[fcvs] + TRG_max[fcvs] - (TRG[fcvs] ? TRG_timer[fcvs] : 0) + T_max[tvs] :
                 R[fcvs] ? R_timer[fcvs][fcls] + (T_max[tvs] > 0 ? T_max[tvs] : 1) :
                 T[tvs] ? (T_max[tvs] - T_timer[tvs]) :
                 R_timer[fcvs][fcls], BIT1);

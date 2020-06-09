@@ -104,6 +104,7 @@
         <File Id='GongSolutions.WPF.DragDrop' Name='GongSolutions.WPF.DragDrop.dll' Source='$(var.ReleaseDir)/GongSolutions.WPF.DragDrop.dll' KeyPath='no' />
         <File Id='Gu.Wpf.DataGrid2D' Name='Gu.Wpf.DataGrid2D.dll' Source='$(var.ReleaseDir)/Gu.Wpf.DataGrid2D.dll' KeyPath='no' />
         <File Id='ICSharpCode.AvalonEdit' Name='ICSharpCode.AvalonEdit.dll' Source='$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll' KeyPath='no' />
+        <File Id='Markdown.XAML' Name='Markdown.XAML.dll' Source='$(var.ReleaseDir)/Markdown.XAML.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack' Name='Microsoft.WindowsAPICodePack.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack.Shell' Name='Microsoft.WindowsAPICodePack.Shell.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.Shell.dll' KeyPath='no' />
         <File Id='Newtonsoft.Json' Name='Newtonsoft.Json.dll' Source='$(var.ReleaseDir)/Newtonsoft.Json.dll' KeyPath='no' />

@@ -4,7 +4,6 @@ using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 using NUnit.Framework;
-using OpenQA.Selenium.Appium.Windows;
 
 namespace TLCGen.UITests
 {
