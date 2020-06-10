@@ -75,6 +75,12 @@ namespace TLCGen.Models
                    Type == DetectorTypeEnum.KnopBuiten;
         }
 
+        public bool IsKopLang()
+        {
+            return Type == DetectorTypeEnum.Kop ||
+                   Type == DetectorTypeEnum.Lang;
+        }
+
         #endregion // Public Methods
 
         #region IComparable

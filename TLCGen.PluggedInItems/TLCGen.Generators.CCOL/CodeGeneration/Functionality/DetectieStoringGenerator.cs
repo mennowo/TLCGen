@@ -317,19 +317,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.Append($"{ts1}if (");
                     for (var str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.Where(x => !x.IsDrukKnop()).All(x => x.Rijstrook != str || x.Verlengen == DetectorVerlengenTypeEnum.Geen)) continue;
+                        var dets = fc.Detectoren.Where(x => x.IsKopLang() && x.Verlengen != DetectorVerlengenTypeEnum.Geen && x.Rijstrook == str).ToList();
+                        if (dets.Count == 0) continue;
 
                         var det = 0;
                         if (str > 1)
                         {
                             sb.AppendLine(" ||");
                         }
-                        foreach (var d in fc.Detectoren.Where(x => !x.IsDrukKnop()))
+                        foreach (var d in dets)
                         {
-                            if (d.Verlengen == DetectorVerlengenTypeEnum.Geen) continue;
-
-                            if (d.Rijstrook != str) continue;
-
                             det++;
                             if (det > 1)
                             {
