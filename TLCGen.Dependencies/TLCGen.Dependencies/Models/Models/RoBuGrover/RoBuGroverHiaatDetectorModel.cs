@@ -5,9 +5,9 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Detector, "Detector")]
     public class RoBuGroverHiaatDetectorModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [Browsable(false)]
         [HasDefault(false)]
         public string Detector { get; set; }

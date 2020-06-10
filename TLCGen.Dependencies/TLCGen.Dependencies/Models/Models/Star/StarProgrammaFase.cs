@@ -2,11 +2,11 @@
 
 namespace TLCGen.Models
 {
-    [RefersTo(TLCGenObjectTypeEnum.Fase, nameof(FaseCyclus))]
     public class StarProgrammaFase
     {
         #region Properties
 
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int Start1 { get; set; }

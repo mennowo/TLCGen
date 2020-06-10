@@ -14,8 +14,9 @@ namespace TLCGen.Models
 
 		#region Properties
 
+        [RefersTo(TLCGenObjectTypeEnum.SignaalPlan)]
 		[ModelName(TLCGenObjectTypeEnum.SignaalPlan)]
-		[Browsable(false)]
+        [Browsable(false)]
 		public override string Naam { get; set; }
         public override bool Dummy { get; set; }
         [HasDefault(false)]
@@ -24,6 +25,8 @@ namespace TLCGen.Models
 		public int StartMoment { get; set; }
 		public int SwitchMoment { get; set; }
 		public List<SignaalPlanFaseModel> Fasen { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.SignaalPlan;
 
         #endregion // Properties
 

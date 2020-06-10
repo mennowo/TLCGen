@@ -5,9 +5,9 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class HDIngreepMeerealiserendeFaseCyclusModel : IComparable
     {
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [XmlText]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }

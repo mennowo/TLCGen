@@ -16,17 +16,34 @@ namespace TLCGen.Models
 
         #region Reguliere IO (detectie, Vecom, SD via ingang, wissels)
 
-        [RefersTo(TLCGenObjectTypeEnum.Input)]
+        [RefersTo(TLCGenObjectTypeEnum.Input, nameof(InputTLCGenType))]
         [HasDefault(false)]
         public string RelatedInput1 { get; set; }
         public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type { get; set; }
 
+        public TLCGenObjectTypeEnum InputTLCGenType
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
+                        return TLCGenObjectTypeEnum.Detector;
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                        return TLCGenObjectTypeEnum.SelectieveDetector;
+                    default:
+                        return TLCGenObjectTypeEnum.Detector;
+                }
+            }
+        }
+
         public bool TweedeInput { get; set; }
-        [RefersTo(TLCGenObjectTypeEnum.Input)]
+        [RefersTo(TLCGenObjectTypeEnum.Input, nameof(InputTLCGenType))]
         [HasDefault(false)]
         public string RelatedInput2 { get; set; }
         public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type { get; set; }
-
+        
         public bool KijkNaarWisselStand { get; set; }
         public bool AlleenIndienGeenInmelding { get; set; }
         public bool AlleenIndienRood { get; set; }

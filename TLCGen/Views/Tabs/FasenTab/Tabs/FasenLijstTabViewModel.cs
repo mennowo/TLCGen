@@ -150,7 +150,7 @@ namespace TLCGen.ViewModels
                 changed = true;
                 foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
                 {
-                    TLCGenControllerModifier.Default.RemoveSignalGroupFromController(fcvm.Naam);
+                    TLCGenControllerModifier.Default.RemoveModelItemFromController(fcvm.Naam, TLCGenObjectTypeEnum.Fase);
                     remfcs.Add(fcvm.FaseCyclus);
                 }
 
@@ -160,7 +160,7 @@ namespace TLCGen.ViewModels
             {
                 changed = true;
                 remfcs.Add(SelectedFaseCyclus.FaseCyclus);
-                TLCGenControllerModifier.Default.RemoveSignalGroupFromController(SelectedFaseCyclus.Naam);
+                TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedFaseCyclus.Naam, TLCGenObjectTypeEnum.Fase);
                 SelectedFaseCyclus = null;
             }
 

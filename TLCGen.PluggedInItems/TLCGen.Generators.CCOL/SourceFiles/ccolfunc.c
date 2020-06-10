@@ -183,7 +183,7 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
             A[fc] &= ~BIT9;
             if (!A[fc]) {
                 TFB_timer[fc] = 0;
-                RR[fc] |= RA[fc] ? BIT : 0;
+                RR[fc] |= RA[fc] ? BIT9 : 0;
             }
         }
     }

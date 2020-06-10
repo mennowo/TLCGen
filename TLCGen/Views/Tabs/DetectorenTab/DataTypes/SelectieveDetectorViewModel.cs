@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using TLCGen.Integrity;
+using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -16,9 +17,11 @@ namespace TLCGen.ViewModels
             get => SelectieveDetector.Naam;
             set
             {
+                var old = SelectieveDetector.Naam;
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(Models.Enumerations.TLCGenObjectTypeEnum.Input, value))
                 {
                     SelectieveDetector.Naam = value;
+                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.SelectieveDetector, old, value));
                 }
                 RaisePropertyChanged<object>(broadcast: true);
             }

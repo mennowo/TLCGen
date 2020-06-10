@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Models;
 
 namespace TLCGen.Helpers
@@ -18,7 +13,7 @@ namespace TLCGen.Helpers
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
-                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (ignore != null) continue;
 
                 var propValue = property.GetValue(obj);
@@ -32,8 +27,7 @@ namespace TLCGen.Helpers
                 }
                 else if (!property.PropertyType.IsValueType)
                 {
-                    var elems = propValue as IList;
-                    if (elems != null)
+                    if (propValue is IList elems)
                     {
                         foreach (var item in elems)
                         {
@@ -55,7 +49,7 @@ namespace TLCGen.Helpers
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
-                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (ignore != null) continue;
 
                 var propValue = property.GetValue(obj);
@@ -69,8 +63,7 @@ namespace TLCGen.Helpers
                 }
                 else if (!property.PropertyType.IsValueType)
                 {
-                    var elems = propValue as IList;
-                    if (elems != null)
+                    if (propValue is IList elems)
                     {
                         foreach (var item in elems)
                         {

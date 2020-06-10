@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     public interface IHaveName
     {
-        string Naam { get; set; } 
+        string Naam { get; set; }
+        TLCGenObjectTypeEnum ObjectType { get; }
     }
 }

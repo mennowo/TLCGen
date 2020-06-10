@@ -6,11 +6,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-	[RefersTo(TLCGenObjectTypeEnum.Periode, "Naam")]
     public class PeriodeModel : IHaveName
     {
         #region Properties
 
+	    [RefersTo(TLCGenObjectTypeEnum.Periode)]
         [HasDefault(false)]
         [ModelName(TLCGenObjectTypeEnum.Periode)]
         public string Naam { get; set; }
@@ -28,6 +28,8 @@ namespace TLCGen.Models
         [Browsable(false)]
         [IOElement("per", BitmappedItemTypeEnum.Uitgang, "BitmapNaam", "BitmapDataRelevant")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.Periode;
 
         [XmlIgnore]
         [Browsable(false)]

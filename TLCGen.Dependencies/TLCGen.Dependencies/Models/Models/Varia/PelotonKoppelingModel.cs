@@ -14,6 +14,7 @@ namespace TLCGen.Models
         #region Properties
 
         [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.PelotonKoppeling)]
         [ModelName(TLCGenObjectTypeEnum.PelotonKoppeling)]
         public string KoppelingNaam { get; set; }
         

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace TLCGen.Models
     [Serializable]
     public class FileIngreepModel : IHaveName
     {
+        [RefersTo(TLCGenObjectTypeEnum.FileIngreep)]
         [ModelName(TLCGenObjectTypeEnum.FileIngreep)]
         [HasDefault(false)]
         public string Naam { get; set; }
@@ -29,6 +31,8 @@ namespace TLCGen.Models
         [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string AlternatieveGroentijdenSet { get; set; }
         public FileMetingLocatieEnum FileMetingLocatie { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.FileIngreep;
 
         [IOElement("file", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }

@@ -5,11 +5,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class RatelTikkerModel
     {
         public RateltikkerTypeEnum Type { get; set; }
         public int NaloopTijd { get; set; }
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public List<RatelTikkerDetectorModel> Detectoren { get; set; }

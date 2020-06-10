@@ -10,6 +10,7 @@ namespace TLCGen.Models
     [IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
     public class StarProgrammaModel : IOElementModel, IHaveName, IComparable<StarProgrammaModel>
     {
+        [RefersTo(TLCGenObjectTypeEnum.StarProgramma)]
         [ModelName(TLCGenObjectTypeEnum.StarProgramma)]
         [Browsable(false)]
         public override string Naam { get; set; }
@@ -17,6 +18,8 @@ namespace TLCGen.Models
         public int Cyclustijd { get; set; }
         [XmlElement(ElementName = "Fase")]
         public List<StarProgrammaFase> Fasen { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.StarProgramma;
 
         #region IComparable<StarProgrammaModel>
 

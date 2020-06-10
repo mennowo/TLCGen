@@ -242,7 +242,7 @@ namespace TLCGen.ViewModels
 
         void RemovePeriodeCommand_Executed(object prm)
         {
-			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam);
+			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam, TLCGenObjectTypeEnum.Periode);
 	        Periodes.Remove(SelectedPeriode);
 	        SelectedPeriode = null;
 	        Messenger.Default.Send(new PeriodenChangedMessage());

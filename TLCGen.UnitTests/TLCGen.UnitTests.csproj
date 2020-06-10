@@ -61,6 +61,7 @@
     <Compile Include="Build\BuildTests.cs" />
     <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
+    <Compile Include="Helpers\TLCGenControllerModifierTests.cs" />
     <Compile Include="Plugins\TabCImporterTests.cs" />
     <Compile Include="Tabs\DetectorenTab\Tabs\DetectorenFasenTabTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\FaseCyclusViewModelTests.cs" />

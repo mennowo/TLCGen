@@ -19,9 +19,11 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed_AddsFase()
         {
             var model = new ControllerModel();
+            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
-            var vm = new FasenLijstTabViewModel();
-            vm.Controller = model;
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            var vm = new FasenLijstTabViewModel {Controller = model};
 
             vm.AddFaseCommand.Execute(null);
 
@@ -32,8 +34,10 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_Adds5Fasen()
         {
             var model = new ControllerModel();
+            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
             var vm = new FasenLijstTabViewModel {Controller = model};
 
             vm.AddFaseCommand.Execute(null);
@@ -77,7 +81,7 @@ namespace TLCGen.UnitTests
 
             vm.RemoveFaseCommand.Execute(null);
 
-            controllermodifiermock.Received().RemoveSignalGroupFromController("01");
+            controllermodifiermock.Received().RemoveModelItemFromController("01", TLCGenObjectTypeEnum.Fase);
         }
 
         [Test]

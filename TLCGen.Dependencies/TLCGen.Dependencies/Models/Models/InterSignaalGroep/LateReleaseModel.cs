@@ -4,13 +4,14 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseVan", TLCGenObjectTypeEnum.Fase, "FaseNaar")]
     public class LateReleaseModel : IInterSignaalGroepElement
     {
         #region Properties
 
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseVan { get; set; }
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseNaar { get; set; }
         public int LateReleaseTijd { get; set; }

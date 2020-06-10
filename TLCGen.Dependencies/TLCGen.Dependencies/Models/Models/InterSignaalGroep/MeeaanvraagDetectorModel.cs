@@ -4,9 +4,9 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Detector, "MeeaanvraagDetector")]
     public class MeeaanvraagDetectorModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [HasDefault(false)]
         public string MeeaanvraagDetector { get; set; }
     }

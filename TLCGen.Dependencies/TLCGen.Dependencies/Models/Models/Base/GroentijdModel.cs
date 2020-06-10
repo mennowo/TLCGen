@@ -5,11 +5,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class GroentijdModel : IComparable
     {
         #region Properties
         
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }

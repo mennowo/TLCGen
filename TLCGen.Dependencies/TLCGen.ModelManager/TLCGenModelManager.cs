@@ -700,13 +700,10 @@ namespace TLCGen.ModelManagement
             if (obj == null) return i;
             var objType = obj.GetType();
 
-            // class refers to?
-            var refToAttr = objType.GetCustomAttribute<RefersToAttribute>();
-
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
-                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (ignore != null) continue;
 
                 var propValue = property.GetValue(obj);
@@ -714,29 +711,26 @@ namespace TLCGen.ModelManagement
                 // for strings
                 if (property.PropertyType == typeof(string))
                 {
-                    // if this is the referent string, set it if needed
-                    if (refToAttr != null &&
-                        (property.Name == refToAttr.ReferProperty1 && objectType == refToAttr.ObjectType1 || 
-                         property.Name == refToAttr.ReferProperty2 && objectType == refToAttr.ObjectType2 ||
-                         property.Name == refToAttr.ReferProperty3 && objectType == refToAttr.ObjectType3) &&
+                    var strRefToAttr = property.GetCustomAttribute<RefersToAttribute>();
+
+                    if (strRefToAttr == null) continue;
+                    
+                    var refObjectType = strRefToAttr.ObjectType;
+                    // if applicable, find actual object type
+                    if (strRefToAttr.ObjectTypeProperty != null)
+                    {
+                        var objTypeProp = properties.FirstOrDefault(x => x.Name == strRefToAttr.ObjectTypeProperty);
+                        if (objTypeProp != null && objTypeProp.PropertyType == typeof(TLCGenObjectTypeEnum))
+                        {
+                            refObjectType = (TLCGenObjectTypeEnum) objTypeProp.GetValue(obj);
+                        }
+                    }
+                    // set new value if applicable
+                    if (objectType == refObjectType &&
                         (string) propValue == oldName)
                     {
                         property.SetValue(obj, newName);
                         ++i;
-                    }
-                    // otherwise, check if the string has RefersTo itself, and set if needed
-                    else
-                    {
-                        var strRefToAttr = property.GetCustomAttribute<RefersToAttribute>();
-                        if (strRefToAttr != null &&
-                            (objectType == strRefToAttr.ObjectType1 ||
-                             objectType == strRefToAttr.ObjectType2 ||
-                             objectType == strRefToAttr.ObjectType3) &&
-                            (string)propValue == oldName)
-                        {
-                            property.SetValue(obj, newName);
-                            ++i;
-                        }
                     }
                 }
                 // for lists

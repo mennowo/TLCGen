@@ -110,7 +110,7 @@ namespace TLCGen.UnitTests
 		    vm.OnSelected();
 		    vm.RemoveDetectorCommand.Execute(null);
 
-		    controllermodifiermock.Received().RemoveDetectorFromController("011");
+		    controllermodifiermock.Received().RemoveModelItemFromController("011", TLCGenObjectTypeEnum.Detector);
 	    }
 
 	    [Test]
@@ -131,9 +131,9 @@ namespace TLCGen.UnitTests
 		    };
 		    vm.RemoveDetectorCommand.Execute(null);
 
-		    controllermodifiermock.Received().RemoveDetectorFromController("021");
-		    controllermodifiermock.Received().RemoveDetectorFromController("022");
-		    controllermodifiermock.Received().RemoveDetectorFromController("023");
+		    controllermodifiermock.Received().RemoveModelItemFromController("021", TLCGenObjectTypeEnum.Detector);
+		    controllermodifiermock.Received().RemoveModelItemFromController("022", TLCGenObjectTypeEnum.Detector);
+		    controllermodifiermock.Received().RemoveModelItemFromController("023", TLCGenObjectTypeEnum.Detector);
 	    }
 
 	    [Test]

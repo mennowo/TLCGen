@@ -6,12 +6,12 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Detector, "Detector")]
     public class VAOntruimenDetectorModel
     {
         [XmlArrayItem(ElementName = "ConflictendeFase")]
         public List<VAOntruimenNaarFaseModel> ConflicterendeFasen { get; set; }
 
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [HasDefault(false)]
         public string Detector { get; set; }
 

@@ -151,13 +151,13 @@ namespace TLCGen.ViewModels
                 foreach (IngangViewModel ivm in SelectedIngangen)
                 {
                     rems.Add(ivm.Ingang);
-                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam, TLCGenObjectTypeEnum.Input);
                 }
             }
             else if (SelectedIngang != null)
             {
                 changed = true;
-                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedIngang.Naam);
+                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedIngang.Naam, TLCGenObjectTypeEnum.Input);
                 rems.Add(SelectedIngang.Ingang);
             }
             RebuildIngangenList();

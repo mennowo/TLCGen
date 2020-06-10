@@ -17,10 +17,10 @@ namespace TLCGen.Models
         public string Ontwerper { get; set; }
         [HasDefault(false)]
         public string Commentaar { get; set; }
-        [TLCGenIgnoreAttribute]
+        [TLCGenIgnore]
         [HasDefault(false)]
         public ControllerModel Controller { get; set; }
-        [TLCGenIgnoreAttribute]
+        [TLCGenIgnore]
         [HasDefault(false)]
         public string ControllerPluginData { get; set; }
 

@@ -7,9 +7,9 @@ namespace TLCGen.Models
     /// renaming elements, indexing items for the bitmap, etc.
     /// </summary>
     [AttributeUsage(validOn: AttributeTargets.Property)]
-    public class TLCGenIgnoreAttributeAttribute : Attribute
+    public class TLCGenIgnoreAttribute : Attribute
     {
-        public TLCGenIgnoreAttributeAttribute()
+        public TLCGenIgnoreAttribute()
         {
         }
     }

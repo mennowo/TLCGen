@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using TLCGen.Extensions;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Integrity
 {
@@ -14,10 +15,7 @@ namespace TLCGen.Integrity
     {
         ControllerModel Controller { get; set; }
 
-		// TODO: remove upper two below and make into one generic!
-        void RemoveSignalGroupFromController(string remsg);
-        void RemoveDetectorFromController(string remd);
-        void RemoveModelItemFromController(string remitem);
+		void RemoveModelItemFromController(string remitem, TLCGenObjectTypeEnum objectType);
         void CorrectModel_AlteredConflicts();
         void CorrectModel_AlteredHDIngrepen();
     }
@@ -62,19 +60,9 @@ namespace TLCGen.Integrity
 
         #region ITLCGenControllerModifier
 
-        public void RemoveSignalGroupFromController(string remsg)
-        {
-            RemoveFromController(_Controller, remsg);
-        }
-
-        public void RemoveDetectorFromController(string remd)
-        {
-            RemoveFromController(_Controller, remd);
-        }
-
-	    public void RemoveModelItemFromController(string uniqueModelName)
+        public void RemoveModelItemFromController(string uniqueModelName, TLCGenObjectTypeEnum objectType)
 	    {
-		    RemoveFromController(_Controller, uniqueModelName);
+		    RemoveFromController(_Controller, uniqueModelName, objectType);
 	    }
 
 		public void CorrectModel_AlteredConflicts()
@@ -100,76 +88,85 @@ namespace TLCGen.Integrity
 
         #region Private Methods
         
-		private void RemoveFromController(object obj, string remObject)
+		private void RemoveFromController(object obj, string remObject, TLCGenObjectTypeEnum objectType)
 		{
 			if (obj == null) return;
 			var objType = obj.GetType();
-			var properties = objType.GetProperties();
-			foreach (var property in properties)
+            // find and loop all properties
+			var objectProperties = objType.GetProperties();
+            foreach (var objectProperty in objectProperties)
 			{
-                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                // if flagged, ignore this
+                var ignore = (TLCGenIgnoreAttribute)objectProperty.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (ignore != null) continue;
 
-                var propType = property.PropertyType;
+                var propType = objectProperty.PropertyType;
+                // for lists, and objects we check if items need removing
 				if (!(propType == typeof(string)) && !propType.IsValueType)
 				{
-					var propValue = property.GetValue(obj);
-					var elems = propValue as IList;
-					if (elems != null)
+					var propValue = objectProperty.GetValue(obj);
+                    if (propValue is IList elems)
 					{
-						var t = elems.GetType();
-						if (t.IsGenericType)
+						var elemsType = elems.GetType();
+						if (elemsType.IsGenericType)
 						{
-							var _t = t.GetGenericArguments()[0];
-							if (_t != typeof(List<>))
-							{
-								var _attr = _t.GetCustomAttribute<RefersToAttribute>();
-								if (_attr != null)
-								{
-									var listType = typeof(List<>).MakeGenericType(_t);
-									var remitems = Activator.CreateInstance(listType);
-									foreach (var item in elems)
-									{
-										if (_attr.ReferProperty1 != null)
-										{
-											var val1 = (string)_t.GetProperty(_attr.ReferProperty1).GetValue(item);
-											if (val1 == remObject)
-											{
-												t.GetMethod("Add").Invoke(remitems, new[] { item });
-											}
-											else if (_attr.ReferProperty2 != null)
-											{
-												var val2 = (string)_t.GetProperty(_attr.ReferProperty2).GetValue(item);
-												if (val2 == remObject)
-												{
-													t.GetMethod("Add").Invoke(remitems, new[] { item });
-												}
-                                                else if (_attr.ReferProperty3 != null)
+							var genericType = elemsType.GetGenericArguments()[0];
+                            if (genericType != typeof(List<>))
+                            {
+                                var listType = typeof(List<>).MakeGenericType(genericType);
+                                var remitems = Activator.CreateInstance(listType);
+                                foreach (var item in elems)
+                                {
+                                    var itemProperties = genericType.GetProperties();
+                                    foreach (var itemProperty in itemProperties)
+                                    {
+                                        var itemPropIgnore = (TLCGenIgnoreAttribute) itemProperty.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
+                                        if (itemPropIgnore != null) continue;
+
+                                        // for strings
+                                        if (itemProperty.PropertyType == typeof(string))
+                                        {
+                                            var itemPropValue = itemProperty.GetValue(item);
+                                            var itemRefToAttr = itemProperty.GetCustomAttribute<RefersToAttribute>();
+                                            if (itemRefToAttr == null) continue;
+                                            var refObjectType = itemRefToAttr.ObjectType;
+                                            // if applicable, find actual object type
+                                            if (itemRefToAttr.ObjectTypeProperty != null)
+                                            {
+                                                var objTypeProp = itemProperties.FirstOrDefault(x => x.Name == itemRefToAttr.ObjectTypeProperty);
+                                                if (objTypeProp != null && objTypeProp.PropertyType == typeof(TLCGenObjectTypeEnum))
                                                 {
-                                                    var val3 = (string)_t.GetProperty(_attr.ReferProperty3).GetValue(item);
-                                                    if (val3 == remObject)
-                                                    {
-                                                        t.GetMethod("Add").Invoke(remitems, new[] { item });
-                                                    }
+                                                    refObjectType = (TLCGenObjectTypeEnum) objTypeProp.GetValue(item);
                                                 }
                                             }
+
+                                            // add to removal list if needed
+                                            if (objectType == refObjectType &&
+                                                itemPropValue as string == remObject)
+                                            {
+                                                elemsType.GetMethod("Add").Invoke(remitems, new[] {item});
+                                                break;
+                                            }
                                         }
-									}
-									foreach (var item in (IList)remitems)
-									{
-										elems.Remove(item);
-									}
-								}
-							}
-						}
+                                    }
+                                }
+
+                                foreach (var item in (IList) remitems)
+                                {
+                                    elems.Remove(item);
+                                }
+                            }
+                        }
+                        // now, remaining elements are recursible checked for containing elements
 						foreach (var item in elems)
 						{
-							RemoveFromController(item, remObject);
+							RemoveFromController(item, remObject, objectType);
 						}
 					}
-					else
+                    // objects are recursible checked for containing elements
+                    else
 					{
-                        RemoveFromController(propValue, remObject);
+                        RemoveFromController(propValue, remObject, objectType);
 					}
 				}
 			}

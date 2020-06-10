@@ -4,11 +4,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
 	[Serializable]
-	[RefersTo(TLCGenObjectTypeEnum.Periode, "Periode")]
 	public class HalfstarPeriodeDataModel
 	{
 		#region Properties
 
+	    [RefersTo(TLCGenObjectTypeEnum.Periode)]
         [HasDefault(false)]
 		public string Periode { get; set; }
         [HasDefault(false)]

@@ -7,16 +7,19 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "Naam")]
     [IOElement("", BitmappedItemTypeEnum.Fase, "Naam")]
     public class FaseCyclusModel : IOElementModel, IComparable, IHaveName
     {
         #region Properties
         
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [ModelName(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
         public override string Naam { get; set; }
         public override bool Dummy { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.Fase;
+
         [Browsable(false)]
         public FaseTypeEnum Type { get; set; }
 

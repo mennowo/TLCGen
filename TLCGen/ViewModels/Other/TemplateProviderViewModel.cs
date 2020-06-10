@@ -171,7 +171,7 @@ namespace TLCGen.ViewModels
                             }
                             foreach(var i in l)
                             {
-                                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(i.Naam);
+                                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(i.Naam, i.ObjectType);
                             }
                         }
                         var clonedItems = (IList)valueCloned;

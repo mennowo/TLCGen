@@ -3,6 +3,9 @@ using TLCGen.ViewModels;
 using TLCGen.Models;
 using TLCGen.Settings;
 using System.Collections.Generic;
+using GalaSoft.MvvmLight.Messaging;
+using TLCGen.DataAccess;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.UnitTests
 {
@@ -50,12 +53,15 @@ namespace TLCGen.UnitTests
         public void FasenTimersTabMultipleSelectionEdit_TGLChangedOnOnePhase_ChangesAllSelected()
         {
             var model = new ControllerModel();
+            Messenger.OverrideDefault(new Messenger());
             TemplatesProvider.OverrideDefault(FakesCreator.CreateTemplatesProvider());
             model.Fasen.Add(new FaseCyclusModel { Naam = "01", TGL = 30 });
             model.Fasen.Add(new FaseCyclusModel { Naam = "02", TGL = 30 });
             model.Fasen.Add(new FaseCyclusModel { Naam = "03", TGL = 30 });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04", TGL = 30 });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05", TGL = 30 });
+            TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
             ControllerAccessProvider.OverrideDefault(FakesCreator.CreateControllerAccessProvider(model));
             var vm = new FasenLijstTimersTabViewModel { Controller = model };
 

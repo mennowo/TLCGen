@@ -184,14 +184,14 @@ namespace TLCGen.ViewModels
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
                     remDets.Add(dvm.Detector);
-                    Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(dvm.Naam);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(dvm.Naam, TLCGenObjectTypeEnum.Detector);
                 }
             }
             else if (SelectedDetector != null)
             {
                 changed = true;
                 remDets.Add(SelectedDetector.Detector);
-                Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(SelectedDetector.Naam);
+                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedDetector.Naam, TLCGenObjectTypeEnum.Detector);
             }
             RebuildDetectorenList();
             MessengerInstance.Send(new ControllerDataChangedMessage());

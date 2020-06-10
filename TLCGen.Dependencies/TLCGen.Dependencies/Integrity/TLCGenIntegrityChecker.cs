@@ -30,14 +30,14 @@ namespace TLCGen.Integrity
             {
                 if (!Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
                 {
-                    hisName = hisName + "0";
+                    hisName += "0";
                 }
             }
             if (Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
             {
                 if (!Regex.IsMatch(myName, @".*[a-zA-Z]$"))
                 {
-                    myName = myName + "0";
+                    myName += "0";
                 }
             }
 
@@ -58,12 +58,7 @@ namespace TLCGen.Integrity
         {
             if (c == null) return "Geen controller gevonden om op te slaan!";
             var s = IsConflictMatrixOK(c);
-            if (!string.IsNullOrEmpty(s))
-            {
-                return s;
-            }
-
-            return null;
+            return !string.IsNullOrEmpty(s) ? s : null;
         }
 
         public static string IsGroentijdenSetDataOK(ControllerModel c)
@@ -115,8 +110,7 @@ namespace TLCGen.Integrity
                                     return "Conflict matrix niet symmetrisch:\nGKL van " + cm1.FaseVan + " naar " + cm1.FaseNaar + " maar andersom geen GK.";
                                 continue;
                             default:
-                                int co;
-                                if (Int32.TryParse(cm1.SerializedWaarde, out co))
+                                if (int.TryParse(cm1.SerializedWaarde, out var co))
                                 {
                                     // Check against guaranteed timings
                                     if (c.Data.GarantieOntruimingsTijden)
@@ -127,7 +121,7 @@ namespace TLCGen.Integrity
                                             return "Ontruimingstijd van " + cm1.FaseVan + " naar " + cm1.FaseNaar + " lager dan garantie ontruimmingstijd.";
                                     }
 
-                                    if (Int32.TryParse(cm2.SerializedWaarde, out co))
+                                    if (int.TryParse(cm2.SerializedWaarde, out co))
                                     {
                                         break;
                                     }
@@ -144,9 +138,7 @@ namespace TLCGen.Integrity
 
                         if (c.Data.GarantieOntruimingsTijden)
                         {
-                            int out1;
-
-                            if (Int32.TryParse(cm1.SerializedWaarde, out out1))
+                            if (int.TryParse(cm1.SerializedWaarde, out var out1))
                             {
                                 if (cm1.GarantieWaarde != null && cm1.GarantieWaarde >= 0)
                                 {
@@ -181,13 +173,13 @@ namespace TLCGen.Integrity
         /// </summary>
         /// <param name="naam">The Name property to check</param>
         /// <returns>True if unique, false if not</returns>
-        public static bool IsElementNaamUnique(ControllerModel _Controller, string naam, TLCGenObjectTypeEnum type)
+        public static bool IsElementNaamUnique(ControllerModel controller, string naam, TLCGenObjectTypeEnum type)
         {
             foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationPlugins.Where(x => x.Item1.HasFlag(Plugins.TLCGenPluginElems.IOElementProvider)))
             {
                 if (!((Plugins.ITLCGenElementProvider)pl.Item2).IsElementNameUnique(naam, type)) return false;
             }
-            return IsElementNaamUnique((object)_Controller, naam, type);
+            return IsElementNaamUnique((object)controller, naam, type);
         }
 
         private static bool IsElementNaamUnique(object obj, string naam, TLCGenObjectTypeEnum type)
@@ -199,7 +191,7 @@ namespace TLCGen.Integrity
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
-                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (ignore != null) continue;
 
                 var propValue = property.GetValue(obj);
@@ -241,10 +233,10 @@ namespace TLCGen.Integrity
         /// </summary>
         /// <param name="vissimnaam">The VissimName property to check</param>
         /// <returns>True if unique, false if not</returns>
-        public static bool IsElementVissimNaamUnique(ControllerModel _Controller, string vissimnaam)
+        public static bool IsElementVissimNaamUnique(ControllerModel controller, string vissimnaam)
         {
             // Check detectie
-            foreach (var fcvm in _Controller.Fasen)
+            foreach (var fcvm in controller.Fasen)
             {
                 foreach (var dvm in fcvm.Detectoren)
                 {
@@ -252,7 +244,7 @@ namespace TLCGen.Integrity
                         return false;
                 }
             }
-            foreach (var dvm in _Controller.Detectoren)
+            foreach (var dvm in controller.Detectoren)
             {
                 if (dvm.VissimNaam == vissimnaam)
                     return false;

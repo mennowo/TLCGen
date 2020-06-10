@@ -138,14 +138,14 @@ namespace TLCGen.ViewModels
                 foreach (SelectieveDetectorViewModel ivm in SelectedSelectieveDetectoren)
                 {
                     removed.Add(ivm.SelectieveDetector);
-                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam, TLCGenObjectTypeEnum.SelectieveDetector);
                 }
             }
             else if (SelectedSelectieveDetector != null)
             {
                 changed = true;
                 removed.Add(SelectedSelectieveDetector.SelectieveDetector);
-                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedSelectieveDetector.Naam);
+                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedSelectieveDetector.Naam, TLCGenObjectTypeEnum.SelectieveDetector);
             }
             RebuildSelectieveDetectorenList();
             MessengerInstance.Send(new ControllerDataChangedMessage());

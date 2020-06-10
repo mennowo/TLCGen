@@ -6,7 +6,6 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Detector, "Naam")]
     [IOElement("", BitmappedItemTypeEnum.Detector, "Naam")]
     public class DetectorModel : IOElementModel, IComparable, IHaveName
     {
@@ -16,6 +15,7 @@ namespace TLCGen.Models
 
         #region Properties
         
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [ModelName(TLCGenObjectTypeEnum.Detector)]
         [Browsable(false)]
         public override string Naam { get; set; }
@@ -46,6 +46,8 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel WachtlichtBitmapData { get; set; }
 
         public DetectorSimulatieModel Simulatie { get; set; }
+
+        [Browsable(false)] [HasDefault(false)] public TLCGenObjectTypeEnum ObjectType => TLCGenObjectTypeEnum.Detector;
 
         [Browsable(false)]
         public DetectorTypeEnum Type { get; set; }

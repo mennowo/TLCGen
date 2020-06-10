@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
@@ -25,12 +26,11 @@ namespace TLCGen.UITests
                 var exitApplicationMenuItem = file.FindFirstChild("exitMenuItem");
                 newFile.Click();
                 
+                Thread.Sleep(500);
+
                 // exit
                 file.Click();
                 exitApplicationMenuItem.Click();
-                var msg = WaitForElement(() => window.ModalWindows.FirstOrDefault().AsWindow());
-                var yesButton = msg.FindFirstChild(cf => cf.ByName("No")).AsButton();
-                yesButton.Invoke();
             }
         }
 

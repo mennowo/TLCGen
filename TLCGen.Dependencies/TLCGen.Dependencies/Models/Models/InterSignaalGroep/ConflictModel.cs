@@ -5,7 +5,6 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseVan", TLCGenObjectTypeEnum.Fase, "FaseNaar")]
     public class ConflictModel : IComparable, IInterSignaalGroepElement
     {
         #region Fields
@@ -14,8 +13,10 @@ namespace TLCGen.Models
 
         #region Properties
 
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseVan { get; set; }
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseNaar { get; set; }
 

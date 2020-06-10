@@ -61,6 +61,10 @@ namespace TLCGen.ViewModels
         public void InitCollection(ObservableCollection<T> collection)
         {
             collection.CollectionChanged += CollectionOnCollectionChanged;
+            foreach (var i in collection)
+            {
+                i.PropertyChanged += Item_PropertyChanged;
+            }
         }
 
         private void CollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

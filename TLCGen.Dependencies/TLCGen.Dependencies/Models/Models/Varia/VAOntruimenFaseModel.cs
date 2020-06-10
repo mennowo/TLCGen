@@ -6,9 +6,9 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class VAOntruimenFaseModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int VAOntrMax { get; set; }

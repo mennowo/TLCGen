@@ -7,6 +7,7 @@ namespace TLCGen.Models
     [Serializable]
     public class SelectieveDetectorModel : DetectorModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.SelectieveDetector)]
         [ModelName(TLCGenObjectTypeEnum.SelectieveDetector)]
         [Browsable(false)]
         public override string Naam { get; set; }

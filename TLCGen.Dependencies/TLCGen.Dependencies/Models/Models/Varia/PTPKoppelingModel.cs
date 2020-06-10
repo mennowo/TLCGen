@@ -6,6 +6,7 @@ namespace TLCGen.Models
 	[Serializable]
     public class PTPKoppelingModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
 		[ModelName(TLCGenObjectTypeEnum.PTPKruising)]
         [HasDefault(false)]
         public string TeKoppelenKruispunt { get; set; }

@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
         private bool _detChanging;
         private static IControllerAccessProvider _default;
 
-        public static IControllerAccessProvider Default => _default ?? (_default = new ControllerAccessProvider(Messenger.Default));
+        public static IControllerAccessProvider Default => _default ??= new ControllerAccessProvider(Messenger.Default);
 
         public static void OverrideDefault(IControllerAccessProvider provider)
         {
@@ -105,31 +105,31 @@ namespace TLCGen.ViewModels
         }
 
         public ObservableCollection<IngangViewModel> AllIngangen =>
-            _allIngangen ?? (_allIngangen= new ObservableCollection<IngangViewModel>());
+            _allIngangen ??= new ObservableCollection<IngangViewModel>();
 
         public ObservableCollection<FaseCyclusViewModel> AllSignalGroups =>
-            _allSignalGroups ?? (_allSignalGroups = new ObservableCollection<FaseCyclusViewModel>());
+            _allSignalGroups ??= new ObservableCollection<FaseCyclusViewModel>();
         
         public ObservableCollection<string> AllSignalGroupStrings =>
-            _allSignalGroupStrings ?? (_allSignalGroupStrings = new ObservableCollection<string>());
+            _allSignalGroupStrings ??= new ObservableCollection<string>();
 
         public ObservableCollection<DetectorViewModel> AllDetectors =>
-            _allDetectors ?? (_allDetectors = new ObservableCollection<DetectorViewModel>());
+            _allDetectors ??= new ObservableCollection<DetectorViewModel>();
 
         public ObservableCollection<string> AllDetectorStrings =>
-            _allDetectorStrings ?? (_allDetectorStrings = new ObservableCollection<string>());
+            _allDetectorStrings ??= new ObservableCollection<string>();
         
         public ObservableCollection<DetectorViewModel> AllVecomDetectors =>
-            _allVecomDetectors ?? (_allVecomDetectors = new ObservableCollection<DetectorViewModel>());
+            _allVecomDetectors ??= new ObservableCollection<DetectorViewModel>();
 
         public ObservableCollection<string> AllVecomDetectorStrings =>
-            _allVecomDetectorStrings ?? (_allVecomDetectorStrings = new ObservableCollection<string>());
+            _allVecomDetectorStrings ??= new ObservableCollection<string>();
 
         public ObservableCollection<SelectieveDetectorViewModel> AllSelectiveDetectors =>
-            _allSelectiveDetectors ?? (_allSelectiveDetectors = new ObservableCollection<SelectieveDetectorViewModel>());
+            _allSelectiveDetectors ??= new ObservableCollection<SelectieveDetectorViewModel>();
 
         public ObservableCollection<string> AllSelectiveDetectorStrings =>
-            _allSelectiveDetectorStrings ?? (_allSelectiveDetectorStrings = new ObservableCollection<string>());
+            _allSelectiveDetectorStrings ??= new ObservableCollection<string>();
 
         public ControllerModel Controller { get; private set; }
 
@@ -296,9 +296,11 @@ namespace TLCGen.ViewModels
         private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
         {
             AllSelectiveDetectors.Clear();
+            AllSelectiveDetectorStrings.Clear();
             foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.SelectieveDetectoren)
             {
                 AllSelectiveDetectors.Add(new SelectieveDetectorViewModel(seld));
+                AllSelectiveDetectorStrings.Add(seld.Naam);
             }
         }
 

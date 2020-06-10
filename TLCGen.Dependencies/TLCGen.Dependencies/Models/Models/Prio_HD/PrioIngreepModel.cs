@@ -8,7 +8,6 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, nameof(FaseCyclus))]
     public class PrioIngreepModel : IComparable
     {
         #region Properties
@@ -18,6 +17,7 @@ namespace TLCGen.Models
 
         [XmlIgnore]
         [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
         [ModelName(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
         public string DisplayName
         {
@@ -25,6 +25,7 @@ namespace TLCGen.Models
             set => Naam = Regex.Replace(value, $"^{FaseCyclus}", "");
         }
 
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }

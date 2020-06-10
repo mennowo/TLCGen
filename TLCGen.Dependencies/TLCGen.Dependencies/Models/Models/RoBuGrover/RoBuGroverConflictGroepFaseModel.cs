@@ -4,11 +4,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class RoBuGroverConflictGroepFaseModel
     {
         #region Properties
 
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
 

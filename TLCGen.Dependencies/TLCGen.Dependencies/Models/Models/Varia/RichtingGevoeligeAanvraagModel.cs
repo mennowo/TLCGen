@@ -4,11 +4,12 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus", TLCGenObjectTypeEnum.Detector, "VanDetector", TLCGenObjectTypeEnum.Detector, "NaarDetector")]
     public class RichtingGevoeligeAanvraagModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string VanDetector { get; set; }
         [HasDefault(false)]
