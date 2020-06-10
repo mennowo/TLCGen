@@ -1884,8 +1884,8 @@
             <Description>Inloop tijd fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>fot</Default>
-            <Setting>fot</Setting>
+            <Default>fo</Default>
+            <Setting>fo</Setting>
             <Type>Timer</Type>
             <Description>Fictieve ontruimingstijd van _E1_ naar fase _E2_</Description>
           </Setting>
@@ -1900,6 +1900,12 @@
             <Setting>lr</Setting>
             <Type>Timer</Type>
             <Description>Late release tijd fase _E1_ naar fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>realil</Default>
+            <Setting>il</Setting>
+            <Type>Timer</Type>
+            <Description>Inloop tijd fase _E1_ naar fase _E2_</Description>
           </Setting>
           <Setting>
             <Default>realtijd</Default>

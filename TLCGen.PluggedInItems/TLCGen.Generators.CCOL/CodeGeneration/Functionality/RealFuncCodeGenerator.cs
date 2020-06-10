@@ -16,9 +16,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hinl;
         private CCOLGeneratorCodeStringSettingModel _tinl;
-        private CCOLGeneratorCodeStringSettingModel _tfot;
+        private CCOLGeneratorCodeStringSettingModel _tfo;
         private CCOLGeneratorCodeStringSettingModel _treallr;
         private CCOLGeneratorCodeStringSettingModel _trealvs;
+        private CCOLGeneratorCodeStringSettingModel _trealil;
         private CCOLGeneratorCodeStringSettingModel _hlos;
         private CCOLGeneratorCodeStringSettingModel _schlos;
         private CCOLGeneratorCodeStringSettingModel _mrealtijd;
@@ -130,10 +131,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tfot}{fot}",
+                        $"{_tfo}{fot}",
                         fot.FictieveOntruimingsTijd,
                         CCOLElementTimeTypeEnum.TE_type,
-                        _tfot, fot.FaseVan, fot.FaseNaar));
+                        _tfo, fot.FaseVan, fot.FaseNaar));
             }
 
         }
@@ -261,16 +262,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
                         }
-                        // late release
+                        // late release of inlopen
                         else
                         {
+                            var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
+                            var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
+                            if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
+                            {
+                                max = _trealil;
+                            }
                             sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
                         }
                     }
                     foreach (var (grsync1, grsync2, _) in _sortedSyncs.twoWay)
                     {
                         if (grsync1.Waarde != 0 || grsync2.Waarde != 0) continue;
-                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, 0, TRUE);");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, TRUE);");
                     }
                     sb.AppendLine();
                     foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
@@ -293,7 +300,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
 
                         var lr = ow != null && ow.Waarde > 0;
-                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_FOT({_fcpf}{fot:van}, {_fcpf}{fot:naar}, T_max[{_tpf}{_tfot}{fot}], {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, T_max[{_tpf}{_tfo}{fot}], {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
                     }
                     if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");

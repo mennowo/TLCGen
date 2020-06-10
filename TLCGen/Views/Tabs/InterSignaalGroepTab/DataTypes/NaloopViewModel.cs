@@ -70,6 +70,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool InrijdenTijdensGroenPossible => TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc;
+
         public bool DetectieAfhankelijkPossible
         {
             get => _detectieAfhankelijkPossible;
