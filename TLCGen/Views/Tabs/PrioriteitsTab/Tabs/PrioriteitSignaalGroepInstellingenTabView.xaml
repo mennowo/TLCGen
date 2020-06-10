@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
         xmlns:local="clr-namespace:TLCGen.Views"
+        xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioriteitSignaalGroepInstellingenTabViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <CheckBox DockPanel.Dock="Right" Content="Niet aanmaken parameters" Margin="5" VerticalAlignment="Center"
-                      IsChecked="{Binding Path=OVIngreepSGParametersHard}"/>
+                      IsChecked="{Binding Path=PrioriteitIngreepSGParametersHard}"/>
             <StackPanel Orientation="Horizontal">    
                 <Label Content="Instellingen voor conflicten" />
                 <ct:InfoElement>
