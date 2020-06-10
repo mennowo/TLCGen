@@ -84,28 +84,28 @@
                 </Style>
             </Grid.Style>
             <Label Content="KAR/VECOM/detectie instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
-            <Label Content="Input 1" />
+            <Label Content="Input 1" Visibility="{Binding Path=HasInput1,Converter={StaticResource BoolToVisConv}}" />
             <ComboBox
-                IsEnabled="{Binding Path=HasInput1}" ItemsSource="{Binding Path=AvailableInputs}"
+                Visibility="{Binding Path=HasInput1,Converter={StaticResource BoolToVisConv}}" ItemsSource="{Binding Path=AvailableInputs}"
                 SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>
-            <Label Content="Input 1 type" />
+            <Label Content="Input 1 type" Visibility="{Binding Path=HasInput1Type,Converter={StaticResource BoolToVisConv}}" />
             <ComboBox
-                IsEnabled="{Binding Path=HasInput1}"
+                Visibility="{Binding Path=HasInput1Type,Converter={StaticResource BoolToVisConv}}"
                 SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
             </ComboBox>
-            <CheckBox Content="2e input" IsEnabled="{Binding Path=CanHaveInput2}"
+            <CheckBox Content="2e input" Visibility="{Binding Path=CanHaveInput2,Converter={StaticResource BoolToVisConv}}"
                       IsChecked="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                       Grid.ColumnSpan="2" />
-            <Label Content="Input 2" />
+            <Label Content="Input 2" Visibility="{Binding Path=HasInput2,Converter={StaticResource BoolToVisConv}}" />
             <ComboBox
-                IsEnabled="{Binding Path=HasInput2}" ItemsSource="{Binding Path=AvailableInputs}"
+                Visibility="{Binding Path=HasInput2,Converter={StaticResource BoolToVisConv}}" ItemsSource="{Binding Path=AvailableInputs}"
                 SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>
-            <Label Content="Input 2 type" />
+            <Label Content="Input 2 type" Visibility="{Binding Path=HasInput2,Converter={StaticResource BoolToVisConv}}" />
             <ComboBox
-                IsEnabled="{Binding Path=HasInput2}"
+                Visibility="{Binding Path=HasInput2,Converter={StaticResource BoolToVisConv}}"
                 SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:PrioIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
             </ComboBox>

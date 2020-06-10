@@ -98,12 +98,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (!c.RichtingGevoeligeAanvragen.Any()) return "";
 
                     sb.AppendLine($"{ts}/* Richtinggevoelige aanvragen */");
-                    sb.AppendLine($"{ts}/* --------------------------= */");
+                    sb.AppendLine($"{ts}/* --------------------------- */");
 
                     if (c.RichtingGevoeligeAanvragen.Any(x => x.ResetAanvraag))
                     {
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) RR[fc] &= ~BIT8;  /* reset BIT-sturing t.b.v. reset A */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) RR[fc] &= ~BIT9;  /* reset BIT-sturing t.b.v. reset A */");
                         sb.AppendLine();
                     }
 

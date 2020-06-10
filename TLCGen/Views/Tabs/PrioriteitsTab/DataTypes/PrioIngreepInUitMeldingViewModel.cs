@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
         public PrioIngreepInUitMeldingTypeEnum InUit => PrioIngreepInUitMelding.InUit;
 
         public bool HasInput1 => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
-
+        
         public bool DisabledIfDSI => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
 
         public bool HasInput1Type => Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && 

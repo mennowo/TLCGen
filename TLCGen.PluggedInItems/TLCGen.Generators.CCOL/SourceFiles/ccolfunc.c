@@ -175,15 +175,15 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
         if (TA[fc])
         {
             /* set tijdelijke aanvraag */
-            A[fc] |= BIT8;
+            A[fc] |= BIT9;
         }
-        if (!TA[fc] && (A[fc] & BIT8))
+        if (!TA[fc] && (A[fc] & BIT9))
         {
             /* reset tijdelijke aanvraag */
-            A[fc] &= ~BIT8;
+            A[fc] &= ~BIT9;
             if (!A[fc]) {
                 TFB_timer[fc] = 0;
-                RR[fc] |= RA[fc] ? BIT8 : 0;
+                RR[fc] |= RA[fc] ? BIT : 0;
             }
         }
     }
