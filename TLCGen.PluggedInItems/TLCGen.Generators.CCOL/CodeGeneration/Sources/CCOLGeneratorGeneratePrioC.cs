@@ -1225,10 +1225,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GeneratePrioCPrioriteitsToekenning(ControllerModel c)
         {
-            var _hplhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hplhd");
-            var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
-            var _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
-
             var sb = new StringBuilder();
             sb.AppendLine("/* ------------------------------------");
             sb.AppendLine("   Prioriteitsopties toekenning voor OV");
@@ -1245,10 +1241,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GeneratePrioCTegenhoudenConflicten(ControllerModel c)
         {
-            var _hplhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hplhd");
-            var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
-            var _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
-
             var sb = new StringBuilder();
             sb.AppendLine("/* ------------------------------------");
             sb.AppendLine("   Extra code tegenhouden conflicten OV");
