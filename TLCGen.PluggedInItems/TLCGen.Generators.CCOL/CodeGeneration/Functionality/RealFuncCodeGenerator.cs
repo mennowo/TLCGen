@@ -265,13 +265,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         // late release of inlopen
                         else
                         {
+                            // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
+                            // maar de groentijdcorrectie van b naar a
                             var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                             var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
                             if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
                             {
                                 max = _trealil;
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], TRUE);");
                             }
-                            sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                            }
                         }
                     }
                     foreach (var (grsync1, grsync2, _) in _sortedSyncs.twoWay)
