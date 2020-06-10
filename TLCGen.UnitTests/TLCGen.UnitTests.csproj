@@ -58,7 +58,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Build\BuildTests.cs" />
     <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
     <Compile Include="Plugins\TabCImporterTests.cs" />
