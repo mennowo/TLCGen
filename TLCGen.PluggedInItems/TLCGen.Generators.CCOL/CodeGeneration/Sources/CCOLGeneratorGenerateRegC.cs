@@ -639,6 +639,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (controller.StarData.ToepassenStar)
             {
+                sb.AppendLine($"{ts}star_reset_bits(SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0);");
                 sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0)");
                 sb.AppendLine($"{ts}{{");
                 sb.AppendLine($"{ts}{ts}star_instellingen();");

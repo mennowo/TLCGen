@@ -415,11 +415,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* ------------------- */");
                     iper = 0;
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
-                    foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
+                    foreach (var _ in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{iper}] = (MM[{_mpf}{_mperiod}] == {iper++});");
                     }
-                    iper = 0;
+                    iper = 1;
                     foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.StarRegelen))
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{per.Naam}] = (MM[{_mpf}{_mperiodstar}] == {iper++});");
@@ -447,13 +447,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmperbeldim}] = (IH[{_hpf}{_hperiod}{_prmperbeldim}] == TRUE);");
                         }
                     }
-                    ipero = 1;
-                    foreach (var per in c.PeriodenData.Perioden)
+                    foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Overig))
                     {
-                        if (per.Type == PeriodeTypeEnum.Overig)
-                        {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
-                        }
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
                     }
                     return sb.ToString();
 

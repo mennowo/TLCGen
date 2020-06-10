@@ -29,37 +29,49 @@ boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count eind
 void commando_groen(count fc)
 {
 	B[fc] = (boolv)(R[fc] && A[fc]);
-	YM[fc] = TRUE;
+	YM[fc] |= BIT14;
 	RR[fc] = FALSE;
 }
 
-void star_reset_bits()
+void star_reset_bits(boolv star)
 {
 	int i;
-	
-	for (i = 0; i < FCMAX; ++i)
-	{
-		X[i] = FALSE;
-		RR[i] = FALSE;
-		RS[i] = FALSE;
-		RW[i] = FALSE;
-		Z[i] = FALSE;
-		FW[i] = FALSE;
-		FM[i] = FALSE;
-		YW[i] = FALSE;
-		YV[i] = FALSE;
-		YM[i] = FALSE;
-		B[i] = FALSE;
-		MK[i] = FALSE;
-		RR[i] = TRUE;
-		A[i] = TRUE;
-	}
 
-	for (i = 0; i < TMMAX; ++i)
+	if (star)
 	{
-		RT[i] = FALSE;
-		HT[i] = FALSE;
-		AT[i] = FALSE;
+		for (i = 0; i < FCMAX; ++i)
+		{
+			X[i] = FALSE;
+			RR[i] = FALSE;
+			RS[i] = FALSE;
+			RW[i] = FALSE;
+			Z[i] = FALSE;
+			FW[i] = FALSE;
+			FM[i] = FALSE;
+			YW[i] = FALSE;
+			YV[i] = FALSE;
+			YM[i] = FALSE;
+			B[i] = FALSE;
+			MK[i] = FALSE;
+			RR[i] |= BIT14;
+			A[i] = TRUE;
+		}
+
+		for (i = 0; i < TMMAX; ++i)
+		{
+			RT[i] = FALSE;
+			HT[i] = FALSE;
+			AT[i] = FALSE;
+		}
+	}
+	else
+	{
+		for (i = 0; i < FCMAX; ++i)
+		{
+			B[i] = FALSE;
+			YM[i] &= ~BIT14;
+			RR[i] &= ~BIT14;
+		}
 	}
 }
 

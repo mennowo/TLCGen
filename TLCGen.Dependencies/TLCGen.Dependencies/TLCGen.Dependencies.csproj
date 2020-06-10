@@ -256,6 +256,9 @@
     <Compile Include="Models\Models\Signalen\SignalenDataModel.cs" />
     <Compile Include="Models\Models\Signalen\WaarschuwingsGroepModel.cs" />
     <Compile Include="Models\Models\Star\StarDataModel.cs" />
+    <Compile Include="Models\Models\Star\StarPeriodeDataModel.cs" />
+    <Compile Include="Models\Models\Star\StarProgrammaFase.cs" />
+    <Compile Include="Models\Models\Star\StarProgrammaModel.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinaatModel.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinatenDataModel.cs" />
     <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />

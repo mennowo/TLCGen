@@ -537,10 +537,15 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\StarPeriodeDataViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\StarProgrammaFaseViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\StarProgrammaViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\StarTabView.xaml.cs">
       <DependentUpon>StarTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SpecialsTab\Tabs\StarTabViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\StarTabViewModel.cs">
+      <DependentUpon>StarTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabViewModel.cs">
       <DependentUpon>VAOntruimenTabView.xaml</DependentUpon>
     </Compile>

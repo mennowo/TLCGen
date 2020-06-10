@@ -16,6 +16,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmstarprog;
         private CCOLGeneratorCodeStringSettingModel _prmstarprogdef;
         private CCOLGeneratorCodeStringSettingModel _schstar;
+        private CCOLGeneratorCodeStringSettingModel _isstar;
+        private CCOLGeneratorCodeStringSettingModel _usstar;
         private CCOLGeneratorCodeStringSettingModel _mstarprog;
         private CCOLGeneratorCodeStringSettingModel _prmstarcyclustijd;
 #pragma warning restore 0649
@@ -24,6 +26,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
+            _myBitmapInputs = new List<CCOLIOElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if (!c.StarData.ToepassenStar || !c.StarData.Programmas.Any()) return;
 
@@ -35,6 +39,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == c.StarData.DefaultProgramma);
                 var iDp = dp == null ? -1 : c.StarData.Programmas.IndexOf(dp);
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprogdef}", iDp + 1, CCOLElementTimeTypeEnum.SCH_type, _prmstarprogdef));
+                
+            }
+
+            if (c.StarData.IngangAlsVoorwaarde)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_isstar}", _isstar));
+                _myBitmapInputs.Add(new CCOLIOElement(c.StarData.StarRegelenIngang, $"{_ispf}{_isstar}"));
+            }
+
+            foreach (var pr in c.StarData.Programmas)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstar}{pr.Naam}", _usstar, pr.Naam));
+                _myBitmapOutputs.Add(new CCOLIOElement(pr, $"{_uspf}{_usstar}{pr.Naam}"));
             }
 
             if (c.StarData.ProgrammaTijdenInParameters)
@@ -67,6 +84,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         }
 
         public override bool HasCCOLElements() => true;
+
+        public override bool HasCCOLBitmapInputs() => true;
+
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -126,6 +147,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     
                     sb.AppendLine($"{ts}/* Bepalen actief star programma */");
+                    sb.AppendLine($"{ts}MM[{_mpf}{_mstarprog}] = 0;");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}])");
                     sb.AppendLine($"{ts}{{");
                     if (c.StarData.ProgrammaSturingViaKlok)
@@ -149,6 +171,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.StarData.ProgrammaSturingViaKlok) sb.AppendLine();
                         sb.AppendLine($"{ts}{ts}/* Actief star programma o.b.v. parameter */");
                         sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmstarprogdef}] != 0) MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprogdef}];");
+                    }
+                    if (c.StarData.IngangAlsVoorwaarde)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}/* Star programma uitsluitend activeren indien ingang hoog  */");
+                        sb.AppendLine($"{ts}{ts}if (!IS[{_ispf}{_isstar}]) MM[{_mpf}{_mstarprog}] = 0;");
                     }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");
@@ -175,6 +203,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
+                    var iPr = 1;
+                    foreach (var pr in c.StarData.Programmas)
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstar}{pr.Naam}] = MM[{_mpf}{_mstarprog}] == {iPr++};");
+                    }
 
                     break;
             }

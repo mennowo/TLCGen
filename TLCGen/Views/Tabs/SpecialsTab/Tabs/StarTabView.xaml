@@ -24,6 +24,8 @@
                               IsEnabled="{Binding Path=ToepassenStar}" />
                     <CheckBox Margin="5" Content="Parameter" IsChecked="{Binding Path=ProgrammaSturingViaParameter,UpdateSourceTrigger=PropertyChanged}" 
                               IsEnabled="{Binding Path=ToepassenStar}" />
+                    <CheckBox Margin="5" Content="Ingang als voorwaarde" IsChecked="{Binding Path=IngangAlsVoorwaarde,UpdateSourceTrigger=PropertyChanged}" 
+                              IsEnabled="{Binding Path=ToepassenStar}" />
                     <Label Content="Default star programma:" IsEnabled="{Binding Path=ProgrammaSturingViaParameter}" />
                     <ComboBox 
                         ItemsSource="{Binding Path=DataContext.Programmas,ElementName=Root}" 

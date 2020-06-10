@@ -2171,6 +2171,18 @@
           <Setting>
             <Default>star</Default>
             <Setting>star</Setting>
+            <Type>Ingang</Type>
+            <Description>Star programma inschakelen zoals ingesteld via PRM starprog</Description>
+          </Setting>
+          <Setting>
+            <Default>star</Default>
+            <Setting>star</Setting>
+            <Type>Uitgang</Type>
+            <Description>Star programma _E1_ actief</Description>
+          </Setting>
+          <Setting>
+            <Default>star</Default>
+            <Setting>star</Setting>
             <Type>Schakelaar</Type>
             <Description>Inschakelen star programma</Description>
           </Setting>

@@ -7,5 +7,5 @@ void star_instellingen();
 void update_cyclustimer(count cyclustijd);
 boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count einde_groen);
 void commando_groen(count fc);
-void star_reset_bits();
+void star_reset_bits(boolv star);
 void star_regelen();

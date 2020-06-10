@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -12,175 +7,15 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
-using TLCGen.ViewModels;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class StarProgrammaViewModel : ViewModelBase, IViewModelWithItem, IComparable
-    {
-        #region Properties
-
-        public ObservableCollectionAroundList<StarProgrammaFaseViewModel, StarProgrammaFase> Fasen { get; set; }
-
-        public StarProgrammaModel StarProgramma { get; }
-
-        public string Naam
-        {
-            get => StarProgramma.Naam;
-            set
-            {
-                var oldName = StarProgramma.Naam;
-                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, value));
-                {
-                    StarProgramma.Naam = value;
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));
-                }
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int Cyclustijd
-        {
-            get => StarProgramma.Cyclustijd;
-            set
-            {
-                StarProgramma.Cyclustijd = value; 
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        #endregion // Properties
-
-        #region IViewModelWithItem
-
-        public object GetItem() => StarProgramma;
-
-        #endregion // IViewModelWithItem
-
-        #region Constructor
-
-        public StarProgrammaViewModel(StarProgrammaModel starProgramma)
-        {
-            StarProgramma = starProgramma;
-            Fasen = new ObservableCollectionAroundList<StarProgrammaFaseViewModel, StarProgrammaFase>(starProgramma.Fasen);
-        }
-
-        #endregion // Constructor
-
-        public int CompareTo(object obj)
-        {
-            return string.Compare(Naam, ((StarProgrammaViewModel) obj).Naam, StringComparison.Ordinal);
-        }
-    }
-
-    public class StarProgrammaFaseViewModel : ViewModelBase, IViewModelWithItem
-    {
-        public StarProgrammaFase Fase { get; }
-
-        public string FaseNaam => Fase.FaseCyclus;
-
-        public int Start1
-        {
-            get => Fase.Start1;
-            set
-            {
-                Fase.Start1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int? Start2
-        {
-            get => Fase.Start2;
-            set
-            {
-                Fase.Start2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int Eind1
-        {
-            get => Fase.Eind1;
-            set
-            {
-                Fase.Eind1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int? Eind2
-        {
-            get => Fase.Eind2;
-            set
-            {
-                Fase.Eind2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public object GetItem() => Fase;
-
-        public StarProgrammaFaseViewModel(StarProgrammaFase fase)
-        {
-            Fase = fase;
-        }
-    }
-
-    public class StarPeriodeDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
-    {
-        #region Properties
-
-        public StarPeriodeDataModel StarPeriode { get; }
-
-        public string Periode => StarPeriode.Periode;
-
-        public string StarProgramma
-        {
-            get => StarPeriode.StarProgramma;
-            set
-            {
-                StarPeriode.StarProgramma = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        #endregion // Properties
-
-        #region IViewModelWithItem
-
-        public object GetItem() => StarPeriode;
-
-        #endregion // IViewModelWithItem
-
-        #region IComparable
-
-        public int CompareTo(object obj)
-        {
-            return string.Compare(Periode, ((StarPeriodeDataViewModel) obj).Periode, StringComparison.Ordinal);
-        }
-
-        #endregion // IComparable
-
-        #region Constructor
-
-        public StarPeriodeDataViewModel(StarPeriodeDataModel starPeriode)
-        {
-            StarPeriode = starPeriode;
-        }
-
-        #endregion // Constructor
-    }
-
-    //[TLCGenTabItem(index: 7, type: TabItemTypeEnum.SpecialsTab)]
+    [TLCGenTabItem(index: 7, type: TabItemTypeEnum.SpecialsTab)]
     public class StarTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
-        private RelayCommand _addStarProgramma;
-        private RelayCommand _removeStarProgramma;
-        private StarProgrammaViewModel _selectedProgramma;
+        private AddRemoveItemsManager<StarProgrammaViewModel, StarProgrammaModel, string> _programmaManager;
 
         #endregion // Fields
 
@@ -226,7 +61,20 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.StarData.ProgrammaSturingViaParameter = value;
-                if (!value) ProgrammaSturingViaKlok = true;
+                if (!value)
+                {
+                    ProgrammaSturingViaKlok = true;
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public bool IngangAlsVoorwaarde
+        {
+            get => Controller.StarData.IngangAlsVoorwaarde;
+            set
+            {
+                Controller.StarData.IngangAlsVoorwaarde = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -243,7 +91,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private AddRemoveItemsManager<StarProgrammaViewModel, StarProgrammaModel, string> _programmaManager;
         public AddRemoveItemsManager<StarProgrammaViewModel, StarProgrammaModel, string> ProgrammaManager
         {
             get
@@ -260,14 +107,12 @@ namespace TLCGen.ViewModels
                             {
                                 inext++;
                                 newname = "star" + (inext < 10 ? "0" : "") + inext;
-                            }
-                            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, newname));
+                            } while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, newname));
 
                             var prog = new StarProgrammaModel {Naam = newname};
-                            foreach (var fc in Controller.Fasen) prog.Fasen.Add(new StarProgrammaFase{FaseCyclus = fc.Naam});
+                            foreach (var fc in Controller.Fasen) prog.Fasen.Add(new StarProgrammaFase {FaseCyclus = fc.Naam});
                             return new StarProgrammaViewModel(prog);
-                        }, null);
-                    _programmaManager.SelectedItem = Programmas.FirstOrDefault();
+                        }, null) {SelectedItem = Programmas.FirstOrDefault()};
                 }
                 return _programmaManager;
             }
