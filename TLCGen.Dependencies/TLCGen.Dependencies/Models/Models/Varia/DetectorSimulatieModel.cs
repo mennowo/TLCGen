@@ -14,6 +14,7 @@ namespace TLCGen.Models
         public int Q4 { get; set; }
         public int Stopline { get; set; }
         [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string FCNr { get; set; }
     }
 }

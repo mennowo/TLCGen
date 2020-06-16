@@ -239,17 +239,18 @@ namespace TLCGen.ViewModels
             }
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
+            _dm.Simulatie.FCNr = _SelectedFase.Naam;
             if (_SelectedFase.Detectoren.Count == 0)
             {
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBuiten;
+                if (_SelectedFase.Type == FaseTypeEnum.Auto) _dm.Type = DetectorTypeEnum.Kop;
+                if (_SelectedFase.Type == FaseTypeEnum.Fiets) _dm.Type = DetectorTypeEnum.Kop;
+                if (_SelectedFase.Type == FaseTypeEnum.Voetganger) _dm.Type = DetectorTypeEnum.KnopBuiten;
             }
             else
             {
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Knop;
-                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
+                if (_SelectedFase.Type == FaseTypeEnum.Auto) _dm.Type = DetectorTypeEnum.Lang;
+                if (_SelectedFase.Type == FaseTypeEnum.Fiets) _dm.Type = DetectorTypeEnum.Knop;
+                if (_SelectedFase.Type == FaseTypeEnum.Voetganger) _dm.Type = DetectorTypeEnum.KnopBinnen;
             }
             DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
             var dvm1 = new DetectorViewModel(_dm)

@@ -106,7 +106,8 @@
                   <ScaleTransform ScaleX="288.49727558131411" ScaleY="288.49727558131411" />
                   <TranslateTransform X="-107269.25740211339" Y="-132720.39289241793" />
                 </TransformGroup>
-                <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
+                  <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
+                  <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
               </TransformGroup>
             </LinearGradientBrush.Transform>
             <GradientStop Color="#FFFBE8A2" Offset="0" />
@@ -144,7 +145,8 @@
                     <ScaleTransform ScaleX="2.186629281135732" ScaleY="2.186629281135732" />
                     <TranslateTransform X="-445.46567426320394" Y="-584.34008774815538" />
                   </TransformGroup>
-                  <MatrixTransform>1.0919066,0,0,1.0919066,-38.028153,-44.221683</MatrixTransform>
+                    <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
+                    <MatrixTransform>1.0919066,0,0,1.0919066,-38.028153,-44.221683</MatrixTransform>
                 </TransformGroup>
               </LinearGradientBrush.Transform>
               <GradientStop Color="#FFB4FFA0" Offset="0" />
@@ -167,7 +169,8 @@
                   <ScaleTransform ScaleX="126.08488071143303" ScaleY="126.08488071143303" />
                   <TranslateTransform X="-46686.088420313426" Y="-57721.459122472654" />
                 </TransformGroup>
-                <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
+                  <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
+                  <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
               </TransformGroup>
             </LinearGradientBrush.Transform>
             <GradientStop Color="#FFFBE8A2" Offset="0" />

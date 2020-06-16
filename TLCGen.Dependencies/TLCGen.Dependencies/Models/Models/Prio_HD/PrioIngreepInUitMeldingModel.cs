@@ -65,7 +65,7 @@ namespace TLCGen.Models
         #endregion
 
         [Browsable(false)]
-        public DetectorModel DummyKARMelding { get; set; } = null;
+        public DetectorModel DummyKARMelding { get; set; }
 
         #endregion // Properties
 

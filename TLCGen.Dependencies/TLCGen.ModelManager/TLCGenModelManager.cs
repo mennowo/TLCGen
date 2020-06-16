@@ -871,37 +871,26 @@ namespace TLCGen.ModelManagement
 
         private void OnDetectorenChangedMessage(DetectorenChangedMessage msg)
         {
-            if (msg.RemovedDetectoren != null && msg.RemovedDetectoren.Any())
+            if (msg.RemovedDetectoren == null || !msg.RemovedDetectoren.Any()) return;
+
+            foreach (var d in msg.RemovedDetectoren.Where(x => x.Type == DetectorTypeEnum.OpticomIngang))
             {
-                foreach (var d in msg.RemovedDetectoren)
+                foreach (var hd in msg.Controller.PrioData.HDIngrepen.Where(hd => hd.Opticom && hd.OpticomRelatedInput == d.Naam))
                 {
-                    if (d.Type == DetectorTypeEnum.OpticomIngang)
-                    {
-                        foreach (var hd in msg.Controller.PrioData.HDIngrepen)
-                        {
-                            if (hd.Opticom && hd.OpticomRelatedInput == d.Naam)
-                            {
-                                hd.Opticom = false;
-                                hd.OpticomRelatedInput = null;
-                            }
-                        }
-                    }
+                    hd.Opticom = false;
+                    hd.OpticomRelatedInput = null;
                 }
             }
         }
 
         private void OnFaseDetectorTypeChangedMessage(FaseDetectorTypeChangedMessage msg)
         {
-            if(msg.OldType == DetectorTypeEnum.OpticomIngang && msg.NewType != DetectorTypeEnum.OpticomIngang)
+            if (msg.OldType != DetectorTypeEnum.OpticomIngang || msg.NewType == DetectorTypeEnum.OpticomIngang) return;
+
+            foreach (var hd in msg.Controller.PrioData.HDIngrepen.Where(hd => hd.Opticom && hd.OpticomRelatedInput == msg.DetectorDefine))
             {
-                foreach (var hd in msg.Controller.PrioData.HDIngrepen)
-                {
-                    if (hd.Opticom && hd.OpticomRelatedInput == msg.DetectorDefine)
-                    {
-                        hd.Opticom = false;
-                        hd.OpticomRelatedInput = null;
-                    }
-                }
+                hd.Opticom = false;
+                hd.OpticomRelatedInput = null;
             }
         }
 
@@ -924,5 +913,5 @@ namespace TLCGen.ModelManagement
         }
 
     #endregion // Constructor
-}
+    }
 }

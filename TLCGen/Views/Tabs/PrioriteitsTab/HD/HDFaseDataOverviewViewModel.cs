@@ -46,6 +46,8 @@ namespace TLCGen.ViewModels
                         hd = new HDIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
                         hd.FaseCyclus = _faseCyclus.Naam;
+                        hd.DummyKARInmelding.Simulatie.FCNr = _faseCyclus.Naam;
+                        hd.DummyKARUitmelding.Simulatie.FCNr = _faseCyclus.Naam;
                         _controller.PrioData.HDIngrepen.Add(hd);
                         _controller.PrioData.HDIngrepen.BubbleSort();
                         HDIngreep = new HDIngreepViewModel(_controller, hd);

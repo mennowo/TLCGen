@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Plugins.RangeerElementen"
-             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:extensions="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              xmlns:viewModels="clr-namespace:TLCGen.Plugins.RangeerElementen.ViewModels"
              mc:Ignorable="d" Name="root"

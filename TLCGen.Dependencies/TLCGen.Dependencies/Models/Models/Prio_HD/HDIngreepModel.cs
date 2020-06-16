@@ -70,8 +70,8 @@ namespace TLCGen.Models
         {
             MeerealiserendeFaseCycli = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
             HDInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            DummyKARInmelding = new DetectorModel() { Dummy = true };
-            DummyKARUitmelding = new DetectorModel() { Dummy = true };
+            DummyKARInmelding = new DetectorModel{ Dummy = true };
+            DummyKARUitmelding = new DetectorModel{ Dummy = true };
         }
 
         #endregion // Constructor

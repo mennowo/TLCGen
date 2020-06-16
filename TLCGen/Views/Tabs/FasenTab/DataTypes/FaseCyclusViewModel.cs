@@ -41,6 +41,23 @@ namespace TLCGen.ViewModels
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, value))
                     {
+                        void RenameDetector(DetectorModel detector, string oldFaseCyclusName)
+                        {
+                            var nd = detector.Naam.Replace(oldFaseCyclusName, value);
+                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
+                            {
+                                var oldD = detector.Naam;
+                                detector.Naam = nd;
+                                Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldD, detector.Naam));
+                            }
+
+                            nd = detector.VissimNaam?.Replace(oldFaseCyclusName, value);
+                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd, vissim: true))
+                            {
+                                detector.VissimNaam = nd;
+                            }
+                        }
+
                         var oldname = FaseCyclus.Naam;
                         FaseCyclus.Naam = value;
 
@@ -52,18 +69,21 @@ namespace TLCGen.ViewModels
 
                         foreach (var d in FaseCyclus.Detectoren)
                         {
-                            var nd = d.Naam.Replace(oldname, value);
-                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
-                            {
-                                var oldD = d.Naam;
-                                d.Naam = nd;
-                                Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldD, d.Naam));
-                            }
-                            nd = d.VissimNaam?.Replace(oldname, value);
-                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
-                            {
-                                d.VissimNaam = nd;
-                            }
+                            RenameDetector(d, oldname);
+                        }
+
+                        var prios = TLCGenControllerDataProvider.Default.Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == FaseCyclus.Naam);
+                        var hds = TLCGenControllerDataProvider.Default.Controller.PrioData.HDIngrepen.Where(x => x.FaseCyclus == FaseCyclus.Naam);
+                        foreach (var prio in prios)
+                        {
+                            foreach (var melding in prio.MeldingenData.Inmeldingen) RenameDetector(melding.DummyKARMelding, oldname);
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen) RenameDetector(melding.DummyKARMelding, oldname);
+                        }
+
+                        foreach (var hd in hds)
+                        {
+                            RenameDetector(hd.DummyKARInmelding, oldname);
+                            RenameDetector(hd.DummyKARUitmelding, oldname);
                         }
                     }
                 }
