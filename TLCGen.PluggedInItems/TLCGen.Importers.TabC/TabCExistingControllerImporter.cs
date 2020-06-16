@@ -49,7 +49,7 @@ namespace TLCGen.Importers.TabC
 
                     // Build a list of the Phases with conflicts from the tab.c file
                     var newData = TabCImportHelper.GetNewData(lines, false);
-                    var AllPhasesMessage = "";
+                    var allPhasesMessage = "";
 
                     var result = MessageBoxResult.Yes;
                     if(newData.Intergroen && !c.Data.Intergroen)
@@ -71,19 +71,15 @@ namespace TLCGen.Importers.TabC
 
                     // Find Phases not present in current data
                     var newfcs = new List<FaseCyclusModel>();
-                    var nnewfcs = c.Fasen.Where(x => newData.Fasen.All(x2 => x.Naam != x2.Naam));
-                    foreach (var fcm in c.Fasen)
+                    foreach (var fcm in c.Fasen.Where(fcm => newData.Fasen.All(x => x.Naam != fcm.Naam)))
                     {
-                        if (!newData.Fasen.Any(x => x.Naam == fcm.Naam))
-                        {
-                            AllPhasesMessage = AllPhasesMessage + fcm.Naam + "\n";
-                            newfcs.Add(fcm);
-                        }
+                        allPhasesMessage = allPhasesMessage + fcm.Naam + "\n";
+                        newfcs.Add(fcm);
                     }
-                    if (!string.IsNullOrEmpty(AllPhasesMessage))
+                    if (!string.IsNullOrEmpty(allPhasesMessage))
                     {
                         result = TLCGenDialogProvider.Default.ShowMessageBox("Niet alle fasen uit de regeling komen voor in de tab.c file.\nConflicten van de volgende fasen worden verwijderd:\n\n" +
-                            AllPhasesMessage + "\nDoorgaan?", "Niet alle fasen gevonden", MessageBoxButton.YesNo);
+                            allPhasesMessage + "\nDoorgaan?", "Niet alle fasen gevonden", MessageBoxButton.YesNo);
                     }
 
                     // Continue...
@@ -144,7 +140,7 @@ namespace TLCGen.Importers.TabC
                             }
                         }
 
-                        // remove removed conflicts
+                        // find and remove old conflicts
                         var remConflicts = new List<ConflictModel>();
                         foreach(var cm in c.InterSignaalGroep.Conflicten)
                         {
@@ -163,6 +159,8 @@ namespace TLCGen.Importers.TabC
                         }
 
                         var conflictsChanged = false;
+                        var newConflicts = new List<ConflictModel>();
+
                         foreach(var cm in newData.Conflicten)
                         {
                             var _cm = new ConflictModel
@@ -192,6 +190,8 @@ namespace TLCGen.Importers.TabC
                                         });
                                     }
                                 }
+                                // new conflict found
+                                newConflicts.Add(cm);
                                 conflictsChanged = true;
                             }
 
@@ -279,8 +279,12 @@ namespace TLCGen.Importers.TabC
                             foreach (var r in remnl) c.InterSignaalGroep.Nalopen.Remove(r);
                             foreach (var r in remma) c.InterSignaalGroep.Meeaanvragen.Remove(r);
 
+
+
                             TLCGenDialogProvider.Default.ShowMessageBox(
-                                "Er zijn nieuwe conflicten gevonden in de regeling:\n\nLoop de module molen na, en evt. synchronisaties, RoBuGrover en VA ontruimen",
+                                "Er zijn nieuwe conflicten gevonden in de regeling:\n\n" +
+                                string.Join("\n", newConflicts.Select(x => x.FaseVan + " => " + x.FaseNaar)) +
+                                "\n\nLoop de module molen na, en evt. synchronisaties, RoBuGrover en VA ontruimen",
                                 "Nieuwe conflicten gevonden", MessageBoxButton.OK);
                         }
 
