@@ -65,7 +65,7 @@ Task("Sign")
 });
 
 Task("BuildSetup")
-	.IsDependentOn("Sign")
+	.IsDependentOn("Build")
 	.Does(() =>
 {
 	WiXCandle("./TLCGen.Setup/Product.wxs", new CandleSettings
@@ -99,7 +99,7 @@ Task("SignSetup")
 });
 
 Task("PackPortable")
-	.IsDependentOn("SignSetup")
+	.IsDependentOn("BuildSetup")
     .Does(() =>
 {
     var packedDir = buildDir + new DirectoryPath("packed");

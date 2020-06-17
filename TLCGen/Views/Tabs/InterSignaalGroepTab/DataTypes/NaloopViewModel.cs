@@ -70,7 +70,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool InrijdenTijdensGroenPossible => TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc;
+        public bool InrijdenTijdensGroenPossible => 
+            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc;
 
         public bool DetectieAfhankelijkPossible
         {
@@ -131,7 +132,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool MaximaleVoorstartAllowed => !InrijdenTijdensGroen;
+        public bool MaximaleVoorstartAllowed => !InrijdenTijdensGroen ||
+                                                TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc;
 
         public ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden));
 
