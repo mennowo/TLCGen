@@ -295,7 +295,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}/* Inlopen */");
                             first = false;
                         }
-                        sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], H[{_hpf}{_hinl}{grsync:van}], H[{_hpf}{_hinl}{grsync:naar}], H[{_hpf}{_hlos}{grsync:van}], H[{_hpf}{_hlos}{grsync:naar}]);");
+                        sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], H[{_hpf}{_hinl}{grsync:van}], H[{_hpf}{_hinl}{grsync:naar}], H[{_hpf}{_hlos}{grsync:van}], H[{_hpf}{_hlos}{grsync:naar}], TRUE);");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* Fictieve ontruiming */");

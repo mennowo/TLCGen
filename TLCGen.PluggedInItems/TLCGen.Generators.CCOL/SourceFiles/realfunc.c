@@ -916,9 +916,9 @@ boolv VTG3_Real_Los(count fc1,        /* fc1                                    
                    count hlos9,      /* hulpelement fc9 los toegestaan                                            */
                    count hlos2,      /* hulpelement fc2 los teogestaan                                            */
 
-                   boolv  gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv  gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv  gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
 
 {
   boolv result = 0;
@@ -1026,7 +1026,7 @@ boolv VTG2_Real_Los(count fc1,        /* fasecyclus 1                           
                    count hinl2,      /* hulpelement fc2 inlopen gewenst                    */
                    count hlos1,      /* hulpelement fc1 los toegestaan                     */
                    count hlos2,      /* hulpelement fc2 los teogestaan                     */
-                   boolv  gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
+                   boolv gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
 {
   boolv result = 0;
 
