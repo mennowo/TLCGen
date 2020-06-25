@@ -912,7 +912,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ---------------- */");
                     if (!c.PrioData.PrioUitgangPerFase)
                     {
-                        foreach (var ov in c.PrioData.PrioIngrepen)
+                        foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.MeldingenData.Inmeldingen.Any()))
                         {
                             sb.AppendLine(
                                 $"{ts}CIF_GUS[{_uspf}{_usovinm}{CCOLCodeHelper.GetPriorityName(ov)}] = C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(ov)}];");
@@ -922,6 +922,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var sg in c.Fasen.Where(x => x.PrioIngreep))
                         {
+                            if (!c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == sg.Naam && x.MeldingenData.Inmeldingen.Any()))
+                            {
+                                continue;
+                            }
                             sb.Append(
                                 $"{ts}CIF_GUS[{_uspf}{_usovinm}{sg.Naam}] = ");
                             var firstSg = true;
