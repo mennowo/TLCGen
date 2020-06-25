@@ -139,16 +139,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool NietCheckenOpSignaalgroep
-        {
-            get => _RISModel?.NietCheckenOpSignaalgroep == true;
-            set
-            {
-                _RISModel.NietCheckenOpSignaalgroep = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
         public bool HasMultipleSystemITF
         {
             get => _RISModel?.HasMultipleSystemITF == true;
@@ -180,8 +170,7 @@ namespace TLCGen.ViewModels
         }
 
         public AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> LanesRequestManager =>
-            _lanesRequestManager ??
-            (_lanesRequestManager = new AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string>(
+            _lanesRequestManager ??= new AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string>(
                 RISRequestLanes,
                 x =>
                 {
@@ -196,11 +185,10 @@ namespace TLCGen.ViewModels
                 },
                 (x, y) => false,
                 () => MessengerInstance.Send(new ControllerDataChangedMessage())
-                ));
+            );
 
         public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
-            _lanesExtendManager ??
-            (_lanesExtendManager = new AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string>(
+            _lanesExtendManager ??= new AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string>(
                 RISExtendLanes,
                 x =>
                 {
@@ -215,7 +203,7 @@ namespace TLCGen.ViewModels
                 },
                 (x, y) => false,
                 () => MessengerInstance.Send(new ControllerDataChangedMessage())
-                ));
+            );
 
         #endregion // Properties
 

@@ -217,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], {(risModel.NietCheckenOpSignaalgroep ? "FALSE" : "TRUE")})) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], FALSE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
 
                     var ovRis = c.PrioData.PrioIngrepen
@@ -259,7 +259,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], {(risModel.NietCheckenOpSignaalgroep ? "FALSE" : "TRUE")})) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], FALSE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
