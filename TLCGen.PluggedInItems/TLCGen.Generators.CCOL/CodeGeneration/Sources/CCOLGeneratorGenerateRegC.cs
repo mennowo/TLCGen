@@ -143,7 +143,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)) ||
                     controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)))
                 {
+                    sb.AppendLine($"{ts}{ts}#if (CCOL_V > 100)");
                     sb.AppendLine($"{ts}{ts}#define RIS_SSM  /* Gebruik in/uitmelden via RIS SSM */");
+                    sb.AppendLine($"{ts}{ts}endif");
                 }
                 sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.c\" /* RIS extra functies */");
                 sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
