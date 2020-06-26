@@ -236,34 +236,6 @@ namespace TLCGen.Settings
             var defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             if (Defaults != null && File.Exists(defsetfile))
             {
-                foreach(var vtgT in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
-                {
-                    var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (PrioIngreepVoertuigTypeEnum)vtgT);
-                    if (vtgTSet == null)
-                    {
-                        switch ((PrioIngreepVoertuigTypeEnum)vtgT)
-                        {
-                            case PrioIngreepVoertuigTypeEnum.Tram:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "tram", Setting = "tram" });
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.Bus:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "bus", Setting = "bus" });
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.Fiets:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "fts", Setting = "fts" });
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "vrw", Setting = "vrw" });
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.NG:
-                                Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "alg", Setting = "alg" });
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    }
-                }
-
                 try
                 {
                     var message = "";
@@ -338,6 +310,35 @@ namespace TLCGen.Settings
             {
                 Defaults = DeserializeDefaultsFile(defsetfile);
                 foreach (var d in Defaults.Defaults) d.Editable = false;
+            }
+
+            // Add default vehicle types if missing
+            foreach (var vtgT in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
+            {
+                var vtgTSet = Defaults.VehicleTypes.FirstOrDefault(x => x.VehicleType == (PrioIngreepVoertuigTypeEnum) vtgT);
+                if (vtgTSet == null)
+                {
+                    switch ((PrioIngreepVoertuigTypeEnum) vtgT)
+                    {
+                        case PrioIngreepVoertuigTypeEnum.Tram:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "tram", Setting = "tram"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.Bus:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "bus", Setting = "bus"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.Fiets:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "fts", Setting = "fts"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "vrw", Setting = "vrw"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.NG:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "alg", Setting = "alg"});
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             }
         }
 
