@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.Settings
             {
                 foreach(var ss in s.Item2.Settings)
                 {
-                    CCOLElementNames.Add(GetPrefix(ss.Type) + ss.Default, ss.Setting);
+                    CCOLElementNames.Add(GetDefaultPrefix(ss.Type) + ss.Default, ss.Setting);
                 }
             }
         }

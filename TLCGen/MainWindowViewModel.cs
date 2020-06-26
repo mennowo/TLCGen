@@ -959,51 +959,57 @@ namespace TLCGen.ViewModels
 		            }
 					sk2?.DeleteValue("TempInstallFile");
 	            }
-			
-	            var webRequest = WebRequest.Create(@"https://www.codingconnected.eu/tlcgen/deploy/tlcgenversioning");
-	            webRequest.UseDefaultCredentials = true;
-	            using (var response = webRequest.GetResponse())
-				using (var content = response.GetResponseStream())
-				if(content != null) {
-					using (var reader = new StreamReader(content))
-					{
-                        var data = reader.ReadToEnd();
-                        var all = data.Split('\r');
-						var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-						if (tlcgenVer == null) return;
-						var oldvers = Assembly.GetEntryAssembly()?.GetName().Version.ToString().Split('.');
-						var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-                        var newer = false;
-						if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-						{
-							for (var i = 0; i < newvers.Length; i++)
-							{
-                                    var o = int.Parse(oldvers[i]);
-                                    var n = int.Parse(newvers[i]);
-                                    if(o > n)
-                                    {
-                                        break;
-                                    }
-                                    if(n > o)
-                                    {
-                                        newer = true;
-                                        break;
-                                    }
-							}
-						}
-						if (newer)
-						{
-							DispatcherHelper.CheckBeginInvokeOnUI(() =>
-							{
-                                var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""))
-                                {
-                                    Owner = Application.Current.MainWindow
-                                };
-                                w.ShowDialog();
-							});
-						}
-					}
-				}
+
+                try
+                {
+                    var webRequest = WebRequest.Create(@"https://www.codingconnected.eu/tlcgen/deploy/tlcgenversioning");
+                    webRequest.UseDefaultCredentials = true;
+                    using var response = webRequest.GetResponse();
+                    using var content = response.GetResponseStream();
+                    if (content == null) return;
+                    using var reader = new StreamReader(content);
+                    var data = reader.ReadToEnd();
+                    var all = data.Split('\r');
+                    var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+                    if (tlcgenVer == null) return;
+                    var oldvers = Assembly.GetEntryAssembly()?.GetName().Version.ToString().Split('.');
+                    var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+                    var newer = false;
+                    if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+                    {
+                        for (var i = 0; i < newvers.Length; i++)
+                        {
+                            var o = int.Parse(oldvers[i]);
+                            var n = int.Parse(newvers[i]);
+                            if (o > n)
+                            {
+                                break;
+                            }
+
+                            if (n > o)
+                            {
+                                newer = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (newer)
+                    {
+                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                        {
+                            var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""))
+                            {
+                                Owner = Application.Current.MainWindow
+                            };
+                            w.ShowDialog();
+                        });
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
             });
 #endif
         }
