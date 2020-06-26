@@ -2,9 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TLCGen.Importers.TabC"
-             mc:Ignorable="d" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:tabC="clr-namespace:TLCGen.Importers.TabC"
+             mc:Ignorable="d" Name="Root"
              SizeToContent="Height" Width="300">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="bool2visConv" />
@@ -17,17 +18,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Kies hieronder het type tab.c:" />
-        <StackPanel Orientation="Vertical" Grid.Row="1">
-            <RadioButton Content="Otto uitvoer" Margin="5" Checked="RadioButton_Checked" Name="OttoCheck" />
-            <RadioButton Content="TPA generator" Margin="5" Checked="RadioButton_Checked" Name="TPACheck" />
-            <RadioButton Content="ATB" Margin="5" Checked="RadioButton_Checked" Name="ATBCheck" />
-            <RadioButton Content="Trafick generator" Margin="5" Checked="RadioButton_Checked" Name="FICKCheck" />
-            <RadioButton Content="Huijskes" Margin="5" Checked="RadioButton_Checked" Name="HUIJSKESCheck" />
-            <RadioButton Content="Goudappel Coffeng " Margin="5" Checked="RadioButton_Checked" Name="GCCheck" />
-        </StackPanel>
+        <ComboBox Margin="5"
+                  ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type tabC:TabCType}}}"
+                  SelectedValue="{Binding ElementName=Root,Path=TabType,UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <Label Content="Òverige opties:" Name="OptiesLabel" />
             <CheckBox Name="IntergroenCheck" Margin="5" Content="Intergroen" />
+            <CheckBox Name="ImportToepDefaultsCheck" Margin="5" Content="Toepassen defaults" />
             <CheckBox Name="ImportDetCheck" Margin="5" Content="Importeer detectoren" />
             <CheckBox Name="ImportTijdCheck" Margin="5" Content="Importeer instellingen" />
             <CheckBox Name="ImportDeelconflictenCheck" Margin="5" Content="Importeer deelconflicten" />

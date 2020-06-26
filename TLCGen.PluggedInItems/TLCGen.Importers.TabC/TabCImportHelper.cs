@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -43,34 +44,52 @@ namespace TLCGen.Importers.TabC
 
     }
 
+    public enum TabCType
+    {
+        [Description("TLCGen")]
+        TLCGEN, 
+        [Description("OTTO")]
+        OTTO, 
+        [Description("TPA generator")]
+        TPA, 
+        [Description("ATB generator")]
+        ATB, 
+        [Description("Fick generator")]
+        FICK, 
+        [Description("Huijskes")]
+        HUIJSKES, 
+        [Description("Goudappel")]
+        GC, 
+        [Description("Overig")]
+        UNKNOWN
+    }
+
     public static class TabCImportHelper
     {
-        public enum TabCType
-        {
-            OTTO, TPA, ATB, FICK, HUIJSKES, GC, UNKNOWN
-        }
 
-        private static Regex ReComment = new Regex(@"^\s*/\*.*", RegexOptions.Compiled);
-        private static Regex ReIntergreen = new Regex(@"\s*TIG_max\s?\[.*", RegexOptions.Compiled);
-        private static Regex ReGarantie = new Regex(@"\s*(TIG|TO)_min\s?\[.*", RegexOptions.Compiled);
-        private static Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
-        private static Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
-        private static Regex ReTypeATB = new Regex(@"\s*\*\s+Generator\s*:\s*Advanced\s+Traffic\s+Builder.*", RegexOptions.Compiled);
-        private static Regex ReTypeFICK = new Regex(@".*DE_type.*", RegexOptions.Compiled);
-        private static Regex ReTypeHUIJSKES = new Regex(@".*\*\s+Huijskes.*", RegexOptions.Compiled);
-        private static Regex ReTypeGC = new Regex(@"\s*#define\sTO\(van_fc,\snaar_fc,\swaarde\).*", RegexOptions.Compiled);
+        private static readonly Regex ReComment = new Regex(@"^\s*/\*.*", RegexOptions.Compiled);
+        private static readonly Regex ReIntergreen = new Regex(@"\s*TIG_max\s?\[.*", RegexOptions.Compiled);
+        private static readonly Regex ReGarantie = new Regex(@"\s*(TIG|TO)_min\s?\[.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeTLCGen = new Regex(@"\s*/\*\s+TLCGEN:\s+[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeATB = new Regex(@"\s*\*\s+Generator\s*:\s*Advanced\s+Traffic\s+Builder.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeFICK = new Regex(@".*DE_type.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeHUIJSKES = new Regex(@".*\*\s+Huijskes.*", RegexOptions.Compiled);
+        private static readonly Regex ReTypeGC = new Regex(@"\s*#define\sTO\(van_fc,\snaar_fc,\swaarde\).*", RegexOptions.Compiled);
 
         public static TabCImportHelperOutcome GetNewData(string[] lines, bool newReg)
         {
             var outcome = new TabCImportHelperOutcome();
 
-            if (lines.Count() <= 1)
+            if (lines.Length <= 1)
             {
                 return null;
             }
 
             var tabCType = TabCType.UNKNOWN;
             if (lines.Any(x => ReTypeOTTO.IsMatch(x))) tabCType = TabCType.OTTO;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeTLCGen.IsMatch(x))) tabCType = TabCType.TLCGEN;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeTPA.IsMatch(x))) tabCType = TabCType.TPA;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeATB.IsMatch(x))) tabCType = TabCType.ATB;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeFICK.IsMatch(x))) tabCType = TabCType.FICK;
@@ -81,8 +100,9 @@ namespace TLCGen.Importers.TabC
             outcome.Intergroen = intergroen;
             outcome.Garantie = garantie;
 
-            var importD = false;
-            var importT = false;
+            var applyDefaults = false;
+            bool importD;
+            bool importT;
             var importG = false;
             var importNalopen = false;
             var importDeelconf = "";
@@ -98,7 +118,8 @@ namespace TLCGen.Importers.TabC
                 };
                 var res = dlg.ShowDialog();
                 tabCType = dlg.TabType;
-                if (res == false || tabCType == TabCType.UNKNOWN) return null;
+                if (res == false) return null;
+                applyDefaults = dlg.ToepassenDefaults;
                 importD = dlg.ImportDetectoren;
                 importT = dlg.ImportTijden;
                 outcome.Garantie = importG = dlg.ImportGarantie;
@@ -151,11 +172,13 @@ namespace TLCGen.Importers.TabC
             Regex fasenRegex = null;
             switch (tabCType)
             {
+                case TabCType.UNKNOWN:
                 case TabCType.OTTO:
                     if (intergroen) fasenRegex = new Regex(@"^\s*TIG_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
                     else fasenRegex = new Regex(@"^\s*TO_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
                     
                     break;
+                case TabCType.TLCGEN:
                 case TabCType.TPA:
                 case TabCType.FICK:
                 case TabCType.HUIJSKES:
@@ -179,7 +202,7 @@ namespace TLCGen.Importers.TabC
                             Naam = name.ToLower()
                         };
                         fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
-                        if (!importT)
+                        if (applyDefaults)
                         {
                             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
                         }
@@ -195,6 +218,8 @@ namespace TLCGen.Importers.TabC
             Regex geelRegex = null;
             switch (tabCType)
             {
+                case TabCType.TLCGEN:
+                case TabCType.UNKNOWN:
                 case TabCType.OTTO:
                 case TabCType.TPA:
                 case TabCType.FICK:
@@ -527,6 +552,8 @@ namespace TLCGen.Importers.TabC
                 Regex detectorenRegex = null;
                 switch (tabCType)
                 {
+                    case TabCType.UNKNOWN:
+                    case TabCType.TLCGEN:
                     case TabCType.TPA:
                     case TabCType.FICK:
                     case TabCType.HUIJSKES:
@@ -581,6 +608,34 @@ namespace TLCGen.Importers.TabC
                 }
             }
 
+            if (applyDefaults)
+            {
+                foreach (var fc in outcome.Fasen.Where(x => x.Detectoren.Any()))
+                {
+                    switch (fc.Type)
+                    {
+                        case FaseTypeEnum.Auto:
+                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Lang);
+                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
+                            break;
+                        case FaseTypeEnum.Fiets:
+                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Knop);
+                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
+                            break;
+                        case FaseTypeEnum.Voetganger:
+                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Knop);
+                            break;
+                        case FaseTypeEnum.OV:
+                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Lang);
+                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
+                            break;
+                    }
+                    foreach(var d in fc.Detectoren)
+                    {
+                        DefaultsProvider.Default.SetDefaultsOnModel(d, fc.Type.ToString(), d.Type.ToString());
+                    }
+                }
+            }
             if (importT)
             {
                 
@@ -605,9 +660,8 @@ namespace TLCGen.Importers.TabC
 
                 switch (tabCType)
                 {
+                    case TabCType.TLCGEN:
                     case TabCType.TPA:
-                        dsetRegex2 = new Regex(@"IS_type\s*\[\s*(?<name>d[a-zA-Z0-9_]+)\s*]\s*=\s*(?<type>[a-zA-Z_]+).*", RegexOptions.Compiled);
-                        break;
                     case TabCType.HUIJSKES:
                         dsetRegex2 = new Regex(@"IS_type\s*\[\s*(?<name>d[a-zA-Z0-9_]+)\s*]\s*=\s*(?<type>[a-zA-Z_]+).*", RegexOptions.Compiled);
                         break;
@@ -763,34 +817,6 @@ namespace TLCGen.Importers.TabC
                                 d.Verlengen = DetectorVerlengenTypeEnum.Geen;
                                 break;
                         }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var fc in outcome.Fasen.Where(x => x.Detectoren.Any()))
-                {
-                    switch (fc.Type)
-                    {
-                        case FaseTypeEnum.Auto:
-                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Lang);
-                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
-                            break;
-                        case FaseTypeEnum.Fiets:
-                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Knop);
-                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
-                            break;
-                        case FaseTypeEnum.Voetganger:
-                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Knop);
-                            break;
-                        case FaseTypeEnum.OV:
-                            fc.Detectoren.ForEach(x => x.Type = DetectorTypeEnum.Lang);
-                            fc.Detectoren.First().Type = DetectorTypeEnum.Kop;
-                            break;
-                    }
-                    foreach(var d in fc.Detectoren)
-                    {
-                        DefaultsProvider.Default.SetDefaultsOnModel(d, fc.Type.ToString(), d.Type.ToString());
                     }
                 }
             }

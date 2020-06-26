@@ -16,7 +16,9 @@ namespace TLCGen.Importers.TabC
         public ChooseTabTypeWindow()
         {
             InitializeComponent();
-            ImportDetCheck.IsChecked = ImportTijdCheck.IsChecked = true;
+            ImportDetCheck.IsChecked = 
+                ImportTijdCheck.IsChecked =
+                    ImportToepDefaultsCheck.IsChecked = true;
             DeelconflictenTypeCB.Items.Add("Voorstarten");
             DeelconflictenTypeCB.Items.Add("Late release");
             DeelconflictenTypeCB.SelectedItem = DeelconflictenTypeCB.Items[0];
@@ -46,27 +48,21 @@ namespace TLCGen.Importers.TabC
                 switch (_tabType)
                 {
                     case TabCType.OTTO:
-                        OttoCheck.IsChecked = true;
                         ImportDetCheck.IsChecked = ImportTijdCheck.IsChecked = false;
                         ImportDetCheck.IsEnabled = ImportTijdCheck.IsEnabled = false;
                         ImportDeelconflictenCheck.IsEnabled = true;
                         ImportGarantieCheck.IsEnabled = true;
                         break;
                     case TabCType.TPA:
-                        TPACheck.IsChecked = true;
                         break;
                     case TabCType.ATB:
-                        ATBCheck.IsChecked = true;
                         ImportGarantieCheck.IsEnabled = true;
                         break;
                     case TabCType.FICK:
-                        FICKCheck.IsChecked = true;
                         break;
                     case TabCType.HUIJSKES:
-                        HUIJSKESCheck.IsChecked = true;
                         break;
                     case TabCType.GC:
-                        GCCheck.IsChecked = true;
                         break;
                     case TabCType.UNKNOWN:
                         break;
@@ -95,6 +91,7 @@ namespace TLCGen.Importers.TabC
         }
 
         public string ImportDeelconflicten { get; private set; }
+        public bool ToepassenDefaults { get; private set; } = true;
         public bool ImportDetectoren { get; private set; }
         public bool ImportTijden { get; private set; }
         public bool ImportNalopen { get; private set; }
@@ -108,19 +105,6 @@ namespace TLCGen.Importers.TabC
             }
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (OttoCheck.IsChecked == true) TabType = TabCType.OTTO;
-            if (TPACheck.IsChecked == true) TabType = TabCType.TPA;
-            if (ATBCheck.IsChecked == true) TabType = TabCType.ATB;
-            if (FICKCheck.IsChecked == true) TabType = TabCType.FICK;
-            if (HUIJSKESCheck.IsChecked == true) TabType = TabCType.HUIJSKES;
-            if (GCCheck.IsChecked == true) TabType = TabCType.GC;
-
-            if (TabType == TabCType.UNKNOWN) OKButton.IsEnabled = false;
-            else OKButton.IsEnabled = true;
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ImportDetectoren = ImportDetCheck.IsChecked == true;
@@ -128,6 +112,7 @@ namespace TLCGen.Importers.TabC
             ImportNalopen = ImportNalopenCheck.IsChecked == true;
             Intergroen = IntergroenCheck.IsChecked == true;
             ImportGarantie = ImportGarantieCheck.IsChecked == true;
+            ToepassenDefaults = ImportToepDefaultsCheck.IsChecked == true;
             if (ImportDeelconflictenCheck.IsChecked == true)
             {
                 ImportDeelconflicten = DeelconflictenTypeCB.SelectedValue.ToString();
