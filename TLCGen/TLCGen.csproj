@@ -108,7 +108,13 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml.cs">
+      <DependentUpon>PrioIngrepenOverzichtTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\NevenMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabViewModel.cs">
+      <DependentUpon>PrioIngrepenOverzichtTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioriteitSpecialsTabView.xaml.cs">
       <DependentUpon>PrioriteitSpecialsTabView.xaml</DependentUpon>
     </Compile>
@@ -492,7 +498,6 @@
     <Compile Include="Views\Tabs\ModulesTab\Controls\ModulesTabFasenLijstView.xaml.cs">
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Resources\SpecialDataGrid.cs" />
     <Compile Include="Views\Tabs\BitmapTab\BitmapTab.xaml.cs">
       <DependentUpon>BitmapTab.xaml</DependentUpon>
     </Compile>
@@ -627,6 +632,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

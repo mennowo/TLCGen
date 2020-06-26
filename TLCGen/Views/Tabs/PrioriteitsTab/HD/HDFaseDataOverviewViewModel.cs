@@ -3,18 +3,17 @@ using GalaSoft.MvvmLight;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class OVHDFaseDataOverviewViewModel : ViewModelBase
+    public class HDFaseDataOverviewViewModel : ViewModelBase
 	{
 		#region Fields
 
-		private FaseCyclusModel _faseCyclus;
-		private HDIngreepViewModel _HDIngreep;
-		private ControllerModel _controller;
-		private HDOverzichtTabViewModel _overVM;
+		private readonly FaseCyclusModel _faseCyclus;
+		private readonly ControllerModel _controller;
+		private readonly HDOverzichtTabViewModel _overVm;
+		private HDIngreepViewModel _hdIngreep;
 
 		#endregion // Fields
 
@@ -34,7 +33,7 @@ namespace TLCGen.ViewModels
                     if (hd != null)
                     {
                         HDIngreep = new HDIngreepViewModel(_controller, hd);
-                        HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
+                        HDIngreep.PropertyChanged += _overVm.HDIngreep_PropertyChanged;
                         /* Trick to add dummy detectors */
                         if (hd.KAR)
                         {
@@ -51,7 +50,7 @@ namespace TLCGen.ViewModels
                         _controller.PrioData.HDIngrepen.Add(hd);
                         _controller.PrioData.HDIngrepen.BubbleSort();
                         HDIngreep = new HDIngreepViewModel(_controller, hd);
-                        HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
+                        HDIngreep.PropertyChanged += _overVm.HDIngreep_PropertyChanged;
                         /* Trick to add dummy detectors */
                         if (hd.KAR)
                         {
@@ -83,10 +82,10 @@ namespace TLCGen.ViewModels
 
 		public HDIngreepViewModel HDIngreep
 		{
-			get => _HDIngreep;
+			get => _hdIngreep;
 			set
 			{
-				_HDIngreep = value;
+				_hdIngreep = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -95,18 +94,18 @@ namespace TLCGen.ViewModels
 
 		#region Constructor
 
-		public OVHDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, HDOverzichtTabViewModel overvm, ControllerModel controller)
+		public HDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, HDOverzichtTabViewModel overvm, ControllerModel controller)
 		{
 			_faseCyclus = faseCyclus;
 			_controller = controller;
-			_overVM = overvm;
+			_overVm = overvm;
 			if (_faseCyclus.HDIngreep)
 			{
 				var hdi = controller.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
 				if (hdi != null)
 				{
 					HDIngreep = new HDIngreepViewModel(controller, hdi);
-					HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
+					HDIngreep.PropertyChanged += _overVm.HDIngreep_PropertyChanged;
 				}
 			}
 		}

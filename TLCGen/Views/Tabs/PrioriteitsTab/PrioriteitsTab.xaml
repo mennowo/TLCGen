@@ -26,6 +26,9 @@
         <DataTemplate DataType="{x:Type vm:PrioriteitSpecialsTabViewModel}">
             <local:PrioriteitSpecialsTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PrioIngrepenOverzichtTabViewModel}">
+            <local:PrioIngrepenOverzichtTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

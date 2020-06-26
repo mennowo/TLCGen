@@ -418,12 +418,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* reset bitsturing */");
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
-                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile)))
+                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MaximaleGroentijd)))
                             sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
                         if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MinimaleRoodtijd)))
                             sb.AppendLine($"{ts}{ts}X[fc] &= ~BIT5;");
-                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MaximaleGroentijd)))
-                            sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }

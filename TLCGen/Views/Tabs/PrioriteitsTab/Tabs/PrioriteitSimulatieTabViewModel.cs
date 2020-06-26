@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSimulatieTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

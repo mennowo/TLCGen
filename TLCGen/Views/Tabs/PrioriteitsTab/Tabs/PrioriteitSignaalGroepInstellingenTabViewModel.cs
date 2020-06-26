@@ -9,7 +9,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSignaalGroepInstellingenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

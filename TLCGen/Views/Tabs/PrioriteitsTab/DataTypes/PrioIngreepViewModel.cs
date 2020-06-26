@@ -424,7 +424,7 @@ namespace TLCGen.ViewModels
         
         [Browsable(false)]
         public ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> LijnNummers =>
-            _lijnNummers ?? (_lijnNummers = new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(PrioIngreep.LijnNummers));
+            _lijnNummers ??= new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(PrioIngreep.LijnNummers);
 
         [Browsable(false)]
         public bool HasKAR => PrioIngreep.HasPrioIngreepKAR();
@@ -438,7 +438,7 @@ namespace TLCGen.ViewModels
         public string Description => PrioIngreep.DisplayName;
 
         public PrioIngreepWisselDataViewModel WisselData =>
-            _wisselData ?? (_wisselData = new PrioIngreepWisselDataViewModel(PrioIngreep.MeldingenData));
+            _wisselData ??= new PrioIngreepWisselDataViewModel(PrioIngreep.MeldingenData);
         
         #endregion // Properties
 

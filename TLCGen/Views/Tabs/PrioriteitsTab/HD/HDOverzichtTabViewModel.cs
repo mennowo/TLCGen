@@ -5,32 +5,22 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.PrioriteitTab)]
 	public class HDOverzichtTabViewModel : TLCGenTabItemViewModel
 	{		
         #region Fields
 
-		private ObservableCollection<OVHDFaseDataOverviewViewModel> _Fasen;
-		private OVHDFaseDataOverviewViewModel _SelectedFaseCyclus;
+		private ObservableCollection<HDFaseDataOverviewViewModel> _Fasen;
+		private HDFaseDataOverviewViewModel _SelectedFaseCyclus;
 		private IList _SelectedFaseCycli = new ArrayList();
 		
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<OVHDFaseDataOverviewViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<OVHDFaseDataOverviewViewModel>();
-                }
-                return _Fasen;
-            }
-        }
+        public ObservableCollection<HDFaseDataOverviewViewModel> Fasen => _Fasen ??= new ObservableCollection<HDFaseDataOverviewViewModel>();
 
-        public OVHDFaseDataOverviewViewModel SelectedFaseCyclus
+        public HDFaseDataOverviewViewModel SelectedFaseCyclus
         {
             get => _SelectedFaseCyclus;
 	        set
@@ -69,17 +59,16 @@ namespace TLCGen.ViewModels
 
 	        foreach (var fcvm in Fasen)
 	        {
-		        fcvm.PropertyChanged -= OVHDFaseData_PropertyChanged;
-		        if(fcvm.HDIngreep != null) fcvm.HDIngreep.PropertyChanged -= HDIngreep_PropertyChanged;
+		        fcvm.PropertyChanged -= HDIngreep_PropertyChanged;
 	        }
 
 	        Fasen.Clear();
 	        SelectedFaseCyclus = null;
 	        foreach (var fcm in _Controller.Fasen)
 	        {
-		        var fcvm = new OVHDFaseDataOverviewViewModel(fcm, this, _Controller);
+		        var fcvm = new HDFaseDataOverviewViewModel(fcm, this, _Controller);
 		        Fasen.Add(fcvm);
-		        fcvm.PropertyChanged += OVHDFaseData_PropertyChanged;
+		        fcvm.PropertyChanged += HDIngreep_PropertyChanged;
 		        if (temp == null || fcvm.FaseCyclusNaam != temp.FaseCyclusNaam) continue;
 		        SelectedFaseCyclus = fcvm;
 		        temp = null;
@@ -115,18 +104,6 @@ namespace TLCGen.ViewModels
 		#region Event Handling
 
 		private bool _settingMultiple;
-		private void OVHDFaseData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
-				return;
-
-			if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 1)
-			{
-				_settingMultiple = true;
-				MultiPropertySetter.SetPropertyForAllItems<OVHDFaseDataOverviewViewModel>(sender, e.PropertyName, SelectedFaseCycli);
-			}
-			_settingMultiple = false;
-		}
 
 		public void HDIngreep_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -137,7 +114,7 @@ namespace TLCGen.ViewModels
 			{
 				_settingMultiple = true;
 				var l = new ArrayList();
-				foreach (OVHDFaseDataOverviewViewModel fc in SelectedFaseCycli)
+				foreach (HDFaseDataOverviewViewModel fc in SelectedFaseCycli)
 				{
                     if(fc.FaseCyclusNaam != null)
                     {

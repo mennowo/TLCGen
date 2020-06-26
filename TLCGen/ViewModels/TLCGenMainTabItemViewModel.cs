@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -120,13 +123,16 @@ namespace TLCGen.ViewModels
                     var attr = part.Item2.GetType().GetCustomAttribute<TLCGenTabItemAttribute>();
                     if (attr != null && attr.Type == _TabType)
                     {
-                        if (attr.Index == -1)
+                        try
                         {
-                            tabs.Add(plugindex++, part.Item2 as ITLCGenTabItem);
+                            tabs.Add(attr.Index == -1 ? plugindex++ : attr.Index, part.Item2 as ITLCGenTabItem);
                         }
-                        else
+                        catch (Exception e)
                         {
-                            tabs.Add(attr.Index, part.Item2 as ITLCGenTabItem);
+                            TLCGenDialogProvider.Default.ShowMessageBox(
+                                $"Cannot add tab with ID {(attr.Index == -1 ? plugindex : attr.Index)} to tab with type {_TabType}:\n{e.ToString()}",
+                                "Error adding tab",
+                                MessageBoxButton.OK);
                         }
                     }
                 }

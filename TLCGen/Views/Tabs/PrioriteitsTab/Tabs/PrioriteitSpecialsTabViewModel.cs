@@ -12,7 +12,7 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 6, type: TabItemTypeEnum.PrioriteitTab)]
     public class PrioriteitSpecialsTabViewModel : TLCGenTabItemViewModel
     {
         

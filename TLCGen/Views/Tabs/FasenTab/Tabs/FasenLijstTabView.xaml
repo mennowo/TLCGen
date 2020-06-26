@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:re="clr-namespace:TLCGen.Views.Resources"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" AutomationProperties.AutomationId="fasenLijstTab"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:FasenLijstTabViewModel}">
     <Grid>
@@ -18,7 +18,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <re:SpecialDataGrid
+        <controls:SpecialDataGrid
             ItemsSource="{Binding Path=Fasen}"
             Grid.Row="0" AutomationProperties.AutomationId="fasenLijstDataGrid"
             SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
@@ -56,7 +56,7 @@
                 <DataGridCheckBoxColumn Header="Wachttijdvoorspeller" Binding="{Binding Path=WachttijdVoorspeller,UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="# detectors" IsReadOnly="True" Binding="{Binding Path=DetectorCount}" Foreground="Gray" />
             </DataGrid.Columns>
-        </re:SpecialDataGrid>
+        </controls:SpecialDataGrid>
         <local:FasenToevVerw Grid.Row="1" AutomationProperties.AutomationId="fasenLijstToevVerw" />
     </Grid>
 </UserControl>
