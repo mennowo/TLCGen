@@ -37,9 +37,10 @@ namespace TLCGen.ViewModels
             get => _Controller?.Data?.Naam;
             set
             {
-                if (Helpers.NameSyntaxChecker.IsValidFileName(value))
+                var actualValue = value.Trim();
+                if (Helpers.NameSyntaxChecker.IsValidFileName(actualValue))
                 {
-                    _Controller.Data.Naam = value;
+                    _Controller.Data.Naam = actualValue;
                 }
                 RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }

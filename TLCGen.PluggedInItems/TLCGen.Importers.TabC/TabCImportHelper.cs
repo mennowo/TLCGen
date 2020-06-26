@@ -142,7 +142,7 @@ namespace TLCGen.Importers.TabC
                     var naamM = kNaamRegex.Match(l);
                     if (naamM.Success && naamM.Groups.Count > 1)
                     {
-                        outcome.KruisingNaam = naamM.Groups[1].Value;
+                        outcome.KruisingNaam = naamM.Groups[1].Value.Trim();
                     }
                     else
                     {
