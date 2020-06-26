@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ObservableCollection<FaseCyclusWithPrioViewModel> Fasen => _fasen ?? (_fasen = new ObservableCollection<FaseCyclusWithPrioViewModel>());
+        public ObservableCollection<FaseCyclusWithPrioViewModel> Fasen => _fasen ??= new ObservableCollection<FaseCyclusWithPrioViewModel>();
 
         public object SelectedObject
         {

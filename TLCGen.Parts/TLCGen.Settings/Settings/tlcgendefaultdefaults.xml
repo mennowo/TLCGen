@@ -592,7 +592,6 @@
     <Default>
       <DefaultName>VLOG settings</DefaultName>
       <Category>Other</Category>
-      <Selector1>VLOG30x</Selector1>
       <DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <VLOGToepassen>true</VLOGToepassen>

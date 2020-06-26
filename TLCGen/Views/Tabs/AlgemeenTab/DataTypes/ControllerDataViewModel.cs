@@ -145,7 +145,7 @@ namespace TLCGen.ViewModels
                         if(_Controller.Data.VLOGSettings == null)
                         {
                             _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
-                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, _Controller.Data.VLOGSettings.VLOGVersie.ToString());
+                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings );
                         }
                     }
                     MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());

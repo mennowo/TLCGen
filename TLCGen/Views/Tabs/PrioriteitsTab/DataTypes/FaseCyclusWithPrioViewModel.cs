@@ -39,7 +39,14 @@ namespace TLCGen.ViewModels
             get => _isSelected;
             set
             {
-                _isSelected = value; 
+                _isSelected = value;
+                if (value)
+                {
+                    if (!_isExpanded)
+                    {
+                        IsExpanded = true;
+                    }
+                }
                 RaisePropertyChanged();
             }
         }
@@ -105,8 +112,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _removeIngreepCommand ?? (_removeIngreepCommand =
-                           new RelayCommand<PrioIngreepViewModel>(e => { Ingrepen.Remove(e); }));
+                return _removeIngreepCommand ??= new RelayCommand<PrioIngreepViewModel>(e => { Ingrepen.Remove(e); });
             }
         }
 
@@ -114,7 +120,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _addIngreepCommand ?? (_addIngreepCommand = new RelayCommand(() =>
+                return _addIngreepCommand ??= new RelayCommand(() =>
                 {
                     var prio = new PrioIngreepModel
                     {
@@ -171,7 +177,7 @@ namespace TLCGen.ViewModels
                     if (uitM != null)
                         MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                     Ingrepen.Add(prioVm);
-                }));
+                });
             }
         }
 

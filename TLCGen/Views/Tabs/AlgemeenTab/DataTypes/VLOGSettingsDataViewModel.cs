@@ -8,13 +8,14 @@ namespace TLCGen.ViewModels
 {
     public class VLOGSettingsDataViewModel : ViewModelBase
     {
-        public VLOGSettingsDataModel VLOGSettingsData;
+        public readonly VLOGSettingsDataModel VLOGSettingsData;
 
         public bool VLOGToepassen
         {
             get => VLOGSettingsData.VLOGToepassen;
             set
             {
+                if (value) Settings.DefaultsProvider.Default.SetDefaultsOnModel(VLOGSettingsData);
                 VLOGSettingsData.VLOGToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged("");
