@@ -34,9 +34,19 @@ namespace TLCGen.ViewModels
 
         public GroentijdViewModel[,] GroentijdenMatrix { get; set; }
 
-        public GroentijdenSetViewModel SelectedSet { get; set; }
+        public GroentijdenSetViewModel SelectedSet
+        {
+            get => _selectedSet;
+            set
+            {
+                _selectedSet = value; 
+                RaisePropertyChanged();
+            }
+        }
 
         private ObservableCollection<GroentijdenSetViewModel> _GroentijdenSets;
+        private GroentijdenSetViewModel _selectedSet;
+
         public ObservableCollection<GroentijdenSetViewModel> GroentijdenSets
         {
             get

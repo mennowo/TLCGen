@@ -11,6 +11,7 @@ namespace TLCGen.Models
     [Serializable]
     public class PeriodenDataModel
     {
+        [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string DefaultPeriodeGroentijdenSet { get; set; }
         public string DefaultPeriodeNaam { get; set; }
 

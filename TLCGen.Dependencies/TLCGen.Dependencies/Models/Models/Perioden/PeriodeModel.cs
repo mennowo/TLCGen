@@ -21,6 +21,7 @@ namespace TLCGen.Models
         [XmlIgnore]
         public TimeSpan EindTijd { get; set; }
         [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string GroentijdenSet { get; set; }
         [HasDefault(false)]
         public string Commentaar { get; set; }

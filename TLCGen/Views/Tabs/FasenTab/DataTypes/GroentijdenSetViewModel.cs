@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
                     }
                 }
                 _GroentijdenSet.Naam = value;
-                RaisePropertyChanged("Naam");
+                RaisePropertyChanged();
             }
         }
 
