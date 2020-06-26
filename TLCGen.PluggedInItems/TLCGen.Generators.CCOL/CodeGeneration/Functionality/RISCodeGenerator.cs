@@ -235,10 +235,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Ris PRIO: verstuur SSM */");
+                        sb.AppendLine($"{ts}#ifdef RIS_SSM");
                         foreach (var ov in ovRis)
                         {
                             sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
                         }
+                        sb.AppendLine($"{ts}#endif");
                     }
 
                     sb.AppendLine($"{ts}#endif");

@@ -1,7 +1,12 @@
-TLCGen=0.7.10.0
+TLCGen=0.7.11.0
 MiniTD=1.0.0.0
-YAVV=0.5.0.0
 RN==TLCGen
+TLCGen versie: 0.7.11.0
+- Tabblad overzicht prio ingrepen
+- Optie meting cyclustijd via CCOL parser
+- Fix rond veranderen van CCOL prefixes
+- Mogelijkheid veranderen namen van MG/VG sets
+- Diverse kleine fixes
 TLCGen versie: 0.7.9.0 / 0.7.10.0
 - Diverse kleine bug fixes
 TLCGen versie: 0.7.8.0
