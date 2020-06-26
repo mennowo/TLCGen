@@ -139,6 +139,30 @@
             <Type>Parameter</Type>
             <Description>Versiebeheer zz</Description>
           </Setting>
+          <Setting>
+            <Default>cycl</Default>
+            <Setting>cycl</Setting>
+            <Type>Timer</Type>
+            <Description>Bijhouden actuele cyclustijd</Description>
+          </Setting>
+          <Setting>
+            <Default>cycl</Default>
+            <Setting>cycl</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Bijhouden actuele cyclustijd aan of uit</Description>
+          </Setting>
+          <Setting>
+            <Default>cycl_reset</Default>
+            <Setting>cycl_reset</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Reset meting cyclustijd</Description>
+          </Setting>
+          <Setting>
+            <Default>lcycl</Default>
+            <Setting>lcycl</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden laatste cyclustijd</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

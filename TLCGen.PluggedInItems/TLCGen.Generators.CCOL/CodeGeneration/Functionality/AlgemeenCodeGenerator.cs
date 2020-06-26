@@ -22,6 +22,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmyy;
         private CCOLGeneratorCodeStringSettingModel _prmzz;
         private CCOLGeneratorCodeStringSettingModel _prmfb;
+        private CCOLGeneratorCodeStringSettingModel _tcycl;
+        private CCOLGeneratorCodeStringSettingModel _schcycl;
+        private CCOLGeneratorCodeStringSettingModel _schcycl_reset;
+        private CCOLGeneratorCodeStringSettingModel _mlcycl;
 #pragma warning restore 0649
         string _mperiod;
 
@@ -86,6 +90,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(new CCOLElement("tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            }
+
+            // Cyclustijdmeting
+            if (c.Data.GenererenCyclustijdMeting && !c.Data.MultiModuleReeksen)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tcycl}", 999, CCOLElementTimeTypeEnum.TE_type, _tcycl));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcycl}", 0, CCOLElementTimeTypeEnum.TE_type, _schcycl));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcycl_reset}", 0, CCOLElementTimeTypeEnum.TE_type, _schcycl_reset));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mlcycl}", _mlcycl));
             }
         }
 
@@ -243,8 +256,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (c.Data.ToevoegenOVM)
                     {
-                        if (c.Data.GenererenDuurtestCode)
-                            sb.AppendLine();
+                        if (sb.Length > 0) sb.AppendLine();
+
                         sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
                         foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
                         {
@@ -252,6 +265,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
                         }
                         sb.AppendLine();
+                    }
+
+                    if (c.Data.GenererenCyclustijdMeting && !c.Data.MultiModuleReeksen)
+                    {
+                        if (sb.Length > 0) sb.AppendLine();
+
+                        sb.AppendLine($"{ts}CyclustijdMeting({_tpf}{_tcycl}, {_schpf}{_schcycl}, SML && (ML == ML1), {_schpf}{_schcycl_reset}, {_mpf}{_mlcycl});");
                     }
                     return sb.ToString();
 

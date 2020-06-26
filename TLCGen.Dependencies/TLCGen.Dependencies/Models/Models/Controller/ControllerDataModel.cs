@@ -76,6 +76,7 @@ namespace TLCGen.Models
 
         public bool ToevoegenOVM { get; set; }
         public bool PrmLoggingTfbMax { get; set; }
+        public bool GenererenCyclustijdMeting { get; set; }
 
         [Browsable(false)]
         public string TLCGenVersie { get; set; }

@@ -1182,3 +1182,111 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
     }
     va_end(argpt);
 }
+
+/*
+ * Functie : CyclustijdMeting
+ * Functionele omschrijving : Bepaling cyclustijd regeling o.b.v. conditie en schrijven naar CIF_UBER.
+*/
+
+void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, count mlcyclus)
+{
+    /* moeten statisch zijn om de maximale cyclustijd, de laatste 10 cyclustijden en het tijdstip van de maximale cyclustijd te onthouden. */
+    static count cycmax = 0;
+    static count cyca[10] = {0,0,0,0,0,0,0,0,0,0};
+    static mulv dg,md,jr,ur,mt,se,tr;
+    
+    int i;
+    count k = 0;
+    count totc = 0;
+    mulv cyclGem;
+    
+    /* Reset de maximale cyclustijd en het gemiddelde? */
+    if (SCH[sreset])
+    {
+        cycmax = 0;
+        for (i = 0; i < 10 ; i++) cyca[i] = 0;
+        dg = 0;
+        md = 0;
+        jr = 0;
+        ur = 0;
+        mt = 0;
+        se = 0;
+        tr = 0;
+    }
+
+    RT[tcyclus]= FALSE;
+    if (cond)
+    {
+        if (SCH[scyclus])
+        {
+            if ((T_timer[tcyclus] > 0) && (T_timer[tcyclus] < T_max[tcyclus]))
+            {
+                for (i=0; i<9; i++)
+                {
+                    cyca[i] = cyca[i+1];
+                    if (cyca[i] > 0)
+                    {
+                        totc = totc + cyca[i];
+                        k++;
+                    }
+                }
+    
+                cyca[9] = T_timer[tcyclus];
+    
+                /*if ((T_timer[tcyclus] > cycmax) && (totc > 0))*/
+                if (T_timer[tcyclus] > cycmax)
+                {
+                    cycmax= T_timer[tcyclus];
+#if !defined (AUTOMAAT) || defined (VISSIM)
+                    dg = CIF_KLOK[CIF_DAG];
+                    md = CIF_KLOK[CIF_MAAND];
+                    jr = CIF_KLOK[CIF_JAAR];
+                    ur = CIF_KLOK[CIF_UUR];
+                    mt = CIF_KLOK[CIF_MINUUT];
+                    se = CIF_KLOK[CIF_SECONDE];
+                    tr = CIF_KLOK[CIF_TSEC_TELLER] % 10;
+#endif /* AUTOMAAT || VISSIM */
+                }
+    
+                /* Houd de laatst gemeten cyclustijd bij in een memory-element */
+                MM[mlcyclus] = T_timer[tcyclus];
+    		    
+                /* Bereken de gemiddelde cyclustijd */
+                cyclGem = (totc + T_timer[tcyclus]) / (k + 1);
+    		    
+                uber_puts(PROMPT_code);
+                uber_puts("T_cyclus=");
+                uber_puti(T_timer[tcyclus]);
+                uber_puts(" Gem_cyc=");
+                uber_puti(cyclGem);
+                uber_puts(" Max_cyc=");
+                uber_puti((mulv)cycmax);
+#if !defined (AUTOMAAT) || defined (VISSIM)
+                uber_puts(" (");
+                if (dg < 10) uber_puts("0");
+                uber_puti(dg);
+                uber_puts("-");
+                if (md < 10) uber_puts("0");
+                uber_puti(md);
+                uber_puts("-");
+                if (jr < 10) uber_puts("0");
+                uber_puti(jr);
+                uber_puts(" ");
+                if (ur < 10) uber_puts("0");
+                uber_puti(ur);
+                uber_puts(":");
+                if (mt < 10) uber_puts("0");
+                uber_puti(mt);
+                uber_puts(":");
+                if (se < 10) uber_puts("0");
+                uber_puti(se);
+                uber_puts(".");
+                uber_puti(tr);
+                uber_puts(")");
+#endif /* AUTOMAAT || VISSIM */
+                uber_puts("\n");
+            } /* if (timer) */
+        } /* SCH[scyclus] */
+        RT[tcyclus]= TRUE;
+    } /* if(cond) */
+} /* void */

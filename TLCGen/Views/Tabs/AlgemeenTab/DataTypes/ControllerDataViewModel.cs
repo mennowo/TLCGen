@@ -405,6 +405,9 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool NotMultiModuleReeksen => !MultiModuleReeksen;
+
         [Description("Meerdere module reeksen")]
         public bool MultiModuleReeksen
         {
@@ -413,6 +416,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.MultiModuleReeksen = value;
                 RaisePropertyChanged<object>(nameof(MultiModuleReeksen), broadcast: true);
+                RaisePropertyChanged(nameof(NotMultiModuleReeksen));
 
                 _Controller.Data.ModulenDisplayBitmapData.Clear();
                 if (UitgangPerModule) MessengerInstance.Send(new ModulesChangedMessage());
@@ -484,6 +488,18 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.PrmLoggingTfbMax = value;
                 RaisePropertyChanged<object>(nameof(PrmLoggingTfbMax), broadcast: true);
+            }
+        }
+
+        [Description("Opnemen cyclustijdmeting in regeling")]
+        [BrowsableCondition("NotMultiModuleReeksen")]
+        public bool GenererenCyclustijdMeting 
+        {
+            get => _Controller?.Data?.GenererenCyclustijdMeting ?? false;
+            set
+            {
+                _Controller.Data.GenererenCyclustijdMeting = value;
+                RaisePropertyChanged<object>(nameof(GenererenCyclustijdMeting), broadcast: true);
             }
         }
         
