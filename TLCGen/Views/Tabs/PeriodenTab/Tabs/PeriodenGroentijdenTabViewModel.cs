@@ -378,23 +378,6 @@ namespace TLCGen.ViewModels
                 }
             }
         }
-        
-        private void OnGroentijdenTypeChangedMessage(GroentijdenTypeChangedMessage msg)
-        {
-            if (msg.Type == GroentijdenTypeEnum.MaxGroentijden && DefaultPeriodeGroentijdenSet != null && DefaultPeriodeGroentijdenSet.StartsWith("VG")) DefaultPeriodeGroentijdenSet = DefaultPeriodeGroentijdenSet.Replace("VG", "MG");
-            else if (msg.Type == GroentijdenTypeEnum.VerlengGroentijden && DefaultPeriodeGroentijdenSet != null && DefaultPeriodeGroentijdenSet.StartsWith("MG")) DefaultPeriodeGroentijdenSet = DefaultPeriodeGroentijdenSet.Replace("MG", "VG");
-            foreach(var p in Periodes)
-            {
-                if(msg.Type == GroentijdenTypeEnum.MaxGroentijden)
-                {
-                    if (p.GroentijdenSet != null && p.GroentijdenSet.StartsWith("VG")) p.GroentijdenSet = p.GroentijdenSet.Replace("VG", "MG");
-                }
-                else if (msg.Type == GroentijdenTypeEnum.VerlengGroentijden)
-                {
-                    if (p.GroentijdenSet != null && p.GroentijdenSet.StartsWith("MG")) p.GroentijdenSet = p.GroentijdenSet.Replace("MG", "VG");
-                }
-            }
-        }
 
         #endregion // TLCGen Events
 
@@ -403,7 +386,6 @@ namespace TLCGen.ViewModels
         public PeriodenGroentijdenTabViewModel() : base()
         {
             MessengerInstance.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
-            MessengerInstance.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChangedMessage));
         }
 
         #endregion // Constructor

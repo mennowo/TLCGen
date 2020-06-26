@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using System.Text.RegularExpressions;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -45,17 +46,21 @@ namespace TLCGen.ViewModels
             set
             {
                 _GroentijdenSet.Type = value;
-                switch (value)
+                if (Regex.IsMatch(Naam, @"(M|V)G[0-9]+"))
                 {
-                    case GroentijdenTypeEnum.VerlengGroentijden:
-                        this.Naam = "VG" + this.Naam.Substring(2);
-                        break;
-                    case GroentijdenTypeEnum.MaxGroentijden:
-                        this.Naam = "MG" + this.Naam.Substring(2); 
-                        break;
+                    switch (value)
+                    {
+                        case GroentijdenTypeEnum.VerlengGroentijden:
+                            Naam = "VG" + Naam.Substring(2);
+                            break;
+                        case GroentijdenTypeEnum.MaxGroentijden:
+                            Naam = "MG" + Naam.Substring(2);
+                            break;
+                    }
                 }
-                RaisePropertyChanged("Naam");
-                RaisePropertyChanged("Type");
+
+                RaisePropertyChanged(nameof(Naam));
+                RaisePropertyChanged();
             }
         }
 

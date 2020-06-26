@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using TLCGen.Extensions;
@@ -138,10 +139,10 @@ namespace TLCGen.ViewModels
             switch(_Controller.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.VerlengGroentijden:
-                    mgsm.Naam = "VG" + (GroentijdenSets.Count + 1).ToString();
+                    mgsm.Naam = "VG" + (GroentijdenSets.Count + 1);
                     break;
                 default:
-                    mgsm.Naam = "MG" + (GroentijdenSets.Count + 1).ToString();
+                    mgsm.Naam = "MG" + (GroentijdenSets.Count + 1);
                     break;
 
             }
@@ -205,15 +206,18 @@ namespace TLCGen.ViewModels
 
             foreach(var mgsvm in GroentijdenSets)
             {
-                switch (_Controller.Data.TypeGroentijden)
+                if (Regex.IsMatch(mgsvm.Naam, @"(M|V)G[0-9]+"))
                 {
-                    case GroentijdenTypeEnum.VerlengGroentijden:
-                        mgsvm.Naam = "VG" + i;
-                        break;
-                    default:
-                        mgsvm.Naam = "MG" + i;
-                        break;
+                    switch (_Controller.Data.TypeGroentijden)
+                    {
+                        case GroentijdenTypeEnum.VerlengGroentijden:
+                            mgsvm.Naam = "VG" + i;
+                            break;
+                        default:
+                            mgsvm.Naam = "MG" + i;
+                            break;
 
+                    }
                 }
                 i++;
             }
