@@ -15,6 +15,8 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public HalfstarPrioIngreepModel OvIngreep => _ovIngreep;
+
         public PrioIngreepModel BelongsToOVIngreep { get; set; }
 
         public string FaseCyclus => BelongsToOVIngreep?.FaseCyclus;

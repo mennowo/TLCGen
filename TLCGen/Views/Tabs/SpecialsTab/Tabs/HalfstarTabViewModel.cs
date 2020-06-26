@@ -1076,14 +1076,14 @@ namespace TLCGen.ViewModels
 
         private void OnOVIngrepenChanged(PrioIngrepenChangedMessage msg)
         {
-            var rems = OVIngrepenHalfstar.Where(x => Controller.PrioData.PrioIngrepen.All(x2 => !ReferenceEquals(x, x2.HalfstarIngreepData)));
+            var rems = OVIngrepenHalfstar.Where(x => Controller.PrioData.PrioIngrepen.All(x2 => !ReferenceEquals(x.OvIngreep, x2.HalfstarIngreepData))).ToList();
             foreach(var rem in rems)
             {
                 OVIngrepenHalfstar.Remove(rem);
             }
             foreach(var ovi in Controller.PrioData.PrioIngrepen)
             {
-                if (OVIngrepenHalfstar.All(x => !ReferenceEquals(x, ovi.HalfstarIngreepData)))
+                if (OVIngrepenHalfstar.All(x => !ReferenceEquals(x.OvIngreep, ovi.HalfstarIngreepData)))
                 {
                     OVIngrepenHalfstar.Add(new HalfstarOVIngreepViewModel(ovi.HalfstarIngreepData) { BelongsToOVIngreep = ovi });
                 }
