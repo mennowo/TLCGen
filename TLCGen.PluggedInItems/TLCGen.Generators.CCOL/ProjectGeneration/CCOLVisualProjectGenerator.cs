@@ -135,6 +135,10 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 							case "HS":
 								result = plugin.Controller.HalfstarData.IsHalfstar;
 								break;
+                            case "RIS":
+                                result = plugin.Controller.RISData.RISToepassen && 
+                                         plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any()));
+                                break;
                             default:
 								result = false;
 								break;
