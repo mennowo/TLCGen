@@ -155,6 +155,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
+                    sb.AppendLine($"{ts}#define TESTOMGEVING");
+                    sb.AppendLine($"#endif");
                     if (!c.Data.PracticeOmgeving) return "";
                     sb.AppendLine($"/* T.b.v. practice */");
                     sb.AppendLine($"#ifdef PRACTICE_TEST");
