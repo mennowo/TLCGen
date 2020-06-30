@@ -292,7 +292,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                         var yes = false;
-                        foreach (var gs in gelijkstarttuples.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                        foreach (var gs in gelijkstarttuples)
                         {
                             if (gs.Item2.Count > 1)
                             {
@@ -373,7 +373,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (c.InterSignaalGroep.Nalopen.Any(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
                             {
                                 sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
-                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                foreach (var nl in c.InterSignaalGroep.Nalopen)
                                 {
                                     var hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == nl.FaseVan && x.Item2.Count > 1);
                                     if (hasgs != null)
@@ -396,7 +396,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             
                             sb.AppendLine($"{ts}/* Verzorgen PAR voor naloop richtingen */");
-                            if (c.InterSignaalGroep.Nalopen.Any(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                            if (c.InterSignaalGroep.Nalopen.Any())
                             {
                                 foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
                                 {
@@ -408,7 +408,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         yes = false;
-                        foreach (var gs in gelijkstarttuples.Where(x => c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                        foreach (var gs in gelijkstarttuples)
                         {
                             if (gs.Item2.Count > 1)
                             {
