@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -16,6 +17,13 @@ namespace TLCGen.Models
 
         [IOElement("rt", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
+
+        [IOElement("rtdim", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "DimmenPerUitgang")]
+        public BitmapCoordinatenDataModel DimUitgangBitmapData { get; set; }
+
+        [HasDefault(false)]
+        [Browsable(false)]
+        public bool DimmenPerUitgang => false;
 
         public bool ShouldSerializeNaloopTijd()
         {
