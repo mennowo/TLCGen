@@ -155,6 +155,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && !c.Data.Intergroen)
+                    {
+                        sb.AppendLine($"{ts}#define NO_TIGMAX");
+                    }
                     sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define TESTOMGEVING");
                     sb.AppendLine($"#endif");
