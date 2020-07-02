@@ -149,7 +149,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach(var fc in cfasen)
                     {
-                        sb.AppendLine($"{ts}X[{_fcpf}{fc}] &= ~BIT8;");
+                        sb.AppendLine($"{ts}X[{_fcpf}{fc}] &= ~BIT9;");
                     }
                     sb.AppendLine();
 
@@ -172,7 +172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append($"T[{_tpf}{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}]");
                                     ++i;
                                 }
-                                sb.AppendLine($") X[{_fcpf}{cf.FaseCyclus}] |= BIT8;");
+                                sb.AppendLine($") X[{_fcpf}{cf.FaseCyclus}] |= BIT9;");
                             }
                         }
                     }
