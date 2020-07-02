@@ -1,6 +1,8 @@
-TLCGen=0.7.11.0
+TLCGen=0.7.12.0
 MiniTD=1.0.0.0
 RN==TLCGen
+TLCGen versie: 0.7.12.0
+- Diverse kleine fixes
 TLCGen versie: 0.7.11.0
 - Tabblad overzicht prio ingrepen
 - Optie meting cyclustijd via CCOL parser
