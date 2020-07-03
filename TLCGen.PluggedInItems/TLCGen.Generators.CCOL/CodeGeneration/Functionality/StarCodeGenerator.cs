@@ -61,12 +61,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarcyclustijd}", pr.Cyclustijd, CCOLElementTimeTypeEnum.TS_type, _prmstarcyclustijd, pr.Naam));
                     foreach (var f in pr.Fasen)
                     {
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}", f.Start1, CCOLElementTimeTypeEnum.None, _prmstarstart, "1", f.FaseCyclus, pr.Naam));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}", f.Eind1, CCOLElementTimeTypeEnum.None, _prmstareind, "1", f.FaseCyclus, pr.Naam));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}1{pr.Naam}{f.FaseCyclus}", f.Start1, CCOLElementTimeTypeEnum.None, _prmstarstart, "1", f.FaseCyclus, pr.Naam));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}1{pr.Naam}{f.FaseCyclus}", f.Eind1, CCOLElementTimeTypeEnum.None, _prmstareind, "1", f.FaseCyclus, pr.Naam));
                         if (f.Start2.HasValue && f.Eind2.HasValue)
                         {
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}", f.Start2.Value, CCOLElementTimeTypeEnum.None, _prmstarstart, "2", f.FaseCyclus, pr.Naam));
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}", f.Eind2.Value, CCOLElementTimeTypeEnum.None, _prmstareind, "2", f.FaseCyclus, pr.Naam));
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}2{pr.Naam}{f.FaseCyclus}", f.Start2.Value, CCOLElementTimeTypeEnum.None, _prmstarstart, "2", f.FaseCyclus, pr.Naam));
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstareind}2{pr.Naam}{f.FaseCyclus}", f.Eind2.Value, CCOLElementTimeTypeEnum.None, _prmstareind, "2", f.FaseCyclus, pr.Naam));
                         }
                     }
                 }
@@ -148,7 +148,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                     sb.AppendLine($"{ts}/* Bepalen actief star programma */");
                     sb.AppendLine($"{ts}MM[{_mpf}{_mstarprog}] = 0;");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}])");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}]{(c.StarData.IngangAlsVoorwaarde ? $" || IS[{_ispf}{_isstar}]" : "")})");
                     sb.AppendLine($"{ts}{{");
                     if (c.StarData.ProgrammaSturingViaKlok)
                     {
@@ -171,12 +171,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.StarData.ProgrammaSturingViaKlok) sb.AppendLine();
                         sb.AppendLine($"{ts}{ts}/* Actief star programma o.b.v. parameter */");
                         sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmstarprogdef}] != 0) MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprogdef}];");
-                    }
-                    if (c.StarData.IngangAlsVoorwaarde)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}/* Star programma uitsluitend activeren indien ingang hoog  */");
-                        sb.AppendLine($"{ts}{ts}if (!IS[{_ispf}{_isstar}]) MM[{_mpf}{_mstarprog}] = 0;");
                     }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");

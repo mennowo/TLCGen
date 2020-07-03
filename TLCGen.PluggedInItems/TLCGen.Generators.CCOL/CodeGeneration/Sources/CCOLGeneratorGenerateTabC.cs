@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -1139,6 +1140,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
+            var _prmstarstart = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstarstart");
+            var _prmstareind = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstareind");
+
             sb.AppendLine("void star_instellingen(void)");
             sb.AppendLine("{");
 
@@ -1152,10 +1156,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = {programma.Cyclustijd};");
                 foreach (var sg in programma.Fasen)
                 {
-                    sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
-                    if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
+                    if (controller.StarData.ProgrammaSturingViaParameter)
                     {
-                        sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
+                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}1{programma.Naam}{sg.FaseCyclus}]; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}1{programma.Naam}{sg.FaseCyclus};");
+                        if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
+                        {
+                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}2{programma.Naam}{sg.FaseCyclus}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}2{programma.Naam}{sg.FaseCyclus};");
+                        }           
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
+                        if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
+                        {
+                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start2}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind2};");
+                        }
                     }
                 }
                 ++pr;
