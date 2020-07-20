@@ -381,7 +381,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 catch (Exception e)
                 {
                     TLCGenDialogProvider.Default.ShowMessageBox(
-                        $"Er is een fout opgetreden tijdens genereren. " +
+                        "Er is een fout opgetreden tijdens genereren. " +
                         $"Controlleer of alle te genereren bestanden overschreven kunnen worden.\n\nOorspronkelijke foutmelding:\n{e.Message}", "Fout tijdens genereren", MessageBoxButton.OK);
                 }
 
@@ -772,9 +772,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 					{
-                        sb.Append($" /* ");
+                        sb.Append(" /* ");
                         sb.Append($"{elem.Commentaar}".PadRight(pad3));
-                        sb.Append($" */");
+                        sb.Append(" */");
                     }
 					sb.AppendLine();
                     ++indexautom;
@@ -859,9 +859,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 					{
-                        sb.Append($" /* ");
+                        sb.Append(" /* ");
                         sb.Append($"{ elem.Commentaar}".PadRight(pad6));
-                        sb.Append($" */");
+                        sb.Append(" */");
 					}
                     sb.AppendLine();
                 }
@@ -892,9 +892,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     if (!string.IsNullOrWhiteSpace(delem.Commentaar))
                     {
-                        sb.Append($" /*");
+                        sb.Append(" /* ");
                         sb.Append($"{delem.Commentaar}".PadRight(pad6));
-                        sb.Append($" */");
+                        sb.Append(" */");
                     }
                     sb.AppendLine();
                 }

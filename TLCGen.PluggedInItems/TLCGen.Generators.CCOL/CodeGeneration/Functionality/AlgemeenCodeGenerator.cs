@@ -289,45 +289,56 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}SegmentSturing(ML+1, {_uspf}{_ussegm}1, {_uspf}{_ussegm}2, {_uspf}{_ussegm}3, {_uspf}{_ussegm}4, {_uspf}{_ussegm}5, {_uspf}{_ussegm}6, {_uspf}{_ussegm}7);");
                         }
-                    }
-                    else if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.DrieCijferDisplay)
-                    {
-                        if (c.HalfstarData.IsHalfstar)
+                        else
                         {
-                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}] && SCH[{_schpf}{_schtoon7s}])");
-                            sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}/* Uitsturen segmenten verklikking signaalplantijd */");
-                            sb.AppendLine($"{ts}{ts}SegmentSturingDrie(TX_timer,");
-                            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}a1, {_uspf}{_ussegm}a2, {_uspf}{_ussegm}a3, {_uspf}{_ussegm}a4, {_uspf}{_ussegm}a5, {_uspf}{_ussegm}a6, {_uspf}{_ussegm}a7,");
-                            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}b1, {_uspf}{_ussegm}b2, {_uspf}{_ussegm}b3, {_uspf}{_ussegm}b4, {_uspf}{_ussegm}b5, {_uspf}{_ussegm}b6, {_uspf}{_ussegm}b7,");
-                            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
-                            sb.AppendLine($"{ts}}}");
-                            if (!c.Data.MultiModuleReeksen)
+                            sb.AppendLine($"{ts}{ts}/* Let op: end enkel segmenten display niet is compatible met multi module molens */");
+                            sb.AppendLine($"CIF_GUS[{_uspf}{_ussegm}4] = TRUE;");
+                        }
+                    }
+                    else
+                    {
+
+                        if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.DrieCijferDisplay)
+                        {
+                            if (c.HalfstarData.IsHalfstar)
                             {
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}] && SCH[{_schpf}{_schtoon7s}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}/* Uitsturen segmenten verklikking signaalplantijd */");
+                                SingleModuleCode("TX_timer", sb, ts);
+                                sb.AppendLine($"{ts}}}");
                                 sb.AppendLine($"{ts}else if (SCH[{_schpf}{_schtoon7s}])");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}/* Uitsturen segmenten verklikking module regelen */");
-                                sb.AppendLine($"{ts}{ts}SegmentSturingDrie(ML + 1,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}a1, {_uspf}{_ussegm}a2, {_uspf}{_ussegm}a3, {_uspf}{_ussegm}a4, {_uspf}{_ussegm}a5, {_uspf}{_ussegm}a6, {_uspf}{_ussegm}a7,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}b1, {_uspf}{_ussegm}b2, {_uspf}{_ussegm}b3, {_uspf}{_ussegm}b4, {_uspf}{_ussegm}b5, {_uspf}{_ussegm}b6, {_uspf}{_ussegm}b7,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
+                                if (!c.Data.MultiModuleReeksen)
+                                {
+                                    SingleModuleCode("ML + 1", sb, ts);
+                                }
+                                else
+                                {
+                                    MultiModuleCode(c, sb);
+                                }
                                 sb.AppendLine($"{ts}}}");
                             }
-                        }
-                        else
-                        {
-                            if (!c.Data.MultiModuleReeksen)
+                            else
                             {
                                 sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtoon7s}])");
                                 sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}SegmentSturingDrie(ML + 1,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}a1, {_uspf}{_ussegm}a2, {_uspf}{_ussegm}a3, {_uspf}{_ussegm}a4, {_uspf}{_ussegm}a5, {_uspf}{_ussegm}a6, {_uspf}{_ussegm}a7,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}b1, {_uspf}{_ussegm}b2, {_uspf}{_ussegm}b3, {_uspf}{_ussegm}b4, {_uspf}{_ussegm}b5, {_uspf}{_ussegm}b6, {_uspf}{_ussegm}b7,");
-                                sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
+                                // single module mill
+                                if (!c.Data.MultiModuleReeksen)
+                                {
+                                    SingleModuleCode("ML + 1", sb, ts);
+                                }
+                                // multi module mill, with at least one mill with modules with signalgroups
+                                else if (c.MultiModuleMolens.Any(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                                {
+                                    MultiModuleCode(c, sb);
+                                }
                                 sb.AppendLine($"{ts}}}");
                             }
                         }
                     }
+
                     sb.AppendLine();
                     if (c.Data.UitgangPerModule && c.Data.ModulenDisplayBitmapData.Any())
                     {
@@ -379,6 +390,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             return sb.ToString();
+        }
+
+        private void SingleModuleCode(string arg1, StringBuilder sb, string ts)
+        {
+            sb.AppendLine($"{ts}{ts}SegmentSturingDrie({arg1},");
+            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}a1, {_uspf}{_ussegm}a2, {_uspf}{_ussegm}a3, {_uspf}{_ussegm}a4, {_uspf}{_ussegm}a5, {_uspf}{_ussegm}a6, {_uspf}{_ussegm}a7,");
+            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}b1, {_uspf}{_ussegm}b2, {_uspf}{_ussegm}b3, {_uspf}{_ussegm}b4, {_uspf}{_ussegm}b5, {_uspf}{_ussegm}b6, {_uspf}{_ussegm}b7,");
+            sb.AppendLine($"{ts}{ts}{ts}{_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
+        }
+
+        private void MultiModuleCode(ControllerModel c, StringBuilder sb)
+        {
+            var reeksen = c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())).OrderBy(x => x.Reeks).ToList();
+
+            // acutally single mill
+            if (reeksen.Count > 0)
+            {
+                sb.AppendLine($"SegmentSturing({reeksen[0].Reeks} + 1, {_uspf}{_ussegm}a1, {_uspf}{_ussegm}a2, {_uspf}{_ussegm}a3, {_uspf}{_ussegm}a4, {_uspf}{_ussegm}a5, {_uspf}{_ussegm}a6, {_uspf}{_ussegm}a7);");
+            }
+
+            // two mills: dash between two ML numbers
+            if (reeksen.Count == 2)
+            {
+                sb.AppendLine($"CIF_GUS[{_uspf}{_ussegm}b4] = TRUE;");
+                sb.AppendLine($"SegmentSturing({reeksen[1].Reeks} + 1, {_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
+            }
+
+            // three or more mills: three ML numbers
+            else if (reeksen.Count > 2)
+            {
+                sb.AppendLine($"SegmentSturing({reeksen[1].Reeks} + 1, {_uspf}{_ussegm}b1, {_uspf}{_ussegm}b2, {_uspf}{_ussegm}b3, {_uspf}{_ussegm}b4, {_uspf}{_ussegm}b5, {_uspf}{_ussegm}b6, {_uspf}{_ussegm}b7);");
+                sb.AppendLine($"SegmentSturing({reeksen[2].Reeks} + 1, {_uspf}{_ussegm}c1, {_uspf}{_ussegm}c2, {_uspf}{_ussegm}c3, {_uspf}{_ussegm}c4, {_uspf}{_ussegm}c5, {_uspf}{_ussegm}c6, {_uspf}{_ussegm}c7);");
+            }
         }
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)

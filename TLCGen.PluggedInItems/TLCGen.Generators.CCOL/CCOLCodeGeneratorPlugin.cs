@@ -151,7 +151,7 @@ namespace TLCGen.Generators.CCOL
                                 {
                                     foreach (var set2 in cpg2.Item2.Settings)
                                     {
-                                        if (set.Default == set2.Default)
+                                        if (set.Type == set2.Type && set.Default == set2.Default)
                                         {
                                             set2.Setting = set.Setting;
                                             break;
