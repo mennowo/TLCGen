@@ -1,7 +1,9 @@
-﻿using TLCGen.Models.Enumerations;
+﻿using System;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    [Serializable]
     public class StarProgrammaFase
     {
         #region Properties
