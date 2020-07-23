@@ -35,6 +35,9 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 case CCOLVersieEnum.CCOL100:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100;
                     break;
+                case CCOLVersieEnum.CCOL110:
+                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL110;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -199,6 +202,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     case CCOLVersieEnum.CCOL9:
                     case CCOLVersieEnum.CCOL95:
                     case CCOLVersieEnum.CCOL100:
+                    case CCOLVersieEnum.CCOL110:
                         neededlibs.Add("htmlhelp.lib");
                         break;
                     default:

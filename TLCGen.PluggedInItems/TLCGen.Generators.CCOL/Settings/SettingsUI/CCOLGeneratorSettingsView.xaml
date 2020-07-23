@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TLCGen.Generators.CCOL"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance local:CCOLGeneratorSettingsViewModel}">
     <Grid>
         <TabControl>
             <TabItem Header="Visual project">
@@ -14,17 +14,17 @@
                     <TabItem Header="CCOL 8">
                         <xctk:PropertyGrid Margin="2" 
                                          ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                                         SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
                     </TabItem>
                     <TabItem Header="CCOL 9">
                         <xctk:PropertyGrid Margin="2" 
                                          ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL9}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                                         SelectedObject="{Binding Path=VisualSettingsCCOL9}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
                     </TabItem>
                     <TabItem Header="CCOL 9.5">
                         <xctk:PropertyGrid Margin="2" 
                                          ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL95}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
+                                         SelectedObject="{Binding Path=VisualSettingsCCOL95}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
                             <xctk:PropertyGrid.PropertyDefinitions>
                                 <xctk:PropertyDefinition TargetProperties="CCOLIncludesPaden" />
                                 <xctk:PropertyDefinition TargetProperties="CCOLLibs" />
@@ -38,7 +38,21 @@
                     <TabItem Header="CCOL 10.0">
                         <xctk:PropertyGrid Margin="2" 
                                          ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL100}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
+                                         SelectedObject="{Binding Path=VisualSettingsCCOL100}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
+                            <xctk:PropertyGrid.PropertyDefinitions>
+                                <xctk:PropertyDefinition TargetProperties="CCOLIncludesPaden" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibs" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPath" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPathNoTig" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLPreprocessorDefinitions" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLResPath" />
+                            </xctk:PropertyGrid.PropertyDefinitions>
+                        </xctk:PropertyGrid>
+                    </TabItem>
+                    <TabItem Header="CCOL 11.0">
+                        <xctk:PropertyGrid Margin="2" 
+                                           ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
+                                           SelectedObject="{Binding Path=VisualSettingsCCOL110}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
                             <xctk:PropertyGrid.PropertyDefinitions>
                                 <xctk:PropertyDefinition TargetProperties="CCOLIncludesPaden" />
                                 <xctk:PropertyDefinition TargetProperties="CCOLLibs" />
