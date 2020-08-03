@@ -93,3 +93,46 @@ void star_regelen()
 		}
 	}
 }
+
+#ifdef STAR_TESTING
+void star_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel)
+{
+    /* omschakelen naar gewenste programma keuze */
+    if (MM[mgewenst] != MM[mwerkelijk])
+    {
+		if (((MM[mgewenst] != 0 && MM[mwerkelijk] != 0 && star_cyclustimer == 1) ||
+			 (MM[mgewenst] != 0 && !IH[hblok_volgrichting]) ||
+			 (MM[mprg_wissel])))
+        {
+            MM[mprg_wissel] = TRUE;
+            if (test_alles_rood())
+			{
+                if (MM[mgps] ==  2)        init_programma_02();
+                if (MM[mgps] == 10)        init_programma_10();
+                CIF_PARM1WIJZAP=CIF_MEER_PARMWIJZ;
+				MM[mwerkelijk] = MM[mgewenst];
+				MM[mprogwissel] = FALSE;
+			}
+		}
+	}
+	else
+	{
+		MM[mprogwissel] = FALSE;
+	}
+
+	/* stuur alles rood tbv programmawisseling     */
+    if (MM[mprogwissel])
+	{
+		int fc;
+		IH[hblok_volgrichting] = FALSE;
+
+    	/* stuur alle signaalgroepen naar rood */
+        for (fc = 0; fc < FCMAX; fc++)
+		{
+			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
+			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
+			IH[hblok_volgrichting] |= (RW[fc]&BIT2 || YV[fc]&BIT2);
+		}
+	}
+}
+#endif

@@ -637,18 +637,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
 
-            var hsts = controller.HalfstarData.IsHalfstar ? ts + ts : ts;
+            var tsts = (controller.StarData.ToepassenStar || controller.HalfstarData.IsHalfstar) ? ts + ts : ts;
 
             if (controller.StarData.ToepassenStar)
             {
                 sb.AppendLine($"{ts}star_reset_bits(SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0);");
-                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0)");
+                sb.AppendLine($"{ts}if (MM[{_mpf}{_mstarprog}] != 0)");
                 sb.AppendLine($"{ts}{{");
                 sb.AppendLine($"{ts}{ts}star_instellingen();");
                 sb.AppendLine($"{ts}{ts}star_regelen();");
                 sb.AppendLine($"{ts}}}");
-                sb.AppendLine($"{ts}else");
-                sb.AppendLine($"{ts}{{");
             }
             if (controller.HalfstarData.IsHalfstar)
             {
@@ -662,24 +660,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 switch (controller.Data.TypeGroentijden)
                 {
                     case GroentijdenTypeEnum.MaxGroentijden:
-                        sb.AppendLine($"{hsts}Maxgroen_halfstar();");
+                        sb.AppendLine($"{tsts}Maxgroen_halfstar();");
                         break;
                     case GroentijdenTypeEnum.VerlengGroentijden:
-                        sb.AppendLine($"{hsts}Verlenggroen_halfstar();");
+                        sb.AppendLine($"{tsts}Verlenggroen_halfstar();");
                         break;
                 }
-                sb.AppendLine($"{hsts}Wachtgroen_halfstar();");
-                sb.AppendLine($"{hsts}Meetkriterium();");
-                sb.AppendLine($"{hsts}Meetkriterium_halfstar();");
-                sb.AppendLine($"{hsts}Meeverlengen_halfstar();");
-                sb.AppendLine($"{hsts}Synchronisaties_halfstar();");
-                sb.AppendLine($"{hsts}RealisatieAfhandeling_halfstar();");
-                sb.AppendLine($"{hsts}Alternatief_halfstar();");
-                sb.AppendLine($"{hsts}FileVerwerking();");
-                sb.AppendLine($"{hsts}FileVerwerking_halfstar();");
-                sb.AppendLine($"{hsts}DetectieStoring();");
-                sb.AppendLine($"{hsts}DetectieStoring_halfstar();");
+                sb.AppendLine($"{tsts}Wachtgroen_halfstar();");
+                sb.AppendLine($"{tsts}Meetkriterium();");
+                sb.AppendLine($"{tsts}Meetkriterium_halfstar();");
+                sb.AppendLine($"{tsts}Meeverlengen_halfstar();");
+                sb.AppendLine($"{tsts}Synchronisaties_halfstar();");
+                sb.AppendLine($"{tsts}RealisatieAfhandeling_halfstar();");
+                sb.AppendLine($"{tsts}Alternatief_halfstar();");
+                sb.AppendLine($"{tsts}FileVerwerking();");
+                sb.AppendLine($"{tsts}FileVerwerking_halfstar();");
+                sb.AppendLine($"{tsts}DetectieStoring();");
+                sb.AppendLine($"{tsts}DetectieStoring_halfstar();");
                 sb.AppendLine($"{ts}}}");
+            }
+
+            if (controller.StarData.ToepassenStar || controller.HalfstarData.IsHalfstar)
+            {
                 sb.AppendLine($"{ts}else");
                 sb.AppendLine($"{ts}{{");
             }
@@ -687,19 +689,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (controller.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.MaxGroentijden:
-                    sb.AppendLine($"{hsts}Maxgroen();");
+                    sb.AppendLine($"{tsts}Maxgroen();");
                     break;
                 case GroentijdenTypeEnum.VerlengGroentijden:
-                    sb.AppendLine($"{hsts}Verlenggroen();");
+                    sb.AppendLine($"{tsts}Verlenggroen();");
                     break;
             }
-            sb.AppendLine($"{hsts}Wachtgroen();");
-            sb.AppendLine($"{hsts}Meetkriterium();");
-            sb.AppendLine($"{hsts}Meeverlengen();");
-            sb.AppendLine($"{hsts}Synchronisaties();");
-            sb.AppendLine($"{hsts}RealisatieAfhandeling();");
-            sb.AppendLine($"{hsts}FileVerwerking();");
-            sb.AppendLine($"{hsts}DetectieStoring();");
+            sb.AppendLine($"{tsts}Wachtgroen();");
+            sb.AppendLine($"{tsts}Meetkriterium();");
+            sb.AppendLine($"{tsts}Meeverlengen();");
+            sb.AppendLine($"{tsts}Synchronisaties();");
+            sb.AppendLine($"{tsts}RealisatieAfhandeling();");
+            sb.AppendLine($"{tsts}FileVerwerking();");
+            sb.AppendLine($"{tsts}DetectieStoring();");
 
             if (controller.HalfstarData.IsHalfstar || controller.StarData.ToepassenStar)
             {
@@ -729,6 +731,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~PRIO_PP_BIT;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
+                }
+                else if (controller.StarData.ToepassenStar)
+                {
+                    sb.AppendLine($"{ts}if (MM[{_mpf}{_mstarprog}] == 0) AfhandelingPrio();");
                 }
                 else
                 {
