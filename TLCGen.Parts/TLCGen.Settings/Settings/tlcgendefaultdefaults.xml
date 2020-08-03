@@ -969,6 +969,7 @@
       <Category>Other</Category>
       <DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Dependencies</DataType>
       <Data>
+        <UsePeriodNames>true</UsePeriodNames>
         <DefaultPeriodeGroentijdenSet></DefaultPeriodeGroentijdenSet>
         <DefaultPeriodeNaam></DefaultPeriodeNaam>
       </Data>

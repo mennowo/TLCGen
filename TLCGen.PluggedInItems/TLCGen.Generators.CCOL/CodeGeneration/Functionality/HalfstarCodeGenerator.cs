@@ -272,7 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							break;
 						}
 					}
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmplxper}{iper}", iplx, CCOLElementTimeTypeEnum.None, _prmplxper, per.Periode));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmplxper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}", iplx, CCOLElementTimeTypeEnum.None, _prmplxper, per.Periode));
 					++iper;
 				}
 
@@ -342,7 +342,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				iper = 1;
 				foreach (var per in hsd.HalfstarPeriodenData)
 				{
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpervar}{iper}", per.VARegelen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schpervar, per.Periode));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpervar}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}", 
+                        per.VARegelen ? 1 : 0, 
+                        CCOLElementTimeTypeEnum.SCH_type, 
+                        _schpervar, 
+                        per.Periode));
 					++iper;
 				}
 
@@ -350,7 +354,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				iper = 1;
 				foreach (var per in hsd.HalfstarPeriodenData)
 				{
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schperarh}{iper}", per.AlternatievenVoorHoofdrichtingen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schperarh, per.Periode));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schperarh}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}", per.AlternatievenVoorHoofdrichtingen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schperarh, per.Periode));
 					++iper;
 				}
 
@@ -669,7 +673,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					{
 						sb.AppendLine($"{mts}{ts}case {iper}: /* default */");
 						sb.AppendLine($"{mts}{ts}{{");
-						sb.AppendLine($"{mts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}{iper}] - 1;");
+						sb.AppendLine($"{mts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}] - 1;");
 						sb.AppendLine($"{mts}{ts}{ts}break;");
 						sb.AppendLine($"{mts}{ts}}}");
 						++iper;
@@ -691,7 +695,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
 					{
 						sb.AppendLine(") ||");
-						sb.Append($"{mts}{ts}    (SCH[{_schpf}{_schpervar}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
+						sb.Append($"{mts}{ts}    (SCH[{_schpf}{_schpervar}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}] && (MM[{_mpf}{_mperiod}] == {iper})");
 						++iper;
 					}
 					sb.AppendLine("))");
@@ -715,7 +719,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
 					{
 						sb.AppendLine(") ||");
-						sb.Append($"{mts}    (SCH[{_schpf}{_schperarh}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
+						sb.Append($"{mts}    (SCH[{_schpf}{_schperarh}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}] && (MM[{_mpf}{_mperiod}] == {iper})");
 						++iper;
 					}
 					sb.AppendLine("))");

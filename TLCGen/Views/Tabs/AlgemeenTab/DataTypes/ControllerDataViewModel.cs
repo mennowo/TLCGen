@@ -490,6 +490,17 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(PrmLoggingTfbMax), broadcast: true);
             }
         }
+        
+        [Description("Gebruik functionele namen perioden")]
+        public bool GebruikPeriodenNamen
+        {
+            get => _Controller?.PeriodenData?.GebruikPeriodenNamen ?? false;
+            set
+            {
+                _Controller.PeriodenData.GebruikPeriodenNamen = value;
+                RaisePropertyChanged<object>(nameof(GebruikPeriodenNamen), broadcast: true);
+            }
+        }
 
         [Description("Opnemen cyclustijdmeting in regeling")]
         [BrowsableCondition("NotMultiModuleReeksen")]

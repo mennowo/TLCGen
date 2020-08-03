@@ -53,8 +53,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{iper}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{iper++}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", _usper, per.Commentaar));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}"));
+                        ++iper;
                         break;
                     case PeriodeTypeEnum.StarRegelen:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.Commentaar));
@@ -77,15 +78,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     hours = 24;
                 }
                 var inst = hours * 100 + per.StartTijd.Minutes;
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, _prmstkp, per.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstkp}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", inst, CCOLElementTimeTypeEnum.TI_type, _prmstkp, per.Naam));
                 hours = per.EindTijd.Hours;
                 if (per.EindTijd.Days == 1)
                 {
                     hours = 24;
                 }
                 inst = hours * 100 + per.EindTijd.Minutes;
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmetkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, _prmetkp, per.Naam));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmdckp}{iper}", (int)per.DagCode, CCOLElementTimeTypeEnum.None, _prmdckp, per.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmetkp}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", inst, CCOLElementTimeTypeEnum.TI_type, _prmetkp, per.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmdckp}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", (int)per.DagCode, CCOLElementTimeTypeEnum.None, _prmdckp, per.Naam));
                 ++iper;
             }
 
@@ -95,11 +96,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var pertypeandnum = "";
                 switch (per.Type)
                 {
-                    case PeriodeTypeEnum.RateltikkersAltijd: pertypeandnum = _prmperrt + iperrt.ToString(); iperrt++; break;
-                    case PeriodeTypeEnum.RateltikkersAanvraag: pertypeandnum = _prmperrta + iperrta.ToString(); iperrta++; break;
-                    case PeriodeTypeEnum.RateltikkersDimmen: pertypeandnum = _prmperrtdim + iperrtdim.ToString(); iperrtdim++; break;
-                    case PeriodeTypeEnum.BellenActief: pertypeandnum = _prmperbel + iperbel.ToString(); iperbel++; break;
-                    case PeriodeTypeEnum.BellenDimmen: pertypeandnum = _prmperbeldim + iperbeldim.ToString(); iperbeldim++; break;
+                    case PeriodeTypeEnum.RateltikkersAltijd: pertypeandnum = _prmperrt + (c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrt.ToString()); iperrt++; break;
+                    case PeriodeTypeEnum.RateltikkersAanvraag: pertypeandnum = _prmperrta + (c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrta.ToString()); iperrta++; break;
+                    case PeriodeTypeEnum.RateltikkersDimmen: pertypeandnum = _prmperrtdim + (c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrtdim.ToString()); iperrtdim++; break;
+                    case PeriodeTypeEnum.BellenActief: pertypeandnum = _prmperbel + (c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperbel.ToString()); iperbel++; break;
+                    case PeriodeTypeEnum.BellenDimmen: pertypeandnum = _prmperbeldim + (c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperbeldim.ToString()); iperbeldim++; break;
                     case PeriodeTypeEnum.StarRegelen: pertypeandnum = per.Naam; break;
                     case PeriodeTypeEnum.Overig: pertypeandnum = _prmpero + per.Naam; break;
                     case PeriodeTypeEnum.Groentijden:
@@ -215,8 +216,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* klokperiode: {comm} */");
                         sb.AppendLine($"{ts}/* -------------{new string('-', comm.Length)} */");
-                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{iper}], PRM[{_prmpf}{_prmetkp}{iper}]) &&");
-                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{iper}]))");
+                        var perN = c.PeriodenData.GebruikPeriodenNamen ? kpm.Naam : iper.ToString();
+                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{perN}], PRM[{_prmpf}{_prmetkp}{perN}]) &&");
+                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{perN}]))");
                         sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiod}] = {iper};");
                         ++iper;
                     }
@@ -263,9 +265,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 {
                                     sb.AppendLine(" || ");
                                 }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{iperrt}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrt}{iperrt}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{iperrt}]))");
+
+                                var perN = c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrt.ToString();
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{perN}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrt}{perN}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{perN}]))");
                                 iperrt++;
                             }
                             sb.AppendLine(";");
@@ -282,9 +286,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 {
                                     sb.AppendLine(" || ");
                                 }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{iperrta}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrta}{iperrta}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{iperrta}]))");
+                                var perN = c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrta.ToString();
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{perN}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrta}{perN}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{perN}]))");
                                 iperrta++;
                             }
                             sb.AppendLine(";");
@@ -301,9 +306,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 {
                                     sb.AppendLine(" || ");
                                 }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrtdim}{iperrtdim}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrtdim}{iperrtdim}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrtdim}{iperrtdim}]))");
+                                var perN = c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperrtdim.ToString();
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrtdim}{perN}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrtdim}{perN}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrtdim}{perN}]))");
                                 iperrtdim++;
                             }
                             sb.AppendLine(";");
@@ -320,9 +326,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 {
                                     sb.AppendLine(" || ");
                                 }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbel}{iperbel}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbel}{iperbel}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbel}{iperbel}]))");
+                                var perN = c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperbel.ToString();
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbel}{perN}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbel}{perN}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbel}{perN}]))");
                                 iperbel++;
                             }
                             sb.AppendLine(";");
@@ -339,9 +346,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 {
                                     sb.AppendLine(" || ");
                                 }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbeldim}{iperbeldim}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbeldim}{iperbeldim}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbeldim}{iperbeldim}]))");
+                                var perN = c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iperbeldim.ToString();
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbeldim}{perN}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbeldim}{perN}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbeldim}{perN}]))");
                                 iperbeldim++;
                             }
                             sb.AppendLine(";");
@@ -415,9 +423,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* ------------------- */");
                     iper = 0;
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
-                    foreach (var _ in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
+                    foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{iper}] = (MM[{_mpf}{_mperiod}] == {iper++});");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}] = (MM[{_mpf}{_mperiod}] == {iper++});");
                     }
                     iper = 1;
                     foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.StarRegelen))

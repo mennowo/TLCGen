@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
@@ -11,6 +8,8 @@ namespace TLCGen.Models
     [Serializable]
     public class PeriodenDataModel
     {
+        public bool GebruikPeriodenNamen { get; set; }
+
         [RefersTo(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string DefaultPeriodeGroentijdenSet { get; set; }
         public string DefaultPeriodeNaam { get; set; }
