@@ -151,6 +151,9 @@
       <DependentUpon>LateReleaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopTijdViewModel.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\SynchronisatieView.xaml.cs">
+      <DependentUpon>SynchronisatieView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\InterSignaalGroepTabViewModel.cs">
       <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
     </Compile>
@@ -656,6 +659,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\SynchronisatieView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

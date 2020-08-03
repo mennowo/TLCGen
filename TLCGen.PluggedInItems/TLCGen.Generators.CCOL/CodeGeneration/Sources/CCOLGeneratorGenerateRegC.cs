@@ -469,8 +469,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
 
@@ -596,12 +598,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}if (!SAPPLPROG)");
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");
-            sb.AppendLine("");
-            if (controller.InterSignaalGroep.Voorstarten.Count > 0 ||
-               controller.InterSignaalGroep.Gelijkstarten.Count > 0)
+            sb.AppendLine();
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
+                (controller.InterSignaalGroep.Voorstarten.Count > 0 ||
+                 controller.InterSignaalGroep.Gelijkstarten.Count > 0))
             {
                 sb.AppendLine($"{ts}init_realisation_timers();");
-                sb.AppendLine("");
+                sb.AppendLine();
             }
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCInitApplication, false, true, false, true);

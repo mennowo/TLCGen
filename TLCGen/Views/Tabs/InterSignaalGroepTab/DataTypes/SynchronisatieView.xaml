@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TLCGen.Views.SynchronisatieView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             xmlns:views="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance vm:SynchronisatieViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <CheckBox 
+            IsEnabled="{Binding Path=IsEnabled}"
+            Visibility="{Binding Path=ShowIsCoupled,Converter={StaticResource BooleanToVisibilityConverter}}"
+            IsChecked="{Binding Path=IsCoupled,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Actief" />
+        <ContentControl Grid.Row="1" Content="{Binding Path=SelectedObject}"
+                        IsEnabled="{Binding Path=IsCoupled}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:GelijkstartViewModel}">
+                    <views:GelijkstartView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:VoorstartViewModel}">
+                    <views:VoorstartView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NaloopViewModel}">
+                    <views:NaloopView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:MeeaanvraagViewModel}">
+                    <views:MeeAanvraagView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:LateReleaseViewModel}">
+                    <views:LateReleaseView />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
+</UserControl>

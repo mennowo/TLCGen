@@ -9,7 +9,11 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" MinWidth="200">
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" MinWidth="200" d:DataContext="{d:DesignInstance viewModels:NaloopViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -22,13 +26,13 @@
             <ComboBox 
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
                     SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <Label Content="Maximale voorstart tijd:" />
+            <Label Content="Maximale tijd inrijden/inlopen:" />
             <xctk:WatermarkTextBox 
                         Watermark="NG" IsEnabled="{Binding Path=MaximaleVoorstartAllowed}"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InrijdenTijdensGroenPossible,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <CheckBox Content="Inrijden/lopen tijdens groen" 
                           IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />
                     <ct:InfoElement>

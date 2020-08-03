@@ -18,6 +18,7 @@
         RegCFileVerwerking,
         RegCDetectieStoring,
         RegCMeeverlengen,
+        RegCRealisatieAfhandelingVoorModules,
         RegCRealisatieAfhandelingModules,
         RegCRealisatieAfhandelingNaModules,
         RegCRealisatieAfhandeling,

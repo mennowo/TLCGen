@@ -13,6 +13,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class AlgemeenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private string _hplact;
+        private string _mperiod;
+        private List<string> _madets;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schtoon7s;
@@ -26,8 +28,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schcycl;
         private CCOLGeneratorCodeStringSettingModel _schcycl_reset;
         private CCOLGeneratorCodeStringSettingModel _mlcycl;
+        private CCOLGeneratorCodeStringSettingModel _hmad;
 #pragma warning restore 0649
-        string _mperiod;
+
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -37,6 +40,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             _myElements.Add(new CCOLElement(_mperiod, CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmfb}", c.Data.Fasebewaking, CCOLElementTimeTypeEnum.TS_type, _prmfb));
+
+            // Onthouden drukknop meldingen
+            var madets = c.InterSignaalGroep.Meeaanvragen.Where(x => x.DetectieAfhankelijk).SelectMany(x => x.Detectoren).Select(x => x.MeeaanvraagDetector).ToList();
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
+                var (_, _, twoWayPedestrians) = GroenSyncDataModel.OrderSyncs(c, groenSyncData);
+                foreach (var (m1, _, gelijkstart) in twoWayPedestrians)
+                {
+                    if (gelijkstart) continue;
+
+                    var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == m1.FaseVan);
+                    var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == m1.FaseNaar);
+                    if (fc1 == null || fc2 == null) continue;
+
+                    var mdr1A = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                    var mdr1B = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                    var mdr2A = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                    var mdr2B = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+
+                    if (mdr1A != null) madets.Add(mdr1A.Naam);
+                    if (mdr1B != null) madets.Add(mdr1B.Naam);
+                    if (mdr2A != null) madets.Add(mdr2A.Naam);
+                    if (mdr2B != null) madets.Add(mdr2B.Naam);
+                }
+            }
+
+            _madets = madets.Distinct().ToList();
+            _madets.Sort();
+            foreach (var dm in _madets.Distinct())
+            {
+                var elem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hmad}{dm}", _hmad, dm);
+                if (_myElements.All(x => x.Naam != elem.Naam))
+                {
+                    _myElements.Add(elem);
+                }
+            }
 
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
@@ -116,6 +156,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCIncludes:
                     return 40;
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return 90;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 40;
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -173,6 +215,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"#ifdef MIRMON");
                     sb.AppendLine($"{ts}#include \"MirakelMonitor.h\"");
                     sb.AppendLine($"#endif /* MIRMON */");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (_madets.Any())
+                    {
+                        sb.AppendLine($"{ts}/* Bewaar meldingen van detectie voor het zetten van een meeaanvraag */");
+                        foreach (var mad in _madets)
+                        {
+                            var fc = c.Fasen.FirstOrDefault(x => x.Detectoren.Any(x2 => x2.Naam == mad));
+                            if (fc == null) continue;
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad}] = SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hmad}{mad}] || D[{_dpf}{mad}] && !G[{_fcpf}{fc.Naam}] && A[{_fcpf}{fc.Naam}];");
+                        }
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:

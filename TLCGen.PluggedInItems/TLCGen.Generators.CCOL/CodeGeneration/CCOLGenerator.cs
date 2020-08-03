@@ -254,11 +254,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "nalopen.h", sourcefilepath);
                     }
 
-                    if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
+                    switch (c.Data.SynchronisatiesType)
                     {
-                        CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
-                        CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
+                        case SynchronisatiesTypeEnum.SyncFunc when (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any()):
+                            CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
+                            CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
+                            CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
+                            break;
+                        case SynchronisatiesTypeEnum.RealFunc when (c.InterSignaalGroep.Voorstarten.Any() 
+                                                                    || c.InterSignaalGroep.Gelijkstarten.Any()
+                                                                    || c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue)
+                                                                    || c.InterSignaalGroep.LateReleases.Any()):
+                            CopySourceIfNeeded(c, "realfunc.c", sourcefilepath);
+                            break;
                     }
 
                     if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&

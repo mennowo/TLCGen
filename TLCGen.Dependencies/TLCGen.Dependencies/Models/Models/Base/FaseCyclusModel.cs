@@ -131,6 +131,11 @@ namespace TLCGen.Models
 
         #endregion // IComparable
 
+        public override string ToString()
+        {
+            return Naam;
+        }
+
         #region Constructor
 
         public FaseCyclusModel() : base()

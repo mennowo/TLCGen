@@ -744,8 +744,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     else
                     {
-                        sb.Append($"{tts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]");
-                        sb.AppendLine($";");
+                        sb.AppendLine($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                     }
                 }
                 if (c.HalfstarData.IsHalfstar)

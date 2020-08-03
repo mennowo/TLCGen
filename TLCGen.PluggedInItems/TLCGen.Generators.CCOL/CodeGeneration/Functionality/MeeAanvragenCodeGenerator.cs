@@ -13,10 +13,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schma;
-        private CCOLGeneratorCodeStringSettingModel _hmad;
         private CCOLGeneratorCodeStringSettingModel _prmtypema;
         private CCOLGeneratorCodeStringSettingModel _tuitgestma;
 #pragma warning restore 0649
+        private string _hmad;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -24,21 +24,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
             {
-                if (ma.DetectieAfhankelijk)
-                {
-                    foreach(var dm in ma.Detectoren)
-                    {
-                        var elem =
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_hmad}{dm.MeeaanvraagDetector}",
-                                _hmad, dm.MeeaanvraagDetector);
-                        if (_myElements.Count == 0 || _myElements.All(x => x.Naam != elem.Naam))
-                        {
-                            _myElements.Add(elem);
-                        }
-                    }
-                }
-
                 if (ma.AanUit != AltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
@@ -52,7 +37,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if ((ma.Type == MeeaanvraagTypeEnum.Startgroen || ma.TypeInstelbaarOpStraat) &&
                     ma.Uitgesteld)
                 {
-
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}",
@@ -294,9 +278,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasSettings()
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            return true;
+            _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+
+            return base.SetSettings(settings);
         }
     }
 }

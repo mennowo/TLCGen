@@ -47,6 +47,8 @@ namespace TLCGen.Models
         [IsDocumented]
         public bool GarantieOntruimingsTijden { get; set; }
         [IsDocumented]
+        public SynchronisatiesTypeEnum SynchronisatiesType { get; set; }
+        [IsDocumented]
         public bool ExtraMeeverlengenInWG { get; set; }
         [IsDocumented]
         public GroentijdenTypeEnum TypeGroentijden { get; set; }

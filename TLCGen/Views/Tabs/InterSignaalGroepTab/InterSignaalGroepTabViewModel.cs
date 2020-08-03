@@ -12,6 +12,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.ViewModels.Enums;
 
@@ -27,7 +28,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _FasenNames;
         private ObservableCollection<string> _Detectoren;
         private ObservableCollection<GarantieTijdConvertHelper> _GarantieTijdenConvertValues;
-        private SynchronisatieViewModel _SelectedSynchronisatie;
+        private SynchronisatieViewModel _selectedSynchronisatie;
         private GarantieTijdConvertHelper _SelectedGarantieTijdenConvertValue;
         private bool _MatrixChanged;
         private IntersignaalGroepTypeEnum _DisplayType;
@@ -85,15 +86,7 @@ namespace TLCGen.ViewModels
 
         public string GarantieTijdenLabel => _Controller?.Data?.Intergroen == true ? "Gar. interg. tijden" : "Gar. ontr. tijden";
 
-        public ObservableCollection<string> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                    _Detectoren = new ObservableCollection<string>();
-                return _Detectoren;
-            }
-        }
+        public ObservableCollection<string> Detectoren => _Detectoren ?? (_Detectoren = new ObservableCollection<string>());
 
         public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues
         {
@@ -113,22 +106,22 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedGarantieTijdenConvertValue = value;
-                RaisePropertyChanged("SelectedGarantieTijdenConvertValue");
+                RaisePropertyChanged();
             }
         }
 
         public SynchronisatieViewModel SelectedSynchronisatie
         {
-            get => _SelectedSynchronisatie;
+            get => _selectedSynchronisatie;
             set
             {
-                _SelectedSynchronisatie = value;
+                _selectedSynchronisatie = value;
                 if (_Controller != null && value != null && _AllDetectoren != null && !string.IsNullOrEmpty(value?.FaseVan))
                 {
                     Detectoren.Clear();
                     foreach (var fc in _Controller.Fasen)
                     {
-                        if (fc.Naam == _SelectedSynchronisatie.FaseVan)
+                        if (fc.Naam == _selectedSynchronisatie.FaseVan)
                         {
                             foreach (var dm in fc.Detectoren)
                             {
@@ -144,22 +137,21 @@ namespace TLCGen.ViewModels
                         {
                             if (ConflictMatrix[i1, i2] == value)
                             {
-                                value.GelijkstartVM.MirroredViewModel = ConflictMatrix[i2, i1].GelijkstartVM;
+                                value.GelijkstartVm.MirroredViewModel = ConflictMatrix[i2, i1].GelijkstartVm;
                                 br = true;
                                 break;
                             }
                         }
                         if (br) break;
                     }
-                    value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
-                    value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
+                    value.NaloopVm.DetectieAfhankelijkPossible = Detectoren.Count > 0;
+                    value.MeeaanvraagVm.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
-                RaisePropertyChanged("SelectedSynchronisatie");
-                if (_SelectedSynchronisatie?.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
+                if (_selectedSynchronisatie?.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
                 {
-                    RaisePropertyChanged("GelijkstartDeelConflict");
-                    RaisePropertyChanged("GelijkstartOntruimingstijdFaseVan");
-                    RaisePropertyChanged("GelijkstartOntruimingstijdFaseNaar");
+                    RaisePropertyChanged(nameof(GelijkstartDeelConflict));
+                    RaisePropertyChanged(nameof(GelijkstartOntruimingstijdFaseVan));
+                    RaisePropertyChanged(nameof(GelijkstartOntruimingstijdFaseNaar));
                 }
                 RaisePropertyChanged("");
             }
@@ -181,7 +173,7 @@ namespace TLCGen.ViewModels
             set
             {
                 if (value)
-                    RaisePropertyChanged(nameof(MatrixChanged), _MatrixChanged, value, true);
+                    RaisePropertyChanged(nameof(MatrixChanged), _MatrixChanged, true, true);
                 _MatrixChanged = value;
             }
         }
@@ -196,6 +188,19 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(UseGarantieOntruimingsTijden), _Controller.Data.GarantieOntruimingsTijden, value, true);
             }
         }
+
+        public SynchronisatiesTypeEnum SynchronisatiesType
+        {
+            get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.SyncFunc;
+            set
+            {
+                _Controller.Data.SynchronisatiesType = value;
+                MatrixChanged = true;
+                RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
+            }
+        }
+
+        public bool ShowGarantieTijdenConverter => DisplayType == IntersignaalGroepTypeEnum.GarantieConflict;
 
         #endregion // Properties
 
@@ -220,7 +225,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
                     }
                 }
-                RaisePropertyChanged("GelijkstartOntruimingstijdFaseVan");
+                RaisePropertyChanged();
             }
         }
         public int GelijkstartOntruimingstijdFaseNaar
@@ -242,7 +247,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
                     }
                 }
-                RaisePropertyChanged("GelijkstartOntruimingstijdFaseNaar");
+                RaisePropertyChanged();
             }
         }
         public bool GelijkstartDeelConflict
@@ -264,7 +269,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.DeelConflict = value;
                     }
                 }
-                RaisePropertyChanged("GelijkstartDeelConflict");
+                RaisePropertyChanged();
             }
         }
 

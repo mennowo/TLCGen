@@ -57,6 +57,7 @@
     <Compile Include="ViewModels\RangeerElementenTabViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
