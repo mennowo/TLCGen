@@ -49,6 +49,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				            sb.AppendLine($"{ts}D_code[{_dpf}{d.Naam}] = \"{d.VissimNaam}\";");
 			            }
 		            }
+                    foreach (var d in c.SelectieveDetectoren)
+                    {
+                        if (!string.IsNullOrWhiteSpace(d.VissimNaam))
+                        {
+                            sb.AppendLine($"{ts}D_code[{_dpf}{d.Naam}] = \"{d.VissimNaam}\";");
+                        }
+                    }
 					sb.AppendLine("#endif");
 					return sb.ToString();
 
