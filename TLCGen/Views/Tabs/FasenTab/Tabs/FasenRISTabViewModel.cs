@@ -553,6 +553,7 @@ namespace TLCGen.ViewModels
                 }
             }
             st.StationData.SimulationData.RelatedName = st.StationData.Naam;
+            st.StationData.SimulationData.FCNr = sg.Naam;
             return st;
         }
 

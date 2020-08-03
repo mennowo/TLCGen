@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -113,7 +114,8 @@ namespace TLCGen.ViewModels
                             dm.Simulatie.Stopline = 10000;
                             break;
                     }
-                    dm.Simulatie.FCNr = fcm.Naam;
+                    if (dm.Simulatie.FCNr.ToUpper() != "NG")
+                        dm.Simulatie.FCNr = fcm.Naam;
                 }
             }
             foreach (var dm in _Controller.Detectoren)
@@ -140,8 +142,10 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Q4 = q4;
 
                 dm.Simulatie.Stopline = 1800;
+                if (dm.Simulatie.FCNr != "NG" && Controller.Fasen.All(x => x.Naam != dm.Simulatie.FCNr))
+                    dm.Simulatie.FCNr = "NG";
             }
-            foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
+            foreach (var dm in _Controller.SelectieveDetectoren)
             {
                 var max = 3;
                 var numbers = new List<int> { 200, 100, 50 };
@@ -165,6 +169,8 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Q4 = q4;
 
                 dm.Simulatie.Stopline = 1800;
+                if (dm.Simulatie.FCNr != "NG" && Controller.Fasen.All(x => x.Naam != dm.Simulatie.FCNr))
+                    dm.Simulatie.FCNr = "NG";
             }
 
             RaisePropertyChanged("");

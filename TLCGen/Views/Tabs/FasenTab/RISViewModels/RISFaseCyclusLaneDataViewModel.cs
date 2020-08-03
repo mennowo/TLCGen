@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using System;
 using System.Linq;
+using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -62,8 +63,7 @@ namespace TLCGen.ViewModels
 
         private AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string> _stationsManager;
         public AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string> StationsManager =>
-            _stationsManager ??
-            (_stationsManager = new AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string>(
+            _stationsManager ??= new AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string>(
                 SimulatedStations,
                 x => 
                 {
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
                 },
                 (x, y) => false,
                 () => MessengerInstance.Send(new ControllerDataChangedMessage())
-                ));
+            );
 
         public object GetItem()
         {
@@ -96,6 +96,14 @@ namespace TLCGen.ViewModels
         {
             _laneData = laneData;
             SimulatedStations = new ObservableCollectionAroundList<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel>(laneData.SimulatedStations);
+            foreach (var ss in SimulatedStations)
+            {
+                if (ss.StationData.SimulationData.FCNr != "NG" && 
+                    TLCGenControllerDataProvider.Default.Controller.Fasen.All(x => x.Naam != ss.StationData.SimulationData.FCNr))
+                {
+                    ss.StationData.SimulationData.FCNr = _laneData.SignalGroupName;
+                }
+            }
         }
     }
 }

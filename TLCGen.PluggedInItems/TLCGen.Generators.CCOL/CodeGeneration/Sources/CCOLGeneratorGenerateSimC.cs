@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
                 sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
-                sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
+                sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && controller.Fasen.Any(x => x.Naam == dm.Simulatie.FCNr) ? _fcpf + dm.Simulatie.FCNr : "NG")};");
                 sb.AppendLine($"{ts}S_generator[{index}] = NG;");
                 sb.AppendLine($"{ts}S_stopline[{index}] = {dm.Simulatie.Stopline};");
                 sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
@@ -113,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
                     sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
-                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
+                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && controller.Fasen.Any(x => x.Naam == dm.Simulatie.FCNr) ? _fcpf + dm.Simulatie.FCNr : "NG")};");
                     sb.AppendLine($"{ts}S_generator[{index}] = NG;");
                     sb.AppendLine($"{ts}S_stopline[{index}] = {dm.Simulatie.Stopline};");
                     sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
@@ -127,7 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}LNK_code[{index}] = \"{e.RelatedName}\";");
                     sb.AppendLine($"{ts}IS_nr[{index}] = {_ispf}{e.RelatedName};");
-                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(e.FCNr) && e.FCNr.ToUpper() != "NG" ? _fcpf + e.FCNr : "NG")};");
+                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(e.FCNr) && controller.Fasen.Any(x => x.Naam == e.FCNr) ? _fcpf + e.FCNr : "NG")};");
                     sb.AppendLine($"{ts}S_generator[{index}] = NG;");
                     sb.AppendLine($"{ts}S_stopline[{index}] = {e.Stopline};");
                     sb.AppendLine($"{ts}Q1[{index}] = {e.Q1};");

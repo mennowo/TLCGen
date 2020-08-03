@@ -109,6 +109,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string FCNr
+        {
+            get => StationData.SimulationData.FCNr;
+            set
+            {
+                StationData.SimulationData.FCNr = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public object GetItem()
         {
             return StationData;
