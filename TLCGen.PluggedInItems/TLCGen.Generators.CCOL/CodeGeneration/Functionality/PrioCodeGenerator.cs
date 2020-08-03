@@ -696,16 +696,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
                     }
                     break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
-                    var sd = c.SelectieveDetectoren.FirstOrDefault(x => x.Naam == melding.RelatedInput1);
-                    if (sd != null && !sd.Dummy)
-                    {
-                        if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
-                        {
-                            sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
-                        }
-                    }
-                    break;
             }
             sb.AppendLine($")");
             sb.AppendLine($"{ts}{{");
