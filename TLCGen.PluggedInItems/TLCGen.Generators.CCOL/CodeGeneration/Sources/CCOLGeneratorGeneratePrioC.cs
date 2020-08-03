@@ -1345,7 +1345,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCSpecialSignals, false, true, false, true);
 
             sb.AppendLine($"{ts}/* reset oude set_DSI_message */");
-            sb.AppendLine($"{ts}#if !defined VISSIM || defined SUMO");
+            sb.AppendLine($"{ts}#if !defined VISSIM_GLOBAL_DSI");
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();
