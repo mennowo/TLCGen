@@ -151,6 +151,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* School ingreep: knipperen wachtlicht */");
                     foreach (var d in dets)
                     {
+                        if(!d.Item2.Wachtlicht) continue;
+                        
                         if (d.Item1.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                         {
                             sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam}]) ");
