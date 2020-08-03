@@ -38,26 +38,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCWachtgroen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 60;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCWachtgroen => 10,
+                CCOLCodeTypeEnum.RegCAanvragen => 60,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

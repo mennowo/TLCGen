@@ -150,22 +150,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 40;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 90;
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 40;
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 20;
-            }
-            return 0;
+                CCOLCodeTypeEnum.SysHBeforeUserDefines => 10,
+                CCOLCodeTypeEnum.RegCIncludes => 40,
+                CCOLCodeTypeEnum.RegCAanvragen => 91,
+                CCOLCodeTypeEnum.RegCInitApplication => 40,
+                CCOLCodeTypeEnum.RegCPostApplication => 30,
+                CCOLCodeTypeEnum.RegCPostSystemApplication => 20,
+                _ => 0
+            };
         }
 
         public override bool HasFunctionLocalVariables()
@@ -220,7 +214,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (_madets.Any())
                     {
-                        sb.AppendLine($"{ts}/* Bewaar meldingen van detectie voor het zetten van een meeaanvraag */");
+                        sb.AppendLine($"{ts}/* Bewaar meldingen van detectie (bv. voor het zetten van een meeaanvraag) */");
                         foreach (var mad in _madets)
                         {
                             var fc = c.Fasen.FirstOrDefault(x => x.Detectoren.Any(x2 => x2.Naam == mad));

@@ -30,21 +30,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.TabCControlDefaults:
-                    return 10;
-                case CCOLCodeTypeEnum.TabCControlParameters:
-                    return 0;
-                case CCOLCodeTypeEnum.TabCBeforeIncludes:
-                case CCOLCodeTypeEnum.RegCBeforeIncludes:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    return 30;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.TabCControlDefaults => 10,
+                CCOLCodeTypeEnum.TabCControlParameters => 0,
+                CCOLCodeTypeEnum.TabCBeforeIncludes => 10,
+                CCOLCodeTypeEnum.RegCBeforeIncludes => 10,
+                CCOLCodeTypeEnum.RegCSystemApplication => 30,
+                CCOLCodeTypeEnum.RegCSystemApplication2 => 30,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

@@ -86,19 +86,10 @@ namespace TLCGen.ViewModels
 
         public string GarantieTijdenLabel => _Controller?.Data?.Intergroen == true ? "Gar. interg. tijden" : "Gar. ontr. tijden";
 
-        public ObservableCollection<string> Detectoren => _Detectoren ?? (_Detectoren = new ObservableCollection<string>());
+        public ObservableCollection<string> Detectoren => _Detectoren ??= new ObservableCollection<string>();
 
-        public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues
-        {
-            get
-            {
-                if (_GarantieTijdenConvertValues == null)
-                {
-                    _GarantieTijdenConvertValues = new ObservableCollection<GarantieTijdConvertHelper>();
-                }
-                return _GarantieTijdenConvertValues;
-            }
-        }
+        public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues => 
+            _GarantieTijdenConvertValues ??= new ObservableCollection<GarantieTijdConvertHelper>();
 
         public GarantieTijdConvertHelper SelectedGarantieTijdenConvertValue
         {
@@ -196,6 +187,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.SynchronisatiesType = value;
                 MatrixChanged = true;
+                SelectedSynchronisatie = ConflictMatrix?[0, 1];
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
             }
         }
@@ -420,65 +412,15 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand DeleteValueCommand
-        {
-            get
-            {
-                if (_DeleteValueCommand == null)
-                {
-                    _DeleteValueCommand = new RelayCommand(DeleteValueCommand_Executed, DeleteValueCommand_CanExecute);
-                }
-                return _DeleteValueCommand;
-            }
-        }
+        public ICommand DeleteValueCommand => _DeleteValueCommand ??= new RelayCommand(DeleteValueCommand_Executed, DeleteValueCommand_CanExecute);
 
-        public ICommand CheckItCommand
-        {
-            get
-            {
-                if (_CheckItCommand == null)
-                {
-                    _CheckItCommand = new RelayCommand(CheckItCommand_Executed, CheckItCommand_CanExecute);
-                }
-                return _CheckItCommand;
-            }
-        }
+        public ICommand CheckItCommand => _CheckItCommand ??= new RelayCommand(CheckItCommand_Executed, CheckItCommand_CanExecute);
 
-        public ICommand SetGarantieValuesCommand
-        {
-            get
-            {
-                if (_SetGarantieValuesCommand == null)
-                {
-                    _SetGarantieValuesCommand = new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
-                }
-                return _SetGarantieValuesCommand;
-            }
-        }
+        public ICommand SetGarantieValuesCommand => _SetGarantieValuesCommand ??= new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
 
-        public ICommand AddGarantieConvertValue
-        {
-            get
-            {
-                if (_AddGarantieConvertValue == null)
-                {
-                    _AddGarantieConvertValue = new RelayCommand(AddGarantieConvertValue_Executed, AddGarantieConvertValue_CanExecute);
-                }
-                return _AddGarantieConvertValue;
-            }
-        }
+        public ICommand AddGarantieConvertValue => _AddGarantieConvertValue ??= new RelayCommand(AddGarantieConvertValue_Executed, AddGarantieConvertValue_CanExecute);
 
-        public ICommand RemoveGarantieConvertValue
-        {
-            get
-            {
-                if (_RemoveGarantieConvertValue == null)
-                {
-                    _RemoveGarantieConvertValue = new RelayCommand(RemoveGarantieConvertValue_Executed, RemoveGarantieConvertValue_CanExecute);
-                }
-                return _RemoveGarantieConvertValue;
-            }
-        }
+        public ICommand RemoveGarantieConvertValue => _RemoveGarantieConvertValue ??= new RelayCommand(RemoveGarantieConvertValue_Executed, RemoveGarantieConvertValue_CanExecute);
 
         #endregion // Commands
 

@@ -117,12 +117,12 @@ namespace TLCGen.GebruikersOpties
                                 catch (Exception e)
                                 {
                                     Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
-                                        $"Kon gebruikersopties niet exporteren:\n\n{e.ToString()}",
+                                        $"Kon gebruikersopties niet exporteren:\n\n{e}",
                                         "Fout bij exporteren gebruikersopties", System.Windows.MessageBoxButton.OK);
                                 }
                             }
                         },
-                        () => ItemsAllPresent.Where(x => x.Selected).Any());
+                        () => ItemsAllPresent.Any(x => x.Selected));
                 }
                 return _exportCommand;
             }

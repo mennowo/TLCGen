@@ -75,36 +75,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return base.GetFunctionLocalVariables(c, type);
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCSystemApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 90;
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 50;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 90;
-                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    return 20;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCInitApplication => 20,
+                CCOLCodeTypeEnum.RegCPreApplication => 90,
+                CCOLCodeTypeEnum.RegCTop => 50,
+                CCOLCodeTypeEnum.RegCIncludes => 30,
+                CCOLCodeTypeEnum.RegCSystemApplication => 90,
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 20,
+                _ => 0
+            };
         }
 
         private string GetFaseReeks(ControllerModel c, string fc)

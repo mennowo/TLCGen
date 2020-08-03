@@ -38,13 +38,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 80;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCSystemApplication => 80,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

@@ -133,32 +133,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCMeetkriterium => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 110;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 110;
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return 110;
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 110;
-                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
-                    return 110;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCInitApplication => 110,
+                CCOLCodeTypeEnum.RegCAanvragen => 110,
+                CCOLCodeTypeEnum.RegCMeetkriterium => 110,
+                CCOLCodeTypeEnum.RegCPostSystemApplication => 110,
+                CCOLCodeTypeEnum.SysHBeforeUserDefines => 110,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

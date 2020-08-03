@@ -43,15 +43,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    return 101;
-                case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    return 101;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCAlternatieven => 101,
+                CCOLCodeTypeEnum.PrioCPARCorrecties => 101,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

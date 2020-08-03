@@ -168,22 +168,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 50;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 80;
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                    return 70;
-				default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCIncludes => 50,
+                CCOLCodeTypeEnum.RegCAanvragen => 80,
+                CCOLCodeTypeEnum.RegCSynchronisaties => 30,
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => 10,
+                CCOLCodeTypeEnum.RegCMaxgroen => 70,
+                CCOLCodeTypeEnum.RegCVerlenggroen => 70,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

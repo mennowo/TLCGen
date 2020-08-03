@@ -389,100 +389,63 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.HalfstarData.IsHalfstar) return base.GetFunctionLocalVariables(c, type);
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.HstCAanvragen:
-                case CCOLCodeTypeEnum.HstCVerlenggroen:
-                case CCOLCodeTypeEnum.HstCMaxgroen:
-                case CCOLCodeTypeEnum.HstCMeetkriterium:
-                case CCOLCodeTypeEnum.HstCMeeverlengen:
-                case CCOLCodeTypeEnum.HstCSynchronisaties:
-                case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
-                case CCOLCodeTypeEnum.HstCPreSystemApplication:
-                case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                case CCOLCodeTypeEnum.HstCAlternatief:
-                    return new List<Tuple<string, string, string>>
-                    {
-                        new Tuple<string, string, string>("int", "ov", ""),
-                        new Tuple<string, string, string>("int", "fc", "")
-                    };
-                case CCOLCodeTypeEnum.HstCKlokPerioden:
-                    return new List<Tuple<string, string, string>>
-                    {
-                        //new Tuple<string, string, string>($"{c.GetBoolV()}", "omschakelmag", "FALSE"),
-                        new Tuple<string, string, string>("char", "volgMaster", "TRUE")
-                    };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.HstCAanvragen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCVerlenggroen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCMaxgroen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCMeetkriterium => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCMeeverlengen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCSynchronisaties => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCPreSystemApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCAlternatief => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "ov", ""), new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.HstCKlokPerioden => new List<Tuple<string, string, string>>
+                {
+                    //new Tuple<string, string, string>($"{c.GetBoolV()}", "omschakelmag", "FALSE"),
+                    new Tuple<string, string, string>("char", "volgMaster", "TRUE")
+                },
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
-		{
-			switch (type)
-			{
-				case CCOLCodeTypeEnum.RegCPreApplication:
-					return 20;
-				case CCOLCodeTypeEnum.HstCPreApplication:
-					return 10;
-				case CCOLCodeTypeEnum.HstCKlokPerioden:
-					return 10;
-				case CCOLCodeTypeEnum.HstCAanvragen:
-					return 10;
-				case CCOLCodeTypeEnum.HstCVerlenggroen:
-					return 10;
-				case CCOLCodeTypeEnum.HstCMaxgroen:
-					return 10;
-				case CCOLCodeTypeEnum.HstCWachtgroen:
-					return 10;
-				case CCOLCodeTypeEnum.HstCMeetkriterium:
-					return 10;
-				case CCOLCodeTypeEnum.HstCMeeverlengen:
-					return 10;
-				case CCOLCodeTypeEnum.HstCSynchronisaties:
-					return 10;
-				case CCOLCodeTypeEnum.HstCAlternatief:
-					return 20;
-				case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
-					return 10;
-				case CCOLCodeTypeEnum.HstCPostApplication:
-					return 10;
-				case CCOLCodeTypeEnum.HstCPreSystemApplication:
-					return 10;
-				case CCOLCodeTypeEnum.HstCPostSystemApplication:
-					return 10;
-				case CCOLCodeTypeEnum.HstCPostDumpApplication:
-                    return 10;
-                case CCOLCodeTypeEnum.HstCPrioHalfstarSettings:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCInitPrio:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCInstellingen:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
-                    return 20;
-                case CCOLCodeTypeEnum.PrioCOnderMaximum:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCAfkapGroen:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCStartGroenMomenten:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCAfkappen:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCTerugkomGroen:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCGroenVasthouden:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCMeetkriterium:
-                    return 10;
-                default:
-					return 0;
-			}
-		}
+        {
+            return type switch
+            {
+                CCOLCodeTypeEnum.RegCPreApplication => 20,
+                CCOLCodeTypeEnum.HstCPreApplication => 10,
+                CCOLCodeTypeEnum.HstCKlokPerioden => 10,
+                CCOLCodeTypeEnum.HstCAanvragen => 10,
+                CCOLCodeTypeEnum.HstCVerlenggroen => 10,
+                CCOLCodeTypeEnum.HstCMaxgroen => 10,
+                CCOLCodeTypeEnum.HstCWachtgroen => 10,
+                CCOLCodeTypeEnum.HstCMeetkriterium => 10,
+                CCOLCodeTypeEnum.HstCMeeverlengen => 10,
+                CCOLCodeTypeEnum.HstCSynchronisaties => 10,
+                CCOLCodeTypeEnum.HstCAlternatief => 20,
+                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => 10,
+                CCOLCodeTypeEnum.HstCPostApplication => 10,
+                CCOLCodeTypeEnum.HstCPreSystemApplication => 10,
+                CCOLCodeTypeEnum.HstCPostSystemApplication => 10,
+                CCOLCodeTypeEnum.HstCPostDumpApplication => 10,
+                CCOLCodeTypeEnum.HstCPrioHalfstarSettings => 10,
+                CCOLCodeTypeEnum.PrioCInitPrio => 10,
+                CCOLCodeTypeEnum.PrioCInstellingen => 10,
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => 20,
+                CCOLCodeTypeEnum.PrioCOnderMaximum => 10,
+                CCOLCodeTypeEnum.PrioCAfkapGroen => 10,
+                CCOLCodeTypeEnum.PrioCStartGroenMomenten => 10,
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 10,
+                CCOLCodeTypeEnum.PrioCAfkappen => 10,
+                CCOLCodeTypeEnum.PrioCTerugkomGroen => 10,
+                CCOLCodeTypeEnum.PrioCGroenVasthouden => 10,
+                CCOLCodeTypeEnum.PrioCMeetkriterium => 10,
+                _ => 0
+            };
+        }
 
 		public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
 		{

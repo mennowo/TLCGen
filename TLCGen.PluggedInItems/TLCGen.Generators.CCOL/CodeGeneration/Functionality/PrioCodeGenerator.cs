@@ -14,23 +14,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         public static string GetDetectorTypeSCHString(PrioIngreepInUitMeldingVoorwaardeInputTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                    return "SD";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                    return "D";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                    return "DB";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                    return "SDB";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                    return "ED";
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                    return "ETDH";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie => "SD",
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp => "D",
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet => "DB",
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet => "SDB",
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie => "ED",
+                PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat => "ETDH",
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 
@@ -552,23 +545,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 61;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 41;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 41;
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 31;
-                case CCOLCodeTypeEnum.PrioCInUitMelden:
-                    return 11;
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    return 11;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCTop => 61,
+                CCOLCodeTypeEnum.RegCPreApplication => 41,
+                CCOLCodeTypeEnum.RegCSystemApplication => 41,
+                CCOLCodeTypeEnum.RegCPostSystemApplication => 31,
+                CCOLCodeTypeEnum.PrioCInUitMelden => 11,
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 11,
+                _ => 0
+            };
         }
 
         private string GetMeldingDetectieCode(PrioIngreepInUitMeldingModel melding)
@@ -964,22 +950,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var vtgType = "";
                         if (!int.TryParse(ov.FaseCyclus, out var fcNmr)) fcNmr = -1;
-                        switch (ov.Type)
+                        vtgType = ov.Type switch
                         {
-                            case PrioIngreepVoertuigTypeEnum.Tram:
-                                vtgType = "CIF_TRAM";
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.Bus:
-                                vtgType = "CIF_BUS";
-                                break;
-                            case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
-                            case PrioIngreepVoertuigTypeEnum.Fiets:
-                            case PrioIngreepVoertuigTypeEnum.NG:
-                                vtgType = "NG";
-                                break;
-                            default:
-                                throw new IndexOutOfRangeException();
-                        }
+                            PrioIngreepVoertuigTypeEnum.Tram => "CIF_TRAM",
+                            PrioIngreepVoertuigTypeEnum.Bus => "CIF_BUS",
+                            PrioIngreepVoertuigTypeEnum.Vrachtwagen => "NG",
+                            PrioIngreepVoertuigTypeEnum.Fiets => "NG",
+                            PrioIngreepVoertuigTypeEnum.NG => "NG",
+                            _ => throw new IndexOutOfRangeException()
+                        };
 
                         if (ov.MeldingenData.Inmeldingen.Any())
                         {
@@ -1275,19 +1254,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (!first) sb.Append(" || ");
                                     first = false;
-                                    var _tnl = "";
-                                    switch (nlt.Type)
+                                    var _tnl = nlt.Type switch
                                     {
-                                        case NaloopTijdTypeEnum.StartGroen: _tnl = _tnlsg; break;
-                                        case NaloopTijdTypeEnum.StartGroenDetectie: _tnl = _tnlsgd; break;
-                                        case NaloopTijdTypeEnum.VastGroen: _tnl = _tnlfg; break;
-                                        case NaloopTijdTypeEnum.VastGroenDetectie: _tnl = _tnlfgd; break;
-                                        case NaloopTijdTypeEnum.EindeGroen: _tnl = _tnleg; break;
-                                        case NaloopTijdTypeEnum.EindeGroenDetectie: _tnl = _tnlegd; break;
-                                        case NaloopTijdTypeEnum.EindeVerlengGroen: _tnl = _tnlcv; break;
-                                        case NaloopTijdTypeEnum.EindeVerlengGroenDetectie: _tnl = _tnlcvd; break;
-                                        default: throw new ArgumentOutOfRangeException();
-                                    }
+                                        NaloopTijdTypeEnum.StartGroen => _tnlsg,
+                                        NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
+                                        NaloopTijdTypeEnum.VastGroen => _tnlfg,
+                                        NaloopTijdTypeEnum.VastGroenDetectie => _tnlfgd,
+                                        NaloopTijdTypeEnum.EindeGroen => _tnleg,
+                                        NaloopTijdTypeEnum.EindeGroenDetectie => _tnlegd,
+                                        NaloopTijdTypeEnum.EindeVerlengGroen => _tnlcv,
+                                        NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
+                                        _ => throw new ArgumentOutOfRangeException()
+                                    };
                                     sb.Append($"RT[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}]");
                                 }
                                 sb.AppendLine(")");

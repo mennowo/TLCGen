@@ -9,15 +9,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 40;
-				case CCOLCodeTypeEnum.TabCControlParameters:
-					return 10;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCTop => 40,
+                CCOLCodeTypeEnum.TabCControlParameters => 10,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

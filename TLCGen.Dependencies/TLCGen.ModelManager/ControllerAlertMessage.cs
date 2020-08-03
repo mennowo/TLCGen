@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media;
 using GalaSoft.MvvmLight;
-using TLCGen.Dependencies.Providers;
 
 namespace TLCGen.Models
 {

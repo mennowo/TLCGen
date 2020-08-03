@@ -24,15 +24,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Type = type;
 			Commentaar = description;
-            switch(Type)
+            TType = Type switch
             {
-                case CCOLElementTypeEnum.Schakelaar:
-                    TType = CCOLElementTimeTypeEnum.SCH_type;
-                    break;
-                default:
-                    TType = CCOLElementTimeTypeEnum.None;
-                    break;
-            }
+                CCOLElementTypeEnum.Schakelaar => CCOLElementTimeTypeEnum.SCH_type,
+                _ => CCOLElementTimeTypeEnum.None
+            };
         }
 
         public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type, string description = null)

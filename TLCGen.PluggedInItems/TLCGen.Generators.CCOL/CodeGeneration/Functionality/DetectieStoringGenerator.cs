@@ -74,13 +74,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCDetectieStoring:
-                    return 10;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCDetectieStoring => 10,
+                _ => 0
+            };
         }
 
         #region Code gen methods
@@ -346,19 +344,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var grfunc = "";
                     if (halfstar)
                     {
-                        switch (c.Data.TypeGroentijden)
+                        grfunc = c.Data.TypeGroentijden switch
                         {
-                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;
-                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
-                        }
+                            GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
+                            GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
+                            _ => grfunc
+                        };
                     }
                     else
                     {
-                        switch (c.Data.TypeGroentijden)
+                        grfunc = c.Data.TypeGroentijden switch
                         {
-                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
-                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
-                        }
+                            GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
+                            GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
+                            _ => grfunc
+                        };
                     }
                     if (halfstar)
                     {
@@ -403,13 +403,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCDetectieStoring:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCDetectieStoring => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

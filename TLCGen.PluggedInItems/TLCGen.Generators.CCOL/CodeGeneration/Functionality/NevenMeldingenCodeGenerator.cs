@@ -49,14 +49,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.PrioCInUitMelden:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 90;
-            }
-            return 0;
+                CCOLCodeTypeEnum.PrioCInUitMelden => 30,
+                CCOLCodeTypeEnum.RegCAanvragen => 90,
+                _ => 0
+            };
         }
 
         private List<Tuple<NevenMeldingModel, string, string>> CombineNevenMeldingenAndHeadDet(ControllerModel c)

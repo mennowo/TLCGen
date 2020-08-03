@@ -236,26 +236,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCFileVerwerking:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 40;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCTop => 10,
+                CCOLCodeTypeEnum.RegCInitApplication => 10,
+                CCOLCodeTypeEnum.RegCSystemApplication => 10,
+                CCOLCodeTypeEnum.RegCWachtgroen => 20,
+                CCOLCodeTypeEnum.RegCFileVerwerking => 10,
+                CCOLCodeTypeEnum.PrioCPARCorrecties => 10,
+                CCOLCodeTypeEnum.RegCVerlenggroen => 40,
+                CCOLCodeTypeEnum.RegCMaxgroen => 40,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -653,12 +645,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{tts}{{");
                             foreach (var ff in fm.TeDoserenSignaalGroepen)
                             {
-                                var grfunc = "";
-                                switch (c.Data.TypeGroentijden)
+                                var grfunc = c.Data.TypeGroentijden switch
                                 {
-                                    case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
-                                    case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
-                                }
+                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
+                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
+                                    _ => ""
+                                };
                                 sb.AppendLine(fm.EerlijkDoseren
                                     ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
                                     : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
@@ -699,12 +691,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{tts}{{");
                             foreach (var ff in fm.TeDoserenSignaalGroepen)
                             {
-                                var grfunc = "";
-                                switch (c.Data.TypeGroentijden)
+                                var grfunc = c.Data.TypeGroentijden switch
                                 {
-                                    case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;
-                                    case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
-                                }
+                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
+                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
+                                    _ => ""
+                                };
                                 sb.AppendLine(fm.EerlijkDoseren
                                     ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
                                     : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");

@@ -132,28 +132,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return 10;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCAanvragen => 10,
+                CCOLCodeTypeEnum.RegCMeetkriterium => 10,
+                _ => 0
+            };
         }
 
         public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen) == true);
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Verlengen != DetectorVerlengenTypeEnum.Geen) == true);
-                default:
-                    return false;
-            }
+                CCOLCodeTypeEnum.RegCAanvragen => c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen) == true),
+                CCOLCodeTypeEnum.RegCMeetkriterium => c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Verlengen != DetectorVerlengenTypeEnum.Geen) == true),
+                _ => false
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -281,52 +275,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private bool DetectorCanHaveAanvraag(DetectorModel dm)
         {
-            switch (dm.Type)
+            return dm.Type switch
             {
-                case DetectorTypeEnum.Kop:
-                case DetectorTypeEnum.Lang:
-                case DetectorTypeEnum.Verweg:
-                case DetectorTypeEnum.File:
-                case DetectorTypeEnum.Knop:
-                case DetectorTypeEnum.KnopBinnen:
-                case DetectorTypeEnum.KnopBuiten:
-                case DetectorTypeEnum.Radar:
-                case DetectorTypeEnum.WisselDetector:
-                case DetectorTypeEnum.WisselStroomKringDetector:
-                case DetectorTypeEnum.WisselStandDetector:
-                case DetectorTypeEnum.Overig:
-                    return true;
-                case DetectorTypeEnum.VecomDetector:
-                case DetectorTypeEnum.OpticomIngang:
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                DetectorTypeEnum.Kop => true,
+                DetectorTypeEnum.Lang => true,
+                DetectorTypeEnum.Verweg => true,
+                DetectorTypeEnum.File => true,
+                DetectorTypeEnum.Knop => true,
+                DetectorTypeEnum.KnopBinnen => true,
+                DetectorTypeEnum.KnopBuiten => true,
+                DetectorTypeEnum.Radar => true,
+                DetectorTypeEnum.WisselDetector => true,
+                DetectorTypeEnum.WisselStroomKringDetector => true,
+                DetectorTypeEnum.WisselStandDetector => true,
+                DetectorTypeEnum.Overig => true,
+                DetectorTypeEnum.VecomDetector => false,
+                DetectorTypeEnum.OpticomIngang => false,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         private bool DetectorCanHaveVerlengen(DetectorModel dm)
         {
-            switch (dm.Type)
+            return dm.Type switch
             {
-                case DetectorTypeEnum.Kop:
-                case DetectorTypeEnum.Lang:
-                case DetectorTypeEnum.Verweg:
-                case DetectorTypeEnum.File:
-                case DetectorTypeEnum.Knop:
-                case DetectorTypeEnum.KnopBinnen:
-                case DetectorTypeEnum.KnopBuiten:
-                case DetectorTypeEnum.Radar:
-                case DetectorTypeEnum.WisselDetector:
-                case DetectorTypeEnum.WisselStroomKringDetector:
-                case DetectorTypeEnum.WisselStandDetector:
-                case DetectorTypeEnum.Overig:
-                    return true;
-                case DetectorTypeEnum.VecomDetector:
-                case DetectorTypeEnum.OpticomIngang:
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                DetectorTypeEnum.Kop => true,
+                DetectorTypeEnum.Lang => true,
+                DetectorTypeEnum.Verweg => true,
+                DetectorTypeEnum.File => true,
+                DetectorTypeEnum.Knop => true,
+                DetectorTypeEnum.KnopBinnen => true,
+                DetectorTypeEnum.KnopBuiten => true,
+                DetectorTypeEnum.Radar => true,
+                DetectorTypeEnum.WisselDetector => true,
+                DetectorTypeEnum.WisselStroomKringDetector => true,
+                DetectorTypeEnum.WisselStandDetector => true,
+                DetectorTypeEnum.Overig => true,
+                DetectorTypeEnum.VecomDetector => false,
+                DetectorTypeEnum.OpticomIngang => false,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

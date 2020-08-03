@@ -77,13 +77,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.Data.ModulenInParameters) return base.GetFunctionLocalVariables(c, type);
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCPostApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override bool HasCCOLElements() => true;
@@ -92,14 +90,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 90;
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 90;
-            }
-            return 0;
+                CCOLCodeTypeEnum.RegCPostApplication => 90,
+                CCOLCodeTypeEnum.RegCInitApplication => 90,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

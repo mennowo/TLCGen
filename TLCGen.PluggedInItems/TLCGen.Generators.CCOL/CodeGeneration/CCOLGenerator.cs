@@ -338,28 +338,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     {
                                         var copy = false;
                                         var cond = lines[0].Replace("CONDITION=", "");
-                                        switch (cond)
+                                        copy = cond switch
                                         {
-                                            case "ALWAYS":
-                                                copy = true;
-                                                break;
-                                            case "OV":
-                                                copy = (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0);
-                                                break;
-                                            case "SYNC":
-                                                copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 ||
-                                                        c.InterSignaalGroep.Voorstarten.Count > 0);
-                                                break;
-                                            case "FIXATIE":
-                                                copy = (c.Data.FixatieData.FixatieMogelijk);
-                                                break;
-                                            case "NALOPEN":
-                                                copy = (c.InterSignaalGroep.Nalopen.Count > 0);
-                                                break;
-                                            case "RGV":
-                                                copy = (c.RoBuGrover.SignaalGroepInstellingen.Count > 0);
-                                                break;
-                                        }
+                                            "ALWAYS" => true,
+                                            "OV" => (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0),
+                                            "SYNC" => (c.InterSignaalGroep.Gelijkstarten.Count > 0 || c.InterSignaalGroep.Voorstarten.Count > 0),
+                                            "FIXATIE" => (c.Data.FixatieData.FixatieMogelijk),
+                                            "NALOPEN" => (c.InterSignaalGroep.Nalopen.Count > 0),
+                                            "RGV" => (c.RoBuGrover.SignaalGroepInstellingen.Count > 0),
+                                            _ => copy
+                                        };
 
                                         if (!copy || File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f)))) continue;
 

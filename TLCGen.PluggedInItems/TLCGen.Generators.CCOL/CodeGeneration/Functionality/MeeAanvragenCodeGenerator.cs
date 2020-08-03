@@ -47,24 +47,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 
                 if (ma.TypeInstelbaarOpStraat)
                 {
-                    var inst = 0;
-                    switch (ma.Type)
+                    var inst = ma.Type switch
                     {
-                        case MeeaanvraagTypeEnum.Aanvraag:
-                            inst = 1;
-                            break;
-                        case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                            inst = 2;
-                            break;
-                        case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                            inst = 3;
-                            break;
-                        case MeeaanvraagTypeEnum.Startgroen:
-                            inst = 4;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                        MeeaanvraagTypeEnum.Aanvraag => 1,
+                        MeeaanvraagTypeEnum.RoodVoorAanvraag => 2,
+                        MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten => 3,
+                        MeeaanvraagTypeEnum.Startgroen => 4,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmtypema}{ma.FaseVan}{ma.FaseNaar}",
@@ -79,13 +69,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 30;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCAanvragen => 30,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -97,31 +85,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
-                    var hasdetafh = false;
-                    if(c.InterSignaalGroep.Meeaanvragen.Count > 0)
-                    {
-                        hasdetafh = c.InterSignaalGroep.Meeaanvragen.Any(x => x.DetectieAfhankelijk);
-                    }
-                    if(hasdetafh)
-                    {
-                        sb.AppendLine($"{ts}/* Bewaar meldingen van detectie voor het zetten van een meeaanvraag */");
-                        var mads = new List<Tuple<string, string>>();
-                        foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
-                        {
-                            if (!ma.DetectieAfhankelijk) continue;
-                            foreach(var d in ma.Detectoren)
-                            {
-                                if(!mads.Any(x => x.Item1 == ma.FaseVan && x.Item2 == d.MeeaanvraagDetector))
-                                {
-                                    mads.Add(new Tuple<string, string>(ma.FaseVan, d.MeeaanvraagDetector));
-                                }
-                            }
-                        }
-                        foreach (var mad in mads)
-                        {
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}] = SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
-                        }
-                    }
+                    
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
                         var tts = ts;

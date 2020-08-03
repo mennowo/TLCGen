@@ -20,27 +20,15 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
         {
             var writeline = line;
 
-            CCOLGeneratorVisualSettingsModel settings;
-            switch (plugin.Controller.Data.CCOLVersie)
+            var settings = plugin.Controller.Data.CCOLVersie switch
             {
-                case CCOLVersieEnum.CCOL8:
-                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings;
-                    break;
-                case CCOLVersieEnum.CCOL9:
-                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL9;
-                    break;
-                case CCOLVersieEnum.CCOL95:
-                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95;
-                    break;
-                case CCOLVersieEnum.CCOL100:
-                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100;
-                    break;
-                case CCOLVersieEnum.CCOL110:
-                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL110;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                CCOLVersieEnum.CCOL8 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings,
+                CCOLVersieEnum.CCOL9 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL9,
+                CCOLVersieEnum.CCOL95 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95,
+                CCOLVersieEnum.CCOL100 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100,
+                CCOLVersieEnum.CCOL110 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL110,
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
             var ccolinclpaths = settings.CCOLIncludesPaden;
             var ccolextralibs = settings.CCOLLibs;
@@ -95,58 +83,24 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 					{
 						var invert = condition.StartsWith("!");
 						var actualCondition = condition.Replace("!", "");
-						switch (actualCondition)
-						{
-							case "IGT":
-								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 &&
-										 plugin.Controller.Data.Intergroen;
-								break;
-							case "CCOL9ORHIGHER":
-								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9;
-								break;
-							case "CCOL95ORHIGHER":
-								result = plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95;
-								break;
-							case "PRIO":
-								result = plugin.Controller.PrioData.PrioIngrepen != null &&
-										 plugin.Controller.PrioData.PrioIngrepen.Any() ||
-										 plugin.Controller.PrioData.HDIngrepen != null &&
-										 plugin.Controller.PrioData.HDIngrepen.Any();
-								break;
-							case "MV":
-								result = plugin.Controller.Data.KWCType != KWCTypeEnum.Geen;
-								break;
-							case "MVVIALIS":
-								result = plugin.Controller.Data.KWCType == KWCTypeEnum.Vialis;
-								break;
-							case "MVOVERIG":
-								result = plugin.Controller.Data.KWCType != KWCTypeEnum.Vialis &&
-										 plugin.Controller.Data.KWCType != KWCTypeEnum.Geen;
-								break;
-							case "PTP":
-							case "KS":
-								result = plugin.Controller.PTPData.PTPKoppelingen != null &&
-										 plugin.Controller.PTPData.PTPKoppelingen.Any();
-								break;
-							case "MS":
-								result = plugin.Controller.Data.CCOLMulti;
-								break;
-							case "SYNC":
-								result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() ||
-										 plugin.Controller.InterSignaalGroep.Voorstarten.Any();
-								break;
-							case "HS":
-								result = plugin.Controller.HalfstarData.IsHalfstar;
-								break;
-                            case "RIS":
-                                result = plugin.Controller.RISData.RISToepassen && 
-                                         plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any()));
-                                break;
-                            default:
-								result = false;
-								break;
-						}
-						if (invert) result = !result;
+                        result = actualCondition switch
+                        {
+                            "IGT" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && plugin.Controller.Data.Intergroen),
+                            "CCOL9ORHIGHER" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9),
+                            "CCOL95ORHIGHER" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95),
+                            "PRIO" => (plugin.Controller.PrioData.PrioIngrepen != null && plugin.Controller.PrioData.PrioIngrepen.Any() || plugin.Controller.PrioData.HDIngrepen != null && plugin.Controller.PrioData.HDIngrepen.Any()),
+                            "MV" => (plugin.Controller.Data.KWCType != KWCTypeEnum.Geen),
+                            "MVVIALIS" => (plugin.Controller.Data.KWCType == KWCTypeEnum.Vialis),
+                            "MVOVERIG" => (plugin.Controller.Data.KWCType != KWCTypeEnum.Vialis && plugin.Controller.Data.KWCType != KWCTypeEnum.Geen),
+                            "PTP" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
+                            "KS" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
+                            "MS" => plugin.Controller.Data.CCOLMulti,
+                            "SYNC" => (plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() || plugin.Controller.InterSignaalGroep.Voorstarten.Any()),
+                            "HS" => plugin.Controller.HalfstarData.IsHalfstar,
+                            "RIS" => (plugin.Controller.RISData.RISToepassen && plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any()))),
+                            _ => false
+                        };
+                        if (invert) result = !result;
 						if (!result) break;
 						#endregion // Conditions
 					}

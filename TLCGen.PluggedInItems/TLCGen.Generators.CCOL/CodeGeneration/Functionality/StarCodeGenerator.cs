@@ -91,24 +91,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.TabCIncludes:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCKlokPerioden:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 60;
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 50;
-            }
-            return 0;
+                CCOLCodeTypeEnum.TabCIncludes => 100,
+                CCOLCodeTypeEnum.RegCIncludes => 100,
+                CCOLCodeTypeEnum.RegCTop => 100,
+                CCOLCodeTypeEnum.RegCPreApplication => 100,
+                CCOLCodeTypeEnum.RegCKlokPerioden => 20,
+                CCOLCodeTypeEnum.RegCVerlenggroen => 60,
+                CCOLCodeTypeEnum.RegCMaxgroen => 60,
+                CCOLCodeTypeEnum.RegCPostApplication => 50,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

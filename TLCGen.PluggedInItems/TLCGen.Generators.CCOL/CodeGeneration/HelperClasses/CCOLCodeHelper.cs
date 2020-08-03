@@ -35,22 +35,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static int GetAanvraagSetting(DetectorModel dm)
         {
-            var set = 0;
-            switch (dm.Aanvraag)
+            var set = dm.Aanvraag switch
             {
-                case DetectorAanvraagTypeEnum.Uit:
-                    set = 0;
-                    break;
-                case DetectorAanvraagTypeEnum.RnietTRG:
-                    set = 1;
-                    break;
-                case DetectorAanvraagTypeEnum.Rood:
-                    set = 2;
-                    break;
-                case DetectorAanvraagTypeEnum.RoodGeel:
-                    set = 3;
-                    break;
-            }
+                DetectorAanvraagTypeEnum.Uit => 0,
+                DetectorAanvraagTypeEnum.RnietTRG => 1,
+                DetectorAanvraagTypeEnum.Rood => 2,
+                DetectorAanvraagTypeEnum.RoodGeel => 3,
+                _ => 0
+            };
             return set;
         }
 

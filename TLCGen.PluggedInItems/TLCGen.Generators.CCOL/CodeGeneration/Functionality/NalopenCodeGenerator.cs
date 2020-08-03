@@ -38,18 +38,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var nlt in nl.Tijden)
                 {
-                    CCOLGeneratorCodeStringSettingModel _tnl = null;
-                    switch (nlt.Type)
+                    var _tnl = nlt.Type switch
                     {
-                        case NaloopTijdTypeEnum.StartGroen: _tnl = _tnlsg; break;
-                        case NaloopTijdTypeEnum.StartGroenDetectie: _tnl = _tnlsgd; break;
-                        case NaloopTijdTypeEnum.VastGroen: _tnl = _tnlfg; break;
-                        case NaloopTijdTypeEnum.VastGroenDetectie: _tnl = _tnlfgd; break;
-                        case NaloopTijdTypeEnum.EindeGroen: _tnl = _tnleg; break;
-                        case NaloopTijdTypeEnum.EindeGroenDetectie: _tnl = _tnlegd; break;
-                        case NaloopTijdTypeEnum.EindeVerlengGroen: _tnl = _tnlcv; break;
-                        case NaloopTijdTypeEnum.EindeVerlengGroenDetectie: _tnl = _tnlcvd; break;
-                    }
+                        NaloopTijdTypeEnum.StartGroen => _tnlsg,
+                        NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
+                        NaloopTijdTypeEnum.VastGroen => _tnlfg,
+                        NaloopTijdTypeEnum.VastGroenDetectie => _tnlfgd,
+                        NaloopTijdTypeEnum.EindeGroen => _tnleg,
+                        NaloopTijdTypeEnum.EindeGroenDetectie => _tnlegd,
+                        NaloopTijdTypeEnum.EindeVerlengGroen => _tnlcv,
+                        NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
+                        _ => null
+                    };
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tnl}{nl.FaseVan}{nl.FaseNaar}",
@@ -100,27 +100,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    return 20;
-                case CCOLCodeTypeEnum.PrioCPrioriteitsNiveau:
-                    return 20;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCInitApplication => 30,
+                CCOLCodeTypeEnum.RegCPreApplication => 30,
+                CCOLCodeTypeEnum.RegCSynchronisaties => 20,
+                CCOLCodeTypeEnum.RegCMaxgroenNaAdd => 10,
+                CCOLCodeTypeEnum.RegCMaxgroen => 20,
+                CCOLCodeTypeEnum.RegCVerlenggroen => 10,
+                CCOLCodeTypeEnum.RegCAlternatieven => 20,
+                CCOLCodeTypeEnum.PrioCPrioriteitsNiveau => 20,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

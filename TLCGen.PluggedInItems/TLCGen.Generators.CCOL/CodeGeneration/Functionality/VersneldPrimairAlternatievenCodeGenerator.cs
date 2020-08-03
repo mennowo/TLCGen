@@ -62,21 +62,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
                     if (sync == null) continue;
 
-                    string hnl;
-                    switch (nl.Type)
+                    var hnl = nl.Type switch
                     {
-                        case NaloopTypeEnum.StartGroen:
-                            hnl = _tnlsg;
-                            break;
-                        case NaloopTypeEnum.EindeGroen:
-                            hnl = _tnleg;
-                            break;
-                        case NaloopTypeEnum.CyclischVerlengGroen:
-                            hnl = _tnlcv;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                        NaloopTypeEnum.StartGroen => _tnlsg,
+                        NaloopTypeEnum.EindeGroen => _tnleg,
+                        NaloopTypeEnum.CyclischVerlengGroen => _tnlcv,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
 
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -222,26 +214,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                default:
-                    return base.GetFunctionLocalVariables(c, type);
-            }
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
-                    return 10;
-                case CCOLCodeTypeEnum.HstCAlternatief:
-                    return 10;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => 10,
+                CCOLCodeTypeEnum.HstCAlternatief => 10,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

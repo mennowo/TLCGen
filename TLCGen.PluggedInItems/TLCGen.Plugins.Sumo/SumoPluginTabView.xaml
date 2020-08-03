@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Plugins.Sumo"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -46,8 +46,8 @@
         <TextBox Text="{Binding SumoKruispuntLinkMax,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="6" />
         <CheckBox IsChecked="{Binding PrependIdToDetectors,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="5" Grid.Row="7" />
         <CheckBox IsChecked="{Binding AutoStartSumo,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="5" Grid.Row="8" />
-        <ct:FolderTextBox Folder="{Binding Path=SumoHomePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO pad" Grid.Column="1" Grid.Row="9" />
-        <ct:FileTextBox File="{Binding Path=SumoConfigPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO config" Grid.Column="1" Grid.Row="10" />
+        <controls:FolderTextBox Folder="{Binding Path=SumoHomePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO pad" Grid.Column="1" Grid.Row="9" />
+        <controls:FileTextBox File="{Binding Path=SumoConfigPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO config" Grid.Column="1" Grid.Row="10" />
         <Grid Grid.Row="11" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

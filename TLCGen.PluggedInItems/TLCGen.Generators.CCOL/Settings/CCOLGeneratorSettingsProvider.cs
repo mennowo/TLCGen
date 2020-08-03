@@ -131,106 +131,68 @@ namespace TLCGen.Generators.CCOL.Settings
 
         private CCOLElementTypeEnum TranslateType(CCOLGeneratorSettingTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLGeneratorSettingTypeEnum.Uitgang:
-                    return CCOLElementTypeEnum.Uitgang;
-                case CCOLGeneratorSettingTypeEnum.Ingang:
-                    return CCOLElementTypeEnum.Ingang;
-                case CCOLGeneratorSettingTypeEnum.Timer:
-                    return CCOLElementTypeEnum.Timer;
-                case CCOLGeneratorSettingTypeEnum.Counter:
-                    return CCOLElementTypeEnum.Counter;
-                case CCOLGeneratorSettingTypeEnum.Schakelaar:
-                    return CCOLElementTypeEnum.Schakelaar;
-                case CCOLGeneratorSettingTypeEnum.HulpElement:
-                    return CCOLElementTypeEnum.HulpElement;
-                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
-                    return CCOLElementTypeEnum.GeheugenElement;
-                case CCOLGeneratorSettingTypeEnum.Parameter:
-                    return CCOLElementTypeEnum.Parameter;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                CCOLGeneratorSettingTypeEnum.Uitgang => CCOLElementTypeEnum.Uitgang,
+                CCOLGeneratorSettingTypeEnum.Ingang => CCOLElementTypeEnum.Ingang,
+                CCOLGeneratorSettingTypeEnum.Timer => CCOLElementTypeEnum.Timer,
+                CCOLGeneratorSettingTypeEnum.Counter => CCOLElementTypeEnum.Counter,
+                CCOLGeneratorSettingTypeEnum.Schakelaar => CCOLElementTypeEnum.Schakelaar,
+                CCOLGeneratorSettingTypeEnum.HulpElement => CCOLElementTypeEnum.HulpElement,
+                CCOLGeneratorSettingTypeEnum.GeheugenElement => CCOLElementTypeEnum.GeheugenElement,
+                CCOLGeneratorSettingTypeEnum.Parameter => CCOLElementTypeEnum.Parameter,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         public string GetDefaultPrefix(CCOLGeneratorSettingTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLGeneratorSettingTypeEnum.Uitgang:
-                    return GetDefaultPrefix("us");
-                case CCOLGeneratorSettingTypeEnum.Ingang:
-                    return GetDefaultPrefix("is");
-                case CCOLGeneratorSettingTypeEnum.HulpElement:
-                    return GetDefaultPrefix("h");
-                case CCOLGeneratorSettingTypeEnum.Timer:
-                    return GetDefaultPrefix("t");
-                case CCOLGeneratorSettingTypeEnum.Counter:
-                    return GetDefaultPrefix("c");
-                case CCOLGeneratorSettingTypeEnum.Schakelaar:
-                    return GetDefaultPrefix("sch");
-                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
-                    return GetDefaultPrefix("m");
-                case CCOLGeneratorSettingTypeEnum.Parameter:
-                    return GetDefaultPrefix("prm");
-                default:
-                    return null;
-            }
+                CCOLGeneratorSettingTypeEnum.Uitgang => GetDefaultPrefix("us"),
+                CCOLGeneratorSettingTypeEnum.Ingang => GetDefaultPrefix("is"),
+                CCOLGeneratorSettingTypeEnum.HulpElement => GetDefaultPrefix("h"),
+                CCOLGeneratorSettingTypeEnum.Timer => GetDefaultPrefix("t"),
+                CCOLGeneratorSettingTypeEnum.Counter => GetDefaultPrefix("c"),
+                CCOLGeneratorSettingTypeEnum.Schakelaar => GetDefaultPrefix("sch"),
+                CCOLGeneratorSettingTypeEnum.GeheugenElement => GetDefaultPrefix("m"),
+                CCOLGeneratorSettingTypeEnum.Parameter => GetDefaultPrefix("prm"),
+                _ => null
+            };
         }
 
         public string GetPrefix(CCOLGeneratorSettingTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLGeneratorSettingTypeEnum.Uitgang:
-                    return GetPrefix("us");
-                case CCOLGeneratorSettingTypeEnum.Ingang:
-                    return GetPrefix("is");
-                case CCOLGeneratorSettingTypeEnum.HulpElement:
-                    return GetPrefix("h");
-                case CCOLGeneratorSettingTypeEnum.Timer:
-                    return GetPrefix("t");
-                case CCOLGeneratorSettingTypeEnum.Counter:
-                    return GetPrefix("c");
-                case CCOLGeneratorSettingTypeEnum.Schakelaar:
-                    return GetPrefix("sch");
-                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
-                    return GetPrefix("m");
-                case CCOLGeneratorSettingTypeEnum.Parameter:
-                    return GetPrefix("prm");
-                default:
-                    return null;
-            }
+                CCOLGeneratorSettingTypeEnum.Uitgang => GetPrefix("us"),
+                CCOLGeneratorSettingTypeEnum.Ingang => GetPrefix("is"),
+                CCOLGeneratorSettingTypeEnum.HulpElement => GetPrefix("h"),
+                CCOLGeneratorSettingTypeEnum.Timer => GetPrefix("t"),
+                CCOLGeneratorSettingTypeEnum.Counter => GetPrefix("c"),
+                CCOLGeneratorSettingTypeEnum.Schakelaar => GetPrefix("sch"),
+                CCOLGeneratorSettingTypeEnum.GeheugenElement => GetPrefix("m"),
+                CCOLGeneratorSettingTypeEnum.Parameter => GetPrefix("prm"),
+                _ => null
+            };
         }
 
         public string GetPrefix(CCOLElementTypeEnum type)
         {
-            switch(type)
+            return type switch
             {
-                case CCOLElementTypeEnum.Fase:
-                    return GetPrefix("fc");
-                case CCOLElementTypeEnum.Detector:
-                    return GetPrefix("d");
-                case CCOLElementTypeEnum.Uitgang:
-                    return GetPrefix("us");
-                case CCOLElementTypeEnum.Ingang:
-                    return GetPrefix("is");
-                case CCOLElementTypeEnum.HulpElement:
-                    return GetPrefix("h");
-                case CCOLElementTypeEnum.Timer:
-                    return GetPrefix("t");
-                case CCOLElementTypeEnum.Counter:
-                    return GetPrefix("c");
-                case CCOLElementTypeEnum.Schakelaar:
-                    return GetPrefix("sch");
-                case CCOLElementTypeEnum.GeheugenElement:
-                    return GetPrefix("m");
-                case CCOLElementTypeEnum.Parameter:
-                    return GetPrefix("prm");
-                default:
-                    return null;
-            }
+                CCOLElementTypeEnum.Fase => GetPrefix("fc"),
+                CCOLElementTypeEnum.Detector => GetPrefix("d"),
+                CCOLElementTypeEnum.Uitgang => GetPrefix("us"),
+                CCOLElementTypeEnum.Ingang => GetPrefix("is"),
+                CCOLElementTypeEnum.HulpElement => GetPrefix("h"),
+                CCOLElementTypeEnum.Timer => GetPrefix("t"),
+                CCOLElementTypeEnum.Counter => GetPrefix("c"),
+                CCOLElementTypeEnum.Schakelaar => GetPrefix("sch"),
+                CCOLElementTypeEnum.GeheugenElement => GetPrefix("m"),
+                CCOLElementTypeEnum.Parameter => GetPrefix("prm"),
+                _ => null
+            };
         }
         
         public string GetPrefix(string pfdefault)

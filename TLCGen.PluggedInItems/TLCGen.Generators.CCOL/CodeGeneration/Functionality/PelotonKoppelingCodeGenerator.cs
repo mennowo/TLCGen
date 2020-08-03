@@ -171,43 +171,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV);
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any();
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV);
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend);
-                case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV);
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && (x.Detectoren.Any() || x.Type == PelotonKoppelingTypeEnum.RHDHV));
-                default:
-                    return false;
-            }
+                CCOLCodeTypeEnum.RegCTop => c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV),
+                CCOLCodeTypeEnum.RegCPreApplication => c.PelotonKoppelingenData.PelotonKoppelingen.Any(),
+                CCOLCodeTypeEnum.RegCAanvragen => c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV),
+                CCOLCodeTypeEnum.RegCMeetkriterium => c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend),
+                CCOLCodeTypeEnum.RegCWachtgroen => c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingTypeEnum.RHDHV),
+                CCOLCodeTypeEnum.RegCPostApplication => c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && (x.Detectoren.Any() || x.Type == PelotonKoppelingTypeEnum.RHDHV)),
+                _ => false
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 70;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 50;
-                case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 70;
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 40;
-                case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return 30;
-            }
-            return 0;
+                CCOLCodeTypeEnum.RegCTop => 70,
+                CCOLCodeTypeEnum.RegCPreApplication => 50,
+                CCOLCodeTypeEnum.RegCAanvragen => 70,
+                CCOLCodeTypeEnum.RegCMeetkriterium => 30,
+                CCOLCodeTypeEnum.RegCPostApplication => 40,
+                CCOLCodeTypeEnum.RegCWachtgroen => 30,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

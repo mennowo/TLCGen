@@ -494,21 +494,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             {
                                 if (cf.Waarde >= -4)
                                 {
-                                    switch (cf.Waarde)
+                                    matrix[i, j] = cf.Waarde switch
                                     {
-                                        case -4:
-                                            matrix[i, j] = -40;
-                                            break;
-                                        case -3:
-                                            matrix[i, j] = -30;
-                                            break;
-                                        case -2:
-                                            matrix[i, j] = -20;
-                                            break;
-                                        default:
-                                            matrix[i, j] = cf.Waarde;
-                                            break;
-                                    }
+                                        -4 => -40,
+                                        -3 => -30,
+                                        -2 => -20,
+                                        _ => cf.Waarde
+                                    };
                                 }
                                 else
                                 {

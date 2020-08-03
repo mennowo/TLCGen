@@ -181,19 +181,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCKlokPerioden:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 10;
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                    return 20;
-                case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return 50;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCKlokPerioden => 10,
+                CCOLCodeTypeEnum.RegCMaxgroen => 10,
+                CCOLCodeTypeEnum.RegCVerlenggroen => 20,
+                CCOLCodeTypeEnum.RegCSystemApplication => 50,
+                _ => 0
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
@@ -359,15 +354,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    string grfunc;
-                    switch (c.Data.TypeGroentijden)
+                    var grfunc = c.Data.TypeGroentijden switch
                     {
-                        case GroentijdenTypeEnum.MaxGroentijden: grfunc = "max_star_groentijden_va_arg"; break;
-                        case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "verleng_star_groentijden_va_arg"; break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    
+                        GroentijdenTypeEnum.MaxGroentijden => "max_star_groentijden_va_arg",
+                        GroentijdenTypeEnum.VerlengGroentijden => "verleng_star_groentijden_va_arg",
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
                     // Groentijden obv periode
                     foreach (var fcm in c.Fasen)
                     {

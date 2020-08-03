@@ -48,24 +48,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCMeeverlengen:
-                    return 20;
-                default:
-                    return 0;
-            }
+                CCOLCodeTypeEnum.RegCMeeverlengen => 20,
+                _ => 0
+            };
         }
 
         public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            switch (type)
+            return type switch
             {
-                case CCOLCodeTypeEnum.RegCMeeverlengen:
-                    return c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit);
-                default:
-                    return false;
-            }
+                CCOLCodeTypeEnum.RegCMeeverlengen => c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit),
+                _ => false
+            };
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
