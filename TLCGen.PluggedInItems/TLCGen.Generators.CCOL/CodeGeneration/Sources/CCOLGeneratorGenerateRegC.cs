@@ -668,6 +668,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
 
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.AppendLine($"{ts}RealisatieTijden();");
+            }
+
             var tsts = (controller.StarData.ToepassenStar || controller.HalfstarData.IsHalfstar) ? ts + ts : ts;
 
             if (controller.StarData.ToepassenStar)
