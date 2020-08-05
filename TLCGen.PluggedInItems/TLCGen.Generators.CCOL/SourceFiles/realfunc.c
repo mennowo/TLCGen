@@ -1064,4 +1064,24 @@ boolv VTG2_Real_Los(count fc1,        /* fasecyclus 1                           
   return result;
 }
 
+bool Naloop_OK(count fc1,     /* fc1  voedende                                                      */
+               count marfc2,  /* memory element fc2, alternatieve ruimte (max_tar_to / tar_max_ple) */
+               count tnlsg)   /* nalooptijd                                                         */
+{
+  bool result=0;
 
+  /* ---------------------------------------------------------------- */
+  /* primair, dus nalooptijd toegestaan                               */
+  /* ---------------------------------------------------------------- */
+/*if(AAPR[fc1] &&   !RR[fc1]       || PR[fc1])           result=TRUE;*/
+  if(AAPR[fc1] && (AAPR[fc1]<BIT4) || PR[fc1])           result=TRUE;    /* AAPR & BIT4 betekent RR, AAPR & BIT5 betekent PFPR nog niet waar */
+  /* ---------------------------------------------------------------- */
+  /* niet primair, bepaal of nalooptijd past bij naloop:              */
+  /* - eerst moet fc1 op groen komen, dus check REALTIJD[fc1]         */
+  /* - plus de nalooptijd moet passen bij fc2                         */
+  /* ---------------------------------------------------------------- */
+  else if(MM[marfc2] >= (REALTIJD[fc1] + T_max[tnlsg]))  result=TRUE;
+  /* ---------------------------------------------------------------- */
+
+  return result;
+}

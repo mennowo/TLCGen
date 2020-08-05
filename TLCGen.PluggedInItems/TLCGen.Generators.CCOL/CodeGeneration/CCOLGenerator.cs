@@ -490,14 +490,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var addlines = File.ReadAllLines(filename);
 
                     var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
-                    var postSys2 = c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
+                    var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("RealisatieTijden_Add"));
+                    var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
 
                     var sb = new StringBuilder();
 
                     foreach (var l in addlines)
                     {
-                        if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
-                                wtvAdd && l.Contains("pre_system_application"))
+                        if (wtvAdd && l.Contains("pre_system_application"))
                         {
                             sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
                             sb.AppendLine("{");
@@ -505,8 +505,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
-                            postSys2 && l.Contains("post_dump_application"))
+                        if (realAdd && l.Contains("Maxgroen_Add"))
+                        {
+                            sb.AppendLine("void RealisatieTijden_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine("");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (postSys2 && l.Contains("post_dump_application"))
                         {
                             sb.AppendLine("void post_system_application2()");
                             sb.AppendLine("{");

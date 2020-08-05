@@ -41,6 +41,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCPreApplication(controller));
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.Append(GenerateRegCAanvragen(controller));
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.Append(GenerateRegCRealisatieTijden(controller));
+            }
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.Append(GenerateRegCWachtgroen(controller));
             sb.Append(GenerateRegCMeetkriterium(controller));
@@ -180,7 +184,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"fixatie.c\"");
             }
-            if (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any())
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
+                (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any()))
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
             }
@@ -348,6 +353,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        {
 		        sb.AppendLine($"{ts}Aanvragen_halfstar();");
 	        }
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+        
+        private string GenerateRegCRealisatieTijden(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void RealisatieTijden(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieTijden, true, true, false, true);
+
+            sb.AppendLine($"{ts}RealisatieTijden_Add();");
+			
+            // TODO Realisatie tijden tijdens halfstar, relevant als aparte functie?
+            //if (controller.HalfstarData.IsHalfstar)
+            //{
+            //    sb.AppendLine($"{ts}RealisatieTijden_halfstar();");
+            //}
 
             sb.AppendLine("}");
             sb.AppendLine();

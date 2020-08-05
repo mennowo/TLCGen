@@ -95,7 +95,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                             "PTP" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
                             "KS" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
                             "MS" => plugin.Controller.Data.CCOLMulti,
-                            "SYNC" => (plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() || plugin.Controller.InterSignaalGroep.Voorstarten.Any()),
+                            "SYNC" => (plugin.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() || plugin.Controller.InterSignaalGroep.Voorstarten.Any()),
                             "HS" => plugin.Controller.HalfstarData.IsHalfstar,
                             "RIS" => (plugin.Controller.RISData.RISToepassen && plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any()))),
                             _ => false
