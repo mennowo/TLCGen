@@ -169,7 +169,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc &&
+                        c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         if (c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue))
                         {

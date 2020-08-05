@@ -1,6 +1,9 @@
-TLCGen=0.7.12.0
+TLCGen=0.7.14.0
 MiniTD=1.0.0.0
 RN==TLCGen
+TLCGen versie: 0.7.14.0
+- Concept versie "realfunc" naast "syncfunc"
+- Diverse kleine en grotere fixes
 TLCGen versie: 0.7.12.0
 - Diverse kleine fixes
 TLCGen versie: 0.7.11.0

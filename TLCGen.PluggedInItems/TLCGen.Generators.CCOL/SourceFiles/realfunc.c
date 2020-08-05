@@ -6,7 +6,7 @@
  *
  * Versie  Datum       Naam          Commentaar
  *
- * 1.0     27-05-2020  OK Geregeld:  Functies t.b.v. realisatietijd en correcties
+ * 1.0     05-08-2020  OK Geregeld:  Functies t.b.v. realisatietijd en correcties
  *
  ************************************************************************************/
 
@@ -530,7 +530,7 @@ void Synchroniseer_PG(void)
       }
 
       /* voorkomen dat slechts één van beide verscneld primair komt, terwijl synchronsatie gewenst */
-      if(REAL_SYN[fc1][fc2] && !(PFPR[fc1] && PFPR[fc2] && A[fc1] && A[fc2]))
+      if(REAL_SYN[fc1][fc2] && A[fc1] && A[fc2] && (!PFPR[fc1] || !PFPR[fc2]))
       {
         PFPR[fc1] = FALSE;
         PFPR[fc2] = FALSE;
@@ -916,9 +916,9 @@ boolv VTG3_Real_Los(count fc1,        /* fc1                                    
                    count hlos9,      /* hulpelement fc9 los toegestaan                                            */
                    count hlos2,      /* hulpelement fc2 los teogestaan                                            */
 
-                   boolv gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv  gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv  gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   boolv  gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
 
 {
   boolv result = 0;
@@ -1026,7 +1026,7 @@ boolv VTG2_Real_Los(count fc1,        /* fasecyclus 1                           
                    count hinl2,      /* hulpelement fc2 inlopen gewenst                    */
                    count hlos1,      /* hulpelement fc1 los toegestaan                     */
                    count hlos2,      /* hulpelement fc2 los teogestaan                     */
-                   boolv gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
+                   boolv  gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
 {
   boolv result = 0;
 
