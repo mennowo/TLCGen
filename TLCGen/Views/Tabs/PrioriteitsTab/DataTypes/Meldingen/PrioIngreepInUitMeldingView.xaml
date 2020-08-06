@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="TLCGen.Views.PrioIngreepInUitMeldingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:meldingen="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepInUitMeldingViewModel}">
+    <UserControl.Resources>
+        <local:MeldingTemplateSelector x:Key="MeldingTemplateSelector">
+            <local:MeldingTemplateSelector.RegularTemplate>
+                <DataTemplate>
+                    <meldingen:PrioIngreepRegularMeldingView />
+                </DataTemplate>
+            </local:MeldingTemplateSelector.RegularTemplate>
+            <local:MeldingTemplateSelector.RISTemplate>
+                <DataTemplate>
+                    <meldingen:PrioIngreepRISMeldingView />
+                </DataTemplate>
+            </local:MeldingTemplateSelector.RISTemplate>
+            <local:MeldingTemplateSelector.PelotonTemplate>
+                <DataTemplate>
+                    <meldingen:PrioIngreepPelotonMeldingView />
+                </DataTemplate>
+            </local:MeldingTemplateSelector.PelotonTemplate>
+        </local:MeldingTemplateSelector>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Generic UI -->
+        <wpfAutoGrid:AutoGrid Columns="Auto,*" Grid.Row="1" RowCount="3">
+            <Label Content="Algemene instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Naam melding" />
+                <controls:InfoElement>
+                    <controls:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Deze naam wordt momenteel uitsluitend in de gebruikersinterface gebruikt.
+                        </TextBlock>
+                    </controls:InfoElement.InfoPopup>
+                </controls:InfoElement>
+            </StackPanel>
+            <TextBox Text="{Binding Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Type" />
+            <ComboBox SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      DisplayMemberPath="Description"
+                      ItemsSource="{Binding Path=MeldingenTypes}" />
+        </wpfAutoGrid:AutoGrid>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2">
+            <ContentControl ContentTemplateSelector="{StaticResource MeldingTemplateSelector}" Content="{Binding ActualViewModel}" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

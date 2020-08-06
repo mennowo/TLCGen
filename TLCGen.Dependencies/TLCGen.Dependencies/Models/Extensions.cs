@@ -26,26 +26,26 @@ namespace TLCGen.Models
 
         public static bool HasOVIngreepVecomIO(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector);
         }
 
         public static bool HasOVIngreepDSI(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
         }
 
         public static bool HasOVIngreepVecom(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
+            return ov.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
         }
 
         public static bool HasPrioIngreepKAR(this PrioIngreepModel ov)
         {
-            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)) ||
-                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            return ov.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
         }
 
         public static IEnumerable<DetectorModel> GetDummyInDetectors(this PrioIngreepModel ov)
@@ -60,12 +60,12 @@ namespace TLCGen.Models
 
         public static bool HasOVIngreepWissel(this PrioIngreepModel ov)
         {
-            return ((ov.MeldingenData.Wissel1 &&
-                     ((ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
-                      (ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
-                    (ov.MeldingenData.Wissel2 &&
-                     ((ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
-                      (ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector)))));
+            return ov.MeldingenData.Wissel1 &&
+                   (ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input) ||
+                    ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)) ||
+                   ov.MeldingenData.Wissel2 &&
+                   (ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input) ||
+                    ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector));
         }
 
         public static bool HasDSI(this ControllerModel c)

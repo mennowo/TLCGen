@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
         public string FaseCyclus => PrioIngreep.FaseCyclus;
 
         private ObservableCollection<PrioIngreepMeldingenListViewModel> _meldingenLists;
-        public ObservableCollection<PrioIngreepMeldingenListViewModel> MeldingenLists => _meldingenLists ?? (_meldingenLists = new ObservableCollection<PrioIngreepMeldingenListViewModel>());
+        public ObservableCollection<PrioIngreepMeldingenListViewModel> MeldingenLists => _meldingenLists ??= new ObservableCollection<PrioIngreepMeldingenListViewModel>();
 
         [Category("Algemene opties")]
         [Description("Type voertuig")]
@@ -50,6 +50,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.Type = value;
+                
+                foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
 
                 foreach (var m in PrioIngreep.MeldingenData.Inmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
                 foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
@@ -569,8 +571,8 @@ namespace TLCGen.ViewModels
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);
 
-            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData));
-            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData));
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
+            MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
         }
 
         #endregion // Constructor

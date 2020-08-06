@@ -483,8 +483,7 @@ namespace TLCGen.UnitTests.Build
 
             Assert.AreEqual(0, p.ExitCode);
         }
-
-
+        
         [Test]
         public void SimpleControllerWithStar_Generated_BuildsSuccesfully()
         {
@@ -498,19 +497,61 @@ namespace TLCGen.UnitTests.Build
                 Directory.CreateDirectory(path);
                 Thread.Sleep(150);
             }
-            
             var c = GetBasicController();
+            MakeStarController(c);
+
+            GenerateController(path, c);
+
+            var p = BuildController(path, output);
+
+            Assert.AreEqual(0, p.ExitCode);
+        }
+
+        [Test]
+        public void SimpleControllerWithStarProgrammaTijdenInParameters_Generated_BuildsSuccesfully()
+        {
+            var path = @"C:\temp\TLCGen_buildTests\basisStarPrms";
+            var output = new List<string>();
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            else
+            {
+                Directory.Delete(path, true);
+                Thread.Sleep(150);
+                Directory.CreateDirectory(path);
+                Thread.Sleep(150);
+            }
+            var c = GetBasicController();
+            MakeStarController(c);
+
+            GenerateController(path, c);
+
+            var p = BuildController(path, output);
+
+            Assert.AreEqual(0, p.ExitCode);
+        }
+
+        private static void MakeStarController(ControllerModel c)
+        {
             c.StarData.ToepassenStar = true;
-            c.StarData.Programmas.Add(new StarProgrammaModel{ Cyclustijd = 35, Naam = "default", Fasen = new List<StarProgrammaFase>
+
+            c.StarData.ProgrammaTijdenInParameters = true;
+
+            c.StarData.Programmas.Add(new StarProgrammaModel
             {
-                new StarProgrammaFase{FaseCyclus = "02", Start1 = 1, Eind1 = 10},
-                new StarProgrammaFase{FaseCyclus = "05", Start1 = 17, Eind1 = 30},
-            }});
-            c.StarData.Programmas.Add(new StarProgrammaModel{ Cyclustijd = 36, Naam = "weekeind", Fasen = new List<StarProgrammaFase>
+                Cyclustijd = 35, Naam = "default", Fasen = new List<StarProgrammaFase>
+                {
+                    new StarProgrammaFase {FaseCyclus = "02", Start1 = 1, Eind1 = 10},
+                    new StarProgrammaFase {FaseCyclus = "05", Start1 = 17, Eind1 = 30},
+                }
+            });
+            c.StarData.Programmas.Add(new StarProgrammaModel
             {
-                new StarProgrammaFase{FaseCyclus = "02", Start1 = 2, Eind1 = 11},
-                new StarProgrammaFase{FaseCyclus = "05", Start1 = 18, Eind1 = 31},
-            }});
+                Cyclustijd = 36, Naam = "weekeind", Fasen = new List<StarProgrammaFase>
+                {
+                    new StarProgrammaFase {FaseCyclus = "02", Start1 = 2, Eind1 = 11},
+                    new StarProgrammaFase {FaseCyclus = "05", Start1 = 18, Eind1 = 31},
+                }
+            });
             c.StarData.DefaultProgramma = "default";
             c.StarData.ProgrammaSturingViaParameter = true;
 
@@ -529,7 +570,7 @@ namespace TLCGen.UnitTests.Build
                 Naam = "star1",
                 DagCode = PeriodeDagCodeEnum.Werkdagen,
                 StartTijd = new TimeSpan(12, 0, 0),
-                EindTijd =  new TimeSpan(16, 0, 0),
+                EindTijd = new TimeSpan(16, 0, 0),
                 Type = PeriodeTypeEnum.StarRegelen,
                 Commentaar = "star regelen default"
             });
@@ -538,16 +579,10 @@ namespace TLCGen.UnitTests.Build
                 Naam = "starWeekeind",
                 DagCode = PeriodeDagCodeEnum.Weekeind,
                 StartTijd = new TimeSpan(18, 0, 0),
-                EindTijd =  new TimeSpan(21, 0, 0),
+                EindTijd = new TimeSpan(21, 0, 0),
                 Type = PeriodeTypeEnum.StarRegelen,
                 Commentaar = "star regelen weekeind"
             });
-
-            GenerateController(path, c);
-
-            var p = BuildController(path, output);
-
-            Assert.AreEqual(0, p.ExitCode);
         }
     }
 }

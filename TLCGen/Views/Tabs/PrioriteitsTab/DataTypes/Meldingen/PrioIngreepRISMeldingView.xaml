@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen.PrioIngreepRISMeldingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
+             xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:views="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
+        <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Alert -->
+        <TextBlock Background="LightGoldenrodYellow" Padding="5" Visibility="{Binding Path=ShowAlertMessage,Converter={StaticResource BoolToVisConv}}">
+            <Run Foreground="Red" FontWeight="Bold">Let op! </Run>
+            Prioriteit via de RIS vergt gebruik van speciale CCOL bestanden en libraries.<LineBreak />
+            <Bold>RIS werkt momenteel uitsluitend voor de bus.</Bold> Voor overige voertuigtypen is dit in ontwikkeling.
+        </TextBlock>
+        <!-- UI for RIS -->
+        <wpfAutoGrid:AutoGrid Grid.Row="1" Columns="Auto,*" RowCount="12">
+            <Label Content="RIS instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
+            <Label Content="Start" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <Label Content="Eind" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <CheckBox Content="Match SG" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
+                      IsChecked="{Binding Path=RisMatchSg,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Grid.ColumnSpan="2" />
+        </wpfAutoGrid:AutoGrid>            
+    </Grid>
+</UserControl>

@@ -108,6 +108,19 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\MeldingTemplateSelector.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingView.xaml.cs">
+      <DependentUpon>PrioIngreepPelotonMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingView.xaml.cs">
+      <DependentUpon>PrioIngreepRegularMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingView.xaml.cs">
+      <DependentUpon>PrioIngreepRISMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml.cs">
       <DependentUpon>PrioIngrepenOverzichtTabView.xaml</DependentUpon>
     </Compile>
@@ -170,7 +183,7 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\FaseCyclusWithPrioViewModel.cs">
       <DependentUpon>FaseCyclusWithPrioView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingViewModel.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepInUitMeldingViewModel.cs">
       <DependentUpon>PrioIngreepInUitMeldingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepMeldingenListView.xaml.cs">
@@ -181,7 +194,7 @@
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepWisselDataViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Varia\OVIngreepRitCategorieViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingView.xaml.cs">
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepInUitMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepInUitMeldingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
@@ -638,6 +651,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -686,7 +711,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioIngreepInUitMeldingView.xaml">
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepInUitMeldingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

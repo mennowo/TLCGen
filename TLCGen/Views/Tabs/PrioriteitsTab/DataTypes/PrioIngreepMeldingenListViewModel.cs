@@ -22,6 +22,7 @@ namespace TLCGen.ViewModels
 
         private RelayCommand _addMeldingCommand;
         private RelayCommand _removeMeldingCommand;
+        private PrioIngreepViewModel _ingreep;
 
         #endregion // Fields
 
@@ -45,7 +46,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddMeldingCommand => _addMeldingCommand ?? (_addMeldingCommand = new RelayCommand(() =>
+        public ICommand AddMeldingCommand => _addMeldingCommand ??= new RelayCommand(() =>
         {
             var m = new PrioIngreepInUitMeldingModel
             {
@@ -66,7 +67,7 @@ namespace TLCGen.ViewModels
                     throw new ArgumentOutOfRangeException();
             }
 
-            Meldingen.Add(new PrioIngreepInUitMeldingViewModel(m, this));
+            Meldingen.Add(new PrioIngreepInUitMeldingViewModel(m, this, _ingreep));
             var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
@@ -75,93 +76,27 @@ namespace TLCGen.ViewModels
                      + DefaultsProvider.Default.GetMeldingShortcode(m)
                      + (MeldingType == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
             MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, m));
-        }));
+        });
 
         #endregion // Commands
 
         #region TLCGen events
-
-        private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
-        {
-            ///var msg = new PrioIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
-            ///MessengerInstance.Send(msg);
-            ///if (msg.FaseCyclus == null) return;
-            ///
-            ///var sd1 = "";
-            ///var sd2 = "";
-            ///if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
-            ///{
-            ///    sd1 = Wissel1Detector;
-            ///}
-            ///if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
-            ///{
-            ///    sd2 = Wissel2Detector;
-            ///}
-            ///
-            ///
-            ///WisselDetectoren.Clear();
-            ///foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.WisselStandDetector)))
-            ///{
-            ///    WisselDetectoren.Add(d.Naam);
-            ///}
-            ///foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren.Where(x => x.Type == DetectorTypeEnum.WisselStandDetector))
-            ///{
-            ///    WisselDetectoren.Add(d.Naam);
-            ///}
-            ///
-            ///if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
-            ///{
-            ///    Wissel1Detector = sd1;
-            ///}
-            ///if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
-            ///{
-            ///    Wissel2Detector = sd2;
-            ///}
-        }
-
-        private void OnIngangenChanged(IngangenChangedMessage obj)
-        {
-            ///var sd1 = "";
-            ///var sd2 = "";
-            ///if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
-            ///{
-            ///    sd1 = Wissel1Input;
-            ///}
-            ///if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
-            ///{
-            ///    sd2 = Wissel2Input;
-            ///}
-            ///
-            ///WisselInputs.Clear();
-            ///foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
-            ///{
-            ///    WisselInputs.Add(seld.Naam);
-            ///}
-            ///
-            ///if (Wissel1 && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
-            ///{
-            ///    Wissel1Input = sd1;
-            ///}
-            ///if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
-            ///{
-            ///    Wissel2Input = sd2;
-            ///}
-        }
-
+        
         #endregion // TLCGen events
         
         #region Constructor
 
-        public PrioIngreepMeldingenListViewModel(string naam, PrioIngreepInUitMeldingTypeEnum type, PrioIngreepMeldingenDataModel prioIngreepMassaDetectieData)
+        public PrioIngreepMeldingenListViewModel(string naam, PrioIngreepInUitMeldingTypeEnum type, PrioIngreepMeldingenDataModel prioIngreepMassaDetectieData, PrioIngreepViewModel ingreep)
         {
+            _ingreep = ingreep;
             PrioIngreepMeldingenData = prioIngreepMassaDetectieData;
             switch (type)
             {
                 case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                    Meldingen = new ObservableCollection<PrioIngreepInUitMeldingViewModel>(prioIngreepMassaDetectieData.Inmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x, this)));
+                    Meldingen = new ObservableCollection<PrioIngreepInUitMeldingViewModel>(prioIngreepMassaDetectieData.Inmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x, this, ingreep)));
                     break;
                 case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                    Meldingen = new ObservableCollection<PrioIngreepInUitMeldingViewModel>(prioIngreepMassaDetectieData.Uitmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x, this)));
+                    Meldingen = new ObservableCollection<PrioIngreepInUitMeldingViewModel>(prioIngreepMassaDetectieData.Uitmeldingen.Select(x => new PrioIngreepInUitMeldingViewModel(x, this, ingreep)));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

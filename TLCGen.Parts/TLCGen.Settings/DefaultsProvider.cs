@@ -83,6 +83,16 @@ namespace TLCGen.Settings
                     return "vecio";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
                     return "ris";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
+                    return "vrwris";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
+                    return "fts";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
+                    return "ftsris";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
+                    return "autris";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
+                    return "aut";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -331,6 +341,9 @@ namespace TLCGen.Settings
                             break;
                         case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "vrw", Setting = "vrw"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.Auto:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "aut", Setting = "aut"});
                             break;
                         case PrioIngreepVoertuigTypeEnum.NG:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "alg", Setting = "alg"});

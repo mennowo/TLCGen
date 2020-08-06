@@ -10,6 +10,7 @@ namespace TLCGen.Models.Enumerations
         Bus,
         Fiets,
         Vrachtwagen,
+        Auto,
         NG
     }
 }

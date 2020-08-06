@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using TLCGen.Settings.Views;
 using TLCGen.ViewModels;
@@ -25,15 +26,17 @@ namespace TLCGen.Views
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if (item == null) return null;
+
             switch (item)
             {
-                case FaseCyclusWithPrioViewModel _: return FaseCyclusTemplate;
-                case PrioIngreepViewModel _: return PrioIngreepTemplate;
-                case PrioIngreepMeldingenListViewModel _: return PrioIngreepMeldingenListTemplate;
-                case PrioIngreepInUitMeldingViewModel _: return PrioIngreepInUitMeldingTemplate;
+                case FaseCyclusWithPrioViewModel _: return FaseCyclusTemplate ?? throw new NullReferenceException();
+                case PrioIngreepViewModel _: return PrioIngreepTemplate ?? throw new NullReferenceException();
+                case PrioIngreepMeldingenListViewModel _: return PrioIngreepMeldingenListTemplate ?? throw new NullReferenceException();
+                case PrioIngreepInUitMeldingViewModel _: return PrioIngreepInUitMeldingTemplate ?? throw new NullReferenceException();
             }
 
-            return null;
+            throw new NullReferenceException();
         }
     }
 }

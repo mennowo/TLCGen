@@ -9,7 +9,7 @@ namespace TLCGen.Models
     public class StarDataModel
     {
         public bool ToepassenStar { get; set; }
-        public bool ProgrammaSturingViaParameter { get; set; } = true;
+        public bool ProgrammaSturingViaParameter { get; set; }
         public bool ProgrammaSturingViaKlok { get; set; }
         public bool IngangAlsVoorwaarde { get; set; }
         public bool ProgrammaTijdenInParameters { get; set; }

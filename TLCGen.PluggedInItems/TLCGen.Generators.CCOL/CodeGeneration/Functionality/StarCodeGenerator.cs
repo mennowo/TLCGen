@@ -39,7 +39,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var dp = c.StarData.Programmas.FirstOrDefault(x => x.Naam == c.StarData.DefaultProgramma);
                 var iDp = dp == null ? -1 : c.StarData.Programmas.IndexOf(dp);
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarprogdef}", iDp + 1, CCOLElementTimeTypeEnum.SCH_type, _prmstarprogdef));
-                
             }
 
             if (c.StarData.IngangAlsVoorwaarde)
