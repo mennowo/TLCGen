@@ -204,7 +204,7 @@ namespace TLCGen.ViewModels
             }
 
             Type = MeldingenTypes.FirstOrDefault(x => x.Value == sel?.Value);
-            if (Type == null) Type = MeldingenTypes.First();
+            if (Type == null) Type = MeldingenTypes.FirstOrDefault();
         }
 
         #endregion // Public Methods
@@ -262,7 +262,7 @@ namespace TLCGen.ViewModels
             Type = MeldingenTypes.FirstOrDefault(x => x.Value == PrioIngreepInUitMelding.Type);
             if (Type == null)
             {
-                Type = MeldingenTypes.First();
+                Type = MeldingenTypes.FirstOrDefault();
             }
 
             SetActualViewModel();

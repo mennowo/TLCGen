@@ -135,7 +135,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Cyclustijdmeting
             if (c.Data.GenererenCyclustijdMeting && !c.Data.MultiModuleReeksen)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tcycl}", 999, CCOLElementTimeTypeEnum.TE_type, _tcycl));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tcycl}", 999, CCOLElementTimeTypeEnum.TS_type, _tcycl));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcycl}", 0, CCOLElementTimeTypeEnum.TE_type, _schcycl));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcycl_reset}", 0, CCOLElementTimeTypeEnum.TE_type, _schcycl_reset));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mlcycl}", _mlcycl));
