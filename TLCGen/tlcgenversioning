@@ -1,9 +1,10 @@
-TLCGen=0.7.15.0
+TLCGen=0.7.16.0
 MiniTD=1.0.0.0
 RN==TLCGen
-TLCGen versie: 0.7.15.0
+TLCGen versie: 0.7.15.0 / 0.7.16.0
 - Fixes voor "realfunc" functionaliteit
 - Fix star regelen tijden in parameters
+- Fix TS type cyclustijd timer
 TLCGen versie: 0.7.14.0
 - Concept versie "realfunc" naast "syncfunc"
 - Diverse kleine en grotere fixes
