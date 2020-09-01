@@ -1157,7 +1157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = {programma.Cyclustijd};");
                 foreach (var sg in programma.Fasen)
                 {
-                    if (controller.StarData.ProgrammaSturingViaParameter)
+                    if (controller.StarData.ProgrammaTijdenInParameters)
                     {
                         sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}1{programma.Naam}{sg.FaseCyclus}]; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}1{programma.Naam}{sg.FaseCyclus}];");
                         if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
@@ -1167,10 +1167,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     else
                     {
-                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1}];");
+                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start1}; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind1};");
                         if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
                         {
-                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start2}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind2}];");
+                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Start2}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = {sg.Eind2};");
                         }
                     }
                 }

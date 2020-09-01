@@ -9,3 +9,5 @@ boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count eind
 void commando_groen(count fc);
 void star_reset_bits(boolv star);
 void star_regelen();
+boolv star_test_alles_rood();
+void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel, count hblokvolgri);

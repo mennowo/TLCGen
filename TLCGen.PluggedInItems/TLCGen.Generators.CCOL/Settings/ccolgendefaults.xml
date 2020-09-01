@@ -2286,6 +2286,24 @@
             <Description>Onthouden actief star programma</Description>
           </Setting>
           <Setting>
+            <Default>starprogwens</Default>
+            <Setting>starprogwens</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden gewenst star programma</Description>
+          </Setting>
+          <Setting>
+            <Default>starprogwissel</Default>
+            <Setting>starprogwissel</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden actief zijn wisselen naar star programma</Description>
+          </Setting>
+          <Setting>
+            <Default>blokvolgrichting</Default>
+            <Setting>blokvolgrichting</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden blokkeren volgrichting bij schakelen naar star programma</Description>
+          </Setting>
+          <Setting>
             <Default>starprogdef</Default>
             <Setting>starprogdef</Setting>
             <Type>Parameter</Type>

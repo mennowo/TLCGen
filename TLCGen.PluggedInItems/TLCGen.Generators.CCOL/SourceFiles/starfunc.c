@@ -1,6 +1,6 @@
 #include "starfunc.h"
 
-static count star_cyclustimer;
+mulv star_cyclustimer;
 
 static void update_cyclustimer(count cyclustijd)
 {	
@@ -94,21 +94,28 @@ void star_regelen()
 	}
 }
 
-#ifdef STAR_TESTING
-void star_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel)
+boolv star_test_alles_rood()
+{
+	int fc = 0;
+	for (; fc < FCMAX; ++fc)
+	{
+		if (!R[fc]) return FALSE;
+	}
+	return TRUE;
+}
+
+void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel, count hblokvolgri)
 {
     /* omschakelen naar gewenste programma keuze */
     if (MM[mgewenst] != MM[mwerkelijk])
     {
-		if (((MM[mgewenst] != 0 && MM[mwerkelijk] != 0 && star_cyclustimer == 1) ||
-			 (MM[mgewenst] != 0 && !IH[hblok_volgrichting]) ||
-			 (MM[mprg_wissel])))
+		if ((((MM[mgewenst] != 0 || MM[mwerkelijk] != 0) && star_cyclustimer == 1) ||
+			 (MM[mgewenst] != 0 && !IH[hblokvolgri]) ||
+			 (MM[mprogwissel])))
         {
-            MM[mprg_wissel] = TRUE;
-            if (test_alles_rood())
+            MM[mprogwissel] = TRUE;
+            if (star_test_alles_rood())
 			{
-                if (MM[mgps] ==  2)        init_programma_02();
-                if (MM[mgps] == 10)        init_programma_10();
                 CIF_PARM1WIJZAP=CIF_MEER_PARMWIJZ;
 				MM[mwerkelijk] = MM[mgewenst];
 				MM[mprogwissel] = FALSE;
@@ -124,15 +131,14 @@ void star_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel)
     if (MM[mprogwissel])
 	{
 		int fc;
-		IH[hblok_volgrichting] = FALSE;
+		IH[hblokvolgri] = FALSE;
 
     	/* stuur alle signaalgroepen naar rood */
         for (fc = 0; fc < FCMAX; fc++)
 		{
 			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
 			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
-			IH[hblok_volgrichting] |= (RW[fc]&BIT2 || YV[fc]&BIT2);
+			IH[hblokvolgri] |= (RW[fc]&BIT2 || YV[fc]&BIT2);
 		}
 	}
 }
-#endif

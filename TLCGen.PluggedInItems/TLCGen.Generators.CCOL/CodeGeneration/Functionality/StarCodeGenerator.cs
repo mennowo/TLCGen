@@ -19,7 +19,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _isstar;
         private CCOLGeneratorCodeStringSettingModel _usstar;
         private CCOLGeneratorCodeStringSettingModel _mstarprog;
+        private CCOLGeneratorCodeStringSettingModel _mstarprogwens;
+        private CCOLGeneratorCodeStringSettingModel _mstarprogwissel;
         private CCOLGeneratorCodeStringSettingModel _prmstarcyclustijd;
+        private CCOLGeneratorCodeStringSettingModel _hblokvolgrichting;
 #pragma warning restore 0649
         private string _mperiodstar;
 
@@ -33,6 +36,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schstar}", 0, CCOLElementTimeTypeEnum.SCH_type, _schstar));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprog}", _mstarprog));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwens}", _mstarprogwens));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwissel}", _mstarprogwissel));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hblokvolgrichting}", _hblokvolgrichting));
 
             if (c.StarData.ProgrammaSturingViaParameter)
             {
@@ -120,7 +126,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}#include \"starvar.c\" /* Variabelen t.b.v. star regelen */");
                     break;
                 case CCOLCodeTypeEnum.RegCTop:
-                    sb.AppendLine($"{ts}extern count star_cyclustimer;");
+                    sb.AppendLine($"{ts}extern mulv star_cyclustimer;");
                     break;
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     if (c.Data.MultiModuleReeksen)
@@ -139,8 +145,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCKlokPerioden:
 
                     
-                    sb.AppendLine($"{ts}/* Bepalen actief star programma */");
-                    sb.AppendLine($"{ts}MM[{_mpf}{_mstarprog}] = 0;");
+                    sb.AppendLine($"{ts}/* Bepalen actief star programma wens */");
+                    sb.AppendLine($"{ts}MM[{_mpf}{_mstarprogwens}] = 0;");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schstar}]{(c.StarData.IngangAlsVoorwaarde ? $" || IS[{_ispf}{_isstar}]" : "")})");
                     sb.AppendLine($"{ts}{{");
                     if (c.StarData.ProgrammaSturingViaKlok)
@@ -152,7 +158,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var periode in c.StarData.PeriodenData)
                         {
                             sb.AppendLine($"{ts}{ts}{ts}case {iPeriode++}:");
-                            sb.AppendLine($"{ts}{ts}{ts}{ts}MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprog}{periode.Periode}];");
+                            sb.AppendLine($"{ts}{ts}{ts}{ts}MM[{_mpf}{_mstarprogwens}] = PRM[{_prmpf}{_prmstarprog}{periode.Periode}];");
                             sb.AppendLine($"{ts}{ts}{ts}{ts}break;");
                         }
                         sb.AppendLine($"{ts}{ts}{ts}default:");
@@ -163,33 +169,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (c.StarData.ProgrammaSturingViaKlok) sb.AppendLine();
                         sb.AppendLine($"{ts}{ts}/* Actief star programma o.b.v. parameter */");
-                        sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmstarprogdef}] != 0) MM[{_mpf}{_mstarprog}] = PRM[{_prmpf}{_prmstarprogdef}];");
+                        sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmstarprogdef}] != 0) MM[{_mpf}{_mstarprogwens}] = PRM[{_prmpf}{_prmstarprogdef}];");
                     }
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");
 
                     break;
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    sb.AppendLine($"{ts}/* stuur alles rood tbv programmawisseling */");
-                    sb.AppendLine($"{ts}if (0) /* (MM[mprg_wissel]) TODO hoe wordt deze opgezet? */");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}int fc;");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/*IH[hblok_volgrichting] = FALSE;*/");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/***************************************/");
-                    sb.AppendLine($"{ts}{ts}/* stuur alle signaalgroepen naar rood */");
-                    sb.AppendLine($"{ts}{ts}/***************************************/");
-                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] = (RW[fc] & BIT2 || YV[fc] & BIT2) ? FALSE : TRUE;");
-                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] = (RW[fc] & BIT2 || YV[fc] & BIT2) ? FALSE : TRUE;");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}{ts}/*IH[hblok_volgrichting] |= (RW[fc] & BIT2 || YV[fc] & BIT2);*/");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* star programmawisseling */");
+                    sb.AppendLine($"{ts}star_bepaal_omschakelen({_mpf}{_mstarprogwens}, {_mpf}{_mstarprog}, {_mpf}{_mstarprogwissel}, {_hpf}{_hblokvolgrichting});");
+                    sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");
                     var iPr = 1;
                     foreach (var pr in c.StarData.Programmas)
                     {

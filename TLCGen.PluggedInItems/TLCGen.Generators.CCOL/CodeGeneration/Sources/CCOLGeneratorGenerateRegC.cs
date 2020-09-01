@@ -677,7 +677,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (controller.StarData.ToepassenStar)
             {
-                sb.AppendLine($"{ts}star_reset_bits(SCH[{_schpf}{_schstar}] && MM[{_mpf}{_mstarprog}] != 0);");
+                sb.AppendLine($"{ts}star_reset_bits(MM[{_mpf}{_mstarprog}] != 0);");
                 sb.AppendLine($"{ts}if (MM[{_mpf}{_mstarprog}] != 0)");
                 sb.AppendLine($"{ts}{{");
                 sb.AppendLine($"{ts}{ts}star_instellingen();");
@@ -745,12 +745,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             if ((controller.PrioData.PrioIngrepen.Count > 0 ||
-                 controller.PrioData.HDIngrepen.Count > 0)
-                && !controller.StarData.ToepassenStar)
+                 controller.PrioData.HDIngrepen.Count > 0))
             {
                 if (controller.HalfstarData.IsHalfstar)
                 {
-                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingPrio();");
+                    if (!controller.StarData.ToepassenStar)
+                    {
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}]) AfhandelingPrio();");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mstarprog}] == 0 && (IH[{_hpf}{_hmlact}] || SCH[{_schpf}{_schovpriople}])) AfhandelingPrio();");
+                    }
                     sb.AppendLine($"{ts}else");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}int fc;");
