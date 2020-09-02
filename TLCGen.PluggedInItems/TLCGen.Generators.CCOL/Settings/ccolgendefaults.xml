@@ -2298,6 +2298,12 @@
             <Description>Onthouden actief zijn wisselen naar star programma</Description>
           </Setting>
           <Setting>
+            <Default>starprogwissel</Default>
+            <Setting>starprogwissel</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken actief zijn wisselen naar star programma</Description>
+          </Setting>
+          <Setting>
             <Default>blokvolgrichting</Default>
             <Setting>blokvolgrichting</Setting>
             <Type>HulpElement</Type>

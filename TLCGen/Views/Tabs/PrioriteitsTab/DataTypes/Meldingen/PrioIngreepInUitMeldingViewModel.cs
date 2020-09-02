@@ -64,10 +64,11 @@ namespace TLCGen.ViewModels
                 
                 if (value != null && PrioIngreepInUitMelding != null)
                 {
+                    var raise = PrioIngreepInUitMelding.Type != value.Value;
                     PrioIngreepInUitMelding.Type = value.Value;
+                    if (raise) RaisePropertyChanged<object>(broadcast: true);
                 }
 
-                RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged("");
 
                 var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);

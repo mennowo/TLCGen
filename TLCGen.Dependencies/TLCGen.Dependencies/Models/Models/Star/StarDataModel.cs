@@ -17,6 +17,9 @@ namespace TLCGen.Models
         [IOElement("star", BitmappedItemTypeEnum.Ingang, conditionprop: nameof(IngangAlsVoorwaarde))]
         public BitmapCoordinatenDataModel StarRegelenIngang { get; set; }
 
+        [IOElement("starprogwissel", BitmappedItemTypeEnum.Uitgang)]
+        public BitmapCoordinatenDataModel ProgrammaWisselBitmapInfo { get; set; }
+
         [XmlElement(ElementName = "Programma")]
         public List<StarProgrammaModel> Programmas { get; set; }
         public string DefaultProgramma { get; set; }
@@ -28,6 +31,7 @@ namespace TLCGen.Models
             Programmas = new List<StarProgrammaModel>();
             PeriodenData = new List<StarPeriodeDataModel>();
             StarRegelenIngang = new BitmapCoordinatenDataModel();
+            ProgrammaWisselBitmapInfo = new BitmapCoordinatenDataModel();
         }
     }
 }
