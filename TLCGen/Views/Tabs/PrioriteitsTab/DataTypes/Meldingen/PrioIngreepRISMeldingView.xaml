@@ -17,12 +17,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!-- Alert -->
-        <TextBlock Background="LightGoldenrodYellow" Padding="5" Visibility="{Binding Path=ShowAlertMessage,Converter={StaticResource BoolToVisConv}}">
-            <Run Foreground="Red" FontWeight="Bold">Let op! </Run>
-            Prioriteit via de RIS vergt gebruik van speciale CCOL bestanden en libraries.<LineBreak />
-            <Bold>RIS werkt momenteel uitsluitend voor de bus.</Bold> Voor overige voertuigtypen is dit in ontwikkeling.
-        </TextBlock>
         <!-- UI for RIS -->
         <wpfAutoGrid:AutoGrid Grid.Row="1" Columns="Auto,*" RowCount="12">
             <Label Content="RIS instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />

@@ -85,19 +85,20 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 						var actualCondition = condition.Replace("!", "");
                         result = actualCondition switch
                         {
-                            "IGT" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && plugin.Controller.Data.Intergroen),
-                            "CCOL9ORHIGHER" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9),
-                            "CCOL95ORHIGHER" => (plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95),
-                            "PRIO" => (plugin.Controller.PrioData.PrioIngrepen != null && plugin.Controller.PrioData.PrioIngrepen.Any() || plugin.Controller.PrioData.HDIngrepen != null && plugin.Controller.PrioData.HDIngrepen.Any()),
-                            "MV" => (plugin.Controller.Data.KWCType != KWCTypeEnum.Geen),
-                            "MVVIALIS" => (plugin.Controller.Data.KWCType == KWCTypeEnum.Vialis),
-                            "MVOVERIG" => (plugin.Controller.Data.KWCType != KWCTypeEnum.Vialis && plugin.Controller.Data.KWCType != KWCTypeEnum.Geen),
-                            "PTP" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
-                            "KS" => (plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any()),
+                            "IGT" => plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && plugin.Controller.Data.Intergroen,
+                            "CCOL9ORHIGHER" => plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9,
+                            "CCOL95ORHIGHER" => plugin.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95,
+                            "PRIO" => plugin.Controller.PrioData.PrioIngrepen != null && plugin.Controller.PrioData.PrioIngrepen.Any() || plugin.Controller.PrioData.HDIngrepen != null && plugin.Controller.PrioData.HDIngrepen.Any(),
+                            "MV" => plugin.Controller.Data.KWCType != KWCTypeEnum.Geen,
+                            "MVVIALIS" => plugin.Controller.Data.KWCType == KWCTypeEnum.Vialis,
+                            "MVOVERIG" => plugin.Controller.Data.KWCType != KWCTypeEnum.Vialis && plugin.Controller.Data.KWCType != KWCTypeEnum.Geen,
+                            "PTP" => plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any(),
+                            "KS" => plugin.Controller.PTPData.PTPKoppelingen != null && plugin.Controller.PTPData.PTPKoppelingen.Any(),
                             "MS" => plugin.Controller.Data.CCOLMulti,
-                            "SYNC" => (plugin.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() || plugin.Controller.InterSignaalGroep.Voorstarten.Any()),
+                            "SYNC" => plugin.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() || plugin.Controller.InterSignaalGroep.Voorstarten.Any(),
                             "HS" => plugin.Controller.HalfstarData.IsHalfstar,
-                            "RIS" => (plugin.Controller.RISData.RISToepassen && plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any()))),
+                            "RIS" => plugin.Controller.RISData.RISToepassen && plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any()),
+                            "RISSIM" => plugin.Controller.RISData.RISToepassen && plugin.Controller.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any())),
                             _ => false
                         };
                         if (invert) result = !result;
@@ -178,6 +179,17 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
             {
                 neededlibs.Add("dsifunc.lib");
             }
+            if (c.RISData.RISToepassen)
+            {
+                if (c.RISData.RISFasen.Any(x => x.LaneData.Any()))
+                {
+                    neededlibs.Add("risfunc.lib");
+                }
+                if (c.RISData.RISFasen.Any(x => x.LaneData.Any(x2 => x2.SimulatedStations.Any())))
+                {
+                    neededlibs.Add("rissimfunc.lib");
+                }
+            }
 
             switch (visualVer)
             {
@@ -188,6 +200,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 case 2013:
                     break;
                 case 2017:
+                case 2019:
                     neededlibs.Add("legacy_stdio_definitions.lib");
                     break;
                 default:

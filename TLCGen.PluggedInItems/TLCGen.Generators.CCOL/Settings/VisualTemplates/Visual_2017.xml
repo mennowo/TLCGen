@@ -95,7 +95,7 @@ __ELSE__      <AdditionalLibraryDirectories>__CCOLLIBSDIRNOTIG__</AdditionalLibr
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
 __IF;PRIO__    <ClCompile Include="__CONTROLLERNAME__prio.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
-__IF;RIS__    <ClCompile Include="__CONTROLLERNAME__rissim.c" />
+__IF;RISSIM__    <ClCompile Include="__CONTROLLERNAME__rissim.c" />
     <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
 __IF;PTP__    <ClCompile Include="PTPWIN.C" />

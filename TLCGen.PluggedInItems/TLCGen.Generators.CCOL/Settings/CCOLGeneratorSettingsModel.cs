@@ -16,6 +16,22 @@ namespace TLCGen.Generators.CCOL.Settings
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100 { get; set; }
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL110 { get; set; }
 
+        [XmlIgnore]
+        public CCOLGeneratorVisualSettingsModel[] AllVisualSettings 
+        {
+            get
+            {
+                return new[]
+                {
+                    VisualSettings,
+                    VisualSettingsCCOL9,
+                    VisualSettingsCCOL95,
+                    VisualSettingsCCOL100,
+                    VisualSettingsCCOL110
+                };
+            }
+        }
+
         [XmlArrayItem(ElementName = "Prefix")]
         public List<CCOLGeneratorCodeStringSettingModel> Prefixes { get; set; }
 
