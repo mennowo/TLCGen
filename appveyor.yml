@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: '0.7.16.{build}'
+version: '0.8.0.{build}'
 
 branches:
   # whitelist
