@@ -7,6 +7,7 @@ static void update_cyclustimer(count cyclustijd)
 	star_cyclustimer -= 1;
 	star_cyclustimer += TS;
 	star_cyclustimer = star_cyclustimer % cyclustijd + 1;
+	DICG_TX_timer = star_cyclustimer;
 }
 
 boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count einde_groen)
@@ -45,7 +46,6 @@ void star_reset_bits(boolv star)
 			RR[i] = FALSE;
 			RS[i] = FALSE;
 			RW[i] = FALSE;
-			Z[i] = FALSE;
 			FW[i] = FALSE;
 			FM[i] = FALSE;
 			YW[i] = FALSE;
@@ -53,8 +53,9 @@ void star_reset_bits(boolv star)
 			YM[i] = FALSE;
 			B[i] = FALSE;
 			MK[i] = FALSE;
-			RR[i] |= BIT14;
 			A[i] = TRUE;
+			Z[i] |= BIT14;
+			RR[i] |= BIT14;
 		}
 
 		for (i = 0; i < TMMAX; ++i)
@@ -136,8 +137,8 @@ void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel
     	/* stuur alle signaalgroepen naar rood */
         for (fc = 0; fc < FCMAX; fc++)
 		{
-			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
-			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : TRUE;
+			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
+			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
 			IH[hblokvolgri] |= (RW[fc]&BIT2 || YV[fc]&BIT2);
 		}
 	}

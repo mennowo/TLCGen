@@ -189,7 +189,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstar}{pr.Naam}] = MM[{_mpf}{_mstarprog}] == {iPr++};");
                     }
-                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstarprogwissel}] = MM[{_mpf}{_mstarprogwissel}] != 0;");
+                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstarprogwissel}] = MM[{_mpf}{_mstarprogwissel}] != 0 || MM[{_mpf}{_mstarprog}] != 0 && MM[{_mpf}{_mstarprogwens}] != MM[{_mpf}{_mstarprog}];");
 
                     break;
             }
