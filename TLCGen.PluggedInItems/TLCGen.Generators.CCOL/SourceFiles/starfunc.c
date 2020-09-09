@@ -54,7 +54,8 @@ void star_reset_bits(boolv star)
 			B[i] = FALSE;
 			MK[i] = FALSE;
 			A[i] = TRUE;
-			Z[i] |= BIT14;
+			Z[i] = FALSE;
+
 			RR[i] |= BIT14;
 		}
 
