@@ -490,7 +490,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var addlines = File.ReadAllLines(filename);
 
                     var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
-                    var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("RealisatieTijden_Add"));
+                    var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
                     var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
 
                     var sb = new StringBuilder();
@@ -507,7 +507,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         if (realAdd && l.Contains("Maxgroen_Add"))
                         {
-                            sb.AppendLine("void RealisatieTijden_Add()");
+                            sb.AppendLine("void BepaalRealisatieTijden_Add()");
                             sb.AppendLine("{");
                             sb.AppendLine("");
                             sb.AppendLine("}");

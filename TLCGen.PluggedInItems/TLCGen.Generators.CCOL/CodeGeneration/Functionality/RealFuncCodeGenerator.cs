@@ -147,7 +147,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCRealisatieTijden:
+                case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc 
                         || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0 && c.InterSignaalGroep?.LateReleases?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
@@ -171,7 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCIncludes => 50,
-                CCOLCodeTypeEnum.RegCRealisatieTijden => 10,
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => 10,
                 CCOLCodeTypeEnum.RegCSynchronisaties => 30,
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => 10,
                 CCOLCodeTypeEnum.RegCMaxgroen => 70,
@@ -197,7 +197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine($"{ts}#include \"realfunc.c\"");
                     return sb.ToString();
-                case CCOLCodeTypeEnum.RegCRealisatieTijden:
+                case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
 
                     // TODO test and check logic
                     var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);

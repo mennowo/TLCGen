@@ -10,7 +10,7 @@
         RegCPreApplication,
         RegCKlokPerioden,
         RegCAanvragen,
-        RegCRealisatieTijden,
+        RegCBepaalRealisatieTijden,
         RegCVerlenggroen,
         RegCMaxgroen,
         RegCMaxgroenNaAdd,

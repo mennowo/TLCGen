@@ -43,7 +43,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCAanvragen(controller));
             if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
-                sb.Append(GenerateRegCRealisatieTijden(controller));
+                sb.Append(GenerateRegCBepaalRealisatieTijden(controller));
             }
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.Append(GenerateRegCWachtgroen(controller));
@@ -360,16 +360,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
         
-        private string GenerateRegCRealisatieTijden(ControllerModel controller)
+        private string GenerateRegCBepaalRealisatieTijden(ControllerModel controller)
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("void RealisatieTijden(void)");
+            sb.AppendLine("void BepaalRealisatieTijden(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieTijden, true, true, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalRealisatieTijden, true, true, false, true);
 
-            sb.AppendLine($"{ts}RealisatieTijden_Add();");
+            sb.AppendLine($"{ts}BepaalRealisatieTijden_Add();");
 			
             // TODO Realisatie tijden tijdens halfstar, relevant als aparte functie?
             //if (controller.HalfstarData.IsHalfstar)
@@ -670,7 +670,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
-                sb.AppendLine($"{ts}RealisatieTijden();");
+                sb.AppendLine($"{ts}BepaalRealisatieTijden();");
             }
 
             var tsts = (controller.StarData.ToepassenStar || controller.HalfstarData.IsHalfstar) ? ts + ts : ts;
