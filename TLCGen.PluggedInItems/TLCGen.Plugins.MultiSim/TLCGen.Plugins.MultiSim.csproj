@@ -92,11 +92,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
       <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
       <Name>TLCGen.Dependencies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+    <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
       <Project>{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}</Project>
       <Name>TLCGen.Generators.CCOL</Name>
     </ProjectReference>
@@ -106,7 +106,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -115,7 +115,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net46\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net46\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -124,7 +124,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
-          <HintPath>..\packages\CommonServiceLocator\lib\net47\CommonServiceLocator.dll</HintPath>
+          <HintPath>..\..\packages\CommonServiceLocator\lib\net47\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -135,22 +135,22 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="GalaSoft.MvvmLight">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="GalaSoft.MvvmLight.Extras">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="GalaSoft.MvvmLight.Platform">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="System.Windows.Interactivity">
-          <HintPath>..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <HintPath>..\..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

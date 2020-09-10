@@ -69,6 +69,9 @@
         <CheckBox IsChecked="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Anti jutter" 
                   Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                   Grid.ColumnSpan="2" />
+        <CheckBox IsChecked="{Binding CheckAltijdOpDsinBijVecom,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Check altijd op DSIN bij VECOM" 
+                  Visibility="{Binding Path=HasSD,Converter={StaticResource BoolToVisConv}}"
+                  Grid.ColumnSpan="2" />
         <Label Content="Anti jutter tijd" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
         <TextBox
                 Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"

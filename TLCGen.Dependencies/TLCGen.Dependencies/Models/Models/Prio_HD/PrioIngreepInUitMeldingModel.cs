@@ -51,6 +51,8 @@ namespace TLCGen.Models
         public bool AntiJutterTijdToepassen { get; set; }
         public int AntiJutterTijd { get; set; }
 
+        public bool CheckAltijdOpDsinBijVecom { get; set; }
+
         public bool OpvangStoring { get; set; }
         public PrioIngreepInUitMeldingModel MeldingBijstoring { get; set; }
 

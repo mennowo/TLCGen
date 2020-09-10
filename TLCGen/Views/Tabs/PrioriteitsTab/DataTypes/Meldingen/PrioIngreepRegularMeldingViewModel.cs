@@ -164,6 +164,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool CheckAltijdOpDsinBijVecom
+        {
+            get => Parent.PrioIngreepInUitMelding.CheckAltijdOpDsinBijVecom;
+            set
+            {
+                Parent.PrioIngreepInUitMelding.CheckAltijdOpDsinBijVecom = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public int AntiJutterTijd
         {
             get => Parent.PrioIngreepInUitMelding.AntiJutterTijd;

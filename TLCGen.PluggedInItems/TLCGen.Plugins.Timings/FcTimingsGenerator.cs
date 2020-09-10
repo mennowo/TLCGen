@@ -77,10 +77,7 @@ namespace TLCGen.Plugins.Timings
                         sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GROEN]= CIF_TIMING_GROEN;      /* Groen  */");
                         if (fcfc != null)
                         {
-                            if(fcfc.Type == TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger)
-                                sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GROEN_KNIPPEREN;       /* Geel   */");
-                            else
-                                sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GEEL;       /* Geel   */");
+                            sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GEEL;       /* Geel   */");
                         }
                         break;
                     case TimingsFaseCyclusTypeEnum.Deelconflict:
@@ -88,10 +85,7 @@ namespace TLCGen.Plugins.Timings
                         sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GROEN]= CIF_TIMING_GROEN_DEELCONFLICT;      /* Groen  */");
                         if (fcfc != null)
                         {
-                            if (fcfc.Type == TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger)
-                                sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GROEN_KNIPPEREN_DEELCONFLICT;       /* Geel   */");
-                            else
-                                sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GEEL_DEELCONFLICT;       /* Geel   */");
+                            sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GEEL_DEELCONFLICT;       /* Geel   */");
                         }
                         break;
                 }

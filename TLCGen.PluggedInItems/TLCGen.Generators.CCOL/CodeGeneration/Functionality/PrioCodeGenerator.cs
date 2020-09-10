@@ -776,7 +776,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     "TRUE, " +
                                                     $"{(fcNmr == -1 ? "NG" : sgCheck)}," +
                                                     "TRUE, " +
-                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "CIF_DSIN, " : "CIF_DSUIT, ") +
+                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
+                                                        ? "CIF_DSIN, " 
+                                                        : "CIF_DSUIT, ") +
                                                     $"{extra});");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
@@ -785,7 +787,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     "FALSE, " +
                                                     "NG, " +
                                                     $"SCH[{_schpf}{_schcheckdstype}], " +
-                                                    $"{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "CIF_DSIN" : "CIF_DSUIT")}, " +
+                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ||
+                                                     melding.CheckAltijdOpDsinBijVecom 
+                                                        ? "CIF_DSIN, " 
+                                                        : "CIF_DSUIT, ") +
                                                     $"{extra});");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:

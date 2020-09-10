@@ -1062,6 +1062,10 @@
       <Project>{470913de-034e-4502-aac8-e62aab880bd1}</Project>
       <Name>TLCGen.Plugins.DynamischeHiaat</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
+      <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
+      <Name>TLCGen.Plugins.MultiSim</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
       <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
       <Name>TLCGen.Plugins.RangeerElementen</Name>
@@ -1081,10 +1085,6 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Specificator\TLCGen.Specificator.csproj">
       <Project>{6f5df100-b22b-40bc-a8c3-7f19817835f0}</Project>
       <Name>TLCGen.Specificator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
-      <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
-      <Name>TLCGen.Plugins.MultiSim</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

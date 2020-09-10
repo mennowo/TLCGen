@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
