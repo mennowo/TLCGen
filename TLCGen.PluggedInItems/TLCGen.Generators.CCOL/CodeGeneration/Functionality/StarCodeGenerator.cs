@@ -22,7 +22,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _mstarprogwissel;
         private CCOLGeneratorCodeStringSettingModel _usstarprogwissel;
         private CCOLGeneratorCodeStringSettingModel _prmstarcyclustijd;
-        private CCOLGeneratorCodeStringSettingModel _hblokvolgrichting;
 #pragma warning restore 0649
         private string _mperiodstar;
 
@@ -38,7 +37,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprog}", _mstarprog));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwens}", _mstarprogwens));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwissel}", _mstarprogwissel));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hblokvolgrichting}", _hblokvolgrichting));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstarprogwissel}", _usstarprogwissel));
             _myBitmapOutputs.Add(new CCOLIOElement(c.StarData.ProgrammaWisselBitmapInfo, $"{_uspf}{_usstarprogwissel}"));
 
@@ -179,7 +177,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     sb.AppendLine($"{ts}/* star programmawisseling */");
-                    sb.AppendLine($"{ts}star_bepaal_omschakelen({_mpf}{_mstarprogwens}, {_mpf}{_mstarprog}, {_mpf}{_mstarprogwissel}, {_hpf}{_hblokvolgrichting});");
+                    sb.AppendLine($"{ts}star_bepaal_omschakelen({_mpf}{_mstarprogwens}, {_mpf}{_mstarprog}, {_mpf}{_mstarprogwissel});");
                     sb.AppendLine($"{ts}star_programma = MM[{_mpf}{_mstarprog}];");
                     var iPr = 1;
                     sb.AppendLine();

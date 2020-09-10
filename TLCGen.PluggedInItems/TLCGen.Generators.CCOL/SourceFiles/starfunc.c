@@ -106,7 +106,7 @@ boolv star_test_alles_rood()
 	return TRUE;
 }
 
-void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel, count hblokvolgri)
+void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel)
 {
     /* omschakelen naar gewenste programma keuze */
     if (MM[mgewenst] != MM[mwerkelijk])
@@ -133,14 +133,12 @@ void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel
     if (MM[mprogwissel])
 	{
 		int fc;
-		IH[hblokvolgri] = FALSE;
 
     	/* stuur alle signaalgroepen naar rood */
         for (fc = 0; fc < FCMAX; fc++)
 		{
 			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
 			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
-			IH[hblokvolgri] |= (RW[fc]&BIT2 || YV[fc]&BIT2);
 		}
 	}
 }
