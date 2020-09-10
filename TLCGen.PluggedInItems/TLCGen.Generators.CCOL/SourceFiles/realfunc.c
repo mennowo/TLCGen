@@ -37,7 +37,11 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
   {
      conflicttijd = 0;
 
-     k= TO_pointer[fc][n];
+#if (CCOL_V >= 95)
+     k = KF_pointer[fc][n];
+#else
+     k = TO_pointer[fc][n];
+#endif
 
      /* ------------------------------------------------------------ */
      /* ALS CONFLICT actief IS DIENT CONFLICTTIJD BEPAALD TE WORDEN: */
@@ -50,12 +54,20 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
      {
          conflicttijd =  3000;
      }
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+     else if(TIG[k][fc])
+#else
      else if(TO[k][fc])
+#endif
      {
        /* ---------------------------------------------------------- */
        /* conflicttijd groen-   conflicten bepalen                   */
        /* ---------------------------------------------------------- */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+       if(TIG_max[k][fc]==GK || TIG_max[k][fc]==GKL)
+#else
        if(TO_max[k][fc]==GK || TO_max[k][fc]==GKL)
+#endif
        {
          conflicttijd = ( G[k] && !MG[k]) ? TFG_max[k]     - TFG_timer[k] +       /* conflict G (uitgezonderd MG) */
                                             TVG_max[k]     - TVG_timer[k]   : 0;
@@ -75,21 +87,37 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
        /* ---------------------------------------------------------- */
        /* conflicttijd conflicten bepalen                            */
        /* ---------------------------------------------------------- */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+       else if((TIG_max[k][fc]>=0))
+#else
        else if((TO_max[k][fc]>=0))
+#endif
        {
          conflicttijd = ( G[k] && !MG[k]) ? TFG_max[k]     - TFG_timer[k] +       /* conflict G (uitgezonderd MG) */
                                             TVG_max[k]     - TVG_timer[k] +
-                                            TGL_max[k]                    +
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+                                             TIG_max[k][fc]                  :
+                               GL[k]      ?  TIG_max[k][fc]                  :    /* conflict GL of MG             */
+                               TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]   : 0; /* ontruimen   of MG             */
+#else
+                                            TGL_max[k] +
                                              TO_max[k][fc]                  :
                         (GL[k] ||  MG[k]) ? TGL_max[k]     - TGL_timer[k] +       /* conflict GL of MG             */
                                              TO_max[k][fc]                  :
                                 TO[k][fc] ?  TO_max[k][fc] -  TO_timer[k]   : 0;  /* ontruimen   of MG             */
 
+#endif
+
 #if PLMAX
          if(hsignaalplan!=NG && correctie_sp!=NG && IH[hsignaalplan])  /* tijdens signaalplan en groen conflicttijd aanpassen */
          {
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+           if(G[k] && PR[k] && !MG[k] && (conflicttijd < (TOTXD_PL[k]- correctie_sp + TIG_max[k][fc])))
+                                          conflicttijd = (TOTXD_PL[k]- correctie_sp + TIG_max[k][fc]);
+#else
            if(G[k] && PR[k] && !MG[k] && (conflicttijd < (TOTXD_PL[k]- correctie_sp + TGL_max[k] + TO_max[k][fc])))
                                           conflicttijd = (TOTXD_PL[k]- correctie_sp + TGL_max[k] + TO_max[k][fc]);
+#endif
 
            /* Voor alternatief tijdens signaalplan nog geen rekening gehouden met resterrend groen. */
            /* Voor nu mag een alernatief zsm afgebroken worden.                                     */
@@ -569,24 +597,40 @@ boolv Maatgevend_Groen(count fc)   /* fasecyclus                                
   {
     for (n=0; n<GKFC_MAX[fc]; n++)
     {
-       k= TO_pointer[fc][n];
+#if (CCOL_V >= 95)
+      k = KF_pointer[fc][n];
+#else
+      k = TO_pointer[fc][n];
+#endif
 
       if(A[k] && (AAPR[k] || PAR[k] || RA[k] || AA[k]))
       {
         /* bepaal of G[fc] maatgevend is voor een groen-conflict */
         /* ----------------------------------------------------- */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+        if(TIG_max[fc][k]==GK || TIG_max[fc][k]==GKL)
+#else
         if(TO_max[fc][k]==GK || TO_max[fc][k]==GKL)
+#endif
         {
           if(      MG[fc] && ((                                                                                      1) >= REALTIJD[k]))  result = TRUE;
           else if(!MG[fc] && ((TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc]                              ) >= REALTIJD[k]))  result = TRUE;
         }
         /* bepaal of G[fc] maatgevend is voor een       conflict */
         /* ----------------------------------------------------- */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+        else if(TIG_max[fc][k]>=0)
+        {
+          if(      MG[fc] && ((                                                            TIG_max[fc][k]) >= REALTIJD[k]))  result = TRUE;
+          else if(!MG[fc] && ((TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc] + TIG_max[fc][k]) >= REALTIJD[k]))  result = TRUE;
+        }
+#else
         else if(TO_max[fc][k]>=0)
         {
           if(      MG[fc] && ((                                                            TGL_max[fc] + TO_max[fc][k]) >= REALTIJD[k]))  result = TRUE;
           else if(!MG[fc] && ((TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc] + TGL_max[fc] + TO_max[fc][k]) >= REALTIJD[k]))  result = TRUE;
         }
+#endif
       }
     }
   }
