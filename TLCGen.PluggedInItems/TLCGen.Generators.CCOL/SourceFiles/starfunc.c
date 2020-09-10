@@ -111,8 +111,8 @@ void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel
     /* omschakelen naar gewenste programma keuze */
     if (MM[mgewenst] != MM[mwerkelijk])
     {
-		if ((((MM[mgewenst] != 0 || MM[mwerkelijk] != 0) && star_cyclustimer == 1) ||
-			 (MM[mgewenst] != 0 && !IH[hblokvolgri]) ||
+		if (((MM[mwerkelijk] != 0 && star_cyclustimer == 1) ||
+			 MM[mgewenst] != 0 ||
 			 (MM[mprogwissel])))
         {
             MM[mprogwissel] = TRUE;

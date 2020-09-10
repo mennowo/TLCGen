@@ -1,5 +1,7 @@
 #include "extra_func_ris.h"
 
+#if (CCOL_V >= 110)
+
 /* RIS INMELDING SELECTIEF */ /* CCA TvG */
 /* ======================= */
 /* ris_inmelding_selectief() is gebaseerd op de functie ris_detectie_selectief() uit de Toolkit CCOL. Hieraan is toegevoegd: 
@@ -78,9 +80,6 @@ rif_bool ris_uitmelding_selectief(count fc)
    }
    return ((rif_bool) result);
 }
-
-
-#ifdef RIS_SSM
 
 void ris_verstuur_ssm(int prioFcsrm) {  /* CCA */
 
@@ -189,7 +188,7 @@ void ris_verstuur_ssm(int prioFcsrm) {  /* CCA */
    }
 }
 
-#endif // RIS_SSM
+#endif // (CCOL_V >= 110)
 
 void ris_ym(int prioFcsrm, count tym, count tym_max) { /* CCA */
 /* @@@Moet eigengelijk gebueren op basis van ETA. Nu op basis van rijtijd (op ongeveer 250 meter dus onnauwkeurig). Optie om uit te werken op basis van aanwezigheid voertuig x meter voor de stopstreep met granted?
