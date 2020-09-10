@@ -19,6 +19,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmrisvend;
         private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
         private CCOLGeneratorCodeStringSettingModel _schrisgeencheckopsg;
+        private CCOLGeneratorCodeStringSettingModel _schris;
 #pragma warning restore 0649
 
         public override bool HasSettings()
@@ -40,6 +41,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     0,
                     CCOLElementTimeTypeEnum.SCH_type,
                     _schrisgeencheckopsg));
+
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schris}",
+                    1,
+                    CCOLElementTimeTypeEnum.SCH_type,
+                    _schris));
 
                 foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData))
                 {
@@ -273,7 +280,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}#endif");
                     sb.AppendLine($"{ts}{ts}{ts}/* RIS-Controller */");
                     sb.AppendLine($"{ts}{ts}{ts}/* -------------- */");
-                    sb.AppendLine($"{ts}{ts}{ts}ris_controller(SAPPLPROG, TRUE);");
+                    sb.AppendLine($"{ts}{ts}{ts}if (SCH[{_schpf}{_schris}]) ris_controller(SAPPLPROG, TRUE);");
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                 default:

@@ -743,9 +743,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             var extra = "";
-            if (ov.CheckLijnNummer && ov.LijnNummers.Any())
+            if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector ||
+                 melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) &&
+                ov.CheckLijnNummer && ov.LijnNummers.Any())
             {
-                if (!ov.CheckRitCategorie)
+                if (!ov.CheckRitCategorie || melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
                 {
                     extra += "DSIMeldingPRIO_LijnNummer_V1(" +
                              $"{_prmpf + _prmallelijnen + CCOLCodeHelper.GetPriorityName(ov)}, " +

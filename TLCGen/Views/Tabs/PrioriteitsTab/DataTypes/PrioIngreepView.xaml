@@ -156,11 +156,12 @@
                                         op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
                                         Daarbij geldt volgens de CVN-C interface:<LineBreak />
                                         10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
-                                        12 = inrukrit naar remise, 13 = uitrukrit van remise
+                                        12 = inrukrit naar remise, 13 = uitrukrit van remise<LineBreak />
+                                        <Span TextBlock.FontStyle="Italic">Let op: dit werkt uitsluitend voor VECOM meldingen</Span>
                                     </TextBlock>
                                 </ct:InfoElement.InfoPopup>
                             </ct:InfoElement>
-                            <Label Content="Check op rit categorie" />
+                            <Label Content="Check VECOM op rit categorie" />
                         </DockPanel>
                         <CheckBox IsEnabled="{Binding Path=CheckLijnNummer}" 
                                   IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
