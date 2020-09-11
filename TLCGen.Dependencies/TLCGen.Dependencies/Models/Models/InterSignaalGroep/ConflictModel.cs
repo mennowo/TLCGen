@@ -5,7 +5,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class ConflictModel : IComparable, IInterSignaalGroepElement
+    public class ConflictModel : IComparable, IInterSignaalGroepElement, IFormattable
     {
         #region Fields
 
@@ -90,6 +90,22 @@ namespace TLCGen.Models
         }
 
         #endregion // IComparable
+
+        #region ToString
+        
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            switch (format)
+            {
+                case "naarvan": return FaseNaar + FaseVan;
+                case "van": return FaseVan;
+                case "naar": return FaseNaar;
+            }
+
+            return ToString();
+        }
+
+        #endregion // ToString
 
         #region Constructor
 

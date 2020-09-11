@@ -438,7 +438,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.PrioCOnderMaximum => 10,
                 CCOLCodeTypeEnum.PrioCAfkapGroen => 10,
                 CCOLCodeTypeEnum.PrioCStartGroenMomenten => 10,
-                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 10,
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 20,
                 CCOLCodeTypeEnum.PrioCAfkappen => 10,
                 CCOLCodeTypeEnum.PrioCTerugkomGroen => 10,
                 CCOLCodeTypeEnum.PrioCGroenVasthouden => 10,

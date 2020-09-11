@@ -1,6 +1,8 @@
 TLCGen=0.8.0.0
 MiniTD=1.1.0.0
 RN==TLCGen
+TLCGen versie: 0.8.1.0
+- Diverse kleine fixes
 TLCGen versie: 0.8.0.0
 - Ondersteuning voor CCOL 11
 - Star regelen via alles rood

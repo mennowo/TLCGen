@@ -582,33 +582,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCSystemApplication => 41,
                 CCOLCodeTypeEnum.RegCPostSystemApplication => 31,
                 CCOLCodeTypeEnum.PrioCInUitMelden => 11,
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 10,
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 11,
                 _ => 0
             };
         }
 
-        private string GetMeldingDetectieCode(PrioIngreepInUitMeldingModel melding)
+        private static string GetMeldingDetectieCode(PrioIngreepInUitMeldingModel melding, string dpf)
         {
             var sb = new StringBuilder();
             switch (melding.RelatedInput1Type)
             {
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                    sb.Append($"SD[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"SD[{dpf}{melding.RelatedInput1}]");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                    sb.Append($"D[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"D[{dpf}{melding.RelatedInput1}]");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                    sb.Append($"DB[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"DB[{dpf}{melding.RelatedInput1}]");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                    sb.Append($"!DB_old[{_dpf}{melding.RelatedInput1}] && DB[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"!DB_old[{dpf}{melding.RelatedInput1}] && DB[{dpf}{melding.RelatedInput1}]");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                    sb.Append($"ED[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"ED[{dpf}{melding.RelatedInput1}]");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                    sb.Append($"TDH_old[{_dpf}{melding.RelatedInput1}] && !TDH[{_dpf}{melding.RelatedInput1}]");
+                    sb.Append($"TDH_old[{dpf}{melding.RelatedInput1}] && !TDH[{dpf}{melding.RelatedInput1}]");
                     break;
             }
             if (melding.TweedeInput)
@@ -616,22 +617,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 switch (melding.RelatedInput2Type)
                 {
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                        sb.Append($" && SD[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && SD[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                        sb.Append($" && D[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && D[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                        sb.Append($" && DB[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && DB[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                        sb.Append($" && !DB_old[{_dpf}{melding.RelatedInput2}] && DB[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && !DB_old[{dpf}{melding.RelatedInput2}] && DB[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                        sb.Append($" && ED[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && ED[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                        sb.Append($" && TDH_old[{_dpf}{melding.RelatedInput2}] && !TDH[{_dpf}{melding.RelatedInput2}]");
+                        sb.Append($" && TDH_old[{dpf}{melding.RelatedInput2}] && !TDH[{dpf}{melding.RelatedInput2}]");
                         break;
                 }
             }
@@ -796,7 +797,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     $"{extra});");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
-                    sb.AppendLine(GetMeldingDetectieCode(melding) + ";");
+                    sb.AppendLine(GetMeldingDetectieCode(melding, _dpf) + ";");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
@@ -1316,6 +1317,63 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}}}");
                             }
                         }
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
+                    var naloopWithPrioConflicts = new List<(NaloopModel naloop, List<ConflictModel> conflicts)>();
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                    {
+                        // search conflicts of naloop fc (search nl 'to' and conflict 'from')
+                        var conflicts = c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseNaar);
+                        if (!conflicts.Any()) continue;
+                        // find out if conflict has prio (search conflict 'to')
+                        var prioConflicts = new List<ConflictModel>();
+                        foreach (var conflict in conflicts)
+                        {
+                            var prio = c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == conflict.FaseNaar);
+                            if (prio) prioConflicts.Add(conflict);
+                        }
+                        if (prioConflicts.Any()) naloopWithPrioConflicts.Add((nl, prioConflicts));
+                    }
+
+                    if (!naloopWithPrioConflicts.Any()) return "";
+
+                    sb.AppendLine($"{ts}/* Tegenhouden voedende richting, bij een conflicterende prio-ingreep van de nalooprichting */");
+                    sb.AppendLine($"{ts}/* Afzetten RR */");
+                    foreach (var nl in naloopWithPrioConflicts)
+                    {
+                        sb.Append($"{ts}if (");
+                        first = true;
+                        foreach (var conflict in nl.conflicts)
+                        {
+                            if (!first)
+                            {
+                                sb.AppendLine(" &&");
+                                sb.Append($"{ts}    ");
+                            }
+                            sb.Append($"(G[{_fcpf}{conflict:naar}] || !(YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT))");
+                            first = false;
+                        }
+                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT9;");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Opzetten RR */");
+                    foreach (var nl in naloopWithPrioConflicts)
+                    {
+                        sb.Append($"{ts}if (");
+                        first = true;
+                        foreach (var conflict in nl.conflicts)
+                        {
+                            if (!first)
+                            {
+                                sb.AppendLine(" ||");
+                                sb.Append($"{ts}    ");
+                            }
+                            sb.Append($"((Z[{_fcpf}{nl.naloop:van}] & PRIO_Z_BIT) && (YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT) && !G[{_fcpf}{conflict:naar}])");
+                            first = false;
+                        }
+                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] |= ~BIT9;");
                     }
                     return sb.ToString();
 

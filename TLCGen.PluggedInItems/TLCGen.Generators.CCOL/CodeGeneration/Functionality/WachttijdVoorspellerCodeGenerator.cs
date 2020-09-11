@@ -93,7 +93,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCTop => 50,
                 CCOLCodeTypeEnum.RegCIncludes => 30,
                 CCOLCodeTypeEnum.RegCSystemApplication => 90,
-                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 20,
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 30,
                 _ => 0
             };
         }
