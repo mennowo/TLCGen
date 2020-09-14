@@ -735,8 +735,9 @@ namespace TLCGen.ModelManagement
                             refObjectType = (TLCGenObjectTypeEnum) objTypeProp.GetValue(obj);
                         }
                     }
-                    // set new value if applicable
-                    if (objectType == refObjectType &&
+                    // set new value if applicable (do not change NULL values)
+                    if (!string.IsNullOrEmpty(oldName) &&
+                        objectType == refObjectType &&
                         (string) propValue == oldName)
                     {
                         property.SetValue(obj, newName);
