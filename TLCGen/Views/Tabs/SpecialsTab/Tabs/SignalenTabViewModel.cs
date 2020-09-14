@@ -89,6 +89,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Signalen.DimUitgangPerTikker = value;
+                foreach (var rt in _Controller.Signalen.Rateltikkers)
+                {
+                    rt.DimmenPerUitgang = value;
+                    if (rt.DimUitgangBitmapData == null) rt.DimUitgangBitmapData = new BitmapCoordinatenDataModel();
+                }
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

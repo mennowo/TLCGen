@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -23,7 +24,8 @@ namespace TLCGen.Models
 
         [HasDefault(false)]
         [Browsable(false)]
-        public bool DimmenPerUitgang => false;
+        [XmlIgnore]
+        public bool DimmenPerUitgang { get; set; }
 
         public bool ShouldSerializeNaloopTijd()
         {

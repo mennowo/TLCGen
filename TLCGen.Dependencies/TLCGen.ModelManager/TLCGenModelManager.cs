@@ -153,6 +153,16 @@ namespace TLCGen.ModelManagement
             controller.Signalen.ControllerHasPeriodRtDimmen = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen);
             controller.Signalen.ControllerHasPeriodBellenDimmen= controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen);
 
+            // set display for seperate dimming outputs
+            if (controller.Signalen.DimUitgangPerTikker)
+            {
+                foreach (var rt in controller.Signalen.Rateltikkers)
+                {
+                    rt.DimmenPerUitgang = true;
+                    if (rt.DimUitgangBitmapData == null) rt.DimUitgangBitmapData = new BitmapCoordinatenDataModel();
+                }
+            }
+
             // sort if needed
             if (!controller.Detectoren.IsSorted()) controller.Detectoren.BubbleSort();
             if (!controller.SelectieveDetectoren.IsSorted()) controller.SelectieveDetectoren.BubbleSort();
