@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
@@ -6,6 +7,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class DetectieAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
     {
+        private string _prmda;
+     
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
@@ -34,7 +37,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}/* Direct groen in geval van !K voor een richting */");
                                     ++i;
                                 }
-                                sb.AppendLine($"{ts}AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
+                                if (d.Aanvraag != Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
+                                {
+                                    sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmda}{d.Naam}] != 0) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
+                                }
                             }
                         }
                     }
@@ -42,6 +48,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
+        }
+        
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _prmda = CCOLGeneratorSettingsProvider.Default.GetElementName("prmda");
+
+            return base.SetSettings(settings);
         }
     }
 }
