@@ -26,6 +26,7 @@ namespace TLCGen.ViewModels
             {
                 _RatelTikker.Type = value;
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                MessengerInstance.Send(new RatelTikkerTypeChangedMessage(_RatelTikker));
             }
         }
 
@@ -46,6 +47,30 @@ namespace TLCGen.ViewModels
             {
                 _RatelTikker.FaseCyclus = value;
                 RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+            }
+        }
+
+        public int DimmingNiveauPeriodeDimmen
+        {
+            get => _RatelTikker.DimmingNiveauPeriodeDimmen;
+            set
+            {
+                _RatelTikker.DimmingNiveauPeriodeDimmen = value;
+                if (_RatelTikker.DimmingNiveauPeriodeDimmen < 0) _RatelTikker.DimmingNiveauPeriodeDimmen = 0;
+                if (_RatelTikker.DimmingNiveauPeriodeDimmen > 10) _RatelTikker.DimmingNiveauPeriodeDimmen = 10;
+                RaisePropertyChanged<object>(nameof(DimmingNiveauPeriodeDimmen), broadcast: true);
+            }
+        }
+        
+        public int DimmingNiveauPeriodeNietDimmen
+        {
+            get => _RatelTikker.DimmingNiveauPeriodeNietDimmen;
+            set
+            {
+                _RatelTikker.DimmingNiveauPeriodeNietDimmen = value;
+                if (_RatelTikker.DimmingNiveauPeriodeNietDimmen < 0) _RatelTikker.DimmingNiveauPeriodeNietDimmen = 0;
+                if (_RatelTikker.DimmingNiveauPeriodeNietDimmen > 10) _RatelTikker.DimmingNiveauPeriodeNietDimmen = 10;
+                RaisePropertyChanged<object>(nameof(DimmingNiveauPeriodeNietDimmen), broadcast: true);
             }
         }
 

@@ -375,6 +375,7 @@ void AanvraagSnelV2(count fc1, count dp)
                                 rateltikkers continu
       3.0   22-11-2012  dze     verbetering code                 xx-xx-xxxx
       4.0   19-04-2016  mvw     loslaten ACCROSS                 xx-xx-xxxx
+      5.0   11-06-2019  ddo     aanpassing voor bewaakte tikker
     ------------------------------------------------------------------------------
 
     De rateltikkers voor voetgangers worden niet in het regeltoestel afgehandeld,
@@ -388,19 +389,22 @@ void AanvraagSnelV2(count fc1, count dp)
     b)  van begin melding (buiten) drukknop tot na aflopen timer tnlrt, die 
         start bij het eerstvolgend einde groen mits die drukknop een groene golf 
         naar de bijbehorende richting aanvraagt;
-    c)  continu tijdens een aanwezige klokperiode (MM [  mas_aan]);
-    d)  continu tijdens een aanwezige schakelaar  (SCH[schas_aan]).
+    c)  continu tijdens een aanwezige klokperiode (H [has_aan]);
     
     Het dimsignaal voor alle rateltikkers is aanwezig:
-    a)  tijdens een aanwezige klokperiode (MM [  mas_dim]);
-    b)  tijdens een aanwezige schakelaar  (SCH[schas_dim]).
+    a)  tijdens een aanwezige klokperiode (H[has_dim]);
+    OF
+    b)  het volume c.q. dimnivo wordt permanent vanuit de regelapplicatie uitgestuurd 
+        (bij tikkers van het nieuwe (bewaakte) type). Hierbij is tevens het signaal 
+        'rateltikkers aan' geinverteerd.
     ------------------------------------------------------------------------------ */
-bool Rateltikkers(      count fc,       /* fase */
-                        count has,      /* hulpelement rateltikkers voor deze fase */
-                        count has_aan_, /* hulpelement tikkers werking */
-                        count has_cont_,/* hulpelement tikkers continu */
-                        count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
-                        ...)            /* hulpelementen drukknoppen */
+bool Rateltikkers(   count fc,        /* fase                                     */
+                       count has,      /* hulpelement rateltikkers voor deze fase  */
+                       count has_aan_, /* hulpelement tikkers werking              */
+                       count has_cont_,/* hulpelement tikkers continu              */
+                       count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
+                       bool bewaakt,  /* rateltikker van nieuwe (bewaakte) type?  */
+                       ...)            /* hulpelementen drukknoppen                */
 {
 	va_list argpt;
 	count hdkh;
@@ -432,7 +436,12 @@ bool Rateltikkers(      count fc,       /* fase */
 		IH[has] |= IH[has_cont_];
 	}
 
-    return (IH[has]);
+  if ((bewaakt == FALSE) || (bewaakt == NG)) {
+    return (IH[has]); /* positieve uitsturing bij niet-bewaakte tikkers */
+  }
+  else {
+    return (!IH[has]); /* geïnverteerde uitsturing bij bewaakte tikkers */
+  }
 }
 
 /** ------------------------------------------------------------------------------
@@ -498,6 +507,41 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	return (IH[has]);
 }
 
+/* Rateltikkers Hoeflake waarbij het dimnivo vanuit de applicatie kan worden geregeld.      */
+/* Code kan zowel booleaans dimsignaal als dimnivo verzorgen. Bij aansturing volume vanuit  */
+/* de applicatie dient voor iedere tikker apart het dimnivo signaal uitgestuurd te worden.  */
+/* aanroep:
+   GUS[usrtdim32a] = RateltikkerDimming(fc32, hperiodrtdim, prmdimas32adag, prmdimas32anacht) -> dimnivo via appl.
+   GUS[usrtdim32b] = RateltikkerDimming(fc32, hperiodrtdim, prmdimas32bdag, prmdimas32bnacht) -> dimnivo via appl.
+   (bij twee tikker units voor fc32)
+   of
+   GUS[usrtdim32] = RateltikkerDimming(fc32, hperiodrtdim, NG, NG) -> volume ingesteld in tikker unit.
+*/
+bool Rateltikkers_HoeflakeDimming(count fc,        /* fase                                           */
+                         count hperasdim, /* hulpelement klokperiode gedimde uitsturing     */
+                         count prmasndim, /* dimnivo periode niet dimmen (0-10, 10 = tikker uit) of NG  */ 
+                         count prmasdim)  /* dimnivo periode dimmen (0-10, 10 = tikker uit) of NG  */
+{
+  bool uitsturing = FALSE; /* uitsturing (kan boolean dimsignaal of dimnivo blokgolf zijn) */
+  int dimblokgolf = CIF_KLOK[CIF_SECONDE] - (CIF_KLOK[CIF_SECONDE] / 10 * 10);
+
+  /* bepaal wijze van uitsturen */  
+  if ((prmasndim > NG) && (prmasdim > NG)) /* dimnivo door regelapplicatie bepaald */
+  {
+    /* bepaal uitsturing dimnivo; 
+    /* hoe HOGER de waarde van de PRM (0 .. 10), hoe LAGER het volume */
+    if (IH[hperasdim]) {
+      if (dimblokgolf <= PRM[prmasdim])  uitsturing = TRUE;
+    }
+    else {
+      if (dimblokgolf <= PRM[prmasndim])    uitsturing = TRUE;
+    }
+  }
+  else uitsturing = IH[hperasdim]; /* volume door tikker bepaald */
+ 
+  return uitsturing;
+}
+
 /** ------------------------------------------------------------------------------
     EERLIJK DOSEREN BIJ FILE
     ------------------------------------------------------------------------------
@@ -522,7 +566,8 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
                         count fcmg[][MPERIODMAX], /* pointer naar array met mg parameter index nummers */
                         int nogtedoseren[],       /* pointer naar array met nog te doseren waarden     */
 	                    bool *prml[],
-	                    count ml)
+	                    count ml,
+						count _mperiod)
 {
     int i, j, laatstedosering;
 
@@ -533,7 +578,7 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
         if(EG[fc[i]] && H[hfile] && MK[fc[i]])
         {
             /* Uitrekenen laatst toegepaste dosering */
-            laatstedosering = 100 - (int)(100.0 * (((float)(TFG_max[fc[i]] + TVG_timer[fc[i]])) / ((float)(PRM[fcmg[i][MM[mperiod]]]))));
+            laatstedosering = 100 - (int)(100.0 * (((float)(TFG_max[fc[i]] + TVG_timer[fc[i]])) / ((float)(PRM[fcmg[i][MM[_mperiod]]]))));
             /* Voor elke fase mbt het fileveld */
             for(j = 0; j < aantalfc; ++j)
             {
@@ -563,8 +608,8 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
         if(nogtedoseren[i] > 0 && !H[hfile])
         {
             /* Toepassen eerder opgeslagen nog te doseren percentage */
-            TVG_max[fc[i]] = ((mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[mperiod]]])/100) > TFG_max[fc[i]])
-                        ?  (mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[mperiod]]])/100) - TFG_max[fc[i]]
+            TVG_max[fc[i]] = ((mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[_mperiod]]])/100) > TFG_max[fc[i]])
+                        ?  (mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[_mperiod]]])/100) - TFG_max[fc[i]]
                         : 0;
         }
     }   
@@ -576,7 +621,8 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
                         count fcvg[][MPERIODMAX],       /* pointer naar array met mg parameter index nummers */
                         int nogtedoseren[],             /* pointer naar array met nog te doseren waarden     */
 	                    bool *prml[],
-	                    count ml)
+	                    count ml,
+						count _mperiod)
 {
     int i, j, laatstedosering;
 
@@ -587,7 +633,7 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
         if(EG[fc[i]] && H[hfile] && MK[fc[i]])
         {
             /* Uitrekenen laatst toegepaste dosering */
-            laatstedosering = 100 - (int)(100.0 * (((float)(TFG_max[fc[i]] + TVG_timer[fc[i]])) / ((float)(PRM[fcvg[i][MM[mperiod]]]+TFG_max[fc[i]]))));
+            laatstedosering = 100 - (int)(100.0 * (((float)(TFG_max[fc[i]] + TVG_timer[fc[i]])) / ((float)(PRM[fcvg[i][MM[_mperiod]]]+TFG_max[fc[i]]))));
             /* Voor elke fase mbt het fileveld */
             for(j = 0; j < aantalfc; ++j)
             {
@@ -617,7 +663,7 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
         if(nogtedoseren[i] > 0 && !H[hfile])
         {
             /* Toepassen eerder opgeslagen nog te doseren percentage */
-            TVG_max[fc[i]] = (mulv)(((long)(100 - nogtedoseren[i]) * (long)(PRM[fcvg[i][MM[mperiod]]]+TFG_max[fc[i]]))/100);
+            TVG_max[fc[i]] = (mulv)(((long)(100 - nogtedoseren[i]) * (long)(PRM[fcvg[i][MM[_mperiod]]]+TFG_max[fc[i]]))/100);
         }
     }   
 }

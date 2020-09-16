@@ -1,11 +1,9 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-	public class DetectorenChangedMessage
+    public class DetectorenChangedMessage
     {
         public ControllerModel Controller { get; }
         public List<DetectorModel> AddedDetectoren { get; }

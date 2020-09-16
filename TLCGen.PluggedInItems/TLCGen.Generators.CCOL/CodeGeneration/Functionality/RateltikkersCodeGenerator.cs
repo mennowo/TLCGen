@@ -18,6 +18,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hrt;
         private CCOLGeneratorCodeStringSettingModel _hdrt;
         private CCOLGeneratorCodeStringSettingModel _tnlrt;
+        private CCOLGeneratorCodeStringSettingModel _prmnivndim;
+        private CCOLGeneratorCodeStringSettingModel _prmnivdim;
 #pragma warning restore 0649
         private string _hperiod;
         private string _prmperrt;
@@ -25,7 +27,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmperrtdim;
 
         #endregion // Fields
-        
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
@@ -41,7 +43,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrtdim}{rt.FaseCyclus}", _usrtdim, rt.FaseCyclus));
                 }
 
-                if (rt.Type == RateltikkerTypeEnum.Hoeflake)
+                if (rt.Type == RateltikkerTypeEnum.HoeflakeBewaakt && c.Signalen.DimmingNiveauVanuitApplicatie)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivndim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum.None, _prmnivndim, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivdim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeDimmen, CCOLElementTimeTypeEnum.None, _prmnivndim, rt.FaseCyclus));
+                }
+
+                if (rt.Type == RateltikkerTypeEnum.Hoeflake || rt.Type == RateltikkerTypeEnum.HoeflakeBewaakt)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", rt.NaloopTijd, CCOLElementTimeTypeEnum.TE_type, _tnlrt, rt.FaseCyclus));
                 }
@@ -108,13 +116,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine("END);");
                                 break;
                             case RateltikkerTypeEnum.Hoeflake:
-                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {rta}, {rtr}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {rta}, {rtr}, {_tpf}{_tnlrt}{rt.FaseCyclus}, NG, ");
                                 foreach (var d in rt.Detectoren)
                                 {
                                     sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");
                                 }
                                 sb.AppendLine("END);");
                                 break;
+                            case RateltikkerTypeEnum.HoeflakeBewaakt:
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {rta}, {rtr}, {_tpf}{_tnlrt}{rt.FaseCyclus}, TRUE, ");
+                                foreach (var d in rt.Detectoren)
+                                {
+                                    sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");
+                                }
+                                sb.AppendLine("END);");
+                                break;
+
                         }
                     }
 
@@ -124,7 +141,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* uitsturing dimming signaal per rateltikker */");
                         foreach (var rt in c.Signalen.Rateltikkers)
                         {
-                            sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = H[{_hpf}{_hperiod}{_prmperrtdim}];");
+                            switch (rt.Type)
+                            {
+                                case RateltikkerTypeEnum.Hoeflake:
+                                case RateltikkerTypeEnum.Accross:
+                                    sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = H[{_hpf}{_hperiod}{_prmperrtdim}];");
+                                    break;
+                                case RateltikkerTypeEnum.HoeflakeBewaakt:
+                                    if (c.Signalen.DimmingNiveauVanuitApplicatie)
+                                    {
+                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, {_prmpf}{_prmnivndim}{rt.FaseCyclus}, {_prmpf}{_prmnivdim}{rt.FaseCyclus});");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, NG, NG);");
+                                    }
+                                    break;
+                            }
                         }
                     }
 

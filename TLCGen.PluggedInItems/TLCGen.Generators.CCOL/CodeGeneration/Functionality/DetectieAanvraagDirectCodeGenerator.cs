@@ -39,7 +39,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 if (d.Aanvraag != Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
                                 {
-                                    sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmda}{d.Naam}] != 0) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
+                                    if (d.AanvraagHardOpStraat)
+                                    {
+                                        sb.AppendLine($"{ts}AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmda}{d.Naam}] != 0) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
+                                    }
                                 }
                             }
                         }

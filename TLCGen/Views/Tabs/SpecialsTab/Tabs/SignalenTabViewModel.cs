@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -69,6 +72,8 @@ namespace TLCGen.ViewModels
             private set;
         }
 
+        public ObservableCollection<RatelTikkerViewModel> RatelTikkersBewaakt { get; } = new ObservableCollection<RatelTikkerViewModel>();
+
         public ObservableCollection<string> ControllerFasen => _ControllerFasen ?? (_ControllerFasen = new ObservableCollection<string>());
 
 	    public ObservableCollection<string> SelectableRatelTikkerFasen => _SelectableRatelTikkerFasen ?? (_SelectableRatelTikkerFasen = new ObservableCollection<string>());
@@ -94,6 +99,17 @@ namespace TLCGen.ViewModels
                     rt.DimmenPerUitgang = value;
                     if (rt.DimUitgangBitmapData == null) rt.DimUitgangBitmapData = new BitmapCoordinatenDataModel();
                 }
+                if (!value) DimmingNiveauVanuitApplicatie = false;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool DimmingNiveauVanuitApplicatie
+        {
+            get => _Controller.Signalen.DimmingNiveauVanuitApplicatie;
+            set
+            {
+                _Controller.Signalen.DimmingNiveauVanuitApplicatie = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -320,6 +336,15 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void UpdateBewaakteRatelTikkers()
+        {
+            RatelTikkersBewaakt.Clear();
+            foreach(var rt in RatelTikkers.Where(x => x.Type == RateltikkerTypeEnum.HoeflakeBewaakt))
+            {
+                RatelTikkersBewaakt.Add(rt);
+            }
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -346,6 +371,7 @@ namespace TLCGen.ViewModels
                 {
                     WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
                     RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+                    UpdateBewaakteRatelTikkers();
                 }
                 else
                 {
@@ -375,6 +401,11 @@ namespace TLCGen.ViewModels
             RatelTikkers.Rebuild();
         }
 
+        private void OnRatelTikkerTypeChanged(RatelTikkerTypeChangedMessage obj)
+        {
+            UpdateBewaakteRatelTikkers();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -383,6 +414,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<RatelTikkerTypeChangedMessage>(OnRatelTikkerTypeChanged));
         }
 
         #endregion // Constructor

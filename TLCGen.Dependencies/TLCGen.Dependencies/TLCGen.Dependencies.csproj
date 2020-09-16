@@ -116,6 +116,7 @@
     <Compile Include="Messaging\Messages\OVIngrepenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\PeriodenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\PTPKoppelingenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\RatelTikkerTypeChangedMessage.cs" />
     <Compile Include="Messaging\Messages\SelectedConflictGroepChangedMessage.cs" />
     <Compile Include="Messaging\Messages\SelectieveDetectorenChangedMessage.cs" />
     <Compile Include="Messaging\Messages\SystemITFChangedMessage.cs" />

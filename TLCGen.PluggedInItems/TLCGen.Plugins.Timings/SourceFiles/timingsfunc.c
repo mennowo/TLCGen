@@ -45,78 +45,6 @@
 /* ==================== */
 s_int16 CCOL_FC_EVENTSTATE[FCMAX][3];
 
-
-/* De functie Eventstate_Definition() definieert de eventstate voor de fasecycli van DEMO.
- * De functie Eventstate_Definition() wordt aangeroepen door de functie void msg_fctiming().
- */
-
-void Eventstate_Definition(void)
-{
-   register count i;
-
-/* zet defaultwaarde  */
-/* ------------------ */
-   for (i = 0; i < FCMAX; i++)
-   {
-      CCOL_FC_EVENTSTATE[i][CIF_ROOD]= CIF_TIMING_ONBEKEND;       /* Rood   */
-      CCOL_FC_EVENTSTATE[i][CIF_GROEN]= CIF_TIMING_ONBEKEND;      /* Groen  */
-      CCOL_FC_EVENTSTATE[i][CIF_GEEL]= CIF_TIMING_ONBEKEND;       /* Geel   */
-   }
-
-/* fc01 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc01][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc01][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc01][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-
-/* fc02 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc02][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc02][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc02][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-/* fc08 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc08][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc08][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc08][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-
-/* fc09 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc09][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc09][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc09][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-/* fc10 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc10][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc10][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc10][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-
-/* fc12 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc12][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc12][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc12][CIF_GEEL]= CIF_TIMING_GEEL;              /* Geel   */
-
-/* fc31 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc31][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc31][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc31][CIF_GEEL]= CIF_TIMING_GEEL;              /* Groen knipperen - opgeven als Geel */
-
-/* fc32 - conflictvrij */
-/* ------------------- */
-   CCOL_FC_EVENTSTATE[fc32][CIF_ROOD]= CIF_TIMING_ROOD;              /* Rood   */
-   CCOL_FC_EVENTSTATE[fc32][CIF_GROEN]= CIF_TIMING_GROEN;            /* Groen  */
-   CCOL_FC_EVENTSTATE[fc32][CIF_GEEL]= CIF_TIMING_GEEL;              /* Groen knipperen - opgeven als Geel */
-}
-
-
-
 /* DEFINITIE FCTMING FUNCTIES */
 /* ========================== */
 
@@ -194,15 +122,6 @@ void msg_fctiming(void)
    register count i;
    static s_int16 WPS_old= 0;       /* oude programmastatus		*/
    static boolv init = 0;           /* initialisatievlag                */
-
-
-   /* EVENTSTATE DEFEIITIE VOOR MSG_TIMING */
-   /* ------------------------------------ */
-   if (!init) {
-      Eventstate_Definition();
-      init = TRUE;
-   }
-
 
    for (i=0; i<FC_MAX; i++) {
 

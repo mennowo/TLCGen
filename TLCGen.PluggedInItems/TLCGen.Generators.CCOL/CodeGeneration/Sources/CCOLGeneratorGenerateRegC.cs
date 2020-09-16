@@ -848,7 +848,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var vars = new List<string>();
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSystemApplication, true, false, false, true, vars);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreSystemApplication, true, false, false, true, vars);
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, true, false, false, true, vars);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostSystemApplication, true, false, false, true, vars);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreSystemApplication, false, true, false, true);
             

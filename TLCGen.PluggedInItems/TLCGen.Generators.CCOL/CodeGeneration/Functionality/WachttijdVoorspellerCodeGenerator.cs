@@ -70,18 +70,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override bool HasFunctionLocalVariables() => true;
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
-        {
-            if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return base.GetFunctionLocalVariables(c, type);
-            return type switch
-            {
-                CCOLCodeTypeEnum.RegCSystemApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                _ => base.GetFunctionLocalVariables(c, type)
-            };
-        }
-
         public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)

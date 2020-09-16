@@ -98,6 +98,11 @@ namespace TLCGen.Generators.CCOL.Settings
             return descr;	
 		}
 
+        internal CCOLElement CreateElement(string v, int dimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum none, object prmnivndim, string faseCyclus)
+        {
+            throw new NotImplementedException();
+        }
+
         public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLGeneratorCodeStringSettingModel element, params string [] elementnames)
         {
             var t = TranslateType(element.Type);

@@ -19,12 +19,17 @@ bool Rateltikkers(count fc,       /* fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
 	count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
+	bool bewaakt,  /* rateltikker van nieuwe (bewaakte) type?  */
 	...);           /* drukknoppen */
 bool Rateltikkers_Accross(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
 	...);           /* drukknoppen */
+bool Rateltikkers_HoeflakeDimming(count fc,/* fase                                           */
+                         count hperasdim,  /* hulpelement klokperiode gedimde uitsturing     */
+                         count prmasndim,  /* dimnivo periode niet dimmen (0-10, 10 = tikker uit) of NG  */ 
+                         count prmasdim);  /* dimnivo periode dimmen (0-10, 10 = tikker uit) of NG  */
 void Eerlijk_doseren_V1(count hfile,            /* hulpelement wel/geen file */
 	count _prmperc,         /* indexnummer parameter % doseren */
 	count aantalfc,         /* aantal te doseren fasen */
@@ -32,7 +37,8 @@ void Eerlijk_doseren_V1(count hfile,            /* hulpelement wel/geen file */
 	count fcmg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
 	int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
 	bool *prml[],
-	count ml);
+	count ml,
+	count _mperiod);
 void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            /* hulpelement wel/geen file */
     count _prmperc,         /* indexnummer parameter % doseren */
     count aantalfc,         /* aantal te doseren fasen */
@@ -40,7 +46,8 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            /* hulpelemen
     count fcvg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
     int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
 	bool *prml[], 
-	count ml);
+	count ml,
+	count _mperiod);
 void FileMeldingV2(count det,     /* filelus                                */
     count tbez,    /* bezettijd  als D langer bezet -> file  */
     count trij,    /* rijtijd    als D korter bezet -> !file */

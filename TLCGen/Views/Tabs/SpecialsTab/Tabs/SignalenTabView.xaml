@@ -9,120 +9,135 @@
              mc:Ignorable="d" 
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="Waarschuwings signalen groepen" />
-            <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1"
-                  ItemsSource="{Binding Path=WaarschuwingsGroepen}" SelectedItem="{Binding Path=SelectedWaarschuwingsGroep}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridCheckBoxColumn Header="Lichten" Binding="{Binding Path=Lichten,UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridCheckBoxColumn Header="Bellen" Binding="{Binding Path=Bellen,UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridTemplateColumn Header="Fasecyclus" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=FaseCyclusVoorAansturing}" Margin="2" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox 
-                                    ItemsSource="{Binding Path=DataContext.ControllerFasen,ElementName=root}" 
-                                    FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                    SelectedValue="{Binding Path=FaseCyclusVoorAansturing,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Button Content="Signalen groep toev." Command="{Binding Path=AddWaarschuwingsGroepCommand}" Margin="2" />
-                <Button Content="Signalen groep verw." Command="{Binding Path=RemoveWaarschuwingsGroepCommand}" Margin="2" />
-            </StackPanel>
-        </Grid>
-        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Content="Rateltikkers" Grid.ColumnSpan="2" />
-            <CheckBox Content="Dimming uitgang per rateltikker" IsChecked="{Binding DimUitgangPerTikker}" VerticalAlignment="Center" Margin="2" Grid.Row="1" Grid.ColumnSpan="2" />
-            <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="2"
-                  ItemsSource="{Binding Path=RatelTikkers}" SelectedItem="{Binding Path=SelectedRatelTikker}">
-                <DataGrid.RowHeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                      AncestorType={x:Type DataGridRow}}, 
-                                      Path=Item.FaseCyclus}"/>
-                    </DataTemplate>
-                </DataGrid.RowHeaderTemplate>
-                <DataGrid.Columns>
-                    <DataGridComboBoxColumn 
-                        Header="Type"
-                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RateltikkerTypeEnum}}}"  />
-                    <DataGridTextColumn Header="Naloop tijd" Binding="{Binding Path=NaloopTijd,UpdateSourceTrigger=PropertyChanged}" >
-                        <DataGridTextColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=Type}" Value="Accross">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="Background" Value="LightGray" />
-                                        <Setter Property="Foreground" Value="LightGray" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.CellStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="1">
+    <TabControl>
+        <TabItem Header="Rateltikkers">
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Content="Rateltikker detectoren" />
-                <ListView ItemsSource="{Binding Path=SelectedRatelTikker.Detectoren}" Grid.Row="1"
-                          SelectedItem="{Binding Path=SelectedRatelTikker.SelectedDetector}" Margin="2" >
-                    <ListView.ItemTemplate>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1"
+                      ItemsSource="{Binding Path=RatelTikkers}" SelectedItem="{Binding Path=SelectedRatelTikker}">
+                    <DataGrid.RowHeaderTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Detector}" Margin="2" />
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.FaseCyclus}"/>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <local:ItemsManagerView DataContext="{Binding Path=SelectedRatelTikker.DetectorManager}" Grid.Row="2" />
-                <!--<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
-                    <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerDetectoren}" 
-                              SelectedValue="{Binding Path=SelectedRatelTikkerDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
-                    <Button Content="+" Command="{Binding AddRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
-                    <Button Content="-" Command="{Binding RemoveRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
-                </StackPanel>-->
+                    </DataGrid.RowHeaderTemplate>
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn 
+                            Header="Type"
+                            SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RateltikkerTypeEnum}}}"  />
+                        <DataGridTextColumn Header="Naloop tijd" Binding="{Binding Path=NaloopTijd,UpdateSourceTrigger=PropertyChanged}" >
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Type}" Value="Accross">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Rateltikker detectoren" />
+                    <ListView ItemsSource="{Binding Path=SelectedRatelTikker.Detectoren}" Grid.Row="1"
+                              SelectedItem="{Binding Path=SelectedRatelTikker.SelectedDetector}" Margin="2" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Detector}" Margin="2" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <local:ItemsManagerView DataContext="{Binding Path=SelectedRatelTikker.DetectorManager}" Grid.Row="2" />
+                    <!--<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+                        <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerDetectoren}" 
+                                  SelectedValue="{Binding Path=SelectedRatelTikkerDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
+                        <Button Content="+" Command="{Binding AddRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
+                        <Button Content="-" Command="{Binding RemoveRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
+                    </StackPanel>-->
+                </Grid>
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2">
+                    <Label Content="Fase" />
+                    <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerFasen}" 
+                              SelectedValue="{Binding Path=SelectedRatelTikkerFaseToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
+                    <Button Content="Rateltikker toev." Command="{Binding Path=AddRatelTikkerCommand}" Margin="2" />
+                    <Button Content="Rateltikker verw." Command="{Binding Path=RemoveRatelTikkerCommand}" Margin="2" />
+                </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2">
-                <Label Content="Fase" />
-                <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerFasen}" 
-                          SelectedValue="{Binding Path=SelectedRatelTikkerFaseToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
-                <Button Content="Rateltikker toev." Command="{Binding Path=AddRatelTikkerCommand}" Margin="2" />
-                <Button Content="Rateltikker verw." Command="{Binding Path=RemoveRatelTikkerCommand}" Margin="2" />
-            </StackPanel>
-        </Grid>
-    </Grid>
+        </TabItem>
+        
+        <TabItem Header="Rateltikkers dimming">
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <CheckBox Content="Dimming uitgang per rateltikker" 
+                          IsChecked="{Binding DimUitgangPerTikker,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Row="0" Grid.ColumnSpan="2" />
+                <CheckBox Content="Dimming niveau vanuit applicatie (hoeflake bewaakt)" 
+                          IsChecked="{Binding DimmingNiveauVanuitApplicatie,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Row="1" Grid.ColumnSpan="2" />
+                <DataGrid ItemsSource="{Binding Path=RatelTikkersBewaakt}" Grid.Row="2" IsEnabled="{Binding Path=DimmingNiveauVanuitApplicatie}"
+                          AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Niveau niet dimmen" Binding="{Binding Path=DimmingNiveauPeriodeNietDimmen,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Niveau dimmen" Binding="{Binding Path=DimmingNiveauPeriodeDimmen,UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        
+        <TabItem Header="Waarschuwings signalen groepen">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="0"
+                      ItemsSource="{Binding Path=WaarschuwingsGroepen}" SelectedItem="{Binding Path=SelectedWaarschuwingsGroep}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Lichten" Binding="{Binding Path=Lichten,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Bellen" Binding="{Binding Path=Bellen,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTemplateColumn Header="Fasecyclus" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=FaseCyclusVoorAansturing}" Margin="2" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox 
+                                        ItemsSource="{Binding Path=DataContext.ControllerFasen,ElementName=root}" 
+                                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                        SelectedValue="{Binding Path=FaseCyclusVoorAansturing,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Button Content="Signalen groep toev." Command="{Binding Path=AddWaarschuwingsGroepCommand}" Margin="2" />
+                    <Button Content="Signalen groep verw." Command="{Binding Path=RemoveWaarschuwingsGroepCommand}" Margin="2" />
+                </StackPanel>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </UserControl>

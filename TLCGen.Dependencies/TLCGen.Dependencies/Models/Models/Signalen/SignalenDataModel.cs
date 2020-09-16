@@ -18,6 +18,7 @@ namespace TLCGen.Models
         public List<RatelTikkerModel> Rateltikkers { get; set; }
 
         public bool DimUitgangPerTikker { get; set; }
+        public bool DimmingNiveauVanuitApplicatie { get; set; }
 
         [IOElement("rtact", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevantAanvraag")]
         public BitmapCoordinatenDataModel RatelTikkerActiefBitmapData { get; set; }

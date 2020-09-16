@@ -11,6 +11,10 @@ namespace TLCGen.Models
     {
         public RateltikkerTypeEnum Type { get; set; }
         public int NaloopTijd { get; set; }
+        
+        public int DimmingNiveauPeriodeNietDimmen { get; set; }
+        public int DimmingNiveauPeriodeDimmen { get; set; }
+
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
