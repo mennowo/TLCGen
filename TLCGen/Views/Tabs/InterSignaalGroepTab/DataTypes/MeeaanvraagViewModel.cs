@@ -198,7 +198,7 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
-            _detectorManager.Refresh();
+            _detectorManager?.Refresh();
 
             if (Detectoren?.Count == 0)
                 return;
@@ -215,7 +215,7 @@ namespace TLCGen.ViewModels
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            _detectorManager.Refresh();
+            _detectorManager?.Refresh();
         }
 
         #endregion // TLCGen Events

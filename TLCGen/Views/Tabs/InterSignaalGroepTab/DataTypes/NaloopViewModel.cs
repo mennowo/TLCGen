@@ -306,12 +306,12 @@ namespace TLCGen.ViewModels
                 Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             }
 
-            _detectorManager.Refresh();
+            _detectorManager?.Refresh();
         }
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            _detectorManager.Refresh();
+            _detectorManager?.Refresh();
         }
         
         #endregion // TLCGen Events

@@ -114,7 +114,7 @@ namespace TLCGen.ViewModels
                             dm.Simulatie.Stopline = 10000;
                             break;
                     }
-                    if (dm.Simulatie.FCNr.ToUpper() != "NG")
+                    if (dm.Simulatie.FCNr?.ToUpper() != "NG")
                         dm.Simulatie.FCNr = fcm.Naam;
                 }
             }
