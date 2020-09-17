@@ -36,7 +36,7 @@ namespace TLCGen.Generators.CCOL
 
         public string GetGeneratorVersion()
         {
-            return "0.7.1.0";
+            return Controller?.Data.TLCGenVersie ?? "0";
         }
 
         public string GetPluginName()

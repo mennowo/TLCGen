@@ -423,16 +423,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         return;
                     }
                 }
-                if(c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL100)
+                var text = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename));
+                text = $"/* {Path.GetFileName(filename)} - gegenereerd met TLCGen {c.Data.TLCGenVersie} */" + Environment.NewLine + Environment.NewLine + text;
+                if(c.Data.CCOLVersie < CCOLVersieEnum.CCOL100)
                 {
-                    var text = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename));
                     var rtext = Regex.Replace(text, @"(^|\s|\W)va_boolv", "$1va_bool");
                     rtext = Regex.Replace(rtext, @"(^|\W)boolv(\W)", "$1bool$2");
                     File.WriteAllText(Path.Combine(sourcefilepath, filename), rtext, Encoding.Default);
                 }
                 else // CCOL 10.0
                 {
-                    var text = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename));
                     var rtext = Regex.Replace(text, @"(^|\s|\W)va_bool", "$1va_boolv");
                     rtext = Regex.Replace(rtext, @"(^|\W)bool(\W)", "$1boolv$2");
                     File.WriteAllText(Path.Combine(sourcefilepath, filename), rtext, Encoding.Default);

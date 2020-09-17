@@ -571,6 +571,7 @@ namespace TLCGen.ViewModels
             var s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
             if (s == null)
             {
+                TLCGenControllerDataProvider.Default.Controller.Data.TLCGenVersie = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 SelectedGenerator.Generator.GenerateController();
                 MessengerInstance.Send(new ControllerCodeGeneratedMessage());
             }
