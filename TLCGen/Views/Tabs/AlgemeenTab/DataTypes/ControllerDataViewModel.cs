@@ -140,13 +140,24 @@ namespace TLCGen.ViewModels
                 }
                 else
                 {
+                    var oldValue = _Controller.Data.CCOLVersie;
                     _Controller.Data.CCOLVersie = value;
                     if(value > CCOLVersieEnum.CCOL8)
                     {
                         if(_Controller.Data.VLOGSettings == null)
                         {
                             _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
-                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings );
+                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, (value < CCOLVersieEnum.CCOL110 ? "VLOG300" : "VLOG310"));
+                        }
+                        else if (value >= CCOLVersieEnum.CCOL110 && oldValue < CCOLVersieEnum.CCOL110)
+                        {
+                            var result = TLCGenDialogProvider.Default.ShowMessageBox(
+                                "Vanaf CCOL11 is de VLOG versie 3.1. Opnieuw toepassen defaults voor VLOG " +
+                                "instellingen tbv. juiste instellingen?", "VLOG 3.1 instellen", System.Windows.MessageBoxButton.YesNo);
+                            if (result == System.Windows.MessageBoxResult.Yes)
+                            {
+                                Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, "VLOG310");
+                            }
                         }
                     }
                     MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());

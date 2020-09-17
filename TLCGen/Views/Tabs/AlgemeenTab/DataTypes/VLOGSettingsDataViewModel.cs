@@ -10,6 +10,7 @@ namespace TLCGen.ViewModels
     {
         public readonly VLOGSettingsDataModel VLOGSettingsData;
 
+        [Description("VLOG toepassen")]
         public bool VLOGToepassen
         {
             get => VLOGSettingsData.VLOGToepassen;

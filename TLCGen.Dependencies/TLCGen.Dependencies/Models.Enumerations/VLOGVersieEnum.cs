@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using TLCGen.Helpers;
-
 
 namespace TLCGen.Models.Enumerations
 {
@@ -13,6 +7,8 @@ namespace TLCGen.Models.Enumerations
     public enum VLOGVersieEnum
     {
         [Description("VLOG 3.0.x")]
-        VLOG30x
+        VLOG30x,
+        [Description("VLOG 3.1.x")]
+        VLOG31x
     }
 }
