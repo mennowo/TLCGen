@@ -199,6 +199,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
 
+                    if (_sortedSyncs.twoWay.Any() || 
+                        _sortedSyncs.oneWay.Any() || 
+                        _sortedSyncs.twoWayPedestrians.Any())
+                    {
+                        sb.AppendLine($"{ts}/* Bepalen realisatietijden */");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Reset */");
+                        sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}Realisatietijd(i, NG, NG);");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+
                     // TODO test and check logic
                     var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);
 

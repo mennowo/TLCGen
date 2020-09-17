@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
                         if(_Controller.Data.VLOGSettings == null)
                         {
                             _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
-                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, (value < CCOLVersieEnum.CCOL110 ? "VLOG300" : "VLOG310"));
+                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, value < CCOLVersieEnum.CCOL110 ? "VLOG300" : "VLOG310");
                         }
                         else if (value >= CCOLVersieEnum.CCOL110 && oldValue < CCOLVersieEnum.CCOL110)
                         {

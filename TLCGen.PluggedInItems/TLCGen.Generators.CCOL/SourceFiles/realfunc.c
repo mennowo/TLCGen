@@ -4,9 +4,10 @@
 
 /****************************** Versie commentaar ***********************************
  *
- * Versie  Datum       Naam          Commentaar
+ * TLCGen  Datum       Naam          Commentaar
  *
  * 1.0     05-08-2020  OK Geregeld:  Functies t.b.v. realisatietijd en correcties
+ * 0.8.2.0 17-09-2020  OK Geregeld:  Bugfix REALTIJD[fc2] ivm voorstart > 0, regel 217
  *
  ************************************************************************************/
 
@@ -213,9 +214,11 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
   /* - realtijd fc2 kleiner dan die van fc1 + correctie                                            */
   if(REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD[fc2] < (REALTIJD[fc1] + t1_t2)))
   {
-    REALTIJD[fc2] = REALTIJD[fc1]==3000 ? 3000 : REALTIJD[fc1] + t1_t2;
-
-    result = TRUE;
+    REALTIJD[fc2] =  !G[fc1] && REALTIJD[fc1]==3000     ? 3000                                   :
+                     !G[fc1]                            ? REALTIJD[fc1] + t1_t2                  :
+                    TGG[fc1] && (t1_t2 > TGG_timer[fc1])                  t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];  /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
+                                                                                                                   /* of als voorstarttijd verstreken.                        */
+    result = TRUE;                                                                                                 /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
   }
 
   /* --------------------------------- */
