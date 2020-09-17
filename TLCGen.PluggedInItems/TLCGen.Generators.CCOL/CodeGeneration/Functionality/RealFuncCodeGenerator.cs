@@ -300,7 +300,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
 
                         var lr = ow != null && ow.Waarde > 0;
-                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, T_max[{_tpf}{_tfo}{fot}], {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
                     }
                     if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
