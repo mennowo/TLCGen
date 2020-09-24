@@ -1373,7 +1373,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"((Z[{_fcpf}{nl.naloop:van}] & PRIO_Z_BIT) && (YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT) && !G[{_fcpf}{conflict:naar}])");
                             first = false;
                         }
-                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] |= ~BIT9;");
+                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] |= BIT9;");
                     }
                     return sb.ToString();
 

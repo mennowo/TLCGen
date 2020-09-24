@@ -89,7 +89,10 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateCodeCommand_Executed(object prm)
         {
-            _plugin.Controller.Data.TLCGenVersie = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+            if (_plugin.Controller?.Data != null)
+            {
+                _plugin.Controller.Data.TLCGenVersie = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
+            }
             var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_plugin.Controller);
             Messenger.Default.Send(prepreq);
             var s = TLCGenIntegrityChecker.IsControllerDataOK(_plugin.Controller);
