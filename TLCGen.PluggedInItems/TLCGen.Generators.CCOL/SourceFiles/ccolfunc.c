@@ -139,7 +139,7 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
         RT[trga] = SD[d2];
         if (tav >= 0)
         {
-            RT[tav] = SD[d1] && T[trga] ? TRUE : T[tav] && !G[fc] && (D[d1] || D[d2]);
+            RT[tav] = R[fc] && !TRG[fc] && SD[d1] && T[trga] ? TRUE : T[tav] && !G[fc] && (D[d1] || D[d2]);
             AT[tav] = G[fc];
         }
         /* snelle variant */

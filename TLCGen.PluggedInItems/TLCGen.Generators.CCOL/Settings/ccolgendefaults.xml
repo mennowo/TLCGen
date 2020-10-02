@@ -1700,12 +1700,6 @@
             <Type>Timer</Type>
             <Description></Description>
           </Setting>
-          <Setting>
-            <Default>rismax</Default>
-            <Setting>rismax</Setting>
-            <Type>Timer</Type>
-            <Description></Description>
-          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

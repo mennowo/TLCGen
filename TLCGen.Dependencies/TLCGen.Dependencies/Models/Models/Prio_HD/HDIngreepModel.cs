@@ -17,6 +17,18 @@ namespace TLCGen.Models
         public string FaseCyclus { get; set; }
 
         public bool KAR { get; set; }
+        
+        #region RIS
+
+        public bool RIS { get; set; }
+        public int RisStart { get; set; }
+        public int RisEnd { get; set; }
+        public bool RisMatchSg { get; set; }
+        public int? RISInmeldingFilterTijd { get; set; }
+        public int? RISUitmeldingFilterTijd { get; set; }
+        
+        #endregion
+
         public bool Opticom { get; set; }
         public int? KARInmeldingFilterTijd { get; set; }
         public int? KARUitmeldingFilterTijd { get; set; }

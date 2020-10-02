@@ -57,6 +57,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool RIS
+        {
+            get => _HDIngreep.RIS;
+            set
+            {
+                _HDIngreep.RIS = value;
+                RaisePropertyChanged<object>(nameof(RIS), broadcast: true);
+            }
+        }
+
         [Description("Inmelding filtertijd KAR")]
         public int? KARInmeldingFilterTijd
         {

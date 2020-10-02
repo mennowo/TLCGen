@@ -89,7 +89,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
             var controllerdets = controller.Detectoren;
             var ovdummydets = controller.PrioData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets).ToList();
+            var sddets = controller.SelectieveDetectoren;
+            var alldets = fasendets.Concat(controllerdets).Concat(sddets).Concat(ovdummydets).ToList();
             var externals = PieceGenerators.Where(x => x.HasSimulationElements(controller)).SelectMany(x => x.GetSimulationElements(controller)).ToList();
 
             foreach (var dm in alldets.Where(x => !x.Dummy))

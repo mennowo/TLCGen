@@ -142,6 +142,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
+                CCOLCodeTypeEnum.RegCAanvragen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
                 CCOLCodeTypeEnum.RegCMeetkriterium => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
@@ -230,15 +231,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
                                     x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
                         .ToList();
-                    if (ovRis.Any())
+                    var hdRis = c.PrioData.HDIngrepen.Where(x => x.RIS).ToList();
+                    if (ovRis.Any() || hdRis.Any())
                     {
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Ris PRIO: verstuur SSM */");
                         sb.AppendLine($"{ts}#ifdef RIS_SSM");
                         foreach (var ov in ovRis)
                         {
+                            // TODO !!!
+                            #if !DEBUG
+                            TODO
+                            #endif
+                            sb.AppendLine($"{ts}ris_srm_put_signalgroup_publictransport(fc01, PRM[{_prmpf}approachid{ov.FaseCyclus}], {_prmpf}allelijnen{ov.FaseCyclus}ris, 10);");
+                        }
+
+                        foreach (var hd in hdRis)
+                        {
+                            sb.AppendLine($"{ts}ris_srm_put_signalgroup_emergency({_fcpf}{hd.FaseCyclus}, PRM[{_prmpf}approachid{hd.FaseCyclus}]);");
+                        }
+
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FC_MAX; ++fc) {{ YM[fc] &= ~BIT15; YV[fc] &= ~BIT15; }}");
+
+                        foreach (var ov in ovRis)
+                        {
                             sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
                         }
+                        
+                        foreach (var hd in hdRis)
+                        {
+                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus};");
+                        }
+
                         sb.AppendLine($"{ts}#endif");
                     }
 
