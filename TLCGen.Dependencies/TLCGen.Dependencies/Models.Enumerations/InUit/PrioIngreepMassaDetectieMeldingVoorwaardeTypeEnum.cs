@@ -14,16 +14,16 @@ namespace TLCGen.Models.Enumerations
         VecomViaDetector,
         [Description("Selectieve detector")]
         SelectieveDetector,
-        [Description("RIS OV")]
+        [Description("RIS")]
         RISVoorwaarde,
-        [Description("RIS vracht")]
-        VrachtRIS,
-        [Description("RIS peloton fiets")]
-        FietsRISPeloton,
+        //[Description("RIS vracht")]
+        //VrachtRIS,
+        //[Description("RIS peloton fiets")]
+        //FietsRISPeloton,
         [Description("Massa peloton fiets")]
         FietsMassaPeloton,
-        [Description("RIS peloton auto")]
-        AutoRISPeloton,
+        //[Description("RIS peloton auto")]
+        //AutoRISPeloton,
         [Description("Massa peloton auto")]
         AutoMassaPeloton,
     }

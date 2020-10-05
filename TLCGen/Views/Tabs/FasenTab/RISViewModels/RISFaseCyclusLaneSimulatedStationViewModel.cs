@@ -9,13 +9,39 @@ namespace TLCGen.ViewModels
     {
         public RISFaseCyclusLaneSimulatedStationModel StationData { get; }
 
-        public RISStationTypeSimEnum Type
+        public RISStationTypeSimEnum StationType
         {
             get => StationData.Type;
             set
             {
                 StationData.Type = value;
                 StationData.SimulationData.RelatedName = StationData.Naam;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasEx));
+            }
+        }
+
+        public bool HasEx =>
+            StationType == RISStationTypeSimEnum.BUS ||
+            StationType == RISStationTypeSimEnum.TRAM ||
+            StationType == RISStationTypeSimEnum.SPECIALVEHICLES;
+        
+        public RISVehicleRole VehicleRole
+        {
+            get => StationData.VehicleRole;
+            set
+            {
+                StationData.VehicleRole = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public RISVehicleSubrole VehicleSubrole
+        {
+            get => StationData.VehicleSubrole;
+            set
+            {
+                StationData.VehicleSubrole = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -115,6 +141,16 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.FCNr = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int Importance
+        {
+            get => StationData.Importance;
+            set
+            {
+                StationData.Importance = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

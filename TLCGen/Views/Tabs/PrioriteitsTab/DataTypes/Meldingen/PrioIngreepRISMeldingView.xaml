@@ -24,9 +24,6 @@
             <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <Label Content="Eind" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
-            <CheckBox Content="Match SG" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
-                      IsChecked="{Binding Path=RisMatchSg,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                      Grid.ColumnSpan="2" />
         </wpfAutoGrid:AutoGrid>            
     </Grid>
 </UserControl>

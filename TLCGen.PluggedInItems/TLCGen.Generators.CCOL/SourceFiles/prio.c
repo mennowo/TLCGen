@@ -44,6 +44,7 @@ int iGroenBewakingsTimer[prioFCMAX];
 int iRijTijd[prioFCMAX];
 int iRijTimer[prioFCMAX];
 int iPrioriteit[prioFCMAX];
+int iPrioriteitNooitAfkappen[prioFCMAX];
 int iKOVPrio[prioFCMAX];
 int iInstPrioriteitsNiveau[prioFCMAX];
 int iInstPrioriteitsOpties[prioFCMAX];
@@ -970,7 +971,8 @@ void PrioriteitsToekenning(void)
         for (i = 0; i < prioGKFC_MAX[prio]; ++i)
         {
             kov = prioTO_pointer[prio][i];
-            if (iPrioriteitsNiveau[kov] > iPrioriteitsNiveau[prio] && !iXPrio[kov] &&
+            if (!iPrioriteitNooitAfkappen[prio] &&
+                iPrioriteitsNiveau[kov] > iPrioriteitsNiveau[prio] && !iXPrio[kov] &&
                 (!G[fc] || iPrioriteitsOpties[kov] & poAfkappenKonflikterendOV))
             {
                 iPrioriteit[prio] = 0;

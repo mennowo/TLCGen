@@ -16,4 +16,38 @@
         TRAM = 0x0800,
         ROADSIDEUNIT = 0x8000
     }
+
+    public enum RISVehicleRole
+    {
+        DEFAULT = 0,
+        PUBLICTRANSPORT = 1,
+        SPECIALTRANSPORT = 2,
+        DANGEROUSGOODS = 3,
+        ROADWORK = 4,
+        RESCUE = 5,
+        EMERGENCY = 6,
+        SAFETYCAR = 7,
+        AGRICULTURE = 8,
+        COMMERCIAL = 9,
+        MILITARY = 10,
+        ROADOPERATOR = 11,
+        TAXI = 12
+    }
+
+    public enum RISVehicleSubrole
+    {
+        UNKNOWN = 0,
+        BUS = 1,
+        TRAM = 2,
+        METRO = 3,
+        TRAIN = 4,
+        EMERGENCY = 5,
+        SMOOTH = 6,
+        TIMETABLE = 7,
+        INTERVAL = 8,
+        EXPRESSTRANSIT = 9,
+        NOSERVICE = 10,
+        PLATOON = 11,
+        ECODRIVING = 12
+    }
 }

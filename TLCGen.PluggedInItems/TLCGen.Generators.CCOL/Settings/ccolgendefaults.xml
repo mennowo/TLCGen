@@ -1911,6 +1911,12 @@
             <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
           </Setting>
           <Setting>
+            <Default>risapproachid</Default>
+            <Setting>risapproachid</Setting>
+            <Type>Parameter</Type>
+            <Description>Approach id voor fase _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>risgeencheckopsg</Default>
             <Setting>risgeencheckopsg</Setting>
             <Type>Schakelaar</Type>

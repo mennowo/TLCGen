@@ -31,16 +31,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool RisMatchSg
-        {
-            get => Parent.PrioIngreepInUitMelding.RisMatchSg;
-            set 
-            { 
-                Parent.PrioIngreepInUitMelding.RisMatchSg = value; 
-                RaisePropertyChanged();
-            }
-        }
-
         #endregion // Properties
 
         #region Constructor

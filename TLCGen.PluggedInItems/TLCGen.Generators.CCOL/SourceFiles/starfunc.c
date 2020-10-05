@@ -73,6 +73,7 @@ void star_reset_bits(boolv star)
 			B[i] = FALSE;
 			YM[i] &= ~BIT14;
 			RR[i] &= ~BIT14;
+			Z[i] &= ~BIT14;
 		}
 	}
 }

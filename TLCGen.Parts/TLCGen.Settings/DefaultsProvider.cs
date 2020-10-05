@@ -83,14 +83,14 @@ namespace TLCGen.Settings
                     return "vecio";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
                     return "ris";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
-                    return "vrwris";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
-                    return "fts";
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
+                //    return "vrwris";
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
+                //    return "fts";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
                     return "ftsris";
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
-                    return "autris";
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
+                //    return "autris";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
                     return "aut";
                 default:

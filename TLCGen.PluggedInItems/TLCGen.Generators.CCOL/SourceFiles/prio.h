@@ -178,6 +178,7 @@ extern int iGroenBewakingsTimer[];
 extern int iRijTijd[];
 extern int iRijTimer[];
 extern int iPrioriteit[];
+extern int iPrioriteitNooitAfkappen[];
 extern int iKOVPrio[];
 extern int iInstPrioriteitsNiveau[];
 extern int iInstPrioriteitsOpties[];

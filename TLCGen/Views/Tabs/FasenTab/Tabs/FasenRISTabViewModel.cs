@@ -115,16 +115,16 @@ namespace TLCGen.ViewModels
                                 switch (sg.Type)
                                 {
                                     case FaseTypeEnum.Auto:
-                                        if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.PASSENGERCAR) l.SimulatedStations[0].Type = RISStationTypeSimEnum.PASSENGERCAR;
+                                        if (l.SimulatedStations[0].StationType != RISStationTypeSimEnum.PASSENGERCAR) l.SimulatedStations[0].StationType = RISStationTypeSimEnum.PASSENGERCAR;
                                         break;
                                     case FaseTypeEnum.Fiets:
-                                        if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.CYCLIST) l.SimulatedStations[0].Type = RISStationTypeSimEnum.CYCLIST;
+                                        if (l.SimulatedStations[0].StationType != RISStationTypeSimEnum.CYCLIST) l.SimulatedStations[0].StationType = RISStationTypeSimEnum.CYCLIST;
                                         break;
                                     case FaseTypeEnum.Voetganger:
-                                        if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.PEDESTRIAN) l.SimulatedStations[0].Type = RISStationTypeSimEnum.PEDESTRIAN;
+                                        if (l.SimulatedStations[0].StationType != RISStationTypeSimEnum.PEDESTRIAN) l.SimulatedStations[0].StationType = RISStationTypeSimEnum.PEDESTRIAN;
                                         break;
                                     case FaseTypeEnum.OV:
-                                        if (l.SimulatedStations[0].Type != RISStationTypeSimEnum.BUS) l.SimulatedStations[0].Type = RISStationTypeSimEnum.BUS;
+                                        if (l.SimulatedStations[0].StationType != RISStationTypeSimEnum.BUS) l.SimulatedStations[0].StationType = RISStationTypeSimEnum.BUS;
                                         break;
                                 }
                             }
@@ -531,22 +531,22 @@ namespace TLCGen.ViewModels
                 switch (sg.Type)
                 {
                     case FaseTypeEnum.Auto:
-                        st.Type = RISStationTypeSimEnum.PASSENGERCAR;
+                        st.StationType = RISStationTypeSimEnum.PASSENGERCAR;
                         st.Flow = 200;
                         st.Snelheid = 50;
                         break;
                     case FaseTypeEnum.Fiets:
-                        st.Type = RISStationTypeSimEnum.CYCLIST;
+                        st.StationType = RISStationTypeSimEnum.CYCLIST;
                         st.Flow = 20;
                         st.Snelheid = 15;
                         break;
                     case FaseTypeEnum.Voetganger:
-                        st.Type = RISStationTypeSimEnum.PEDESTRIAN;
+                        st.StationType = RISStationTypeSimEnum.PEDESTRIAN;
                         st.Flow = 20;
                         st.Snelheid = 5;
                         break;
                     case FaseTypeEnum.OV:
-                        st.Type = RISStationTypeSimEnum.BUS;
+                        st.StationType = RISStationTypeSimEnum.BUS;
                         st.Flow = 10;
                         st.Snelheid = 45;
                         break;

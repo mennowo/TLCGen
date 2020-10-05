@@ -1,19 +1,21 @@
-#ifndef EXTRA_FUNC_RIS
-#define EXTRA_FUNC_RIS
+/* EXTRA_FUNC_RIS.H */
+/* ================ */
 
-#include <stdio.h>
-#include <stdlib.h>
+/* CCOL :  versie 11.0     */
+/* FILE :  extra_func.h    */
+/* DATUM:  01-10-2020      */
 
-#include "prio.h"
+#ifndef __EXTRA_FUNC_RIS_H
+#define __EXTRA_FUNC_RIS_H
 
-#if (CCOL_V >= 110)
 
-	rif_bool ris_inmelding_selectief(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup);
-	rif_bool ris_uitmelding_selectief(count fc);
-	void ris_verstuur_ssm(int prioFcsrm);
+/* declaratie functies */
+/* =================== */
+   rif_bool ris_inmelding_selectief(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_int role, rif_int subrole, rif_int priotypefc_id); 
+   rif_bool ris_inmelding_selectief_approach(rif_int approach, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_int role, rif_int subrole, rif_int priotypefc_id);
 
-#endif
+   rif_bool ris_uitmelding_selectief(rif_int priotypefc_id);
 
-void ris_ym(int prioFcsrm, count tym, count tym_max);
+   void ris_verstuur_ssm(rif_int priotypefc_id);
 
-#endif // EXTRA_FUNC_RIS
+#endif /* __EXTRA_FUNC_RIS_H  */

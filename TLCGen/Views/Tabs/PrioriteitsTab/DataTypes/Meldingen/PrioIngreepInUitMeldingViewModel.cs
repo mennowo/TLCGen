@@ -190,16 +190,16 @@ namespace TLCGen.ViewModels
                 case PrioIngreepVoertuigTypeEnum.Fiets:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     break;
                 case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     break;
                 case PrioIngreepVoertuigTypeEnum.Auto:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     break;
                 case PrioIngreepVoertuigTypeEnum.NG:
                     break;
@@ -227,9 +227,9 @@ namespace TLCGen.ViewModels
                     ActualViewModel = ViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
+                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
                     ActualViewModel = RISViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
