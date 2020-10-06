@@ -238,24 +238,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}ris_srm_put_signalgroup_publictransport({_fcpf}{ov.FaseCyclus}, PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], {_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, {ov.LijnNummers.Count});");
                         }
-
-                        foreach (var hd in hdRis)
-                        {
-                            sb.AppendLine($"{ts}ris_srm_put_signalgroup_emergency({_fcpf}{hd.FaseCyclus}, PRM[{_prmpf}approachid{hd.FaseCyclus}]);");
-                        }
-
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FC_MAX; ++fc) {{ YM[fc] &= ~BIT15; YV[fc] &= ~BIT15; }}");
-
                         foreach (var ov in ovRis)
                         {
                             sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
                         }
-                        
                         foreach (var hd in hdRis)
                         {
-                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus};");
+                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus});");
                         }
-
                         sb.AppendLine($"{ts}#endif");
                     }
 

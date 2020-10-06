@@ -871,7 +871,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                               $"PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                               $"{role}, " +
                                               $"{subrole}, " +
-                                              $"prioFC{ov.FaseCyclus}ris)");
+                                              $"prioFC{CCOLCodeHelper.GetPriorityName(ov)})");
                                     first = false;
                                 }
                                 sb.AppendLine(";");
@@ -1215,8 +1215,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.AppendLine($"{ts}" +
                                               $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}ris] = " +
-                                              $"RT[{_tpf}{_thdin}{hd.FaseCyclus}ris] = " +
-                                              $"!T[{_tpf}{_thdin}{hd.FaseCyclus}ris] && " +
                                               $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}ris] && (");
 
                                 first = true;
@@ -1229,13 +1227,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         var itf = c.RISData.HasMultipleSystemITF
                                             ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
                                         sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief_approach(" +
-                                                  $"PRM[{_prmpf}{_prmrisapproachid}{hd.FaseCyclus}]" +
-                                                  $"{_fcpf}{hd.FaseCyclus}, " +
+                                                  $"PRM[{_prmpf}{_prmrisapproachid}{hd.FaseCyclus}]," +
                                                   $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
                                                   $"PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], " +
                                                   $"RIS_HULPDIENST, " +
                                                   $"PRM[{_prmpf}{_prmrisstart}{hd.FaseCyclus}hd], " +
-                                                  $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd]" +
+                                                  $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd]," +
                                                   $"RIF_VEHICLEROLE_EMERGENCY, " +
                                                   $"RIF_VEHICLESUBROLE_EMERGENCY, " +
                                                   $"hdFC{hd.FaseCyclus})");
@@ -1289,7 +1286,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             if (hd.RIS)
                             {
-                                sb.AppendLine($"{ts}[{_hpf}{_hhduit}{hd.FaseCyclus}ris] = RT[{_tpf}{_thduit}{hd.FaseCyclus}ris] = !T[{_tpf}{_thduit}{hd.FaseCyclus}01ris] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}ris] && (ris_uitmelding_selectief({_fcpf}{hd.FaseCyclus}));");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}ris] = SCH[{_schpf}{_schhduit}{hd.FaseCyclus}ris] && (ris_uitmelding_selectief(hdFC{hd.FaseCyclus}));");
                                 uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}ris");
                             }
 

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -10,6 +11,8 @@ namespace TLCGen.ViewModels
         #region Properties
         
         public PrioIngreepInUitMeldingViewModel Parent { get; }
+
+        public PrioIngreepInUitMeldingTypeEnum InUit => Parent.InUit;
 
         public int RisStart
         {

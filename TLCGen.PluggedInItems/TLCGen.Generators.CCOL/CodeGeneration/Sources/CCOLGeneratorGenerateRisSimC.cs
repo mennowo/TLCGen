@@ -128,7 +128,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case RISStationTypeSimEnum.HEAVYTRUCK:
                         case RISStationTypeSimEnum.TRAILER:
                         case RISStationTypeSimEnum.BUS:
-                        case RISStationTypeSimEnum.SPECIALVEHICLES:
                         case RISStationTypeSimEnum.TRAM:
                             sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) {{");
                             var prio = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == s.SignalGroupName && x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
@@ -155,9 +154,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                       $"RIF_VEHICLEROLE_{s.VehicleRole}," +
                                       $"RIF_VEHICLESUBROLE_{s.VehicleSubrole}," +
                                       $"25," +
-                                      $"NG," +
+                                      $"{_fcpf}{l.SignalGroupName}," +
                                       $"PRM[{_prmpf}{_prmrisapproachid}{s.SignalGroupName}]," +
                                       $"buffer," +
+                                      $"123," +
+                                      $"{s.Importance});");
+                            sb.AppendLine($"{ts}}}"); 
+                            break;
+                        case RISStationTypeSimEnum.SPECIALVEHICLES:
+                            sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) {{");
+                            sb.AppendLine($"{ts}{ts}ris_simulation_put_itsstation_pb_ex(" +
+                                      $"{sitf}, " +
+                                      $"PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                      $"{_fcpf}{l.SignalGroupName}, " +
+                                      $"RIF_STATIONTYPE_{s.Type}, " +
+                                      $"-1, " +
+                                      $"{(s.Prioriteit ? "1" : "0")}, " +
+                                      $"{s.Snelheid}, " +
+                                      $"{s.Afstand}, " +
+                                      $"1," +
+                                      $"RIF_VEHICLEROLE_{s.VehicleRole}," +
+                                      $"RIF_VEHICLESUBROLE_{s.VehicleSubrole}," +
+                                      $"25," +
+                                      $"NG," +
+                                      $"PRM[{_prmpf}{_prmrisapproachid}{s.SignalGroupName}]," +
+                                      $"\"NG\"," +
                                       $"123," +
                                       $"{s.Importance});");
                             sb.AppendLine($"{ts}}}"); 
