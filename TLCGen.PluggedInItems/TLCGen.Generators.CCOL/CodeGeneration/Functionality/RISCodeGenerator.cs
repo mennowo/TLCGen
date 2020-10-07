@@ -239,11 +239,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}#ifdef RIS_SSM");
                         foreach (var ov in ovRis)
                         {
-                            // TODO !!!
-                            #if !DEBUG
-                            TODO
-                            #endif
-                            sb.AppendLine($"{ts}ris_srm_put_signalgroup_publictransport(fc01, PRM[{_prmpf}approachid{ov.FaseCyclus}], {_prmpf}allelijnen{ov.FaseCyclus}ris, 10);");
+                            //// TODO !!!
+                            //#if !DEBUG
+                            //TODO
+                            //#endif
+                            //sb.AppendLine($"{ts}ris_srm_put_signalgroup_publictransport(fc01, PRM[{_prmpf}approachid{ov.FaseCyclus}], {_prmpf}allelijnen{ov.FaseCyclus}ris, 10);");
                         }
 
                         foreach (var hd in hdRis)

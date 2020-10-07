@@ -322,7 +322,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}/* Inlopen */");
                             first = false;
                         }
-                        if (gelijkstart && grsync.AanUit != AltijdAanUitEnum.Altijd)
+                        if (grsync.AanUit != AltijdAanUitEnum.Altijd)
                         {
                             sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync}]) ");
                         }
@@ -343,7 +343,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{m1}]) ");
                         }
                         else sb.Append($"{ts}{ts}");
-                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                        sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
                     }
                     if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
