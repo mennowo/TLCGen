@@ -29,8 +29,8 @@ namespace TLCGen.Models
             {
                 var naloop1 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == gs.FaseVan && x.FaseNaar == gs.FaseNaar);
                 var naloop2 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == gs.FaseNaar && x.FaseNaar == gs.FaseVan);
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, Waarde = naloop1?.MaximaleVoorstart ?? 0 });
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseNaar, FaseNaar = gs.FaseVan, Waarde = naloop2?.MaximaleVoorstart ?? 0 });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, Waarde = naloop1?.MaximaleVoorstart ?? 0, AanUit = gs.Schakelbaar });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseNaar, FaseNaar = gs.FaseVan, Waarde = naloop2?.MaximaleVoorstart ?? 0, AanUit = gs.Schakelbaar });
                 if (gs.DeelConflict)
                 {
                     result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, FictieveOntruimingsTijd = gs.GelijkstartOntruimingstijdFaseVan });

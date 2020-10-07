@@ -1989,6 +1989,12 @@
             <Description>Toestaan los realiseren fase _E1_</Description>
           </Setting>
           <Setting>
+            <Default>realgs</Default>
+            <Setting>realgs</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelbare gelijkstart tussen fase _E1_ en _E2_</Description>
+          </Setting>
+          <Setting>
             <Default>los</Default>
             <Setting>los</Setting>
             <Type>HulpElement</Type>

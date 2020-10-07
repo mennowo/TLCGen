@@ -13,6 +13,8 @@ namespace TLCGen.Models
         public string FaseNaar { get; set; }
 
         public int Waarde { get; set; }
+
+        public AltijdAanUitEnum AanUit { get; set; }
         
         public override string ToString()
         {
