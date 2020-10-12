@@ -6,14 +6,59 @@
              xmlns:local="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
              xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:views="clr-namespace:TLCGen.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
         <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
+        <Style TargetType="{x:Type ListBoxItem}" x:Key="ListBoxItemStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="False" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{x:Static SystemColors.HighlightBrush}" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="True" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{x:Static SystemColors.HighlightBrush}" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -24,6 +69,56 @@
             <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <Label Content="Eind (ver van ss)" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <Label Content="E.t.a." Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <xctk:WatermarkTextBox
+                Watermark="NG" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
+                Text="{Binding Path=RisEta,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
+            <Grid Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Content="RIS vehicle role" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+                <Label Grid.Row="0" Grid.Column="1" Content="RIS vehicle subrole" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+                <ListView
+                    Grid.Row="1" Grid.Column="0" SelectionMode="Multiple" Margin="2"
+                    ItemsSource="{Binding Path=AvailableRoles}" 
+                    Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListBoxItemStyle}">
+                            <Style.Setters>
+                                <Setter Property="IsSelected" Value="{Binding Path=IsSelected}" />
+                            </Style.Setters>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Role}" Margin="2" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView
+                    Grid.Row="1" Grid.Column="1" SelectionMode="Multiple" Margin="2"
+                    ItemsSource="{Binding Path=AvailableSubroles}" 
+                    Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListBoxItemStyle}">
+                            <Style.Setters>
+                                <Setter Property="IsSelected" Value="{Binding Path=IsSelected}" />
+                            </Style.Setters>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Subrole}" Margin="2" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
         </wpfAutoGrid:AutoGrid>            
     </Grid>
 </UserControl>

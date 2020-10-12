@@ -203,6 +203,7 @@ extern int *iInPrioriteitsOpties[];
 extern int *iInRijTimer[];
 extern int *iInGroenBewakingsTimer[];
 extern int *iInOnderMaximumVerstreken[];
+extern int *iPrioMeeRealisatie[];
 
 extern int prioKFC_MAX[];
 extern int *prioTO_pointer[];

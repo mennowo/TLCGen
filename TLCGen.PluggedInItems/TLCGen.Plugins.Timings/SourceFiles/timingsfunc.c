@@ -4,7 +4,9 @@
 
 /* CCOL:  version 11.0	      */
 /* FILE:  demo_msg_fctiming.c */
-/* DATE:  05-08-2020 - maxEndTime is een verplicht veld geworden in de Dutch Profiles */
+
+/* DATUM: 11-10-2020 - start regelen, inschakelen, uitschakelen en fatale fout zijn toegevoegd */  
+/* DATUM: 05-08-2020 - maxEndTime is een verplicht veld geworden in de Dutch Profiles */
 /*                   - maxEndTime voor Geel toegevoegd                                */
 /*                   - Groen Knipperen opgeven als Geel voor voetgangers              */
 /* DATUM: 30-04-2020          */
@@ -131,6 +133,22 @@ void msg_fctiming(void)
 
          switch (CIF_WPS[CIF_PROG_STATUS]) {
 
+         case CIF_STAT_ONGEDEF:  /* Ongedefinieerd */
+            if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
+               set_fctiming((mulv) i, /* fc */
+                  (mulv) 0,                                /* event      */
+                  (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
+                  (s_int16) CIF_TIMING_ONBEKEND,           /* eventState */
+                  (s_int16) NG,                            /* startTime  */
+                  (s_int16) NG,                            /* minEndTime */
+                  (s_int16) NG,                            /* maxEndTime */
+                  (s_int16) NG,                            /* likelyTime */
+                  (s_int16) NG,                            /* confidence */
+                  (s_int16) NG);                           /* nextTime   */
+               reset_fctiming((mulv) i, (mulv) 1);
+            }
+            break;
+
          case CIF_STAT_GEDOOFD: /* Gedoofd */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
                set_fctiming((mulv) i, /* fc */
@@ -163,6 +181,22 @@ void msg_fctiming(void)
             }
             break;
 
+         case CIF_STAT_INSCHAKELEN:  /* Inschakelen */
+            if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
+               set_fctiming((mulv) i, /* fc */
+                  (mulv) 0,                                /* event      */
+                  (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
+                  (s_int16) CIF_TIMING_ONBEKEND,           /* eventState */
+                  (s_int16) NG,                            /* startTime  */
+                  (s_int16) NG,                            /* minEndTime */
+                  (s_int16) NG,                            /* maxEndTime */
+                  (s_int16) NG,                            /* likelyTime */
+                  (s_int16) NG,                            /* confidence */
+                  (s_int16) NG);                           /* nextTime   */
+               reset_fctiming((mulv) i, (mulv) 1);
+            }
+            break;
+
          case CIF_STAT_AR: /* Alles rood */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
                set_fctiming((mulv) i, /* fc */
@@ -178,8 +212,24 @@ void msg_fctiming(void)
                reset_fctiming((mulv) i, (mulv) 1);
             }
             break;
+
          case CIF_STAT_REG:   /* Regelen */
-            if (CIF_WPS[CIF_PROG_STATUS] == WPS_old) {
+            if (CIF_WPS[CIF_PROG_STATUS] =! WPS_old) {   /* start regelen */
+               if (R[i]) { 
+                  set_fctiming((mulv) i, /* fc */
+                     (mulv) 0,                                     /* event      */
+                     (s_int16) (CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
+                     (s_int16) CCOL_FC_EVENTSTATE[i][CIF_ROOD],    /* eventState */
+                     (s_int16) NG,                                 /* startTime  */
+                     (s_int16) NG,				   /* minEndTime */
+                     (s_int16) NG,                                 /* maxEndTime */
+                     (s_int16) NG,                                 /* likelyTime */
+                     (s_int16) NG,                                 /* confidence */
+                     (s_int16) NG);                                /* nextTime   */
+                  reset_fctiming((mulv) i, (mulv) 1);
+               }
+            }
+            else {
                if (SR[i]) {
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
@@ -217,18 +267,40 @@ void msg_fctiming(void)
                      (s_int16) NG,                                 /* likelyTime */
                      (s_int16) NG,                                 /* confidence */
                      (s_int16) NG);                                /* nextTime   */
-                  set_fctiming((mulv) i, /* fc */
-                     (mulv) 1,                                      /* event      */
-                     (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
-                     (s_int16) CCOL_FC_EVENTSTATE[i][CIF_ROOD],    /* eventState */
-                     (s_int16) NG,                                 /* startTime  */
-                     (s_int16) NG,                                 /* minEndTime */
-                     (s_int16) NG,                                 /* maxEndTime */
-                     (s_int16) NG,                                 /* likelyTime */
-                     (s_int16) NG,                                 /* confidence */
-                     (s_int16) NG);                                /* nextTime   */
-                  reset_fctiming((mulv) i, (mulv) 2);
+                  reset_fctiming((mulv) i, (mulv) 1);
                }
+            }
+            break;
+
+         case CIF_STAT_UITSCHAKELEN:  /* Uitschakelen */
+            if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
+               set_fctiming((mulv) i, /* fc */
+                  (mulv) 0,                                /* event      */
+                  (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
+                  (s_int16) CIF_TIMING_ONBEKEND,           /* eventState */
+                  (s_int16) NG,                            /* startTime  */
+                  (s_int16) NG,                            /* minEndTime */
+                  (s_int16) NG,                            /* maxEndTime */
+                  (s_int16) NG,                            /* likelyTime */
+                  (s_int16) NG,                            /* confidence */
+                  (s_int16) NG);                           /* nextTime   */
+               reset_fctiming((mulv) i, (mulv) 1);
+            }
+            break;
+
+         case CIF_STAT_FATALE_FOUT:  /* Fatale fout - knippern of gedoofd */
+            if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
+               set_fctiming((mulv) i, /* fc */
+                  (mulv) 0,                                /* event      */
+                  (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
+                  (s_int16) CIF_TIMING_ONBEKEND,           /* eventState */
+                  (s_int16) NG,                            /* startTime  */
+                  (s_int16) NG,                            /* minEndTime */
+                  (s_int16) NG,                            /* maxEndTime */
+                  (s_int16) NG,                            /* likelyTime */
+                  (s_int16) NG,                            /* confidence */
+                  (s_int16) NG);                           /* nextTime   */
+               reset_fctiming((mulv) i, (mulv) 1);
             }
             break;
 
@@ -252,3 +324,4 @@ void msg_fctiming(void)
    }
    WPS_old= CIF_WPS[CIF_PROG_STATUS];
 }
+

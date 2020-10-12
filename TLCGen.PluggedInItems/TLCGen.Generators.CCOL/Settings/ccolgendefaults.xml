@@ -1689,6 +1689,24 @@
             <Description></Description>
           </Setting>
           <Setting>
+            <Default>riseta</Default>
+            <Setting>riseta</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risrole</Default>
+            <Setting>risrole</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>rissubrole</Default>
+            <Setting>rissubrole</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
             <Default>rismatchsg</Default>
             <Setting>rismatchsg</Setting>
             <Type>Schakelaar</Type>

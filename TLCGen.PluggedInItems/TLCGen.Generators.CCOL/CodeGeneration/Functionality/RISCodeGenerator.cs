@@ -24,6 +24,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0649
         
         private string _prmlijn;
+        private string _prmrisrole;
+        private string _prmrissubrole;
 
         public override bool HasSettings()
         {
@@ -236,7 +238,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}#ifdef RIS_SSM");
                         foreach (var ov in ovRis)
                         {
-                            sb.AppendLine($"{ts}ris_srm_put_signalgroup_publictransport({_fcpf}{ov.FaseCyclus}, PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], {_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, {ov.LijnNummers.Count});");
+                            sb.AppendLine($"{ts}ris_srm_put_signalgroup(" +
+                                          $"{_fcpf}{ov.FaseCyclus}, " +
+                                          $"PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], " +
+                                          $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
+                                          $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
+                                          $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, " +
+                                          $"{ov.LijnNummers.Count});");
                         }
                         foreach (var ov in ovRis)
                         {
@@ -298,6 +306,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _prmlijn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlijn");
+            _prmrisrole = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisrole");
+            _prmrissubrole = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrissubrole");
 
             return base.SetSettings(settings);
         }

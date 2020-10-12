@@ -114,6 +114,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("RIS eta")]
+        [BrowsableCondition(nameof(RIS))]
+        public int? RisEta
+        {
+            get => _HDIngreep.RisEta;
+            set
+            {
+                _HDIngreep.RisEta = value;
+                RaisePropertyChanged<object>(nameof(RisEta), broadcast: true);
+            }
+        }
+
         [Description("Check op sirene")]
         public bool Sirene
         {

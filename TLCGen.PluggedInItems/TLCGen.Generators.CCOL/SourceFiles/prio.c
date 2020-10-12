@@ -73,6 +73,7 @@ int *iInGroenBewakingsTimer[prioFCMAX];
 int *iInOnderMaximumVerstreken[prioFCMAX];
 int *iInMaxWachtTijdOverschreden[prioFCMAX]; /*@@@ DSC*/
 int *iInID[prioFCMAX];
+int *iPrioMeeRealisatie[FCMAX];
 
 int iM_RealisatieTijd[FCMAX*FCMAX];
 int iM_InPrioriteitsNiveau[prioFCMAX * MAX_AANTAL_INMELDINGEN];
@@ -82,6 +83,7 @@ int iM_InGroenBewakingsTimer[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InOnderMaximumVerstreken[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InID[prioFCMAX * MAX_AANTAL_INMELDINGEN];
 int iM_InMaxWachtTijdOverschreden[prioFCMAX * MAX_AANTAL_INMELDINGEN]; /*@@@ DSC*/
+int iM_PrioMeeRealisatie[FCMAX*FCMAX];
 
 int prioKFC_MAX[prioFCMAX];
 int prioGKFC_MAX[prioFCMAX];
@@ -100,8 +102,15 @@ void PrioInit(void)
         iPRM_ALTP[fc] = TFG_max[fc];
         iSCH_ALTG[fc] = TRUE;
         iRealisatieTijd[fc] = iM_RealisatieTijd + (fc*FCMAX);
-    }
 
+    	/* Meerealisatie default uit (NG) */
+	    iPrioMeeRealisatie[fc] = iM_PrioMeeRealisatie + (fc*FCMAX);
+	    for (fc2 = 0; fc2 < FCMAX; ++fc2)
+	    {
+	        iPrioMeeRealisatie[fc][fc2] = NG;
+	    }
+    }
+	
     /* werkelijke OV-instellingen */
     PrioInstellingen();
 
