@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows.Data;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -158,7 +156,7 @@ namespace TLCGen.ViewModels
             {
                 AddPeriodToModel(PeriodeTypeEnum.BellenDimmen, "beldim");
             }
-
+            
             Messenger.Default.Send(new ModelManagerMessageBase());
         }
 
@@ -232,6 +230,9 @@ namespace TLCGen.ViewModels
 	        {
 		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen, "rtdimmen");
             }
+            
+            RatelTikkers.BubbleSort();
+
             Messenger.Default.Send(new ModelManagerMessageBase());
         }
 
@@ -345,6 +346,24 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void SortTikkers()
+        {
+            if (!RatelTikkers.IsSorted())
+            {
+                RatelTikkers.BubbleSort();
+            }
+            if (!RatelTikkersBewaakt.IsSorted())
+            {
+                RatelTikkersBewaakt.BubbleSort();
+            }
+        }
+
+        private void RebuildTikkers()
+        {
+            RatelTikkers.Rebuild();
+            UpdateBewaakteRatelTikkers();
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -372,6 +391,7 @@ namespace TLCGen.ViewModels
                     WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
                     RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
                     UpdateBewaakteRatelTikkers();
+                    SortTikkers();
                 }
                 else
                 {
@@ -391,19 +411,25 @@ namespace TLCGen.ViewModels
         {
             UpdateSelectables();
             WaarschuwingsGroepen.Rebuild();
-            RatelTikkers.Rebuild();
+            RebuildTikkers();
+            SortTikkers();
         }
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
             UpdateSelectables();
             WaarschuwingsGroepen.Rebuild();
-            RatelTikkers.Rebuild();
+            RebuildTikkers();
         }
 
         private void OnRatelTikkerTypeChanged(RatelTikkerTypeChangedMessage obj)
         {
             UpdateBewaakteRatelTikkers();
+        }
+
+        private void OnNameChanged(NameChangedMessage obj)
+        {
+            SortTikkers();
         }
 
         #endregion // TLCGen Events
@@ -414,6 +440,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             Messenger.Default.Register(this, new Action<RatelTikkerTypeChangedMessage>(OnRatelTikkerTypeChanged));
         }
 

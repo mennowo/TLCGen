@@ -84,7 +84,7 @@
         </TabItem>
         
         <TabItem Header="Rateltikkers dimming">
-            <Grid Grid.Row="2">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -96,6 +96,13 @@
                           IsChecked="{Binding DimmingNiveauVanuitApplicatie,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Row="1" Grid.ColumnSpan="2" />
                 <DataGrid ItemsSource="{Binding Path=RatelTikkersBewaakt}" Grid.Row="2" IsEnabled="{Binding Path=DimmingNiveauVanuitApplicatie}"
                           AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2">
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.FaseCyclus}"/>
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Niveau niet dimmen" Binding="{Binding Path=DimmingNiveauPeriodeNietDimmen,UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Niveau dimmen" Binding="{Binding Path=DimmingNiveauPeriodeDimmen,UpdateSourceTrigger=PropertyChanged}" />

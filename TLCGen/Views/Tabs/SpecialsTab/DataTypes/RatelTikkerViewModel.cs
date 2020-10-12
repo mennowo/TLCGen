@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class RatelTikkerViewModel : ViewModelBase, IViewModelWithItem
+    public class RatelTikkerViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -96,18 +98,17 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _DetectorManager ?? (_DetectorManager =
-                           new ItemsManagerViewModel<RatelTikkerDetectorViewModel, string>(
-                               Detectoren,
-                               ControllerAccessProvider.Default.AllDetectors.Where(x =>
-                                   x.Type == DetectorTypeEnum.Knop ||
-                                   x.Type == DetectorTypeEnum.KnopBinnen ||
-                                   x.Type == DetectorTypeEnum.KnopBuiten).Select(x => x.Naam),
-                               x => new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel{Detector = x}),
-                               x => Detectoren.All(y => y.Detector != x),
-                               null,
-                               () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true),
-                               () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true)));
+                return _DetectorManager ??= new ItemsManagerViewModel<RatelTikkerDetectorViewModel, string>(
+                    Detectoren,
+                    ControllerAccessProvider.Default.AllDetectors.Where(x =>
+                        x.Type == DetectorTypeEnum.Knop ||
+                        x.Type == DetectorTypeEnum.KnopBinnen ||
+                        x.Type == DetectorTypeEnum.KnopBuiten).Select(x => x.Naam),
+                    x => new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel{Detector = x}),
+                    x => Detectoren.All(y => y.Detector != x),
+                    null,
+                    () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true),
+                    () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true));
             }
         }
 
@@ -152,6 +153,17 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TLCGen messaging
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            if (!(obj is RatelTikkerViewModel other))
+                throw new InvalidCastException();
+            return TLCGenIntegrityChecker.CompareSignalGroups(this.FaseCyclus, other.FaseCyclus);
+        }
+        
+        #endregion // IComparable
 
         #region Constructor
 
