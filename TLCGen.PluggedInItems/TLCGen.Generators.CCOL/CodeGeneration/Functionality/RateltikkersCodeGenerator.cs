@@ -18,8 +18,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hrt;
         private CCOLGeneratorCodeStringSettingModel _hdrt;
         private CCOLGeneratorCodeStringSettingModel _tnlrt;
-        private CCOLGeneratorCodeStringSettingModel _prmnivndim;
-        private CCOLGeneratorCodeStringSettingModel _prmnivdim;
+        private CCOLGeneratorCodeStringSettingModel _prmnivnrtdim;
+        private CCOLGeneratorCodeStringSettingModel _prmnivrtdim;
 #pragma warning restore 0649
         private string _hperiod;
         private string _prmperrt;
@@ -45,8 +45,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (rt.Type == RateltikkerTypeEnum.HoeflakeBewaakt && c.Signalen.DimmingNiveauVanuitApplicatie)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivndim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum.None, _prmnivndim, rt.FaseCyclus));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivdim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeDimmen, CCOLElementTimeTypeEnum.None, _prmnivndim, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivnrtdim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum.None, _prmnivnrtdim, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnivrtdim}{rt.FaseCyclus}", rt.DimmingNiveauPeriodeDimmen, CCOLElementTimeTypeEnum.None, _prmnivnrtdim, rt.FaseCyclus));
                 }
 
                 if (rt.Type == RateltikkerTypeEnum.Hoeflake || rt.Type == RateltikkerTypeEnum.HoeflakeBewaakt)
@@ -150,7 +150,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case RateltikkerTypeEnum.HoeflakeBewaakt:
                                     if (c.Signalen.DimmingNiveauVanuitApplicatie)
                                     {
-                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, {_prmpf}{_prmnivndim}{rt.FaseCyclus}, {_prmpf}{_prmnivdim}{rt.FaseCyclus});");
+                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, {_prmpf}{_prmnivnrtdim}{rt.FaseCyclus}, {_prmpf}{_prmnivrtdim}{rt.FaseCyclus});");
                                     }
                                     else
                                     {

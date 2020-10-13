@@ -1962,14 +1962,14 @@
             <Description>Nalooptijd rateltikker fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>nivndim</Default>
-            <Setting>nivndim</Setting>
+            <Default>nivnrtdim</Default>
+            <Setting>nivnrtdim</Setting>
             <Type>Parameter</Type>
             <Description>Dimming niveau rateltikker periode niet dimmen fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>nivdim</Default>
-            <Setting>nivdim</Setting>
+            <Default>nivrtdim</Default>
+            <Setting>nivrtdim</Setting>
             <Type>Parameter</Type>
             <Description>Dimming niveau rateltikker periode wel dimmen fase _E1_</Description>
           </Setting>
