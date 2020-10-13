@@ -122,7 +122,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case RISStationTypeSimEnum.MOPED:
                         case RISStationTypeSimEnum.MOTORCYCLE:
                         case RISStationTypeSimEnum.PASSENGERCAR:
-                            sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
+                            sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{s.SimulationData.FCNr}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
                             break;
                         case RISStationTypeSimEnum.LIGHTTRUCK:
                         case RISStationTypeSimEnum.HEAVYTRUCK:
@@ -154,7 +154,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                       $"RIF_VEHICLEROLE_{s.VehicleRole}," +
                                       $"RIF_VEHICLESUBROLE_{s.VehicleSubrole}," +
                                       $"25," +
-                                      $"{_fcpf}{l.SignalGroupName}," +
+                                      $"{_fcpf}{s.SimulationData.FCNr}," +
                                       $"PRM[{_prmpf}{_prmrisapproachid}{s.SignalGroupName}]," +
                                       $"buffer," +
                                       $"123," +

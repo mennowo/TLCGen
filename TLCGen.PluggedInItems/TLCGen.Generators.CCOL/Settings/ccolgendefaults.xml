@@ -1986,8 +1986,8 @@
             <Description>Nalooptijd rateltikker fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>nivrtndim</Default>
-            <Setting>nivrtndim</Setting>
+            <Default>nivnrtdim</Default>
+            <Setting>nivnrtdim</Setting>
             <Type>Parameter</Type>
             <Description>Dimming niveau rateltikker periode niet dimmen fase _E1_</Description>
           </Setting>
