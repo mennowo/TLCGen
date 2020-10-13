@@ -187,6 +187,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}hst.c");
                     }
+                    if (c.Data.GenererenEnkelCompilatieBestand)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}regeling.c"), GenerateRegelingC(c), Encoding.Default);
+                        _allFiles.Add($"{c.Data.Naam}regeling.c");
+                    }
                     if (c.Data.PracticeOmgeving)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg.txt"), GeneratePraticeCcolReg(c), Encoding.Default);

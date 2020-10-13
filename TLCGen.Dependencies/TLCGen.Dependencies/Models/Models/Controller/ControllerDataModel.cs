@@ -96,6 +96,8 @@ namespace TLCGen.Models
 
         public bool GenererenIncludesLijst { get; set; }
 
+        public bool GenererenEnkelCompilatieBestand { get; set; }
+
         public bool GeenDetectorGedragInAutomaatOmgeving { get; set; }
 
         public bool MultiModuleReeksen { get; set; }

@@ -535,6 +535,17 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(GenererenIncludesLijst), broadcast: true);
             }
         }
+        
+        [Description("Compileren met één bestand")]
+        public bool GenererenEnkelCompilatieBestand
+        {
+            get => _Controller?.Data?.GenererenEnkelCompilatieBestand ?? false;
+            set
+            {
+                _Controller.Data.GenererenEnkelCompilatieBestand = value;
+                RaisePropertyChanged<object>(nameof(GenererenEnkelCompilatieBestand), broadcast: true);
+            }
+        }
 
         [Category("Opties ontwikkel omgeving")]
         [Description("VLOG in testomgeving")]
