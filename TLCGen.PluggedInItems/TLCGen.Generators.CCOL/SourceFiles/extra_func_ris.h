@@ -3,7 +3,7 @@
 
 /* CCOL :  versie 11.0     */
 /* FILE :  extra_func.h    */
-/* DATUM:  11-10-2020      */
+/* DATUM:  12-10-2020      */
 
 
 
@@ -22,4 +22,3 @@
    rif_int ris_verstuur_ssm(rif_int priotypefc_id);
 
 #endif /* __EXTRA_FUNC_RIS_H  */
-

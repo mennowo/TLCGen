@@ -3,7 +3,7 @@
 
 /* CCOL :  versie 11.0     */
 /* FILE :  extra_func.c    */
-/* DATUM:  11-10-2020      */
+/* DATUM:  12-10-2020      */
 
 
 /* include files */
@@ -66,12 +66,12 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
          if (strcmp(RIS_PRIOREQUEST_AP[r].signalGroup, FC_code[fc]) == 0) {   /* test op juiste signalgroup - voor openbaar vervoer */
             /* signalGroup is correct  */
          }
-      }
-      else if  (RIS_PRIOREQUEST_AP[r].approach == approach_id) {              /* test op juiste approach - voor hulpdiensten */
+         else if  (RIS_PRIOREQUEST_AP[r].approach == approach_id) {              /* test op juiste approach - voor hulpdiensten */
             /* approach is correct */
-      }
-      else {           
-          break;   /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
+         }
+         else {
+            break;   /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
+         }
       }
 
       /* test op inmelding */
@@ -92,7 +92,7 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
                      if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0 ) {   /* test op zelfde ItsStation ID */
                         if ( (stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf)) ) || (stationtype_bits <= 0) ) {  /* test stationType - bit */
                            RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id+1;      /* 1 hoger om ook de index 0 te ondersteunen */
-                           return ( (rif_bool) TRUE); ;
+                           return ( (rif_bool) TRUE);
                         }
                      }
                      i++;
@@ -113,7 +113,7 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
                         if ((lane_id == RIS_ITSSTATION_AP[i].matches[j].lane)                      /* test op juiste lane id  */
                            || (lane_id <= 0) /* && (RIS_PRIOREQUEST_AP[r].approach==approach_id) */ ) {  /* test op alle lanes van de approach */
                            if ((RIS_ITSSTATION_EX_AP[i].matches[j].distance > length_start) && (RIS_ITSSTATION_EX_AP[i].matches[j].distance <= length_end)) {  /* test distance */
-                              RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id+1;     /* 1 hoger om ook de index 0 te ondersteunen */
+                              RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id+1;   /* 1 hoger om ook de index 0 te ondersteunen */
                               return ( (rif_bool) TRUE);
                            }
                         }
@@ -248,7 +248,6 @@ rif_int ris_srm_put_signalgroup(count fc, rif_int approach_id, rif_int role_bits
                               /* ------------------------------------- */
                               snprintf(RIS_PRIOREQUEST_AP[r].signalGroup, RIF_STRINGLENGTH, "%s", FC_code[fc]);
                               number++;   /* SRM-bericht is aangepast - verhoog number */
-                              break;
                            }
                         }
                      }
@@ -302,7 +301,7 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
  * of MaxPresence). de statuswijzigingen zijn gebaseerd op de UC3-Prioriteren specificatie. ris_verstuur_ssm() gebruikt de functie
  * ris_put_activeprio() voor het verzenden van SSM-berichten.
  * ris_verstuur_ssm() verzorgt/corrigeert ook de instelling van de prioriteitsoptie(s) voor de Prioriteitsmodule op basis van de ontvangen
- * 'importance' (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
+ * ‘importance’ (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
  * bij de aanroep van de functie dient de identificatie van het prioriteitstype van de fasecyclus (priotypefc_id ), die wordt gedefinieerd
  * bij de PrioriteitsModule-applicatie, als argument te worden opgegeven.
  * ris_verstuur_srm() geeft als return-waarde het aantal verzonden SSM-berichten (number).
@@ -390,7 +389,7 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
                              
                   /* Normal Flow - [processing] -> granted - test de realisatie en ook de meerealisaties op de approach voor de hulpdiensten */
                   /* ----------------------------------------------------------------------------------------------------------------------- */ 
-                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id])  {   /* test de fasecyclus */
+                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id]) {     /* test fasecyclus */
                      j = 0;
                      while (iPrioMeeRealisatie[fc][j] >= 0) {  /* test ook de meerealisaties van de fasecyclus op de approach  */
                         if (!G[iPrioMeeRealisatie[fc][j]] /* && !iOnderMaximumVerstreken[priotypefc_id]??? - priotypefc_id van deze fasecyclus is niet bekend */ ) { 
@@ -437,8 +436,8 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
                }
                
                /* Normal Flow - [processing] -> granted - (overige roles/subroles) */
-               /* ---------------------------------------------------------------- */  /* @@@@@ Cyril: niet afkappen forceren in prioModule; instelling opzoeken en opnemen */
-               else if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id])  { 
+               /* ---------------------------------------------------------------- */
+               else if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id]) {   /* test fasecyclus */
                   ris_put_activeprio((RIS_PRIOREQUEST_AP[r].id), (RIS_PRIOREQUEST_AP[r].sequenceNumber), RIF_PRIORITIZATIONSTATE_GRANTED); /* 4 */
                   number++;      /* SSM-bericht verzonden - verhoog number */
                }
@@ -450,7 +449,7 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
                  
                   /* Normal Flow - [WatchOtherTraffic] -> granted - voor de realisatie en meerealisaties op de approach voor hulpdiensten */
                   /* -------------------------------------------------------------------------------------------------------------------- */  
-                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id])  {   /* test de fasecyclus */
+                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id]) {     /* test fasecyclus */
                      j = 0;
                      while (iPrioMeeRealisatie[fc][j] >= 0) {  /* test ook de meerealisaties van de fasecyclus op de approach  */
                         if (!G[iPrioMeeRealisatie[fc][j]] /* && !iOnderMaximumVerstreken[priotypefc_id]??? */ ) { 
@@ -472,19 +471,18 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
                }
 
                /* Normal Flow - [WatchOtherTraffic] -> granted (overige roles/subroles)  */
-               /* ---------------------------------------------------------------------- */  /* @@@@@ Cyril: niet afkappen forceren in prioModule; instelling opzoeken en opnemen */
-               else if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id])  { 
+               /* ---------------------------------------------------------------------- */
+               else if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id]) {   /* test fasecyclus */
                   ris_put_activeprio((RIS_PRIOREQUEST_AP[r].id), (RIS_PRIOREQUEST_AP[r].sequenceNumber), RIF_PRIORITIZATIONSTATE_GRANTED); /* 4 */
                   number++;      /* SSM-bericht verzonden - verhoog number */
                }
                break;
  
-
              case RIF_PRIORITIZATIONSTATE_GRANTED:
 
                /* Exception #8 - [granted] -> maxPresence -> end */
                /* ---------------------------------------------- */
-               if ( EG[fc] ) {   /* afgebroken door een hulpdienst - eigenlijk beter om Rejected te sturen, maar mag niet volgens de UC3-Specificatie @@@@@ */
+               if ( EG[fc] ) {   /* afgebroken door een hulpdienst - eigenlijk logischer om Rejected te sturen, maar dat staat niet in de UC3-Specificatie @@@@@ */
                   ris_put_activeprio((RIS_PRIOREQUEST_AP[r].id), (RIS_PRIOREQUEST_AP[r].sequenceNumber), RIF_PRIORITIZATIONSTATE_MAXPRESENCE); /* 6 */
                   number++;      /* SSM-bericht verzonden - verhoog number */
                }
