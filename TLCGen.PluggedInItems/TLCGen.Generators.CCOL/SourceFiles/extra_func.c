@@ -523,7 +523,7 @@ bool Rateltikkers_HoeflakeDimming(count fc,        /* fase                      
                          count prmasdim)  /* dimnivo periode dimmen (0-10, 10 = tikker uit) of NG  */
 {
   bool uitsturing = FALSE; /* uitsturing (kan boolean dimsignaal of dimnivo blokgolf zijn) */
-  int dimblokgolf = CIF_KLOK[CIF_SECONDE] - (CIF_KLOK[CIF_SECONDE] / 10 * 10);
+  int dimblokgolf = CIF_KLOK[CIF_SECONDE] - (CIF_KLOK[CIF_SECONDE] / 10 * 10 - 1);
 
   /* bepaal wijze van uitsturen */  
   if ((prmasndim > NG) && (prmasdim > NG)) /* dimnivo door regelapplicatie bepaald */
