@@ -141,13 +141,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (gs.DeelConflict)
                             {
-                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, BIT3);");
-                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, BIT3);");
+                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
+                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
                             }
                         }
                         foreach (var vs in c.InterSignaalGroep.Voorstarten)
                         {
-                            sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, BIT3);");
+                            sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
                         }
                         sb.AppendLine();
 
@@ -157,13 +157,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (gs.DeelConflict)
                             {
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan});");
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar});");
+                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
+                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
                             }
                         }
                         foreach (var vs in c.InterSignaalGroep.Voorstarten)
                         {
-                            sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan});");
+                            sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
                         }
                         sb.AppendLine();
                     }

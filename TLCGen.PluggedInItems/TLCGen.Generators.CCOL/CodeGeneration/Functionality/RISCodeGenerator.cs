@@ -260,7 +260,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         
                         foreach (var hd in hdRis)
                         {
-                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus};");
+                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus});");
                         }
 
                         sb.AppendLine($"{ts}#endif");

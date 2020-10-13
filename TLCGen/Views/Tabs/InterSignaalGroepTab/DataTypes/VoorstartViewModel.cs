@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -37,7 +38,7 @@ namespace TLCGen.ViewModels
             $"Voorstart tijd van {_voorstart.FaseVan} naar {_voorstart.FaseNaar}";
 
         public string Comment2 =>
-            $"Voorstart ontruimingstijd van {_voorstart.FaseNaar} naar {_voorstart.FaseVan}";
+            $"Voorstart {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} van {_voorstart.FaseNaar} naar {_voorstart.FaseVan}";
 
         #endregion // Properties
 

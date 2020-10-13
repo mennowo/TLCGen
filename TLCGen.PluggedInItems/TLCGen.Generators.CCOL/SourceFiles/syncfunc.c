@@ -250,12 +250,12 @@ void dump_realisation_timers(void)
     }
 }
 
-void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool bit)
+void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool bit, bool intergroen)
 {
     if (period)
     {
         /* Fictieve ontruimingstijd fcv naar fcn */
-        RT[tftofcvfcn] = SR[fcv];
+        RT[tftofcvfcn] = (intergroen ? SGL[fcv] : SR[fcv]);
 
         /* Tegenhouden groenfase met RR totdat fictieve ontruimingstijd gaat lopen */
         RR[fcn] |= R[fcn] && (G[fcv] || ERA[fcn]) ? bit : 0;
@@ -274,7 +274,7 @@ void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool 
     }
 }
 
-void FictiefOntruimen_correctionKR(bool period, count fcv, count fcn, count tftofcvfcn)
+void FictiefOntruimen_correctionKR(bool period, count fcv, count fcn, count tftofcvfcn, bool intergroen)
 {
     if (period)
     {
@@ -282,7 +282,7 @@ void FictiefOntruimen_correctionKR(bool period, count fcv, count fcn, count tfto
         {
             correction_realisation_timers(fcv, fcn, TGL_max[fcv] + T_max[tftofcvfcn], BIT4);
         }
-        else if (GL[fcv] || SR[fcv])
+        else if (!intergroen && (GL[fcv] || SR[fcv]))
         {
             correction_realisation_timers(fcv, fcn, TGL_max[fcv] - TGL_timer[fcv] + T_max[tftofcvfcn], BIT4);
         }
