@@ -1050,6 +1050,10 @@
       <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
       <Name>TLCGen.Generators.TLCCC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.Itf\TLCGen.Importers.Itf\TLCGen.Importers.Itf.csproj">
+      <Project>{37e1d041-bb8b-4f4d-b873-1699f0e02b12}</Project>
+      <Name>TLCGen.Importers.Itf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
       <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
       <Name>TLCGen.Importers.TabC</Name>
