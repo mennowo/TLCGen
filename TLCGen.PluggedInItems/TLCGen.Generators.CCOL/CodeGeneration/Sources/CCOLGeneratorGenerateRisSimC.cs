@@ -154,7 +154,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                       $"RIF_VEHICLEROLE_{s.VehicleRole}," +
                                       $"RIF_VEHICLESUBROLE_{s.VehicleSubrole}," +
                                       $"25," +
-                                      $"{_fcpf}{s.SimulationData.FCNr}," +
+                                      $"{(s.SimulationData.FCNr == "NG" ? "NG" : $"{_fcpf}{s.SimulationData.FCNr}")}," +
                                       $"PRM[{_prmpf}{_prmrisapproachid}{s.SignalGroupName}]," +
                                       $"buffer," +
                                       $"123," +

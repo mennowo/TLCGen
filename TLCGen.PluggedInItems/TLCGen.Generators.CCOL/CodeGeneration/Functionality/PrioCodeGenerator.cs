@@ -112,6 +112,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmriseta;
         private CCOLGeneratorCodeStringSettingModel _prmrisrole;
         private CCOLGeneratorCodeStringSettingModel _prmrissubrole;
+        private CCOLGeneratorCodeStringSettingModel _prmrisstationtype;
         private CCOLGeneratorCodeStringSettingModel _tris;
 
 #pragma warning restore 0649
@@ -182,6 +183,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisend}{hd.FaseCyclus}hd", hd.RisEnd, CCOLElementTimeTypeEnum.None, _prmrisend, hd.FaseCyclus));
                     if (hd.RisEta.HasValue)
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmriseta}{hd.FaseCyclus}hd", hd.RisEta.Value, CCOLElementTimeTypeEnum.None, _prmriseta, hd.FaseCyclus));
+
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{hd.FaseCyclus}hd", 64, CCOLElementTimeTypeEnum.None, _prmrisrole, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{hd.FaseCyclus}hd", 32, CCOLElementTimeTypeEnum.None, _prmrissubrole, hd.FaseCyclus));
+                    
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0x0400, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
+
+                    foreach (var lane in fcRis.LaneData)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisapproachid}{hd.FaseCyclus}hd", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrislaneid}{hd.FaseCyclus}hd_{lane.RijstrookIndex}", lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                    }
                 }
             }
 
@@ -194,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        private void AddAllIngreepElements(PrioIngreepModel prio, bool prioUitgangPerFase)
+        private void AddAllIngreepElements(PrioIngreepModel prio, bool prioUitgangPerFase, ControllerModel c)
         {
             // Verklikken prio
             if (!prioUitgangPerFase)
@@ -311,12 +323,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var inR in inRis)
                 {
+                    var fcRis = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
+
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstart}{CCOLCodeHelper.GetPriorityName(prio)}", inR.RisStart, CCOLElementTimeTypeEnum.None, _prmrisstart, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisend}{CCOLCodeHelper.GetPriorityName(prio)}", inR.RisEnd, CCOLElementTimeTypeEnum.None, _prmrisend, prio.FaseCyclus));
                     if (inR.RisEta.HasValue)
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmriseta}{CCOLCodeHelper.GetPriorityName(prio)}", inR.RisEta.Value, CCOLElementTimeTypeEnum.None, _prmriseta, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{CCOLCodeHelper.GetPriorityName(prio)}", (int)inR.RisRole, CCOLElementTimeTypeEnum.None, _prmrisrole, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(prio)}", (int)inR.RisSubrole, CCOLElementTimeTypeEnum.None, _prmrissubrole, prio.FaseCyclus));
+
+                    var stationtype = prio.Type
+                        switch
+                        {
+                            PrioIngreepVoertuigTypeEnum.Bus => 0x0040,
+                            PrioIngreepVoertuigTypeEnum.Tram => 0x0800,
+                            PrioIngreepVoertuigTypeEnum.Fiets => 0x0004,
+                            PrioIngreepVoertuigTypeEnum.Vrachtwagen => 0x0080 | 0x0100 | 0x0200,
+                            PrioIngreepVoertuigTypeEnum.Auto => 0x0020,
+                            PrioIngreepVoertuigTypeEnum.NG => 0x0001,
+                            _ => 0x0001
+                        };
+
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(prio)}", stationtype, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
+                    
+                    if (fcRis != null)
+                    {
+                        foreach (var lane in fcRis.LaneData)
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(prio)}", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(prio)}_{lane.RijstrookIndex}", lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                        }
+                    }
                 }
 
                 foreach (var inR in uitRis)
@@ -503,7 +540,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             /* Variables for OV */
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                AddAllIngreepElements(prio, c.PrioData.PrioUitgangPerFase);
+                AddAllIngreepElements(prio, c.PrioData.PrioUitgangPerFase, c);
             }
 
             /* Variables for HD */
@@ -830,17 +867,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         case PrioIngreepInUitMeldingTypeEnum.Inmelding:
                             var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
                             var first = true;
-                            var stationtype = ov.Type
-                                switch
-                                {
-                                    PrioIngreepVoertuigTypeEnum.Bus => "RIS_BUS",
-                                    PrioIngreepVoertuigTypeEnum.Tram => "RIS_TRAM",
-                                    PrioIngreepVoertuigTypeEnum.Fiets => "RIS_FIETS",
-                                    PrioIngreepVoertuigTypeEnum.Vrachtwagen => "(RIS_LICHTE_VRACHTWAGEN | RIS_ZWARE_VRACHTWAGEN | RIS_TRAILER)",
-                                    PrioIngreepVoertuigTypeEnum.Auto => "RIS_AUTO",
-                                    PrioIngreepVoertuigTypeEnum.NG => "RIS_ONBEKEND",
-                                    _ => "RIS_ONBEKEND"
-                                };
+                            
                             if (risFc != null)
                             {
                                 sb.AppendLine();
@@ -851,10 +878,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
                                     sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
                                               $"{_fcpf}{ov.FaseCyclus}, " +
-                                              $"PRM[{_prmpf}{_prmrisapproachid}{risFc.FaseCyclus}], " +
+                                              $"PRM[{_prmpf}{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                               $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                              $"PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], " +
-                                              $"{stationtype}, " +
+                                              $"PRM[{_prmpf}{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(ov)}_{lane.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                               $"PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                               $"PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                               $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
@@ -1202,7 +1229,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == hd.FaseCyclus);
                             if (risFc != null && hd.RIS)
                             {
-                                sb.AppendLine($"{ts}" +
+                                sb.Append($"{ts}" +
                                               $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}ris] = " +
                                               $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}ris] && (");
 
@@ -1217,15 +1244,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
                                         sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
                                                   $"NG, " +
-                                                  $"PRM[{_prmpf}{_prmrisapproachid}{risFc.FaseCyclus}], " +
+                                                  $"PRM[{_prmpf}{_prmrisapproachid}{risFc.FaseCyclus}hd], " +
                                                   $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                                  $"PRM[{_prmpf}{_prmrislaneid}{lane.SignalGroupName}_{lane.RijstrookIndex}], " +
-                                                  $"RIS_HULPDIENST, " +
+                                                  $"PRM[{_prmpf}{_prmrislaneid}{risFc.FaseCyclus}hd_{lane.RijstrookIndex}], " +
+                                                  $"PRM[{_prmpf}{_prmrisstationtype}{risFc.FaseCyclus}hd], " +
                                                   $"PRM[{_prmpf}{_prmrisstart}{hd.FaseCyclus}hd], " +
                                                   $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd], " +
-                                                  $"RIS_ROLE_EMERGENCY, " +
-                                                  $"RIS_SUBROLE_EMERGENCY, " +
-                                                  $"{(hd.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}hd]" : "NG")}, " +
+                                                  $"PRM[{_prmpf}{_prmrisrole}{risFc.FaseCyclus}hd], " +
+                                                  $"PRM[{_prmpf}{_prmrissubrole}{risFc.FaseCyclus}hd], " +
+                                                  $"{(hd.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{risFc.FaseCyclus}hd]" : "NG")}, " +
                                                   $"hdFC{hd.FaseCyclus})");
                                         first = false;
                                     }

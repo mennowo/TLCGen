@@ -1707,6 +1707,12 @@
             <Description></Description>
           </Setting>
           <Setting>
+            <Default>risstationtype</Default>
+            <Setting>risstationtype</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
             <Default>rismatchsg</Default>
             <Setting>rismatchsg</Setting>
             <Type>Schakelaar</Type>
