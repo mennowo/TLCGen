@@ -80,6 +80,8 @@ namespace TLCGen.Models
         public bool PrmLoggingTfbMax { get; set; }
         public bool GenererenCyclustijdMeting { get; set; }
 
+        public bool TVGAMaxAlsDefaultGroentijdSet { get; set; }
+
         [Browsable(false)]
         public string TLCGenVersie { get; set; }
 

@@ -74,6 +74,7 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2timer,
 	count exgperc, count verlengen, count meergroen, ...);
 void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, count mlcyclus);
+void maximumgroentijden_va_arg(count fc, ...);
 
 extern mulv FC_type[];
 extern mulv DVG[];
