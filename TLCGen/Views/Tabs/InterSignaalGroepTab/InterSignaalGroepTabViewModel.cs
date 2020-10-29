@@ -11,6 +11,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -188,6 +189,7 @@ namespace TLCGen.ViewModels
                 _Controller.Data.SynchronisatiesType = value;
                 MatrixChanged = true;
                 SelectedSynchronisatie = ConflictMatrix?[0, 1];
+                TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
             }
         }

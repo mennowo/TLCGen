@@ -657,12 +657,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
                                 var rest = "";
                                 var irest = 1;
-                                rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
+                                if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
+                                {
+                                    rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
+                                }
+                                else
+                                {
+                                    rest += $", TVGA_max[{_fcpf}{ff.FaseCyclus}]";
+                                }
 
                                 foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                                 {
                                     foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
                                     {
+                                        if (c.Data.TVGAMaxAlsDefaultGroentijdSet && mgsm.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet)
+                                        {
+                                            sb.Append(", ");
+                                            sb.Append($"TVGA_max[{_fcpf}{ff.FaseCyclus}]");
+                                            continue;
+                                        }
                                         foreach (var mgm in mgsm.Groentijden.Where(
                                             x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
                                         {

@@ -529,7 +529,7 @@ namespace TLCGen.ViewModels
         }
 
         private ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> _hardMeeverlengenFaseCycli;
-        public ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli => _hardMeeverlengenFaseCycli ?? (_hardMeeverlengenFaseCycli = new ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel>(FaseCyclus.HardMeeverlengenFaseCycli));
+        public ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli => _hardMeeverlengenFaseCycli ??= new ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel>(FaseCyclus.HardMeeverlengenFaseCycli);
 
         public HardMeeverlengenFaseCyclusViewModel SelectedHardMeeverlengenFase
         {
@@ -543,17 +543,16 @@ namespace TLCGen.ViewModels
         }
 
         public ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string> HardMeeverlengenFasenManager =>
-            _hardMeeverlengenFasenManager ?? (
-                _hardMeeverlengenFasenManager = new ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string>(
-                    HardMeeverlengenFaseCycli,
-                    ControllerAccessProvider.Default.AllSignalGroupStrings,
-                    e => new HardMeeverlengenFaseCyclusViewModel(new HardMeeverlengenFaseCyclusModel() { FaseCyclus = e }),
-                    e => e != Naam &&
-                         !TLCGenControllerChecker.IsFasenConflicting(TLCGenControllerDataProvider.Default.Controller, Naam, e) &&
-                         HardMeeverlengenFaseCycli.All(x => x.FaseCyclus != e),
-                    null,
-                    UpdateHardMeeVerlengenItemsChanged,
-                    UpdateHardMeeVerlengenItemsChanged));
+            _hardMeeverlengenFasenManager ??= new ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string>(
+                HardMeeverlengenFaseCycli,
+                ControllerAccessProvider.Default.AllSignalGroupStrings,
+                e => new HardMeeverlengenFaseCyclusViewModel(new HardMeeverlengenFaseCyclusModel() { FaseCyclus = e }),
+                e => e != Naam &&
+                     !TLCGenControllerChecker.IsFasenConflicting(TLCGenControllerDataProvider.Default.Controller, Naam, e) &&
+                     HardMeeverlengenFaseCycli.All(x => x.FaseCyclus != e),
+                null,
+                UpdateHardMeeVerlengenItemsChanged,
+                UpdateHardMeeVerlengenItemsChanged);
 
         private void UpdateHardMeeVerlengenItemsChanged()
         {

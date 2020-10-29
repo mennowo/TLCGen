@@ -5,7 +5,9 @@ namespace TLCGen.Models
 {
     public enum ControllerAlertType
     {
-        WachttijdVoorspeller
+        WachttijdVoorspeller,
+        RISPrio,
+        RealFunc
     }
 
     public class ControllerAlertMessage : ViewModelBase

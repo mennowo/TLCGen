@@ -101,6 +101,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RISModel.RISToepassen = value;
+                TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(broadcast: true);
                 if (string.IsNullOrWhiteSpace(SystemITF)) SystemITF = Controller.Data.Naam;
                 foreach (var fc in RISFasen)

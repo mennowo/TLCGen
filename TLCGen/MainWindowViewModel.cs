@@ -230,6 +230,7 @@ namespace TLCGen.ViewModels
         RelayCommand _generateControllerCommand;
         RelayCommand _importControllerCommand;
         RelayCommand _hideAlertMessageCommand;
+        RelayCommand _hideAllAlertMessagesCommand;
 
         public ICommand NewFileCommand
         {
@@ -372,6 +373,18 @@ namespace TLCGen.ViewModels
                     _hideAlertMessageCommand = new RelayCommand(HideAlertMessageCommand_Executed, null);
                 }
                 return _hideAlertMessageCommand;
+            }
+        }
+
+        public ICommand HideAllAlertMessagesCommand
+        {
+            get
+            {
+                if (_hideAllAlertMessagesCommand == null)
+                {
+                    _hideAllAlertMessagesCommand = new RelayCommand(HideAllAlertMessagesCommand_Executed, HideAllAlertMessagesCommand_CanExecute);
+                }
+                return _hideAllAlertMessagesCommand;
             }
         }
 
@@ -626,6 +639,16 @@ namespace TLCGen.ViewModels
         private void HideAlertMessageCommand_Executed(object obj)
         {
             ShowAlertMessage = false;
+        }
+
+        private void HideAllAlertMessagesCommand_Executed(object obj)
+        {
+            foreach (var msg in AlertMessages) msg.Shown = false;
+        }
+
+        private bool HideAllAlertMessagesCommand_CanExecute(object obj)
+        {
+            return AlertMessages.Any(x => x.Shown);
         }
 
         #endregion // Command functionality
@@ -942,6 +965,7 @@ namespace TLCGen.ViewModels
             Directory.SetCurrentDirectory(tmpCurDir);
 
             TLCGenModelManager.Default.ControllerAlertsUpdated += (sender, args) => RaisePropertyChanged(nameof(ShowAlertMessages));
+            AlertMessages.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(ShowAlertMessages));
 
 #if !DEBUG
             // Find out if there is a newer version available via online check

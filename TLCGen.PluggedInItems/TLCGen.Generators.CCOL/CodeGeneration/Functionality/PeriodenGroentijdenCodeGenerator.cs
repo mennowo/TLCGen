@@ -108,6 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
                 var stkp = _prmstkp + pertypeandnum;
                 var etkp = _prmetkp + pertypeandnum;
                 var dckp = _prmdckp + pertypeandnum;
@@ -155,6 +156,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";
             foreach (var mgset in c.GroentijdenSets)
             {
+                if (c.Data.TVGAMaxAlsDefaultGroentijdSet && mgset.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet) continue;
+
                 foreach (var mgm in mgset.Groentijden)
                 {
                     if (!mgm.Waarde.HasValue)

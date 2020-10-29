@@ -28,7 +28,7 @@
                                 <Setter Property="TextAlignment" Value="Left" />
                                 <Setter Property="FontSize" Value="12" />
                                 <Setter Property="PagePadding" Value="2" />
-                                <Setter Property="Background" Value="Lavender" />
+                                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=DataContext.Background}" />
                                 <Setter Property="PageWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth}" />
                                 <!--<Setter Property="MaxPageWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=Grid},Path=ActualWidth}" />-->
                             </Style>
@@ -149,6 +149,12 @@
                 <ContentPresenter Content="{Binding Path=SelectedGenerator.GeneratorView}" />
             </ToolBar>
         </ToolBarTray>
+        <Grid HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Bottom" Margin="2"
+              Visibility="{Binding Path=ShowAlertMessages,Converter={StaticResource Bool2VisConv}}">
+            <TextBlock>
+                <Hyperlink Command="{Binding Path=HideAllAlertMessagesCommand}">Alles sluiten</Hyperlink>
+            </TextBlock>
+        </Grid>
         <TextBlock Grid.Row="2" Padding="5" Visibility="{Binding Path=ShowAlertMessage,Converter={StaticResource Bool2VisConv}}" Background="LightGoldenrodYellow">
             <Run Foreground="Red" FontWeight="Bold">Let op!</Run>
             Deze regeling is gemaakt met een eerdere versie van TLCGen.<LineBreak/>
@@ -158,7 +164,7 @@
             Klik <Hyperlink Command="{Binding Path=HideAlertMessageCommand}">hier</Hyperlink> om deze melding te verbergen.
         </TextBlock>
         <ListBox Grid.Row="3" ItemsSource="{Binding Path=AlertMessages}" Visibility="{Binding Path=ShowAlertMessages,Converter={StaticResource Bool2VisConv}}"
-                 HorizontalContentAlignment="Stretch" Background="Lavender" Padding="0"
+                 HorizontalContentAlignment="Stretch" Background="LightGray" Padding="0"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="models:ControllerAlertMessage">

@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using TLCGen.Dependencies.Providers;
 using TLCGen.Extensions;
@@ -34,7 +33,7 @@ namespace TLCGen.ModelManagement
 
         private Action<object, string> _setDefaultsAction;
 
-        private List<Tuple<string, object>> _pluginDataToMove = new List<Tuple<string, object>>();
+        private readonly List<Tuple<string, object>> _pluginDataToMove = new List<Tuple<string, object>>();
         private ControllerModel _controller;
 
         #endregion // Fields
@@ -558,6 +557,8 @@ namespace TLCGen.ModelManagement
                 ControllerAlerts.Clear();
                 return;
             }
+            
+            // wachttijdvoorspellers
             if (Controller.Fasen.Any(x => x.WachttijdVoorspeller))
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.WachttijdVoorspeller))
@@ -576,6 +577,60 @@ namespace TLCGen.ModelManagement
             else
             {
                 var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.WachttijdVoorspeller);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
+
+            // RIS prio
+            if (Controller.RISData.RISToepassen && 
+                (Controller.PrioData.HDIngrepen.Any(x => x.RIS) || 
+                 Controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RISPrio))
+                {
+                    var msg = new ControllerAlertMessage
+                    {
+                        Background = Brushes.MistyRose,
+                        Shown = true,
+                        Message = "***Let op!*** Prioriteit via de RIS bevindt zich in de bèta test fase.",
+                        Type = ControllerAlertType.RISPrio
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.RISPrio);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
+            
+            // Syncfunc
+            if (Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RealFunc))
+                {
+                    var msg = new ControllerAlertMessage
+                    {
+                        Background = Brushes.LightCyan,
+                        Shown = true,
+                        Message = "***Let op!*** Realfunc is nog in bèta; niet alle combinaties met andere functies zijn getest.",
+                        Type = ControllerAlertType.RealFunc
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.RealFunc);
                 if (alert != null)
                 {
                     ControllerAlerts.Remove(alert);

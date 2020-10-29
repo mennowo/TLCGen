@@ -6,6 +6,7 @@ using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -29,9 +30,9 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
+        private readonly PrioIngreepViewModel _ingreep;
         private RelayCommand _removeMeldingCommand;
         private readonly object _parent;
-        private PrioIngreepViewModel _ingreep;
         private ViewModelBase _actualViewModel;
         private PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper _prioIngreepInUitMeldingType;
 
@@ -230,6 +231,7 @@ namespace TLCGen.ViewModels
                 //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
                 //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
                 //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
+                    TLCGenModelManager.Default.UpdateControllerAlerts();
                     ActualViewModel = RISViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
