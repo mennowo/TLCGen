@@ -25,12 +25,22 @@
         <DataGrid ItemsSource="{Binding Path=StationsManager.ItemsSource}" Grid.Row="2" Grid.ColumnSpan="2"
                   SelectedItem="{Binding Path=StationsManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="2">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}" x:Key="HasExStyle">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=HasEx}" Value="false">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridComboBoxColumn Header="Type" 
-                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridComboBoxColumn Header="Station type" 
+                                        SelectedItemBinding="{Binding Path=StationType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeSimEnum}}}"/>
                 <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit,UpdateSourceTrigger=PropertyChanged}" Header="Prioriteit" />
-                <!--<DataGridTextColumn Binding="{Binding Path=Flow,UpdateSourceTrigger=PropertyChanged}" Header="Flow" />-->
                 <DataGridTextColumn Binding="{Binding Path=Snelheid,UpdateSourceTrigger=PropertyChanged}" Header="Snelheid" />
                 <DataGridTextColumn Binding="{Binding Path=Afstand,UpdateSourceTrigger=PropertyChanged}" Header="Afstand" />
                 <DataGridTextColumn Binding="{Binding Path=Q1,UpdateSourceTrigger=PropertyChanged}" Header="Q1" />
@@ -39,6 +49,15 @@
                 <DataGridTextColumn Binding="{Binding Path=Q4,UpdateSourceTrigger=PropertyChanged}" Header="Q4" />
                 <DataGridTextColumn Binding="{Binding Path=Stopline,UpdateSourceTrigger=PropertyChanged}" Header="Stopline" />
                 <DataGridTextColumn Binding="{Binding Path=FCNr,UpdateSourceTrigger=PropertyChanged}" Header="FCNr" />
+                <DataGridComboBoxColumn Header="Role" 
+                                        SelectedItemBinding="{Binding Path=VehicleRole,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISVehicleRole}}}"/>
+                <DataGridComboBoxColumn Header="Subrole" 
+                                        SelectedItemBinding="{Binding Path=VehicleSubrole,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISVehicleSubrole}}}"/>
+                <DataGridTextColumn Binding="{Binding Path=Importance,UpdateSourceTrigger=PropertyChanged}" 
+                                    
+                                    Header="Importance" />
             </DataGrid.Columns>
         </DataGrid>
         <!--<StackPanel Grid.Row="3" Orientation="Horizontal">

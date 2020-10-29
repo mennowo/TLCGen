@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using TLCGen.Controls;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -42,8 +43,8 @@ namespace TLCGen.ViewModels
                 _HDIngreep.KAR = value;
                 if (value)
                 {
-                    _HDIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
-                    _HDIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
+                    _HDIngreep.DummyKARInmelding = new DetectorModel { Dummy = true };
+                    _HDIngreep.DummyKARUitmelding = new DetectorModel { Dummy = true };
                     _HDIngreep.DummyKARInmelding.Naam = "dummyhdkarin" + _HDIngreep.FaseCyclus;
                     _HDIngreep.DummyKARUitmelding.Naam = "dummyhdkaruit" + _HDIngreep.FaseCyclus;
                 }
@@ -54,16 +55,6 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged<object>(nameof(KAR), broadcast: true);
                 Messenger.Default.Send(new PrioIngrepenChangedMessage());
-            }
-        }
-
-        public bool RIS
-        {
-            get => _HDIngreep.RIS;
-            set
-            {
-                _HDIngreep.RIS = value;
-                RaisePropertyChanged<object>(nameof(RIS), broadcast: true);
             }
         }
 
@@ -86,6 +77,52 @@ namespace TLCGen.ViewModels
             {
                 _HDIngreep.KARUitmeldingFilterTijd = value;
                 RaisePropertyChanged<object>(nameof(KARUitmeldingFilterTijd), broadcast: true);
+            }
+        }
+
+        public bool RIS
+        {
+            get => _HDIngreep.RIS;
+            set
+            {
+                _HDIngreep.RIS = value;
+                RaisePropertyChanged<object>(nameof(RIS), broadcast: true);
+            }
+        }
+
+        [Description("RIS start (dichtbij ss)")]
+        [BrowsableCondition(nameof(RIS))]
+        public int RisStart
+        {
+            get => _HDIngreep.RisStart;
+            set
+            {
+                _HDIngreep.RisStart = value;
+                RaisePropertyChanged<object>(nameof(RisStart), broadcast: true);
+            }
+        }
+
+        [Description("RIS end (verweg ss)")]
+        [BrowsableCondition(nameof(RIS))]
+        public int RisEnd
+        {
+            get => _HDIngreep.RisEnd;
+            set
+            {
+                _HDIngreep.RisEnd = value;
+                RaisePropertyChanged<object>(nameof(RisEnd), broadcast: true);
+            }
+        }
+
+        [Description("RIS eta")]
+        [BrowsableCondition(nameof(RIS))]
+        public int? RisEta
+        {
+            get => _HDIngreep.RisEta;
+            set
+            {
+                _HDIngreep.RisEta = value;
+                RaisePropertyChanged<object>(nameof(RisEta), broadcast: true);
             }
         }
 

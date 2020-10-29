@@ -1689,6 +1689,30 @@
             <Description></Description>
           </Setting>
           <Setting>
+            <Default>riseta</Default>
+            <Setting>riseta</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risrole</Default>
+            <Setting>risrole</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>rissubrole</Default>
+            <Setting>rissubrole</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
+            <Default>risstationtype</Default>
+            <Setting>risstationtype</Setting>
+            <Type>Parameter</Type>
+            <Description></Description>
+          </Setting>
+          <Setting>
             <Default>rismatchsg</Default>
             <Setting>rismatchsg</Setting>
             <Type>Schakelaar</Type>
@@ -1909,6 +1933,12 @@
             <Setting>rislaneid</Setting>
             <Type>Parameter</Type>
             <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>risapproachid</Default>
+            <Setting>risapproachid</Setting>
+            <Type>Parameter</Type>
+            <Description>Approach id voor fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>risgeencheckopsg</Default>

@@ -1336,3 +1336,22 @@ void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, co
         RT[tcyclus]= TRUE;
     } /* if(cond) */
 } /* void */
+
+void maximumgroentijden_va_arg(count fc, ...)
+{
+   va_list argpt;                       /* variabele argumentenlijst	*/
+   mulv prmmg;                          /* maximum verlenggroentijd	*/
+   mulv hklok;				/* klokgebied			*/
+
+   va_start(argpt, fc);			/* start var. argumentenlijst	*/
+   do
+   {
+      prmmg= va_arg(argpt, va_mulv);	/* lees max. verlenggroentijd	*/
+      hklok= va_arg(argpt, va_mulv);	/* lees klokperiode		*/
+   }
+   while (hklok == 0);
+
+   va_end(argpt);			/* maak var. arg-lijst leeg	*/
+
+   TVG_max[fc] = (prmmg - TFG_max[fc] < 0) ? 0 : prmmg - TFG_max[fc];
+}

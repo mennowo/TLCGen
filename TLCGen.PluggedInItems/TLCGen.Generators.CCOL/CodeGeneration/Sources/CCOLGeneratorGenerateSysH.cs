@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
                 }
             }
+            sb.AppendLine("#define TVGAMAX \"/* gebruik van TVGA_max[] */\"");
             sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();

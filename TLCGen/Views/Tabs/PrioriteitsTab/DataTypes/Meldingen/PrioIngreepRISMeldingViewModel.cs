@@ -1,4 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using GalaSoft.MvvmLight;
+using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -11,13 +16,15 @@ namespace TLCGen.ViewModels
         
         public PrioIngreepInUitMeldingViewModel Parent { get; }
 
+        public PrioIngreepInUitMeldingTypeEnum InUit => Parent.InUit;
+
         public int RisStart
         {
             get => Parent.PrioIngreepInUitMelding.RisStart;
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisStart = value; 
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -27,19 +34,23 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisEnd = value; 
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public bool RisMatchSg
+        public int? RisEta
         {
-            get => Parent.PrioIngreepInUitMelding.RisMatchSg;
+            get => Parent.PrioIngreepInUitMelding.RisEta;
             set 
             { 
-                Parent.PrioIngreepInUitMelding.RisMatchSg = value; 
-                RaisePropertyChanged();
+                Parent.PrioIngreepInUitMelding.RisEta = value; 
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
+
+        public ObservableCollection<RISVehicleRoleViewModel> AvailableRoles { get; } = new ObservableCollection<RISVehicleRoleViewModel>();
+        
+        public ObservableCollection<RISVehicleSubroleViewModel> AvailableSubroles { get; } = new ObservableCollection<RISVehicleSubroleViewModel>();
 
         #endregion // Properties
 
@@ -48,8 +59,84 @@ namespace TLCGen.ViewModels
         public PrioIngreepRISMeldingViewModel(PrioIngreepInUitMeldingViewModel parent)
         {
             Parent = parent;
+
+            foreach (RISVehicleRole role in Enum.GetValues(typeof(RISVehicleRole)))
+            {
+                var rvm = new RISVehicleRoleViewModel
+                {
+                    Role = role,
+                    IsSelected = Parent.PrioIngreepInUitMelding.RisRole.HasFlag(role)
+                };
+                rvm.PropertyChanged += RvmOnPropertyChanged;
+                AvailableRoles.Add(rvm);
+            }
+
+            foreach (RISVehicleSubrole subrole in Enum.GetValues(typeof(RISVehicleSubrole)))
+            {
+                var srvm = new RISVehicleSubroleViewModel
+                {
+                    Subrole = subrole,
+                    IsSelected = Parent.PrioIngreepInUitMelding.RisSubrole.HasFlag(subrole)
+                };
+                srvm.PropertyChanged += SrvmOnPropertyChanged;
+                AvailableSubroles.Add(srvm);
+            }
         }
-        
+
+        private void SrvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Parent.PrioIngreepInUitMelding.RisSubrole = 0;
+            foreach (var subrole in AvailableSubroles)
+            {
+                if (subrole.IsSelected) Parent.PrioIngreepInUitMelding.RisSubrole |= subrole.Subrole;
+            }
+            RaisePropertyChanged<object>(broadcast: true);
+        }
+
+        private void RvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Parent.PrioIngreepInUitMelding.RisRole = 0;
+            foreach (var role in AvailableRoles)
+            {
+                if (role.IsSelected) Parent.PrioIngreepInUitMelding.RisRole |= role.Role;
+            }
+            RaisePropertyChanged<object>(broadcast: true);
+        }
+
         #endregion // Constructor
+    }
+
+    public class RISVehicleRoleViewModel : ViewModelBase
+    {
+        private bool _isSelected;
+        
+        public RISVehicleRole Role { get; set; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value; 
+                RaisePropertyChanged();
+            }
+        }
+    }
+    
+    public class RISVehicleSubroleViewModel : ViewModelBase
+    {
+        private bool _isSelected;
+        
+        public RISVehicleSubrole Subrole { get; set; }
+        
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value; 
+                RaisePropertyChanged();
+            }
+        }
     }
 }

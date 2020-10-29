@@ -365,6 +365,17 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }
+        
+        [Description("TVGAmax als default groentijdenset")]
+        public bool TVGAMaxAlsDefaultGroentijdSet
+        {
+            get => _Controller?.Data?.TVGAMaxAlsDefaultGroentijdSet ?? false;
+            set
+            {
+                _Controller.Data.TVGAMaxAlsDefaultGroentijdSet = value;
+                RaisePropertyChanged<object>(nameof(TVGAMaxAlsDefaultGroentijdSet), broadcast: true);
+            }
+        }
 
         [Description("Toevoegen OVM code")]
         public bool ToevoegenOVM

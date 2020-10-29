@@ -430,10 +430,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var fcgs = gs.Groentijden.FirstOrDefault(x => x.FaseCyclus == fcm.Naam);
                     if (fcgs != null)
                     {
-                        tvg = fcgs.Waarde == null ? "NG" : fcgs.Waarde.Value.ToString();
+                        var tfg = controller.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? fcm.TFG : 0;
+                        tvg = fcgs.Waarde == null ? "NG" : (fcgs.Waarde.Value - tfg < 0 ? 0 : fcgs.Waarde.Value - tfg).ToString();
                     }
                 }
-                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = {tvg};");
+                sb.AppendLine($"TVGA_max[{fcm.GetDefine()}] = {tvg};");
             }
 
             return sb.ToString();

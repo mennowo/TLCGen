@@ -10,6 +10,8 @@ namespace TLCGen.Models
     {
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string FaseCyclus { get; set; }
+        
+        public int ApproachID { get; set; }
 
         public List<RISFaseCyclusLaneDataModel> LaneData { get; set; }
 

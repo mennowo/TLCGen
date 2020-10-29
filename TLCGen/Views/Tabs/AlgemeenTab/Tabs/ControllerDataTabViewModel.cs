@@ -12,16 +12,16 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        private ControllerDataViewModel _ControllerData;
+        private ControllerDataViewModel _controllerData;
         public ControllerDataViewModel ControllerData
         {
             get
             {
-                if(_ControllerData == null)
+                if(_controllerData == null)
                 {
-                    _ControllerData = new ControllerDataViewModel();
+                    _controllerData = new ControllerDataViewModel();
                 }
-                return _ControllerData;
+                return _controllerData;
             }
         }
 

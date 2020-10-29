@@ -103,13 +103,40 @@
                     </ct:SpecialDataGrid>
                 </Grid>            
             </TabItem>-->
-            <TabItem Header="Instellingen lanes">
+            
+            <TabItem Header="Instellingen fasen">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Content="RIS fasen instellingen" />
+                    <ct:SpecialDataGrid 
+                        ItemsSource="{Binding Path=RISFasen}" Margin="2"
+                        IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
+                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <ct:SpecialDataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
+                                <Style.Setters>
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                </Style.Setters>
+                            </Style>
+                        </ct:SpecialDataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=FaseCyclus,Mode=OneWay}" Header="Signaalgroep" CellStyle="{StaticResource ReadOnlyStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=ApproachID,UpdateSourceTrigger=PropertyChanged}" Header="Approach ID" />
+                        </DataGrid.Columns>
+                    </ct:SpecialDataGrid>
+                </Grid>         
+            </TabItem>
+            <TabItem Header="Instellingen lanes">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Content="RIS lanes instellingen" />
                     <ct:SpecialDataGrid 
                         ItemsSource="{Binding Path=RISLanes}" Margin="2"
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"

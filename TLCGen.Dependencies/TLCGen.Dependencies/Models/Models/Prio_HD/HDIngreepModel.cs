@@ -23,9 +23,7 @@ namespace TLCGen.Models
         public bool RIS { get; set; }
         public int RisStart { get; set; }
         public int RisEnd { get; set; }
-        public bool RisMatchSg { get; set; }
-        public int? RISInmeldingFilterTijd { get; set; }
-        public int? RISUitmeldingFilterTijd { get; set; }
+        public int? RisEta { get; set; }
         
         #endregion
 

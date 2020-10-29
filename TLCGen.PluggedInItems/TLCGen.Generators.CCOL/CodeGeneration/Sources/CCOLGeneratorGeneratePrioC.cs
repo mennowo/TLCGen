@@ -790,6 +790,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
+                if (c.HasHD())
+                {
+                    sb.AppendLine($"{ts}/* definitie van de meerealisaties voor de hulpdiensten */");
+                    foreach (var hd in c.PrioData.HDIngrepen)
+                    {
+                        var i = 0;
+                        foreach (var mr in hd.MeerealiserendeFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}iPrioMeeRealisatie[{_fcpf}{hd.FaseCyclus}][{i}] = {_fcpf}{mr.FaseCyclus};");
+                            ++i;
+                        }
+                    }
+                    sb.AppendLine();
+                }
+
                 sb.AppendLine($"{ts}/* De regeling maakt gebruik van langstwachtende alternatief */");
                 sb.AppendLine($"{ts}iLangstWachtendeAlternatief = 1;");
                 sb.AppendLine();

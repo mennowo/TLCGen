@@ -35,6 +35,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int ApproachID
+        {
+
+            get => _faseCyclus.ApproachID;
+            set
+            {
+                _faseCyclus.ApproachID = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public object GetItem()
         {
             return _faseCyclus;

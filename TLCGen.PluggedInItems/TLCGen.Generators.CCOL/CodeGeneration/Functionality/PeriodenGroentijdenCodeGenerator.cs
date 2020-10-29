@@ -356,8 +356,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     var grfunc = c.Data.TypeGroentijden switch
                     {
-                        GroentijdenTypeEnum.MaxGroentijden => "max_star_groentijden_va_arg",
-                        GroentijdenTypeEnum.VerlengGroentijden => "verleng_star_groentijden_va_arg",
+                        GroentijdenTypeEnum.MaxGroentijden => "maximumgroentijden_va_arg",
+                        GroentijdenTypeEnum.VerlengGroentijden => "verlenggroentijden_va_arg",
                         _ => throw new ArgumentOutOfRangeException()
                     };
 
@@ -383,7 +383,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                         if (hasMg)
                         {
-                            sb.AppendLine($"{ts}{grfunc}((count) {_fcpf}{fcm.Naam}, (mulv) FALSE, (mulv) FALSE,");
+                            sb.AppendLine($"{ts}{grfunc}((count) {_fcpf}{fcm.Naam},");
                             var mper = 1;
                             foreach (var per in c.PeriodenData.Perioden)
                             {
@@ -396,13 +396,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (mgm.FaseCyclus != fcm.Naam || !mgm.Waarde.HasValue) continue;
                                         sb.Append("".PadLeft(($"{ts}{grfunc}(").Length));
                                         sb.AppendLine(
-                                            ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[{_mpf}{_mperiod}] == {mper}),"));
+                                            ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) (MM[{_mpf}{_mperiod}] == {mper}),"));
                                     }
                                 }
                                 ++mper;
                             }
-                            sb.Append("".PadLeft(($"{ts}{grfunc}(").Length));
-                            sb.AppendLine($"(va_mulv) PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_count) END);");
+                            sb.Append("".PadLeft($"{ts}{grfunc}(".Length));
+                            if (c.Data.TVGAMaxAlsDefaultGroentijdSet)
+                            {
+                                sb.AppendLine($"(va_mulv) TVGA_max[{_fcpf}{fcm.Naam}], (va_count) END);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"(va_mulv) PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fcm.Naam}], (va_count) END);");
+                            }
                         }
                         else
                         {
