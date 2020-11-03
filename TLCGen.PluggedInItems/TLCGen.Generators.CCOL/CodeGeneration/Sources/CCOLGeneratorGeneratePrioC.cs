@@ -1384,7 +1384,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, {(c.PrioData.CheckOpDSIN ? "CIF_DSUIT" : "CIF_DSIN")}, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                     }
                 }
