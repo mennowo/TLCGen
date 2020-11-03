@@ -1,3 +1,5 @@
+/* ccolfunc.c - gegenereerd met TLCGen 0.8.2.0 */
+
 #include <stdarg.h>
 
 #include "ccolfunc.h"
@@ -19,10 +21,10 @@
 #include "uitstuur.c"
 
 
-#define TAMAX  32000      /* Maximaal aantal tijdelijke aanvragen op een fasecyclus     */
+#define TAVRMAX  32000      /* Maximaal aantal tijdelijke aanvragen op een fasecyclus     */
 
-mulv TA[FCMAX];           /* Tijdelijke aanvraag (kan tijdens geel/rood worden gereset) */
-mulv TMA[FCMAX][FCMAX];   /* Tijdelijke meeaanvraag van fcxx naar fcyy                  */
+mulv TAVR[FCMAX];           /* Tijdelijke aanvraag (kan tijdens geel/rood worden gereset) */
+mulv TMAVR[FCMAX][FCMAX];   /* Tijdelijke meeaanvraag van fcxx naar fcyy                  */
 
 /**************************************************************************
  *  Functie  : aanvraag_detectie_reset_prm_va_arg
@@ -67,19 +69,19 @@ void aanvraag_detectie_reset_prm_va_arg(count fc, ...)
                         RT[tav] = (R[fc] || GL[fc]) && DB[dpnr] ? TRUE : T[tav] && !G[fc] && D[dpnr];
                     }
                     AT[tav] = G[fc];
-                    if (RT[tav] && !T[tav] && (TA[fc] < TAMAX)) TA[fc]++; /* optellen tijdelijke aanvragen bij start timer */
-                    if (ET[tav] && !AT[tav] && (TA[fc] > 0))    TA[fc]--; /* aftellen tijdelijke aanvragen bij einde timer */
-                    if (EG[fc])                               TA[fc] = 0; /* altijd reset bij eindgroen (net als A)        */
+                    if (RT[tav] && !T[tav] && (TAVR[fc] < TAVRMAX)) TAVR[fc]++; /* optellen tijdelijke aanvragen bij start timer */
+                    if (ET[tav] && !AT[tav] && (TAVR[fc] > 0))    TAVR[fc]--; /* aftellen tijdelijke aanvragen bij einde timer */
+                    if (EG[fc])                               TAVR[fc] = 0; /* altijd reset bij eindgroen (net als A)        */
                 }
             }
         }
     } while ((dpnr >= 0) && (tav >= 0) && (prm > END));
-    if (TA[fc])
+    if (TAVR[fc])
     {
         /* set tijdelijke aanvraag */
         A[fc] |= BIT8;
     }
-    if (!TA[fc] && (A[fc] & BIT8))
+    if (!TAVR[fc] && (A[fc] & BIT8))
     {     
         /* reset tijdelijke aanvraag */
         A[fc] &= ~BIT8;
@@ -169,15 +171,15 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
     }
     if (tav >= 0)
     {
-        if (RT[tav] && !T[tav] && (TA[fc] < TAMAX)) TA[fc]++; /* optellen tijdelijke aanvragen bij start timer */
-        if (ET[tav] && !AT[tav] && (TA[fc] > 0))    TA[fc]--; /* aftellen tijdelijke aanvragen bij einde timer */
-        if (EG[fc])                               TA[fc] = 0; /* altijd reset bij eindgroen (net als A)        */
-        if (TA[fc])
+        if (RT[tav] && !T[tav] && (TAVR[fc] < TAVRMAX)) TAVR[fc]++; /* optellen tijdelijke aanvragen bij start timer */
+        if (ET[tav] && !AT[tav] && (TAVR[fc] > 0))    TAVR[fc]--; /* aftellen tijdelijke aanvragen bij einde timer */
+        if (EG[fc])                               TAVR[fc] = 0; /* altijd reset bij eindgroen (net als A)        */
+        if (TAVR[fc])
         {
             /* set tijdelijke aanvraag */
             A[fc] |= BIT9;
         }
-        if (!TA[fc] && (A[fc] & BIT9))
+        if (!TAVR[fc] && (A[fc] & BIT9))
         {
             /* reset tijdelijke aanvraag */
             A[fc] &= ~BIT9;
@@ -215,11 +217,11 @@ void mee_aanvraag_reset(count fcn, count fcv, bool expressie)
         A[fcn] |= BIT8;
     }
 
-    TMA[fcv][fcn] = TA[fcv]; /* onthoud of de aanvragende fc nog een TA heeft */
+    TMAVR[fcv][fcn] = TAVR[fcv]; /* onthoud of de aanvragende fc nog een TA heeft */
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
-        if (TMA[fc][fcn]) /* er is nog een aanvragende fc met een TA */
+        if (TMAVR[fc][fcn]) /* er is nog een aanvragende fc met een TA */
         {
             reset_A = FALSE;
             break;
