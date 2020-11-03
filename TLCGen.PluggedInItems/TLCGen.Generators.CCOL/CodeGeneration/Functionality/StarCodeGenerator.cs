@@ -131,11 +131,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     if (c.Data.MultiModuleReeksen)
                     {
-                        sb.AppendLine($"{ts}if (SMLA && MLA == ML1)");
+                        sb.AppendLine($"{ts}if (SMLA && MLA == ML1 && (MM[{_mpf}{_mstarprog}] == 0))");
                     }
                     else
                     {
-                        sb.AppendLine($"{ts}if (SML && ML == ML1)");
+                        sb.AppendLine($"{ts}if (SML && ML == ML1 && (MM[{_mpf}{_mstarprog}] == 0))");
                     }
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}star_cyclustimer = 0;");

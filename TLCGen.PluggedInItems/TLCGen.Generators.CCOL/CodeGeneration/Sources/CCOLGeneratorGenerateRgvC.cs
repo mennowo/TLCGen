@@ -149,7 +149,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}#else");
                         foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
                         {
-                            sb.AppendLine($"{ts}{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                            sb.AppendLine($"{ts}{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO_max[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
                         }
                         sb.AppendLine($"{ts}#endif");
                     }
@@ -157,7 +157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
                         {
-                            sb.AppendLine($"{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                            sb.AppendLine($"{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO_max[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
                         }
                     }
                     sb.AppendLine();

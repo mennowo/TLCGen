@@ -2,7 +2,7 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     AvalonEdit (6.0.1) - restriction: >= net45
     Castle.Core (4.4.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (>= net46)
-    CodingConnected.Topology (1.0.1) - restriction: >= net45
+    CodingConnected.Topology (1.1.1) - restriction: >= net45
     CommonServiceLocator (2.0.5) - restriction: >= net45
     DocumentFormat.OpenXml (2.11.3) - restriction: >= net45
       System.IO.Packaging (>= 4.7) - restriction: || (&& (< net35) (>= netstandard1.3) (< netstandard2.0)) (&& (< net35) (>= netstandard2.0)) (>= net46)
@@ -16,8 +16,8 @@ NUGET
     FlaUI.UIA3 (3.2)
       FlaUI.Core (>= 3.2)
       Interop.UIAutomationClient (>= 10.18362)
-    GitVersionTask (5.3.7) - restriction: >= net45
-    gong-wpf-dragdrop (2.2) - restriction: >= net45
+    GitVersionTask (5.5) - restriction: >= net45
+    gong-wpf-dragdrop (2.3.2) - restriction: >= net45
     Gu.Wpf.DataGrid2D (0.2.3) - restriction: >= net45
     InputSimulator (1.0.4) - restriction: >= net45
     Interop.UIAutomationClient (10.19041)

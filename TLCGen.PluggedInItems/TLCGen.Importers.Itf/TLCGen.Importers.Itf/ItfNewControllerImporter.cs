@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using CodingConnected.Topology;
+using CodingConnected.Topology.Models;
 using Microsoft.Win32;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -59,23 +61,69 @@ namespace TLCGen.Importers.Itf
                     if (lines.Length <= 1)
                         throw new IndexOutOfRangeException("Het bestand heeft minder dan 2 regels.");
 
-
                     var t = TopologyReader.ReadTopologyFile(openFileDialog.FileName);
                     var signalGroups = TopologyReader.GetSignalGroups(t);
                     var conflicts = TopologyReader.GetSignalGroupConflicts(t);
-                    var lanes = TopologyReader.GetSignalGroupLanes(t);
+
+                    newc.RISData.RISToepassen = true;
+                    if (t.mapData.intersections.Any())
+                    {
+                        newc.RISData.SystemITF = t.mapData.intersections[0].name;
+                        if (t.mapData.intersections.Length > 1)
+                        {
+                            newc.RISData.HasMultipleSystemITF = true;
+                            foreach (var intersection in t.mapData.intersections)
+                            {
+                                newc.RISData.MultiSystemITF.Add(new RISSystemITFModel{ SystemITF = intersection.name });
+                            }
+                        }
+
+                        foreach (var sg in signalGroups)
+                        {
+                            var ilane = 1;
+                            var lanes = new List<RISFaseCyclusLaneDataModel>();
+                            foreach (var signalGroupLane in sg.Lanes)
+                            {
+                                if (!string.IsNullOrEmpty(signalGroupLane.LaneId) && int.TryParse(signalGroupLane.LaneId, out var sgLaneId))
+                                {
+                                    lanes.Add(new RISFaseCyclusLaneDataModel
+                                    {
+                                        SignalGroupName = sg.Name,
+                                        LaneID = sgLaneId,
+                                        RijstrookIndex = ilane++,
+                                        SystemITF = signalGroupLane.SystemItf
+                                    });
+                                }
+                            }
+
+                            var risSg = new RISFaseCyclusDataModel
+                            {
+                                FaseCyclus = sg.Name,
+                                LaneData = lanes
+                            };
+                            if (!string.IsNullOrEmpty(sg.IngressApproachId) && int.TryParse(sg.IngressApproachId, out var ingrId))
+                            {
+                                risSg.ApproachID = ingrId;
+                            }
+                            else
+                            {
+                                risSg.ApproachID = -1;
+                            }
+                            newc.RISData.RISFasen.Add(risSg);
+                        }
+                    }
 
                     foreach (var sg in signalGroups)
                     {
                         var fc = new FaseCyclusModel {Naam = sg.Name};
                         fc.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fc.Naam);
                         DefaultsProvider.Default.SetDefaultsOnModel(fc, fc.Type.ToString());
-                        fc.TGL_min = (int) sg.MinAmberTime;
-                        fc.TGL = (int) sg.MinAmberTime;
-                        fc.TGG_min = (int) sg.MinGreenTime;
-                        fc.TGG = (int) sg.MinGreenTime;
-                        fc.TRG_min = (int) sg.MinRedTime;
-                        fc.TRG = (int) sg.MinRedTime;
+                        if (sg.MinAmberTime > 0) fc.TGL_min = (int) sg.MinAmberTime;
+                        if (sg.MinAmberTime > 0) fc.TGL = (int) sg.MinAmberTime;
+                        if (sg.MinGreenTime > 0) fc.TGG_min = (int) sg.MinGreenTime;
+                        if (sg.MinGreenTime > 0) fc.TGG = (int) sg.MinGreenTime;
+                        if (sg.MinRedTime > 0) fc.TRG_min = (int) sg.MinRedTime;
+                        if (sg.MinRedTime > 0) fc.TRG = (int) sg.MinRedTime;
                         newc.Fasen.Add(fc);
                     }
 
