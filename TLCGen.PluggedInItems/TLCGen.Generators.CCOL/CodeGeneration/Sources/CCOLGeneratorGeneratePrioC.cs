@@ -54,9 +54,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.InterSignaalGroep.Nalopen.Any())
             {
                 sb.AppendLine("#define NALOPEN");
-                sb.AppendLine("#define PRIO_ADDFILE");
-                sb.AppendLine();
             }
+            sb.AppendLine("#define PRIO_ADDFILE");
+            sb.AppendLine();
 
             sb.AppendLine("/*include files */");
             sb.AppendLine("/*------------- */");
