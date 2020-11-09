@@ -416,7 +416,7 @@ bool Rateltikkers(   count fc,        /* fase                                   
 	/* check tikkers werking */
 	if (IH[has_aan_])
 	{
-		va_start(argpt, tnlrt);
+		va_start(argpt, bewaakt);
 		while ((hdkh = va_arg(argpt, va_count)) != END)
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
