@@ -179,7 +179,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var k in c.PTPData.PTPKoppelingen)
             {
                 sb.AppendLine($"{ts}{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
-                sb.AppendLine($"{ts}{ts}    ptp_init(&PTP_{k.TeKoppelenKruispunt});");
+                if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}{ts}#ifndef PRACTICE_TEST");
+                sb.AppendLine($"{ts}{ts}{ts}ptp_init(&PTP_{k.TeKoppelenKruispunt});");
+                if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine();
             }
@@ -221,8 +223,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* aanroep ptp-functies */");
                 sb.AppendLine($"{ts}{ts}/* -------------------- */");
+                if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}{ts}#ifndef PRACTICE_TEST");
                 sb.AppendLine($"{ts}{ts}ptp_application_ks(&PTP_{k.TeKoppelenKruispunt}, &PTP_{k.TeKoppelenKruispunt}KS);");
                 sb.AppendLine($"{ts}{ts}ptp_control(&PTP_{k.TeKoppelenKruispunt});");
+                if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* opzetten hulpelementen */");
                 sb.AppendLine($"{ts}{ts}/* ---------------------- */");

@@ -13,12 +13,12 @@
 
 mulv REALTIJD[FCMAX];
 
-boolv REAL_SYN[FCMAX][FCMAX];  /* Vlag tbv synchronisatie      obv REALTIJD */
+bool REAL_SYN[FCMAX][FCMAX];  /* Vlag tbv synchronisatie      obv REALTIJD */
                               /* BIT1 TRUE/FALSE                           */
                               /* BIT2 correctie gelijk (extra info)        */
                               /* BIT3 correctie plus   (extra info)        */
                               /* BIT4 correctie min    (extra info)        */
-boolv REAL_FOT[FCMAX][FCMAX];  /* Vlag tbv fictieve ontruiming obv REALTIJD */
+bool REAL_FOT[FCMAX][FCMAX];  /* Vlag tbv fictieve ontruiming obv REALTIJD */
 mulv TIME_FOT[FCMAX][FCMAX];  /* Timer resterende FOT  (extra info)        */
 
 /* ========================================================================================================================================================================================================== */
@@ -168,12 +168,12 @@ void Realisatietijd_MM(count fc, count mrt)
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE - NEW !!! - eenzijdig gemaakt - negatieve waarden kunnen als argument worden meegegeven                                                                   */
 /* ================================================================================================================================================================================== */
-boolv Corr_Real(count fc1,        /* fasecyclus 1                                       */
+bool Corr_Real(count fc1,        /* fasecyclus 1                                       */
                count fc2,        /* fasecyclus 2                                       */
                mulv  t1_t2,      /* correctiewaarde van fc1 naar fc2                   */
-               boolv  period)     /* extra voorwaarde                                   */
+               bool  period)     /* extra voorwaarde                                   */
 {
-  boolv result = 0;
+  bool result = 0;
 
   /* --------------------------------------------------------------------------------------------- */
   /* Bepaal synchronisatie ongewenst                                                               */
@@ -216,7 +216,7 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
   {
     REALTIJD[fc2] =  !G[fc1] && REALTIJD[fc1]==3000     ? 3000                                   :
                      !G[fc1]                            ? REALTIJD[fc1] + t1_t2                  :
-                    TGG[fc1] && (t1_t2 > TGG_timer[fc1])                  t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];  /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
+                    TGG[fc1] && (t1_t2 > TGG_timer[fc1])?                 t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];  /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                    /* of als voorstarttijd verstreken.                        */
     result = TRUE;                                                                                                 /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
   }
@@ -230,12 +230,12 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE - GELIJK (fc1 en fc2 tegelijk groen)                                                                                                                      */
 /* ================================================================================================================================================================================== */
-boolv Corr_Gel(count fc1,        /* fasecyclus 1                                       */
+bool Corr_Gel(count fc1,        /* fasecyclus 1                                       */
               count fc2,        /* fasecyclus 2                                       */
-              boolv  period)     /* extra voorwaarde                                   */
+              bool  period)     /* extra voorwaarde                                   */
 {
-  boolv result1 = 0;
-  boolv result2 = 0;
+  bool result1 = 0;
+  bool result2 = 0;
 
   result2 |= Corr_Real(fc1, fc2, 0, period);
   result1 |= Corr_Real(fc2, fc1, 0, period);
@@ -252,12 +252,12 @@ boolv Corr_Gel(count fc1,        /* fasecyclus 1                                
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE - PLUS (fc2 dus later groen dan fc1)                                                                                                                      */
 /* ================================================================================================================================================================================== */
-boolv Corr_Pls(count fc1,        /* fasecyclus 1                                       */
+bool Corr_Pls(count fc1,        /* fasecyclus 1                                       */
               count fc2,        /* fasecyclus 2                                       */
               mulv  t1_t2,      /* correctiewaarde fc1 obv fc2                        */
-              boolv  period)     /* extra voorwaarde                                   */
+              bool  period)     /* extra voorwaarde                                   */
 {
-  boolv result = 0;
+  bool result = 0;
 
   result |= Corr_Real(fc1, fc2, t1_t2, period);
 
@@ -272,12 +272,12 @@ boolv Corr_Pls(count fc1,        /* fasecyclus 1                                
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE - MIN (fc2 dus eerder groen dan fc1)                                                                                                                      */
 /* ================================================================================================================================================================================== */
-boolv Corr_Min( count fc1,        /* fasecyclus 1                                       */
+bool Corr_Min( count fc1,        /* fasecyclus 1                                       */
                count fc2,        /* fasecyclus 2                                       */
                mulv  t1_t2,      /* correctiewaarde fc1 obv fc2                        */
-               boolv  period)     /* extra voorwaarde                                   */
+               bool  period)     /* extra voorwaarde                                   */
 {
-  boolv result = 0;
+  bool result = 0;
 
   result |= Corr_Real(fc1, fc2, -t1_t2, period);
 
@@ -292,15 +292,15 @@ boolv Corr_Min( count fc1,        /* fasecyclus 1                               
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE DUBBELE VOETGANGERSOVERSTEEK (hulpfunctie die Corr_Real() aanroept afhankelijk van buitendrukknoppen of beide alleen mee-aanvraag)                        */
 /* ================================================================================================================================================================================== */
-boolv VTG2_Real(count fc1,        /* fasecyclus 1                                       */
+bool VTG2_Real(count fc1,        /* fasecyclus 1                                       */
                count fc2,        /* fasecyclus 2                                       */
                mulv  t1_t2,      /* correctiewaarde fc1 tov fc2                        */
                mulv  t2_t1,      /* correctiewaarde fc2 tov fc1                        */
                count hdk1_bu,    /* hulpelement, drukknop fc1 buitenzijde              */
                count hdk2_bu,    /* hulpelement, drukknop fc2 buitenzijde              */
-               boolv  gelijk )    /* extra voorwaarde t.b.v. gelijkstart                */
+               bool  gelijk )    /* extra voorwaarde t.b.v. gelijkstart                */
 {
-  boolv result = 0;
+  bool result = 0;
 
   gelijk |= A[fc1] && !(A[fc1] & ~(BIT4|BIT8)) &&  /* Sowieso gelijk als beide alleen mee-aanvraag.   */
             A[fc2] && !(A[fc2] & ~(BIT4|BIT8)) ||
@@ -331,12 +331,12 @@ boolv VTG2_Real(count fc1,        /* fasecyclus 1                               
 /* ================================================================================================================================================================================== */
 /* REALISATIETIJD CORRECTIE DOOR FICTIEVE ONTRUIMINGSTIJD - NEW !!! - eenzijdig gemaakt                                                                                               */
 /* ================================================================================================================================================================================== */
-boolv Corr_FOT(count fc1,     /* fasecyclus VAN                       */
+bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
               count fc2,     /* fasecyclus NAAR                      */
               count fot1_2,  /* fictieve ontruiming VAN fc1 NAAR fc2 */
               mulv  gg1)     /* TGG_timer[fc1] > gg1, dan RT[fot1_2] */
 {
-  boolv result = 0;
+  bool result = 0;
   mulv hulp   = 0;
 
   /* -------------------------------------------------------------------------- */
@@ -588,11 +588,11 @@ void Synchroniseer_PG1_2(count fc1, count fc2)  /* Gelijk aan bovenstaande allee
 }
 /* ========================================================================================================================================================================================================== */
 
-boolv Maatgevend_Groen(count fc)   /* fasecyclus                                      */
+bool Maatgevend_Groen(count fc)   /* fasecyclus                                      */
 {
   register count n, k;
 
-  boolv result=0;
+  bool result=0;
 
   /* bepaal of G[fc] maatgevend is voor een (groen) conflict */
   /* ------------------------------------------------------- */
@@ -668,18 +668,18 @@ void Inlopen_Los3(count fc1,        /* fc1                                      
                   count hlos9,      /* hulpelement fc9 los toegestaan                                            */
                   count hlos2,      /* hulpelement fc2 los teogestaan                                            */
 
-                  boolv  sch1_1,     /* fc1   los, bij DK1_bi en DK1_bu                                           */
-                  boolv  sch1_2,     /* fc1   los, bij DK1_bi en DK2_bu/DK9_b (A in rug tbv naloop)               */
-                  boolv  sch2_1,     /* fc2   los, bij DK2_bi en DK2_bu                                           */
-                  boolv  sch2_2,     /* fc2   los, bij DK2_bi en DK1_bu/DK9_a (A in rug tbv naloop)               */
-                  boolv  sch9_1a,    /* fc9   los, bij DK9_a                  (DK9_a single OK    )               */
-                  boolv  sch9_1b,    /* fc9   los, bij DK9_b                  (DK9_b single OK    )               */
-                  boolv  sch9_2a,    /* fc9   los, bij DK9_a  en DK2_bu       (tegenligger    fc32)               */
-                  boolv  sch9_2b,    /* fc9   los, bij DK9_b  en DK1_bu       (tegenligger    fc31)               */
-                  boolv  sch9_3a,    /* fc9   los, bij DK9_a  en DK1_bu       (A in rug tbv naloop)               */
-                  boolv  sch9_3b,    /* fc9   los, bij DK9_b  en DK2_bu       (A in rug tbv naloop)               */
-                  boolv  sch9_4a,    /* fc9-2 los, bij DK9_a  en DK1_bu       (A in rug tbv naloop)               */
-                  boolv  sch9_4b)    /* fc9-1 los, bij DK9_b  en DK2_bu       (A in rug tbv naloop)               */
+                  bool  sch1_1,     /* fc1   los, bij DK1_bi en DK1_bu                                           */
+                  bool  sch1_2,     /* fc1   los, bij DK1_bi en DK2_bu/DK9_b (A in rug tbv naloop)               */
+                  bool  sch2_1,     /* fc2   los, bij DK2_bi en DK2_bu                                           */
+                  bool  sch2_2,     /* fc2   los, bij DK2_bi en DK1_bu/DK9_a (A in rug tbv naloop)               */
+                  bool  sch9_1a,    /* fc9   los, bij DK9_a                  (DK9_a single OK    )               */
+                  bool  sch9_1b,    /* fc9   los, bij DK9_b                  (DK9_b single OK    )               */
+                  bool  sch9_2a,    /* fc9   los, bij DK9_a  en DK2_bu       (tegenligger    fc32)               */
+                  bool  sch9_2b,    /* fc9   los, bij DK9_b  en DK1_bu       (tegenligger    fc31)               */
+                  bool  sch9_3a,    /* fc9   los, bij DK9_a  en DK1_bu       (A in rug tbv naloop)               */
+                  bool  sch9_3b,    /* fc9   los, bij DK9_b  en DK2_bu       (A in rug tbv naloop)               */
+                  bool  sch9_4a,    /* fc9-2 los, bij DK9_a  en DK1_bu       (A in rug tbv naloop)               */
+                  bool  sch9_4b)    /* fc9-1 los, bij DK9_b  en DK2_bu       (A in rug tbv naloop)               */
 {
   /* ------------------------------------------------------------------------------------------------------------------------------ */
   /* Bij een drie-voudige oversteek met 6 drukknoppen zijn er 18 mogelijkheden waarbij er:                                          */
@@ -721,7 +721,7 @@ void Inlopen_Los3(count fc1,        /* fc1                                      
   /* 18:|               |          X  |           X   |     | BYZ | INL | SCH |     | BYZ = BYZONDER: FC9 los? Zo nee, FC9-FC1 los? */
   /* ---|---------------|-------------|---------------|-----|-----|-----|-----|-----|---------------------------------------------- */
 
-  boolv SITUATIE[19]={0};
+  bool SITUATIE[19]={0};
 
   /* ----------------------------------------------------------------------------- */
   /* Bepaal of drukknop bediend is                                                 */
@@ -865,10 +865,10 @@ void Inlopen_Los2(count fc1,        /* fc1                                      
                   count hlos1,      /* hulpelement fc1 los toegestaan                                            */
                   count hlos2,      /* hulpelement fc2 los teogestaan                                            */
 
-                  boolv  sch1_1,     /* fc1   los, bij DK1_bi en DK1_bu                                           */
-                  boolv  sch1_2,     /* fc1   los, bij DK1_bi en DK2_bu       (A in rug tbv naloop)               */
-                  boolv  sch2_1,     /* fc2   los, bij DK2_bi en DK2_bu                                           */
-                  boolv  sch2_2)     /* fc2   los, bij DK2_bi en DK1_bu       (A in rug tbv naloop)               */
+                  bool  sch1_1,     /* fc1   los, bij DK1_bi en DK1_bu                                           */
+                  bool  sch1_2,     /* fc1   los, bij DK1_bi en DK2_bu       (A in rug tbv naloop)               */
+                  bool  sch2_1,     /* fc2   los, bij DK2_bi en DK2_bu                                           */
+                  bool  sch2_2)     /* fc2   los, bij DK2_bi en DK1_bu       (A in rug tbv naloop)               */
 {
   /* ------------------------------------------------------------------------------------------------------------------------------ */
   /* Bij een twee-voudige oversteek met 4 drukknoppen zijn er  7 mogelijkheden waarbij er:                                          */
@@ -895,7 +895,7 @@ void Inlopen_Los2(count fc1,        /* fc1                                      
   /*  9:|   X           |             |   X           | INL |     | SCH |           |                                               */
   /* ---|---------------|-------------|---------------|-----|-----|-----|-----------|---------------------------------------------- */
 
-  boolv SITUATIE[10]={0};
+  bool SITUATIE[10]={0};
 
   /* ----------------------------------------------------------------------------- */
   /* Bepaal of drukknop bediend is                                                 */
@@ -943,7 +943,7 @@ void Inlopen_Los2(count fc1,        /* fc1                                      
   IH[hinl2]   = EG[fc2] ? FALSE : R[fc2] ? IH[hdk2bu] && !IH[hlos2] : IH[hinl2]  ;
 }
 
-boolv VTG3_Real_Los(count fc1,        /* fc1                                                                       */
+bool VTG3_Real_Los(count fc1,        /* fc1                                                                       */
                    count fc9,        /* fc9, middelste fc                                                         */
                    count fc2,        /* fc2                                                                       */
 
@@ -963,19 +963,19 @@ boolv VTG3_Real_Los(count fc1,        /* fc1                                    
                    count hlos9,      /* hulpelement fc9 los toegestaan                                            */
                    count hlos2,      /* hulpelement fc2 los teogestaan                                            */
 
-                   boolv  gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv  gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
-                   boolv  gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   bool  gelijk1_2,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   bool  gelijk1_9,  /* extra voorwaarde t.b.v. gelijkstart                                       */
+                   bool  gelijk2_9)  /* extra voorwaarde t.b.v. gelijkstart                                       */
 
 {
-  boolv result = 0;
+  bool result = 0;
 
   /* ------------------------------------------------------------------------------------------------------------------------------------------------------------ */
   /* Bepalen hulpwaarde t.b.v. beide alleen mee-aanvraag, dan gelijkstart                                                                                         */
   /* ------------------------------------------------------------------------------------------------------------------------------------------------------------ */
-  boolv alleen_MA_1 = A[fc1] && !(A[fc1] & ~(BIT4|BIT8));
-  boolv alleen_MA_2 = A[fc2] && !(A[fc2] & ~(BIT4|BIT8));
-  boolv alleen_MA_9 = A[fc9] && !(A[fc9] & ~(BIT4|BIT8));
+  bool alleen_MA_1 = A[fc1] && !(A[fc1] & ~(BIT4|BIT8));
+  bool alleen_MA_2 = A[fc2] && !(A[fc2] & ~(BIT4|BIT8));
+  bool alleen_MA_9 = A[fc9] && !(A[fc9] & ~(BIT4|BIT8));
 
   gelijk1_2 |= alleen_MA_1 && alleen_MA_2 || !A[fc1] && !A[fc2];  /* Sowieso gelijk als beide alleen mee-aanvraag.    */
   gelijk1_9 |= alleen_MA_1 && alleen_MA_9 || !A[fc1] && !A[fc9];  /* Bij beide geen A ook uitgaan van gelijk,         */
@@ -1065,7 +1065,7 @@ boolv VTG3_Real_Los(count fc1,        /* fc1                                    
   return result;
 }
 
-boolv VTG2_Real_Los(count fc1,        /* fasecyclus 1                                       */
+bool VTG2_Real_Los(count fc1,        /* fasecyclus 1                                       */
                    count fc2,        /* fasecyclus 2                                       */
                    mulv  t1_t2,      /* inlooptijd  fc1 op fc2                             */
                    mulv  t2_t1,      /* inlooptijd  fc2 op fc1                             */
@@ -1073,9 +1073,9 @@ boolv VTG2_Real_Los(count fc1,        /* fasecyclus 1                           
                    count hinl2,      /* hulpelement fc2 inlopen gewenst                    */
                    count hlos1,      /* hulpelement fc1 los toegestaan                     */
                    count hlos2,      /* hulpelement fc2 los teogestaan                     */
-                   boolv  gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
+                   bool  gelijk)     /* extra voorwaarde t.b.v. gelijkstart                */
 {
-  boolv result = 0;
+  bool result = 0;
 
   gelijk |= A[fc1] && !(A[fc1] & ~(BIT4|BIT8)) &&  /* Sowieso gelijk als beide alleen mee-aanvraag.   */
             A[fc2] && !(A[fc2] & ~(BIT4|BIT8)) ||

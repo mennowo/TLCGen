@@ -59,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 sb.AppendLine();
-                sb.AppendLine("void RealisatieTijden_Add(void)");
+                sb.AppendLine("void BepaalRealisatieTijden_Add(void)");
                 sb.AppendLine("{");
                 sb.AppendLine("");
                 sb.AppendLine("}");
