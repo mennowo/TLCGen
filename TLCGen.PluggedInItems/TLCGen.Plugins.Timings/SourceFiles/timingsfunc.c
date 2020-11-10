@@ -214,7 +214,7 @@ void msg_fctiming(void)
             break;
 
          case CIF_STAT_REG:   /* Regelen */
-            if (CIF_WPS[CIF_PROG_STATUS] =! WPS_old) {   /* start regelen */
+            if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {   /* start regelen */
                if (R[i]) { 
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
