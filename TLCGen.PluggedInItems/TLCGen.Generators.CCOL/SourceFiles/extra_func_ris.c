@@ -3,9 +3,14 @@
 
 /* CCOL :  versie 11.0        */
 /* FILE :  extra_func_ris.c   */
-/* DATUM:  30-10-2020         */
+/* DATUM:  11-11-2020         */
+
+/* DATUM:  11-11-2020 - correctie in de functie ris_srm_put_signalgroup() */
+
 
 /* Deze ris prioriteit applicatiefuncties worden gebruikt in de programmagenerator TLCGEN in combinatie met de PrioModule van TLCGen */
+
+
 
 /* include files */
 /* ============= */
@@ -19,6 +24,8 @@
 #if (defined(_MSC_VER) && (_MSC_VER < 1900))
    #define snprintf sprintf_s
 #endif
+
+
 
 /* RIS INMELDING SELECTIEF */ 
 /* ======================= */
@@ -226,7 +233,7 @@ rif_int ris_srm_put_signalgroup(count fc, rif_int approach_id, rif_int role_bits
                      number++;      /* SRM-bericht is aangepast - verhoog number */
 
                   }
-                  else if ( (prm_line_first + prm_line_max) < PRM_MAX ) {  /* test parameter range */
+                  else if ( (prm_line_first + prm_line_max) <= PRM_MAX ) {  /* test parameter range */
 
                      /* test eerste lijnnumer parameter op de instelling - alle lijnnumers */
                      /* ------------------------------------------------------------------ */
