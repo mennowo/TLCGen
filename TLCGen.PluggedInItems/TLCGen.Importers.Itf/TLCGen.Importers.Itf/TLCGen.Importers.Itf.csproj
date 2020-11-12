@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CodingConnected.Topology, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\CodingConnected.Topology\src\CodingConnected.Topology\bin\Debug\net461\CodingConnected.Topology.dll</HintPath>
+    <Reference Include="CodingConnected.Topology">
+      <HintPath>..\..\..\..\CodingConnected.Topology\src\CodingConnected.Topology\bin\Release\net461\CodingConnected.Topology.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />

@@ -283,7 +283,11 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
       j = 0;
       while (j < GKFC_MAX[fc]) {    /* doorloop alle conflicten */
          kfc = KF_pointer[fc][j];   /* index van de conflictrichting */
-         if (!RV[kfc] || (!(RR[kfc] & BIT6) || P[kfc]) )  break;     /* er is nog een conflict die niet op rood staat of niet wordt tegenhouden met BIT6 */
+         if (!RV[kfc] || (!(RR[kfc] & BIT6)
+#if (CCOL_V >= 110)
+             || P[kfc]
+#endif
+             ) )  break;     /* er is nog een conflict die niet op rood staat of niet wordt tegenhouden met BIT6 */
          j++;
        }
        if (j >= GKFC_MAX[fc])  {  /* alle conflicten staan op rood? */
