@@ -29,6 +29,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine("/* INCLUDE FILES */");
             sb.AppendLine("/* ============= */");
+            sb.AppendLine("#include <stdio.h>");
+            sb.AppendLine();
             sb.AppendLine($"#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine("#include \"cif.inc\"            /* declaratie CIF_IS[]           */");
             sb.AppendLine("#include \"isvar.h\"            /* declaratie IS[]               */");
