@@ -25,7 +25,7 @@ var outputDirBase = Directory("./published");
 // varia
 var prev_version = "0_8_2_0";
 var backupOld = false;
-var deployDev = true;
+var deployDev = false;
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -62,7 +62,8 @@ Task("Sign")
     Sign(file, new SignToolSignSettings {
             TimeStampUri = certUri,
             CertPath = certPath,
-            Password = signPass
+            Password = signPass,
+            DigestAlgorithm = SignToolDigestAlgorithm.Sha256
     });
 });
 

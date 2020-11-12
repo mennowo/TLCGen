@@ -1,5 +1,9 @@
-TLCGen=0.8.2.0
+TLCGen=0.9.0.0
 RN==TLCGen
+TLCGen versie: 0.9.0.0
+- RIS update, ondersteuning CCOL11
+- ITF import
+- Diverse kleine fixes
 TLCGen versie: 0.8.2.0
 - Ondersteuning voor bewaakte rateltikkers
 - TLCGen versie header voor meegeleverde files
