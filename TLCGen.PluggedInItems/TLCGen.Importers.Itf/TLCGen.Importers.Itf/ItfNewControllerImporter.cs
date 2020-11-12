@@ -85,13 +85,16 @@ namespace TLCGen.Importers.Itf
                             {
                                 if (!string.IsNullOrEmpty(signalGroupLane.LaneId) && int.TryParse(signalGroupLane.LaneId, out var sgLaneId))
                                 {
-                                    lanes.Add(new RISFaseCyclusLaneDataModel
+                                    if (lanes.All(x => x.LaneID != sgLaneId))
                                     {
-                                        SignalGroupName = sg.Name,
-                                        LaneID = sgLaneId,
-                                        RijstrookIndex = ilane++,
-                                        SystemITF = signalGroupLane.SystemItf
-                                    });
+                                        lanes.Add(new RISFaseCyclusLaneDataModel
+                                        {
+                                            SignalGroupName = sg.Name,
+                                            LaneID = sgLaneId,
+                                            RijstrookIndex = ilane++,
+                                            SystemITF = signalGroupLane.SystemItf
+                                        });
+                                    }
                                 }
                             }
 
@@ -116,7 +119,13 @@ namespace TLCGen.Importers.Itf
                     {
                         var fc = new FaseCyclusModel {Naam = sg.Name};
                         fc.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fc.Naam);
+
+                        var risFc = newc.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == sg.Name);
                         DefaultsProvider.Default.SetDefaultsOnModel(fc, fc.Type.ToString());
+                        if (risFc != null)
+                        {
+                            fc.AantalRijstroken = risFc.LaneData.Count;
+                        }
                         if (sg.MinAmberTime > 0) fc.TGL_min = (int) sg.MinAmberTime;
                         if (sg.MinAmberTime > 0) fc.TGL = (int) sg.MinAmberTime;
                         if (sg.MinGreenTime > 0) fc.TGG_min = (int) sg.MinGreenTime;
