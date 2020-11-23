@@ -693,7 +693,10 @@ namespace TLCGen.Specificator
                 (Regex.IsMatch(c.Data.Stad, @"^(g|G)emeente") ? $"in de {c.Data.Stad}" : $"te {c.Data.Stad} ({c.Data.Naam}).");
             body.Append(OpenXmlHelper.GetTextParagraph(text));
 
-            if (!string.IsNullOrEmpty(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
+            var sb = new StringBuilder();
+            
+            if (!c.Data.NietGebruikenBitmap &&
+                !string.IsNullOrEmpty(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
             {
                 var path = Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);
                 var file = Path.Combine(path, (Regex.IsMatch(c.Data.BitmapNaam, @"\.(bmp|BMP)$") ? c.Data.BitmapNaam : c.Data.BitmapNaam + ".bmp"));
@@ -701,11 +704,8 @@ namespace TLCGen.Specificator
                 {
                     OpenXmlHelper.AddImageToBody(doc, file);
                 }
+                sb.Append($"Het kruispunt {GetKruisingNaam(c)} wordt schematisch weergegeven in de bovenstaande figuur. ");
             }
-
-            var sb = new StringBuilder();
-
-            sb.Append($"Het kruispunt {GetKruisingNaam(c)} wordt schematisch weergegeven in de bovenstaande figuur. ");
 
             var sl = new List<Tuple<string, int>>();
             if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.DeelConflict) ||

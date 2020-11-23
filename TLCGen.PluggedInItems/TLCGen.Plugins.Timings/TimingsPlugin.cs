@@ -30,7 +30,13 @@ namespace TLCGen.Plugins.Timings
         private TimingsDataModel _timingsModel;
 
 #pragma warning disable 0649
-        // private CCOLGeneratorCodeStringSettingModel _prm...;
+        private CCOLGeneratorCodeStringSettingModel _schfctiming = new CCOLGeneratorCodeStringSettingModel
+        {
+            Default = "fctiming",
+            Setting = "fctiming",
+            Type = CCOLGeneratorSettingTypeEnum.Schakelaar,
+            Description = "Timings activeren"
+        };
 #pragma warning restore 0649
 
         #endregion // Fields
@@ -77,7 +83,7 @@ namespace TLCGen.Plugins.Timings
                 {
                     _ContentDataTemplate = new DataTemplate();
                     var tab = new FrameworkElementFactory(typeof(TimingsTabView));
-                    tab.SetValue(TimingsTabView.DataContextProperty, _timingsVM);
+                    tab.SetValue(FrameworkElement.DataContextProperty, _timingsVM);
                     _ContentDataTemplate.VisualTree = tab;
                 }
                 return _ContentDataTemplate;
@@ -197,11 +203,16 @@ namespace TLCGen.Plugins.Timings
 
         public override void CollectCCOLElements(ControllerModel c)
         {
+            _myElements = new List<CCOLElement>(0);
+
+            if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return;
+
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schfctiming}", 1, CCOLElementTimeTypeEnum.SCH_type, _schfctiming));
         }
 
         public override bool HasCCOLElements()
         {
-            return false;
+            return true;
         }
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
@@ -227,7 +238,7 @@ namespace TLCGen.Plugins.Timings
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            if (_controller.Data.CCOLVersie <= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
+            if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
 
             var sb = new StringBuilder();
 
@@ -243,7 +254,7 @@ namespace TLCGen.Plugins.Timings
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    sb.AppendLine($"{ts}msg_fctiming();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfctiming}]) msg_fctiming();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCIncludes:
                     sb.AppendLine($"{ts}void Timings_Eventstate_Definition(void);");
@@ -258,7 +269,7 @@ namespace TLCGen.Plugins.Timings
 
         public override List<string> GetSourcesToCopy()
         {
-            if (_controller.Data.CCOLVersie <= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
+            if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
             return new List<string>
             {
                 "timingsfunc.c",
@@ -308,6 +319,7 @@ namespace TLCGen.Plugins.Timings
         {
             IsEnabled = true;
             _timingsVM = new TimingsTabViewModel(this);
+            ElementGenerationOrder = int.MaxValue;
         }
 
         #endregion // Constructor

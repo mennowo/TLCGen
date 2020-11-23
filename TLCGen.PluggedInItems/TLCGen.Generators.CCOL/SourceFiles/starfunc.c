@@ -2,7 +2,7 @@
 
 mulv star_cyclustimer;
 
-static void update_cyclustimer(count cyclustijd)
+void update_cyclustimer(count cyclustijd)
 {	
 	star_cyclustimer -= 1;
 	star_cyclustimer += TS;

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using System.IO;
 using System.Windows.Input;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
@@ -76,17 +77,23 @@ namespace TLCGen.Specificator
                 {
                     File.Delete(filename);
                 }
+
                 using (var stream = assembly.GetManifestResourceStream("TLCGen.Specificator.Resources.specification_template.docx"))
                 using (var fileStream = File.Create(filename))
                 {
                     stream.CopyTo(fileStream);
                 }
+
                 TableGenerator.ClearTables();
                 SpecificationGenerator.GenerateSpecification(filename, _plugin.Controller, Data);
             }
-            catch
+            catch (IOException)
             {
-                System.Windows.MessageBox.Show("De specificatie is nog geopend in een ander programma.");
+                System.Windows.MessageBox.Show("Fout bij wegschrijven data: de specificatie is mogelijk nog geopend in een ander programma.");
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show("Fout bij wegschrijven data: " + e);
             }
         }
 
