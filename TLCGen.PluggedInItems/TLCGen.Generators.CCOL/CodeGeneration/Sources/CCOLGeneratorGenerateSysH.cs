@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -33,27 +31,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHUitgangen(c));
+            sb.Append(GenerateSysHUitgangen());
             sb.AppendLine();
             sb.Append(GenerateSysHDetectors(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHIngangen(c));
+            sb.Append(GenerateSysHIngangen());
             sb.AppendLine();
-            sb.Append(GenerateSysHHulpElementen(c));
+            sb.Append(GenerateSysHHulpElementen());
             sb.AppendLine();
-            sb.Append(GenerateSysHGeheugenElementen(c));
+            sb.Append(GenerateSysHGeheugenElementen());
             sb.AppendLine();
-            sb.Append(GenerateSysHTijdElementen(c));
+            sb.Append(GenerateSysHTijdElementen());
             sb.AppendLine();
-            sb.Append(GenerateSysHCounters(c));
+            sb.Append(GenerateSysHCounters());
             sb.AppendLine();
-            sb.Append(GenerateSysHSchakelaars(c));
+            sb.Append(GenerateSysHSchakelaars());
             sb.AppendLine();
-            sb.Append(GenerateSysHParameters(c));
+            sb.Append(GenerateSysHParameters());
             sb.AppendLine();
             if (c.HasDSI())
             {
-                sb.Append(GenerateSysHDS(c));
+                sb.Append(GenerateSysHds(c));
                 sb.AppendLine();
             }
             var ov = 0;
@@ -61,15 +59,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var ovFC in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{ovFC.Naam} {ov.ToString()}");
+                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{ovFC.Naam} {ov}");
                     ++ov;
                 }
                 foreach (var hdFC in c.PrioData.HDIngrepen)
                 {
-                    sb.AppendLine($"{ts}#define hdFC{hdFC.FaseCyclus} {ov.ToString()}");
+                    sb.AppendLine($"{ts}#define hdFC{hdFC.FaseCyclus} {ov}");
                     ++ov;
                 }
-                sb.AppendLine($"{ts}#define prioFCMAX {ov.ToString()}");
+                sb.AppendLine($"{ts}#define prioFCMAX {ov}");
                 sb.AppendLine();
             }
             
@@ -138,25 +136,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (fcm.GetDefine().Length > pad1) pad1 = fcm.GetDefine().Length;
             }
-            pad1 = pad1 + $"{ts}#define  ".Length;
+            pad1 += $"{ts}#define  ".Length;
 
             var pad2 = controller.Fasen.Count.ToString().Length;
 
             var index = 0;
-            foreach (var fcm in controller.Fasen)
+            foreach (var fcm in controller.Fasen.OrderBy(x => x.RangeerIndex))
             {
                 sb.Append($"{ts}#define {fcm.GetDefine()} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                sb.AppendLine($"{index}".PadLeft(pad2));
                 ++index;
             }
             sb.Append($"{ts}#define FCMAX1 ".PadRight(pad1));
-            sb.Append($"{index.ToString()} ".PadLeft(pad2));
+            sb.Append($"{index} ".PadLeft(pad2));
             sb.AppendLine("/* aantal fasecycli */");
 
             return sb.ToString();
         }
 
-        private string GenerateSysHUitgangen(ControllerModel controller)
+        private string GenerateSysHUitgangen()
         {
             var sb = new StringBuilder();
 
@@ -182,33 +180,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if(controller.Detectoren.Any())
             {
-                var _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
-                pad1 = _pad1 > pad1 ? _pad1 : pad1;
+                var maxPadDet = controller.Detectoren.Max(x => x.GetDefine().Length);
+                pad1 = maxPadDet > pad1 ? maxPadDet : pad1;
             }
             if (controller.SelectieveDetectoren.Any())
             {
-                var _pad1 = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
-                pad1 = _pad1 > pad1 ? _pad1 : pad1;
+                var maxPadSelDet = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
+                pad1 = maxPadSelDet > pad1 ? maxPadSelDet : pad1;
             }
             var ovdummies = controller.PrioData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
                 pad1 = ovdummies.Max(x => x.GetDefine().Length);
             }
-            pad1 = pad1 + $"{ts}#define  ".Length;
+            pad1 += $"{ts}#define  ".Length;
 
             var pad2 = controller.Fasen.Count.ToString().Length;
 
             var index = 0;
-            foreach (var dm in controller.GetAllDetectors())
+            foreach (var dm in controller.GetAllDetectors().OrderBy(x => x.RangeerIndex))
             {
                 if (dm.Dummy) continue;
                 sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                sb.AppendLine($"{index}".PadLeft(pad2));
                 ++index;
             }
 
-            var autom_index = index;
+            var automIndex = index;
 
             /* Dummies */
             if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Dummy) ||
@@ -216,38 +214,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 ovdummies.Any())
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
-                foreach (var dm in controller.GetAllDetectors(x => x.Dummy))
+                foreach (var dm in controller.GetAllDetectors(x => x.Dummy).OrderBy(x => x.RangeerIndex))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{index}".PadLeft(pad2));
                     ++index;
                 }
-                foreach(var dm in ovdummies)
+                foreach(var dm in ovdummies.OrderBy(x => x.RangeerIndex))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{index}".PadLeft(pad2));
                     ++index;
                 }
                 sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
-                sb.Append($"{index.ToString()} ".PadLeft(pad2));
+                sb.Append($"{index} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal detectoren testomgeving */");
                 sb.AppendLine("#else");
                 sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
-                sb.Append($"{autom_index.ToString()} ".PadLeft(pad2));
+                sb.Append($"{automIndex} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal detectoren automaat omgeving */");
                 sb.AppendLine("#endif");
             }
             else
             {
                 sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
-                sb.Append($"{index.ToString()} ".PadLeft(pad2));
+                sb.Append($"{index} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal detectoren */");
             }
 
             return sb.ToString();
         }
 
-        private string GenerateSysHIngangen(ControllerModel controller)
+        private string GenerateSysHIngangen()
         {
             var sb = new StringBuilder();
 
@@ -259,7 +257,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHHulpElementen(ControllerModel controller)
+        private string GenerateSysHHulpElementen()
         {
             var sb = new StringBuilder();
 
@@ -271,7 +269,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHGeheugenElementen(ControllerModel controller)
+        private string GenerateSysHGeheugenElementen()
         {
             var sb = new StringBuilder();
 
@@ -283,7 +281,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHTijdElementen(ControllerModel controller)
+        private string GenerateSysHTijdElementen()
         {
             var sb = new StringBuilder();
 
@@ -295,7 +293,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
         
-        private string GenerateSysHCounters(ControllerModel controller)
+        private string GenerateSysHCounters()
         {
             var sb = new StringBuilder();
 
@@ -307,7 +305,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHSchakelaars(ControllerModel controller)
+        private string GenerateSysHSchakelaars()
         {
             var sb = new StringBuilder();
 
@@ -319,7 +317,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHParameters(ControllerModel controller)
+        private string GenerateSysHParameters()
         {
             var sb = new StringBuilder();
 
@@ -331,7 +329,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHDS(ControllerModel controller)
+        private string GenerateSysHds(ControllerModel controller)
         {
             var sb = new StringBuilder();
 

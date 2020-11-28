@@ -126,6 +126,14 @@ namespace TLCGen.ViewModels
             get => PrioIngreep.Koplus;
             set
             {
+                // Do not set if value is NULL but the existing value is valid
+                if (value == null && 
+                    PrioIngreep.Koplus != null &&
+                    DataAccess.TLCGenControllerDataProvider.Default.Controller.GetAllDetectors(x => x.Type == DetectorTypeEnum.Kop).Any(x => x.Naam == PrioIngreep.Koplus))
+                {
+                    return;
+                }
+
                 PrioIngreep.Koplus = value;
                 if (value == null) PrioIngreep.Koplus = "NG";
                 RaisePropertyChanged<object>(nameof(Koplus), broadcast: true);

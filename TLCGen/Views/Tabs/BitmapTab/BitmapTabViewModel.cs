@@ -31,30 +31,27 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<BitmappedItemViewModel> _Fasen;
-        private ObservableCollection<BitmappedItemViewModel> _Detectoren;
-        private ObservableCollection<BitmappedItemViewModel> _OverigeUitgangen;
-        private ObservableCollection<BitmappedItemViewModel> _OverigeIngangen;
-        private BitmappedItemViewModel _SelectedItem;
-        private TabItem _SelectedTab;
-        private BitmapImage _MyBitmap;
-        private EditableBitmap _EditableBitmap;
-        private QueueLinearFloodFiller _FloodFiller;
-        private string _ControllerFileName;
-        private string _BitmapFileName;
+        private ObservableCollection<BitmappedItemViewModel> _fasen;
+        private ObservableCollection<BitmappedItemViewModel> _detectoren;
+        private ObservableCollection<BitmappedItemViewModel> _overigeUitgangen;
+        private ObservableCollection<BitmappedItemViewModel> _overigeIngangen;
+        private BitmappedItemViewModel _selectedItem;
+        private TabItem _selectedTab;
+        private EditableBitmap _editableBitmap;
+        private readonly QueueLinearFloodFiller _floodFiller;
+        private string _controllerFileName;
         private int _width = int.MaxValue, _height = int.MaxValue;
 
-        private Color TestFillColor = Color.CornflowerBlue;
-        private Color DefaultFillColor = Color.LightGray;
-        private Color DefaultFaseColor = Color.DarkRed;
-        private Color DefaultFaseSelectedColor = Color.Lime;
-        private Color DefaultDetectorColor = Color.Yellow;
-        private Color DefaultDetectorSelectedColor = Color.Magenta;
-
-        private readonly Color DefaultUitgangColor = Color.Blue;
-        private Color DefaultUitgangSelectedColor = Color.Lime;
-        private Color DefaultIngangColor = Color.DarkCyan;
-        private Color DefaultIngangSelectedColor = Color.Cyan;
+        private readonly Color _defaultFillColor = Color.LightGray;
+        private readonly Color _defaultFaseSelectedColor = Color.Lime;
+        private readonly Color _defaultUitgangColor = Color.Blue;
+        private readonly Color _defaultUitgangSelectedColor = Color.Lime;
+        private readonly Color _defaultIngangColor = Color.DarkCyan;
+        private readonly Color _defaultIngangSelectedColor = Color.Cyan;
+        private readonly Color _testFillColor = Color.CornflowerBlue;
+        private readonly Color _defaultFaseColor = Color.DarkRed;
+        private readonly Color _defaultDetectorColor = Color.Yellow;
+        private readonly Color _defaultDetectorSelectedColor = Color.Magenta;
 
         #endregion // Fields
 
@@ -64,9 +61,9 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                var dict = new System.Windows.ResourceDictionary();
+                var dict = new ResourceDictionary();
                 var u = new Uri("pack://application:,,,/" +
-                                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                                Assembly.GetExecutingAssembly().GetName().Name +
                                 ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
                 return (System.Windows.Media.ImageSource)dict["BitmapTabDrawingImage"];
@@ -77,11 +74,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_Fasen == null)
+                if (_fasen == null)
                 {
-                    _Fasen = new ObservableCollection<BitmappedItemViewModel>();
+                    _fasen = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _Fasen;
+                return _fasen;
             }
         }
 
@@ -89,11 +86,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_Detectoren == null)
+                if (_detectoren == null)
                 {
-                    _Detectoren = new ObservableCollection<BitmappedItemViewModel>();
+                    _detectoren = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _Detectoren;
+                return _detectoren;
             }
         }
 
@@ -101,11 +98,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_OverigeUitgangen == null)
+                if (_overigeUitgangen == null)
                 {
-                    _OverigeUitgangen = new ObservableCollection<BitmappedItemViewModel>();
+                    _overigeUitgangen = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _OverigeUitgangen;
+                return _overigeUitgangen;
             }
         }
 
@@ -113,63 +110,59 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_OverigeIngangen == null)
+                if (_overigeIngangen == null)
                 {
-                    _OverigeIngangen = new ObservableCollection<BitmappedItemViewModel>();
+                    _overigeIngangen = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _OverigeIngangen;
+                return _overigeIngangen;
             }
         }
 
         public BitmappedItemViewModel SelectedItem
         {
-            get => _SelectedItem;
+            get => _selectedItem;
             set
             {
-                if (_SelectedItem != null && _SelectedItem.HasCoordinates)
+                if (_selectedItem != null && _selectedItem.HasCoordinates)
                 {
-                    foreach(var p in _SelectedItem.Coordinates)
-                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                    foreach(var p in _selectedItem.Coordinates)
+                        if (p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                             FillMyBitmap(p, GetFillColor(false));
                     RefreshMyBitmapImage();
                 }
-                _SelectedItem = value;
-                if (_SelectedItem != null && _SelectedItem.HasCoordinates)
+                _selectedItem = value;
+                if (_selectedItem != null && _selectedItem.HasCoordinates)
                 {
-                    foreach (var p in _SelectedItem.Coordinates)
-                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                    foreach (var p in _selectedItem.Coordinates)
+                        if (p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                             FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
                 }
-                RaisePropertyChanged("SelectedItem");
+                RaisePropertyChanged();
             }
         }
 
         public TabItem SelectedTab
         {
-            get => _SelectedTab;
+            get => _selectedTab;
             set
             {
-                _SelectedTab = value;
-                RaisePropertyChanged("SelectedTab");
+                _selectedTab = value;
+                RaisePropertyChanged();
             }
         }
 
-        public BitmapImage MyBitmap => _MyBitmap;
+        public BitmapImage MyBitmap { get; private set; }
 
-        public string BitmapFileName
-        {
-            get => _BitmapFileName;
-            set => _BitmapFileName = value;
-        }
+        public string BitmapFileName { get; set; }
 
         public string ControllerFileName
         {
-            get => _ControllerFileName;
+            get => _controllerFileName;
             set
             {
-                _ControllerFileName = value;
-                RaisePropertyChanged("IsEnabled");
+                _controllerFileName = value;
+                RaisePropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -177,30 +170,17 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _SetCoordinatesCommand;
-        public ICommand SetCoordinatesCommand
-        {
-            get
-            {
-                if (_SetCoordinatesCommand == null)
-                {
-                    _SetCoordinatesCommand = new RelayCommand(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
-                }
-                return _SetCoordinatesCommand;
-            }
-        }
+        RelayCommand _setCoordinatesCommand;
+        public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
 
-        RelayCommand _RefreshBitmapCommand;
-        public ICommand RefreshBitmapCommand => _RefreshBitmapCommand ?? (_RefreshBitmapCommand =
-                                                    new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute));
+        RelayCommand _refreshBitmapCommand;
+        public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
 
-        RelayCommand _ResetBitmapCommand;
-        public ICommand ResetBitmapCommand => _ResetBitmapCommand ?? (_ResetBitmapCommand =
-                                                  new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute));
+        RelayCommand _resetBitmapCommand;
+        public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
 
-        RelayCommand _ImportDplCCommand;
-        public ICommand ImportDplCCommand => _ImportDplCCommand ?? (_ImportDplCCommand =
-                                                  new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute));
+        RelayCommand _importDplCCommand;
+        public ICommand ImportDplCCommand => _importDplCCommand ??= new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute);
 
         
         #endregion // Commands
@@ -211,16 +191,13 @@ namespace TLCGen.ViewModels
 
         public override bool OnSelectedPreview()
         {
-            if (File.Exists(BitmapFileName))
-                return true;
-            else
-                return false;
+            return File.Exists(BitmapFileName);
         }
 
         public override void OnSelected()
         {
             // Collect all IO to be displayed in the lists
-            _SelectedItem = null;
+            _selectedItem = null;
             TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
             CollectAllIO();
             LoadBitmap();
@@ -240,11 +217,11 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void SetCoordinatesCommand_Executed(object prm)
+        private void SetCoordinatesCommand_Executed(object prm)
         {
             var p = (Point)prm;
 
-            var c = _EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
+            var c = _editableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
 
             if(c.ToArgb().Equals(GetFillColor(true).ToArgb()))
             {
@@ -253,12 +230,12 @@ namespace TLCGen.ViewModels
                     var coords = new List<Point>();
                     foreach (var pp in SelectedItem.Coordinates)
                     {
-                        if (pp.X <= _EditableBitmap.Bitmap.Width && pp.Y <= _EditableBitmap.Bitmap.Height)
+                        if (pp.X <= _editableBitmap.Bitmap.Width && pp.Y <= _editableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(pp, TestFillColor);
-                            if (_EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == TestFillColor.ToArgb())
+                            FillMyBitmap(pp, _testFillColor);
+                            if (_editableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == _testFillColor.ToArgb())
                             {
-                                FillMyBitmap(pp, DefaultFillColor);
+                                FillMyBitmap(pp, _defaultFillColor);
                                 coords.Add(pp);
                             }
                             else
@@ -272,9 +249,9 @@ namespace TLCGen.ViewModels
                 }
             }
             else if (!c.ToArgb().Equals(Color.Black.ToArgb()) &&
-                !c.ToArgb().Equals(DefaultFaseColor.ToArgb()) &&
-                !c.ToArgb().Equals(DefaultDetectorColor.ToArgb()) &&
-                !c.ToArgb().Equals(DefaultDetectorSelectedColor.ToArgb()))
+                !c.ToArgb().Equals(_defaultFaseColor.ToArgb()) &&
+                !c.ToArgb().Equals(_defaultDetectorColor.ToArgb()) &&
+                !c.ToArgb().Equals(_defaultDetectorSelectedColor.ToArgb()))
             {
                 SelectedItem.Coordinates.Add(p);
 
@@ -301,7 +278,7 @@ namespace TLCGen.ViewModels
 
         private void ResetBitmapCommand_Executed(object obj)
         {
-            var zb = obj as TLCGen.Controls.ZoomViewbox;
+            var zb = obj as Controls.ZoomViewbox;
             zb?.Reset();
         }
 
@@ -334,14 +311,11 @@ namespace TLCGen.ViewModels
         private void SetBitmapFileName()
         {
             // Set the bitmap
-            if (!string.IsNullOrWhiteSpace(_ControllerFileName) &&
-                Controller != null &&
-                Controller.Data != null &&
-                !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
+            if (!string.IsNullOrWhiteSpace(_controllerFileName) && Controller?.Data != null && !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
             {
                 BitmapFileName =
-                    System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(_ControllerFileName),
+                    Path.Combine(
+                        Path.GetDirectoryName(_controllerFileName) ?? string.Empty,
                         Controller.Data.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ?
                         Controller.Data.BitmapNaam :
                         Controller.Data.BitmapNaam + ".bmp"
@@ -356,41 +330,35 @@ namespace TLCGen.ViewModels
         private BitmappedItemViewModel GetIOElementFromObject(object obj, PropertyInfo prop = null)
         {
             var objType = obj.GetType();
-            IOElementAttribute attr = null;
-            if (prop == null)
+            var attr = prop == null ? objType.GetCustomAttribute<IOElementAttribute>() : prop.GetCustomAttribute<IOElementAttribute>();
+
+            if (attr == null) return null;
+
+            var cond = true;
+            if (!string.IsNullOrWhiteSpace(attr.DisplayConditionProperty))
             {
-                attr = objType.GetCustomAttribute<IOElementAttribute>();
-            }
-            else
-            {
-                attr = prop.GetCustomAttribute<IOElementAttribute>();
+                if (objType.GetProperty(attr.DisplayConditionProperty)?.GetValue(obj) is bool b)
+                {
+                    cond = b;
+                }
             }
 
-            BitmappedItemViewModel bivm = null;
-            if (attr != null)
+            if (!cond) return null;
+
+            var name = attr.DisplayName;
+            if (!string.IsNullOrWhiteSpace(attr.DisplayNameProperty))
             {
-                var cond = true;
-                if (!string.IsNullOrWhiteSpace(attr.DisplayConditionProperty))
+                if (objType.GetProperty(attr.DisplayNameProperty)?.GetValue(obj) is string s)
                 {
-                    cond = (bool)objType.GetProperty(attr.DisplayConditionProperty).GetValue(obj);
-                }
-                if (cond)
-                {
-                    var name = attr.DisplayName;
-                    if (!string.IsNullOrWhiteSpace(attr.DisplayNameProperty))
-                    {
-                        name = name + (string)objType.GetProperty(attr.DisplayNameProperty).GetValue(obj);
-                    }
-                    if (prop == null)
-                    {
-                        bivm = new BitmappedItemViewModel(obj as IOElementModel, name, attr.Type);
-                    }
-                    else
-                    {
-                        bivm = new BitmappedItemViewModel(prop.GetValue(obj) as IOElementModel, name, attr.Type);
-                    }
+                    name += s;
                 }
             }
+            
+            var bivm = 
+                prop == null 
+                    ? new BitmappedItemViewModel(obj as IOElementModel, name, attr.Type) 
+                    : new BitmappedItemViewModel(prop.GetValue(obj) as IOElementModel, name, attr.Type);
+            
             return bivm;
         }
 
@@ -415,8 +383,7 @@ namespace TLCGen.ViewModels
                 var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
                 if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) || ignore != null) continue;
                 var propValue = property.GetValue(obj);
-                var elems = propValue as IList;
-                if (elems != null)
+                if (propValue is IList elems)
                 {
                     l.AddRange(from object item in elems from i in GetAllIOElements(item) select i);
                 }
@@ -515,53 +482,35 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private BitmappedItemViewModel GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum type, string itemname)
-        {
-            var pers = new List<PeriodeModel>();
-            if(_Controller.PeriodenData.Perioden.Count > 0)
-            {
-                foreach(var p in _Controller.PeriodenData.Perioden)
-                {
-                    if(p.Type == type)
-                    {
-                        return new BitmappedItemViewModel(p.BitmapData, itemname, BitmappedItemTypeEnum.Uitgang);
-                    }
-                }
-            }
-            return null;
-        }
-
         private void LoadBitmap()
         {
-            if(string.IsNullOrEmpty(_BitmapFileName))
+            if(string.IsNullOrEmpty(BitmapFileName))
             {
-                _EditableBitmap = null;
+                _editableBitmap = null;
                 _width = _height = int.MaxValue;
                 RefreshMyBitmapImage();
                 return;
             }
 
-            if (File.Exists(_BitmapFileName))
+            if (File.Exists(BitmapFileName))
             {
                 try
                 {
-                    using (var bitmap = new Bitmap(_BitmapFileName))
-                    {
-                        _EditableBitmap = new EditableBitmap(bitmap, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        CorrectCoordinates();
-                        _FloodFiller.Bitmap = _EditableBitmap;
-                        FillAllIO();
-                        RefreshMyBitmapImage();
-                    }
+                    using var bitmap = new Bitmap(BitmapFileName);
+                    _editableBitmap = new EditableBitmap(bitmap, PixelFormat.Format24bppRgb);
+                    CorrectCoordinates();
+                    _floodFiller.Bitmap = _editableBitmap;
+                    FillAllIO();
+                    RefreshMyBitmapImage();
                 }
                 catch
                 {
-
+                    // ignored
                 }
             }
             else
             {
-                System.Windows.MessageBox.Show("Bestand " + _BitmapFileName + " niet gevonden.", "Bitmap niet gevonden");
+                MessageBox.Show("Bestand " + BitmapFileName + " niet gevonden.", "Bitmap niet gevonden");
             }
         }
 
@@ -569,8 +518,8 @@ namespace TLCGen.ViewModels
 
         private void FillDefaultColor(Point p)
         {
-            _FloodFiller.FillColor = DefaultFillColor;
-            _FloodFiller.FloodFill(p);
+            _floodFiller.FillColor = _defaultFillColor;
+            _floodFiller.FloodFill(p);
             RefreshMyBitmapImage();
         }
 
@@ -580,16 +529,16 @@ namespace TLCGen.ViewModels
             switch (SelectedItem.IOType)
             {
                 case BitmappedItemTypeEnum.Fase:
-                    c = selected ? DefaultFaseSelectedColor : DefaultFaseColor;
+                    c = selected ? _defaultFaseSelectedColor : _defaultFaseColor;
                     break;
                 case BitmappedItemTypeEnum.Detector:
-                    c = selected ? DefaultDetectorSelectedColor : DefaultDetectorColor;
+                    c = selected ? _defaultDetectorSelectedColor : _defaultDetectorColor;
                     break;
                 case BitmappedItemTypeEnum.Uitgang:
-                    c = selected ? DefaultUitgangSelectedColor : DefaultUitgangColor;
+                    c = selected ? _defaultUitgangSelectedColor : _defaultUitgangColor;
                     break;
                 case BitmappedItemTypeEnum.Ingang:
-                    c = selected ? DefaultIngangSelectedColor : DefaultIngangColor;
+                    c = selected ? _defaultIngangSelectedColor : _defaultIngangColor;
                     break;
             }
             return c;
@@ -597,44 +546,42 @@ namespace TLCGen.ViewModels
 
         private void FillMyBitmap(Point p, Color c)
         {
-            _FloodFiller.FillColor = c;
-            _FloodFiller.FloodFill(p);
+            _floodFiller.FillColor = c;
+            _floodFiller.FloodFill(p);
         }
 
         private void RefreshMyBitmapImage()
         {
-            if(_EditableBitmap == null)
+            if(_editableBitmap == null)
             {
-                _MyBitmap = null;
-                RaisePropertyChanged("MyBitmap");
+                MyBitmap = null;
+                RaisePropertyChanged(nameof(MyBitmap));
                 return;
             }
 
-            using (var memory = new MemoryStream())
-            {
-                _MyBitmap = new BitmapImage();
-                _EditableBitmap.Bitmap.Save(memory, ImageFormat.Bmp);
-                memory.Position = 0;
+            using var memory = new MemoryStream();
+            MyBitmap = new BitmapImage();
+            _editableBitmap.Bitmap.Save(memory, ImageFormat.Bmp);
+            memory.Position = 0;
 
-                MyBitmap.BeginInit();
-                MyBitmap.StreamSource = memory;
-                MyBitmap.CacheOption = BitmapCacheOption.OnLoad;
-                MyBitmap.EndInit();
+            MyBitmap.BeginInit();
+            MyBitmap.StreamSource = memory;
+            MyBitmap.CacheOption = BitmapCacheOption.OnLoad;
+            MyBitmap.EndInit();
 
-                RaisePropertyChanged("MyBitmap");
-            }
+            RaisePropertyChanged(nameof(MyBitmap));
         }
 
         private void CorrectCoordinates()
         {
-            if (_width > _EditableBitmap.Bitmap.Width || _height > _EditableBitmap.Bitmap.Height)
+            if (_width > _editableBitmap.Bitmap.Width || _height > _editableBitmap.Bitmap.Height)
             {
-                _width = _EditableBitmap.Bitmap.Width;
-                _height = _EditableBitmap.Bitmap.Height;
-                var ioElements = _Fasen.Concat(_Detectoren).Concat(_OverigeUitgangen).Concat(_OverigeIngangen);
+                _width = _editableBitmap.Bitmap.Width;
+                _height = _editableBitmap.Bitmap.Height;
+                var ioElements = _fasen.Concat(_detectoren).Concat(_overigeUitgangen).Concat(_overigeIngangen);
                 foreach (var ioe in ioElements)
                 {
-                    var rems = ioe.Coordinates.Where(x => x.X > _EditableBitmap.Bitmap.Width || x.Y > _EditableBitmap.Bitmap.Height).ToList();
+                    var rems = ioe.Coordinates.Where(x => x.X > _editableBitmap.Bitmap.Width || x.Y > _editableBitmap.Bitmap.Height).ToList();
                     if (rems.Any())
                     {
                         var all = ioe.Coordinates.Where(x => true).ToList();
@@ -656,9 +603,9 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var p in bivm.Coordinates)
                     {
-                        if(p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        if(p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(p, DefaultFaseColor);
+                            FillMyBitmap(p, _defaultFaseColor);
                         }
                     }
                 }
@@ -669,9 +616,9 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var p in bivm.Coordinates)
                     {
-                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        if (p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(p, DefaultDetectorColor);
+                            FillMyBitmap(p, _defaultDetectorColor);
                         }
                     }
                 }
@@ -682,9 +629,9 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var p in bivm.Coordinates)
                     {
-                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        if (p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(p, DefaultUitgangColor);
+                            FillMyBitmap(p, _defaultUitgangColor);
                         }
                     }
                 }
@@ -695,9 +642,9 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var p in bivm.Coordinates)
                     {
-                        if (p.X <= _EditableBitmap.Bitmap.Width && p.Y <= _EditableBitmap.Bitmap.Height)
+                        if (p.X <= _editableBitmap.Bitmap.Width && p.Y <= _editableBitmap.Bitmap.Height)
                         {
-                            FillMyBitmap(p, DefaultIngangColor);
+                            FillMyBitmap(p, _defaultIngangColor);
                         }
                     }
                 }
@@ -716,7 +663,7 @@ namespace TLCGen.ViewModels
         {
             if (message.NewFileName == null) return;
             
-            _ControllerFileName = message.NewFileName;
+            _controllerFileName = message.NewFileName;
             SetBitmapFileName();
             RefreshMyBitmapImage();
         }
@@ -767,7 +714,7 @@ namespace TLCGen.ViewModels
 
         public BitmapTabViewModel() : base()
         {
-            _FloodFiller = new QueueLinearFloodFiller(null);
+            _floodFiller = new QueueLinearFloodFiller(null);
 
             Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));

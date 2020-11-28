@@ -100,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prmvar.h\"   /* parameters                        */");
             sb.AppendLine($"{ts}#include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
             sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
-            if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            if (c.Data.VLOGType != VLOGTypeEnum.Geen)
             {
                 sb.AppendLine($"{ts}#ifndef NO_VLOG");
                 sb.AppendLine($"{ts}{ts}#include \"vlogvar.h\"  /* variabelen t.b.v. vlogfuncties                */");
@@ -180,23 +180,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersConflicten(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersUitgangen(controller));
+            sb.Append(GenerateTabCControlParametersUitgangen());
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersDetectors(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersIngangen(controller));
+            sb.Append(GenerateTabCControlParametersIngangen());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersHulpElementen(controller));
+            sb.Append(GenerateTabCControlParametersHulpElementen());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersGeheugenElementen(controller));
+            sb.Append(GenerateTabCControlParametersGeheugenElementen());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersTijdElementen(controller));
+            sb.Append(GenerateTabCControlParametersTijdElementen());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersCounters(controller));
+            sb.Append(GenerateTabCControlParametersCounters());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersSchakelaars(controller));
+            sb.Append(GenerateTabCControlParametersSchakelaars());
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersParameters(controller));
+            sb.Append(GenerateTabCControlParametersParameters());
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
             sb.AppendLine();
@@ -207,7 +207,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.Append(GenerateTabCControlParametersModulen(controller));
             sb.AppendLine();
-            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            if (controller.Data.VLOGType != VLOGTypeEnum.Geen)
             {
                 sb.Append(GenerateTabCControlParametersVLOG(controller));
                 sb.AppendLine();
@@ -343,16 +343,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
                 switch (fc.Type)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Auto:
                         sb.AppendLine("MVT_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.OV:
+                    case FaseTypeEnum.OV:
                         sb.AppendLine("OV_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine("FTS_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine("VTG_type;");
                         break;
                     default:
@@ -460,7 +460,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (ff == ft) continue;
 
                     // Cause an empty line in between signalgroups
-                    if (prevfasefrom == "")
+                    if (prevfasefrom.Length == 0)
                     {
                         prevfasefrom = ff;
                     }
@@ -560,7 +560,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             switch (nl.Type)
                             {
-                                case Models.Enumerations.NaloopTypeEnum.StartGroen:
+                                case NaloopTypeEnum.StartGroen:
                                     if (nl.InrijdenTijdensGroen)
                                     {
                                         if (matrix[i, k] > -2) matrix[i, k] = -2;
@@ -572,11 +572,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (matrix[k, i] > -3) matrix[k, i] = -3;
                                     }
                                     break;
-                                case Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen:
+                                case NaloopTypeEnum.CyclischVerlengGroen:
                                     if (matrix[i, k] > -2) matrix[i, k] = -2;
                                     if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     break;
-                                case Models.Enumerations.NaloopTypeEnum.EindeGroen:
+                                case NaloopTypeEnum.EindeGroen:
                                     if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                                     {
                                         if (nl.InrijdenTijdensGroen)
@@ -607,8 +607,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 for (var i = 0; i < controller.Fasen.Count; ++i)
                 {
-                    bool AppendEmptyLine;
-                    AppendEmptyLine = false;
+                    var appendEmptyLine = false;
                     for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
                         if (matrix[i, j] >= -1) continue;
@@ -616,9 +615,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
                         if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
                         sb.AppendLine($"{ts}{totigmax}[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
-                        AppendEmptyLine = true;
+                        appendEmptyLine = true;
                     }
-                    if (AppendEmptyLine) sb.AppendLine();
+                    if (appendEmptyLine) sb.AppendLine();
                 }
 
                 if (controller.Data.GarantieOntruimingsTijden)
@@ -643,7 +642,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (ff == ft) continue;
 
                             // Cause an empty line in between signalgroups
-                            if (prevfasefrom == "")
+                            if (prevfasefrom.Length == 0)
                             {
                                 prevfasefrom = ff;
                             }
@@ -652,7 +651,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 prevfasefrom = ff;
                                 sb.AppendLine();
                             }
-                            sb.AppendLine($"{ts}{totigmin}[{ff}][{ft}] = {conflict.GarantieWaarde.Value};");
+
+                            if (conflict.GarantieWaarde != null) sb.AppendLine($"{ts}{totigmin}[{ff}][{ft}] = {conflict.GarantieWaarde.Value};");
                         }
 
                     }
@@ -663,7 +663,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersUitgangen(ControllerModel controller)
+        private string GenerateTabCControlParametersUitgangen()
         {
             var sb = new StringBuilder();
 
@@ -837,10 +837,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (dm.TFL != null)
                 {
                     sb.Append($"{ts}");
-                    var l = $"TFL_max[{dm.GetDefine()}] = {dm.TFL};";
-                    sb.Append($"TFL_max[{dm.GetDefine()}] = {dm.TFL};".PadRight(tflmax.Value));
+                    sb.Append($"TFL_max[{dm.GetDefine()}] = {dm.TFL};".PadRight(tflmax ?? 0));
                 }
-                else
+                else if (tflmax != null) 
                 {
                     sb.Append("".PadRight(tflmax.Value));
                 }
@@ -857,7 +856,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        private string GenerateTabCControlParametersIngangen(ControllerModel controller)
+        private string GenerateTabCControlParametersIngangen()
         {
             var sb = new StringBuilder();
 
@@ -869,7 +868,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersHulpElementen(ControllerModel controller)
+        private string GenerateTabCControlParametersHulpElementen()
         {
             var sb = new StringBuilder();
 
@@ -881,7 +880,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersGeheugenElementen(ControllerModel controller)
+        private string GenerateTabCControlParametersGeheugenElementen()
         {
             var sb = new StringBuilder();
 
@@ -893,7 +892,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersTijdElementen(ControllerModel controller)
+        private string GenerateTabCControlParametersTijdElementen()
         {
             var sb = new StringBuilder();
 
@@ -905,7 +904,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersCounters(ControllerModel controller)
+        private string GenerateTabCControlParametersCounters()
         {
             var sb = new StringBuilder();
 
@@ -917,7 +916,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersSchakelaars(ControllerModel controller)
+        private string GenerateTabCControlParametersSchakelaars()
         {
             var sb = new StringBuilder();
 
@@ -930,7 +929,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         }
 
 
-        private string GenerateTabCControlParametersParameters(ControllerModel controller)
+        private string GenerateTabCControlParametersParameters()
         {
             var sb = new StringBuilder();
 
@@ -953,16 +952,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 switch(fc.Type)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Auto:
                         sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = MVT_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = FTS_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = VTG_type;");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.OV:
+                    case FaseTypeEnum.OV:
                         sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = OV_type;");
                         break;
                 }
@@ -1046,9 +1045,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersVLOG(ControllerModel c)
         {
-            if ((c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
-                 c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Geen ||
-                 c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+            if ((c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 &&
+                 c.Data.VLOGType == VLOGTypeEnum.Geen ||
+                 c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
                  c.Data.VLOGSettings?.VLOGToepassen != true))
                 return "";
 
@@ -1105,7 +1104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE.ToString()};");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE};");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - monitoring */");
                 sb.AppendLine($"{ts}/* ----------------- */");

@@ -64,6 +64,11 @@ namespace TLCGen.Generators.CCOL
             return _myVm.GenerateCodeCommand.CanExecute(null);
         }
 
+        public List<IOElementModel> GetAllIOElements(ControllerModel c)
+        {
+            return _generator.CollectAllIO(c);
+        }
+
         #endregion // ITLCGenGenerator
 
         #region ITLCGenPlugMessaging

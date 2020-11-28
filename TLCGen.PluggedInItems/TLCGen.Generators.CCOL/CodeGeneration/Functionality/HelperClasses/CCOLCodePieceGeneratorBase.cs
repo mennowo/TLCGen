@@ -42,9 +42,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         protected List<CCOLIOElement> _myBitmapOutputs;
         protected List<CCOLIOElement> _myBitmapInputs;
 
-        private Regex __fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
+        private readonly Regex _fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
-        public int ElementGenerationOrder { get; private set; }
+        public int ElementGenerationOrder { get; protected set; }
 
         public virtual bool HasFunctionLocalVariables()
         {
@@ -169,7 +169,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var field in fields)
             {
                 if(field.FieldType == typeof(CCOLGeneratorCodeStringSettingModel) &&
-                    __fieldregex.IsMatch(field.Name) && field.GetValue(this) == null)
+                    _fieldregex.IsMatch(field.Name) && field.GetValue(this) == null)
                 {
 #if DEBUG
                         System.Windows.MessageBox.Show("Setting not found: [" + this.GetType().Name + "] " + field.Name);

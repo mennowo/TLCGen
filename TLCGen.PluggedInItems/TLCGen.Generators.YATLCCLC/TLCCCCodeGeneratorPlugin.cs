@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Generators.TLCCC.CodeGeneration;
@@ -14,6 +15,11 @@ namespace TLCGen.Generators.TLCCC
         #region ITLCGenGenerator
 
         public UserControl GeneratorView => _generatorView;
+
+        public List<IOElementModel> GetAllIOElements(ControllerModel c)
+        {
+            return null;
+        }
 
         public string GetGeneratorName()
         {

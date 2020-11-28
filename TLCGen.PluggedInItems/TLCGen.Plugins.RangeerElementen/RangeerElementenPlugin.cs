@@ -16,7 +16,6 @@ namespace TLCGen.Plugins.RangeerElementen
         TLCGenPluginElems.TabControl |
         TLCGenPluginElems.XMLNodeWriter |
         TLCGenPluginElems.PlugMessaging)]
-    [CCOLCodePieceGenerator]
     public partial class RangeerElementenPlugin : CCOLCodePieceGeneratorBase, ITLCGenTabItem, ITLCGenXMLNodeWriter, ITLCGenPlugMessaging
     {
         #region Fields
@@ -31,10 +30,6 @@ namespace TLCGen.Plugins.RangeerElementen
         #endregion // Fields
 
         #region Properties
-
-        public string Dpf => _dpf;
-        public string Fcpf => _fcpf;
-        public string Ts { get; set; }
 
         #endregion // Properties
 
@@ -73,13 +68,12 @@ namespace TLCGen.Plugins.RangeerElementen
         {
             get
             {
-                if (_ContentDataTemplate == null)
-                {
-                    _ContentDataTemplate = new DataTemplate();
-                    var tab = new FrameworkElementFactory(typeof(RangeerElementenTabView));
-                    tab.SetValue(RangeerElementenTabView.DataContextProperty, _rangeerElementenVm);
-                    _ContentDataTemplate.VisualTree = tab;
-                }
+                if (_ContentDataTemplate != null) return _ContentDataTemplate;
+
+                _ContentDataTemplate = new DataTemplate();
+                var tab = new FrameworkElementFactory(typeof(RangeerElementenTabView));
+                tab.SetValue(FrameworkElement.DataContextProperty, _rangeerElementenVm);
+                _ContentDataTemplate.VisualTree = tab;
                 return _ContentDataTemplate;
             }
         }
@@ -108,7 +102,8 @@ namespace TLCGen.Plugins.RangeerElementen
 
         public void OnSelected()
         {
-
+            var ioCollector = new IOCollector();
+            //ioCollector.CollectItems(_controller, );
         }
 
         public bool OnSelectedPreview()
@@ -158,21 +153,6 @@ namespace TLCGen.Plugins.RangeerElementen
         }
 
         #endregion // ITLCGenPlugMessaging
-
-        #region ITLCGenElementProvider
-
-        public override int HasCode(CCOLCodeTypeEnum type)
-        {
-            return type == CCOLCodeTypeEnum.RegCTop ? 10000 : 0;
-        }
-
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
-        {
-            Ts = ts;
-            return null;
-        }
-
-        #endregion // ITLCGenElementProvider
 
         #region Private Methods
 

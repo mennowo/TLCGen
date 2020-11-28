@@ -35,11 +35,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFileIngreep = value;
-                if (_SelectedFileIngreep != null)
-                {
-                    _SelectedFileIngreep.OnSelected(_ControllerFasen);
-                }
-                RaisePropertyChanged("SelectedFileIngreep");
+                _SelectedFileIngreep?.OnSelected(_ControllerFasen);
+                RaisePropertyChanged();
             }
         }
 

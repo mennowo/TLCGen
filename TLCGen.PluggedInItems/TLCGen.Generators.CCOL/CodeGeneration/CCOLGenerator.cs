@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,14 +27,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLElemListData _schakelaars;
         private CCOLElemListData _parameters;
 
-        private List<string> _allFiles = new List<string>();
+        private readonly List<string> _allFiles = new List<string>();
 
         private List<DetectorModel> _alleDetectoren;
 
-        private List<CCOLIOElement> AllCCOLOutputElements;
-        private List<CCOLIOElement> AllCCOLInputElements;
-        private List<IOElementModel> AllOutputModelElements;
-        private List<IOElementModel> AllInputModelElements;
+        private List<IOElementModel> AllCCOLOutputElements;
+        private List<IOElementModel> AllCCOLInputElements;
 
         private string _uspf;
         private string _ispf;
@@ -50,8 +47,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string ts => CCOLGeneratorSettingsProvider.Default.Settings.TabSpace ?? "";
 
-        private string _beginGeneratedHeader = "/* BEGIN GEGENEREERDE HEADER */";
-        private string _endGeneratedHeader = "/* EINDE GEGENEREERDE HEADER */";
+        private readonly string _beginGeneratedHeader = "/* BEGIN GEGENEREERDE HEADER */";
+        private readonly string _endGeneratedHeader = "/* EINDE GEGENEREERDE HEADER */";
 
         #endregion // Fields
 
@@ -108,16 +105,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators.OrderBy(x => x.ElementGenerationOrder).ToList());
 
-                    CollectAllIO();
+                    CollectAllIO(c);
 
                     if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                         throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
 
-                    foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
+                    foreach (var (pluginItems, plugin) in TLCGenPluginManager.Default.ApplicationPlugins)
                     {
-                        if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
+                        if ((pluginItems & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
 
-                        var elemprov = pl.Item2 as ITLCGenElementProvider;
+                        var elemprov = plugin as ITLCGenElementProvider;
                         var elems = elemprov?.GetAllItems();
                         if (elems == null) continue;
                         foreach (var elem in elems)
@@ -175,7 +172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}ptp.c");
                     }
-                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                    if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit &&
                         (c.PrioData.PrioIngrepen.Any() ||
                          c.PrioData.HDIngrepen.Any()))
                     {
@@ -217,7 +214,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     ReviseSysAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, Encoding.Default);
                     if (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
                     {
-                        if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit)
+                        if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit)
                         {
                             WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.add"), c, GeneratePrioAdd, GeneratePrioAddHeader, Encoding.Default);
                             _allFiles.Add($"{c.Data.Naam}prio.add");
@@ -274,7 +271,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             break;
                     }
 
-                    if (c.PrioData.PrioIngreepType == Models.Enumerations.PrioIngreepTypeEnum.GeneriekePrioriteit &&
+                    if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit &&
                         (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any()))
                     {
                         CopySourceIfNeeded(c, "prio.c", sourcefilepath);
@@ -643,24 +640,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             foreach (var i in lv)
                             {
-                                if (!vars.Any(x => x == i.Item2))
-                                {
-                                    vars.Add(i.Item2);
-                                    added = true;
-                                    if (!string.IsNullOrWhiteSpace(i.Item3))
-                                    {
-                                        sb.AppendLine($"{ts}{i.Item1} {i.Item2} = {i.Item3};");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
-                                    }
-                                }
-                                else
-                                {
-                                    // ignore: local variable already exists
-                                    //MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
-                                }
+                                // ignore if variable already exists
+                                if (vars.Any(x => x == i.Item2)) continue;
+
+                                vars.Add(i.Item2);
+                                added = true;
+                                sb.AppendLine(!string.IsNullOrWhiteSpace(i.Item3) ? $"{ts}{i.Item1} {i.Item2} = {i.Item3};" : $"{ts}{i.Item1} {i.Item2};");
                             }
                         }
                     }
@@ -671,11 +656,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type)))
                     {
                         var code = gen.Value.GetCode(c, type, ts);
-                        if (!string.IsNullOrWhiteSpace(code))
-                        {
-                            sb.Append(code);
-                            if (addnewlineatend) sb.AppendLine();
-                        }
+                        
+                        if (string.IsNullOrWhiteSpace(code)) continue;
+
+                        sb.Append(code);
+                        if (addnewlineatend) sb.AppendLine();
                     }
                 }
 			}
@@ -685,33 +670,59 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Private Methods
 
-        private void CollectAllIO()
+        public List<IOElementModel> CollectAllIO(ControllerModel c)
         {
-            AllCCOLOutputElements = new List<CCOLIOElement>();
-            AllCCOLInputElements = new List<CCOLIOElement>();
-            AllOutputModelElements = new List<IOElementModel>();
-            AllInputModelElements = new List<IOElementModel>();
+            AllCCOLOutputElements = new List<IOElementModel>();
+            AllCCOLInputElements = new List<IOElementModel>();
 
             foreach (var pgen in PieceGenerators)
             {
+                pgen.CollectCCOLElements(c);
                 if (pgen.HasCCOLBitmapOutputs())
                 {
-                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs());
+                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs().Where(x => x?.Element != null).Select(x => x.Element));
                 }
                 if (pgen.HasCCOLBitmapInputs())
                 {
-                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs());
+                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs().Where(x => x?.Element != null).Select(x => x.Element));
                 }
             }
 
-            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            var parts = new List<ITLCGenElementProvider>();
+            foreach (var (pluginElements, plugin) in TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins))
             {
-                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
-                {
-                    AllOutputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems());
-                    AllInputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems());
-                }
+                if ((pluginElements & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
+
+                parts.Add((ITLCGenElementProvider)plugin);
             }
+            foreach (var plugin in parts)
+            {
+                AllCCOLOutputElements.AddRange(plugin.GetOutputItems());
+                AllCCOLInputElements.AddRange(plugin.GetInputItems());
+            }
+
+            foreach (var element in AllCCOLOutputElements)
+            {
+                element.ElementType = IOElementTypeEnum.Output;
+            }
+            foreach (var element in AllCCOLInputElements)
+            {
+                element.ElementType = IOElementTypeEnum.Input;
+            }
+
+            var rest = new List<IOElementModel>();
+            foreach (var fc in c.Fasen)
+            {
+                fc.ElementType = IOElementTypeEnum.FaseCyclus;
+                rest.Add(fc);
+            }
+            foreach (var d in c.GetAllDetectors())
+            {
+                d.ElementType = IOElementTypeEnum.Detector;
+                rest.Add(d);
+            }
+
+            return rest.Concat(AllCCOLOutputElements).Concat(AllCCOLInputElements).ToList();
         }
 
         /// <summary>

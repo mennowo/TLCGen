@@ -65,18 +65,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLOutputElements)
             {
-                if (item.Element?.BitmapCoordinaten?.Count > 1)
-                {
-                    for (var i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
-                    {
-                        sb.AppendLine($"{ts}#define {item.Naam}_{i} (USMAX + {usmaxplus})");
-                        ++usmaxplus;
-                    }
-                }
-            }
-
-            foreach (var item in AllOutputModelElements)
-            {
                 if (item.BitmapCoordinaten?.Count > 1)
                 {
                     for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
@@ -100,20 +88,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-
+            
             foreach (var item in AllCCOLInputElements)
-            {
-                if (item.Element?.BitmapCoordinaten?.Count > 1)
-                {
-                    for (var i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
-                    {
-                        sb.AppendLine($"{ts}#define {item.Naam}_{i} (ISMAX + {ismaxplus})");
-                        ++ismaxplus;
-                    }
-                }
-            }
-
-            foreach (var item in AllInputModelElements)
             {
                 if (item.BitmapCoordinaten?.Count > 1)
                 {
@@ -224,15 +200,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLOutputElements.Where(x => !x.Dummy))
             {
-                if(item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                sb.Append(GetCoordinatesString(item, item.Naam, "us"));
             }
 
-            foreach (var item in AllOutputModelElements.Where(x => !x.Dummy))
-            {
-                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
-            }
-
-            if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
+            
+            if (AllCCOLOutputElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
             }
@@ -241,19 +213,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
                 {
-                    if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                    sb.Append(GetCoordinatesString(item, item.Naam, "us"));
                 }
             }
 
-            if (AllOutputModelElements.Any(x => x.Dummy))
-            {
-                foreach (var item in AllOutputModelElements.Where(x => x.Dummy))
-                {
-                    sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
-                }
-            }
-
-            if (AllCCOLOutputElements.Any(x => x.Dummy) || AllOutputModelElements.Any(x => x.Dummy))
+            if (AllCCOLOutputElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#endif");
             }
@@ -265,15 +229,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLInputElements.Where(x => !x.Dummy))
             {
-                if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                sb.Append(GetCoordinatesString(item, item.Naam, "is"));
             }
 
-            foreach (var item in AllInputModelElements.Where(x => !x.Dummy))
-            {
-                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
-            }
-            
-            if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
+            if (AllCCOLInputElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
             }
@@ -282,19 +241,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
                 {
-                    if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                    sb.Append(GetCoordinatesString(item, item.Naam, "is"));
                 }
             }
 
-            if (AllInputModelElements.Any(x => x.Dummy))
-            {
-                foreach (var item in AllInputModelElements.Where(x => x.Dummy))
-                {
-                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
-                }
-            }
-
-            if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
+            if (AllCCOLInputElements.Any(x => x.Dummy))
             { 
                 sb.AppendLine("#endif");
             }

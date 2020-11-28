@@ -230,6 +230,7 @@
     <Compile Include="Models\Models\InterSignaalGroep\VoorstartModel.cs" />
     <Compile Include="Models\Models\Modules\AlternatievenPerBlokModel.cs" />
     <Compile Include="Models\Models\Modules\FaseCyclusAlternatiefPerBlokModel.cs" />
+    <Compile Include="Models\Models\NonController\IOCollector.cs" />
     <Compile Include="Models\Models\RIS\RISDataModel.cs" />
     <Compile Include="Models\Models\RIS\RISFaseCyclusDataModel.cs" />
     <Compile Include="Models\Models\RIS\RISFaseCyclusLaneDataModel.cs" />

@@ -1,11 +1,13 @@
 ﻿using System;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.DataAccess
 {
     public interface ITLCGenControllerDataProvider
     {
         ControllerModel Controller { get; }
+        ITLCGenGenerator CurrentGenerator { get; set; }
         string ControllerFileName { get; set; }
         bool ControllerHasChanged { get; set; }
 

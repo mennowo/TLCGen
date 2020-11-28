@@ -379,6 +379,10 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabView.xaml.cs">
+      <DependentUpon>RangeerElementenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabViewModel.cs">
       <DependentUpon>RoBuGroverTabView.xaml</DependentUpon>
     </Compile>
@@ -799,6 +803,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1069,10 +1077,6 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
       <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
       <Name>TLCGen.Plugins.MultiSim</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
-      <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
-      <Name>TLCGen.Plugins.RangeerElementen</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Sumo\TLCGen.Plugins.Sumo.csproj">
       <Project>{e327cf4f-33b4-4a6f-91ad-17fde5c91d86}</Project>

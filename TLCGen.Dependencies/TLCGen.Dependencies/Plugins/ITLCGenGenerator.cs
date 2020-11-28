@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
+using TLCGen.Models;
 
 namespace TLCGen.Plugins
 {
@@ -8,6 +10,8 @@ namespace TLCGen.Plugins
 
         bool CanGenerateController();
         void GenerateController();
+
+        List<IOElementModel> GetAllIOElements(ControllerModel c);
 
         string GetGeneratorName();
         string GetGeneratorVersion();

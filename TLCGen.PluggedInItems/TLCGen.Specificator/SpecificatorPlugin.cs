@@ -45,6 +45,11 @@ namespace TLCGen.Specificator
 
         public UserControl GeneratorView { get; }
 
+        public List<IOElementModel> GetAllIOElements(ControllerModel c)
+        {
+            return null;
+        }
+
         public string GetGeneratorName()
         {
             return "Specificator";

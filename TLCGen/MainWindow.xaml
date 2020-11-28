@@ -14,7 +14,7 @@
         dd:DragDrop.IsDropTarget="True"
         dd:DragDrop.DropHandler="{Binding}"
         mc:Ignorable="d"
-        DataContext="{Binding}"
+        DataContext="{Binding}" d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
         Title="{Binding Path=ProgramTitle}" Height="550" Width="700">
     <Window.Resources>
         <ResourceDictionary>

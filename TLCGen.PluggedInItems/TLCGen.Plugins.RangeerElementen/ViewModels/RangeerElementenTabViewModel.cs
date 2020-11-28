@@ -11,6 +11,7 @@ using System.Windows.Media.Animation;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins.RangeerElementen.Models;
@@ -374,153 +375,11 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             }
         }
 
-        private void OnGenerated(ControllerCodeGeneratedMessage obj)
-        {
-            if (!_rangeerElementenModel.RangeerElementenToepassen) return;
-            var sysFile =
-                Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), _plugin.Controller.Data.Naam + "sys.h");
-            if (File.Exists(sysFile))
-            {
-                var sb = new StringBuilder();
-                var lines = File.ReadAllLines(sysFile);
-                var insertedD = false;
-                var insertedSg = false;
-                var foundD = false;
-                var foundSg = false;
-                foreach (var l in lines)
-                {
-                    if (!insertedSg)
-                    {
-                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Fcpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
-                        if (m.Success)
-                        {
-                            foundSg = true;
-                            var rd = RangeerSignalGroups.FirstOrDefault(x => _plugin.Fcpf + x.SignalGroup == m.Groups["def"].Value);
-                            if (rd != null)
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                    if (!insertedSg && foundSg &&
-                        (Regex.IsMatch(l, @"\s*#ifndef\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, @"\s*#if\s+!defined\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, @"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
-                         Regex.IsMatch(l, @"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
-                    {
-                        sb.Append(GetNewSignalGroupDefines());
-                        insertedSg = true;
-                    }
-                    if (!insertedSg && Regex.IsMatch(l, @"\s*#define\s+FCMAX.*"))
-                    {
-                        sb.Append(GetNewSignalGroupDefines());
-                        insertedSg = true;
-                    }
-
-                    if (!insertedD)
-                    {
-                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
-                        if (m.Success)
-                        {
-                            foundD = true;
-                            var rd = RangeerDetectors.FirstOrDefault(x => _plugin.Dpf + x.Element == m.Groups["def"].Value);
-                            if (rd != null)
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                    if (!insertedD && foundD &&
-                        (Regex.IsMatch(l, @"\s*#ifndef\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, @"\s*#if\s+!defined\s+AUTOMAAT.*") || 
-                         Regex.IsMatch(l, @"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
-                         Regex.IsMatch(l, @"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
-                    {
-                        sb.Append(GetNewDetectorDefines());
-                        insertedD = true;
-                    }
-                    if (!insertedD && Regex.IsMatch(l, @"\s*#define\s+DPMAX.*"))
-                    {
-                        sb.Append(GetNewDetectorDefines());
-                        insertedD = true;
-                    }
-
-                    sb.AppendLine(l);
-                }
-                try
-                {
-                    File.Delete(sysFile);
-                    File.WriteAllText(sysFile, sb.ToString(), Encoding.Default);
-                }
-                catch
-                {
-                    MessageBox.Show("De rangeer elementen plugin kan de sys.h niet overschrijven; is die elders open?", "Fout bij overschrijven sys.h");
-                }
-            }
-        }
-
         #endregion // TLCGen messaging
 
         #region Private Methods 
 
-        private string GetNewDetectorDefines()
-        {
-            var sb = new StringBuilder();
-
-            var pad1 = "ISMAX".Length;
-            if (RangeerDetectors.Any())
-            {
-                pad1 = RangeerDetectors.Max(x => (_plugin.Dpf + x.Element).Length);
-            }
-            if (_plugin.Controller.SelectieveDetectoren.Any())
-            {
-                var _pad1 = _plugin.Controller.SelectieveDetectoren.Max(x => (_plugin.Dpf + x.Naam).Length);
-                pad1 = _pad1 > pad1 ? _pad1 : pad1;
-            }
-            var ovdummies = _plugin.Controller.PrioData.GetAllDummyDetectors();
-            if (ovdummies.Any())
-            {
-                pad1 = ovdummies.Max(x => (_plugin.Dpf + x.Naam).Length);
-            }
-            pad1 = pad1 + $"{_plugin.Ts}#define  ".Length;
-
-            var pad2 = _plugin.Controller.GetAllDetectors().Count().ToString().Length;
-
-            var index = 0;
-            foreach (var dm in RangeerDetectors)
-            {
-                sb.Append($"{_plugin.Ts}#define {_plugin.Dpf}{dm.Element} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                ++index;
-            }
-
-            return sb.ToString();
-        }
-
         
-        private string GetNewSignalGroupDefines()
-        {
-            var sb = new StringBuilder();
-
-            var pad1 = "FCMAX".Length;
-            if (RangeerSignalGroups.Any())
-            {
-                pad1 = RangeerSignalGroups.Max(x => (_plugin.Fcpf + x.SignalGroup).Length);
-            }
-            pad1 = pad1 + $"{_plugin.Ts}#define  ".Length;
-
-            var pad2 = _plugin.Controller.Fasen.Count.ToString().Length;
-
-            var index = 0;
-            foreach (var dm in RangeerSignalGroups)
-            {
-                sb.Append($"{_plugin.Ts}#define {_plugin.Fcpf}{dm.SignalGroup} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                ++index;
-            }
-
-            return sb.ToString();
-        }
 
         #endregion // Private Methods 
 
@@ -531,7 +390,42 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<ControllerCodeGeneratedMessage>(this, OnGenerated);
+            MessengerInstance.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequestReceived);
+        }
+
+        private void OnPrepareForGenerationRequestReceived(PrepareForGenerationRequest obj)
+        {
+            var c = obj.Controller;
+
+
+
+            if (_rangeerElementenModel.RangeerSignaalGroepenToepassen)
+            {
+                foreach (var sg in c.Fasen)
+                {
+                    var rangeSg = _rangeerElementenModel.RangeerSignaalGroepen.FirstOrDefault(x => x.SignaalGroep == sg.Naam);
+                    if (rangeSg != null)
+                    {
+                        sg.RangeerIndex = rangeSg.RangeerIndex;
+                    }
+                }
+            }
+
+            if (_rangeerElementenModel.RangeerElementenToepassen)
+            {
+                for (int i = 0; i < _rangeerElementenModel.RangeerElementen.Count; i++)
+                {
+                    _rangeerElementenModel.RangeerElementen[i].RangeerIndex = i;
+                }
+                foreach (var d in c.GetAllDetectors())
+                {
+                    var rangeD = _rangeerElementenModel.RangeerElementen.FirstOrDefault(x => x.Element == d.Naam);
+                    if (rangeD != null)
+                    {
+                        d.RangeerIndex = rangeD.RangeerIndex;
+                    }
+                }
+            }
         }
 
         #endregion // Public Methods

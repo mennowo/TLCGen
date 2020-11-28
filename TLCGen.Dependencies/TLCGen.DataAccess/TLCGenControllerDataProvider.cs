@@ -7,7 +7,6 @@ using System.Windows;
 using System.Xml;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
-using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
@@ -26,8 +25,6 @@ namespace TLCGen.DataAccess
         private static ITLCGenControllerDataProvider _Default;
 
         private ControllerModel _Controller;
-        private string _ControllerFileName;
-        private bool _ControllerHasChanged;
 
         private XmlDocument _ControllerXml;
 
@@ -82,17 +79,11 @@ namespace TLCGen.DataAccess
 	    /// <summary>
         /// String representation of the currently loaded file.
         /// </summary>
-        public string ControllerFileName
-        {
-            get => _ControllerFileName;
-		    set => _ControllerFileName = value;
-        }
+        public string ControllerFileName { get; set; }
 
-        public bool ControllerHasChanged
-        {
-            get => _ControllerHasChanged;
-	        set => _ControllerHasChanged = value;
-        }
+        public bool ControllerHasChanged { get; set; }
+
+        public ITLCGenGenerator CurrentGenerator { get; set; }
 
         #endregion // Properties
 
