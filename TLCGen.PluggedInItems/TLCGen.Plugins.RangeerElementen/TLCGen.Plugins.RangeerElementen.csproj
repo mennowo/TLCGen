@@ -49,13 +49,8 @@
     <Compile Include="Models\RangeerElementenDataModel.cs" />
     <Compile Include="Models\RangeerElementModel.cs" />
     <Compile Include="Models\RangeerSignaalGroepModel.cs" />
-    <Compile Include="RangeerElementenTabView.xaml.cs">
-      <DependentUpon>RangeerElementenTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RangeerElementenPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\RangeerElementViewModel.cs" />
-    <Compile Include="ViewModels\RangeerElementenTabViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -78,12 +73,6 @@
       <Project>{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}</Project>
       <Name>TLCGen.Generators.CCOL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="RangeerElementenTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>

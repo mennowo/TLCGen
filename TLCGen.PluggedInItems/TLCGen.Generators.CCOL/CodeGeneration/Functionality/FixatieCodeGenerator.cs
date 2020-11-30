@@ -30,7 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_isfix}",
                         _isfix));
-                _myBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData as IOElementModel, $"{_ispf}{_isfix}"));
+                _myBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData, $"{_isfix}"));
             }
         }
 

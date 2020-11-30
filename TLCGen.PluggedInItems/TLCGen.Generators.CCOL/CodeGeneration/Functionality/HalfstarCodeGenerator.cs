@@ -177,7 +177,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}{_uspl}{pl.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspl}{pl.Naam}"));
 
                     foreach(var fcpl in pl.Fasen)
                     {
@@ -200,13 +200,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
 
-                _myBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_uspf}{_usplact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlActUitgang, $"{_uspf}{_usmlact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KpActUitgang, $"{_uspf}{_uskpact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlPlUitgang, $"{_uspf}{_usmlpl}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.TxTimerUitgang, $"{_uspf}{_ustxtimer}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KlokUitgang, $"{_uspf}{_usklok}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.HandUitgang, $"{_uspf}{_ushand}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_usplact}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlActUitgang, $"{_usmlact}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KpActUitgang, $"{_uskpact}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlPlUitgang, $"{_usmlpl}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.TxTimerUitgang, $"{_ustxtimer}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KlokUitgang, $"{_usklok}"));
+				_myBitmapOutputs.Add(new CCOLIOElement(hsd.HandUitgang, $"{_ushand}"));
 				
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplact}", _hplact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hkpact}", _hkpact));
@@ -227,10 +227,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 				{
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaster}", _usmaster));
-					_myBitmapOutputs.Add(new CCOLIOElement(hsd.MasterUitgang, $"{_uspf}{_usmaster}"));
+					_myBitmapOutputs.Add(new CCOLIOElement(hsd.MasterUitgang, $"{_usmaster}"));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usslave}", _usslave));
-                    _myBitmapOutputs.Add(new CCOLIOElement(hsd.SlaveUitgang, $"{_uspf}{_usslave}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(hsd.SlaveUitgang, $"{_usslave}"));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mmaster}", _mmaster));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mslave}", _mslave));
@@ -287,24 +287,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "in"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"{_uspf}in{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InKoppelpuls, $"{_uspf}in{k.KruisingNaam}{_uskpuls}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodeVARegelen, $"{_uspf}in{k.KruisingNaam}{_uspervar}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodenAlternatievenHoofdrichtingen, $"{_uspf}in{k.KruisingNaam}{_usperarh}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"in{k.KruisingNaam}{_usleven}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InKoppelpuls, $"in{k.KruisingNaam}{_uskpuls}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodeVARegelen, $"in{k.KruisingNaam}{_uspervar}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodenAlternatievenHoofdrichtingen, $"in{k.KruisingNaam}{_usperarh}"));
                         foreach (var pl in hsd.SignaalPlannen)
 						{
                         	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "in"));
 						}
 						foreach (var pl in k.PlanIngangen)
 						{
-							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}in{k.KruisingNaam}{pl.Plan}"));
+							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"in{k.KruisingNaam}{pl.Plan}"));
 						}
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "uit"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"{_uspf}uit{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitSynchronisatieOk, $"{_uspf}uit{k.KruisingNaam}{_ussyncok}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitTxsOk, $"{_uspf}uit{k.KruisingNaam}{_ustxsok}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"uit{k.KruisingNaam}{_usleven}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitSynchronisatieOk, $"uit{k.KruisingNaam}{_ussyncok}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitTxsOk, $"uit{k.KruisingNaam}{_ustxsok}"));
 					}
 					if (k.Type == HalfstarGekoppeldTypeEnum.Slave)
 					{
@@ -312,24 +312,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "uit"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"{_uspf}uit{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitKoppelpuls, $"{_uspf}uit{k.KruisingNaam}{_uskpuls}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodeVARegelen, $"{_uspf}uit{k.KruisingNaam}{_uspervar}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodenAlternatievenHoofdrichtingen, $"{_uspf}uit{k.KruisingNaam}{_usperarh}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"uit{k.KruisingNaam}{_usleven}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitKoppelpuls, $"uit{k.KruisingNaam}{_uskpuls}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodeVARegelen, $"uit{k.KruisingNaam}{_uspervar}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodenAlternatievenHoofdrichtingen, $"uit{k.KruisingNaam}{_usperarh}"));
 						foreach (var pl in hsd.SignaalPlannen)
 						{
                         	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "uit"));
 						}
 						foreach (var pl in k.PlanUitgangen)
 						{
-							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}uit{k.KruisingNaam}{pl.Plan}"));
+							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"uit{k.KruisingNaam}{pl.Plan}"));
 						}
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "in"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"{_uspf}in{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InSynchronisatieOk, $"{_uspf}in{k.KruisingNaam}{_ussyncok}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InTxsOk, $"{_uspf}in{k.KruisingNaam}{_ustxsok}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"in{k.KruisingNaam}{_usleven}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InSynchronisatieOk, $"in{k.KruisingNaam}{_ussyncok}"));
+						_myBitmapOutputs.Add(new CCOLIOElement(k.InTxsOk, $"in{k.KruisingNaam}{_ustxsok}"));
 					}
                     var signals = ((IHaveKoppelSignalen)k).UpdateKoppelSignalen();
                     foreach (var s in signals)

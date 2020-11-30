@@ -81,7 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{_ussegm}{item.Naam}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_ussegm}{item.Naam}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm));
             }
             if (c.Data.SegmentDisplayType == Models.Enumerations.SegmentDisplayTypeEnum.DrieCijferDisplay)
@@ -94,7 +94,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var item in c.Data.ModulenDisplayBitmapData)
                 {
-                    _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam.Replace("ML", _usML.Setting)}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{item.Naam.Replace("ML", _usML.Setting)}"));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{item.Naam.Replace("ML", _usML.Setting)}", _usML, item.Naam.Replace("ML", _usML.Setting)));
                 }
@@ -104,7 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var i in c.Ingangen)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
-                _myBitmapInputs.Add(new CCOLIOElement(i, $"{_ispf}{i.Naam}"));
+                _myBitmapInputs.Add(new CCOLIOElement(i, $"{i.Naam}"));
             }
 
             // Versie beheer

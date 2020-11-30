@@ -70,6 +70,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ObjectModel" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
@@ -998,6 +1001,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="paket.references" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1077,6 +1081,10 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.MultiSim\TLCGen.Plugins.MultiSim.csproj">
       <Project>{4244bf1c-fbf7-4647-9d71-3c25e756b4e1}</Project>
       <Name>TLCGen.Plugins.MultiSim</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
+      <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
+      <Name>TLCGen.Plugins.RangeerElementen</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Sumo\TLCGen.Plugins.Sumo.csproj">
       <Project>{e327cf4f-33b4-4a6f-91ad-17fde5c91d86}</Project>

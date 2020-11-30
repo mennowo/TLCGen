@@ -47,23 +47,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             // outputs
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
-            _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_uspf}{_usperdef}"));
+            _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_usperdef}"));
             foreach (var per in c.PeriodenData.Perioden)
             {
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}"));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}"));
                         ++iper;
                         break;
                     case PeriodeTypeEnum.StarRegelen:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{per.Naam}"));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{per.Naam}"));
                         break;
                     case PeriodeTypeEnum.Overig:
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{_prmpero}{per.Naam}"));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{_prmpero}{per.Naam}"));
                         break;
                 }
             }
@@ -146,11 +146,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, _prmperrtdim.Description));
             if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, _prmperbel.Description));
             if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, _prmperbeldim.Description));
-            if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_uspf}{_usper}{_prmperrt}"));
-            if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_uspf}{_usper}{_prmperrta}"));
-            if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));
-            if (iperbel > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenActiefBitmapData, $"{_uspf}{_usper}{_prmperbel}"));
-            if (iperbeldim > 1) _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
+            if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_usper}{_prmperrt}"));
+            if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_usper}{_prmperrta}"));
+            if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_usper}{_prmperrtdim}"));
+            if (iperbel > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenActiefBitmapData, $"{_usper}{_prmperbel}"));
+            if (iperbeldim > 1) _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_usper}{_prmperbeldim}"));
 
             // groentijden
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";

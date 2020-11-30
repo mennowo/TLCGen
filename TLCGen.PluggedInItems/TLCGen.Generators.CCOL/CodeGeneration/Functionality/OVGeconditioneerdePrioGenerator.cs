@@ -67,9 +67,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}", _usovoptijd, ov.FaseCyclus, ov.Type.GetDescription()));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtelaat, ov.FaseCyclus, ov.Type.GetDescription()));
 
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_uspf}{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_uspf}{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_uspf}{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}"));
                 }
             }
             if (c.PrioData.PrioUitgangPerFase)
@@ -81,9 +81,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{sg.Naam}", _usovoptijd, sg.Naam, ""));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{sg.Naam}", _usovtelaat, sg.Naam, ""));
 
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeVroegBitmapData, $"{_uspf}{_usovtevroeg}{sg.Naam}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioOpTijdBitmapData, $"{_uspf}{_usovoptijd}{sg.Naam}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeLaatBitmapData, $"{_uspf}{_usovtelaat}{sg.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeVroegBitmapData, $"{_usovtevroeg}{sg.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioOpTijdBitmapData, $"{_usovoptijd}{sg.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeLaatBitmapData, $"{_usovtelaat}{sg.Naam}"));
                 }
             }
         }

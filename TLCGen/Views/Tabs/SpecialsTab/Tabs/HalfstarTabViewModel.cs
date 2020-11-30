@@ -46,8 +46,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return Type != HalfstarTypeEnum.Master &&
-                    !GekoppeldeKruisingen.Any(x => x.Type == HalfstarGekoppeldTypeEnum.Master);
+                return Type != HalfstarTypeEnum.Master && GekoppeldeKruisingen.All(x => x.Type != HalfstarGekoppeldTypeEnum.Master);
             }
         }
 
@@ -102,7 +101,6 @@ namespace TLCGen.ViewModels
 				HalfstarData.IsHalfstar = value;
                 if (value && Controller != null)
 				{
-					// TODO: can make this generic?
 					foreach (var sp in SignaalPlannen)
 					{
 						foreach (var fc in Controller.Fasen)
@@ -134,13 +132,24 @@ namespace TLCGen.ViewModels
                     UpdateAlternatievenFromController();
                     UpdatePeriodenData();
 				}
+				else if (!value && Controller != null)
+                {
+                    ClearHalfstar();
+                }
 
 				RaisePropertyChanged<object>(broadcast: true);
 				RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
 			}
 		}
 
-		public HalfstarTypeEnum Type
+        private void ClearHalfstar()
+        {
+            SignaalPlannen.RemoveAll();
+			GekoppeldeKruisingen.RemoveAll();
+            HoofdRichtingen.RemoveAll();
+        }
+
+        public HalfstarTypeEnum Type
 		{
 			get => HalfstarData?.Type ?? HalfstarTypeEnum.FallbackMaster;
 			set
@@ -918,6 +927,9 @@ namespace TLCGen.ViewModels
 					{
 						PTPKruisingenNames.Add(kr.TeKoppelenKruispunt);
 					}
+
+					if (!HalfstarData.IsHalfstar) ClearHalfstar();
+
 					UpdateSelectables();
 				}
 				else

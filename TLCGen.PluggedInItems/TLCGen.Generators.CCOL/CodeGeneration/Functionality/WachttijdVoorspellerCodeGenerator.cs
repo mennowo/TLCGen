@@ -49,8 +49,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData, $"{_uspf}{_uswtv}{fc.Naam}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.Naam));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData, $"{_uswtv}{fc.Naam}"));
                 if (c.Data.WachttijdvoorspellerAansturenBus)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtvbus}{fc.Naam}", _uswtvbus, fc.Naam));
@@ -60,6 +60,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtv, fc.Naam));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData0, $"{_uswtv}{fc.Naam}0"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData1, $"{_uswtv}{fc.Naam}1"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData2, $"{_uswtv}{fc.Naam}2"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData3, $"{_uswtv}{fc.Naam}3"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData4, $"{_uswtv}{fc.Naam}4"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwtv}{fc.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwtv}{fc.Naam}", _hwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwtv}{fc.Naam}", _mwtv, fc.Naam));

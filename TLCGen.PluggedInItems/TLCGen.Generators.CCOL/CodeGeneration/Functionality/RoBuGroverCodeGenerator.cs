@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            _myBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, _uspf + _usrgv));
+            _myBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, _usrgv.ToString()));
         }
 
         public override bool HasCCOLElements() => true;

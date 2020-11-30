@@ -36,11 +36,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var rt in c.Signalen.Rateltikkers)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrt}{rt.FaseCyclus}", _usrt, rt.FaseCyclus));
+                _myBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData, $"{_usrt}{rt.FaseCyclus}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hrt}{rt.FaseCyclus}", _hrt, rt.FaseCyclus));
                 
                 if (c.Signalen.DimUitgangPerTikker)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrtdim}{rt.FaseCyclus}", _usrtdim, rt.FaseCyclus));
+                    _myBitmapOutputs.Add(new CCOLIOElement(rt.DimUitgangBitmapData, $"{_usrtdim}{rt.FaseCyclus}"));
                 }
 
                 if (rt.Type == RateltikkerTypeEnum.HoeflakeBewaakt && c.Signalen.DimmingNiveauVanuitApplicatie)
@@ -53,9 +55,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", rt.NaloopTijd, CCOLElementTimeTypeEnum.TE_type, _tnlrt, rt.FaseCyclus));
                 }
-
-
-                _myBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
             }
             foreach (var d in c.Signalen.Rateltikkers.SelectMany(x => x.Detectoren).Select(x => x.Detector).Distinct())
             {

@@ -12,6 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             Naam = naam;
             Element = ioelem;
+            if (Element != null) Element.Naam ??= naam;
             Dummy = false;
         }
     }

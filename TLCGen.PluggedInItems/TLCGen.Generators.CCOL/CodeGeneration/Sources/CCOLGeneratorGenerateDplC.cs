@@ -200,10 +200,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLOutputElements.Where(x => !x.Dummy))
             {
-                sb.Append(GetCoordinatesString(item, item.Naam, "us"));
+                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
             }
 
-            
             if (AllCCOLOutputElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
@@ -213,7 +212,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
                 {
-                    sb.Append(GetCoordinatesString(item, item.Naam, "us"));
+                    sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
                 }
             }
 
@@ -229,7 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLInputElements.Where(x => !x.Dummy))
             {
-                sb.Append(GetCoordinatesString(item, item.Naam, "is"));
+                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
             }
 
             if (AllCCOLInputElements.Any(x => x.Dummy))
@@ -241,7 +240,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
                 {
-                    sb.Append(GetCoordinatesString(item, item.Naam, "is"));
+                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
                 }
             }
 

@@ -1,8 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using GongSolutions.Wpf.DragDrop;
 using TLCGen.DataAccess;
+using TLCGen.Extensions;
+using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -22,6 +26,8 @@ namespace TLCGen.ViewModels
             if (dropInfo.InsertIndex == dropInfo.DragInfo.SourceIndex)
                 return;
 
+            var changed = false;
+
             if (dropInfo.Data is IOElementViewModel item)
             {
                 var col = (ObservableCollection<IOElementViewModel>)dropInfo.TargetCollection;
@@ -39,6 +45,7 @@ namespace TLCGen.ViewModels
                     var newIndex = dropInfo.InsertIndex + extra;
                     newIndex -= extra;
                     col.Move(sourceIndex, newIndex);
+                    changed = true;
                 }
                 // drag down
                 else
@@ -53,6 +60,7 @@ namespace TLCGen.ViewModels
                     newIndex -= extra;
                     if (newIndex >= col.Count) newIndex = col.Count - 1;
                     col.Move(sourceIndex, newIndex);
+                    changed = true;
                 }
                 for (var i = 0; i < col.Count; ++i)
                 {
@@ -80,6 +88,7 @@ namespace TLCGen.ViewModels
                         var newIndex = dropInfo.InsertIndex + extra + insert++;
                         newIndex -= extra;
                         col.Move(sourceIndex, newIndex);
+                        changed = true;
                     }
                     // drag down
                     else
@@ -94,6 +103,7 @@ namespace TLCGen.ViewModels
                         newIndex -= extra;
                         if (newIndex >= col.Count) newIndex = col.Count - 1;
                         col.Move(sourceIndex, newIndex);
+                       changed = true;
                     }
                 }
                 for (var i = 0; i < col.Count; ++i)
@@ -101,14 +111,11 @@ namespace TLCGen.ViewModels
                     col[i].RangeerIndex = i;
                 }
             }
-        }
-
-        public IOElementModelListDropTarget()
-        {
+            if (changed) Messenger.Default.Send(new ControllerDataChangedMessage());
         }
     }
 
-    public class IOElementViewModel : ViewModelBase
+    public class IOElementViewModel : ViewModelBase, IComparable
     {
         public IOElementViewModel(IOElementModel element)
         {
@@ -121,10 +128,18 @@ namespace TLCGen.ViewModels
             set
             {
                 Element.RangeerIndex = value;
+                if (SavedData != null) SavedData.RangeerIndex = value;
             }
         }
 
         public IOElementModel Element { get; }
+
+        public IOElementRangeerDataModel SavedData { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return RangeerIndex.CompareTo(((IOElementViewModel) obj).RangeerIndex);
+        }
     }
 
     [TLCGenTabItem(index: 8, type: TabItemTypeEnum.SpecialsTab)]
@@ -136,7 +151,57 @@ namespace TLCGen.ViewModels
 
         #region Properties
         
+        public bool RangerenFasen
+        {
+            get => _Controller?.Data?.RangeerData?.RangerenFasen ?? false;
+            set
+            {
+                _Controller.Data.RangeerData.RangerenFasen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateRangeerIndices(_Controller);
+            }
+        }
+
+        public bool RangerenDetectoren
+        {
+            get => _Controller?.Data?.RangeerData?.RangerenDetectoren ?? false;
+            set
+            {
+                _Controller.Data.RangeerData.RangerenDetectoren = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateRangeerIndices(_Controller);
+            }
+        }
+
+        public bool RangerenIngangen
+        {
+            get => _Controller?.Data?.RangeerData?.RangerenIngangen ?? false;
+            set
+            {
+                _Controller.Data.RangeerData.RangerenIngangen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateRangeerIndices(_Controller);
+            }
+        }
+
+        public bool RangerenUitgangen
+        {
+            get => _Controller?.Data?.RangeerData?.RangerenUitgangen ?? false;
+            set
+            {
+                _Controller.Data.RangeerData.RangerenUitgangen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateRangeerIndices(_Controller);
+            }
+        }
+
         public ObservableCollection<IOElementViewModel> Fasen { get; } = new ObservableCollection<IOElementViewModel>();
+
+        public ObservableCollection<IOElementViewModel> Detectoren { get; } = new ObservableCollection<IOElementViewModel>();
+
+        public ObservableCollection<IOElementViewModel> Ingangen { get; } = new ObservableCollection<IOElementViewModel>();
+
+        public ObservableCollection<IOElementViewModel> Uitgangen { get; } = new ObservableCollection<IOElementViewModel>();
 
         public IOElementModelListDropTarget DropTarget { get; } = new IOElementModelListDropTarget();
 
@@ -152,14 +217,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(_Controller);
-            if (elements == null) return;
-            
-            Fasen.Clear();
-            foreach (var e in elements.Where(x => x.ElementType == IOElementTypeEnum.FaseCyclus).OrderBy(x => x.RangeerIndex))
-            {
-                Fasen.Add(new IOElementViewModel(e));
-            }
+            UpdateRangeerIndices(_Controller);
         }
 
         public override ControllerModel Controller
@@ -178,9 +236,71 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen TabItem overrides
 
+        private void UpdateRangeerIndices(ControllerModel c)
+        {
+            if (!RangerenFasen && !RangerenDetectoren && !RangerenIngangen && !RangerenIngangen) return;
+
+            var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(c);
+            if (elements == null) return;
+
+            var vms = new (ObservableCollection<IOElementViewModel> items, IOElementTypeEnum type)[]
+            {
+                (Fasen, IOElementTypeEnum.FaseCyclus),
+                (Detectoren, IOElementTypeEnum.Detector),
+                (Ingangen, IOElementTypeEnum.Input),
+                (Uitgangen, IOElementTypeEnum.Output)
+            };
+            var models = new[]
+            {
+                c.Data.RangeerData.RangeerFasen,
+                c.Data.RangeerData.RangeerDetectoren,
+                c.Data.RangeerData.RangeerIngangen,
+                c.Data.RangeerData.RangeerUitgangen
+            };
+
+            for (var i = 0; i < 4; i++)
+            {
+                // clear and rebuild viewmodel list
+                vms[i].items.Clear();
+                foreach (var e in elements.Where(x => x.ElementType == vms[i].type))
+                {
+                    vms[i].items.Add(new IOElementViewModel(e));
+                }
+
+                // for each item, match with saved data
+                foreach (var vm in vms[i].items)
+                {
+                    var model = models[i].FirstOrDefault(x => x.Naam == vm.Element.Naam);
+                    if (model != null)
+                    {
+                        vm.RangeerIndex = model.RangeerIndex;
+                        vm.SavedData = model;
+                    }
+                    else
+                    {
+                        var ind = models[i].Count;
+                        var m = new IOElementRangeerDataModel
+                        {
+                            Naam = vm.Element.Naam,
+                            RangeerIndex = ind,
+                        };
+                        models[i].Add(m);
+                        vm.SavedData = m;
+                    }
+                }
+
+                // clean up saved model items that are no longer present
+                var remModels = models[i].Where(x => vms[i].items.All(x2 => x2.Element.Naam != x.Naam)).ToList();
+                foreach (var r in remModels) models[i].Remove(r);
+
+                // sort!
+                vms[i].items.BubbleSort();
+            }
+        }
+
         private void OnPrepareForGenerationRequestReceived(PrepareForGenerationRequest obj)
         {
-            
+            UpdateRangeerIndices(obj.Controller);
         }
 
         #region Constructor

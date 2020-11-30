@@ -16,13 +16,23 @@ namespace TLCGen.Models
     [Serializable]
     public abstract class IOElementModel
     {
+        private int _rangeerIndex;
+
         [HasDefault(false)]
         public abstract string Naam { get; set; }
 
         public abstract bool Dummy { get; set; }
 
+        [XmlIgnore]
         [HasDefault(false)]
-        public int RangeerIndex { get; set; }
+        public int RangeerIndex
+        {
+            get => _rangeerIndex;
+            set
+            {
+                _rangeerIndex = value;
+            }
+        }
 
         [HasDefault(false)]
         public IOElementTypeEnum ElementType { get; set; }
@@ -34,6 +44,11 @@ namespace TLCGen.Models
         [Browsable(false)]
         [XmlArrayItem(ElementName = "Coordinaat")]
         public List<BitmapCoordinaatModel> BitmapCoordinaten { get; set; }
+
+        public override string ToString()
+        {
+            return Naam;
+        }
 
         public IOElementModel()
         {

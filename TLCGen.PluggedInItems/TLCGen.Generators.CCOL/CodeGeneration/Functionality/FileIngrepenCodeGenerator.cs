@@ -41,7 +41,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var fm in c.FileIngrepen)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData, $"{_uspf}{_usfile}{fm.Naam}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData, $"{_usfile}{fm.Naam}"));
 
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(

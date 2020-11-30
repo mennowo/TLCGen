@@ -7,7 +7,8 @@ namespace TLCGen.Models
     {
         WachttijdVoorspeller,
         RISPrio,
-        RealFunc
+        RealFunc,
+        RangerenOldNew
     }
 
     public class ControllerAlertMessage : ViewModelBase

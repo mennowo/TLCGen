@@ -111,11 +111,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myBitmapOutputs.Add(
                         new CCOLIOElement(
                             k.OkBitmapData as IOElementModel,
-                            $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_usoke}"));
+                            $"{_usptp}_{k.TeKoppelenKruispunt}{_usoke}"));
                 _myBitmapOutputs.Add(
                         new CCOLIOElement(
                             k.ErrorBitmapData as IOElementModel,
-                            $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_userr}"));
+                            $"{_usptp}_{k.TeKoppelenKruispunt}{_userr}"));
 
                 _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(

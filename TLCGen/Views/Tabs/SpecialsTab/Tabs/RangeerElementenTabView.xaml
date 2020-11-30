@@ -9,44 +9,123 @@
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:RangeerElementenTabViewModel}">
+    <UserControl.Resources>
+        <Style TargetType="ListViewItem" x:Key="RangeerItemStyle">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                    <Setter Property="Background" Value="DarkGray" />
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MaxWidth" Value="120"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <!--IsEnabled="{Binding Path=RangeerElementenToepassen,Mode=OneWay}"-->
                         <!--SelectedItem="{Binding Path=SelectedRangeerDetector,UpdateSourceTrigger=PropertyChanged}"-->
                         <!--extensions:ListViewExtensions.SelectedItemsList="{Binding Path=Fasen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"-->
-        <ListView
-                        dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                        dd:DragDrop.UseDefaultDragAdorner="True"
-                        dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
-                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        ItemsSource="{Binding Path=Fasen}" Margin="2" Grid.Row="2" AlternationCount="2">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Style.Triggers>
-                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                                        <Setter Property="Background" Value="LightGray" />
-                                    </Trigger>
-                                    <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                                        <Setter Property="Background" Value="DarkGray" />
-                                    </Trigger>
-                                </Style.Triggers>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="MinWidth" Value="120"/>
-                                <Setter Property="MaxWidth" Value="120"/>
-                                <Setter Property="Margin" Value="2"/>
-                                <Setter Property="Padding" Value="0"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Rangeren toepassen voor" />
+            <CheckBox IsChecked="{Binding Path=RangerenFasen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Fasen" VerticalAlignment="Center" />
+            <CheckBox IsChecked="{Binding Path=RangerenDetectoren,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Detectoren" VerticalAlignment="Center" />
+            <CheckBox IsChecked="{Binding Path=RangerenIngangen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Ingangen" VerticalAlignment="Center" />
+            <CheckBox IsChecked="{Binding Path=RangerenUitgangen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Uitgangen" VerticalAlignment="Center" />
+        </StackPanel>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Fasen" IsEnabled="{Binding Path=RangerenFasen}">
+                <ListView
+                    dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
+                    dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemsSource="{Binding Path=Fasen}" Margin="2" AlternationCount="2">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Detectoren" IsEnabled="{Binding Path=RangerenDetectoren}">
+                <ListView
+                    dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
+                    dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemsSource="{Binding Path=Detectoren}" Margin="2" AlternationCount="2">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Ingangen" IsEnabled="{Binding Path=RangerenIngangen}">
+                <ListView
+                    dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
+                    dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemsSource="{Binding Path=Ingangen}" Margin="2" AlternationCount="2">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Uitgangen" IsEnabled="{Binding Path=RangerenUitgangen}">
+                <ListView
+                    dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
+                    dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemsSource="{Binding Path=Uitgangen}" Margin="2" AlternationCount="2">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

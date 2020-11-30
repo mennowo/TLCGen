@@ -637,6 +637,32 @@ namespace TLCGen.ModelManagement
                     alert.PropertyChanged -= AlertMsgOnPropertyChanged;
                 }
             }
+
+            // Rangeer elementen
+            if (Controller.Data.RangeerData.RangerenOvergezet)
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RangerenOldNew))
+                {
+                    var msg = new ControllerAlertMessage
+                    {
+                        Background = Brushes.BlanchedAlmond,
+                        Shown = true,
+                        Message = "***Let op!*** De oude rangeer elementen data is omgezet; controleer dit via tab Specials > Rangeren IO.",
+                        Type = ControllerAlertType.RangerenOldNew
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.RangerenOldNew);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
         }
 
         private void AlertMsgOnPropertyChanged(object sender, PropertyChangedEventArgs e)

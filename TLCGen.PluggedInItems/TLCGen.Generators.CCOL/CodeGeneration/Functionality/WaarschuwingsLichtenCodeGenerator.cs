@@ -47,13 +47,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbel}{wlg.Naam}", _usbel, wlg.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.BellenBitmapData as IOElementModel, $"{_uspf}{_usbel}{wlg.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.BellenBitmapData as IOElementModel, $"{_usbel}{wlg.Naam}"));
                 }
                 if (wlg.Lichten)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswl}{wlg.Naam}", _uswl, wlg.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.LichtenBitmapData as IOElementModel, $"{_uspf}{_uswl}{wlg.Naam}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.LichtenBitmapData as IOElementModel, $"{_uswl}{wlg.Naam}"));
                 }
             }
         }

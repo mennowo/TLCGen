@@ -93,6 +93,21 @@ namespace TLCGen.Models
         [IOElement("wtv", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
         public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData { get; set; }
 
+        [IOElement("wtv0", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData0 { get; set; }
+
+        [IOElement("wtv1", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData1 { get; set; }
+
+        [IOElement("wtv2", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData2 { get; set; }
+        
+        [IOElement("wtv3", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData3 { get; set; }
+        
+        [IOElement("wtv4", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData4 { get; set; }
+
         [XmlArrayItem(ElementName = "HardMeeverlengFaseCyclus")]
         public List<HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli { get; set; }
 
@@ -147,6 +162,11 @@ namespace TLCGen.Models
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBitmapData0 = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBitmapData1 = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBitmapData2 = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBitmapData3 = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBitmapData4 = new BitmapCoordinatenDataModel();
             AantalRijstroken = 1;
         }
 

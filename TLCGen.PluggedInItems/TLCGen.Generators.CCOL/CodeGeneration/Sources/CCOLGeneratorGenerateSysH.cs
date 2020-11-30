@@ -31,11 +31,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHUitgangen());
+            sb.Append(GenerateSysHUitgangen(c));
             sb.AppendLine();
             sb.Append(GenerateSysHDetectors(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHIngangen());
+            sb.Append(GenerateSysHIngangen(c));
             sb.AppendLine();
             sb.Append(GenerateSysHHulpElementen());
             sb.AppendLine();
@@ -141,7 +141,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad2 = controller.Fasen.Count.ToString().Length;
 
             var index = 0;
-            foreach (var fcm in controller.Fasen.OrderBy(x => x.RangeerIndex))
+            var fasen = controller.Data.RangeerData.RangerenFasen ? controller.Fasen.OrderBy(x => x.RangeerIndex).ToList() : controller.Fasen;
+            foreach (var fcm in fasen)
             {
                 sb.Append($"{ts}#define {fcm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index}".PadLeft(pad2));
@@ -154,19 +155,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHUitgangen()
+        private string GenerateSysHUitgangen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
 
-            sb.Append(GetAllElementsSysHLines(_uitgangen, "FCMAX"));
+            if (c.Data.RangeerData.RangerenUitgangen)
+            {
+                foreach (var u in _uitgangen.Elements)
+                {
+                    var m = c.Data.RangeerData.RangeerUitgangen.FirstOrDefault(x => x.Naam == u.Naam);
+                    if (m != null) u.RangeerIndex = m.RangeerIndex;
+                }
+            }
+
+            sb.Append(GetAllElementsSysHLines(_uitgangen, "FCMAX", useRangering: c.Data.RangeerData.RangerenUitgangen));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHDetectors(ControllerModel controller)
+        private string GenerateSysHDetectors(ControllerModel c)
         {
             var sb = new StringBuilder();
 
@@ -174,31 +184,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* -------- */");
 
             var pad1 = "ISMAX".Length;
-            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any())
+            if(c.Fasen.Any() && c.Fasen.SelectMany(x => x.Detectoren).Any())
             {
-                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
+                pad1 = c.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
             }
-            if(controller.Detectoren.Any())
+            if(c.Detectoren.Any())
             {
-                var maxPadDet = controller.Detectoren.Max(x => x.GetDefine().Length);
+                var maxPadDet = c.Detectoren.Max(x => x.GetDefine().Length);
                 pad1 = maxPadDet > pad1 ? maxPadDet : pad1;
             }
-            if (controller.SelectieveDetectoren.Any())
+            if (c.SelectieveDetectoren.Any())
             {
-                var maxPadSelDet = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
+                var maxPadSelDet = c.SelectieveDetectoren.Max(x => x.GetDefine().Length);
                 pad1 = maxPadSelDet > pad1 ? maxPadSelDet : pad1;
             }
-            var ovdummies = controller.PrioData.GetAllDummyDetectors();
+            var ovdummies = c.PrioData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
                 pad1 = ovdummies.Max(x => x.GetDefine().Length);
             }
             pad1 += $"{ts}#define  ".Length;
 
-            var pad2 = controller.Fasen.Count.ToString().Length;
+            var pad2 = c.Fasen.Count.ToString().Length;
 
             var index = 0;
-            foreach (var dm in controller.GetAllDetectors().OrderBy(x => x.RangeerIndex))
+            var detectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors().OrderBy(x => x.RangeerIndex) : c.GetAllDetectors();
+            foreach (var dm in detectors)
             {
                 if (dm.Dummy) continue;
                 sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
@@ -209,18 +220,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var automIndex = index;
 
             /* Dummies */
-            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Dummy) ||
-                controller.Detectoren.Any() && controller.Detectoren.Any(x => x.Dummy) ||
+            if (c.Fasen.Any() && c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Dummy) ||
+                c.Detectoren.Any() && c.Detectoren.Any(x => x.Dummy) ||
                 ovdummies.Any())
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
-                foreach (var dm in controller.GetAllDetectors(x => x.Dummy).OrderBy(x => x.RangeerIndex))
+                var dummyDetectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors(x => x.Dummy).OrderBy(x => x.RangeerIndex) : c.GetAllDetectors(x => x.Dummy);
+                foreach (var dm in dummyDetectors)
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index}".PadLeft(pad2));
                     ++index;
                 }
-                foreach(var dm in ovdummies.OrderBy(x => x.RangeerIndex))
+                var dummyOvDetectors = c.Data.RangeerData.RangerenDetectoren ? ovdummies.OrderBy(x => x.RangeerIndex).ToList() : ovdummies;
+                foreach(var dm in dummyOvDetectors)
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index}".PadLeft(pad2));
@@ -245,14 +258,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHIngangen()
+        private string GenerateSysHIngangen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX"));
+            if (c.Data.RangeerData.RangerenDetectoren)
+            {
+                foreach (var i in _ingangen.Elements)
+                {
+                    var m = c.Data.RangeerData.RangeerIngangen.FirstOrDefault(x => x.Naam == i.Naam);
+                    if (m != null) i.RangeerIndex = m.RangeerIndex;
+                }
+            }
+
+            sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX", useRangering: c.Data.RangeerData.RangerenDetectoren));
 
             return sb.ToString();
         }

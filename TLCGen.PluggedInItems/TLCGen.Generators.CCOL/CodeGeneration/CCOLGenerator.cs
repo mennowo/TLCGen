@@ -67,30 +67,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Public Methods
 
+        private void PrepareGeneration(ControllerModel c)
+        {
+            CCOLGeneratorSettingsProvider.Default.Reset();
+            CCOLElementCollector.Reset();
+
+            _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
+            _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
+            _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
+            _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
+            _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
+            _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
+            _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+            _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
+            _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
+            _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
+            foreach (var pgen in PieceGenerators)
+            {
+                pgen.CollectCCOLElements(c);
+            }
+        }
+
         public string GenerateSourceFiles(ControllerModel c, string sourcefilepath)
         {
             if (Directory.Exists(sourcefilepath))
             {
                 try
                 {
-                    CCOLGeneratorSettingsProvider.Default.Reset();
-                    CCOLElementCollector.Reset();
+                    PrepareGeneration(c);
 
-                    _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
-                    _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
-                    _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
-                    _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
-                    _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
-                    _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
-                    _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
-                    _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
-                    _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
-                    _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
-
-                    foreach (var pgen in PieceGenerators)
-                    {
-                        pgen.CollectCCOLElements(c);
-                    }
+                    CollectAllIO(c);
 
                     _alleDetectoren = new List<DetectorModel>();
                     foreach (var fcm in c.Fasen)
@@ -104,8 +111,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _alleDetectoren.Add(dm);
 
                     var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators.OrderBy(x => x.ElementGenerationOrder).ToList());
-
-                    CollectAllIO(c);
 
                     if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                         throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
@@ -143,6 +148,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     _counters = CCOLElementLists[5];
                     _schakelaars = CCOLElementLists[6];
                     _parameters = CCOLElementLists[7];
+
+                    if (c.Data.RangeerData.RangerenIngangen)
+                    {
+                        foreach (var ccolelem in _ingangen.Elements)
+                        {
+                            var model = c.Data.RangeerData.RangeerIngangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
+                            if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
+                        }
+                    }
+
+                    if (c.Data.RangeerData.RangerenUitgangen)
+                    {
+                        foreach (var ccolelem in _uitgangen.Elements)
+                        {
+                            var model = c.Data.RangeerData.RangeerUitgangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
+                            if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
+                        }
+                    }
 
                     foreach (var l in CCOLElementLists)
                     {
@@ -670,14 +693,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Private Methods
 
-        public List<IOElementModel> CollectAllIO(ControllerModel c)
+        public List<IOElementModel> CollectAllIO(ControllerModel c, bool prepare = false)
         {
+            if (prepare) PrepareGeneration(c);
+
             AllCCOLOutputElements = new List<IOElementModel>();
             AllCCOLInputElements = new List<IOElementModel>();
 
             foreach (var pgen in PieceGenerators)
             {
-                pgen.CollectCCOLElements(c);
                 if (pgen.HasCCOLBitmapOutputs())
                 {
                     AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs().Where(x => x?.Element != null).Select(x => x.Element));
@@ -734,7 +758,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         /// - if it is null, lines are generated like this: #define ElemName #
         /// - if it is not null, it goes like this: #define ElemName (numberdefine + #)</param>
         /// <returns></returns>
-        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null, List<CCOLElement> extraElements = null)
+        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null, List<CCOLElement> extraElements = null, bool useRangering = false)
         {
             var sb = new StringBuilder();
 
@@ -743,7 +767,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad3 = data.CommentsMaxWidth;
             var index = 0;
 
-            foreach (var elem in data.Elements)
+            var elements = useRangering ? data.Elements.OrderBy(x => x.RangeerIndex).ToList() : data.Elements;
+
+            foreach (var elem in elements)
             {
                 if (elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
                     continue;
@@ -773,7 +799,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
-                foreach (var elem in data.Elements)
+                foreach (var elem in elements)
                 {
                     if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
                         continue;

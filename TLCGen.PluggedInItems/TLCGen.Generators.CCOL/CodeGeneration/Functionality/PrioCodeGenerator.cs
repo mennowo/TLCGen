@@ -137,7 +137,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AddAllHDIngreepElements(HDIngreepModel hd, ControllerModel c)
         {
-            _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
+            _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_ushdinm}{hd.FaseCyclus}"));
 
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushdinm}{hd.FaseCyclus}", _ushdinm, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhd}{hd.FaseCyclus}", _hhd, hd.FaseCyclus));
@@ -212,7 +212,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!prioUitgangPerFase)
             {
                 _myBitmapOutputs.Add(new CCOLIOElement(prio.PrioInmeldingBitmapData,
-                    $"{_uspf}{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}"));
+                    $"{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}", _usovinm, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
@@ -453,14 +453,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtvtg}", c.PrioData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type, _prmmwtvtg));
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaxwt}", _usmaxwt));
-                _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.MaximaleWachttijdOverschredenBitmapData, $"{_uspf}{_usmaxwt}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.MaximaleWachttijdOverschredenBitmapData, $"{_usmaxwt}"));
 
                 if (c.HasKAR())
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}", _uskarog));
-                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KARMeldingBitmapData, $"{_uspf}{_uskarmelding}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KAROnderGedragBitmapData, $"{_uspf}{_uskarog}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KARMeldingBitmapData, $"{_uskarmelding}"));
+                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KAROnderGedragBitmapData, $"{_uskarog}"));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarmelding}", 15, CCOLElementTimeTypeEnum.TE_type, _tkarmelding));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarog}", 1440, CCOLElementTimeTypeEnum.TM_type, _tkarog));
@@ -532,7 +532,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var sg in c.Fasen.Where(x => x.PrioIngreep))
                 {
                     _myBitmapOutputs.Add(new CCOLIOElement(sg.PrioIngreepBitmapData,
-                        $"{_uspf}{_usovinm}{sg.Naam}"));
+                        $"{_usovinm}{sg.Naam}"));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{sg.Naam}", _usovinm, sg.Naam, ""));
                 }
             }

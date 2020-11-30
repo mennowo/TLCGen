@@ -38,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwens}", _mstarprogwens));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwissel}", _mstarprogwissel));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstarprogwissel}", _usstarprogwissel));
-            _myBitmapOutputs.Add(new CCOLIOElement(c.StarData.ProgrammaWisselBitmapInfo, $"{_uspf}{_usstarprogwissel}"));
+            _myBitmapOutputs.Add(new CCOLIOElement(c.StarData.ProgrammaWisselBitmapInfo, $"{_usstarprogwissel}"));
 
             if (c.StarData.ProgrammaSturingViaParameter)
             {
@@ -50,13 +50,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.StarData.IngangAlsVoorwaarde)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_isstar}", _isstar));
-                _myBitmapInputs.Add(new CCOLIOElement(c.StarData.StarRegelenIngang, $"{_ispf}{_isstar}"));
+                _myBitmapInputs.Add(new CCOLIOElement(c.StarData.StarRegelenIngang, $"{_isstar}"));
             }
 
             foreach (var pr in c.StarData.Programmas)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstar}{pr.Naam}", _usstar, pr.Naam));
-                _myBitmapOutputs.Add(new CCOLIOElement(pr, $"{_uspf}{_usstar}{pr.Naam}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(pr, $"{_usstar}{pr.Naam}"));
             }
 
             if (c.StarData.ProgrammaTijdenInParameters)

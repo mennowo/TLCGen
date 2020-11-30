@@ -11,6 +11,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public string Commentaar { get; set; }
         public CCOLElementTypeEnum Type { get; set; }
         public bool Dummy { get; set; }
+        public int RangeerIndex { get; set; }
 
         public CCOLElement()
         {
