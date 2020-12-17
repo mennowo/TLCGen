@@ -124,7 +124,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _counters = CCOLElementLists[5];
             _schakelaars = CCOLElementLists[6];
             _parameters = CCOLElementLists[7];
-
+            
             foreach (var l in CCOLElementLists)
             {
                 l.SetMax();
@@ -700,26 +700,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 else
                                 {
                                     vars.Add(i);
+                                    added = true;
                                 }
                             }
 
-                            added = vars.Any();
+                        }
+                    }
 
-                            foreach (var variable in vars)
+                    if (added)
+                    {
+                        foreach (var variable in vars)
+                        {
+                            if (!string.IsNullOrEmpty(variable.DefineCondition))
                             {
-                                if (!string.IsNullOrEmpty(variable.DefineCondition))
-                                {
-                                    sb.Append($"#if {variable.DefineCondition}");
-                                }
-                                sb.AppendLine(!string.IsNullOrWhiteSpace(variable.InitialValue) ? $"{ts}{variable.Type} {variable.Name} = {variable.InitialValue};" : $"{ts}{variable.Type} {variable.Name};");
-                                if (!string.IsNullOrEmpty(variable.DefineCondition))
-                                {
-                                    sb.Append($"#endif");
-                                }
-                                sb.AppendLine();
+                                sb.AppendLine($"#if {variable.DefineCondition}");
+                            }
+
+                            sb.AppendLine(!string.IsNullOrWhiteSpace(variable.InitialValue) ? $"{ts}{variable.Type} {variable.Name} = {variable.InitialValue};" : $"{ts}{variable.Type} {variable.Name};");
+                            if (!string.IsNullOrEmpty(variable.DefineCondition))
+                            {
+                                sb.AppendLine("#endif");
                             }
                         }
                     }
+
                     if (added && addnewlineatend) sb.AppendLine();
                 }
                 if (includecode)
