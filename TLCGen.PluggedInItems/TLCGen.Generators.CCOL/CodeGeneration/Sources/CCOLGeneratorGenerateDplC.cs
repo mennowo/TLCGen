@@ -132,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GetCoordinatesString(IOElementModel item, string itemdefine, string itemtype)
         {
             var sb = new StringBuilder();
-            if (item.BitmapCoordinaten?.Count > 0)
+            if (item != null && item.BitmapCoordinaten?.Count > 0)
             {
                 sb.Append($"{ts}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
                 sb.AppendLine($"Y_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].Y};");
@@ -143,7 +143,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"Y_{itemtype}[{itemdefine}] = NG;");
             }
 
-            if (item.BitmapCoordinaten?.Count > 1)
+            if (item != null && item.BitmapCoordinaten?.Count > 1)
             {
                 for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
                 {
@@ -198,7 +198,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
-            foreach (var item in _uitgangen.Elements.Where(x => !x.Dummy && x.IOElementData != null))
+            foreach (var item in _uitgangen.Elements.Where(x => !string.IsNullOrWhiteSpace(x.Naam) && !x.Dummy))
             {
                 sb.Append(GetCoordinatesString(item.IOElementData, _uspf + item.Naam, "us"));
             }
@@ -206,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (_uitgangen.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
-                foreach (var item in _uitgangen.Elements.Where(x => x.Dummy && x.IOElementData != null))
+                foreach (var item in _uitgangen.Elements.Where(x => !string.IsNullOrWhiteSpace(x.Naam) && x.Dummy))
                 {
                     sb.Append(GetCoordinatesString(item.IOElementData, _uspf + item.Naam, "us"));
                 }
@@ -218,7 +218,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
 
-            foreach (var item in _ingangen.Elements.Where(x => !x.Dummy && x.IOElementData != null))
+            foreach (var item in _ingangen.Elements.Where(x => !string.IsNullOrWhiteSpace(x.Naam) && !x.Dummy))
             {
                 sb.Append(GetCoordinatesString(item.IOElementData, _ispf + item.Naam, "is"));
             }
@@ -226,7 +226,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (_ingangen.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
-                foreach (var item in _ingangen.Elements.Where(x => x.Dummy && x.IOElementData != null))
+                foreach (var item in _ingangen.Elements.Where(x => !string.IsNullOrWhiteSpace(x.Naam) && x.Dummy))
                 {
                     sb.Append(GetCoordinatesString(item.IOElementData, _ispf + item.Naam, "is"));
                 }

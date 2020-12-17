@@ -273,8 +273,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usperarh}", _usperarh, k.InPeriodenAlternatievenHoofdrichtingen, k.KruisingNaam, "in"));
                         foreach (var pl in hsd.SignaalPlannen)
                         {
-                            var plin = k.PlanIngangen.FirstOrDefault(x => x.Naam == pl.Naam);
-                        	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, plin, pl.Naam, k.KruisingNaam, "in"));
+                            var plin = k.PlanIngangen.FirstOrDefault(x => x.Plan == pl.Naam);
+                        	    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, plin, pl.Naam, k.KruisingNaam, "in"));
 						}
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.UitLeven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.UitSynchronisatieOk, k.KruisingNaam, "uit"));
@@ -288,7 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usperarh}", _usperarh, k.UitPeriodenAlternatievenHoofdrichtingen, k.KruisingNaam, "uit"));
 						foreach (var pl in hsd.SignaalPlannen)
 						{
-                            var pluit = k.PlanUitgangen.FirstOrDefault(x => x.Naam == pl.Naam);
+                            var pluit = k.PlanUitgangen.FirstOrDefault(x => x.Plan == pl.Naam);
                         	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pluit, pl.Naam, k.KruisingNaam, "uit"));
 						}
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.InLeven, k.KruisingNaam, "in"));

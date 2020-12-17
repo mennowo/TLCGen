@@ -839,22 +839,12 @@ namespace TLCGen.GebruikersOpties
 
         public List<IOElementModel> GetOutputItems()
         {
-            var items = new List<IOElementModel>();
-            foreach (var v in Uitgangen)
-            {
-                items.Add(v.GebruikersOptieWithIO as IOElementModel);
-            }
-            return items;
+            return Uitgangen.Select(v => v.GebruikersOptieWithIO).Cast<IOElementModel>().ToList();
         }
 
         public List<IOElementModel> GetInputItems()
         {
-            var items = new List<IOElementModel>();
-            foreach (var v in Ingangen)
-            {
-                items.Add(v.GebruikersOptieWithIO as IOElementModel);
-            }
-            return items;
+            return Ingangen.Select(v => v.GebruikersOptieWithIO).Cast<IOElementModel>().ToList();
         }
 
         public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
@@ -896,7 +886,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang,
-                        elem.Commentaar){ Dummy = elem.Dummy });
+                        elem.Commentaar, elem.GebruikersOptieWithIO){ Dummy = elem.Dummy });
             }
             foreach (var elem in Ingangen)
             {
@@ -904,7 +894,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang,
-                        elem.Commentaar){ Dummy = elem.Dummy });
+                        elem.Commentaar, elem.GebruikersOptieWithIO){ Dummy = elem.Dummy });
             }
             foreach (var elem in HulpElementen)
             {

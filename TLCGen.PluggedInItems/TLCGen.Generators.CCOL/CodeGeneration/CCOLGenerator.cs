@@ -703,7 +703,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     added = true;
                                 }
                             }
-
                         }
                     }
 
