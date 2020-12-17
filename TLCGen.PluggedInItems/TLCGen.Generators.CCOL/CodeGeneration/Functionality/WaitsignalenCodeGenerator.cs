@@ -18,7 +18,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             // outputs
             var alldets = c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
@@ -26,15 +25,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if(d.Wachtlicht)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_uswt + d.Naam, _uswt, d.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uswt + d.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_uswt + d.Naam, _uswt, d.WachtlichtBitmapData, d.Naam));
                 }
             }
         }
 
         public override bool HasCCOLElements() => true;
-    
-        public override bool HasCCOLBitmapOutputs() => true;
     
         public override int HasCode(CCOLCodeTypeEnum type)
         {

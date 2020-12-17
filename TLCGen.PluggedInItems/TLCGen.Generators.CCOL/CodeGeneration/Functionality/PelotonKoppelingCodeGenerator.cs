@@ -39,7 +39,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen)
             {
@@ -86,8 +85,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 break;
                             case PelotonKoppelingRichtingEnum.Inkomend:
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspf}{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
-                                _myBitmapOutputs.Add(new CCOLIOElement(pk.InkomendVerklikking, $"{_uspelin}{pk.KoppelingNaam}"));
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspf}{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.InkomendVerklikking, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
 
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelmeet}{pk.KoppelingNaam}", pk.Meetperiode,
                                     CCOLElementTimeTypeEnum.TE_type, _tpelmeet, pk.KoppelingNaam, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
@@ -136,8 +134,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 break;
                             case PelotonKoppelingRichtingEnum.Inkomend:
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
-                                _myBitmapOutputs.Add(new CCOLIOElement(pk.InkomendVerklikking, $"{_uspelin}{pk.KoppelingNaam}"));
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.InkomendVerklikking, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
 
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpelin}{pk.KoppelingNaam}", _hpelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpeltegenh}{pk.KoppelingNaam}", _hpeltegenh, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
@@ -166,8 +163,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapOutputs() => true;
 
         public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
         {

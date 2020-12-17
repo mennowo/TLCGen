@@ -980,7 +980,7 @@ void PrioriteitsToekenning(void)
         for (i = 0; i < prioGKFC_MAX[prio]; ++i)
         {
             kov = prioTO_pointer[prio][i];
-            if (!iPrioriteitNooitAfkappen[prio] &&
+            if (!(iPrioriteitNooitAfkappen[prio] && G[fc]) &&
                 iPrioriteitsNiveau[kov] > iPrioriteitsNiveau[prio] && !iXPrio[kov] &&
                 (!G[fc] || iPrioriteitsOpties[kov] & poAfkappenKonflikterendOV))
             {

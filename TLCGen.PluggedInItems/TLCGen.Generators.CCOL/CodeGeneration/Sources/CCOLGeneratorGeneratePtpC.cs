@@ -192,11 +192,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}{ts}communicatieprogramma(GEEN_INIT);");
             sb.AppendLine($"{ts}{ts}#endif");
             sb.AppendLine();
+            if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
+            {
+                sb.AppendLine($"{ts}/* afzetten van statusbit in CIF_GPS[5] */");
+                sb.AppendLine($"{ts}/* ------------------------------------ */");
+                sb.AppendLine($"{ts}CIF_GPS[AUTSTATUS] = FALSE;");
+                sb.AppendLine();
+            }
             foreach (var k in c.PTPData.PTPKoppelingen)
             {
                 sb.AppendLine($"{ts}{ts}/* opzetten signalen van en naar {k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
-                sb.AppendLine("");
+                sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* nalopen in en uitgangssignalen */");
                 sb.AppendLine($"{ts}{ts}");
                 sb.AppendLine($"{ts}{ts}/* opzetten van uitgaande koppelsignalen PTP_{k.TeKoppelenKruispunt} */");

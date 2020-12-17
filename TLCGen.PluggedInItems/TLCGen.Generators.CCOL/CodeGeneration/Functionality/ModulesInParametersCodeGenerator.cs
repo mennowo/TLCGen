@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -18,7 +19,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
 
             if (c.Data.ModulenInParameters)
             {
@@ -74,19 +74,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.Data.ModulenInParameters) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPostApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.RegCPostApplication => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapInputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

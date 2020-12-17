@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -75,9 +76,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
         
-        public override bool HasFunctionLocalVariables() => true;
-        
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
@@ -85,7 +84,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc ||
                         c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }

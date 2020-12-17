@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.Settings
 {
@@ -117,11 +118,22 @@ namespace TLCGen.Generators.CCOL.Settings
                     GetElementDescription(element.Description, t, elementnames));
         }
 
+        public CCOLElement CreateElement(string name, CCOLGeneratorCodeStringSettingModel element, IOElementModel ioElementData, params string[] elementnames)
+        {
+            var t = TranslateType(element.Type);
+            return new CCOLElement(name, t, GetElementDescription(element.Description, t, elementnames), ioElementData);
+        }
+
         public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, string description)
         {
             return new CCOLElement(name, type, GetElementDescription(description, type));
         }
 
+        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, IOElementModel ioElementData, string description)
+        {
+            return new CCOLElement(name, type, GetElementDescription(description, type), ioElementData);
+        }
+        
         public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLElementTypeEnum type, string description)
         {
             return new CCOLElement(name, setting, timeType, type, GetElementDescription(description, type));

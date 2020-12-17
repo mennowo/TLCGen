@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -37,16 +38,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var fm in c.FileIngrepen)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData, $"{_usfile}{fm.Naam}"));
-
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_usfile}{fm.Naam}",
-                        _usfile, fm.Naam));
+                        _usfile, fm.BitmapData, fm.Naam));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_hfile}{fm.Naam}",
@@ -217,18 +215,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
         
-        public override bool HasCCOLBitmapOutputs() => true;
-
-        public override bool HasFunctionLocalVariables() => true;
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
                     if(!c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MinimaleRoodtijd)))
                         return base.GetFunctionLocalVariables(c, type);
-                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }

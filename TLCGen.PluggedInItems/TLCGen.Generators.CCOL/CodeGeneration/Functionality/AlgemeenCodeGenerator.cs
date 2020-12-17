@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -35,8 +36,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
 
             _myElements.Add(new CCOLElement(_mperiod, CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmfb}", c.Data.Fasebewaking, CCOLElementTimeTypeEnum.TS_type, _prmfb));
@@ -81,10 +80,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_ussegm}{item.Naam}"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm, item.BitmapData));
             }
-            if (c.Data.SegmentDisplayType == Models.Enumerations.SegmentDisplayTypeEnum.DrieCijferDisplay)
+            if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.DrieCijferDisplay)
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtoon7s}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtoon7s));
             }
@@ -94,17 +92,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var item in c.Data.ModulenDisplayBitmapData)
                 {
-                    _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{item.Naam.Replace("ML", _usML.Setting)}"));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{item.Naam.Replace("ML", _usML.Setting)}", _usML, item.Naam.Replace("ML", _usML.Setting)));
+                        $"{item.Naam.Replace("ML", _usML.Setting)}", _usML, item.BitmapData, item.Naam.Replace("ML", _usML.Setting)));
                 }
             }
 
             // Inputs
             foreach (var i in c.Ingangen)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
-                _myBitmapInputs.Add(new CCOLIOElement(i, $"{i.Naam}"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(i.Naam, CCOLElementTypeEnum.Ingang, i, i.Omschrijving));
             }
 
             // Versie beheer
@@ -144,10 +140,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override bool HasCCOLBitmapOutputs() => true;
-
-        public override bool HasCCOLBitmapInputs() => true;
-
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
@@ -162,23 +154,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (c.Data.GeenDetectorGedragInAutomaatOmgeving)
-                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "i", "") };
-                    return base.GetFunctionLocalVariables(c, type);
+                    return c.Data.GeenDetectorGedragInAutomaatOmgeving 
+                        ? new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i", "", "(defined AUTOMAAT || defined AUTOMAAT_TEST)") } 
+                        : base.GetFunctionLocalVariables(c, type);
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if (c.Data.PrmLoggingTfbMax)
-                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
-                    return base.GetFunctionLocalVariables(c, type);
+                    return c.Data.PrmLoggingTfbMax 
+                        ? new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") } 
+                        : base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -137,9 +138,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AddAllHDIngreepElements(HDIngreepModel hd, ControllerModel c)
         {
-            _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_ushdinm}{hd.FaseCyclus}"));
-
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushdinm}{hd.FaseCyclus}", _ushdinm, hd.FaseCyclus));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushdinm}{hd.FaseCyclus}", _ushdinm, hd.HDInmeldingBitmapData, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhd}{hd.FaseCyclus}", _hhd, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}", _hhdin, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}", _hhduit, hd.FaseCyclus));
@@ -186,12 +185,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{hd.FaseCyclus}hd", 64, CCOLElementTimeTypeEnum.None, _prmrisrole, hd.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{hd.FaseCyclus}hd", 32, CCOLElementTimeTypeEnum.None, _prmrissubrole, hd.FaseCyclus));
-                    
+                   
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0x0400, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisapproachid}{hd.FaseCyclus}hd", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
 
                     foreach (var lane in fcRis.LaneData)
                     {
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisapproachid}{hd.FaseCyclus}hd", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrislaneid}{hd.FaseCyclus}hd_{lane.RijstrookIndex}", lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                     }
                 }
@@ -211,9 +210,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Verklikken prio
             if (!prioUitgangPerFase)
             {
-                _myBitmapOutputs.Add(new CCOLIOElement(prio.PrioInmeldingBitmapData,
-                    $"{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}", _usovinm, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{CCOLCodeHelper.GetPriorityName(prio)}", _usovinm, prio.PrioInmeldingBitmapData, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             // Hulp elementen prio
@@ -348,9 +345,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                     if (fcRis != null)
                     {
+                        var approach = $"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(prio)}";
+                        if (_myElements.All(x => x.Naam != approach))
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(approach, fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                        }
                         foreach (var lane in fcRis.LaneData)
                         {
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(prio)}", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(prio)}_{lane.RijstrookIndex}", lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                         }
                     }
@@ -435,8 +436,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
             _myDetectors = new List<DetectorModel>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
 
             if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.GeneriekePrioriteit) return;
 
@@ -452,15 +451,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtfts}", c.PrioData.MaxWachttijdFiets, CCOLElementTimeTypeEnum.TS_type, _prmmwtfts));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtvtg}", c.PrioData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type, _prmmwtvtg));
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaxwt}", _usmaxwt));
-                _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.MaximaleWachttijdOverschredenBitmapData, $"{_usmaxwt}"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaxwt}", _usmaxwt, c.PrioData.MaximaleWachttijdOverschredenBitmapData));
 
                 if (c.HasKAR())
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}", _uskarog));
-                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KARMeldingBitmapData, $"{_uskarmelding}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(c.PrioData.KAROnderGedragBitmapData, $"{_uskarog}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding, c.PrioData.KARMeldingBitmapData));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}", _uskarog, c.PrioData.KAROnderGedragBitmapData));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarmelding}", 15, CCOLElementTimeTypeEnum.TE_type, _tkarmelding));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarog}", 1440, CCOLElementTimeTypeEnum.TM_type, _tkarog));
@@ -531,9 +527,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var sg in c.Fasen.Where(x => x.PrioIngreep))
                 {
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.PrioIngreepBitmapData,
-                        $"{_usovinm}{sg.Naam}"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{sg.Naam}", _usovinm, sg.Naam, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{sg.Naam}", _usovinm, sg.PrioIngreepBitmapData, sg.Naam, ""));
                 }
             }
 
@@ -591,41 +585,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasDetectors() => true;
 
-        public override bool HasCCOLBitmapOutputs() => true;
-
-        public override bool HasCCOLBitmapInputs() => true;
-
-        public override bool HasFunctionLocalVariables() => true;
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen) return base.GetFunctionLocalVariables(c, type);
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    var result = new List<Tuple<string, string, string>>();
-                    result.Add(new Tuple<string, string, string>("int", "ov", "0"));
-                    return result;
+                    return new List<CCOLLocalVariable>
+                    {
+                        new CCOLLocalVariable("int", "ov", "0")
+                    };
             
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    var result2 = new List<Tuple<string, string, string>>();
                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isHD", "FALSE"));
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isWTV", "FALSE"));
-
+                        var result2 = new List<CCOLLocalVariable> {new CCOLLocalVariable(c.GetBoolV(), "isHD", "FALSE")};
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isWTV", "FALSE"));
+                        return result2;
                     }
-                    return result2;
+                    else return base.GetFunctionLocalVariables(c, type);
 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
-                    var result3 = new List<Tuple<string, string, string>>();
                     if (c.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
                                                          x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)))
                     {
-                        result3.Add(new Tuple<string, string, string>("int", "i", "0"));
+                        return new List<CCOLLocalVariable> {new CCOLLocalVariable("int", "i", "0")};
                     }
-                    return result3;
+                    else return base.GetFunctionLocalVariables(c, type);
 
                 default:
                     return base.GetFunctionLocalVariables(c, type);

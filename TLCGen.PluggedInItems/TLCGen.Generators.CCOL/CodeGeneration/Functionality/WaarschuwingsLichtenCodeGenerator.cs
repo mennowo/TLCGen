@@ -28,7 +28,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if (c.Signalen.WaarschuwingsGroepen.Any(x => x.Bellen))
             {
@@ -46,21 +45,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (wlg.Bellen)
                 {
                     _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbel}{wlg.Naam}", _usbel, wlg.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.BellenBitmapData as IOElementModel, $"{_usbel}{wlg.Naam}"));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbel}{wlg.Naam}", _usbel, wlg.BellenBitmapData, wlg.Naam));
                 }
                 if (wlg.Lichten)
                 {
                     _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswl}{wlg.Naam}", _uswl, wlg.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(wlg.LichtenBitmapData as IOElementModel, $"{_uswl}{wlg.Naam}"));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswl}{wlg.Naam}", _uswl, wlg.LichtenBitmapData, wlg.Naam));
                 }
             }
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

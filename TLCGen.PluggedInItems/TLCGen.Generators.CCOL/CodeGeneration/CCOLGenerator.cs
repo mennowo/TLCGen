@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using TLCGen.Dependencies.Providers;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.ProjectGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -30,9 +31,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private readonly List<string> _allFiles = new List<string>();
 
         private List<DetectorModel> _alleDetectoren;
-
-        private List<IOElementModel> AllCCOLOutputElements;
-        private List<IOElementModel> AllCCOLInputElements;
 
         private string _uspf;
         private string _ispf;
@@ -87,6 +85,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 pgen.CollectCCOLElements(c);
             }
+
+            var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators.OrderBy(x => x.ElementGenerationOrder).ToList());
+
+            if (CCOLElementLists == null || CCOLElementLists.Length != 8)
+                throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
+
+            foreach (var (pluginItems, plugin) in TLCGenPluginManager.Default.ApplicationPlugins)
+            {
+                if ((pluginItems & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
+
+                var elemprov = plugin as ITLCGenElementProvider;
+                var elems = elemprov?.GetAllItems();
+                if (elems == null) continue;
+                foreach (var elem in elems)
+                {
+                    var ccolElement = elem as CCOLElement;
+                    if (ccolElement == null) continue;
+                    switch (ccolElement.Type)
+                    {
+                        case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(ccolElement); break;
+                    }
+                }
+            }
+
+            _uitgangen = CCOLElementLists[0];
+            _ingangen = CCOLElementLists[1];
+            _hulpElementen = CCOLElementLists[2];
+            _geheugenElementen = CCOLElementLists[3];
+            _timers = CCOLElementLists[4];
+            _counters = CCOLElementLists[5];
+            _schakelaars = CCOLElementLists[6];
+            _parameters = CCOLElementLists[7];
+
+            foreach (var l in CCOLElementLists)
+            {
+                l.SetMax();
+            }
+
+            CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
         }
 
         public string GenerateSourceFiles(ControllerModel c, string sourcefilepath)
@@ -110,45 +154,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (var dm in c.SelectieveDetectoren)
                         _alleDetectoren.Add(dm);
 
-                    var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators.OrderBy(x => x.ElementGenerationOrder).ToList());
-
-                    if (CCOLElementLists == null || CCOLElementLists.Length != 8)
-                        throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
-
-                    foreach (var (pluginItems, plugin) in TLCGenPluginManager.Default.ApplicationPlugins)
-                    {
-                        if ((pluginItems & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
-
-                        var elemprov = plugin as ITLCGenElementProvider;
-                        var elems = elemprov?.GetAllItems();
-                        if (elems == null) continue;
-                        foreach (var elem in elems)
-                        {
-                            var ccolElement = elem as CCOLElement;
-                            if (ccolElement == null) continue;
-                            switch (ccolElement.Type)
-                            {
-                                case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(ccolElement); break;
-                                case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(ccolElement); break;
-                            }
-                        }
-                    }
-
-                    _uitgangen = CCOLElementLists[0];
-                    _ingangen = CCOLElementLists[1];
-                    _hulpElementen = CCOLElementLists[2];
-                    _geheugenElementen = CCOLElementLists[3];
-                    _timers = CCOLElementLists[4];
-                    _counters = CCOLElementLists[5];
-                    _schakelaars = CCOLElementLists[6];
-                    _parameters = CCOLElementLists[7];
-
                     if (c.Data.RangeerData.RangerenIngangen)
                     {
                         foreach (var ccolelem in _ingangen.Elements)
@@ -166,13 +171,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
                         }
                     }
-
-                    foreach (var l in CCOLElementLists)
-                    {
-                        l.SetMax();
-                    }
-
-                    CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
 
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
                     _allFiles.Add($"{c.Data.Naam}reg.c");
@@ -646,29 +644,79 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool includevars, bool includecode, bool addnewlinebefore, bool addnewlineatend, List<string> varsBefore = null)
+	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool includevars, bool includecode, bool addnewlinebefore, bool addnewlineatend, List<CCOLLocalVariable> varsBefore = null)
 	    {
 			if (OrderedPieceGenerators[type].Any())
 			{
                 if ((includevars || includecode) && addnewlinebefore) sb.AppendLine();
                 if (includevars)
                 {
-                    var vars = new List<string>();
+                    var vars = new List<CCOLLocalVariable>();
                     var added = false;
                     if (varsBefore != null) vars = varsBefore;
                     foreach (var gen in OrderedPieceGenerators[type])
                     {
-                        var lv = gen.Value.GetFunctionLocalVariables(c, type);
+                        var lv = gen.Value.GetFunctionLocalVariables(c, type).ToArray();
                         if (lv.Any())
                         {
                             foreach (var i in lv)
                             {
-                                // ignore if variable already exists
-                                if (vars.Any(x => x == i.Item2)) continue;
+                                // check if variable already exists
+                                var existing = vars.FirstOrDefault(x => x.Name == i.Name);
+                                if (existing != null)
+                                {
+                                    // set initial value if needed
+                                    if (string.IsNullOrEmpty(existing.InitialValue) &&
+                                        !string.IsNullOrEmpty(i.InitialValue))
+                                    {
+                                        existing.InitialValue = i.InitialValue;
+                                    }
 
-                                vars.Add(i.Item2);
-                                added = true;
-                                sb.AppendLine(!string.IsNullOrWhiteSpace(i.Item3) ? $"{ts}{i.Item1} {i.Item2} = {i.Item3};" : $"{ts}{i.Item1} {i.Item2};");
+                                    // warn if initial value is already set
+                                    if (!string.IsNullOrEmpty(existing.InitialValue) &&
+                                        !string.IsNullOrEmpty(i.InitialValue) &&
+                                        existing.InitialValue != i.InitialValue)
+                                    {
+                                        MessageBox.Show($"Initial value of variable {existing.Name} " +
+                                                        $"in function type {type} is being set twice, " +
+                                                        "with different values", "Warning: initial variable value inconsistency");
+                                    }
+
+                                    // reset define condition if not set here, cause it means
+                                    // the variable is needed no matter what for this code gen
+                                    if (!string.IsNullOrEmpty(existing.DefineCondition) &&
+                                        string.IsNullOrEmpty(i.DefineCondition))
+                                    {
+                                        existing.DefineCondition = "";
+                                    }
+                                    // otherwise, if different, use both conditions
+                                    else if (!string.IsNullOrEmpty(existing.DefineCondition) &&
+                                             !string.IsNullOrEmpty(i.DefineCondition) &&
+                                             existing.DefineCondition != i.DefineCondition)
+                                    {
+                                        existing.DefineCondition = existing.DefineCondition + " || " + i.DefineCondition;
+                                    }
+                                }
+                                else
+                                {
+                                    vars.Add(i);
+                                }
+                            }
+
+                            added = vars.Any();
+
+                            foreach (var variable in vars)
+                            {
+                                if (!string.IsNullOrEmpty(variable.DefineCondition))
+                                {
+                                    sb.Append($"#if {variable.DefineCondition}");
+                                }
+                                sb.AppendLine(!string.IsNullOrWhiteSpace(variable.InitialValue) ? $"{ts}{variable.Type} {variable.Name} = {variable.InitialValue};" : $"{ts}{variable.Type} {variable.Name};");
+                                if (!string.IsNullOrEmpty(variable.DefineCondition))
+                                {
+                                    sb.Append($"#endif");
+                                }
+                                sb.AppendLine();
                             }
                         }
                     }
@@ -683,6 +731,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (string.IsNullOrWhiteSpace(code)) continue;
 
                         sb.Append(code);
+
                         if (addnewlineatend) sb.AppendLine();
                     }
                 }
@@ -697,43 +746,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             if (prepare) PrepareGeneration(c);
 
-            AllCCOLOutputElements = new List<IOElementModel>();
-            AllCCOLInputElements = new List<IOElementModel>();
-
-            foreach (var pgen in PieceGenerators)
-            {
-                if (pgen.HasCCOLBitmapOutputs())
-                {
-                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs().Where(x => x?.Element != null).Select(x => x.Element));
-                }
-                if (pgen.HasCCOLBitmapInputs())
-                {
-                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs().Where(x => x?.Element != null).Select(x => x.Element));
-                }
-            }
-
-            var parts = new List<ITLCGenElementProvider>();
-            foreach (var (pluginElements, plugin) in TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins))
-            {
-                if ((pluginElements & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
-
-                parts.Add((ITLCGenElementProvider)plugin);
-            }
-            foreach (var plugin in parts)
-            {
-                AllCCOLOutputElements.AddRange(plugin.GetOutputItems());
-                AllCCOLInputElements.AddRange(plugin.GetInputItems());
-            }
-
-            foreach (var element in AllCCOLOutputElements)
-            {
-                element.ElementType = IOElementTypeEnum.Output;
-            }
-            foreach (var element in AllCCOLInputElements)
-            {
-                element.ElementType = IOElementTypeEnum.Input;
-            }
-
             var rest = new List<IOElementModel>();
             foreach (var fc in c.Fasen)
             {
@@ -746,7 +758,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 rest.Add(d);
             }
 
-            return rest.Concat(AllCCOLOutputElements).Concat(AllCCOLInputElements).ToList();
+            return rest.Concat(_uitgangen.Elements.Where(x => x.Type == CCOLElementTypeEnum.Uitgang || x.Type == CCOLElementTypeEnum.Ingang).Select(x => x.IOElementData)).ToList();
         }
 
         /// <summary>

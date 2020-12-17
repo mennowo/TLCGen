@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -60,15 +61,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override bool HasCCOLElements() => true;
 
-        public override bool HasFunctionLocalVariables() => true;
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (c?.RichtingGevoeligeAanvragen.Any(x => x.ResetAanvraag) == true)
-                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                        return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);

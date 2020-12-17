@@ -361,19 +361,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
-                AllCCOLInputElements.Any(x => x.Multivalent))
+                _ingangen.Elements.Any(x => x.IOMultivalent))
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Multivalente ingangen */");
                 sb.AppendLine("#if !defined NO_VLOG_300");
-                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent && !x.Dummy))
+                foreach (var i in _ingangen.Elements.Where(x => x.IOMultivalent && !x.Dummy))
                 {
                     sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
                 }
-                if (AllCCOLInputElements.Any(x => x.Multivalent && x.Dummy))
+                if (_ingangen.Elements.Any(x => x.IOMultivalent && x.Dummy))
                 {
                     sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
-                    foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent && x.Dummy))
+                    foreach (var i in _ingangen.Elements.Where(x => x.IOMultivalent && x.Dummy))
                     {
                         sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
                     }
@@ -382,19 +382,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }
             if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
-                AllCCOLOutputElements.Any(x => x.Multivalent))
+                _uitgangen.Elements.Any(x => x.IOMultivalent))
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Multivalente ingangen */");
                 sb.AppendLine("#if !defined NO_VLOG_300");
-                foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
+                foreach (var i in _uitgangen.Elements.Where(x => x.IOMultivalent && !x.Dummy))
                 {
                     sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
                 }
-                if (AllCCOLOutputElements.Any(x => x.Multivalent && x.Dummy))
+                if (_uitgangen.Elements.Any(x => x.Dummy))
                 {
                     sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
-                    foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent && x.Dummy))
+                    foreach (var i in _uitgangen.Elements.Where(x => x.IOMultivalent && x.Dummy))
                     {
                         sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
                     }

@@ -41,7 +41,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if(c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
             {
@@ -63,13 +62,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstipttelaat}{CCOLCodeHelper.GetPriorityName(ov)}", ov.GeconditioneerdePrioTeLaat, CCOLElementTimeTypeEnum.None, _prmovstipttelaat, ov.FaseCyclus, ov.Type.GetDescription()));
                 if (!c.PrioData.PrioUitgangPerFase)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtevroeg, ov.FaseCyclus, ov.Type.GetDescription()));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}", _usovoptijd, ov.FaseCyclus, ov.Type.GetDescription()));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtelaat, ov.FaseCyclus, ov.Type.GetDescription()));
-
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtevroeg, ov.GeconditioneerdePrioTeVroegBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}", _usovoptijd, ov.GeconditioneerdePrioOpTijdBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtelaat, ov.GeconditioneerdePrioTeLaatBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
                 }
             }
             if (c.PrioData.PrioUitgangPerFase)
@@ -77,21 +72,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var sg in c.Fasen.Where(x => c.PrioData.PrioIngrepen.Any(x2 =>
                     x2.FaseCyclus == x.Naam && x2.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)))
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{sg.Naam}", _usovtevroeg, sg.Naam, ""));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{sg.Naam}", _usovoptijd, sg.Naam, ""));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{sg.Naam}", _usovtelaat, sg.Naam, ""));
-
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeVroegBitmapData, $"{_usovtevroeg}{sg.Naam}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioOpTijdBitmapData, $"{_usovoptijd}{sg.Naam}"));
-                    _myBitmapOutputs.Add(new CCOLIOElement(sg.GeconditioneerdePrioTeLaatBitmapData, $"{_usovtelaat}{sg.Naam}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{sg.Naam}", _usovtevroeg, sg.GeconditioneerdePrioTeVroegBitmapData, sg.Naam, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{sg.Naam}", _usovoptijd, sg.GeconditioneerdePrioOpTijdBitmapData, sg.Naam, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{sg.Naam}", _usovtelaat, sg.GeconditioneerdePrioTeLaatBitmapData, sg.Naam, ""));
                 }
             }
         }
 
         public override bool HasCCOLElements() => true;
 
-        public override bool HasCCOLBitmapOutputs() => true;
-        
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             return type switch

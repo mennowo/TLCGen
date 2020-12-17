@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -35,7 +36,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
 
             var risModel = c.RISData;
 
@@ -103,10 +103,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var s in lanesSim.SelectMany(x => x.SimulatedStations))
             {
                 s.StationBitmapData.Naam = s.Naam;
-                var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
+                var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, s.StationBitmapData, "");
                 e.Dummy = true;
                 _myElements.Add(e);
-                _myBitmapInputs.Add(new CCOLIOElement(s.StationBitmapData, $"{s.Naam}") { Dummy = true });
             }
         }
 
@@ -120,12 +119,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _myElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCCOLBitmapInputs()
-        {
-            return true;
-        }
-
-        public override bool HasSimulationElements(ControllerModel c)
+                public override bool HasSimulationElements(ControllerModel c)
         {
             return c.RISData.RISToepassen;
         }
@@ -135,13 +129,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return c.RISData.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations).Select(x => x.SimulationData);
         }
 
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.RegCAanvragen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.RegCMeetkriterium => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
+                CCOLCodeTypeEnum.RegCAanvragen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -238,13 +232,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}#ifdef RIS_SSM");
                         foreach (var ov in ovRis)
                         {
+                            var lijncheck = ov.CheckLijnNummer && ov.LijnNummers.Any()
+                                ? $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, {ov.LijnNummers.Count}"
+                                : "NG, NG";
                             sb.AppendLine($"{ts}ris_srm_put_signalgroup(" +
                                           $"{_fcpf}{ov.FaseCyclus}, " +
                                           $"PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], " +
                                           $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
                                           $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
-                                          $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, " +
-                                          $"{ov.LijnNummers.Count});");
+                                          lijncheck +
+                                          ");");
                         }
                         foreach (var ov in ovRis)
                         {

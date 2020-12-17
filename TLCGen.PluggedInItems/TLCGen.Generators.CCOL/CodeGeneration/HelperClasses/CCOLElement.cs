@@ -1,4 +1,5 @@
 ﻿using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -12,13 +13,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public CCOLElementTypeEnum Type { get; set; }
         public bool Dummy { get; set; }
         public int RangeerIndex { get; set; }
+        public IOElementModel IOElementData { get; set; }
+        public bool IOMultivalent { get; set; }
 
         public CCOLElement()
         {
             Dummy = false;
         }
 
-        public CCOLElement(string naam, CCOLElementTypeEnum type, string description = null)
+        public CCOLElement(string naam, CCOLElementTypeEnum type, string description = null, IOElementModel ioElementData = null)
         {
             Dummy = false;
             Naam = naam;
@@ -30,6 +33,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 CCOLElementTypeEnum.Schakelaar => CCOLElementTimeTypeEnum.SCH_type,
                 _ => CCOLElementTimeTypeEnum.None
             };
+            IOElementData = ioElementData;
+            
+            // sync data
+            if (ioElementData != null)
+            {
+                Naam ??= ioElementData.Naam;
+                if (!Dummy) Dummy = ioElementData.Dummy;
+                if (!IOMultivalent) IOMultivalent = ioElementData.Multivalent;
+            }
         }
 
         public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type, string description = null)

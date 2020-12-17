@@ -31,7 +31,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             var iper = 1;
             var iperrt = 1;
@@ -46,24 +45,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             // outputs
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
-            _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_usperdef}"));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef, c.PeriodenData.DefaultPeriodeBitmapData));
             foreach (var per in c.PeriodenData.Perioden)
             {
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}", _usper, per.BitmapData, per.Commentaar));
                         ++iper;
                         break;
                     case PeriodeTypeEnum.StarRegelen:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{per.Naam}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_usper}{_prmpero}{per.Naam}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
                         break;
                 }
             }
@@ -141,16 +136,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, _prmperrtdim.Description));
             if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, _prmperbel.Description));
             if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, _prmperbeldim.Description));
-            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, _prmperrt.Description));
-            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, _prmperrta.Description));
-            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, _prmperrtdim.Description));
-            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, _prmperbel.Description));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, _prmperbeldim.Description));
-            if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_usper}{_prmperrt}"));
-            if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_usper}{_prmperrta}"));
-            if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_usper}{_prmperrtdim}"));
-            if (iperbel > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenActiefBitmapData, $"{_usper}{_prmperbel}"));
-            if (iperbeldim > 1) _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_usper}{_prmperbeldim}"));
+            if (iperrt > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerAltijdBitmapData, _prmperrt.Description));
+            if (iperrta > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerActiefBitmapData, _prmperrta.Description));
+            if (iperrtdim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerDimmenBitmapData, _prmperrtdim.Description));
+            if (iperbel > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenActiefBitmapData, _prmperbel.Description));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenDimmenBitmapData, _prmperbeldim.Description));
 
             // groentijden
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";
@@ -179,8 +169,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         }
 
         public override bool HasCCOLElements() => true;
-    
-        public override bool HasCCOLBitmapOutputs() => true;
     
         public override int HasCode(CCOLCodeTypeEnum type)
         {

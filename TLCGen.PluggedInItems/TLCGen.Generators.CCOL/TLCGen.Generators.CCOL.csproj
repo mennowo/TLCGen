@@ -89,6 +89,7 @@
     <Compile Include="CodeGeneration\Functionality\WachttijdVoorspellerCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLKoppelSignaal.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLLocalVariable.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePrioC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePractice.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />

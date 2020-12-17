@@ -1316,7 +1316,7 @@ void SignalplanPrmsToTx(count pl, count txa1)
 	}
 }
 
-bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
+bool CheckSignalplanPrms(count pl, mulv txmax, count txa1)
 {
 	char temp[1024];
 	short i, cfc, fc, real, tg_min;
@@ -1324,7 +1324,6 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 	short txb_fc, txb_cfc, txd_fc, txd_cfc;
 	short tx[5];
 	char txS[5][1] = { 'A', 'B', 'C', 'D', 'E' };
-	short txmax = PRM[ctijd];
 
 	if (txmax < 0)
 	{
@@ -1351,7 +1350,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 			{
 				if (tx[i] < 0 || tx[i] >= txmax)
 				{
-					sprintf(temp, "copy PRM to TX: TX%c for fc%s for new signalplan %d has an invalid value: %d\n", txS[i][0], FC_code[fc], pl + 1, txa);
+					sprintf(temp, "copy PRM to TX: TX%c for fc%s for new signalplan %d has an invalid value: %d\n", txS[i][0], FC_code[fc], pl + 1, tx[i]);
 					uber_puts(temp);
 					return TRUE;
 				}

@@ -31,7 +31,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if (c.RoBuGrover.ConflictGroepen?.Count == 0)
                 return;
@@ -46,7 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_hrgvact.Setting, _hrgvact));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv.Setting, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv_snel.Setting, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv_snel));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usrgv.Setting, _usrgv));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usrgv.Setting, _usrgv, c.RoBuGrover.BitmapData));
 
             foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
@@ -65,14 +64,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thd}{_dpf}{d.Detector}", d.HiaatTijd, CCOLElementTimeTypeEnum.TE_type, _thd, fc.FaseCyclus, d.Detector));
                 }
             }
-
-            _myBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, _usrgv.ToString()));
         }
 
         public override bool HasCCOLElements() => true;
         
-        public override bool HasCCOLBitmapOutputs() => true;
-
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             return type switch

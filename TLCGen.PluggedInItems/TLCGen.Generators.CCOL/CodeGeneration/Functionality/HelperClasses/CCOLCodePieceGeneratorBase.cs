@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -39,21 +40,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         protected string _BITxnl = "BIT8";
 
         protected List<CCOLElement> _myElements = null;
-        protected List<CCOLIOElement> _myBitmapOutputs;
-        protected List<CCOLIOElement> _myBitmapInputs;
 
         private readonly Regex _fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
         public int ElementGenerationOrder { get; protected set; }
 
-        public virtual bool HasFunctionLocalVariables()
+        public virtual IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            return false;
-        }
-
-        public virtual IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
-        {
-            return Enumerable.Empty<Tuple<string, string, string>>();
+            return Enumerable.Empty<CCOLLocalVariable>();
         }
 
         public virtual void CollectCCOLElements(ControllerModel c)
@@ -71,11 +65,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _myElements.Where(x => x.Type == type);
         }
 
-        public virtual IEnumerable<CCOLElement> GetCCOLElements()
-        {
-            return _myElements;
-        }
-
         public virtual bool HasDetectors()
         {
             return false;
@@ -84,26 +73,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public virtual IEnumerable<DetectorModel> GetDetectors()
         {
             throw new NotSupportedException();
-        }
-
-        public virtual bool HasCCOLBitmapOutputs()
-        {
-            return false;
-        }
-
-        public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
-        public virtual bool HasCCOLBitmapInputs()
-        {
-            return false;
-        }
-
-        public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
-        {
-            return _myBitmapInputs;
         }
 
         public virtual bool HasSimulationElements(ControllerModel c)

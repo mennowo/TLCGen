@@ -28,8 +28,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if (!c.StarData.ToepassenStar || !c.StarData.Programmas.Any()) return;
 
@@ -37,8 +35,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprog}", _mstarprog));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwens}", _mstarprogwens));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstarprogwissel}", _mstarprogwissel));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstarprogwissel}", _usstarprogwissel));
-            _myBitmapOutputs.Add(new CCOLIOElement(c.StarData.ProgrammaWisselBitmapInfo, $"{_usstarprogwissel}"));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstarprogwissel}", _usstarprogwissel, c.StarData.ProgrammaWisselBitmapInfo));
 
             if (c.StarData.ProgrammaSturingViaParameter)
             {
@@ -49,14 +46,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.StarData.IngangAlsVoorwaarde)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_isstar}", _isstar));
-                _myBitmapInputs.Add(new CCOLIOElement(c.StarData.StarRegelenIngang, $"{_isstar}"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_isstar}", _isstar, c.StarData.StarRegelenIngang));
             }
 
             foreach (var pr in c.StarData.Programmas)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstar}{pr.Naam}", _usstar, pr.Naam));
-                _myBitmapOutputs.Add(new CCOLIOElement(pr, $"{_usstar}{pr.Naam}"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usstar}{pr.Naam}", _usstar, pr, pr.Naam));
             }
 
             if (c.StarData.ProgrammaTijdenInParameters)
@@ -89,10 +84,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapInputs() => true;
-
-        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

@@ -63,11 +63,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            foreach (var item in AllCCOLOutputElements)
+            foreach (var item in _uitgangen.Elements.Where(x => x.IOElementData != null))
             {
-                if (item.BitmapCoordinaten?.Count > 1)
+                if (item.IOElementData.BitmapCoordinaten?.Count > 1)
                 {
-                    for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.IOElementData.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {_uspf}{item.Naam}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
@@ -89,11 +89,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             
-            foreach (var item in AllCCOLInputElements)
+            foreach (var item in _ingangen.Elements.Where(x => x.IOElementData != null))
             {
-                if (item.BitmapCoordinaten?.Count > 1)
+                if (item.IOElementData.BitmapCoordinaten?.Count > 1)
                 {
-                    for (var i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    for (var i = 1; i < item.IOElementData.BitmapCoordinaten.Count; ++i)
                     {
                         sb.AppendLine($"{ts}#define {_ispf}{item.Naam}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
@@ -198,26 +198,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
-            foreach (var item in AllCCOLOutputElements.Where(x => !x.Dummy))
+            foreach (var item in _uitgangen.Elements.Where(x => !x.Dummy && x.IOElementData != null))
             {
-                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
+                sb.Append(GetCoordinatesString(item.IOElementData, _uspf + item.Naam, "us"));
             }
 
-            if (AllCCOLOutputElements.Any(x => x.Dummy))
+            if (_uitgangen.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
-            }
-
-            if (AllCCOLOutputElements.Any(x => x.Dummy))
-            {
-                foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
+                foreach (var item in _uitgangen.Elements.Where(x => x.Dummy && x.IOElementData != null))
                 {
-                    sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
+                    sb.Append(GetCoordinatesString(item.IOElementData, _uspf + item.Naam, "us"));
                 }
-            }
-
-            if (AllCCOLOutputElements.Any(x => x.Dummy))
-            {
                 sb.AppendLine("#endif");
             }
 
@@ -226,26 +218,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
 
-            foreach (var item in AllCCOLInputElements.Where(x => !x.Dummy))
+            foreach (var item in _ingangen.Elements.Where(x => !x.Dummy && x.IOElementData != null))
             {
-                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
+                sb.Append(GetCoordinatesString(item.IOElementData, _ispf + item.Naam, "is"));
             }
 
-            if (AllCCOLInputElements.Any(x => x.Dummy))
+            if (_ingangen.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
-            }
-
-            if (AllCCOLInputElements.Any(x => x.Dummy))
-            {
-                foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
+                foreach (var item in _ingangen.Elements.Where(x => x.Dummy && x.IOElementData != null))
                 {
-                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
+                    sb.Append(GetCoordinatesString(item.IOElementData, _ispf + item.Naam, "is"));
                 }
-            }
-
-            if (AllCCOLInputElements.Any(x => x.Dummy))
-            { 
                 sb.AppendLine("#endif");
             }
 

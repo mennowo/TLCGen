@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -95,16 +95,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning restore 0649
 
-        public void CollectKoppelSignalen(ControllerModel c)
-        {
-            var _myKoppelSignalen = new List<CCOLKoppelSignaal>();
-
-        }
-
         public override void CollectCCOLElements(ControllerModel c)
 		{
 			_myElements = new List<CCOLElement>();
-			_myBitmapOutputs = new List<CCOLIOElement>();
 
 			if (c.HalfstarData.IsHalfstar)
 			{
@@ -119,8 +112,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (hasgs != null)
                         {
                             var namealtphst = _prmaltphst + string.Join(string.Empty, hasgs.Item2);
-                            if (!_myElements.Any(i => i.Naam == namealtphst))
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtphst}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, "fasen", string.Join(", ", hasgs.Item2)));
+                            if (_myElements.All(i => i.Naam != namealtphst))
+                            {
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtphst}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, "fasen", string.Join(", ", hasgs.Item2)));
+                            }
                         }
                         else
                         {
@@ -161,14 +156,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhd}", _hplhd));
                 }
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ustxtimer}", _ustxtimer));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usklok}", _usklok));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushand}", _ushand));
-
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact, hsd.PlActUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact, hsd.MlActUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact, hsd.KpActUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl, hsd.MlPlUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ustxtimer}", _ustxtimer, hsd.TxTimerUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usklok}", _usklok, hsd.KlokUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushand}", _ushand, hsd.HandUitgang));
+				
                 if (c.HalfstarData.PlantijdenInParameters)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schinstprm}", 0, CCOLElementTimeTypeEnum.SCH_type, _schinstprm));
@@ -176,8 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl.Naam));
-                    _myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspl}{pl.Naam}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl, pl.Naam));
 
                     foreach(var fcpl in pl.Fasen)
                     {
@@ -199,14 +193,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                 }
-
-                _myBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_usplact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlActUitgang, $"{_usmlact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KpActUitgang, $"{_uskpact}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.MlPlUitgang, $"{_usmlpl}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.TxTimerUitgang, $"{_ustxtimer}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.KlokUitgang, $"{_usklok}"));
-				_myBitmapOutputs.Add(new CCOLIOElement(hsd.HandUitgang, $"{_ushand}"));
 				
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplact}", _hplact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hkpact}", _hkpact));
@@ -226,11 +212,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mhand}", _mhand));
 				if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 				{
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaster}", _usmaster));
-					_myBitmapOutputs.Add(new CCOLIOElement(hsd.MasterUitgang, $"{_usmaster}"));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaster}", _usmaster, hsd.MasterUitgang));
 
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usslave}", _usslave));
-                    _myBitmapOutputs.Add(new CCOLIOElement(hsd.SlaveUitgang, $"{_usslave}"));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usslave}", _usslave, hsd.SlaveUitgang));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mmaster}", _mmaster));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mslave}", _mslave));
@@ -283,53 +267,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if(k.Type == HalfstarGekoppeldTypeEnum.Master)
 					{
 					
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "in"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "in"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "in"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"in{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InKoppelpuls, $"in{k.KruisingNaam}{_uskpuls}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodeVARegelen, $"in{k.KruisingNaam}{_uspervar}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodenAlternatievenHoofdrichtingen, $"in{k.KruisingNaam}{_usperarh}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.InLeven, k.KruisingNaam, "in"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uskpuls}", _uskpuls, k.InKoppelpuls, k.KruisingNaam, "in"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uspervar}", _uspervar, k.InPeriodeVARegelen, k.KruisingNaam, "in"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usperarh}", _usperarh, k.InPeriodenAlternatievenHoofdrichtingen, k.KruisingNaam, "in"));
                         foreach (var pl in hsd.SignaalPlannen)
-						{
-                        	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "in"));
+                        {
+                            var plin = k.PlanIngangen.FirstOrDefault(x => x.Naam == pl.Naam);
+                        	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, plin, pl.Naam, k.KruisingNaam, "in"));
 						}
-						foreach (var pl in k.PlanIngangen)
-						{
-							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"in{k.KruisingNaam}{pl.Plan}"));
-						}
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "uit"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "uit"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"uit{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitSynchronisatieOk, $"uit{k.KruisingNaam}{_ussyncok}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitTxsOk, $"uit{k.KruisingNaam}{_ustxsok}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.UitLeven, k.KruisingNaam, "uit"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.UitSynchronisatieOk, k.KruisingNaam, "uit"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ustxsok}", _ustxsok, k.UitTxsOk, k.KruisingNaam, "uit"));
 					}
 					if (k.Type == HalfstarGekoppeldTypeEnum.Slave)
 					{
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "uit"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "uit"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "uit"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitLeven, $"uit{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitKoppelpuls, $"uit{k.KruisingNaam}{_uskpuls}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodeVARegelen, $"uit{k.KruisingNaam}{_uspervar}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodenAlternatievenHoofdrichtingen, $"uit{k.KruisingNaam}{_usperarh}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.UitLeven, k.KruisingNaam, "uit"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uskpuls}", _uskpuls, k.UitKoppelpuls, k.KruisingNaam, "uit"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uspervar}", _uspervar, k.UitPeriodeVARegelen, k.KruisingNaam, "uit"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usperarh}", _usperarh, k.UitPeriodenAlternatievenHoofdrichtingen, k.KruisingNaam, "uit"));
 						foreach (var pl in hsd.SignaalPlannen)
 						{
-                        	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "uit"));
+                            var pluit = k.PlanUitgangen.FirstOrDefault(x => x.Naam == pl.Naam);
+                        	_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pluit, pl.Naam, k.KruisingNaam, "uit"));
 						}
-						foreach (var pl in k.PlanUitgangen)
-						{
-							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"uit{k.KruisingNaam}{pl.Plan}"));
-						}
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "in"));
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "in"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"in{k.KruisingNaam}{_usleven}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InSynchronisatieOk, $"in{k.KruisingNaam}{_ussyncok}"));
-						_myBitmapOutputs.Add(new CCOLIOElement(k.InTxsOk, $"in{k.KruisingNaam}{_ustxsok}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.InLeven, k.KruisingNaam, "in"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ussyncok}", _ussyncok, k.InSynchronisatieOk, k.KruisingNaam, "in"));
+						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ustxsok}", _ustxsok, k.InTxsOk, k.KruisingNaam, "in"));
 					}
                     var signals = ((IHaveKoppelSignalen)k).UpdateKoppelSignalen();
                     foreach (var s in signals)
@@ -382,30 +346,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 		public override bool HasCCOLElements() => true;
 		
-		public override bool HasCCOLBitmapOutputs() => true;
-
-        public override bool HasFunctionLocalVariables() => true;
-
-        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             if (!c.HalfstarData.IsHalfstar) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.HstCAanvragen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCVerlenggroen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCMaxgroen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCMeetkriterium => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCMeeverlengen => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCSynchronisaties => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCPreSystemApplication => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCAlternatief => new List<Tuple<string, string, string>> {new Tuple<string, string, string>("int", "ov", ""), new Tuple<string, string, string>("int", "fc", "")},
-                CCOLCodeTypeEnum.HstCKlokPerioden => new List<Tuple<string, string, string>>
+                CCOLCodeTypeEnum.HstCAanvragen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCVerlenggroen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCMaxgroen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCMeetkriterium => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCMeeverlengen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCSynchronisaties => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCPreSystemApplication => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "ov"), new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCKlokPerioden => new List<CCOLLocalVariable>
                 {
-                    //new Tuple<string, string, string>($"{c.GetBoolV()}", "omschakelmag", "FALSE"),
-                    new Tuple<string, string, string>("char", "volgMaster", "TRUE")
+                    new CCOLLocalVariable("char", "volgMaster", "TRUE")
                 },
                 _ => base.GetFunctionLocalVariables(c, type)
             };

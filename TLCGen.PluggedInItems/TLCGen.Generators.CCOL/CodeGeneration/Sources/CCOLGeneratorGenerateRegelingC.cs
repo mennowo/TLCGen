@@ -69,7 +69,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             if (c.PTPData.PTPKoppelingen.Any())
             {
-                sb.AppendLine($"#include \"PTPWIN.C\"");
+                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine($"{ts}#include \"PTPWIN.C\"");
+                sb.AppendLine("#endif");
             }
             sb.AppendLine($"#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"#include \"{c.Data.Naam}reg.c\"");

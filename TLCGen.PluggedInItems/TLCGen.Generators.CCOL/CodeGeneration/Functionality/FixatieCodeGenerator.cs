@@ -16,7 +16,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapInputs = new List<CCOLIOElement>();
 
             if (c.Data.FixatieData.FixatieMogelijk)
             {
@@ -29,14 +28,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_isfix}",
-                        _isfix));
-                _myBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData, $"{_isfix}"));
+                        _isfix, c.Data.FixatieData.FixatieBitmapData));
             }
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapInputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

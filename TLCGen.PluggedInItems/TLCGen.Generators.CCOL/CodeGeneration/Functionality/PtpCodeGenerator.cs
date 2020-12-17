@@ -45,7 +45,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var k in c.PTPData.PTPKoppelingen)
             {
@@ -102,20 +101,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_usoke}",
-                            _usoke, k.TeKoppelenKruispunt));
+                            _usoke, k.OkBitmapData, k.TeKoppelenKruispunt));
                 _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_userr}",
-                            _userr, k.TeKoppelenKruispunt));
-
-                _myBitmapOutputs.Add(
-                        new CCOLIOElement(
-                            k.OkBitmapData as IOElementModel,
-                            $"{_usptp}_{k.TeKoppelenKruispunt}{_usoke}"));
-                _myBitmapOutputs.Add(
-                        new CCOLIOElement(
-                            k.ErrorBitmapData as IOElementModel,
-                            $"{_usptp}_{k.TeKoppelenKruispunt}{_userr}"));
+                            _userr, k.ErrorBitmapData, k.TeKoppelenKruispunt));
 
                 _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -197,8 +187,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         }
 
         public override bool HasCCOLElements() => true;
-
-        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
