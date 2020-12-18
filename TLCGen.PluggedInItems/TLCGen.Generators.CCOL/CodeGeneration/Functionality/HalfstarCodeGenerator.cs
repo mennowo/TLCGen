@@ -171,7 +171,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl, pl.Naam));
+					// TODO this is provisionary !!!
+                    var temp = pl.Naam;
+                    pl.Naam = _uspl + pl.Naam;
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(temp, _uspl, pl, temp));
+                    pl.Naam = temp;
 
                     foreach(var fcpl in pl.Fasen)
                     {

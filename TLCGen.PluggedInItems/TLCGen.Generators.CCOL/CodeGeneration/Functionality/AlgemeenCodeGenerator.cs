@@ -80,6 +80,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
+                item.BitmapData.Naam = _ussegm + item.Naam;
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm, item.BitmapData));
             }
             if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.DrieCijferDisplay)

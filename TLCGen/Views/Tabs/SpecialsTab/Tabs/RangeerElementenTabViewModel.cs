@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
@@ -12,7 +13,12 @@ namespace TLCGen.ViewModels
     public class RangeerElementenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-        
+
+        private ObservableCollection<IOElementViewModel> _fasen;
+        private ObservableCollection<IOElementViewModel> _detectoren;
+        private ObservableCollection<IOElementViewModel> _outputs;
+        private ObservableCollection<IOElementViewModel> _inputs;
+
         #endregion // Fields
 
         #region Properties
@@ -61,13 +67,46 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<IOElementViewModel> Fasen { get; } = new ObservableCollection<IOElementViewModel>();
+        public ObservableCollection<IOElementViewModel> Fasen
+        {
+            get => _fasen;
+            set
+            {
+                _fasen = value; 
+                RaisePropertyChanged();
+            }
+        }
+        
+        public ObservableCollection<IOElementViewModel> Detectoren
+        {
+            get => _detectoren;
+            set
+            {
+                _detectoren = value; 
+                RaisePropertyChanged();
+            }
+        }
+        
+        public ObservableCollection<IOElementViewModel> Uitgangen
+        {
+            get => _outputs;
+            set
+            {
+                _outputs= value; 
+                RaisePropertyChanged();
+            }
+        }
 
-        public ObservableCollection<IOElementViewModel> Detectoren { get; } = new ObservableCollection<IOElementViewModel>();
-
-        public ObservableCollection<IOElementViewModel> Ingangen { get; } = new ObservableCollection<IOElementViewModel>();
-
-        public ObservableCollection<IOElementViewModel> Uitgangen { get; } = new ObservableCollection<IOElementViewModel>();
+        
+        public ObservableCollection<IOElementViewModel> Ingangen
+        {
+            get => _inputs;
+            set
+            {
+                _inputs = value; 
+                RaisePropertyChanged();
+            }
+        }
 
         public IOElementModelListDropTarget DropTarget { get; } = new IOElementModelListDropTarget();
 
@@ -109,12 +148,12 @@ namespace TLCGen.ViewModels
             var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(c);
             if (elements == null) return;
 
-            var vms = new (ObservableCollection<IOElementViewModel> items, IOElementTypeEnum type)[]
+            var vms = new (List<IOElementViewModel> items, IOElementTypeEnum type)[]
             {
-                (Fasen, IOElementTypeEnum.FaseCyclus),
-                (Detectoren, IOElementTypeEnum.Detector),
-                (Ingangen, IOElementTypeEnum.Input),
-                (Uitgangen, IOElementTypeEnum.Output)
+                (new List<IOElementViewModel>(), IOElementTypeEnum.FaseCyclus),
+                (new List<IOElementViewModel>(), IOElementTypeEnum.Detector),
+                (new List<IOElementViewModel>(), IOElementTypeEnum.Input),
+                (new List<IOElementViewModel>(), IOElementTypeEnum.Output)
             };
             var models = new[]
             {
@@ -127,7 +166,6 @@ namespace TLCGen.ViewModels
             for (var i = 0; i < 4; i++)
             {
                 // clear and rebuild viewmodel list
-                vms[i].items.Clear();
                 foreach (var e in elements.Where(x => x != null && x.ElementType == vms[i].type))
                 {
                     vms[i].items.Add(new IOElementViewModel(e));
@@ -159,8 +197,11 @@ namespace TLCGen.ViewModels
                 var remModels = models[i].Where(x => vms[i].items.All(x2 => x2.Element.Naam != x.Naam)).ToList();
                 foreach (var r in remModels) models[i].Remove(r);
 
-                // sort!
-                if (!vms[i].items.IsSorted()) vms[i].items.BubbleSort();
+                // update
+                Fasen = new ObservableCollection<IOElementViewModel>(vms[0].items.OrderBy(x => x.RangeerIndex));
+                Detectoren = new ObservableCollection<IOElementViewModel>(vms[1].items.OrderBy(x => x.RangeerIndex));
+                Ingangen = new ObservableCollection<IOElementViewModel>(vms[2].items.OrderBy(x => x.RangeerIndex));
+                Uitgangen = new ObservableCollection<IOElementViewModel>(vms[3].items.OrderBy(x => x.RangeerIndex));
             }
         }
 

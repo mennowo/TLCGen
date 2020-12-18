@@ -130,6 +130,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _counters = CCOLElementLists[5];
             _schakelaars = CCOLElementLists[6];
             _parameters = CCOLElementLists[7];
+
+            if (c.Data.RangeerData.RangerenIngangen)
+            {
+                foreach (var ccolelem in _ingangen.Elements)
+                {
+                    var model = c.Data.RangeerData.RangeerIngangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
+                    if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
+                }
+            }
+
+            if (c.Data.RangeerData.RangerenUitgangen)
+            {
+                foreach (var ccolelem in _uitgangen.Elements)
+                {
+                    var model = c.Data.RangeerData.RangeerUitgangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
+                    if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
+                }
+            }
             
             foreach (var l in CCOLElementLists)
             {
@@ -159,24 +177,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _alleDetectoren.Add(dm);
                     foreach (var dm in c.SelectieveDetectoren)
                         _alleDetectoren.Add(dm);
-
-                    if (c.Data.RangeerData.RangerenIngangen)
-                    {
-                        foreach (var ccolelem in _ingangen.Elements)
-                        {
-                            var model = c.Data.RangeerData.RangeerIngangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
-                            if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
-                        }
-                    }
-
-                    if (c.Data.RangeerData.RangerenUitgangen)
-                    {
-                        foreach (var ccolelem in _uitgangen.Elements)
-                        {
-                            var model = c.Data.RangeerData.RangeerUitgangen.FirstOrDefault(x => x.Naam == ccolelem.Naam);
-                            if (model != null) ccolelem.RangeerIndex = model.RangeerIndex;
-                        }
-                    }
 
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
                     _allFiles.Add($"{c.Data.Naam}reg.c");
@@ -767,7 +767,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 rest.Add(d);
             }
 
-            var ioResult = _uitgangen.Elements.Take(_uitgangen.Elements.Count - 1).Concat(_ingangen.Elements.Take(_uitgangen.Elements.Count - 1)).ToList();
+            var ioResult = _uitgangen.Elements.Take(_uitgangen.Elements.Count - 1).OrderBy(x => x.IOElementData.RangeerIndex).Concat(_ingangen.Elements.Take(_ingangen.Elements.Count - 1).OrderBy(x => x.IOElementData.RangeerIndex)).ToList();
 
             var totalResult = rest.Concat(ioResult.Select(x => x.IOElementData)).ToList();
 
@@ -792,7 +792,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad3 = data.CommentsMaxWidth;
             var index = 0;
 
-            var elements = useRangering ? data.Elements.OrderBy(x => x.RangeerIndex).ToList() : data.Elements;
+            var elements = (useRangering ? data.Elements.OrderBy(x => x.RangeerIndex).ToList() : data.Elements).ToList();
 
             foreach (var elem in elements)
             {
