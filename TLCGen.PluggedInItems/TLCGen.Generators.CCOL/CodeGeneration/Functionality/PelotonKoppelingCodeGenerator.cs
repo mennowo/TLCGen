@@ -85,8 +85,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 break;
                             case PelotonKoppelingRichtingEnum.Inkomend:
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspf}{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.InkomendVerklikking, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
-
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelmeet}{pk.KoppelingNaam}", pk.Meetperiode,
                                     CCOLElementTimeTypeEnum.TE_type, _tpelmeet, pk.KoppelingNaam, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelmaxhiaat}{pk.KoppelingNaam}", pk.MaximaalHiaat,
@@ -97,7 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpelin}{pk.KoppelingNaam}", _hpelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpeltegenh}{pk.KoppelingNaam}", _hpeltegenh, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mpelin}{pk.KoppelingNaam}", _mpelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspelin}{pk.KoppelingNaam}", _uspelin, pk.InkomendVerklikking, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
 
                                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                                 {

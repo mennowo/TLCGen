@@ -196,7 +196,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}/* afzetten van statusbit in CIF_GPS[5] */");
                 sb.AppendLine($"{ts}/* ------------------------------------ */");
-                sb.AppendLine($"{ts}CIF_GPS[AUTSTATUS] = FALSE;");
+                sb.AppendLine($"{ts}CIF_GPS[AUTSTATUS] &= ~CIFA_COMF;");
                 sb.AppendLine();
             }
             foreach (var k in c.PTPData.PTPKoppelingen)

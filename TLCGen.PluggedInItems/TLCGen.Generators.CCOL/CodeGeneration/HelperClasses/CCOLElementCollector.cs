@@ -102,6 +102,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (!pgen.HasCCOLElements()) continue;
                 foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
                 {
+                    i.IOElementData.ElementType = IOElementTypeEnum.Output;
                     data.Elements.Add(i);
                 }
             }
@@ -118,6 +119,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (!pgen.HasCCOLElements()) continue;
                 foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Ingang))
                 {
+                    i.IOElementData.ElementType = IOElementTypeEnum.Input;
                     data.Elements.Add(i);
                 }
             }

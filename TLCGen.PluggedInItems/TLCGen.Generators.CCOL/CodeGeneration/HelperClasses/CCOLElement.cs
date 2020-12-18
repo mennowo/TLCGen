@@ -1,4 +1,5 @@
-﻿using TLCGen.Generators.CCOL.Settings;
+﻿using System;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -35,10 +36,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             };
             IOElementData = ioElementData;
             
+            // check
+            if ((type == CCOLElementTypeEnum.Uitgang || type == CCOLElementTypeEnum.Ingang) && ioElementData == null)
+            {
+                throw new NullReferenceException("IO data may not be null for IO");
+            }
+
             // sync data
             if (ioElementData != null)
             {
                 Naam ??= ioElementData.Naam;
+                ioElementData.Naam ??= Naam;
                 if (!Dummy) Dummy = ioElementData.Dummy;
                 if (!IOMultivalent) IOMultivalent = ioElementData.Multivalent;
             }

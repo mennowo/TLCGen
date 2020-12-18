@@ -104,8 +104,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (ccolElement == null) continue;
                     switch (ccolElement.Type)
                     {
-                        case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
-                        case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
+                        case CCOLElementTypeEnum.Uitgang: 
+                            ccolElement.IOElementData.ElementType = IOElementTypeEnum.Output; 
+                            CCOLElementLists[0].Elements.Add(ccolElement); 
+                            break;
+                        case CCOLElementTypeEnum.Ingang: 
+                            ccolElement.IOElementData.ElementType = IOElementTypeEnum.Input; 
+                            CCOLElementLists[1].Elements.Add(ccolElement); 
+                            break;
                         case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
                         case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
                         case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
@@ -761,7 +767,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 rest.Add(d);
             }
 
-            return rest.Concat(_uitgangen.Elements.Where(x => x.Type == CCOLElementTypeEnum.Uitgang || x.Type == CCOLElementTypeEnum.Ingang).Select(x => x.IOElementData)).ToList();
+            var ioResult = _uitgangen.Elements.Take(_uitgangen.Elements.Count - 1).Concat(_ingangen.Elements.Take(_uitgangen.Elements.Count - 1)).ToList();
+
+            var totalResult = rest.Concat(ioResult.Select(x => x.IOElementData)).ToList();
+
+            return totalResult;
         }
 
         /// <summary>

@@ -373,6 +373,8 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\HalfstarTabViewModel.cs">
       <DependentUpon>HalfstarTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Other\IOElementModelListDropTarget.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\IOElementViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PelotonKoppelingenTabView.xaml.cs">
       <DependentUpon>PelotonKoppelingenTabView.xaml</DependentUpon>
     </Compile>
@@ -385,7 +387,9 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabView.xaml.cs">
       <DependentUpon>RangeerElementenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\RangeerElementenTabViewModel.cs">
+      <DependentUpon>RangeerElementenTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabViewModel.cs">
       <DependentUpon>RoBuGroverTabView.xaml</DependentUpon>
     </Compile>

@@ -1,147 +1,13 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using GongSolutions.Wpf.DragDrop;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
-using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public class IOElementModelListDropTarget : IDropTarget
-    {
-        public void DragOver(IDropInfo dropInfo)
-        {
-            // Call default DragOver method, cause most stuff should work by default
-            DragDrop.DefaultDropHandler.DragOver(dropInfo);
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            if (dropInfo.InsertIndex == dropInfo.DragInfo.SourceIndex)
-                return;
-
-            var changed = false;
-
-            if (dropInfo.Data is IOElementViewModel item)
-            {
-                var col = (ObservableCollection<IOElementViewModel>)dropInfo.TargetCollection;
-                var sourceIndex = col.IndexOf(item);
-                var extra = 0;
-                // drag up
-                if (sourceIndex > dropInfo.InsertIndex)
-                {
-                    var start = dropInfo.InsertIndex;
-                    while (start >= 0)
-                    {
-                        if (start != dropInfo.InsertIndex && start < col.Count) extra++;
-                        start--;
-                    }
-                    var newIndex = dropInfo.InsertIndex + extra;
-                    newIndex -= extra;
-                    col.Move(sourceIndex, newIndex);
-                    changed = true;
-                }
-                // drag down
-                else
-                {
-                    var start = 0;
-                    while (start <= dropInfo.InsertIndex)
-                    {
-                        if (start >= 0 && start < col.Count) extra++;
-                        start++;
-                    }
-                    var newIndex = dropInfo.InsertIndex - 1 + extra;
-                    newIndex -= extra;
-                    if (newIndex >= col.Count) newIndex = col.Count - 1;
-                    col.Move(sourceIndex, newIndex);
-                    changed = true;
-                }
-                for (var i = 0; i < col.Count; ++i)
-                {
-                    col[i].RangeerIndex = i;
-                }
-            }
-            else
-            {
-                var col = (ObservableCollection<IOElementViewModel>)dropInfo.TargetCollection;
-
-                var insert = 0;
-                foreach (var i in dropInfo.DragInfo.SourceItems)
-                {
-                    var sourceIndex = col.IndexOf(i as IOElementViewModel);
-                    var extra = 0;
-                    // drag up
-                    if (sourceIndex > dropInfo.InsertIndex)
-                    {
-                        var start = dropInfo.InsertIndex;
-                        while (start >= 0)
-                        {
-                            if (start != dropInfo.InsertIndex && start >= 0 && start < col.Count) extra++;
-                            start--;
-                        }
-                        var newIndex = dropInfo.InsertIndex + extra + insert++;
-                        newIndex -= extra;
-                        col.Move(sourceIndex, newIndex);
-                        changed = true;
-                    }
-                    // drag down
-                    else
-                    {
-                        var start = 0;
-                        while (start <= dropInfo.InsertIndex)
-                        {
-                            if (start >= 0 && start < col.Count) extra++;
-                            start++;
-                        }
-                        var newIndex = dropInfo.InsertIndex - 1 + extra;
-                        newIndex -= extra;
-                        if (newIndex >= col.Count) newIndex = col.Count - 1;
-                        col.Move(sourceIndex, newIndex);
-                       changed = true;
-                    }
-                }
-                for (var i = 0; i < col.Count; ++i)
-                {
-                    col[i].RangeerIndex = i;
-                }
-            }
-            if (changed) Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-    }
-
-    public class IOElementViewModel : ViewModelBase, IComparable
-    {
-        public IOElementViewModel(IOElementModel element)
-        {
-            Element = element;
-        }
-
-        public int RangeerIndex
-        {
-            get => Element.RangeerIndex;
-            set
-            {
-                Element.RangeerIndex = value;
-                if (SavedData != null) SavedData.RangeerIndex = value;
-            }
-        }
-
-        public IOElementModel Element { get; }
-
-        public IOElementRangeerDataModel SavedData { get; set; }
-
-        public int CompareTo(object obj)
-        {
-            return RangeerIndex.CompareTo(((IOElementViewModel) obj).RangeerIndex);
-        }
-    }
-
     [TLCGenTabItem(index: 8, type: TabItemTypeEnum.SpecialsTab)]
     public class RangeerElementenTabViewModel : TLCGenTabItemViewModel
     {
@@ -262,7 +128,7 @@ namespace TLCGen.ViewModels
             {
                 // clear and rebuild viewmodel list
                 vms[i].items.Clear();
-                foreach (var e in elements.Where(x => x.ElementType == vms[i].type))
+                foreach (var e in elements.Where(x => x != null && x.ElementType == vms[i].type))
                 {
                     vms[i].items.Add(new IOElementViewModel(e));
                 }
@@ -270,7 +136,7 @@ namespace TLCGen.ViewModels
                 // for each item, match with saved data
                 foreach (var vm in vms[i].items)
                 {
-                    var model = models[i].FirstOrDefault(x => x.Naam == vm.Element.Naam);
+                    var model = models[i].FirstOrDefault(x => x != null && x.Naam == vm.Element.Naam);
                     if (model != null)
                     {
                         vm.RangeerIndex = model.RangeerIndex;
@@ -294,7 +160,7 @@ namespace TLCGen.ViewModels
                 foreach (var r in remModels) models[i].Remove(r);
 
                 // sort!
-                vms[i].items.BubbleSort();
+                if (!vms[i].items.IsSorted()) vms[i].items.BubbleSort();
             }
         }
 

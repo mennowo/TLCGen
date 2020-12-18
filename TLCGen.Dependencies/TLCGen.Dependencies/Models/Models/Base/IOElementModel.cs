@@ -28,10 +28,7 @@ namespace TLCGen.Models
         public int RangeerIndex
         {
             get => _rangeerIndex;
-            set
-            {
-                _rangeerIndex = value;
-            }
+            set => _rangeerIndex = value;
         }
 
         [HasDefault(false)]
