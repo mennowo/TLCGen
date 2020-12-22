@@ -2631,7 +2631,7 @@
             <Default>minwtv</Default>
             <Setting>minwtv</Setting>
             <Type>Parameter</Type>
-            <Description>Minimaal aantal LEDs dat moet gaan branden bij starten wachttijdvoorspeller</Description>
+            <Description>Minimale tijd die een LED moet branden tijdens aftellen</Description>
           </Setting>
         </Settings>
       </CodePieceData>

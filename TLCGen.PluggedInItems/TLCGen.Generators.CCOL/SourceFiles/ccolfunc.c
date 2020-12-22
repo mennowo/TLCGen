@@ -501,7 +501,7 @@ mulv max_tar_tig(count i)
             k = KF_pointer[i][n];
             if (TIG[k][i])               /* zoek grootste ontruimingstijd      */
             {
-                to_tmp = TGL_max[k] + TIG_max[k][i] - TGL_timer[k] - TIG_timer[k];
+                to_tmp = TIG_max[k][i] - TIG_timer[k];
                 if (to_tmp > to_max)
                     to_max = to_tmp;
             }
@@ -520,7 +520,7 @@ mulv max_tar_tig(count i)
                     {
                         if (G[kk] && !MG[kk] && !FM[kk] && !Z[kk])
                         {
-                            totxb_tmp = TFG_max[kk] + TVG_max[kk] + TGL_max[kk] + TIG_max[kk][k] - TFG_timer[kk] - TVG_timer[kk] - TGL_max[i] - TIG_max[i][k];
+                            totxb_tmp = TFG_max[kk] + TVG_max[kk] + TIG_max[kk][k] - TFG_timer[kk] - TVG_timer[kk] - TIG_max[i][k];
                             if (totxb_tmp > totxb_min)
                             {
                                 totxb_min = totxb_tmp;
@@ -528,7 +528,7 @@ mulv max_tar_tig(count i)
                         }
                         else if (RA[kk] && !RR[kk] && !BL[kk])
                         {
-                            totxb_tmp = TFG_max[kk] + TVG_max[kk] + TGL_max[kk] + TIG_max[kk][k] - TGL_max[i] - TIG_max[i][k];
+                            totxb_tmp = TFG_max[kk] + TVG_max[kk] + TIG_max[kk][k] - TIG_max[i][k];
                             if (totxb_tmp > totxb_min)
                             {
                                 totxb_min = totxb_tmp;
@@ -540,7 +540,7 @@ mulv max_tar_tig(count i)
                 if (totxb_min < totxb_min_tmp) totxb_min_tmp = totxb_min;
 #endif
             }
-            }
+        }
         if (t_aa_max >= 0)              /* bereken de realisatietijd          */
         {
             if (aapr_tmp)               /* primaire conflict aanvraag         */

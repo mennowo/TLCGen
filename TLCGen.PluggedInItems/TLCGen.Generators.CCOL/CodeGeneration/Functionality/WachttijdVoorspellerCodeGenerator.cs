@@ -42,7 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return;
 
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmminwtv}", 2, CCOLElementTimeTypeEnum.None, _prmminwtv));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmminwtv}", 2, CCOLElementTimeTypeEnum.TE_type, _prmminwtv));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmwtvnhaltmax}", c.Data.WachttijdvoorspellerNietHalterenMax, CCOLElementTimeTypeEnum.None, _prmwtvnhaltmax));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmwtvnhaltmin}", c.Data.WachttijdvoorspellerNietHalterenMin, CCOLElementTimeTypeEnum.None, _prmwtvnhaltmin));
 

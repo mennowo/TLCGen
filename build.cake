@@ -63,7 +63,8 @@ Task("Sign")
             TimeStampUri = certUri,
             CertPath = certPath,
             Password = signPass,
-            DigestAlgorithm = SignToolDigestAlgorithm.Sha256
+            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
+            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
     });
 });
 
@@ -97,7 +98,9 @@ Task("SignSetup")
     Sign(file, new SignToolSignSettings {
             TimeStampUri = certUri,
             CertPath = certPath,
-            Password = signPass
+            Password = signPass,
+            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
+            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
     });
 });
 

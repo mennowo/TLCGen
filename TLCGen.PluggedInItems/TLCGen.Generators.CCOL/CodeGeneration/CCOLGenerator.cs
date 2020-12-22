@@ -320,6 +320,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
                         CopySourceIfNeeded(c, "halfstar_prio.c", sourcefilepath);
                         CopySourceIfNeeded(c, "halfstar_prio.h", sourcefilepath);
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+                        {
+                            CopySourceIfNeeded(c, "halfstar_wtv.c", sourcefilepath);
+                            CopySourceIfNeeded(c, "halfstar_wtv.h", sourcefilepath);
+                        }
                     }
 
                     if (c.Fasen.Any(x => x.WachttijdVoorspeller))

@@ -149,6 +149,12 @@
     <Compile Include="Settings\CCOLGeneratorSettingsModel.cs" />
     <Compile Include="Settings\CCOLGeneratorSettingsProvider.cs" />
     <Compile Include="Settings\CodePieceSettingsTuple.cs" />
+    <Content Include="SourceFiles\halfstar_wtv.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\halfstar_wtv.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\realfunc.c">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
