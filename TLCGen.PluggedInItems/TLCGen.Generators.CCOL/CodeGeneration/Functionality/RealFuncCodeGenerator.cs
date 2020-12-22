@@ -50,8 +50,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var grsync in _sortedSyncs.oneWay)
             {
                 var max = grsync.Waarde <= 0 ? _trealvs : _treallr;
-                // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
-                // maar de groentijdcorrectie van b naar a
+                // inlopen voetgangers (eenzijdig)
                 var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                 var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
                 if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)

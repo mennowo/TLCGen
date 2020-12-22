@@ -479,7 +479,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}{ts}#ifndef DUURTEST");
                 sb.AppendLine($"{ts}{ts}{ts}MG_Bars_init(TVG_basis, TVG_rgv, 10, 750, 0, 0);");
-                sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(SYSTEM, ");
+                sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(szWndTitleName, ");
                 foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
                 {
                     sb.Append($"{_fcpf}{fc.FaseCyclus}, ");

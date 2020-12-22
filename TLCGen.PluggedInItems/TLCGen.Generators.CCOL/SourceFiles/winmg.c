@@ -190,7 +190,7 @@ void MG_Fasen_Venster_init(LPCTSTR lpWindowName, ...)
 		/* opzoeken parent window */
 		/* De window name wordt doorgegeven vanuit MG_Bars() als argument van die functie. */
 		/* In de aanroep ervan in de reg.add wordt 'SYSTEM' ingevuld, wat gelijk is aan het kruispuntnummer als c-style string ofwel char[] */
-		hParent = FindWindow(NULL, SYSTEM);
+		hParent = FindWindow(NULL, szWndTitleName);
 		if (hParent)
 		{
 			/* opvragen window instance */

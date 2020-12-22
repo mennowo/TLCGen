@@ -9,6 +9,9 @@
 
 #include "sysdef.c"
 
+/* Titel van het CCOL venster */
+extern char szWndTitleName[];
+
 /*
 * Voorbeeld: MG_Bars_init(TVG_basis, TVG_rgv, 10, 400, 0, 0);
 */
