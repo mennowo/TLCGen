@@ -36,7 +36,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen))
                 {
                     _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbeldim}", _usbeldim));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbeldim}", _usbeldim, c.Signalen.BellenDimmenBitmapData));
                 }
             }
 
