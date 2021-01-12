@@ -10,6 +10,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
@@ -105,6 +106,8 @@ namespace TLCGen.ViewModels
         public PrioIngreepRISMeldingViewModel RISViewModel { get; }
 
         public PrioIngreepPelotonMeldingViewModel PelotonViewModel { get; }
+
+        public PrioIngreepFietsPrioriteitMeldingViewModel FietsPrioriteitViewModel { get; set; }
 
         public bool OpvangStoring
         {
@@ -235,6 +238,8 @@ namespace TLCGen.ViewModels
                     ActualViewModel = RISViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
+                    ActualViewModel = FietsPrioriteitViewModel;
+                    break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
                     ActualViewModel = PelotonViewModel;
                     break;
@@ -259,6 +264,7 @@ namespace TLCGen.ViewModels
             ViewModel = new PrioIngreepRegularMeldingViewModel(this);
             RISViewModel = new PrioIngreepRISMeldingViewModel(this);
             PelotonViewModel = new PrioIngreepPelotonMeldingViewModel(this);
+            FietsPrioriteitViewModel = new PrioIngreepFietsPrioriteitMeldingViewModel(this);
 
             if (PrioIngreepInUitMelding.MeldingBijstoring != null)
             {
@@ -273,6 +279,7 @@ namespace TLCGen.ViewModels
 
             SetActualViewModel();
         }
+
 
         #endregion //Constructor
     }

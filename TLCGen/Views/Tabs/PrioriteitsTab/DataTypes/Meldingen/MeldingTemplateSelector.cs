@@ -11,6 +11,7 @@ namespace TLCGen.Views
         public DataTemplate RegularTemplate { get; set; }
         public DataTemplate RISTemplate { get; set; }
         public DataTemplate PelotonTemplate { get; set; }
+        public DataTemplate FietsPrioriteitTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -22,6 +23,8 @@ namespace TLCGen.Views
                     return PelotonTemplate ?? throw new NullReferenceException();
                 case PrioIngreepRISMeldingViewModel _: 
                     return RISTemplate ?? throw new NullReferenceException();
+                case PrioIngreepFietsPrioriteitMeldingViewModel _: 
+                    return FietsPrioriteitTemplate ?? throw new NullReferenceException();
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:

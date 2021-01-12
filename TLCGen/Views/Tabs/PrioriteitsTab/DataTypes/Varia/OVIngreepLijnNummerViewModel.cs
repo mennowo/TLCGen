@@ -4,6 +4,38 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
+    public class OVIngreepPeriodeViewModel : ViewModelBase, IViewModelWithItem
+    {
+        #region Fields
+        #endregion // Fields
+
+        #region Properties
+
+        public OVIngreepPeriodeModel Periode { get; }
+
+        public string PeriodeNaam => Periode.Periode;
+
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return Periode;
+        }
+
+        #endregion // IViewModelWithItem
+
+        #region Constructor
+        
+        public OVIngreepPeriodeViewModel(OVIngreepPeriodeModel periode)
+        {
+            Periode = periode;
+        }
+        
+        #endregion // Constructor
+    }
+
     public class OVIngreepLijnNummerViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields

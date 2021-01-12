@@ -29,6 +29,11 @@
                     <meldingen:PrioIngreepPelotonMeldingView />
                 </DataTemplate>
             </local:MeldingTemplateSelector.PelotonTemplate>
+            <local:MeldingTemplateSelector.FietsPrioriteitTemplate>
+                <DataTemplate>
+                    <local:PrioIngreepFietsPrioriteitMeldingView />
+                </DataTemplate>
+            </local:MeldingTemplateSelector.FietsPrioriteitTemplate>
         </local:MeldingTemplateSelector>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="2" />

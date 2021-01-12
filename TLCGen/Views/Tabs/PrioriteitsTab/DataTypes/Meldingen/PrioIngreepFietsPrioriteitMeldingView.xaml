@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="TLCGen.Views.PrioIngreepFietsPrioriteitMeldingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:meldingen="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:views="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepFietsPrioriteitMeldingViewModel}">
+    <UserControl.Resources>
+        <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="Fiets prioriteit obv. massa detectie en/of wachttijd" FontWeight="Bold" Grid.ColumnSpan="2" />
+            <Label Grid.Row="1" Grid.Column="0" Content="Aantal keer prio per cyclus" />
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitAantalKeerPerCyclus}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="Toegestaan blok" />
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitBlok}" />
+            <Label Grid.Row="3" Grid.Column="0" Content="Minimaal aantal voertuigen" />
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumAantalVoertuigen}" />
+            <Label Grid.Row="4" Grid.Column="0" Content="Minimale wachttijd voor prio" />
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumWachttijdVoorPrioriteit}" />
+            <Label Grid.Row="5" Grid.Column="0" Content="Gebruik tel detector" />
+            <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Path=FietsPrioriteitGebruikLus}" />
+            <Label Grid.Row="6" Grid.Column="0" Content="Tel detector" />
+            <ComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Path=AvailableDetectors}" Margin="2"
+                      IsEnabled="{Binding Path=FietsPrioriteitGebruikLus}"
+                      SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </Grid>
+</UserControl>

@@ -149,7 +149,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX = {k.AantalsignalenUit};   /* aantal uitgaande koppelsignalen    */ /* @ verhogen in stappen van 8 */");
                 if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
                 {
-                    sb.AppendLine($"{ts}{ts}#ifndef NO_PTP_MULTIVALENT");
+                    sb.AppendLine($"{ts}{ts}#if CCOL_V >= 110 && !defined NO_PTP_MULTIVALENT");
                     sb.AppendLine($"{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.IKSM_MAX = 0;");
                     sb.AppendLine($"{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKSM_MAX = 0;");
                     sb.AppendLine($"{ts}{ts}#endif");

@@ -72,8 +72,11 @@ namespace TLCGen.Models
 
         #region Fiets
         
-        public bool FietsMassaTellingVerwegLus { get; set; }
-        public bool FietsMassa { get; set; }
+        public bool FietsPrioriteitGebruikLus { get; set; }
+        public int FietsPrioriteitBlok { get; set; }
+        public int FietsPrioriteitAantalKeerPerCyclus { get; set; }
+        public int FietsPrioriteitMinimumAantalVoertuigen { get; set; }
+        public int FietsPrioriteitMinimumWachttijdVoorPrioriteit { get; set; }
         
         #endregion
         

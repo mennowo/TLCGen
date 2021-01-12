@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -40,6 +41,9 @@ namespace TLCGen.ViewModels
         public string FaseCyclus => PrioIngreep.FaseCyclus;
 
         private ObservableCollection<PrioIngreepMeldingenListViewModel> _meldingenLists;
+        private ObservableCollectionAroundList<OVIngreepPeriodeViewModel, OVIngreepPeriodeModel> _gerelateerdePerioden;
+        private OVIngreepPeriodeViewModel _selectedPeriode;
+        private ItemsManagerViewModel<OVIngreepPeriodeViewModel, string> _gerelateerdePeriodenManager;
         public ObservableCollection<PrioIngreepMeldingenListViewModel> MeldingenLists => _meldingenLists ??= new ObservableCollection<PrioIngreepMeldingenListViewModel>();
 
         [Category("Algemene opties")]
@@ -437,6 +441,41 @@ namespace TLCGen.ViewModels
             _lijnNummers ??= new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(PrioIngreep.LijnNummers);
 
         [Browsable(false)]
+        [Description("Check op periode actief")]
+        public bool CheckPeriode
+        {
+            get => PrioIngreep.CheckPeriode;
+            set
+            {
+                PrioIngreep.CheckPeriode = value;
+                RaisePropertyChanged<object>(nameof(CheckPeriode), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public OVIngreepPeriodeViewModel SelectedPeriode
+        {
+            get => _selectedPeriode;
+            set
+            {
+                _selectedPeriode = value;
+                RaisePropertyChanged(nameof(SelectedPeriode));
+            }
+        }
+
+        [Browsable(false)]
+        public ObservableCollectionAroundList<OVIngreepPeriodeViewModel, OVIngreepPeriodeModel> GerelateerdePerioden =>
+            _gerelateerdePerioden ??= new ObservableCollectionAroundList<OVIngreepPeriodeViewModel, OVIngreepPeriodeModel>(PrioIngreep.GerelateerdePerioden);
+
+        [Browsable(false)]
+        public ItemsManagerViewModel<OVIngreepPeriodeViewModel, string> GerelateerdePeriodenManager => _gerelateerdePeriodenManager ??=
+            new ItemsManagerViewModel<OVIngreepPeriodeViewModel, string>(
+                GerelateerdePerioden,
+                ControllerAccessProvider.Default.AllePerioden.Where(x => x.Type == PeriodeTypeEnum.Overig).Select(x => x.Naam), 
+                model => new OVIngreepPeriodeViewModel(new OVIngreepPeriodeModel {Periode = model}),
+                model => GerelateerdePerioden.All(x => x.PeriodeNaam != model));
+
+        [Browsable(false)]
         public bool HasKAR => PrioIngreep.HasPrioIngreepKAR();
 
         [Browsable(false)]
@@ -444,6 +483,10 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public ObservableCollection<string> Detectoren { get; }
+
+        [Browsable(false)]
+        public ICollectionView OverigePerioden =>
+            ControllerAccessProvider.Default.GetCollectionView(PeriodeTypeEnum.Overig);
 
         public string Description => PrioIngreep.DisplayName;
 
@@ -458,29 +501,28 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _addLijnNummerCommand ?? (_addLijnNummerCommand =
-                           new RelayCommand(() => 
-                           {
-                               if (!string.IsNullOrWhiteSpace(NewLijnNummer))
-                               {
-                                   var nummer = new OVIngreepLijnNummerModel()
-                                   {
-                                       Nummer = NewLijnNummer, RitCategorie = "999"
-                                   };
-                                   LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                               }
-                               else
-                               {
-                                   var nummer = new OVIngreepLijnNummerModel()
-                                   {
-                                       Nummer = "0", RitCategorie = "999"
-                                   };
-                                   LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                               }
-                               NewLijnNummer = "";
-                               GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                return _addLijnNummerCommand ??= new RelayCommand(() => 
+                {
+                    if (!string.IsNullOrWhiteSpace(NewLijnNummer))
+                    {
+                        var nummer = new OVIngreepLijnNummerModel()
+                        {
+                            Nummer = NewLijnNummer, RitCategorie = "999"
+                        };
+                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                    }
+                    else
+                    {
+                        var nummer = new OVIngreepLijnNummerModel()
+                        {
+                            Nummer = "0", RitCategorie = "999"
+                        };
+                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                    }
+                    NewLijnNummer = "";
+                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
 
-                           }, () => LijnNummers != null));
+                }, () => LijnNummers != null);
             }
         }
 
@@ -488,15 +530,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_add10LijnNummersCommand == null)
-                {
-                    _add10LijnNummersCommand = new RelayCommand(
-                        () =>
-                        {
-                            for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
-                        }, () => LijnNummers != null);
-                }
-                return _add10LijnNummersCommand;
+                return _add10LijnNummersCommand ??= new RelayCommand(
+                    () =>
+                    {
+                        for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
+                    }, () => LijnNummers != null);
             }
         }
 
@@ -506,23 +544,20 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_removeLijnNummerCommand == null)
+                return _removeLijnNummerCommand ??= new RelayCommand(() =>
                 {
-                    _removeLijnNummerCommand = new RelayCommand(() =>
+                    if (SelectedLijnNummer != null)
                     {
-                        if (SelectedLijnNummer != null)
-                        {
-                            LijnNummers.Remove(SelectedLijnNummer);
-                            SelectedLijnNummer = null;
-                        }
-                        else
-                        {
-                            LijnNummers.RemoveAt(LijnNummers.Count - 1);
-                        }
-                        GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                    }, () => LijnNummers != null && LijnNummers.Count > 0);
-                }
-                return _removeLijnNummerCommand;
+                        LijnNummers.Remove(SelectedLijnNummer);
+                        SelectedLijnNummer = null;
+                    }
+                    else
+                    {
+                        LijnNummers.RemoveAt(LijnNummers.Count - 1);
+                    }
+
+                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                }, () => LijnNummers != null && LijnNummers.Count > 0);
             }
         }
 
@@ -530,8 +565,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _removeIngreepCommand ?? (_removeIngreepCommand =
-                           new RelayCommand(() => { _parentIngreep.Ingrepen.Remove(this); }));
+                return _removeIngreepCommand ??= new RelayCommand(() => { _parentIngreep.Ingrepen.Remove(this); });
             }
         }
         
@@ -576,11 +610,18 @@ namespace TLCGen.ViewModels
             _parentIngreep = parentIngreep;
             
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);
 
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
+        }
+
+        private void OnPeriodenChanged(PeriodenChangedMessage obj)
+        {
+            GerelateerdePerioden.Rebuild();
+            _gerelateerdePeriodenManager?.Refresh();
         }
 
         #endregion // Constructor

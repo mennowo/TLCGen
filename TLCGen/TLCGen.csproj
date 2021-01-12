@@ -112,6 +112,10 @@
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\MeldingTemplateSelector.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingView.xaml.cs">
+      <DependentUpon>PrioIngreepFietsPrioriteitMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepPelotonMeldingView.xaml</DependentUpon>
@@ -659,6 +663,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

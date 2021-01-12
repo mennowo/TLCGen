@@ -29,3 +29,4 @@ bool WDNST_check_uit(count fc);
 #endif
 
 void NevenMelding(count ov1, count ov2, count ov3, count d, count prmrtbl, count prmrtbh, count hovss1, count hovss2, count hovss3, count hneven1, count hneven2, count hneven3);
+bool fietsprio_inmelding (count fc, count dvw, count c_priocount, count c_priocyc, count prm_prioblok, count prm_priocyc, count prm_priocount, count prm_priowt, bool prioin, count ml);

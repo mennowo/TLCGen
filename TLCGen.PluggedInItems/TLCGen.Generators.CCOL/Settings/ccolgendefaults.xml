@@ -1724,6 +1724,42 @@
             <Type>Timer</Type>
             <Description></Description>
           </Setting>
+          <Setting>
+            <Default>ftsblok</Default>
+            <Setting>ftsblok</Setting>
+            <Type>Parameter</Type>
+            <Description>Blokken waarin fiets peloton prio actief mag zijn voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftsmaxpercyc</Default>
+            <Setting>ftsmaxpercyc</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximaal aantal keer fiets peloton prio per cyclus voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftsminvtg</Default>
+            <Setting>ftsminvtg</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimaal aantal gemeten fietsers tbv peloton prio voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftsminwt</Default>
+            <Setting>ftsminwt</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimale wachttijd tbv peloton prio voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftscyc</Default>
+            <Setting>ftscyc</Setting>
+            <Type>Counter</Type>
+            <Description>Bijhouden cycli tbv peloton prio voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftsvtg</Default>
+            <Setting>ftsvtg</Setting>
+            <Type>Counter</Type>
+            <Description>Bijhouden wachttijd tbv peloton prio voor fase _E1_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

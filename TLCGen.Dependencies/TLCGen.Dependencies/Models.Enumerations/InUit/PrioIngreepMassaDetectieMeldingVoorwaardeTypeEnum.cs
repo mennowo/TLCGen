@@ -20,7 +20,7 @@ namespace TLCGen.Models.Enumerations
         //VrachtRIS,
         //[Description("RIS peloton fiets")]
         //FietsRISPeloton,
-        [Description("Massa peloton fiets")]
+        [Description("Fiets prioriteit")]
         FietsMassaPeloton,
         //[Description("RIS peloton auto")]
         //AutoRISPeloton,

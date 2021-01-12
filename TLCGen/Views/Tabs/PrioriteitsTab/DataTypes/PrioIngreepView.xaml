@@ -11,7 +11,7 @@
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              x:Name="Root"
-             d:DesignHeight="1000" d:DesignWidth="300"
+             d:DesignHeight="1200" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance vm:PrioIngreepViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
@@ -42,7 +42,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <ag:AutoGrid Columns="Auto,*" RowCount="35">
+                    <ag:AutoGrid Columns="Auto,*" RowCount="38">
                         <!-- Algemeen -->
                         <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
                         <StackPanel Orientation="Horizontal">
@@ -187,6 +187,18 @@
                         <TextBlock Text="Overig" Grid.ColumnSpan="2" Margin="5" Padding="0" TextDecorations="Underline" />
                         <Label Content="Check op wagen nummer" Grid.Row="1" />
                         <CheckBox IsChecked="{Binding Path=CheckWagenNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                        <Label Content="Klokperiode als voorwaarde" Grid.Row="1" />
+                        <CheckBox IsChecked="{Binding Path=CheckPeriode,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
+                        <DataGrid 
+                            AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                            ItemsSource="{Binding Path=GerelateerdePerioden}" IsEnabled="{Binding Path=CheckPeriode}" SelectedItem="{Binding SelectedPeriode}" Margin="2" 
+                            Grid.ColumnSpan="2">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=PeriodeNaam}" Header="Periode" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <local:ItemsManagerView DataContext="{Binding Path=GerelateerdePeriodenManager}" 
+                                                IsEnabled="{Binding ElementName=Root,Path=DataContext.CheckPeriode}" Grid.ColumnSpan="2" />
                     </ag:AutoGrid>
                 </Grid>
             </Grid>

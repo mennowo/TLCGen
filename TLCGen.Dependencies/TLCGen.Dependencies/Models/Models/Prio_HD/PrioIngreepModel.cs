@@ -56,6 +56,7 @@ namespace TLCGen.Models
         public bool CheckRitCategorie { get; set; }
         public bool AlleLijnen { get; set; }
         public bool AlleRitCategorien { get; set; }
+        public bool CheckPeriode { get; set; }
 
         public bool GeenEigenVerklikking { get; set; }
 
@@ -97,6 +98,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
 
+        [XmlArrayItem(ElementName = "Periode")]
+        public List<OVIngreepPeriodeModel> GerelateerdePerioden { get; set; }
+
         public PrioIngreepMeldingenDataModel MeldingenData { get; set; }
 
         #endregion // Properties
@@ -119,6 +123,7 @@ namespace TLCGen.Models
         public PrioIngreepModel()
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
+            GerelateerdePerioden = new List<OVIngreepPeriodeModel>();
             Koplus = "NG";
             PrioInmeldingBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();

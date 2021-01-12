@@ -19,6 +19,7 @@ namespace TLCGen.ViewModels
         ControllerModel Controller { get; }
         ObservableCollection<FaseCyclusViewModel> AllSignalGroups { get; }
         ObservableCollection<IngangViewModel> AllIngangen { get; }
+        ObservableCollection<PeriodeViewModel> AllePerioden { get; }
         ObservableCollection<DetectorViewModel> AllDetectors { get; }
         ObservableCollection<DetectorViewModel> AllVecomDetectors { get; }
         ObservableCollection<SelectieveDetectorViewModel> AllSelectiveDetectors { get; }
@@ -39,6 +40,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<DetectorViewModel> _allDetectors;
         private ObservableCollection<DetectorViewModel> _allVecomDetectors;
         private ObservableCollection<SelectieveDetectorViewModel> _allSelectiveDetectors;
+        private ObservableCollection<PeriodeViewModel> _allePerioden;
         private ObservableCollection<string> _allSignalGroupStrings;
         private ObservableCollection<string> _allDetectorStrings;
         private ObservableCollection<string> _allVecomDetectorStrings;
@@ -99,6 +101,19 @@ namespace TLCGen.ViewModels
                         return _detectorsCollectionViews[i];
                     }
                     break;
+                case PeriodeTypeEnum p:
+                    if(_allePerioden != null)
+                    {
+                        if (!_detectorsCollectionViews.ContainsKey(p))
+                        {
+                            var view = CollectionViewSource.GetDefaultView(_allIngangen);
+                            view.Filter += o => ((PeriodeViewModel)o).Type == p;
+                            view.Refresh();
+                            _detectorsCollectionViews.Add(p, view);
+                        }
+                        return _detectorsCollectionViews[p];
+                    }
+                    break;
             }
 
             return null;
@@ -131,6 +146,9 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> AllSelectiveDetectorStrings =>
             _allSelectiveDetectorStrings ??= new ObservableCollection<string>();
 
+        public ObservableCollection<PeriodeViewModel> AllePerioden =>
+            _allePerioden ??= new ObservableCollection<PeriodeViewModel>();
+
         public ControllerModel Controller { get; private set; }
 
         public void Setup()
@@ -141,8 +159,20 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<ControllerLoadedMessage>(this, OnControllerLoaded);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnSignalGroupFaseDetectorTypeChanged));
-            MessengerInstance.Register(this, new Action<FaseDetectorVeiligheidsGroenChangedMessage>(OnSignalGroupDetectorVeiligheidsGroenChanged));
+            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnSignalGroupFaseDetectorTypeChanged);
+            MessengerInstance.Register<FaseDetectorVeiligheidsGroenChangedMessage>(this, OnSignalGroupDetectorVeiligheidsGroenChanged);
+            MessengerInstance.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+        }
+
+        private void OnPeriodenChanged(PeriodenChangedMessage obj)
+        {
+            foreach (var p in Controller.PeriodenData.Perioden.Where(p => AllePerioden.All(x => x.Naam != p.Naam)))
+            {
+                AllePerioden.Add(new PeriodeViewModel(p));
+            }
+
+            var rem = AllePerioden.Where(x => Controller.PeriodenData.Perioden.All(x2 => x2.Naam != x.Naam)).ToList();
+            foreach (var r in rem) AllePerioden.Remove(r);
         }
 
         private void OnIngangenChanged(IngangenChangedMessage obj)
@@ -315,6 +345,7 @@ namespace TLCGen.ViewModels
             AllSelectiveDetectorStrings.Clear();
             AllVecomDetectors.Clear();
             AllVecomDetectorStrings.Clear();
+            AllePerioden.Clear();
             
             Controller = obj.Controller;
 
@@ -344,6 +375,11 @@ namespace TLCGen.ViewModels
             foreach (var ingang in obj.Controller.Ingangen)
             {
                 AllIngangen.Add(new IngangViewModel(ingang));
+            }
+
+            foreach (var periode in obj.Controller.PeriodenData.Perioden)
+            {
+                AllePerioden.Add(new PeriodeViewModel(periode));;
             }
         }
 

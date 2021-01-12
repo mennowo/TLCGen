@@ -444,3 +444,41 @@ void NevenMelding(count ov1,      /* OV fasecyclus 1                */
                               IH[hovss2] ||
                (fc3 != NG) && IH[hovss3] ? PRM[prmrtbh] : PRM[prmrtbl];
 }
+
+boolv fietsprio_inmelding (
+     count fc,            /* Fasecyclus */
+     count dvw,              /* Verweg detector */
+     count c_priocount,      /* Counter tellen voertuigen */
+     count c_priocyc,     /* Counter aantal keer prio per cyclus */
+     count prm_prioblok,  /* Bitwise bepalen toegestane blokken */
+     count prm_priocyc,      /* Maximum aantal keer prio per cyclus */
+     count prm_priocount, /* Minimum aantal voertuigen voor prio */
+     count prm_priowt,      /* Minimum wachttijd voor prio */
+     boolv prioin,         /* Hulpelement inmelding prio */
+	 count ml)            /* Actieve module */
+{
+     /* fietsprioriteit */
+     /* eenmaal per cyclus */
+     RC[c_priocyc] = SML && (ml==ML1);
+     INC[c_priocyc] = prioin;
+
+     /* aantal fietsers tellen */
+   	if (dvw != NG)
+	{
+       RC[c_priocount] = SG[fc];
+       INC[c_priocount] = R[fc] && SD[dvw];
+	}
+
+     /* Check juiste blok */
+     if (!(PRM[prm_prioblok] & (1 << ml))) return FALSE;
+
+     /* Check aantal keer prio per cyclus niet overschreden */
+     if (C[c_priocyc] && (C_counter[c_priocyc] >= PRM[prm_priocyc]))
+         return FALSE;
+
+     /* prio actief indien: voldoende voertuigen OF voldoende wachttijd */
+     return
+         R[fc] && !TRG[fc] &&
+		 (dvw != NG && C_counter[c_priocount] >= PRM[prm_priocount] ||
+          A[fc] && TFB_timer[fc] >= PRM[prm_priowt]);
+}

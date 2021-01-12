@@ -88,7 +88,7 @@ namespace TLCGen.Settings
                 //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
                 //    return "fts";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
-                    return "ftsris";
+                    return "fiets";
                 //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
                 //    return "autris";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
