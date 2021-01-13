@@ -82,6 +82,7 @@
     <Compile Include="Integrity\TLCGenControllerChecker.cs" />
     <Compile Include="Integrity\TLCGenControllerModifier.cs" />
     <Compile Include="Integrity\TLCGenIntegrityChecker.cs" />
+    <Compile Include="Messaging\Messages\CCOLVersionChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ConflictsChangedMessage.cs" />
     <Compile Include="Messaging\Messages\ControllerCodeGeneratedMessage.cs" />
     <Compile Include="Messaging\Messages\ControllerDataChangedMessage.cs" />

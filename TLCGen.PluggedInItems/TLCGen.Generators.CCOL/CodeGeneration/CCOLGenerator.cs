@@ -766,9 +766,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 fc.ElementType = IOElementTypeEnum.FaseCyclus;
                 rest.Add(fc);
             }
-            foreach (var d in c.GetAllDetectors())
+            foreach (var d in c.GetAllRegularDetectors())
             {
                 d.ElementType = IOElementTypeEnum.Detector;
+                rest.Add(d);
+            }
+            foreach (var d in c.SelectieveDetectoren)
+            {
+                d.ElementType = IOElementTypeEnum.SelectiveDetector;
                 rest.Add(d);
             }
 

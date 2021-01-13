@@ -10,7 +10,8 @@ namespace TLCGen.Models
         FaseCyclus,
         Detector,
         Output,
-        Input
+        Input,
+        SelectiveDetector
     }
 
     [Serializable]

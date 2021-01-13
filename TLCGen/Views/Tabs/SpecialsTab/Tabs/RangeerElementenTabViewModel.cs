@@ -18,6 +18,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<IOElementViewModel> _detectoren;
         private ObservableCollection<IOElementViewModel> _outputs;
         private ObservableCollection<IOElementViewModel> _inputs;
+        private ObservableCollection<IOElementViewModel> _selectieveDetectoren;
 
         #endregion // Fields
 
@@ -67,6 +68,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool RangerenSelectieveDetectoren
+        {
+            get => _Controller?.Data?.RangeerData?.RangerenSelectieveDetectoren ?? false;
+            set
+            {
+                _Controller.Data.RangeerData.RangerenSelectieveDetectoren = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateRangeerIndices(_Controller);
+            }
+        }
+
         public ObservableCollection<IOElementViewModel> Fasen
         {
             get => _fasen;
@@ -97,13 +109,22 @@ namespace TLCGen.ViewModels
             }
         }
 
-        
         public ObservableCollection<IOElementViewModel> Ingangen
         {
             get => _inputs;
             set
             {
                 _inputs = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IOElementViewModel> SelectieveDetectoren
+        {
+            get => _selectieveDetectoren;
+            set
+            {
+                _selectieveDetectoren = value; 
                 RaisePropertyChanged();
             }
         }
@@ -153,17 +174,19 @@ namespace TLCGen.ViewModels
                 (new List<IOElementViewModel>(), IOElementTypeEnum.FaseCyclus),
                 (new List<IOElementViewModel>(), IOElementTypeEnum.Detector),
                 (new List<IOElementViewModel>(), IOElementTypeEnum.Input),
-                (new List<IOElementViewModel>(), IOElementTypeEnum.Output)
+                (new List<IOElementViewModel>(), IOElementTypeEnum.Output),
+                (new List<IOElementViewModel>(), IOElementTypeEnum.SelectiveDetector)
             };
             var models = new[]
             {
                 c.Data.RangeerData.RangeerFasen,
                 c.Data.RangeerData.RangeerDetectoren,
                 c.Data.RangeerData.RangeerIngangen,
-                c.Data.RangeerData.RangeerUitgangen
+                c.Data.RangeerData.RangeerUitgangen,
+                c.Data.RangeerData.RangeerSelectieveDetectoren
             };
 
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < 5; i++)
             {
                 // clear and rebuild viewmodel list
                 foreach (var e in elements.Where(x => x != null && x.ElementType == vms[i].type))
@@ -202,6 +225,7 @@ namespace TLCGen.ViewModels
                 Detectoren = new ObservableCollection<IOElementViewModel>(vms[1].items.OrderBy(x => x.RangeerIndex));
                 Ingangen = new ObservableCollection<IOElementViewModel>(vms[2].items.OrderBy(x => x.RangeerIndex));
                 Uitgangen = new ObservableCollection<IOElementViewModel>(vms[3].items.OrderBy(x => x.RangeerIndex));
+                SelectieveDetectoren = new ObservableCollection<IOElementViewModel>(vms[4].items.OrderBy(x => x.RangeerIndex));
             }
         }
 

@@ -1155,8 +1155,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             if (prio.CheckPeriode && prio.GerelateerdePerioden.Any(x => !string.IsNullOrEmpty(x.Periode)))
                             {
-                                sb.AppendLine(");");
+                                sb.Append(")");
                             }
+                            sb.AppendLine(";");
                         }
 
                         if (prio.MeldingenData.Uitmeldingen.Any())

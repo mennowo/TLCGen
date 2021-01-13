@@ -2,9 +2,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -611,11 +613,24 @@ namespace TLCGen.ViewModels
             
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            MessengerInstance.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);
 
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
+        }
+
+        private void OnCCOLVersionChanged(CCOLVersionChangedMessage obj)
+        {
+            if (obj.OldVersion >= CCOLVersieEnum.CCOL110 && obj.NewVersion < CCOLVersieEnum.CCOL110 &&
+                MeldingenLists.SelectMany(x => x.Meldingen).Any(x => x.Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+            {
+                TLCGenDialogProvider.Default.ShowMessageBox(
+                    "In CCOL versies lager dan 11 is prioriteit via de RIS niet beschikbaar; controleer de prio instellingen.",
+                    "Prioriteit RIS niet beschikbaar", MessageBoxButton.OK);
+            }
+            foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
         }
 
         private void OnPeriodenChanged(PeriodenChangedMessage obj)

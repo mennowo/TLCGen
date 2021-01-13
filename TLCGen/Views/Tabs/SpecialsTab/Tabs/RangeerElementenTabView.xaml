@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:extensions="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
@@ -27,20 +25,18 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <!--IsEnabled="{Binding Path=RangeerElementenToepassen,Mode=OneWay}"-->
-                        <!--SelectedItem="{Binding Path=SelectedRangeerDetector,UpdateSourceTrigger=PropertyChanged}"-->
-                        <!--extensions:ListViewExtensions.SelectedItemsList="{Binding Path=Fasen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"-->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <WrapPanel Orientation="Horizontal">
             <Label Content="Rangeren toepassen voor" />
             <CheckBox IsChecked="{Binding Path=RangerenFasen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Fasen" VerticalAlignment="Center" />
             <CheckBox IsChecked="{Binding Path=RangerenDetectoren,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Detectoren" VerticalAlignment="Center" />
             <CheckBox IsChecked="{Binding Path=RangerenIngangen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Ingangen" VerticalAlignment="Center" />
             <CheckBox IsChecked="{Binding Path=RangerenUitgangen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Uitgangen" VerticalAlignment="Center" />
-        </StackPanel>
+            <CheckBox IsChecked="{Binding Path=RangerenSelectieveDetectoren,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Selectieve detectoren" VerticalAlignment="Center" />
+        </WrapPanel>
         <TabControl Grid.Row="1">
             <TabItem Header="Fasen" IsEnabled="{Binding Path=RangerenFasen}">
                 <ListView
@@ -114,6 +110,27 @@
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                     ItemContainerStyle="{StaticResource RangeerItemStyle}"
                     ItemsSource="{Binding Path=Uitgangen}" Margin="2" AlternationCount="2">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Selectieve detectoren" IsEnabled="{Binding Path=RangerenSelectieveDetectoren}">
+                <ListView
+                    dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                    dd:DragDrop.UseDefaultDragAdorner="True"
+                    dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemsSource="{Binding Path=SelectieveDetectoren}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Vertical" />

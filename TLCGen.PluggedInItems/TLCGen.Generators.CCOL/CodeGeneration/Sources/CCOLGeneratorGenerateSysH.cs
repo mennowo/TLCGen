@@ -351,7 +351,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSysHds(ControllerModel controller)
+        private string GenerateSysHds(ControllerModel c)
         {
             var sb = new StringBuilder();
 
@@ -359,7 +359,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ------------------- */");
 
             var index = 0;
-            var isvecom = controller.SelectieveDetectoren.Any();
+            var isvecom = c.SelectieveDetectoren.Any();
             // Geen VECOM? Dan alleen een dummy lus tbv KAR
             if (!isvecom)
             {
@@ -371,8 +371,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR & VECOM start op 1 */");
                 ++index;
-                
-                foreach (var d in controller.SelectieveDetectoren)
+
+                var selDets = c.Data.RangeerData.RangerenSelectieveDetectoren ? c.SelectieveDetectoren.OrderBy(x => x.RangeerIndex).ToList() : c.SelectieveDetectoren;
+                foreach (var d in selDets)
                 {
                     sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}{(!string.IsNullOrWhiteSpace(d.Omschrijving) ? " /* " + d.Omschrijving + "*/" : "")}");
                 }

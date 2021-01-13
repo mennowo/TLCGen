@@ -26,11 +26,13 @@ namespace TLCGen.Models
         public bool RangerenDetectoren { get; set; }
         public bool RangerenIngangen { get; set; }
         public bool RangerenUitgangen{ get; set; }
+        public bool RangerenSelectieveDetectoren { get; set; }
 
         public List<IOElementRangeerDataModel> RangeerFasen { get; set; }
         public List<IOElementRangeerDataModel> RangeerDetectoren { get; set; }
         public List<IOElementRangeerDataModel> RangeerIngangen { get; set; }
         public List<IOElementRangeerDataModel> RangeerUitgangen { get; set; }
+        public List<IOElementRangeerDataModel> RangeerSelectieveDetectoren { get; set; }
 
         public ControllerRangeerDataModel()
         {

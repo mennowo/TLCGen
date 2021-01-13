@@ -13,6 +13,11 @@ namespace TLCGen.Models
         {
             return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren);
         }
+        
+        public static IEnumerable<DetectorModel> GetAllRegularDetectors(this ControllerModel c)
+        {
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
+        }
 
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, Func<DetectorModel, bool> predicate)
         {

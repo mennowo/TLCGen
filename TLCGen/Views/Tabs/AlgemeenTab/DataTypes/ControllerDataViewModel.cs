@@ -130,6 +130,7 @@ namespace TLCGen.ViewModels
             get => _Controller?.Data?.CCOLVersie ?? CCOLVersieEnum.CCOL8;
             set
             {
+                var oldValue = _Controller.Data.CCOLVersie;
                 if (Intergroen && value < CCOLVersieEnum.CCOL95)
                 {
                     TLCGenDialogProvider.Default.ShowMessageBox(
@@ -140,7 +141,6 @@ namespace TLCGen.ViewModels
                 }
                 else
                 {
-                    var oldValue = _Controller.Data.CCOLVersie;
                     _Controller.Data.CCOLVersie = value;
                     if(value > CCOLVersieEnum.CCOL8)
                     {
@@ -167,6 +167,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThan9));
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                MessengerInstance.Send(new CCOLVersionChangedMessage(oldValue, _Controller.Data.CCOLVersie));
             }
         }
 

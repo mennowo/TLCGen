@@ -15,7 +15,8 @@ namespace TLCGen.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.InsertIndex == dropInfo.DragInfo.SourceIndex)
+            if (dropInfo.InsertIndex == dropInfo.DragInfo.SourceIndex ||
+                !ReferenceEquals(dropInfo.DragInfo.SourceCollection, dropInfo.TargetCollection))
                 return;
 
             var changed = false;
