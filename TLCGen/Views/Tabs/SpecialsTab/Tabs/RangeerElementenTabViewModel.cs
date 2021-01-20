@@ -188,6 +188,8 @@ namespace TLCGen.ViewModels
 
             for (var i = 0; i < 5; i++)
             {
+                if (models[i] == null) continue;
+
                 // clear and rebuild viewmodel list
                 foreach (var e in elements.Where(x => x != null && x.ElementType == vms[i].type))
                 {
@@ -217,7 +219,7 @@ namespace TLCGen.ViewModels
                 }
 
                 // clean up saved model items that are no longer present
-                var remModels = models[i].Where(x => vms[i].items.All(x2 => x2.Element.Naam != x.Naam)).ToList();
+                var remModels = models[i].Where(x => vms[i].items.All(x2 => x2.Element != null && x2.Element.Naam != x.Naam)).ToList();
                 foreach (var r in remModels) models[i].Remove(r);
 
                 // update
