@@ -1,5 +1,9 @@
-TLCGen=0.9.1.0
+TLCGen=0.9.2.0
 RN==TLCGen
+TLCGen versie: 0.9.2.0
+- rangeren van selectieve detectie
+- optie lower/upper case voor namen in tab.c
+- diverse kleine fixes
 TLCGen versie: 0.9.1.0
 - Rangeren items voor alle typen IO
 - Prio ingreep alleen tijdens periode actief
