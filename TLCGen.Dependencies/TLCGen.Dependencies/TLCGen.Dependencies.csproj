@@ -132,6 +132,7 @@
     <Compile Include="Models.Enumerations\AansturingWaitsignalenEnum.cs" />
     <Compile Include="Models.Enumerations\AltijdAanUitEnum.cs" />
     <Compile Include="Models.Enumerations\BitmappedItemTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\CCOLCodeCaseEnum.cs" />
     <Compile Include="Models.Enumerations\CCOLVersieEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorAanvraagTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorTypeEnum.cs" />

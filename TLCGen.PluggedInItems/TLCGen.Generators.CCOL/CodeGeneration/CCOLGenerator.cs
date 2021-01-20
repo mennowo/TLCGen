@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using TLCGen.Dependencies.Models.Enumerations;
 using TLCGen.Dependencies.Providers;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.ProjectGeneration;
@@ -902,7 +903,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GetAllElementsTabCLines(CCOLElemListData data)
+        private string GetAllElementsTabCLines(ControllerModel c, CCOLElemListData data)
         {
             var sb = new StringBuilder();
 
@@ -922,7 +923,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (!string.IsNullOrWhiteSpace(elem.Naam))
                 {
                     sb.Append($"{ts}{data.CCOLCode}[{elem.Define}]".PadRight(pad1));
-                    sb.Append($" = \"{elem.Naam}\";".PadRight(pad2));
+                    var name = c.Data.CCOLCodeCase switch
+                    {
+                        CCOLCodeCaseEnum.LowerCase => elem.Naam.ToLower(),
+                        CCOLCodeCaseEnum.UpperCase => elem.Naam.ToUpper(),
+                        _ => elem.Naam
+                    };
+                    sb.Append($" = \"{name}\";".PadRight(pad2));
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && elem.Instelling.HasValue)
                     {
                         sb.Append($" {data.CCOLSetting}[{elem.Define}]".PadRight(pad3));
@@ -955,7 +962,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (!delem.Dummy)
                         continue;
                     sb.Append($"{ts}{data.CCOLCode}[{delem.Define}]".PadRight(pad1));
-                    sb.Append($" = \"{delem.Naam}\";".PadRight(pad2));
+                    var name = c.Data.CCOLCodeCase switch
+                    {
+                        CCOLCodeCaseEnum.LowerCase => delem.Naam.ToLower(),
+                        CCOLCodeCaseEnum.UpperCase => delem.Naam.ToUpper(),
+                        _ => delem.Naam
+                    };
+                    sb.Append($" = \"{name}\";".PadRight(pad2));
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && delem.Instelling.HasValue)
                     {
                         sb.Append($" {data.CCOLSetting}[{delem.Define}]".PadRight(pad3));

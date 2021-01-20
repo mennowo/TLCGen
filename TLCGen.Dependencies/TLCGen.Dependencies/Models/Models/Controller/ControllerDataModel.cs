@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using TLCGen.Dependencies.Models.Enumerations;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -98,6 +99,7 @@ namespace TLCGen.Models
 
         public bool PracticeOmgeving { get; set; }
         public bool NietGebruikenBitmap { get; set; }
+        public CCOLCodeCaseEnum CCOLCodeCase { get; set; }
 
         public bool CCOLMulti { get; set; }
         public int CCOLMultiSlave { get; set; }

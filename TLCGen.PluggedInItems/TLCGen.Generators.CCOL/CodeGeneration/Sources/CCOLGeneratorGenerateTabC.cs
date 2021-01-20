@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using TLCGen.Dependencies.Models.Enumerations;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -180,23 +181,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersConflicten(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersUitgangen());
+            sb.Append(GenerateTabCControlParametersUitgangen(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersDetectors(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersIngangen());
+            sb.Append(GenerateTabCControlParametersIngangen(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersHulpElementen());
+            sb.Append(GenerateTabCControlParametersHulpElementen(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersGeheugenElementen());
+            sb.Append(GenerateTabCControlParametersGeheugenElementen(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersTijdElementen());
+            sb.Append(GenerateTabCControlParametersTijdElementen(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersCounters());
+            sb.Append(GenerateTabCControlParametersCounters(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersSchakelaars());
+            sb.Append(GenerateTabCControlParametersSchakelaars(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersParameters());
+            sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
             sb.AppendLine();
@@ -416,7 +417,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var gs = controller.GroentijdenSets.FirstOrDefault();
             foreach (var fcm in controller.Fasen)
             {
-                var s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
+                var name = controller.Data.CCOLCodeCase switch
+                {
+                    CCOLCodeCaseEnum.LowerCase => fcm.Naam.ToLower(),
+                    CCOLCodeCaseEnum.UpperCase => fcm.Naam.ToUpper(),
+                    _ => fcm.Naam
+                };
+                var s = $"   FC_code[{fcm.GetDefine()}] = \"{name}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
                 sb.Append(s);
                 sb.Append($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min}; ");
                 sb.Append($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG}; ");
@@ -663,19 +670,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersUitgangen()
+        private string GenerateTabCControlParametersUitgangen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
 
-            sb.Append(GetAllElementsTabCLines(_uitgangen));
+            sb.Append(GetAllElementsTabCLines(c, _uitgangen));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersDetectors(ControllerModel controller)
+        private string GenerateTabCControlParametersDetectors(ControllerModel c)
         {
             var sb = new StringBuilder();
 
@@ -690,8 +697,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? bgmax = 0;
             int? tflmax = 0;
 
-            var ovdummydets = controller.PrioData.GetAllDummyDetectors();
-            var alldets = controller.GetAllDetectors().Concat(ovdummydets);
+            var ovdummydets = c.PrioData.GetAllDummyDetectors();
+            var alldets = c.GetAllDetectors().Concat(ovdummydets);
 
             var nondummydets = alldets.Where(x => !x.Dummy);
             var detectorModels = nondummydets as DetectorModel[] ?? nondummydets.ToArray();
@@ -724,7 +731,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (!dm.Dummy)
                 {
-                    AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
+                    AppendDetectorTabString(c, sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }
             }
 
@@ -770,7 +777,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                 foreach(var dm in detectorModels)
                 {
-                    AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
+                    AppendDetectorTabString(c, sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }
                 if(detectorModels.Any(x => x.TFL != null || x.CFL != null))
                 {
@@ -787,11 +794,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private void AppendDetectorTabString(StringBuilder sb, DetectorModel dm, int pad1, int pad2, int pad3, int pad4, int pad5, int pad6)
+        private void AppendDetectorTabString(ControllerModel c, StringBuilder sb, DetectorModel dm, int pad1, int pad2, int pad3, int pad4, int pad5, int pad6)
         {
             sb.Append($"{ts}");
             sb.Append($"D_code[{dm.GetDefine()}] ".PadRight(pad1));
-            sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
+            var name = c.Data.CCOLCodeCase switch
+            {
+                CCOLCodeCaseEnum.LowerCase => dm.Naam.ToLower(),
+                CCOLCodeCaseEnum.UpperCase => dm.Naam.ToUpper(),
+                _ => dm.Naam
+            };
+            sb.Append($"= \"{name}\"; ".PadRight(pad2));
             if (dm.TDB != null)
             {
                 sb.Append($"TDB_max[{dm.GetDefine()}] ".PadRight(pad3));
@@ -856,87 +869,87 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        private string GenerateTabCControlParametersIngangen()
+        private string GenerateTabCControlParametersIngangen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsTabCLines(_ingangen));
+            sb.Append(GetAllElementsTabCLines(c, _ingangen));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersHulpElementen()
+        private string GenerateTabCControlParametersHulpElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsTabCLines(_hulpElementen));
+            sb.Append(GetAllElementsTabCLines(c, _hulpElementen));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersGeheugenElementen()
+        private string GenerateTabCControlParametersGeheugenElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
             
-            sb.Append(GetAllElementsTabCLines(_geheugenElementen));
+            sb.Append(GetAllElementsTabCLines(c, _geheugenElementen));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersTijdElementen()
+        private string GenerateTabCControlParametersTijdElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsTabCLines(_timers));
+            sb.Append(GetAllElementsTabCLines(c, _timers));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersCounters()
+        private string GenerateTabCControlParametersCounters(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsTabCLines(_counters));
+            sb.Append(GetAllElementsTabCLines(c, _counters));
 
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersSchakelaars()
+        private string GenerateTabCControlParametersSchakelaars(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
 
-            sb.Append(GetAllElementsTabCLines(_schakelaars));
+            sb.Append(GetAllElementsTabCLines(c, _schakelaars));
 
             return sb.ToString();
         }
 
 
-        private string GenerateTabCControlParametersParameters()
+        private string GenerateTabCControlParametersParameters(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
 
-            sb.Append(GetAllElementsTabCLines(_parameters));
+            sb.Append(GetAllElementsTabCLines(c, _parameters));
 
             return sb.ToString();
         }
@@ -976,15 +989,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
+            var dummyname = controller.Data.CCOLCodeCase switch
+            {
+                CCOLCodeCaseEnum.LowerCase => "dsdummy",
+                CCOLCodeCaseEnum.UpperCase => "DSDUMMY",
+                _ => "dsdummy"
+            };
             if (!controller.SelectieveDetectoren.Any())
             {
                 // dummy lus voor KAR
-                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"{dummyname}\";");
             }
             else
             {
                 // dummy lus voor KAR
-                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"{dummyname}\";");
                 // selectieve lussen
                 foreach (var sd in controller.SelectieveDetectoren)
                 {

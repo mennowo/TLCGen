@@ -9,6 +9,7 @@ using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
 using System;
 using System.Linq;
+using TLCGen.Dependencies.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -556,6 +557,17 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.GenererenEnkelCompilatieBestand = value;
                 RaisePropertyChanged<object>(nameof(GenererenEnkelCompilatieBestand), broadcast: true);
+            }
+        }
+        
+        [Description("Code in tab.c kleine/hoofd letters")]
+        public CCOLCodeCaseEnum CCOLCodeCase
+        {
+            get => _Controller?.Data?.CCOLCodeCase ?? CCOLCodeCaseEnum.LowerCase;
+            set
+            {
+                _Controller.Data.CCOLCodeCase = value;
+                RaisePropertyChanged<object>(nameof(CCOLCodeCase), broadcast: true);
             }
         }
 

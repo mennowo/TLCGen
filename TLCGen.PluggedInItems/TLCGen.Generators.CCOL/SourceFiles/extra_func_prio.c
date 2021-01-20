@@ -465,7 +465,7 @@ boolv fietsprio_inmelding (
      /* aantal fietsers tellen */
    	if (dvw != NG)
 	{
-       RC[c_priocount] = SG[fc];
+       RC[c_priocount] = !R[fc];
        INC[c_priocount] = R[fc] && SD[dvw];
 	}
 
