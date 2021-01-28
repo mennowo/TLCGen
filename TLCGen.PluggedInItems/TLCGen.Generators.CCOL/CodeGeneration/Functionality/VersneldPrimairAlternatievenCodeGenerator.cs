@@ -369,12 +369,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             Tuple<string, List<string>> hasgs = null;
-                            foreach (var gs in gelijkstarttuples)
+                            if (gelijkstarttuples != null)
                             {
-                                if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                                foreach (var gs in gelijkstarttuples)
                                 {
-                                    hasgs = gs;
-                                    break;
+                                    if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                                    {
+                                        hasgs = gs;
+                                        break;
+                                    }
                                 }
                             }
 
