@@ -75,9 +75,9 @@ namespace TLCGen.ModelManagement
 
         #region Public Methods
 
-        public void SetPrioOutputPerSignalGroup(ControllerModel controller, bool outputPerSg)
+        public void SetSpecialIOPerSignalGroup(ControllerModel controller)
         { 
-            if (outputPerSg)
+            if (controller.PrioData.PrioUitgangPerFase)
             {
                 controller.PrioData.PrioIngrepen.ForEach(x => x.GeenEigenVerklikking = true);
                 controller.Fasen.ForEach(x => x.PrioIngreep = controller.PrioData.PrioIngrepen.Any(x2 => x2.FaseCyclus == x.Naam));
@@ -88,6 +88,14 @@ namespace TLCGen.ModelManagement
                 controller.PrioData.PrioIngrepen.ForEach(x => x.GeenEigenVerklikking = false);
                 controller.Fasen.ForEach(x => x.PrioIngreep = false);
                 controller.Fasen.ForEach(x => x.PrioIngreepGeconditioneerd = false);
+            }
+
+            foreach (var fase in controller.Fasen)
+            {
+                fase.HasWachttijdVoorspellerBus = 
+                    controller.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen && 
+                    controller.Data.WachttijdvoorspellerAansturenBus &&
+                    fase.WachttijdVoorspeller;
             }
         }
 
@@ -892,7 +900,7 @@ namespace TLCGen.ModelManagement
                             meldingMsg.IngreepMelding.DummyKARMelding = null;
                         }
                     }
-                    SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
+                    SetSpecialIOPerSignalGroup(Controller);
                     break;
                 case ModulesChangedMessage modulesMessage:
                     if (Controller.Data.UitgangPerModule)

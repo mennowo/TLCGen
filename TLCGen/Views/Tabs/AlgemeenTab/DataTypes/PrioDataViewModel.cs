@@ -53,7 +53,7 @@ namespace TLCGen.ViewModels
                 _Controller.PrioData.PrioUitgangPerFase = value;
                 RaisePropertyChanged<object>(nameof(PrioUitgangPerFase), broadcast: true);
 
-                TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(_Controller, value);
+                TLCGenModelManager.Default.SetSpecialIOPerSignalGroup(_Controller);
             }
         }
 

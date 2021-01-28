@@ -49,9 +49,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.WachttijdVoorspellerBitmapData, fc.Naam));
-                if (c.Data.WachttijdvoorspellerAansturenBus)
+                if (c.Data.WachttijdvoorspellerAansturenBus && 
+                    c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtvbus}{fc.Naam}", _uswtvbus, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtvbus}{fc.Naam}", _uswtvbus, fc.WachttijdVoorspellerBusBitmapData, fc.Naam));
                 }
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.WachttijdVoorspellerBitmapData0, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.WachttijdVoorspellerBitmapData1, fc.Naam));
@@ -171,7 +172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
                         foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                         {
-                            if (c.Data.WachttijdvoorspellerAansturenBus)
+                            if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                             {
                                 sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, {_uspf}{_uswtvbus}{fc.Naam}, TYPE_LEDS);");
                             }
@@ -394,7 +395,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var reeks = GetFaseReeks(c, fc.Naam);
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
-                        if (c.Data.WachttijdvoorspellerAansturenBus)
+                        if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                         {
                             if (!c.Data.WachttijdvoorspellerAansturenBusHD)
                             {

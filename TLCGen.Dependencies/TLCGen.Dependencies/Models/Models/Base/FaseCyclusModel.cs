@@ -93,6 +93,14 @@ namespace TLCGen.Models
         [IOElement("wtv", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
         public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData { get; set; }
 
+        [XmlIgnore]
+        [HasDefault(false)]
+        [Browsable(false)]
+        public bool HasWachttijdVoorspellerBus { get; set; }
+
+        [IOElement("wtvbus", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(HasWachttijdVoorspellerBus))]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBusBitmapData { get; set; }
+
         [IOElement("wtv0", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(WachttijdVoorspeller))]
         public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData0 { get; set; }
 
@@ -162,6 +170,7 @@ namespace TLCGen.Models
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData = new BitmapCoordinatenDataModel();
+            WachttijdVoorspellerBusBitmapData = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData0 = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData1 = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData2 = new BitmapCoordinatenDataModel();

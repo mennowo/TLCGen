@@ -35,12 +35,18 @@ namespace TLCGen.ViewModels
         private ObservableCollection<BitmappedItemViewModel> _detectoren;
         private ObservableCollection<BitmappedItemViewModel> _overigeUitgangen;
         private ObservableCollection<BitmappedItemViewModel> _overigeIngangen;
+        
         private BitmappedItemViewModel _selectedItem;
         private TabItem _selectedTab;
         private EditableBitmap _editableBitmap;
         private readonly QueueLinearFloodFiller _floodFiller;
         private string _controllerFileName;
         private int _width = int.MaxValue, _height = int.MaxValue;
+        
+        RelayCommand _setCoordinatesCommand;
+        RelayCommand _refreshBitmapCommand;
+        RelayCommand _resetBitmapCommand;
+        RelayCommand _importDplCCommand;
 
         private readonly Color _defaultFillColor = Color.LightGray;
         private readonly Color _defaultFaseSelectedColor = Color.Lime;
@@ -170,16 +176,12 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _setCoordinatesCommand;
         public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
 
-        RelayCommand _refreshBitmapCommand;
         public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
 
-        RelayCommand _resetBitmapCommand;
         public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
 
-        RelayCommand _importDplCCommand;
         public ICommand ImportDplCCommand => _importDplCCommand ??= new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute);
 
         
@@ -198,7 +200,7 @@ namespace TLCGen.ViewModels
         {
             // Collect all IO to be displayed in the lists
             _selectedItem = null;
-            TLCGenModelManager.Default.SetPrioOutputPerSignalGroup(Controller, Controller.PrioData.PrioUitgangPerFase);
+            TLCGenModelManager.Default.SetSpecialIOPerSignalGroup(Controller);
             CollectAllIO();
             LoadBitmap();
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Xml;
-using TLCGen.Dependencies.Providers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -21,7 +20,7 @@ namespace TLCGen.ModelManagement
         int ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType);
         void ConvertToIntergroen(ControllerModel controller);
         void ConvertToOntruimingstijden(ControllerModel controller);
-        void SetPrioOutputPerSignalGroup(ControllerModel controller, bool outputPerSg);
+        void SetSpecialIOPerSignalGroup(ControllerModel controller);
         void UpdateControllerAlerts();
         event EventHandler ControllerAlertsUpdated;
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
@@ -9,7 +8,6 @@ using TLCGen.DataAccess;
 using TLCGen.Settings;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
-using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
