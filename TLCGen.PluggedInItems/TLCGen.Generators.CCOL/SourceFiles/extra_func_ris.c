@@ -1,10 +1,12 @@
-/* RISPRIOAPPL.H */
-/* ============= */
+/* EXTRA_FUNC_RIS.C */
+/* ================ */
 
 /* CCOL :  versie 11.0        */
 /* FILE :  extra_func_ris.c   */
-/* DATUM:  11-11-2020         */
+/* DATUM:  24-11-2020         */
 
+/* DATUM:  24-11-2020 - correctie in de functie ris_ris_verstuur_ssm() */
+/* DATUM:  17-11-2020 - ondersteuning van indexering SRM/CAM wordt gebruikt in de functie ris_inmelding_selectief() */
 /* DATUM:  11-11-2020 - correctie in de functie ris_srm_put_signalgroup() */
 
 
@@ -14,12 +16,15 @@
 
 /* include files */
 /* ============= */
-   #include "extra_func_ris.h"   /* declaratie risprio-functies   */
-   #include "fcvar.h"            /* declaratie G[], FC_MAX        */
-   #include "prio.h"             /* prioriteitsmodule             */
-   #include <stdlib.h>           /* declaratie atoi()             */
-   #include <stdio.h>            /* declaratie snprintf()         */
-   #include <string.h>           /* declaratie strlen()           */
+   #include "extra_func_ris.h"	/* declaratie risprio-functies   */
+   #include "risvar.h"        	/* declaratie risfunc-functies   */
+   #include "fcvar.h"         	/* declaratie G[], FC_MAX        */
+   #include "kfvar.h"         	/* declaratie GKFC_MAX           */
+   #include "prmvar.h"        	/* declaratie PRM[], PRM_MAX     */
+   #include "prio.h"          	/* prioriteitsmodule             */
+   #include <stdlib.h>        	/* declaratie atoi()             */
+   #include <stdio.h>         	/* declaratie snprintf()         */
+   #include <string.h>        	/* declaratie strlen()           */
 
 #if (defined(_MSC_VER) && (_MSC_VER < 1900))
    #define snprintf sprintf_s
@@ -96,23 +101,35 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
             if ( eta_prm > 0 ) {                                                                      /* test op ingestelde eta_prm. (eta_prm <= 0) is uitgeschakeld */
                if ( (RIS_PRIOREQUEST_AP[r].eta > RIF_UTC_TIME_PB)                                     /* test of eta in de toekomst ligt */
                   && ( (RIS_PRIOREQUEST_AP[r].eta - RIF_UTC_TIME_PB) < (eta_prm * 1000) ) ) {         /* test op juiste eta_prm */
+#ifdef RIS_GEEN_INDEXERING
                   i = 0;
                   while (i < RIS_ITSSTATION_AP_NUMBER) {                                              /* doorloop alle ItsStation objecten */
+#else
+                  i = RIS_PRIOREQUEST_EX_AP[r].ItsStationIndex;
+                  if ( (i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
+#endif /* RIS_GEEN_INDEXERING */
                      if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0 ) {   /* test op zelfde ItsStation ID */
                         if ( (stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf)) ) || (stationtype_bits <= 0) ) {  /* test stationType - bit */
                            RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id;
                            return ( (rif_bool) TRUE);
                         }
                      }
+#ifdef RIS_GEEN_INDEXERING
                      i++;
+#endif /* RIS_GEEN_INDEXERING */
                   }
                }
             }
 
             /* test selectieve inmelding op basis van map (locatie) */
             /* ---------------------------------------------------- */
+#ifdef RIS_GEEN_INDEXERING
             i = 0;
             while (i < RIS_ITSSTATION_AP_NUMBER) {                                                 /* doorloop alle ItsStation objecten */
+#else
+            i = RIS_PRIOREQUEST_EX_AP[r].ItsStationIndex;
+            if ( (i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
+#endif /* RIS_GEEN_INDEXERING */
                if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0 ) {      /* test op zelfde ItsStation ID */
                   if ( (stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf) ) ) || (stationtype_bits <= 0) ) {  /* test stationType - bit */
                      for (j = 0; j < RIF_MAXLANES; j++) {                                          /* doorloop alle gematchte lanes */     
@@ -129,7 +146,9 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
                      }
                   }
                }
+#ifdef RIS_GEEN_INDEXERING
                i++;
+#endif /* RIS_GEEN_INDEXERING */
             }
          }
       }
@@ -162,7 +181,7 @@ rif_int ris_uitmelding_selectief(rif_int priotypefc_id)
 
    while (r < RIS_PRIOREQUEST_AP_NUMBER) {                                                /* doorloop alle PrioRequest objecten */
       if (RIS_PRIOREQUEST_AP[r].requestType == RIF_PRIORITYREQUESTTYPE_CANCELLATION)  {   /* cancellation request */
-         if ( (RIS_PRIOREQUEST_EX_AP[r].prioControlState == (priotypefc_id) )  ) {      /* test op juiste prioControleState */
+         if ( (RIS_PRIOREQUEST_EX_AP[r].prioControlState == (priotypefc_id) )  ) {        /* test op juiste prioControleState */
             number++;      /* er is een uitmelding - verhoog number */
          }
       }
@@ -383,8 +402,7 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
 
                /* Normal Flow - [requested] -> processing */
                /* --------------------------------------- */
-               if ((RIS_PRIOREQUEST_EX_AP[r].prioControlState >  RIF_PRIORITIZATIONSTATE_UNKNOWN)   /* 1 */
-                  && (iInstPrioriteitsOpties[priotypefc_id]>0)  ) { /* 1 */ 
+               if (iInstPrioriteitsOpties[priotypefc_id] > 0) { /* 1 */
                   ris_put_activeprio((RIS_PRIOREQUEST_AP[r].id), (RIS_PRIOREQUEST_AP[r].sequenceNumber), RIF_PRIORITIZATIONSTATE_PROCESSING); /* 2 */
                   number++;      /* SSM-bericht verzonden - verhoog number */
                }
@@ -520,4 +538,3 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
    }
    return (number);
 }
-

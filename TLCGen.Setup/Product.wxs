@@ -131,6 +131,7 @@
         <File Id='TLCGen.Generators.CCOL' Name='TLCGen.Generators.CCOL.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.CCOL.dll' KeyPath='no' />
         <File Id='TLCGen.Generators.TLCCC' Name='TLCGen.Generators.TLCCC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll' KeyPath='no' />
         <File Id='TLCGen.Importers.TabC' Name='TLCGen.Importers.TabC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll' KeyPath='no' />
+        <File Id='TLCGen.Importers.Itf' Name='TLCGen.Importers.Itf.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.Itf.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.AFM' Name='TLCGen.Plugins.AFM.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.DynamischHiaat' Name='TLCGen.Plugins.DynamischHiaat.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.RangeerElementen' Name='TLCGen.Plugins.RangeerElementen.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RangeerElementen.dll' KeyPath='no' />
