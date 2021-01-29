@@ -15,8 +15,10 @@ namespace TLCGen.Models
         {
             foreach (var plugin in parts)
             {
-                Outputs.AddRange(plugin.GetOutputItems());
-                Inputs.AddRange(plugin.GetInputItems());
+                var outitems = plugin.GetOutputItems();
+                if (outitems != null) Outputs.AddRange(outitems);
+                var initems = plugin.GetInputItems();
+                if (initems != null) Inputs.AddRange(initems);
             }
 
             foreach (var fc in c.Fasen)

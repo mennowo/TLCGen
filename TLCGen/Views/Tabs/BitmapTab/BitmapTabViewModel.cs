@@ -455,13 +455,19 @@ namespace TLCGen.ViewModels
                     var pl = v.Item2 as ITLCGenElementProvider;
                     var initems = pl.GetInputItems();
                     var outitems = pl.GetOutputItems();
-                    foreach(var i in initems)
+                    if (initems != null)
                     {
-                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
+                        foreach (var i in initems)
+                        {
+                            OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
+                        }
                     }
-                    foreach (var o in outitems)
+                    if (outitems != null)
                     {
-                        OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
+                        foreach (var o in outitems)
+                        {
+                            OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
+                        }
                     }
                 }
             }
@@ -472,13 +478,19 @@ namespace TLCGen.ViewModels
                     var pl = v.Item2 as ITLCGenElementProvider;
                     var initems = pl.GetInputItems();
                     var outitems = pl.GetOutputItems();
-                    foreach (var i in initems)
+                    if (initems != null)
                     {
-                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
+                        foreach (var i in initems)
+                        {
+                            OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
+                        }
                     }
-                    foreach (var o in outitems)
+                    if (outitems != null)
                     {
-                        OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
+                        foreach (var o in outitems)
+                        {
+                            OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
+                        }
                     }
                 }
             }

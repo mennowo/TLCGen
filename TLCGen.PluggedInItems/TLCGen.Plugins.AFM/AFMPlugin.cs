@@ -9,6 +9,7 @@ using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins.AFM.Models;
 
 namespace TLCGen.Plugins.AFM
@@ -17,9 +18,10 @@ namespace TLCGen.Plugins.AFM
     [TLCGenPlugin(
         TLCGenPluginElems.TabControl | 
         TLCGenPluginElems.XMLNodeWriter |
-        TLCGenPluginElems.PlugMessaging)]
+        TLCGenPluginElems.PlugMessaging |
+        TLCGenPluginElems.IOElementProvider)]
     [CCOLCodePieceGenerator]
-    public class AFMPlugin : CCOLCodePieceGeneratorBase, ITLCGenTabItem, ITLCGenXMLNodeWriter, ITLCGenPlugMessaging
+    public class AFMPlugin : CCOLCodePieceGeneratorBase, ITLCGenTabItem, ITLCGenXMLNodeWriter, ITLCGenPlugMessaging, ITLCGenElementProvider
     {
         #region Fields
 
@@ -184,7 +186,8 @@ namespace TLCGen.Plugins.AFM
                 _myElements.Add(new CCOLElement("AFM_Test", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_Beinvloedbaar", 1, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
-                _myElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang));
+                // This happens via ITLCGenElementProvider below
+                // -- _myElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang, ioElementData: _afmModel.AFMLevenBitmapCoordinaten));
 
                 _myElements.Add(new CCOLElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _myElements.Add(new CCOLElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
@@ -437,5 +440,39 @@ namespace TLCGen.Plugins.AFM
         }
         
         #endregion // Constructor
+
+        #region ITLCGenElementProvider
+
+        public List<IOElementModel> GetOutputItems()
+        {
+            if (!_afmModel.AFMToepassen) return null;
+            _afmModel.AFMLevenBitmapCoordinaten.Naam = "AFMLeven";
+            return new List<IOElementModel>{_afmModel.AFMLevenBitmapCoordinaten}; 
+        }
+
+        public List<IOElementModel> GetInputItems()
+        {
+            return null;
+        }
+
+        public List<object> GetAllItems()
+        {
+            var allElements = new List<object>
+            {
+                new CCOLElement(
+                    "AFMLeven",
+                    CCOLElementTypeEnum.Uitgang,
+                    "", _afmModel.AFMLevenBitmapCoordinaten)
+            };
+
+            return allElements;
+        }
+
+        public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
+        {
+            return type != TLCGenObjectTypeEnum.Output || name != "AFMLeven";
+        }
+
+        #endregion
     }
 }
