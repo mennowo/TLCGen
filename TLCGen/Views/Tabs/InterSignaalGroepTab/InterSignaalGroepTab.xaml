@@ -118,7 +118,8 @@
                 <ComboBox Grid.Row="1" Grid.Column="1"
                           ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:SynchronisatiesTypeEnum}}}"
                     SelectedItem="{Binding Path=SynchronisatiesType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal"
+                            Visibility="{Binding Path=IsSynchRealType,Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Label Content="Bepaal realisatietijden altijd" />
                     <controls:InfoElement>
                         <controls:InfoElement.InfoPopup>
@@ -130,6 +131,7 @@
                     </controls:InfoElement>
                 </StackPanel>
                 <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
+                          Visibility="{Binding Path=IsSynchRealType,Converter={StaticResource BooleanToVisibilityConverter}}"
                           IsChecked="{Binding Path=RealFuncBepaalRealisatieTijdenAltijd,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
             </Grid>
         </TabItem>

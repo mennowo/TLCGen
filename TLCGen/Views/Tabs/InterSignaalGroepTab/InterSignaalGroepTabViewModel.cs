@@ -192,6 +192,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool IsSynchRealType => _Controller?.Data?.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc;
+
         public SynchronisatiesTypeEnum SynchronisatiesType
         {
             get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.SyncFunc;
@@ -202,6 +204,7 @@ namespace TLCGen.ViewModels
                 SelectedSynchronisatie = ConflictMatrix?[0, 1];
                 TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
+                RaisePropertyChanged(nameof(IsSynchRealType));
             }
         }
 
