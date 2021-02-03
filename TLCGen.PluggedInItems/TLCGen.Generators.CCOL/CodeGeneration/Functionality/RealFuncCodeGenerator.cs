@@ -141,12 +141,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 
             }
 
-            foreach (var fc in c.Fasen)
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc &&
+                (c.Data.RealFuncBepaalRealisatieTijdenAltijd
+                 || c.InterSignaalGroep?.Gelijkstarten?.Count > 0
+                 || c.InterSignaalGroep?.Voorstarten?.Count > 0
+                 || c.InterSignaalGroep?.LateReleases?.Count > 0))
             {
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_mrealtijd}{fc}",
-                        _mrealtijd, fc.Naam));
+                foreach (var fc in c.Fasen)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_mrealtijd}{fc}",
+                            _mrealtijd, fc.Naam));
+                }
             }
 
             foreach (var fot in _groenSyncData.FictieveConflicten)
@@ -168,8 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
-                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc 
-                        || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0 && c.InterSignaalGroep?.LateReleases?.Count == 0)
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc)
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<CCOLLocalVariable>
                     {
@@ -204,7 +210,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             // return if no sync
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc ||
-                c.InterSignaalGroep?.Gelijkstarten?.Count == 0 
+                !c.Data.RealFuncBepaalRealisatieTijdenAltijd &&
+                c.InterSignaalGroep?.Gelijkstarten?.Count == 0
                 && c.InterSignaalGroep?.Voorstarten?.Count == 0
                 && c.InterSignaalGroep?.LateReleases?.Count == 0)
                 return null;
@@ -219,52 +226,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
 
-                    if (_sortedSyncs.twoWay.Any() || 
-                        _sortedSyncs.oneWay.Any() || 
-                        _sortedSyncs.twoWayPedestrians.Any())
-                    {
-                        sb.AppendLine($"{ts}/* Bepalen realisatietijden */");
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}/* Reset */");
-                        sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}Realisatietijd(i, NG, NG);");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
-                    }
+                    sb.AppendLine($"{ts}/* Bepalen realisatietijden */");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Reset */");
+                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}Realisatietijd(i, NG, NG);");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine();
 
                     // TODO test and check logic
                     var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);
 
                     // Two-way negative pedestrians
                     var startDuringRed = false;
-                    foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
+                    if (_sortedSyncs.twoWayPedestrians.Any(x => !x.gelijkstart))
                     {
-                        if (gelijkstart) continue;
+                        sb.AppendLine($"{ts}/* Inlopen voetgangers */");
+                        foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
+                        {
+                            if (gelijkstart) continue;
 
-                        var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
-                        var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
-                        if (fc1 == null || fc2 == null) continue;
+                            var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
+                            var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
+                            if (fc1 == null || fc2 == null) continue;
 
-                        var mdr1A = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
-                        var mdr1B = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                        var mdr2A = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
-                        var mdr2B = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                        var dr1A = mdr1A == null ? "NG" : _dpf + mdr1A.Naam;
-                        var dr1B = mdr1B == null ? "NG" : _dpf + mdr1B.Naam;
-                        var dr2A = mdr2A == null ? "NG" : _dpf + mdr2A.Naam;
-                        var dr2B = mdr2B == null ? "NG" : _dpf + mdr2B.Naam;
-                        var hdr1A = mdr1A == null ? "NG" : _hpf + _hmad + mdr1A.Naam;
-                        var hdr1B = mdr1B == null ? "NG" : _hpf + _hmad + mdr1B.Naam;
-                        var hdr2A = mdr2A == null ? "NG" : _hpf + _hmad + mdr2A.Naam;
-                        var hdr2B = mdr2B == null ? "NG" : _hpf + _hmad + mdr2B.Naam;
-                        sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {dr1A}, {dr1B}, {dr2B}, {dr2A}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:van}, {_schpf}{_schlos}{grsync:van}_1, {_schpf}{_schlos}{grsync:van}_2, {_schpf}{_schlos}{grsync:naar}_1, {_schpf}{_schlos}{grsync:naar}_2);");
-                        startDuringRed = true;
+                            var mdr1A = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                            var mdr1B = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                            var mdr2A = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                            var mdr2B = fc2.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                            var dr1A = mdr1A == null ? "NG" : _dpf + mdr1A.Naam;
+                            var dr1B = mdr1B == null ? "NG" : _dpf + mdr1B.Naam;
+                            var dr2A = mdr2A == null ? "NG" : _dpf + mdr2A.Naam;
+                            var dr2B = mdr2B == null ? "NG" : _dpf + mdr2B.Naam;
+                            var hdr1A = mdr1A == null ? "NG" : _hpf + _hmad + mdr1A.Naam;
+                            var hdr1B = mdr1B == null ? "NG" : _hpf + _hmad + mdr1B.Naam;
+                            var hdr2A = mdr2A == null ? "NG" : _hpf + _hmad + mdr2A.Naam;
+                            var hdr2B = mdr2B == null ? "NG" : _hpf + _hmad + mdr2B.Naam;
+                            sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {dr1A}, {dr1B}, {dr2B}, {dr2A}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:van}, {_schpf}{_schlos}{grsync:van}_1, {_schpf}{_schlos}{grsync:van}_2, {_schpf}{_schlos}{grsync:naar}_1, {_schpf}{_schlos}{grsync:naar}_2);");
+                            startDuringRed = true;
+                        }
+                        sb.AppendLine();
                     }
 
-                    if (startDuringRed)
+                    if (startDuringRed && _sortedSyncs.twoWayPedestrians.Any(x => !x.gelijkstart))
                     {
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd */");
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
@@ -273,85 +279,111 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync}] = SG[{_fcpf}{grsync:van}] && H[{_hpf}{_hinl}{grsync:van}]; AT[{_tpf}{_tinl}{grsync}] = G[{_fcpf}{grsync:naar}];");
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}] && H[{_hpf}{_hinl}{grsync:naar}]; AT[{_tpf}{_tinl}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
                         }
+                        sb.AppendLine();
                     }
 
-                    sb.AppendLine();
                     sb.AppendLine($"{ts}/* correctie realisatietijd berekenen (max. 100 iteraties) */");
                     sb.AppendLine($"{ts}for (i = 0; i < 100; ++i)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
-                    foreach (var grsync in _sortedSyncs.oneWay)
+
+                    if (_sortedSyncs.oneWay.Any() || _sortedSyncs.twoWay.Any() || _groenSyncData.FictieveConflicten.Any())
                     {
-                        var max = grsync.Waarde <= 0 ? _trealvs : _treallr;
-                        // voorstart
-                        if (grsync.Waarde <= 0)
+                        sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
+                    }
+
+                    if (_sortedSyncs.oneWay.Any())
+                    {
+                        foreach (var grsync in _sortedSyncs.oneWay)
                         {
-                            sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
-                        }
-                        // late release of inlopen
-                        else
-                        {
-                            // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
-                            // maar de groentijdcorrectie van b naar a
-                            var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
-                            var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
-                            if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
+                            var max = grsync.Waarde <= 0 ? _trealvs : _treallr;
+                            // voorstart
+                            if (grsync.Waarde <= 0)
                             {
-                                max = _trealil;
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
                             }
+                            // late release of inlopen
                             else
                             {
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
+                                // maar de groentijdcorrectie van b naar a
+                                var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
+                                var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
+                                if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
+                                {
+                                    max = _trealil;
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                }
                             }
                         }
                     }
-                    foreach (var (grsync1, grsync2, gs) in _sortedSyncs.twoWay)
-                    {
-                        if (grsync1.Waarde != 0 || grsync2.Waarde != 0) continue;
-                        if (gs && grsync1.AanUit != AltijdAanUitEnum.Altijd)
-                        {
-                            sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync1}]) ");
-                        }
-                        else sb.Append($"{ts}{ts}");
-                        sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, TRUE);");
-                    }
-                    sb.AppendLine();
-                    foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
-                    {
-                        if (gelijkstart) continue;
 
-                        if (first)
-                        {
-                            sb.AppendLine($"{ts}{ts}/* Inlopen */");
-                            first = false;
-                        }
-                        if (grsync.AanUit != AltijdAanUitEnum.Altijd)
-                        {
-                            sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync}]) ");
-                        }
-                        else sb.Append($"{ts}{ts}");
-                        sb.AppendLine($"wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], H[{_hpf}{_hinl}{grsync:van}], H[{_hpf}{_hinl}{grsync:naar}], H[{_hpf}{_hlos}{grsync:van}], H[{_hpf}{_hlos}{grsync:naar}], TRUE);");
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* Fictieve ontruiming */");
-                    foreach (var fot in _groenSyncData.FictieveConflicten)
+                    if (_sortedSyncs.twoWay.Any())
                     {
-                        var ow = _sortedSyncs.oneWay.FirstOrDefault(x => x.FaseVan == fot.FaseNaar && x.FaseNaar == fot.FaseVan);
-                        var (m1, m2, gs) = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fot.FaseVan && x.m1.FaseNaar == fot.FaseNaar || x.m2.FaseVan == fot.FaseVan && x.m2.FaseNaar == fot.FaseNaar);
-                        if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
-
-                        var lr = ow != null && ow.Waarde > 0;
-                        if (gs&& m1.AanUit != AltijdAanUitEnum.Altijd)
+                        foreach (var (grsync1, grsync2, gs) in _sortedSyncs.twoWay)
                         {
-                            sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{m1}]) ");
+                            if (grsync1.Waarde != 0 || grsync2.Waarde != 0) continue;
+                            if (gs && grsync1.AanUit != AltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync1}]) ");
+                            }
+                            else sb.Append($"{ts}{ts}");
+
+                            sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, TRUE);");
                         }
-                        else sb.Append($"{ts}{ts}");
-                        sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                        sb.AppendLine();
                     }
-                    if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
+
+                    if (_sortedSyncs.twoWayPedestrians.Any())
+                    {
+                        foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
+                        {
+                            if (gelijkstart) continue;
+
+                            if (first)
+                            {
+                                sb.AppendLine($"{ts}{ts}/* Inlopen */");
+                                first = false;
+                            }
+
+                            if (grsync.AanUit != AltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync}]) ");
+                            }
+                            else sb.Append($"{ts}{ts}");
+
+                            sb.AppendLine($"wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], H[{_hpf}{_hinl}{grsync:van}], H[{_hpf}{_hinl}{grsync:naar}], H[{_hpf}{_hlos}{grsync:van}], H[{_hpf}{_hlos}{grsync:naar}], TRUE);");
+                        }
+                        sb.AppendLine();
+                    }
+
+                    if (_groenSyncData.FictieveConflicten.Any())
+                    {
+                        sb.AppendLine($"{ts}{ts}/* Fictieve ontruiming */");
+                        foreach (var fot in _groenSyncData.FictieveConflicten)
+                        {
+                            var ow = _sortedSyncs.oneWay.FirstOrDefault(x => x.FaseVan == fot.FaseNaar && x.FaseNaar == fot.FaseVan);
+                            var (m1, m2, gs) = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fot.FaseVan && x.m1.FaseNaar == fot.FaseNaar || x.m2.FaseVan == fot.FaseVan && x.m2.FaseNaar == fot.FaseNaar);
+                            if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
+
+                            var lr = ow != null && ow.Waarde > 0;
+                            if (gs && m1.AanUit != AltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{m1}]) ");
+                            }
+                            else sb.Append($"{ts}{ts}");
+
+                            sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                        }
+
+                        if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
+                    }
+
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
                     sb.AppendLine($"{ts}}}");
                     
@@ -364,6 +396,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
+                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0
+                        && c.InterSignaalGroep?.Voorstarten?.Count == 0
+                        && c.InterSignaalGroep?.LateReleases?.Count == 0) return null;
+
                     sb.AppendLine($"{ts}/* Reset synchronisatie BITs */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
@@ -382,6 +418,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
+                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0
+                        && c.InterSignaalGroep?.Voorstarten?.Count == 0
+                        && c.InterSignaalGroep?.LateReleases?.Count == 0) return null;
+                    
                     sb.AppendLine($"{ts}Synchroniseer_PG(); /* synchronisatie PG's */");
                     return sb.ToString();
 

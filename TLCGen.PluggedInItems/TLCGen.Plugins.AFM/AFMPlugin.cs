@@ -457,6 +457,8 @@ namespace TLCGen.Plugins.AFM
 
         public List<object> GetAllItems()
         {
+            if (!_afmModel.AFMToepassen) return null;
+
             var allElements = new List<object>
             {
                 new CCOLElement(

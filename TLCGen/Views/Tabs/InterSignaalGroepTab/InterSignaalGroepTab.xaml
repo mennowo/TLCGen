@@ -107,13 +107,30 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <Label Content="Gebruik garantie ontruimingstijden" />
-                <CheckBox Grid.Row="1"
+                <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"
                           IsChecked="{Binding Path=UseGarantieOntruimingsTijden,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
-                <Label Grid.Row="2" Content="Type synchronisaties (CCOL)" />
-                <ComboBox Grid.Row="3"
-                    ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:SynchronisatiesTypeEnum}}}"
+                <Label Grid.Row="1" Grid.Column="0" Content="Type synchronisaties (CCOL)" />
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                          ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:SynchronisatiesTypeEnum}}}"
                     SelectedItem="{Binding Path=SynchronisatiesType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="Bepaal realisatietijden altijd" />
+                    <controls:InfoElement>
+                        <controls:InfoElement.InfoPopup>
+                            <TextBlock>
+                                Indien aangevinkt, worden de realisatietijden óók berekend<LineBreak />
+                                wanneer de regeling geen synchronisaties bevat
+                            </TextBlock>
+                        </controls:InfoElement.InfoPopup>
+                    </controls:InfoElement>
+                </StackPanel>
+                <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
+                          IsChecked="{Binding Path=RealFuncBepaalRealisatieTijdenAltijd,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
             </Grid>
         </TabItem>
     </TabControl>

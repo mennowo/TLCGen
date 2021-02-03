@@ -181,6 +181,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool RealFuncBepaalRealisatieTijdenAltijd
+        {
+            get => _Controller?.Data?.RealFuncBepaalRealisatieTijdenAltijd ?? false;
+            set
+            {
+                _Controller.Data.RealFuncBepaalRealisatieTijdenAltijd = value;
+                MatrixChanged = true;
+                RaisePropertyChanged(nameof(RealFuncBepaalRealisatieTijdenAltijd), _Controller.Data.RealFuncBepaalRealisatieTijdenAltijd, value, true);
+            }
+        }
+
         public SynchronisatiesTypeEnum SynchronisatiesType
         {
             get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.SyncFunc;
