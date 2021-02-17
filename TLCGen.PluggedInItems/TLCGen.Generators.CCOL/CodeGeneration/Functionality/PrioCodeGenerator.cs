@@ -754,6 +754,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             var tts = ts;
 
+            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            {
+                sb.AppendLine($"#ifndef NO_RIS");
+            }
+
             if (!opvang)
             {
                 tts = ts + ts;
@@ -933,11 +938,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
                 if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
-                    sb.AppendLine($"{ts}if (IH[{inmHelems.Last()}]) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = TRUE;");
+                    sb.AppendLine($"{ts}{ts}if (IH[{inmHelems.Last()}]) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = TRUE;");
                 else
-                    sb.AppendLine($"{ts}if (IH[{inmHelems.Last()}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] == 0) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = FALSE;");
+                    sb.AppendLine($"{ts}{ts}if (IH[{inmHelems.Last()}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] == 0) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = FALSE;");
             }
             sb.AppendLine($"{ts}}}");
+            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            {
+                sb.AppendLine($"#endif /* NO_RIS */");
+            }
             if (melding.OpvangStoring && melding.MeldingBijstoring != null && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
             {
                 inmHelems.AddRange(GetMeldingCode(c, ov, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));

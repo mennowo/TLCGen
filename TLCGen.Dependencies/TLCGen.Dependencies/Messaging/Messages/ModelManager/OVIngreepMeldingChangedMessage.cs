@@ -7,11 +7,13 @@ namespace TLCGen.Messaging.Messages
     {
         public PrioIngreepInUitMeldingModel IngreepMelding { get; }
         public string FaseCyclus { get; }
+        public bool Removing { get; }
 
-        public PrioIngreepMeldingChangedMessage(string faseCyclus, PrioIngreepInUitMeldingModel ingreepMelding)
+        public PrioIngreepMeldingChangedMessage(string faseCyclus, PrioIngreepInUitMeldingModel ingreepMelding, bool removing = false)
         {
             FaseCyclus = faseCyclus;
             IngreepMelding = ingreepMelding;
+            Removing = removing;
         }
     }
 }

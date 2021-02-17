@@ -115,13 +115,14 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                 var mfc = DynamischHiaatSignalGroups.FirstOrDefault(x => x.SignalGroupName == obj.Fase.Naam);
                 if(mfc == null)
                 {
-                    var msg = new DynamischHiaatSignalGroupViewModel(new DynamischHiaatSignalGroupModel { SignalGroupName = obj.Fase.Naam });
-                    msg.SelectedDefault = _plugin.MyDefaults.Defaults.FirstOrDefault(x => x.Name == _model.TypeDynamischHiaat);
-                    if (string.IsNullOrEmpty(msg.Snelheid) || !msg.SelectedDefault.Snelheden.Any(x => x.Name == msg.Snelheid))
+                    var vm = new DynamischHiaatSignalGroupViewModel(new DynamischHiaatSignalGroupModel { SignalGroupName = obj.Fase.Naam });
+                    vm.SelectedDefault = _plugin.MyDefaults.Defaults.FirstOrDefault(x => x.Name == _model.TypeDynamischHiaat);
+                    if (vm.SelectedDefault != null &&
+                        (string.IsNullOrEmpty(vm.Snelheid) || !vm.SelectedDefault.Snelheden.Any(x => x.Name == vm.Snelheid)))
                     {
-                        msg.Snelheid = msg.SelectedDefault.DefaultSnelheid;
+                        vm.Snelheid = vm.SelectedDefault.DefaultSnelheid;
                     }
-                    DynamischHiaatSignalGroups.Add(msg);
+                    DynamischHiaatSignalGroups.Add(vm);
                 }
             }
             if (obj.NewType != TLCGen.Models.Enumerations.FaseTypeEnum.Auto)

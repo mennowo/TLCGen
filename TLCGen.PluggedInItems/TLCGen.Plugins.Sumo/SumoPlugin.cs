@@ -264,7 +264,7 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}SUMODET SUMODetectors[DPMAX];");
                     sb.AppendLine($"{ts}int SUMOIds[{_MyModel.SumoKruispuntLinkMax}];");
                     sb.AppendLine($"{ts}int isumo;");
-                    sb.AppendLine("#endif // #ifdef SUMO");
+                    sb.AppendLine("#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.TabCControlParameters:
@@ -296,7 +296,7 @@ namespace TLCGen.Plugins.Sumo
                             sb.AppendLine($"{ts}SUMOIds[{sid}] = {_fcpf}{fc.Naam};");
                         }
                     }
-                    sb.AppendLine("#endif // #ifdef SUMO");
+                    sb.AppendLine("#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -306,7 +306,7 @@ namespace TLCGen.Plugins.Sumo
                     }
                     sb.AppendLine("#ifdef SUMO");
                     sb.AppendLine("#include \"cctracic_public.h\"");
-                    sb.AppendLine("#endif // #ifdef SUMO");
+                    sb.AppendLine("#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCTop:
@@ -335,7 +335,7 @@ namespace TLCGen.Plugins.Sumo
                         sb.AppendLine($"{ts}{ts}TerminateProcess(pi.hProcess, 0);");
                         sb.AppendLine($"{ts}}}");
                     }
-                    sb.AppendLine($"{ts}#endif // #ifdef SUMO");
+                    sb.AppendLine($"{ts}#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
@@ -374,7 +374,7 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}{ts}CIF_KLOK[CIF_MINUUT] = {_MyModel.StartTijdMinuut};");
                     sb.AppendLine($"{ts}{ts}   TraCISetOrder({_MyModel.SumoOrder});");
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine($"{ts}#endif // #ifdef SUMO");
+                    sb.AppendLine($"{ts}#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -395,7 +395,7 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}{ts}TraCISetTrafficLightState(\"{_MyModel.SumoKruispuntNaam ?? ""}\", SUMOStateString);");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}TraCIControlSimStep();");
-                    sb.AppendLine($"{ts}#endif // #ifdef SUMO");
+                    sb.AppendLine($"{ts}#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSpecialSignals:
@@ -440,7 +440,7 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}CIF_ISWIJZ = TRUE;");
-                    sb.AppendLine($"{ts}#endif // #ifdef SUMO");
+                    sb.AppendLine($"{ts}#endif /* #ifdef SUMO */");
                     return sb.ToString();
 
                 default:

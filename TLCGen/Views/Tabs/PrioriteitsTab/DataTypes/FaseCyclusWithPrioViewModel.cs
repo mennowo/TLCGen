@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -17,41 +16,6 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioItemViewModel : ViewModelBase
-    {
-        private bool _isExpanded;
-        private bool _isSelected;
-
-        [Browsable(false)]
-        public virtual bool IsExpanded
-        {
-            get => _isExpanded;
-            set
-            {
-                _isExpanded = value; 
-                RaisePropertyChanged();
-            }
-        }
-
-        [Browsable(false)]
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                if (value)
-                {
-                    if (!_isExpanded)
-                    {
-                        IsExpanded = true;
-                    }
-                }
-                RaisePropertyChanged();
-            }
-        }
-    }
-
     public class FaseCyclusWithPrioViewModel : PrioItemViewModel, IComparable
     {
         private RelayCommand _addIngreepCommand;

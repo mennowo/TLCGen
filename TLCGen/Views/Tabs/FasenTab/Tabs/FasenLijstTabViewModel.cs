@@ -302,10 +302,7 @@ namespace TLCGen.ViewModels
                     return;
                 }
             }
-            foreach(var fc in items)
-            {
-                Fasen.Add(new FaseCyclusViewModel(fc));
-            }
+            Messenger.Default.Send(new FasenChangingMessage(items, null));
         }
 
         public void UpdateAfterApplyTemplate(FaseCyclusModel item)

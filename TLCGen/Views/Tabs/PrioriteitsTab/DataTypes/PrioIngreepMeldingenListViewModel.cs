@@ -68,14 +68,11 @@ namespace TLCGen.ViewModels
             }
 
             Meldingen.Add(new PrioIngreepInUitMeldingViewModel(m, this, _ingreep));
-            var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
-            MessengerInstance.Send(msg);
-            if (msg.FaseCyclus == null) return;
-            m.Naam = msg.FaseCyclus 
-                     + msg.Ingreep 
+            m.Naam = _ingreep.FaseCyclus
+                     + _ingreep.PrioIngreep.Naam
                      + DefaultsProvider.Default.GetMeldingShortcode(m)
                      + (MeldingType == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, m));
+            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.FaseCyclus, m));
         });
 
         #endregion // Commands

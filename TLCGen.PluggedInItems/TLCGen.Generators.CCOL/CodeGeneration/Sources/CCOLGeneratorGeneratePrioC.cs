@@ -82,15 +82,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
             var ris = c.RISData.RISToepassen && 
-                      c.PrioData.PrioIngrepen
+                      (c.PrioData.PrioIngrepen
                           .Any(x => 
                               x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
-                              x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
+                              x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)) ||
+                       c.PrioData.HDIngrepen.Any(x => x.RIS));
             if (ris)
             {
                 sb.AppendLine($"{ts}#ifndef NO_RIS");
                 sb.AppendLine($"{ts}{ts}#include \"risappl.h\"   /* RIS routines                     */");
+                sb.AppendLine($"{ts}{ts}#if (CCOL_V > 100)");
                 sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.h\"   /* RIS routines              */");
+                sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine($"{ts}#endif /* NO_RIS */");
             }
             sb.AppendLine($"{ts}#include \"cif.inc\"    /* interface                         */");
@@ -111,7 +114,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"extra_func_prio.h\"");
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#endif // PRACTICE_TEST");
+                sb.AppendLine("#endif /* PRACTICE_TEST */");
             }
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCIncludes, true, true, true, true);
@@ -346,7 +349,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         sb.AppendLine($"{ts}{ts}iFC_PRIO_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
                     }
-                    sb.AppendLine($"{ts}#endif // PRACTICE_TEST");
+                    sb.AppendLine($"{ts}#endif /* PRACTICE_TEST */");
                     sb.AppendLine();
                 }
             }
@@ -1440,7 +1443,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine($"{ts}#endif // !defined AUTOMAAT || defined PRACTICE_TEST");
+                sb.AppendLine($"{ts}#endif /* !defined AUTOMAAT || defined PRACTICE_TEST */");
             }
 
             sb.AppendLine("}");

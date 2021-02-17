@@ -118,7 +118,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#endif // PRACTICE_TEST");
+                sb.AppendLine("#endif /* PRACTICE_TEST */");
             }
 
             sb.AppendLine();
@@ -742,7 +742,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     AppendDetectorFlutterTabString(sb, dm, pad7);
                 }
-                sb.AppendLine("#endif // !defined NO_DDFLUTTER");
+                sb.AppendLine("#endif /* !defined NO_DDFLUTTER */");
             }
 
             /* Dummies */
@@ -786,7 +786,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         AppendDetectorFlutterTabString(sb, dm, pad7);
                     }
-                    sb.AppendLine("#endif // !defined NO_DDFLUTTER");
+                    sb.AppendLine("#endif /* !defined NO_DDFLUTTER */");
                 }
                 sb.AppendLine("#endif");
             }

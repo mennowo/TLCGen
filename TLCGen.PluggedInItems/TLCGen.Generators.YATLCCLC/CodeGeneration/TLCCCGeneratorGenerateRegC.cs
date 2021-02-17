@@ -154,11 +154,11 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
             sb.AppendLine("void application_exit(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}// Set running state to false, cause otherwise the application");
-            sb.AppendLine($"{ts}// will try to access freed memory if running at high speeds");
+            sb.AppendLine($"{ts}/* Set running state to false, cause otherwise the application */");
+            sb.AppendLine($"{ts}/* will try to access freed memory if running at high speeds */");
             sb.AppendLine($"{ts}running = FALSE;");
             sb.AppendLine();
-            sb.AppendLine($"{ts}// Free all allocated memory; good programming practice!");
+            sb.AppendLine($"{ts}/* Free all allocated memory; good programming practice! */");
             sb.AppendLine($"{ts}SignalGroups_free(signalgroups, SGMAX);");
             sb.AppendLine($"{ts}Detectors_free(detectors, DMAX);");
             sb.AppendLine($"{ts}ModuleMill_free(&modulemill, MLMAX);");

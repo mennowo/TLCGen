@@ -69,7 +69,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
                 }
             }
-            sb.AppendLine($"{ts}#endif // RISSIMULATIE");
+            sb.AppendLine($"{ts}#endif /* RISSIMULATIE */");
             sb.AppendLine();
             foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
@@ -99,11 +99,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"void ris_simulation_application(void)");
             sb.AppendLine($"{{");
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT_TEST)");
-            sb.AppendLine($"{ts}char buffer[128];");
+            var first = true;
             foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach (var s in l.SimulatedStations)
                 {
+                    if (first)
+                    {
+                        sb.AppendLine($"{ts}char buffer[128];");
+                        first = false;
+                    }
+
                     var sitf = "SYSTEM_ITF";
                     if (risModel.HasMultipleSystemITF)
                     {

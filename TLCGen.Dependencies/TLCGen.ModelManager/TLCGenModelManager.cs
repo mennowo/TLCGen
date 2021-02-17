@@ -860,6 +860,7 @@ namespace TLCGen.ModelManagement
                         x =>
                             x.MeldingenData.Inmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)) ||
                             x.MeldingenData.Uitmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)));
+                   
                     if (meldingMsg.IngreepMelding != null)
                     {
                         if (meldingMsg.IngreepMelding.Type ==
@@ -868,7 +869,11 @@ namespace TLCGen.ModelManagement
                             switch (meldingMsg.IngreepMelding.InUit)
                             {
                                 case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                                    if (meldingMsg.IngreepMelding.DummyKARMelding == null)
+                                    if (meldingMsg.Removing)
+                                    {
+                                        meldingMsg.IngreepMelding.DummyKARMelding = null;
+                                    }
+                                    else if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                     {
                                         meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                         {
@@ -880,7 +885,11 @@ namespace TLCGen.ModelManagement
 
                                     break;
                                 case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                                    if (meldingMsg.IngreepMelding.DummyKARMelding == null)
+                                    if (meldingMsg.Removing)
+                                    {
+                                        meldingMsg.IngreepMelding.DummyKARMelding = null;
+                                    }
+                                    else if (meldingMsg.IngreepMelding.DummyKARMelding == null)
                                     {
                                         meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
                                         {

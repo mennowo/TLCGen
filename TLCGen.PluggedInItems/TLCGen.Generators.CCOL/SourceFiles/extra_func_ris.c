@@ -358,7 +358,7 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
  *                                                  // determined that the requester should then back off and request an alternative.
  */
 
-/* #define NO_WATCHOTHERTRAFFIC */
+#define NO_WATCHOTHERTRAFFIC
 
 rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
 

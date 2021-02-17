@@ -128,6 +128,7 @@
       <DependentUpon>PrioIngreepRISMeldingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioItemViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml.cs">
       <DependentUpon>PrioIngrepenOverzichtTabView.xaml</DependentUpon>
     </Compile>

@@ -157,8 +157,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact, hsd.PlActUitgang));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact, hsd.MlActUitgang));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact, hsd.KpActUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact, hsd.KpActUitgang));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact, hsd.MlActUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl, hsd.MlPlUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ustxtimer}", _ustxtimer, hsd.TxTimerUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usklok}", _usklok, hsd.KlokUitgang));
@@ -171,11 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
-					// TODO this is provisionary !!!
-                    var temp = pl.Naam;
-                    pl.Naam = _uspl + pl.Naam;
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(temp, _uspl, pl, temp));
-                    pl.Naam = temp;
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl, pl.Naam));
 
                     foreach(var fcpl in pl.Fasen)
                     {
@@ -456,8 +452,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
 					    sb.AppendLine($"{ts}{ts}init_modules(ML_MAX, PRML, YML, &ML, &SML);");
                     }
-					if (c.InterSignaalGroep.Gelijkstarten.Any() ||
-					    c.InterSignaalGroep.Voorstarten.Any())
+					if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
+						(c.InterSignaalGroep.Gelijkstarten.Any() ||
+					     c.InterSignaalGroep.Voorstarten.Any()))
 					{
 						sb.AppendLine($"{ts}{ts}init_realisation_timers();");
 						sb.AppendLine($"{ts}{ts}reset_realisation_timers();");
@@ -900,7 +897,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1 | YV_KOP_HALFSTAR);");
 					sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3 | YM_KOP_HALFSTAR);");
 					sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | X_GELIJK_HALFSTAR | X_VOOR_HALFSTAR | X_DEELC_HALFSTAR);");
-                    if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
+					    (c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any()))
                     {
 					    sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
                     }
@@ -940,7 +938,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					sb.AppendLine();
 
-                    if (c.InterSignaalGroep.Gelijkstarten.Any())
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && 
+						c.InterSignaalGroep.Gelijkstarten.Any())
                     {
                         var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                         foreach (var gs in gelijkstarttuples)

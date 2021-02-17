@@ -313,10 +313,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
 
                         List<Tuple<string, List<string>>> gelijkstarttuples = null;
+                        gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                         var yes = false;
                         if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc) // TODO how is this with REALFUNC?
                         {
-                            gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                             foreach (var gs in gelijkstarttuples.Where(x =>
                                 c.ModuleMolen.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
                             {
