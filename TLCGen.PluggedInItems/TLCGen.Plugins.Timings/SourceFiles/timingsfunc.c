@@ -181,6 +181,7 @@ void msg_fctiming(void)
             }
             break;
 
+#if (CCOL_V > 100)
          case CIF_STAT_INSCHAKELEN:  /* Inschakelen */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
                set_fctiming((mulv) i, /* fc */
@@ -196,6 +197,7 @@ void msg_fctiming(void)
                reset_fctiming((mulv) i, (mulv) 1);
             }
             break;
+#endif
 
          case CIF_STAT_AR: /* Alles rood */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
@@ -272,6 +274,7 @@ void msg_fctiming(void)
             }
             break;
 
+#if (CCOL_V > 100)
          case CIF_STAT_UITSCHAKELEN:  /* Uitschakelen */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {
                set_fctiming((mulv) i, /* fc */
@@ -303,6 +306,7 @@ void msg_fctiming(void)
                reset_fctiming((mulv) i, (mulv) 1);
             }
             break;
+#endif
 
          default:
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {

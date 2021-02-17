@@ -152,7 +152,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}{ts}#define RIS_SSM  /* Gebruik in/uitmelden via RIS SSM */");
                     sb.AppendLine($"{ts}{ts}#endif");
                 }
+                sb.AppendLine($"{ts}{ts}#if (CCOL_V > 100)");
                 sb.AppendLine($"{ts}{ts}#include \"extra_func_ris.c\" /* RIS extra functies */");
+                sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
                 sb.AppendLine($"{ts}{ts}#endif");
