@@ -58,7 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Build1\BuildTests.cs" />
+    <Compile Include="Build\BuildTests.cs" />
     <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
     <Compile Include="Helpers\TLCGenControllerModifierTests.cs" />
@@ -73,6 +73,7 @@
     <Compile Include="Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenOVTabViewModelTests.cs" />
+    <Compile Include="Varia\DeepClonerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

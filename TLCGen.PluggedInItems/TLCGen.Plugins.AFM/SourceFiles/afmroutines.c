@@ -236,7 +236,11 @@ void AFMacties(AFM_FC_STRUCT * AFM_data_fc, mulv fc_shadow, AFM_FC_STRUCT AFM_da
 		DeltaSec = 0;
 		for (AFMfc = 0; AFMfc < AFM_fcmax; ++AFMfc)							/* Voor iedere richting die meedoet met AFM */
 		{
+#ifdef CCOLTIG
+			if ((AFM_data_fcs[AFMfc].fc != AFM_data_fc->fc) && (TIG_max[AFM_data_fcs[AFMfc].fc][AFM_data_fc->fc] != -1)) /* Voor iedere richting die niet deze richting is en er conflicterend mee is */
+#else
 			if ((AFM_data_fcs[AFMfc].fc != AFM_data_fc->fc) && (TO_max[AFM_data_fcs[AFMfc].fc][AFM_data_fc->fc] != -1)) /* Voor iedere richting die niet deze richting is en er conflicterend mee is */
+#endif				
 			{
 				afmprm = AFM_data_fcs[AFMfc].afm_prm;						/* afmprm = de eerste waarde uit het AFMlist array (= het adres van prmAFM##_FC) */
 	

@@ -199,7 +199,9 @@
     <Compile Include="Models\Models\Base\SelectieveDetectorModel.cs" />
     <Compile Include="Models\Models\ControllerModel.cs" />
     <Compile Include="Models\Models\Controller\ControllerDataModel.cs" />
+    <Compile Include="Models\Models\Controller\ControllerRangeerDataModel.cs" />
     <Compile Include="Models\Models\Controller\FixatieModel.cs" />
+    <Compile Include="Models\Models\Controller\IOElementRangeerDataModel.cs" />
     <Compile Include="Models\Models\Controller\VersieModel.cs" />
     <Compile Include="Models\Models\Controller\VLOGSettingsDataModel.cs" />
     <Compile Include="Models\Models\FileIngreep\FileIngreepDetectorModel.cs" />
