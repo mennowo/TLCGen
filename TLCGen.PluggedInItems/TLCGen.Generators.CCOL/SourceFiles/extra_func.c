@@ -683,7 +683,7 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition)
         if (RA[j]) A[i] |= BIT4;
         break;
     case 3:
-        if (RA[j] && !K[j]) A[i] |= BIT4;
+        if (RA[j] && !K[j] || SG[j]) A[i] |= BIT4;
         break;
     case 4:
         if (SG[j]) A[i] |= BIT4;

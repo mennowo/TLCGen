@@ -1,5 +1,8 @@
-TLCGen=0.9.3.0
+TLCGen=0.9.4.0
 RN==TLCGen
+TLCGen versie: 0.9.4.0
+- Fix import ontruimingstijden in bestaande regeling
+- Heel veel kleine verbeteringen
 TLCGen versie: 0.9.3.0
 - fix bus uitgang wachttijdvoorspeller
 - ITF import in .msi versie (setup)

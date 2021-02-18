@@ -124,7 +124,9 @@ namespace TLCGen.UITests
                 fasenTabLijstTabAddRemoveControlAddButton.Click();
                 fasenTabLijstTabAddRemoveControlAddButton.Click();
                 fasenTabLijstTabAddRemoveControlAddButton.Click();
-                fasenLijstDataGrid.Rows[0].Click();
+                System.Threading.Thread.Sleep(500);
+                fasenLijstDataGrid.Rows[1].Click();
+                System.Threading.Thread.Sleep(1500);
                 fasenTabLijstTabAddRemoveControlRemoveButton.Click();
                 
                 // assert
