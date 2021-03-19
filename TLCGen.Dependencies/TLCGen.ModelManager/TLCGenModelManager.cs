@@ -368,6 +368,7 @@ namespace TLCGen.ModelManagement
             var checkVer = Version.Parse("0.2.2.0");
             if(v < checkVer)
             {
+                var shownKarVecomMsg = false;
                 foreach (XmlNode node in doc.FirstChild.ChildNodes)
                 {
                     if (node.LocalName != "OVData") continue;
@@ -380,11 +381,46 @@ namespace TLCGen.ModelManagement
                         var vecom = ingreep.SelectSingleNode("Vecom");
 
                         if (kar != null && (kar.InnerText.ToLower() == "true" ||
-                                            vecom != null && vecom.InnerText.ToLower() == "true"))
+                            vecom != null && vecom.InnerText.ToLower() == "true"))
                         {
-                            MessageBox.Show(
-                                "Dit is oud type TLCGen bestand. OV via KAR en/of VECOM moet opnieuw worden opgegeven.",
-                                "KAR en VECOM opnieuw invoeren.", MessageBoxButton.OK);
+                            if (!shownKarVecomMsg)
+                            {
+                                shownKarVecomMsg = true;
+                                MessageBox.Show(
+                                    "Dit is oud type TLCGen bestand. OV via KAR en/of VECOM moet opnieuw worden opgegeven.",
+                                    "KAR en VECOM opnieuw invoeren.", MessageBoxButton.OK);
+                            }
+                        }
+                    }
+                }
+                
+                // Check detector type VecomIngang and rename to VecomDetector
+                foreach (XmlNode node in doc.FirstChild.ChildNodes)
+                {
+                    if (node.LocalName == "Fasen")
+                    {
+                        foreach (XmlNode fase in node.ChildNodes)
+                        {
+                            if (node.LocalName != "Detectoren") continue;
+                            foreach (XmlNode det in fase.ChildNodes)
+                            {
+                                var c = det.SelectSingleNode("Type");
+                                if (c != null && c.InnerText == "VecomIngang")
+                                {
+                                    c.InnerText = "VecomDetector";
+                                }
+                            }
+                        }
+                    }
+                    if (node.LocalName == "Detectoren")
+                    {
+                        foreach (XmlNode det in node.ChildNodes)
+                        {
+                            var c = det.SelectSingleNode("Type");
+                            if (c != null && c.InnerText == "VecomIngang")
+                            {
+                                c.InnerText = "VecomDetector";
+                            }
                         }
                     }
                 }
@@ -969,6 +1005,8 @@ namespace TLCGen.ModelManagement
 
         private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
         {
+            PrepareModelForUI(msg.Controller);
+
             foreach (var fcm in msg.Controller.Fasen)
             {
                 fcm.Detectoren.BubbleSort();
