@@ -4,7 +4,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class VoorstartModel : IInterSignaalGroepElement
+    public class VoorstartModel : IInterSignaalGroepElement, IFormattable
     {
         #region Properties
 
@@ -18,5 +18,21 @@ namespace TLCGen.Models
         public int VoorstartOntruimingstijd { get; set; }
 
         #endregion // Properties
+        
+        #region ToString
+        
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            switch (format)
+            {
+                case "naarvan": return FaseNaar + FaseVan;
+                case "van": return FaseVan;
+                case "naar": return FaseNaar;
+            }
+
+            return ToString();
+        }
+
+        #endregion // ToString
     }
 }

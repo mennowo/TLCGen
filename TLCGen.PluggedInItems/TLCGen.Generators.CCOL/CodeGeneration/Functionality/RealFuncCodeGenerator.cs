@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
@@ -25,6 +24,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schlos;
         private CCOLGeneratorCodeStringSettingModel _schrealgs;
         private CCOLGeneratorCodeStringSettingModel _mrealtijd;
+        private CCOLGeneratorCodeStringSettingModel _mrealtijdmin;
+        private CCOLGeneratorCodeStringSettingModel _mrealtijdmax;
 #pragma warning restore 0649
         private string _hmad;
         private GroenSyncDataModel _groenSyncData;
@@ -154,6 +155,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             $"{_mrealtijd}{fc}",
                             _mrealtijd, fc.Naam));
                 }
+                foreach (var fc in c.Fasen)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_mrealtijdmin}{fc}",
+                            _mrealtijdmin, fc.Naam));
+                }
+                foreach (var fc in c.Fasen)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_mrealtijdmax}{fc}",
+                            _mrealtijdmax, fc.Naam));
+                }
             }
 
             foreach (var fot in _groenSyncData.FictieveConflicten)
@@ -179,14 +194,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<CCOLLocalVariable>
                     {
-                        new CCOLLocalVariable(c.GetBoolV(), "wijziging", "TRUE"),
-                        new CCOLLocalVariable("int", "i"),
+                        new(c.GetBoolV(), "wijziging", "TRUE"),
+                        new("int", "i"),
                     };
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc 
                         || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0 && c.InterSignaalGroep?.LateReleases?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
-                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc", "") };
+                    return new List<CCOLLocalVariable> { new("int", "fc") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -226,17 +241,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
 
+                    var firstFcName = c.Fasen.First().Naam;
                     sb.AppendLine($"{ts}/* Bepalen realisatietijden */");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Reset */");
                     sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}Realisatietijd(i, NG, NG);");
+                    sb.AppendLine($"{ts}{ts}Realisatietijd_min(i, NG, NG);");
+                    sb.AppendLine($"{ts}{ts}REALTIJD_max[i] = REALTIJD[i];");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
 
                     // TODO test and check logic
-                    var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);
+                    //var threeWayPedestrians = GetThreeWayPedestirans(_sortedSyncs.twoWayPedestrians);
 
                     // Two-way negative pedestrians
                     var startDuringRed = false;
@@ -389,10 +407,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Realisatie tijd naar geheugenelement */");
-                    foreach (var fc in c.Fasen)
-                    {
-                        sb.AppendLine($"{ts}Realisatietijd_MM({_fcpf}{fc}, {_mpf}{_mrealtijd}{fc});");
-                    }
+                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}Realisatietijd_MM({_fcpf}{firstFcName} + i, {_mpf}{_mrealtijd}{firstFcName} + i);");
+                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmin}{firstFcName} + i] = REALTIJD_min[{_fcpf}{firstFcName} + i];");
+                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
+                    sb.AppendLine($"{ts}}}");
+                    
+                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || defined (VISSIM)");
+                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(118, 1 + i, \"MM[mrealtijd%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(139, 1 + i, \"MM[mrealtijdmin%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(163, 1 + i, \"MM[mrealtijdmax%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
+                    
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSynchronisaties:

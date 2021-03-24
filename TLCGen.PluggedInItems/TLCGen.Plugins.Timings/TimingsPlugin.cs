@@ -7,10 +7,12 @@ using System.Windows.Media;
 using System.Xml;
 using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins.Timings.CodeGeneration;
 using TLCGen.Plugins.Timings.Models;
 
 namespace TLCGen.Plugins.Timings
@@ -28,17 +30,8 @@ namespace TLCGen.Plugins.Timings
 
         private TimingsTabViewModel _timingsVM;
         private TimingsDataModel _timingsModel;
-
-#pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _schfctiming = new CCOLGeneratorCodeStringSettingModel
-        {
-            Default = "fctiming",
-            Setting = "fctiming",
-            Type = CCOLGeneratorSettingTypeEnum.Schakelaar,
-            Description = "Timings activeren"
-        };
-#pragma warning restore 0649
-
+        private TimingsCodeGenerator _codeGenerator = new TimingsCodeGenerator();
+        
         #endregion // Fields
 
         #region Properties
@@ -202,81 +195,70 @@ namespace TLCGen.Plugins.Timings
 
             if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return;
 
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schfctiming}", 1, CCOLElementTimeTypeEnum.SCH_type, _schfctiming));
+            _myElements.AddRange(_codeGenerator.GetCCOLElements(c));
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
+        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type) => _myElements.Where(x => x.Type == type);
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 120;
+                case CCOLCodeTypeEnum.RegCSynchronisaties:
+                    if (!_timingsModel.TimingsUsePredictions)
+                        return base.GetFunctionLocalVariables(c, type);
+                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i") };
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    return 120;
-                case CCOLCodeTypeEnum.TabCIncludes:
-                case CCOLCodeTypeEnum.TabCControlParameters:
-                    return 120;
+                    if (!_timingsModel.TimingsToepassen)
+                        return base.GetFunctionLocalVariables(c, type);
+                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i", defineCondition: "(!(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM)))") };
                 default:
-                    return 0;
+                    return base.GetFunctionLocalVariables(c, type);
             }
+        }
+        
+        public override int HasCode(CCOLCodeTypeEnum type)
+        {
+            return _codeGenerator.HasCode(type);
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
-
-            var sb = new StringBuilder();
-
-            switch (type)
-            {
-                case CCOLCodeTypeEnum.RegCIncludes:
-
-                    // Generate rissim.c now
-                    GenerateFcTimingsC(c, _timingsModel, ts);
-
-                    sb.AppendLine($"{ts}#include \"timingsvar.c\" /* FCTiming functies */");
-                    sb.AppendLine($"{ts}#include \"timingsfunc.c\" /* FCTiming functies */");
-                    sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
-                    return sb.ToString();
-                case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfctiming}]) msg_fctiming();");
-                    return sb.ToString();
-                case CCOLCodeTypeEnum.TabCIncludes:
-                    sb.AppendLine($"{ts}void Timings_Eventstate_Definition(void);");
-                    return sb.ToString();
-                case CCOLCodeTypeEnum.TabCControlParameters:
-                    sb.AppendLine($"{ts}Timings_Eventstate_Definition();");
-                    return sb.ToString();
-                default:
-                    return null;
-            }
+            _codeGenerator._fcpf = _fcpf;
+            _codeGenerator._schpf = _schpf;
+            _codeGenerator._prmpf = _prmpf;
+            _codeGenerator._mpf = _mpf;
+            _codeGenerator._ctpf = _ctpf;
+            return _codeGenerator.GetCode(_timingsModel, c, type, ts);
         }
 
         public override List<string> GetSourcesToCopy()
         {
             if (_controller.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
-            return new List<string>
+            var files = new List<string>
             {
                 "timingsfunc.c",
                 "timingsvar.c"
             };
+            if (_timingsModel.TimingsUsePredictions) files.Add("timings_uc4.c");
+            return files;
         }
+        
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _codeGenerator._mrealtijdmin = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmin");
+            _codeGenerator._mrealtijdmax = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmax");
+            _codeGenerator._cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 
+            return base.SetSettings(settings);
+        }
+        
         #endregion // CCOLCodePieceGenerator
 
         #region Private Methods
-
-
+        
         internal void UpdateModel()
         {
             if (_controller != null && _timingsModel != null)

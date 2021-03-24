@@ -733,7 +733,7 @@
               <e p="TLCGenIgnoreAttribute.cs" t="Include" />
               <e p="VissimNameAttribute.cs" t="Include" />
             </e>
-            <e p="Extensions.cs" t="Include" />
+            <e p="ControllerModelExtensions.cs" t="Include" />
             <e p="Interfaces" t="Include">
               <e p="IHaveName.cs" t="Include" />
               <e p="IInterSignaalGroepElement.cs" t="Include" />
@@ -1673,7 +1673,9 @@
         <e p="TLCGen.Plugins.Timings" t="IncludeRecursive">
           <e p="App.config" t="Include" />
           <e p="bin" t="ExcludeRecursive" />
-          <e p="FcTimingsGenerator.cs" t="Include" />
+          <e p="CodeGeneration" t="Include">
+            <e p="TimingsCodeGenerator.cs" t="Include" />
+          </e>
           <e p="Models" t="Include">
             <e p="TimingsDataModel.cs" t="Include" />
             <e p="TimingsFaseCyclusDataModel.cs" t="Include" />
@@ -1691,6 +1693,7 @@
             <e p="AssemblyInfo.cs" t="Include" />
           </e>
           <e p="SourceFiles" t="Include">
+            <e p="timings_uc4.c" t="Include" />
             <e p="timingsfunc.c" t="Include" />
             <e p="timingsvar.c" t="Include" />
           </e>

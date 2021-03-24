@@ -10,6 +10,8 @@ namespace TLCGen.Plugins.Timings.Models
     public class TimingsDataModel
     {
         public bool TimingsToepassen { get; set; }
+        
+        public bool TimingsUsePredictions { get; set; }
 
         [XmlArray(ElementName = "TimingsFaseCyclusData")]
         public List<TimingsFaseCyclusDataModel> TimingsFasen { get; set; }

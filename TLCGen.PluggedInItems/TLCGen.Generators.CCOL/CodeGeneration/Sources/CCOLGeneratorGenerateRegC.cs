@@ -791,7 +791,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, true, false, false, true);
             
             sb.AppendLine($"{ts}int i = 0;");
-            sb.AppendLine($"{ts}for (; i < DPMAX; ++i)");
+            sb.AppendLine($"{ts}for (i = 0; i < DPMAX; ++i)");
             sb.AppendLine($"{ts}{{");
             sb.AppendLine($"{ts}{ts}TDH_old[i] = TDH[i];");
             sb.AppendLine($"{ts}{ts}DB_old[i] = DB[i];");

@@ -90,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     if(c.InterSignaalGroep?.Nalopen?.Count > 0)
-                        return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
+                        return new List<CCOLLocalVariable> { new("int", "fc") };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);

@@ -104,8 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             // return if no sync
-            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc 
-                || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+            if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                 return null;
 
             var sb = new StringBuilder();
@@ -113,6 +112,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return null;
+                    
                     // bits reset
                     sb.AppendLine($"{ts}/* reset synchronisatiebits. */");
                     sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
@@ -132,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     // fictitious intergreen
                     if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.DeelConflict) ||
-                        c.InterSignaalGroep.Voorstarten.Count > 0)
+                        c.InterSignaalGroep.Voorstarten?.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* (Her)start fictieve ontruimingstijden */");
                         sb.AppendLine($"{ts}/* ------------------------------------- */");
@@ -214,24 +215,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{vs.FaseNaar}] && (PR[{_fcpf}{vs.FaseNaar}] || AR[{_fcpf}{vs.FaseNaar}]) && A[{_fcpf}{vs.FaseVan}] && R[{_fcpf}{vs.FaseVan}] && !TRG[{_fcpf}{vs.FaseVan}] && !kcv({_fcpf}{vs.FaseVan})));");
+                        sb.AppendLine($"{ts}set_MRLW({_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{vs.FaseNaar}] && (PR[{_fcpf}{vs.FaseNaar}] || AR[{_fcpf}{vs.FaseNaar}] || (AA[{_fcpf}{vs.FaseNaar}] & BIT11)) && A[{_fcpf}{vs.FaseVan}] && R[{_fcpf}{vs.FaseVan}] && !TRG[{_fcpf}{vs.FaseVan}] && !kcv({_fcpf}{vs.FaseVan})));");
                     }
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        if (gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
+                        if (gs.Schakelbaar == AltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}]) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
-                            sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}]) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
+                            sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}] || (AA[{_fcpf}{gs.FaseNaar}] & BIT11)) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
+                            sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}] || (AA[{_fcpf}{gs.FaseNaar}] & BIT11)) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}]) set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}]) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
-                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}]) set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}]) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
+                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}]) set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}] || (AA[{_fcpf}{gs.FaseNaar}] & BIT11)) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
+                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}]) set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, ({c.GetBoolV()}) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}] || (AA[{_fcpf}{gs.FaseNaar}] & BIT11)) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
                         }
                     }
                     return sb.ToString();
 
 				case CCOLCodeTypeEnum.PrioCIncludes:
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return null;
 					sb.AppendLine("#include \"syncvar.h\"");
 					return sb.ToString();
 

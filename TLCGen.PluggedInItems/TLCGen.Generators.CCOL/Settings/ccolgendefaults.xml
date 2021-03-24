@@ -2108,6 +2108,18 @@
             <Type>GeheugenElement</Type>
             <Description>Realisatie tijd fase _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>realtijdmin</Default>
+            <Setting>realtijdmin</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Realisatie minimum tijd fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>realtijdmax</Default>
+            <Setting>realtijdmax</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Realisatie maximum tijd fase _E1_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

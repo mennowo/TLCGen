@@ -185,7 +185,7 @@
     <Compile Include="Models\Attributes\NoTemplateApplicableAttribute.cs" />
     <Compile Include="Models\Attributes\RefersToAttribute.cs" />
     <Compile Include="Models\Attributes\VissimNameAttribute.cs" />
-    <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\ControllerModelExtensions.cs" />
     <Compile Include="Models\Interfaces\IHaveName.cs" />
     <Compile Include="Models\Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Models\Models\Base\DetectorModel.cs" />

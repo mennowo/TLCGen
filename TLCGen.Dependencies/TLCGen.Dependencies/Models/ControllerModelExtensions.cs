@@ -7,27 +7,71 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
-    public static class Extensions
+    public static class ControllerModelExtensions
     {
+        #region Detectors
+
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c)
         {
             return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren);
         }
         
-        public static IEnumerable<DetectorModel> GetAllRegularDetectors(this ControllerModel c)
-        {
-            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
-        }
-
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, Func<DetectorModel, bool> predicate)
         {
             return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren).Where(predicate);
         }
 
+        public static IEnumerable<DetectorModel> GetAllRegularDetectors(this ControllerModel c)
+        {
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
+        }
+        
+        #endregion // Detectors
+
+        #region SignalGroups
+        
         public static FaseCyclusModel GetFaseCyclus(this ControllerModel c, string naam)
         {
             return c.Fasen.FirstOrDefault(x => x.Naam == naam);
         }
+
+        /// <summary>
+        /// Appends a string to a StringBuilder per SignalGroup in a ControllerModel
+        /// <remarks>Use placeholder &lt;FC&gt; to mark where _fcpf + fc.Naam should be placed</remarks>
+        /// </summary>
+        /// <param name="c">The Controller</param>
+        /// <param name="fcPf">FC prefix</param>
+        /// <param name="s">The string to be added</param>
+        public static void AppendPerFase(this StringBuilder sb, ControllerModel c, string fcPf, string s)
+        {
+            foreach (var fc in c.Fasen)
+            {
+                sb.AppendLine(s.Replace("<FC>", fcPf + fc.Naam));
+            }
+        }
+        
+        #endregion // SignalGroups
+
+        #region Synchronisations
+
+        public static IEnumerable<GelijkstartModel> GetGelijkstarten(this ControllerModel c, string fc)
+        {
+            return c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc || x.FaseNaar == fc);
+        }
+        
+        public static IEnumerable<VoorstartModel> GetVoorstarten(this ControllerModel c, string fcFrom)
+        {
+            return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == fcFrom);
+        }
+        
+        public static IEnumerable<LateReleaseModel> GetLateReleases(this ControllerModel c, string fcFrom)
+        {
+            return c.InterSignaalGroep.LateReleases.Where(x => x.FaseVan == fcFrom);
+        }
+
+        #endregion // Synchronisations
+        
+        #region Public Transport
 
         public static bool HasOVIngreepVecomIO(this PrioIngreepModel ov)
         {
@@ -129,5 +173,7 @@ namespace TLCGen.Models
             return c.PrioData.PrioIngrepen.Any() ||
                    c.PrioData.HDIngrepen.Any();
         }
+
+        #endregion // Public Transport
     }
 }

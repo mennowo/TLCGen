@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:models="clr-namespace:TLCGen.Plugins.Timings.Models"
-             xmlns:local="clr-namespace:TLCGen.Plugins.Timings"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,9 +17,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <CheckBox 
-            IsEnabled="{Binding Path=TimingsToepassenAllowed,Mode=OneWay}"
-            IsChecked="{Binding Path=TimingsToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Timings toepassen" Margin="5" />
+        <StackPanel Orientation="Vertical">
+            <CheckBox 
+                IsEnabled="{Binding Path=TimingsToepassenAllowed,Mode=OneWay}"
+                IsChecked="{Binding Path=TimingsToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Timings toepassen" Margin="5" />
+            <CheckBox 
+                IsEnabled="{Binding Path=TimingsToepassen,Mode=OneWay}"
+                IsChecked="{Binding Path=TimingsUsePredictions,UpdateSourceTrigger=PropertyChanged}" Content="Timings met voorspellingen" Margin="5" />
+        </StackPanel>
         <Label Content="Instellingen timings per fase" Grid.Row="1" />
         <ct:SpecialDataGrid
             CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"

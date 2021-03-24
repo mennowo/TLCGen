@@ -57,6 +57,16 @@ namespace TLCGen.Plugins.Timings
                 RaisePropertyChanged("TimingsToepassenOK");
             }
         }
+        
+        public bool TimingsUsePredictions
+        {
+            get => _TimingsModel.TimingsUsePredictions;
+            set
+            {
+                _TimingsModel.TimingsUsePredictions = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         public bool TimingsToepassenAllowed => _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL9;
 
