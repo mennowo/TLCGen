@@ -64,9 +64,19 @@ namespace TLCGen.Models
             return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == fcFrom);
         }
         
+        public static IEnumerable<VoorstartModel> GetVoorstartenNaar(this ControllerModel c, string fcTo)
+        {
+            return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseNaar == fcTo);
+        }
+        
         public static IEnumerable<LateReleaseModel> GetLateReleases(this ControllerModel c, string fcFrom)
         {
             return c.InterSignaalGroep.LateReleases.Where(x => x.FaseVan == fcFrom);
+        }
+        
+        public static IEnumerable<LateReleaseModel> GetLateReleasesNaar(this ControllerModel c, string fcTo)
+        {
+            return c.InterSignaalGroep.LateReleases.Where(x => x.FaseNaar == fcTo);
         }
 
         #endregion // Synchronisations

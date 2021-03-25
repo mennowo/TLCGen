@@ -1,3 +1,5 @@
+/* timings_uc4.c - gegenereerd met TLCGen 0.9.4.0 */
+
 /* signaalgroep stadium : */
 /* 'Confidence' = Signaalgroep Stadium */
 #define TIMING_CONFIDENCE_ONBEKEND              0     /* Geen informatie */
@@ -201,14 +203,11 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       break;
    }
 
-   /* stadia 15 --> 0 */
-   if (SG[i])
+   /* stadia 15 --> 1 */
+   if (!R[i])
    {
       P[i] &= ~BIT11;
       CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 1;
-      CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
-      CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
-      CCOL_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME] = NG;
    }
 
 /* CHECKS */

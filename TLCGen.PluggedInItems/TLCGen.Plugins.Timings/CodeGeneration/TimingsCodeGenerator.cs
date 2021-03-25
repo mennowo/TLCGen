@@ -41,6 +41,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         public string _mrealtijdmin;
         public string _mrealtijdmax;
         public string _cvc;
+        public string _schgs;
 
         public List<CCOLElement> GetCCOLElements(ControllerModel c)
         {
@@ -147,16 +148,21 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}if (P[{_fcpf}{gs:van}]) {{ PAR[{_fcpf}{gs:naar}] |= BIT11; P[{_fcpf}{gs:naar}] |= BIT11; }}");
-                        sb.AppendLine($"{ts}if (P[{_fcpf}{gs:naar}]) {{ PAR[{_fcpf}{gs:van}] |= BIT11; P[{_fcpf}{gs:van}] |= BIT11; }}");
+                        var sch = "";
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                        {
+                            sch = $"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ";
+                        }
+                        sb.AppendLine($"{ts}if ({sch}(P[{_fcpf}{gs:van}] & BIT11) && R[{_fcpf}{gs:naar}] && !kp({_fcpf}{gs:naar})) {{ PAR[{_fcpf}{gs:naar}] |= BIT11; P[{_fcpf}{gs:naar}] |= BIT11; }}");
+                        sb.AppendLine($"{ts}if ({sch}(P[{_fcpf}{gs:naar}] & BIT11) && R[{_fcpf}{gs:van}] && !kp({_fcpf}{gs:van})) {{ PAR[{_fcpf}{gs:van}] |= BIT11; P[{_fcpf}{gs:van}] |= BIT11; }}");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}if (P[{_fcpf}{vs:naar}]) {{ PAR[{_fcpf}{vs:van}] |= BIT11; P[{_fcpf}{vs:van}] |= BIT11; }}");
+                        sb.AppendLine($"{ts}if ((P[{_fcpf}{vs:naar}] & BIT11) && R[{_fcpf}{vs:van}] && !kp({_fcpf}{vs:van})) {{ PAR[{_fcpf}{vs:van}] |= BIT11; P[{_fcpf}{vs:van}] |= BIT11; }}");
                     }
                     foreach (var lr in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}if (P[{_fcpf}{lr:naar}]) {{ PAR[{_fcpf}{lr:van}] |= BIT11; P[{_fcpf}{lr:van}] |= BIT11; }}");
+                        sb.AppendLine($"{ts}if ((P[{_fcpf}{lr:naar}] & BIT11) && R[{_fcpf}{lr:van}] && !kp({_fcpf}{lr:van})) {{ PAR[{_fcpf}{lr:van}] |= BIT11; P[{_fcpf}{lr:van}] |= BIT11; }}");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -179,18 +185,23 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}])");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}reset_rr_fc(BIT11);");
-                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && (P[<FC>] & BIT14)) set_rr_gk(<FC>, BIT11);");
-                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && (P[<FC>] & BIT14)) A[<FC>] |= BIT11;");
-                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && P[<FC>] && !RA[<FC>]) AA[<FC>] |= BIT11;");
+                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && (P[<FC>] & BIT11)) set_rr_gk(<FC>, BIT11);");
+                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && (P[<FC>] & BIT11)) A[<FC>] |= BIT11;");
+                    sb.AppendPerFase(c, _fcpf, $"{ts}{ts}if (R[<FC>] && (P[<FC>] & BIT11) && !RA[<FC>] && !kaa(<FC>)) AA[<FC>] |= BIT11;");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11)) A[{_fcpf}{gs:naar}] |= BIT11;");
-                        sb.AppendLine($"{ts}{ts}if (RA[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11)) AA[{_fcpf}{gs:naar}] |= BIT11;");
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{gs:van}] && PG[{_fcpf}{gs:van}] &&"); 
+                        var sch = "";
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                        {
+                            sch = $"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ";
+                        }
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11)) A[{_fcpf}{gs:naar}] |= BIT11;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}RA[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11) && !kaa({_fcpf}{gs:naar})) AA[{_fcpf}{gs:naar}] |= BIT11;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:van}] && PG[{_fcpf}{gs:van}] &&"); 
                         sb.AppendLine($"{ts}{ts}    R[{_fcpf}{gs:naar}] && !PG[{_fcpf}{gs:naar}]) PG[{_fcpf}{gs:van}] = 0;");
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) A[{_fcpf}{gs:van}] |= BIT11;");
-                        sb.AppendLine($"{ts}{ts}if (RA[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) AA[{_fcpf}{gs:van}] |= BIT11;");
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{gs:naar}] && PG[{_fcpf}{gs:naar}] &&"); 
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) A[{_fcpf}{gs:van}] |= BIT11;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}RA[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11) && !kaa({_fcpf}{gs:van})) AA[{_fcpf}{gs:van}] |= BIT11;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && PG[{_fcpf}{gs:naar}] &&"); 
                         sb.AppendLine($"{ts}{ts}    R[{_fcpf}{gs:van}] && !PG[{_fcpf}{gs:van}]) PG[{_fcpf}{gs:naar}] = 0;");
                     }
 
@@ -232,23 +243,30 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     sb.AppendLine("#ifndef NO_TIMETOX");
+                    var done = new List<string>();
                     foreach (var ing in c.PrioData.PrioIngrepen)
                     {
+                        if (done.Contains(ing.FaseCyclus)) continue;
+                        done.Add(ing.FaseCyclus);
                         sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{ing.FaseCyclus}] & BIT11)) {{");
                         sb.AppendLine($"{ts}{ts}RR[{_fcpf}{ing.FaseCyclus}] &= ~PRIO_RR_BIT;");
                         foreach (var gs in c.GetGelijkstarten(ing.FaseCyclus))
                         {
                             var otherFc = gs.FaseVan == ing.FaseCyclus ? gs.FaseNaar : gs.FaseVan;
+                            if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
+                            }
                             sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
                         }
-                        foreach (var gs in c.GetVoorstarten(ing.FaseCyclus))
+                        foreach (var vs in c.GetVoorstartenNaar(ing.FaseCyclus))
                         {
-                            var otherFc = gs.FaseVan == ing.FaseCyclus ? gs.FaseNaar : gs.FaseVan;
+                            var otherFc = vs.FaseVan == ing.FaseCyclus ? vs.FaseNaar : vs.FaseVan;
                             sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
                         }
-                        foreach (var gs in c.GetLateReleases(ing.FaseCyclus))
+                        foreach (var lr in c.GetLateReleasesNaar(ing.FaseCyclus))
                         {
-                            var otherFc = gs.FaseVan == ing.FaseCyclus ? gs.FaseNaar : gs.FaseVan;
+                            var otherFc = lr.FaseVan == ing.FaseCyclus ? lr.FaseNaar : lr.FaseVan;
                             sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
                         }
                         sb.AppendLine($"{ts}}}");
