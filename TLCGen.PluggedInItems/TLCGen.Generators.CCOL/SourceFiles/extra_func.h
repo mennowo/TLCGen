@@ -75,6 +75,9 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
 	count exgperc, count verlengen, count meergroen, ...);
 void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, count mlcyclus);
 void maximumgroentijden_va_arg(count fc, ...);
+#if CCOL_V >= 110
+boolv kp(count i);
+#endif
 
 extern mulv FC_type[];
 extern mulv DVG[];

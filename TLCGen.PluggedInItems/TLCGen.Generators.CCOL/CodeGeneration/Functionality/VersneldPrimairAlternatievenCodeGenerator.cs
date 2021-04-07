@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _hnla;
 	    private string _schgs;
 	    private string _hlos;
+	    private string _mar;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -496,7 +497,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         throw new ArgumentOutOfRangeException();
                                 }
 
-                                pars[0].Add($"{ts}IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] = Naloop_OK({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar});");
+                                pars[0].Add($"{ts}IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] = Naloop_OK({_fcpf}{nl.FaseVan}, {_mpf}{_mar}{nl.FaseNaar}, {_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar});");
                                 if (sync.gelijkstart)
                                 {
                                     pars[1].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}];");
@@ -784,6 +785,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
+            _mar = CCOLGeneratorSettingsProvider.Default.GetElementName("mar");
 
             return base.SetSettings(settings);
         }

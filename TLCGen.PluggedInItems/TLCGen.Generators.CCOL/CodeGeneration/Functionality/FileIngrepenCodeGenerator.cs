@@ -653,7 +653,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var irest = 1;
                                 if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
                                 {
-                                    rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
+                                    rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}";
                                 }
                                 else
                                 {
@@ -662,22 +662,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                                 foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                                 {
-                                    foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
+                                    var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == per.GroentijdenSet);
+
+                                    if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
                                     {
-                                        if (c.Data.TVGAMaxAlsDefaultGroentijdSet && mgsm.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet)
-                                        {
-                                            sb.Append(", ");
-                                            sb.Append($"TVGA_max[{_fcpf}{ff.FaseCyclus}]");
-                                            continue;
-                                        }
-                                        foreach (var mgm in mgsm.Groentijden.Where(
-                                            x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
-                                        {
-                                            ++irest;
-                                            rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
-                                        }
+                                        ++irest;
+                                        rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
                                     }
                                 }
+
                                 sb.AppendLine($"{irest}{rest});");
                             }
                             sb.AppendLine($"{tts}}}");

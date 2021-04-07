@@ -418,6 +418,17 @@ namespace TLCGen.ViewModels
         }
 
         [Category("CCOL specifieke opties")]
+        [Description("CCOL parser password ")]
+        public string CCOLParserPassword
+        {
+            get => _Controller?.Data?.CCOLParserPassword;
+            set
+            {
+                _Controller.Data.CCOLParserPassword = value;
+                RaisePropertyChanged<object>(nameof(CCOLParserPassword), broadcast: true);
+            }
+        }
+        
         [Description("Gekoppelde regeling (CCOLMS)")]
         public bool CCOLMulti
         {

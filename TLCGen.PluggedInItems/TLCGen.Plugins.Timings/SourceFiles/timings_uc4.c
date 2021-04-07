@@ -1,5 +1,3 @@
-/* timings_uc4.c - gegenereerd met TLCGen 0.9.4.0 */
-
 /* signaalgroep stadium : */
 /* 'Confidence' = Signaalgroep Stadium */
 #define TIMING_CONFIDENCE_ONBEKEND              0     /* Geen informatie */
@@ -43,11 +41,11 @@ boolv NaarConfidence9_15prio(count i)
    register count n, j;
 
 #ifndef NO_GGCONFLICT
-   for (n=0; n<GKFC_MAX[i]; n++) {
+   for (n = 0; n < GKFC_MAX[i]; ++n) {
 #else
-   for (n=0; n<KFC_MAX[i]; n++) {
+   for (n = 0; n < KFC_MAX[i]; ++n) {
 #endif
-      j=KF_pointer[i][n];
+      j = KF_pointer[i][n];
       /* eigen richting (i) heeft prioriteitsingreep */
       if (!((YV[i]&BIT6) || (YM[i]&BIT6)))  return (FALSE);
       /* conflictrichting (j) heeft geen P */
@@ -56,26 +54,7 @@ boolv NaarConfidence9_15prio(count i)
       if (!((R[j]||GL[j]) && RR[j]&BIT6))   return (FALSE);
    }
    return (TRUE);
-   }   
-
-boolv kp(count i)
-{
-   register count n, j;
-
-#ifndef NO_GGCONFLICT
-   for (n = 0; n < GKFC_MAX[i]; ++n) {
-#else
-   for (n = 0; n < KFC_MAX[i]; ++n) {
-#endif
-#if (CCOL_V >= 95)
-      j = KF_pointer[i][n];
-#else
-      j = TO_pointer[i][n];
-#endif
-      if (P[j] & BIT11) return TRUE;
-   }
-   return FALSE;
-   }
+}
 
 
 static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count prm_ttxconfidence15, count s_conf15ar)
@@ -106,7 +85,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          /* voorwaarde 1 --> 3 */
          ((A[i] || (YV[i] & BIT6) || (YM[i] & BIT6))))
       {
-         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 3;
+         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_AANVRAAG; /* 3 */
       }
       /* override */
       if (!SCH[schspatconfidence1])
@@ -117,13 +96,13 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       }
       break;
 
-   case 3:
+   case TIMING_CONFIDENCE_RD_AANVRAAG: /* 3 */
       if /* voorwaarde 3 --> 6 */
          ((kcv(i) || kg(i) || RA[i] || AAPR[i]) &&
-            /* voorwaarde 1 --> 3 */
+         /* voorwaarde 1 --> 3 */
          (A[i] || YV[i] & BIT6 || YM[i] & BIT6))
          {
-            CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 6;
+            CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_ANDEREN_EERST; /* 6 */
          }
          /* override */
          if (!SCH[schspatconfidence3])
@@ -134,14 +113,14 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          }
          break;
 
-   case 6:
+   case TIMING_CONFIDENCE_RD_ANDEREN_EERST: /* 6 */
       if ((((PR[i] || (SCH[s_conf15ar] && AR[i])) && (kg(i) || RA[i]) || NaarConfidence9(i)) &&
          /* voorwaarde 3 --> 6 */
          (kcv(i) || kg(i) || RA[i] || AAPR[i])) ||
          /* prio */
          NaarConfidence9_15prio(i))
       {
-         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 9;
+         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_VOLGENDE_BEURT; /* 9 */
       }
       /* override */
       if (!SCH[schspatconfidence6])
@@ -152,10 +131,10 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       }
       break;
 
-   case 9:
+   case TIMING_CONFIDENCE_RD_VOLGENDE_BEURT: /* 9 */
       if (((!kg(i) || RA[i])))
       {
-         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 12;
+         CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCERD_GROEN_KOMT; /* 12 */
       }
       /* override */
       if (!SCH[schspatconfidence9])
@@ -166,15 +145,15 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       }
       break;
 
-   case 12:
-      if (/* geen conflicterende richtingen met privilege (P) */
+   case TIMING_CONFIDENCERD_GROEN_KOMT: /* 12 */
+      if (/* geen conflicterende (of FK) richtingen met privilege (P) */
          !kp(i) && 
          /* geen conflicterende groenfase (G) */
          !kg(i) &&
          /* voorwaarde 12 --> 15 */
-         ((NaarConfidence9_15prio(i) || RA[i]) && ((MM[min] <= PRM[prmttxconfidence15]) || (MM[max] <= PRM[prmttxconfidence15]))))
+         (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[min] <= PRM[prmttxconfidence15]) && (MM[max] <= PRM[prmttxconfidence15])))) || P[i] & BIT11)
       {
-         if (P[i] & BIT11) CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 15; /* 1 machineslag vertragen ivm acties door P bij gelijk- en voorstart */
+         if (P[i] & BIT11) CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF; /* 15 */ /* 1 machineslag vertragen ivm acties door P bij gelijk- en voorstart */
          P[i] |= BIT11;
       }
       CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = MM[min];
@@ -189,7 +168,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       }
       break;
 
-   case 15:
+   case TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF: /* 15 */
       CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = MM[min];
       CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = MM[max];
       CCOL_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME] = (((CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]) + (CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]))) / 2;
@@ -215,13 +194,33 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
 #ifndef AUTOMAAT
    if (R[i] && (CIF_FC_RWT[i]==0) && (CCOL_FC_TIMING_old[i][0][CIF_TIMING_MAXENDTIME] != -1) && ((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]) > CCOL_FC_TIMING_old[i][0][CIF_TIMING_MAXENDTIME]))
    {
+      code helpstr[30];  /* help string */
       CIF_FC_RWT[i] |= CIF_FC_RWT_ONBEKEND;
-      stuffkey(F5KEY); 
-      //@@xyprintf(0, 0, "fc=%4d", i);
+      uber_puts(PROMPT_code);
+      uber_puts("maxend>max_endold:");
+      uber_puts(FC_code[i]);
+      uber_puts(" / ");
+      datetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts(" / ");
+      timetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts("\n");
    }
-   if (SG[i])
+   if (R[i] && (CIF_FC_RWT[i]==0)                                                            && ((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]) < CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]))
    {
-      CIF_FC_RWT[i] &=~ CIF_FC_RWT_ONBEKEND;
+      code helpstr[30];  /* help string */
+      CIF_FC_RWT[i] |= CIF_FC_RWT_ONBEKEND;
+      uber_puts(PROMPT_code);
+      uber_puts("maxend<minend:"); 
+      uber_puts(FC_code[i]);
+      uber_puts(" / ");
+      datetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts(" / ");
+      timetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts("\n");
    }
 #endif
 }

@@ -241,7 +241,7 @@ rif_int ris_srm_put_signalgroup(count fc, rif_int approach_id, rif_int role_bits
                     && ( (role_bits & (1 << (RIS_PRIOREQUEST_AP[r].role & 0xf)) ) || (role_bits <= 0) )               /* test op juiste role - bit */
                     && ( (subrole_bits & (1 << (RIS_PRIOREQUEST_AP[r].subrole & 0xf)) ) || (subrole_bits <= 0) ) ) {  /* test op juiste subrole - bit */   
 
-                  if ( (prm_line_first <= 0) || (prm_line_max <= 0) ) {  
+                  if ( (prm_line_first < 0) || (prm_line_max <= 0) ) {  
                   
                      /* geen lijn-parameters opgegeven - don't care */
                      /* ------------------------------------------- */
@@ -333,7 +333,7 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
  * of MaxPresence). de statuswijzigingen zijn gebaseerd op de UC3-Prioriteren specificatie. ris_verstuur_ssm() gebruikt de functie
  * ris_put_activeprio() voor het verzenden van SSM-berichten.
  * ris_verstuur_ssm() verzorgt/corrigeert ook de instelling van de prioriteitsoptie(s) voor de Prioriteitsmodule op basis van de ontvangen
- * ‘importance’ (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
+ * ï¿½importanceï¿½ (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
  * bij de aanroep van de functie dient de identificatie van het prioriteitstype van de fasecyclus (priotypefc_id ), die wordt gedefinieerd
  * bij de PrioriteitsModule-applicatie, als argument te worden opgegeven.
  * ris_verstuur_srm() geeft als return-waarde het aantal verzonden SSM-berichten (number).

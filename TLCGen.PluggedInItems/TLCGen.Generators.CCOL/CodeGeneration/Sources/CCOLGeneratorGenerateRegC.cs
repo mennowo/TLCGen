@@ -363,12 +363,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
 
-                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true);
-
+                    var vars = new List<CCOLLocalVariable>();
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true, vars);
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, false, false, true, vars);
+                    
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
 
-                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, true, false, false);
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, false, true, false, false);
 
                     sb.AppendLine("}");
 
@@ -464,10 +466,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void RealisatieAfhandeling(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, true, false, false, true);
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
+            var vars = new List<CCOLLocalVariable>();
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true, vars);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, true, false, false, true, vars);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true, vars);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true, vars);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
@@ -890,36 +893,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("void dump_application(void)");
             sb.AppendLine("{");
-            //sb.AppendLine("    if (!EXTRADUMP)");
-            //sb.AppendLine("      EXTRADUMP = 1;");
-            //sb.AppendLine("");
-            //sb.AppendLine($"{tabspace}switch (EXTRADUMP)");
-            //sb.AppendLine($"{tabspace}" + "{");
-            //sb.AppendLine($"{tabspace}case 1: /* dump_realisation timers */");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!SYNCDUMP)");
-            //sb.AppendLine($"{tabspace}{tabspace}" + "{");
-            //sb.AppendLine($"{tabspace}{tabspace}{tabspace}DUMP = ENDDUMP;");
-            //sb.AppendLine($"{tabspace}{tabspace}{tabspace}SYNCDUMP = 1;");
-            //sb.AppendLine($"{tabspace}{tabspace}" + "}");
-            //sb.AppendLine($"{tabspace}dump_realisation_timers();");
-            //sb.AppendLine($"{tabspace}if (!SYNCDUMP)");
-            //sb.AppendLine($"{tabspace}{tabspace}EXTRADUMP++;");
-            //sb.AppendLine($"{tabspace}else");
-            //sb.AppendLine($"{tabspace}" + "{");
-            //sb.AppendLine($"{tabspace}{tabspace}DUMP = ENDDUMP;");
-            //sb.AppendLine($"{tabspace}{tabspace}break;");
-            //sb.AppendLine($"{tabspace}" + "}");
-            //sb.AppendLine($"{tabspace}case 2: /* dump applicatiegegevens */");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"\nPlaats: {controller.Data.Stad}\n\");");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 25)) uber_puts(\"Kruispunt: {controller.Data.Naam}\n\");");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"         : {controller.Data.Straat1}\n\");");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"         : {controller.Data.Straat2}\n\");");
-            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 25)) uber_puts(\"Werkadres: {controller.Data.Naam}\n\n\");");
-            //sb.AppendLine($"{tabspace}{tabspace}EXTRADUMP = 0;");
-            //sb.AppendLine($"{tabspace}{tabspace}break;");
-            //sb.AppendLine($"{tabspace}default:");
-            //sb.AppendLine($"{tabspace}{tabspace}break;");
-            //sb.AppendLine($"{tabspace}" + "}");
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_dump_application();");
 	        if (controller.HalfstarData.IsHalfstar)

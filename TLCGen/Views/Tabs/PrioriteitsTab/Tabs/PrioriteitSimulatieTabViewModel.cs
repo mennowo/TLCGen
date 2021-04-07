@@ -106,7 +106,7 @@ namespace TLCGen.ViewModels
                         m.DummyKARMelding.Simulatie.Q3 = 10;
                         m.DummyKARMelding.Simulatie.Q4 = 15;
                         m.DummyKARMelding.Simulatie.Stopline = 1800;
-                        if (m.DummyKARMelding.Simulatie.FCNr.ToUpper() != "NG")
+                        if (m.DummyKARMelding.Simulatie.FCNr?.ToUpper() != "NG")
                             m.DummyKARMelding.Simulatie.FCNr = prio.FaseCyclus;
                     }
                     foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
                         m.DummyKARMelding.Simulatie.Q3 = 200;
                         m.DummyKARMelding.Simulatie.Q4 = 200;
                         m.DummyKARMelding.Simulatie.Stopline = 1800;
-                        if (m.DummyKARMelding.Simulatie.FCNr.ToUpper() != "NG")
+                        if (m.DummyKARMelding.Simulatie.FCNr?.ToUpper() != "NG")
                             m.DummyKARMelding.Simulatie.FCNr = prio.FaseCyclus;
                     }
                 }
@@ -131,14 +131,14 @@ namespace TLCGen.ViewModels
                     hd.DummyKARInmelding.Simulatie.Q3 = 10;
                     hd.DummyKARInmelding.Simulatie.Q4 = 15;
                     hd.DummyKARInmelding.Simulatie.Stopline = 1800;
-                    if (hd.DummyKARInmelding.Simulatie.FCNr.ToUpper() != "NG")
+                    if (hd.DummyKARInmelding.Simulatie.FCNr?.ToUpper() != "NG")
                         hd.DummyKARInmelding.Simulatie.FCNr = hd.FaseCyclus;
                     hd.DummyKARUitmelding.Simulatie.Q1 = 200;
                     hd.DummyKARUitmelding.Simulatie.Q2 = 200;
                     hd.DummyKARUitmelding.Simulatie.Q3 = 200;
                     hd.DummyKARUitmelding.Simulatie.Q4 = 200;
                     hd.DummyKARUitmelding.Simulatie.Stopline = 1800;
-                    if (hd.DummyKARUitmelding.Simulatie.FCNr.ToUpper() != "NG")
+                    if (hd.DummyKARUitmelding.Simulatie.FCNr?.ToUpper() != "NG")
                         hd.DummyKARUitmelding.Simulatie.FCNr = hd.FaseCyclus;
                 }
             }

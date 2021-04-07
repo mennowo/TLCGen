@@ -1,7 +1,3 @@
-/* HANDMATIG AANGEPAST */
-
-/* realfunc.c - gegenereerd met TLCGen 0.9.4.0 */
-
 /*
 BESTAND:   realfunc.c
 */
@@ -21,6 +17,7 @@ BESTAND:   realfunc.c
 ************************************************************************************/
 
 mulv REALTIJD[FCMAX];
+mulv REALTIJD_uncorrected[FCMAX];
 mulv REALTIJD_max[FCMAX];
 mulv REALTIJD_min[FCMAX];
 boolv REAL_SYN[FCMAX][FCMAX];  /* Vlag tbv synchronisatie      obv REALTIJD */
@@ -40,8 +37,10 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
 
   mulv conflicttijd;
   mulv eigentijd;
+  mulv eigentijd_uncorrected;
 
   REALTIJD[fc] = 0;  /* realisatietijd resetten */
+  REALTIJD_uncorrected[fc] = 0;  /* niet-gecorrigeerde realisatietijd resetten */
 
   /* hoogste realisatietijd berekenen */
   for (n=0; n<FKFC_MAX[fc]; n++)
@@ -63,7 +62,7 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
      if(/*RA[k] ||*/                /* (fictief) conflict in RA of   */
         VS[k] && (RS[k] || YS[k]))  /* VS, dan hoge conflicttijd     */
      {
-         conflicttijd =  3000;
+         conflicttijd =  9999;
      }
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
      else if(TIG[k][fc])
@@ -141,12 +140,13 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
      /* REALISATIETIJD BEPALEN ALS CONFLICTTIJD MAATGEVEND BLIJKT */
      /* --------------------------------------------------------- */
      REALTIJD[fc] = !G[fc] && conflicttijd > REALTIJD[fc] ? conflicttijd : REALTIJD[fc];
+     REALTIJD_uncorrected[fc] = !G[fc] && conflicttijd > REALTIJD_uncorrected[fc] ? conflicttijd : REALTIJD_uncorrected[fc];
   }
 
   /* -------------------------------------------------------------------------- */
   /* BEPAAL EIGEN TIJD:                                                         */
   /*                                                                            */
-  /* 3000 (realisatijd heel hoog zetten) als:                                   */
+  /* 9999 (realisatijd heel hoog zetten) als:                                   */
   /* - BL                                                                       */
   /* - RR vanaf BIT2 en BIT0, BIT1/BIT2 worden gebruikt door Synchroniseer():   */
   /*   - BIT1 tegenhouden startgroen obv realisatietijd                         */
@@ -154,12 +154,17 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
   /*                                                                            */
   /* - anders resterend geeltijd + garantie roodtijd berekenen (+ 1 rondje RA)  */
   /* -------------------------------------------------------------------------- */
-  eigentijd =     BL[fc]                                               ? 3000  :
+  eigentijd =     BL[fc]                                               ? 9999  :
 #if CCOL_V >= 110
                   !(P[fc] & BIT11) &&
 #endif 
-                  (RR[fc] >= BIT2 || (RR[fc] & BIT0))        ? 3000  : 
+                  (RR[fc] >= BIT2 || (RR[fc] & BIT0))        ? 9999  : 
 
+                  GL[fc]                                   ? TGL_max[fc] - TGL_timer[fc] + TRG_max[fc]                 + 1 :
+                 TRG[fc]                                   ?                               TRG_max[fc] - TRG_timer[fc] + 1 :
+                  RV[fc]                                   ?                                                             1 : 0;
+                  
+eigentijd_uncorrected =     
                   GL[fc]                                   ? TGL_max[fc] - TGL_timer[fc] + TRG_max[fc]                 + 1 :
                  TRG[fc]                                   ?                               TRG_max[fc] - TRG_timer[fc] + 1 :
                   RV[fc]                                   ?                                                             1 : 0;
@@ -167,7 +172,8 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
   /* --------------------------------------------------------- */
   /* REALISATIETIJD BEPALEN ALS EIGENTIJD MAATGEVEND BLIJKT    */
   /* --------------------------------------------------------- */
-  REALTIJD[fc] = !G[fc] && eigentijd    > REALTIJD[fc] ? eigentijd    : REALTIJD[fc];
+  REALTIJD[fc] = !G[fc] && eigentijd > REALTIJD[fc] ? eigentijd : REALTIJD[fc];
+  REALTIJD_uncorrected[fc] = !G[fc] && eigentijd_uncorrected > REALTIJD_uncorrected[fc] ? eigentijd_uncorrected : REALTIJD_uncorrected[fc];
 }
 
 
@@ -203,7 +209,7 @@ void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
       if(/*RA[k] ||*/                /* (fictief) conflict in RA of   */
          VS[k] && (RS[k] || YS[k]))  /* VS, dan hoge conflicttijd     */
       {
-         conflicttijd =  3000;
+         conflicttijd =  9999;
       }
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
       else if(TIG[k][fc])
@@ -246,7 +252,7 @@ void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
             conflicttijd = ( G[k] && !MG[k]) ? TFG_max[k]     - TFG_timer[k] + 
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
                TIG_max[k][fc]                  :
-            (GL[k] ||  MG[k]) ?  TIG_max[k][fc]                  :    /* conflict GL of MG             */
+            (MG[k]) ?  TIG_max[k][fc]                  :    /* conflict GL of MG             */
                TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]   : 0; /* ontruimen   of MG             */
 #else
                TGL_max[k] +
@@ -284,7 +290,7 @@ void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
    /* -------------------------------------------------------------------------- */
    /* BEPAAL EIGEN TIJD:                                                         */
    /*                                                                            */
-   /* 3000 (realisatijd heel hoog zetten) als:                                   */
+   /* 9999 (realisatijd heel hoog zetten) als:                                   */
    /* - BL                                                                       */
    /* - RR vanaf BIT2 en BIT0, BIT1/BIT2 worden gebruikt door Synchroniseer():   */
    /*   - BIT1 tegenhouden startgroen obv realisatietijd                         */
@@ -292,11 +298,11 @@ void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
    /*                                                                            */
    /* - anders resterend geeltijd + garantie roodtijd berekenen (+ 1 rondje RA)  */
    /* -------------------------------------------------------------------------- */
-   eigentijd =     BL[fc]                                            ? 3000                                    :
+   eigentijd =     BL[fc]                                            ? 9999                                    :
 #if CCOL_V >= 110
       !(P[fc] & BIT11) &&
 #else
-                          (RR[fc] >= BIT2 || (RR[fc] & BIT0))        ? 3000                                    :
+                          (RR[fc] >= BIT2 || (RR[fc] & BIT0))        ? 9999                                    :
 #endif
 
       GL[fc]                                   ? TGL_max[fc] - TGL_timer[fc] + TRG_max[fc]                 + 1 :
@@ -373,7 +379,7 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
   /* - realtijd fc2 kleiner dan die van fc1 + correctie                                            */
   if (REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD[fc2] < (REALTIJD[fc1] + t1_t2)))
   {
-     REALTIJD_temp =   !G[fc1] && REALTIJD[fc1] == 3000 ? 3000 :
+     REALTIJD_temp =   !G[fc1] && REALTIJD[fc1] == 9999 ? 9999 :
                        !G[fc1] ? REALTIJD[fc1] + t1_t2 :
                        TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];               /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
@@ -384,7 +390,7 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
   /* CCA/PSN: toevoeging ophoging minend tijd */
   if (REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD_min[fc2] < (REALTIJD_min[fc1] + t1_t2)))
   {
-     REALTIJD_min_temp =  !G[fc1] && REALTIJD_min[fc1] == 3000 ? 3000 :
+     REALTIJD_min_temp =  !G[fc1] && REALTIJD_min[fc1] == 9999 ? 9999 :
                           !G[fc1] ? REALTIJD_min[fc1] + t1_t2 :
                           TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_min[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
@@ -392,10 +398,12 @@ boolv Corr_Real(count fc1,        /* fasecyclus 1                               
      result = TRUE;                                                                                           
   }
 
-  /* CCA/PSN: toevoeging ophoging maxend tijd */
-  if (REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || !PG[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD_max[fc2] < (REALTIJD_max[fc1] + t1_t2)))
-  {  
-     REALTIJD_max_temp =  !G[fc1] && REALTIJD_max[fc1] == 3000 ? 3000 :
+    /* CCA/PSN: toevoeging ophoging maxend tijd */
+    /* CCA: aanvraag etc. niet van belang voor de max. end tijd */
+    /* CCA: alleen gelijkstartende richting RR krijgt dan geen 9999 overnemen */
+    if (REAL_SYN[fc1][fc2] && !G[fc2] && /* (A[fc1] || !PG[fc1] || GL[fc1] || TRG[fc1]) &&*/ (REALTIJD_max[fc2] < (REALTIJD_max[fc1] + t1_t2)) && (REALTIJD_max[fc1]!=9999))
+    {  
+     REALTIJD_max_temp =  !G[fc1] && REALTIJD_max[fc1] == 9999 ? 9999 :  
                           !G[fc1] ? REALTIJD_max[fc1] + t1_t2 :
                           TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_max[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
@@ -628,7 +636,7 @@ void Synchroniseer_SG(void)
       if(REAL_SYN[fc1][fc2] && R[fc2])
       {
          X[fc2] |= (REALTIJD[fc2] > 0)                                                                      ? BIT1 : 0;
-        RR[fc2] |= (REALTIJD[fc2] > 1) && ((GL[fc1] || RV[fc1]) && kcv_primair(fc1) || REALTIJD[fc1]==3000) ? BIT1 : 0;
+        RR[fc2] |= (REALTIJD[fc2] > 1) && ((GL[fc1] || RV[fc1]) && kcv_primair(fc1) || REALTIJD[fc1]==9999) ? BIT1 : 0;
       }
     }
   }
@@ -639,7 +647,7 @@ void Synchroniseer_SG1_2(count fc1, count fc2)  /* Gelijk aan bovenstaande allee
       if(REAL_SYN[fc1][fc2] && R[fc2])
       {
          X[fc2] |= (REALTIJD[fc2] > 0)                                                                      ? BIT1 : 0;
-        RR[fc2] |= (REALTIJD[fc2] > 1) && ((GL[fc1] || RV[fc1]) && kcv_primair(fc1) || REALTIJD[fc1]==3000) ? BIT1 : 0;
+        RR[fc2] |= (REALTIJD[fc2] > 1) && ((GL[fc1] || RV[fc1]) && kcv_primair(fc1) || REALTIJD[fc1]==9999) ? BIT1 : 0;
       }
 }
 

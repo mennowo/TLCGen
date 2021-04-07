@@ -220,7 +220,7 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            // check PostAfhandelingPrio_Add in ov.add
+            // check PostAfhandelingPrio_Add in prio.add
             if (filename != null)
             {
                 var ovAddFile = Path.Combine(Path.GetDirectoryName(filename) ?? throw new InvalidOperationException(), controller.Data.Naam + "prio.add");

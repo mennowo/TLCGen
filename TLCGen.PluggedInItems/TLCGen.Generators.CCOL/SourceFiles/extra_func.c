@@ -440,7 +440,7 @@ bool Rateltikkers(   count fc,        /* fase                                   
     return (IH[has]); /* positieve uitsturing bij niet-bewaakte tikkers */
   }
   else {
-    return (!IH[has]); /* geïnverteerde uitsturing bij bewaakte tikkers */
+    return (!IH[has]); /* geï¿½nverteerde uitsturing bij bewaakte tikkers */
   }
 }
 
@@ -1355,3 +1355,24 @@ void maximumgroentijden_va_arg(count fc, ...)
 
    TVG_max[fc] = (prmmg - TFG_max[fc] < 0) ? 0 : prmmg - TFG_max[fc];
 }
+
+#if CCOL_V >= 110
+boolv kp(count i)
+{
+   register count n, j;
+
+#ifndef NO_GGCONFLICT
+   for (n = 0; n < FKFC_MAX[i]; ++n) {
+#else
+   for (n = 0; n < KFC_MAX[i]; ++n) {
+#endif
+#if (CCOL_V >= 95)
+      j = KF_pointer[i][n];
+#else
+      j = TO_pointer[i][n];
+#endif
+      if (P[j] & BIT11) return TRUE;
+   }
+   return FALSE;
+}
+#endif

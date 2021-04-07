@@ -25,7 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.Append(GenerateOvAddHeader(c));
+            sb.Append(GeneratePrioAddHeader(c));
             sb.AppendLine();
             sb.AppendLine("void RijTijdScenario_Add(void) {");
             sb.AppendLine("  /* -----------------------------------------------");

@@ -367,37 +367,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else
                     {
-                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, ");
                         sb.Append("".PadLeft($"{ts1}{ts}{grfunc}(".Length));
 
-                        var defmg = c.GroentijdenSets.FirstOrDefault(
-                            x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
-                        var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
-                        if (defmgfc?.Waarde != null)
+                        var rest = "";
+                        var irest = 1;
+                        if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
                         {
-                            sb.Append(!c.Data.TVGAMaxAlsDefaultGroentijdSet ? $"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}" : $"TVGA_max[{_fcpf}{fc.Naam}]");
+                            rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{fc.Naam}";
                         }
-
-                        foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                        else
                         {
-                            foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
-                            {
-                                if (c.Data.TVGAMaxAlsDefaultGroentijdSet && mgsm.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet)
-                                {
-                                    sb.Append(", ");
-                                    sb.Append($"TVGA_max[{_fcpf}{fc.Naam}]");
-                                    continue;
-                                }
+                            rest += $", TVGA_max[{_fcpf}{fc.Naam}]";
+                        }
+                        
+                        foreach (var period in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                        {
+                            var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == period.GroentijdenSet);
+                            if (greentimeSet == null) continue;
 
-                                foreach (var unused in mgsm.Groentijden.Where(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
-                                {
-                                    sb.Append(", ");
-                                    sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}_{fc.Naam}");
-                                }
+                            if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
+                            {
+                                ++irest;
+                                rest += $", {_prmpf}{greentimeSet.Naam.ToLower()}_{fc.Naam}";
                             }
                         }
 
-                        sb.AppendLine(");");
+                        sb.AppendLine($"{irest}{rest});");
                     }
                     sb.AppendLine($"{ts1}}}");
                 }

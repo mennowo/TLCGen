@@ -665,7 +665,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var vars = new List<CCOLLocalVariable>();
                     var added = false;
-                    if (varsBefore != null) vars = varsBefore;
                     foreach (var gen in OrderedPieceGenerators[type])
                     {
                         var lv = gen.Value.GetFunctionLocalVariables(c, type).ToArray();
@@ -674,7 +673,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             foreach (var i in lv)
                             {
                                 // check if variable already exists
-                                var existing = vars.FirstOrDefault(x => x.Name == i.Name);
+                                var existing = varsBefore?.FirstOrDefault(x => x.Name == i.Name) ?? vars.FirstOrDefault(x => x.Name == i.Name);
                                 if (existing != null)
                                 {
                                     // set initial value if needed
@@ -711,6 +710,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                                 else
                                 {
+                                    varsBefore?.Add(i);
                                     vars.Add(i);
                                     added = true;
                                 }

@@ -233,20 +233,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateTabCControlParametersIOTypes(ControllerModel c)
         {
-            string GetIOTypeCode(DetectorTypeEnum detectorTypeEnum, DetectorModel dm, List<string> list)
+            string GetIOTypeCode(DetectorTypeEnum prevDetectorType, DetectorModel dm, List<string> list, bool last = false)
             {
                 var stringBuilder = new StringBuilder();
                 if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
                 {
-                    if (detectorTypeEnum != DetectorTypeEnum.VecomDetector &&
+                    // Check: is this vecom or opticom and previous was not? add #if
+                    if (prevDetectorType != DetectorTypeEnum.VecomDetector && prevDetectorType != DetectorTypeEnum.OpticomIngang &&
                         (dm.Type == DetectorTypeEnum.VecomDetector || dm.Type == DetectorTypeEnum.OpticomIngang))
                     {
                         stringBuilder.AppendLine("#ifndef NO_CVN_50");
                     }
 
-                    if ((detectorTypeEnum == DetectorTypeEnum.VecomDetector ||
-                         detectorTypeEnum == DetectorTypeEnum.OpticomIngang) &&
-                        dm.Type != DetectorTypeEnum.VecomDetector)
+                    if ((prevDetectorType == DetectorTypeEnum.VecomDetector ||
+                         prevDetectorType == DetectorTypeEnum.OpticomIngang) &&
+                        (dm.Type != DetectorTypeEnum.VecomDetector && dm.Type != DetectorTypeEnum.OpticomIngang || last))
                     {
                         stringBuilder.AppendLine("#else");
                         foreach (var d in list)
@@ -317,21 +318,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var ds = new List<string>();
             var prev = DetectorTypeEnum.Kop;
-            foreach (var dm in c.GetAllDetectors(x => !x.Dummy))
+            var nonDummies = c.GetAllDetectors(x => !x.Dummy).ToList();
+            for (var d = 0; d < nonDummies.Count; d++)
             {
-                sb.Append(GetIOTypeCode(prev, dm, ds));
-                prev = dm.Type;
+                sb.Append(GetIOTypeCode(prev, nonDummies[d], ds, d == nonDummies.Count - 1));
+                prev = nonDummies[d].Type;
             }
 
             var dummies = c.GetAllDetectors(x => x.Dummy).ToList();
             if (dummies.Count != 0)
             {
                 sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
-                foreach (var dm in dummies)
+                for (var d = 0; d < dummies.Count; d++)
                 {
-                    sb.Append(GetIOTypeCode(prev, dm, ds));
-                    prev = dm.Type;
+                    sb.Append(GetIOTypeCode(prev, dummies[d], ds, d == dummies.Count - 1));
+                    prev = dummies[d].Type;
                 }
+
                 sb.AppendLine("#endif");
             }
 

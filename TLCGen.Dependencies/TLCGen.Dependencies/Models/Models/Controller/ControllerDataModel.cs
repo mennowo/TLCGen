@@ -127,6 +127,8 @@ namespace TLCGen.Models
         public List<VersieModel> Versies { get; set; }
 
         public ControllerRangeerDataModel RangeerData { get; set; }
+        
+        public string CCOLParserPassword { get; set; }
 
         #endregion // Properties
 

@@ -3,6 +3,7 @@
   <component name="ContentModelStore">
     <e p="C:\Users\menno\AppData\local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
     <e p="C:\Users\menno\AppData\local\JetBrains\Rider2020.3\resharper-host\local\Transient\Rider\v203\SolutionCaches\_TLCGen.-499981504.00" t="ExcludeRecursive" />
+    <e p="C:\Users\menno\AppData\Roaming\JetBrains\Rider2020.3\Extensions" t="IncludeRecursive" />
     <e p="C:\Users\menno\AppData\Roaming\JetBrains\Rider2020.3\scratches" t="IncludeRecursive" />
     <e p="C:\Users\menno\CodingConnected\Repos\TLCGen" t="IncludeFlat">
       <e p=".gitignore" t="Include" />
@@ -1260,7 +1261,6 @@
             <e p="Adds" t="Include">
               <e p="CCOLGeneratorGenerateDplAdd.cs" t="Include" />
               <e p="CCOLGeneratorGenerateHstAdd.cs" t="Include" />
-              <e p="CCOLGeneratorGenerateOvAdd.cs" t="Include" />
               <e p="CCOLGeneratorGeneratePrioAdd.cs" t="Include" />
               <e p="CCOLGeneratorGenerateRegAdd.cs" t="Include" />
               <e p="CCOLGeneratorGenerateSimAdd.cs" t="Include" />

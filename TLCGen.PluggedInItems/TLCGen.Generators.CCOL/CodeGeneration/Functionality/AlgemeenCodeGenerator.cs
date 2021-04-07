@@ -179,6 +179,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    if (!string.IsNullOrWhiteSpace(c.Data.CCOLParserPassword))
+                    {
+                        sb.AppendLine($"{ts}#define PASSWORD \"{c.Data.CCOLParserPassword}\"");
+                    }
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && !c.Data.Intergroen)
                     {
                         sb.AppendLine($"{ts}#define NO_TIGMAX");
@@ -186,7 +190,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define TESTOMGEVING");
                     sb.AppendLine($"#endif");
-                    if (!c.Data.PracticeOmgeving) return "";
+                    if (!c.Data.PracticeOmgeving) return sb.ToString();
                     sb.AppendLine($"/* T.b.v. practice */");
                     sb.AppendLine($"#ifdef PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define XTND_DIC");

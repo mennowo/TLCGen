@@ -613,10 +613,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    return new List<CCOLLocalVariable>
-                    {
-                        new CCOLLocalVariable("int", "ov", "0")
-                    };
+                    return new List<CCOLLocalVariable> { new("int", "ov", "0") };
             
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
@@ -1287,6 +1284,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == hd.FaseCyclus);
                             if (risFc != null && hd.RIS)
                             {
+                                sb.AppendLine("#ifndef NO_RIS");
+                                
                                 sb.Append($"{ts}" +
                                               $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}ris] = " +
                                               $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}ris] && (");
@@ -1317,6 +1316,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine(");");
                                 inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}ris");
+                                
+                                sb.AppendLine("#endif /* NO_RIS */");
                             }
 
                             if (hd.Opticom)
@@ -1362,8 +1363,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             if (hd.RIS)
                             {
+                                sb.AppendLine("#ifndef NO_RIS");
+                                
                                 sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}ris] = SCH[{_schpf}{_schhduit}{hd.FaseCyclus}ris] && (ris_uitmelding_selectief(hdFC{hd.FaseCyclus}));");
                                 uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}ris");
+                                
+                                sb.AppendLine("#endif /* NO_RIS */");
                             }
 
                             if (hd.Opticom)

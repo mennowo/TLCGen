@@ -23,11 +23,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hlos;
         private CCOLGeneratorCodeStringSettingModel _schlos;
         private CCOLGeneratorCodeStringSettingModel _schrealgs;
+        private CCOLGeneratorCodeStringSettingModel _mar;
         private CCOLGeneratorCodeStringSettingModel _mrealtijd;
         private CCOLGeneratorCodeStringSettingModel _mrealtijdmin;
         private CCOLGeneratorCodeStringSettingModel _mrealtijdmax;
 #pragma warning restore 0649
         private string _hmad;
+        private string _hplact;
         private GroenSyncDataModel _groenSyncData;
         private List<string> _fasenMetSync;
         private (List<GroenSyncModel> oneWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWay,
@@ -180,6 +182,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLElementTimeTypeEnum.TE_type,
                         _tfo, fot.FaseVan, fot.FaseNaar));
             }
+            
+            foreach (var fc in c.Fasen)
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_mar}{fc.Naam}", _mar, fc.Naam));
+            }
 
         }
 
@@ -197,6 +206,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         new(c.GetBoolV(), "wijziging", "TRUE"),
                         new("int", "i"),
                     };
+                case CCOLCodeTypeEnum.RegCAlternatieven:
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc)
+                        return base.GetFunctionLocalVariables(c, type);
+                    return new List<CCOLLocalVariable> { new("int", "fc") };
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc 
                         || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0 && c.InterSignaalGroep?.LateReleases?.Count == 0)
@@ -217,6 +230,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => 10,
                 CCOLCodeTypeEnum.RegCMaxgroen => 70,
                 CCOLCodeTypeEnum.RegCVerlenggroen => 70,
+                CCOLCodeTypeEnum.RegCAlternatieven => 90,
                 _ => 0
             };
         }
@@ -232,6 +246,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 return null;
 
             var sb = new StringBuilder();
+            var firstFcName = c.Fasen.First().Naam;
             var first = true;
 
             switch (type)
@@ -239,9 +254,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine($"{ts}#include \"realfunc.c\"");
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCAlternatieven:
+                    sb.AppendLine($"{ts}/* Alternatieve ruimte in memory element schrijven */");
+                    var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}");
+                        sb.AppendLine($"{ts}}}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                        sb.AppendLine($"{ts}else");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                    }
+                    return sb.ToString();
+                    
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
 
-                    var firstFcName = c.Fasen.First().Naam;
                     sb.AppendLine($"{ts}/* Bepalen realisatietijden */");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Reset */");
@@ -249,7 +284,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}Realisatietijd(i, NG, NG);");
                     sb.AppendLine($"{ts}{ts}Realisatietijd_min(i, NG, NG);");
-                    sb.AppendLine($"{ts}{ts}REALTIJD_max[i] = REALTIJD[i];");
+                    sb.AppendLine($"{ts}{ts}REALTIJD_max[i] = REALTIJD_uncorrected[i];");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
 
@@ -502,6 +537,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 		    
             return base.SetSettings(settings);
         }

@@ -2103,6 +2103,12 @@
             <Description>Inloop tijd fase _E1_ naar fase _E2_</Description>
           </Setting>
           <Setting>
+            <Default>ar</Default>
+            <Setting>ar</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Alternatieve ruimte fase _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>realtijd</Default>
             <Setting>realtijd</Setting>
             <Type>GeheugenElement</Type>
