@@ -81,7 +81,7 @@ bool yws_groen_fk(count i);
 void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
 
 void SignalplanPrmsToTx(count pl, count txa1);
-bool CheckSignalplanPrms(count pl, count ctijd, count txa1);
+bool CheckSignalplanPrms(count pl, mulv txmax, count txa1);
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
   bool txboverslag(count fc, bool  condition);

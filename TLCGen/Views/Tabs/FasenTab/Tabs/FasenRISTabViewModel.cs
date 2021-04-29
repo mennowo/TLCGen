@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
@@ -28,6 +29,9 @@ namespace TLCGen.ViewModels
         private RelayCommand _addDefaultExtendLanesCommand;
         private RelayCommand _addSystemITFCommand;
         private RelayCommand _removeSystemITFCommand;
+        private RelayCommand _copyExtendFromRequestLanesCommand;
+        private RelayCommand _copySimulationFromRequestLanesCommand;
+        private RelayCommand _generateRISSimulationDataCommand;
 
         #endregion // Fields
 
@@ -226,7 +230,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ?? (_addDefaultRequestLanesCommand = new RelayCommand(AddDefaultRequestLanesCommand_executed));
+        public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ??= new RelayCommand(AddDefaultRequestLanesCommand_executed);
 
         private void AddDefaultRequestLanesCommand_executed()
         {
@@ -250,9 +254,7 @@ namespace TLCGen.ViewModels
             return;
         }
 
-        public ICommand AddDefaultExtendLanesCommand => _addDefaultExtendLanesCommand ?? (_addDefaultExtendLanesCommand = new RelayCommand(AddDefaultExtendLanesCommand_executed));
-
-        private void AddDefaultExtendLanesCommand_executed()
+        public ICommand AddDefaultExtendLanesCommand => _addDefaultExtendLanesCommand ??= new RelayCommand(() =>
         {
             foreach (var fc in Controller.Fasen)
             {
@@ -270,27 +272,172 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+
             RISExtendLanes.BubbleSort();
-            return;
+        });
+
+        public ICommand CopyExtendFromRequestsLanesCommand => _copyExtendFromRequestLanesCommand ??= new RelayCommand(() =>
+        {
+            foreach (var req in RISRequestLanes)
+            {
+                if (!RISExtendLanes.Any(x => x.SignalGroupName == req.SignalGroupName && x.Type == req.Type && x.RijstrookIndex == req.RijstrookIndex))
+                {
+                    RISExtendLanes.Add(new RISLaneExtendDataViewModel(new RISLaneExtendDataModel
+                    {
+                        SignalGroupName = req.SignalGroupName,
+                        RijstrookIndex = req.RijstrookIndex,
+                        VerlengenStart = req.AanvraagStart,
+                        VerlengenEnd = req.AanvraagEnd,
+                        Type = req.Type
+                    }));
+                }
+            }
+        });
+
+        private bool StationsTypeEqual(RISStationTypeEnum risStationTypeEnum, RISStationTypeSimEnum risStationTypeSimEnum)
+        {
+            switch (risStationTypeEnum)
+            {
+                case RISStationTypeEnum.UNKNOWN: return risStationTypeSimEnum == RISStationTypeSimEnum.UNKNOWN;
+                case RISStationTypeEnum.PEDESTRIAN: return risStationTypeSimEnum == RISStationTypeSimEnum.PEDESTRIAN;
+                case RISStationTypeEnum.CYCLIST: return risStationTypeSimEnum == RISStationTypeSimEnum.CYCLIST;
+                case RISStationTypeEnum.MOPED: return risStationTypeSimEnum == RISStationTypeSimEnum.MOPED;
+                case RISStationTypeEnum.MOTORCYCLE: return risStationTypeSimEnum == RISStationTypeSimEnum.MOTORCYCLE;
+                case RISStationTypeEnum.PASSENGERCAR: return risStationTypeSimEnum == RISStationTypeSimEnum.PASSENGERCAR;
+                case RISStationTypeEnum.BUS: return risStationTypeSimEnum == RISStationTypeSimEnum.BUS;
+                case RISStationTypeEnum.LIGHTTRUCK: return risStationTypeSimEnum == RISStationTypeSimEnum.LIGHTTRUCK;
+                case RISStationTypeEnum.HEAVYTRUCK: return risStationTypeSimEnum == RISStationTypeSimEnum.HEAVYTRUCK;
+                case RISStationTypeEnum.TRAILER: return risStationTypeSimEnum == RISStationTypeSimEnum.TRAILER;
+                case RISStationTypeEnum.SPECIALVEHICLES: return risStationTypeSimEnum == RISStationTypeSimEnum.SPECIALVEHICLES;
+                case RISStationTypeEnum.TRAM: return risStationTypeSimEnum == RISStationTypeSimEnum.TRAM;
+                case RISStationTypeEnum.ROADSIDEUNIT: return risStationTypeSimEnum == RISStationTypeSimEnum.ROADSIDEUNIT;
+                case RISStationTypeEnum.TRUCKS: return
+                        risStationTypeSimEnum == RISStationTypeSimEnum.LIGHTTRUCK ||
+                        risStationTypeSimEnum == RISStationTypeSimEnum.HEAVYTRUCK ||
+                        risStationTypeSimEnum == RISStationTypeSimEnum.TRAILER;  
+                case RISStationTypeEnum.MOTORVEHICLES: return
+                        risStationTypeSimEnum != RISStationTypeSimEnum.UNKNOWN &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.CYCLIST &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.MOPED &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.TRAM &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.ROADSIDEUNIT &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.PEDESTRIAN;
+                case RISStationTypeEnum.VEHICLES: return
+                        risStationTypeSimEnum != RISStationTypeSimEnum.UNKNOWN &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.ROADSIDEUNIT &&
+                        risStationTypeSimEnum != RISStationTypeSimEnum.PEDESTRIAN;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(risStationTypeEnum), risStationTypeEnum, null);
+            }
+        }
+        
+        private RISStationTypeSimEnum ConvertStationTypeToSim(RISStationTypeEnum risStationTypeEnum)
+        {
+            switch (risStationTypeEnum)
+            {
+                case RISStationTypeEnum.UNKNOWN: return RISStationTypeSimEnum.UNKNOWN;
+                case RISStationTypeEnum.PEDESTRIAN: return RISStationTypeSimEnum.PEDESTRIAN;
+                case RISStationTypeEnum.CYCLIST: return RISStationTypeSimEnum.CYCLIST;
+                case RISStationTypeEnum.MOPED: return RISStationTypeSimEnum.MOPED;
+                case RISStationTypeEnum.MOTORCYCLE: return RISStationTypeSimEnum.MOTORCYCLE;
+                case RISStationTypeEnum.PASSENGERCAR: return RISStationTypeSimEnum.PASSENGERCAR;
+                case RISStationTypeEnum.BUS: return RISStationTypeSimEnum.BUS;
+                case RISStationTypeEnum.LIGHTTRUCK: return RISStationTypeSimEnum.LIGHTTRUCK;
+                case RISStationTypeEnum.HEAVYTRUCK: return RISStationTypeSimEnum.HEAVYTRUCK;
+                case RISStationTypeEnum.TRAILER: return RISStationTypeSimEnum.TRAILER;
+                case RISStationTypeEnum.SPECIALVEHICLES: return RISStationTypeSimEnum.SPECIALVEHICLES;
+                case RISStationTypeEnum.TRAM: return RISStationTypeSimEnum.TRAM;
+                case RISStationTypeEnum.ROADSIDEUNIT: return RISStationTypeSimEnum.ROADSIDEUNIT;
+                case RISStationTypeEnum.TRUCKS: return RISStationTypeSimEnum.LIGHTTRUCK;  
+                case RISStationTypeEnum.MOTORVEHICLES: return RISStationTypeSimEnum.PASSENGERCAR;
+                case RISStationTypeEnum.VEHICLES: return RISStationTypeSimEnum.PASSENGERCAR;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(risStationTypeEnum), risStationTypeEnum, null);
+            }
         }
 
-        public ICommand AddSystemITFCommand => _addSystemITFCommand ?? (_addSystemITFCommand =
-            new RelayCommand(
-                () =>
+        public ICommand CopySimulationFromRequestsLanesCommand => _copySimulationFromRequestLanesCommand ??= new RelayCommand(() =>
+        {
+            foreach (var req in RISRequestLanes)
+            {
+                var fc = RISFasen.FirstOrDefault(x => x.FaseCyclus == req.SignalGroupName);
+                if (fc == null) continue;
+                var lane = fc.Lanes.FirstOrDefault(x => x.RijstrookIndex == req.RijstrookIndex);
+                if (lane == null) continue;
+                var sim = lane.SimulatedStations.FirstOrDefault(x => StationsTypeEqual(req.Type, x.StationType));
+                if (sim == null)
                 {
-                    MultiSystemITF.Add(new RISSystemITFViewModel(new RISSystemITFModel()));
-                },
-                () => HasMultipleSystemITF));
+                    lane.SimulatedStations.Add(new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel
+                    {
+                        LaneID = lane.LaneID,
+                        SignalGroupName = lane.SignalGroupName,
+                        Afstand = req.AanvraagStart,
+                        ApproachID = fc.ApproachID,
+                        RijstrookIndex = lane.RijstrookIndex, 
+                        Snelheid = 50,
+                        Type = ConvertStationTypeToSim(req.Type),
+                        VehicleRole = RISVehicleRole.DEFAULT,
+                        VehicleSubrole = RISVehicleSubrole.UNKNOWN, SimulationData = new DetectorSimulatieModel
+                        {
+                            FCNr = fc.FaseCyclus
+                        }
+                    }));
+                }
+            }
+        });
+        
+        public ICommand GenerateRISSimulationDataCommand => _generateRISSimulationDataCommand ??= new RelayCommand(() =>
+        {
+            var rd = new Random();
+            
+            foreach (var risFc in RISFasen)
+            {
+                var max = 3;
+                var numbers = new List<int> { 200, 100, 50 };
+                var n = rd.Next(numbers.Count);
+                var numbersLow = new List<int> { 2, 4 };
+                var q1 = numbers[n];
+                var r = numbers[n];
+                numbers.Remove(r);
+                --max;
+                n = rd.Next(numbers.Count);
+                var q2 = numbers[n];
+                r = numbers[n];
+                numbers.Remove(r);
+                var q3 = numbers[0];
+                n = rd.Next(2);
+                var q4 = numbersLow[n];
+
+                foreach (var sim in risFc.Lanes.SelectMany(x => x.SimulatedStations))
+                {
+                    sim.Q1 = q1;
+                    sim.Q2 = q2;
+                    sim.Q3 = q3;
+                    sim.Q4 = q4;
+
+                    sim.Stopline = 1800;
+                    
+                    if (sim.FCNr?.ToUpper() != "NG")
+                        sim.FCNr = risFc.FaseCyclus;
+                }
+            }
+        });
+        
+        public ICommand AddSystemITFCommand => _addSystemITFCommand ??= new RelayCommand(
+            () =>
+            {
+                MultiSystemITF.Add(new RISSystemITFViewModel(new RISSystemITFModel()));
+            },
+            () => HasMultipleSystemITF);
 
 
-        public ICommand RemoveSystemITFCommand => _removeSystemITFCommand ?? (_removeSystemITFCommand =
-            new RelayCommand(
-                () =>
-                {
-                    MultiSystemITF.Remove(SelectedSystemITF);
-                    SelectedSystemITF = null;
-                },
-                () => HasMultipleSystemITF && SelectedSystemITF != null));
+        public ICommand RemoveSystemITFCommand => _removeSystemITFCommand ??= new RelayCommand(
+            () =>
+            {
+                MultiSystemITF.Remove(SelectedSystemITF);
+                SelectedSystemITF = null;
+            },
+            () => HasMultipleSystemITF && SelectedSystemITF != null);
 
         #endregion // Commands
 

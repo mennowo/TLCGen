@@ -329,8 +329,9 @@
                             <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
-                    <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+                    <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
                         <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultExtendLanesCommand}" Margin="2" />
+                        <Button DockPanel.Dock="Right" Content="Overnemen van aanvragen" Command="{Binding Path=CopyExtendFromRequestsLanesCommand}" Margin="2" />
                         <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
                                  SelectableItemsVisibility="Collapsed"
                                  AddItemCommand="{Binding Path=LanesExtendManager.AddItemCommand}"
@@ -346,14 +347,19 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <DataGrid ItemsSource="{Binding Path=RISFasen}" SelectedItem="{Binding Path=SelectedRISFase}" DockPanel.Dock="Bottom"
+                              Grid.RowSpan="2"
                               CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=FaseCyclus,UpdateSourceTrigger=PropertyChanged}" Header="Fase" Width="*" IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
-                    <Grid DataContext="{Binding Path=SelectedRISFase}" Grid.Column="2">
+                    <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" />
+                    <Grid DataContext="{Binding Path=SelectedRISFase}" Grid.Row="0" Grid.Column="2">
                         <ListView Height="Auto" ItemsSource="{Binding Path=Lanes}" IsEnabled="{Binding Path=HasRIS}"
                                   HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch"
                           SelectedItem="{Binding Path=SelectedLane}" Margin="2">
@@ -364,6 +370,10 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+                        <Button Margin="2" Content="Overnemen van aanvragen" Command="{Binding Path=CopySimulationFromRequestsLanesCommand}"></Button>
+                        <Button Margin="2" Content="Genereren simulatie data" Command="{Binding Path=GenerateRISSimulationDataCommand}"></Button>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
