@@ -48,7 +48,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.WachttijdVoorspellerBitmapData, fc.Naam));
+                var wtvElem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.WachttijdVoorspellerBitmapData, fc.Naam);
+                wtvElem.IOMultivalent = true;
+                _myElements.Add(wtvElem);
+                
                 if (c.Data.WachttijdvoorspellerAansturenBus && 
                     c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                 {

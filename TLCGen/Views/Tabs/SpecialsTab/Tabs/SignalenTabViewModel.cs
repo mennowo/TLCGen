@@ -246,6 +246,10 @@ namespace TLCGen.ViewModels
             var id = RatelTikkers.IndexOf(SelectedRatelTikker);
             var id2 = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
             RatelTikkers.Remove(SelectedRatelTikker);
+            if (RatelTikkersBewaakt.Contains(SelectedRatelTikker))
+            {
+                RatelTikkersBewaakt.Remove(SelectedRatelTikker);
+            }
             UpdateSelectables();
             SelectedRatelTikker = null;
             Messenger.Default.Send(new ControllerDataChangedMessage());

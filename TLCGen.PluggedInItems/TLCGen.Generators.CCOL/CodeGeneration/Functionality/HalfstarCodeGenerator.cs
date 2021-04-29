@@ -159,8 +159,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact, hsd.PlActUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact, hsd.KpActUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact, hsd.MlActUitgang));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl, hsd.MlPlUitgang));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ustxtimer}", _ustxtimer, hsd.TxTimerUitgang));
+                var elem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl, hsd.MlPlUitgang);
+                elem.IOMultivalent = true;
+                _myElements.Add(elem);
+                elem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ustxtimer}", _ustxtimer, hsd.TxTimerUitgang);
+                elem.IOMultivalent = true;
+                _myElements.Add(elem);
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usklok}", _usklok, hsd.KlokUitgang));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushand}", _ushand, hsd.HandUitgang));
 				

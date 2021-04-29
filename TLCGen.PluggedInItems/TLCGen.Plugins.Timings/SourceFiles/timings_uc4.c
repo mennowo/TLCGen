@@ -57,7 +57,7 @@ boolv NaarConfidence9_15prio(count i)
 }
 
 
-static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count prm_ttxconfidence15, count s_conf15ar)
+static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count prm_ttxconfidence15, count s_conf15ar, count s_timingsfc)
 {
    int min = mrealtijdmin; /* eerst MM min met daarna FCMAX x MM */
    int max = mrealtijdmax; /* eerst MM max met daarna FCMAX x MM */
@@ -88,7 +88,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_AANVRAAG; /* 3 */
       }
       /* override */
-      if (!SCH[schspatconfidence1])
+      if (!SCH[schspatconfidence1] || !SCH[s_timingsfc])
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
          CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
@@ -105,7 +105,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
             CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_ANDEREN_EERST; /* 6 */
          }
          /* override */
-         if (!SCH[schspatconfidence3])
+         if (!SCH[schspatconfidence3] || !SCH[s_timingsfc])
          {
             CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
             CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
@@ -123,7 +123,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_VOLGENDE_BEURT; /* 9 */
       }
       /* override */
-      if (!SCH[schspatconfidence6])
+      if (!SCH[schspatconfidence6] || !SCH[s_timingsfc])
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
          CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
@@ -137,7 +137,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCERD_GROEN_KOMT; /* 12 */
       }
       /* override */
-      if (!SCH[schspatconfidence9])
+      if (!SCH[schspatconfidence9] || !SCH[s_timingsfc])
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
          CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
@@ -160,7 +160,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = MM[max];
       CCOL_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME] = (((CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]) + (CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]))) / 2;
       /* override */
-      if (!SCH[schspatconfidence12] && (CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] == 12))
+      if (!SCH[schspatconfidence12] && (CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] == 12) || !SCH[s_timingsfc])
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
          CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;
@@ -173,7 +173,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
       CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = MM[max];
       CCOL_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME] = (((CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]) + (CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]))) / 2;
       /* override */
-      if (!SCH[schspatconfidence15])
+      if (!SCH[schspatconfidence15] || !SCH[s_timingsfc])
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME] = NG;
          CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME] = NG;

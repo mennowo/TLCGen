@@ -54,6 +54,10 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         {
             Default = "spatconfidence15", Setting = "spatconfidence15", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
+        private CCOLGeneratorCodeStringSettingModel _schtimings = new CCOLGeneratorCodeStringSettingModel
+        {
+            Default = "timings", Setting = "timings", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
+        };
 #pragma warning restore 0649
         
         public string _fcpf;
@@ -65,10 +69,14 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         public string _mrealtijdmin;
         public string _mrealtijdmax;
         public string _cvc;
+        public string _cvchd;
         public string _schgs;
+        private List<string> _fasenMetIngrepen;
 
         public List<CCOLElement> GetCCOLElements(ControllerModel c)
         {
+            _fasenMetIngrepen = c.PrioData.PrioIngrepen.Select(x => x.FaseCyclus).Concat(c.PrioData.HDIngrepen.Select(x => x.FaseCyclus)).Distinct().ToList();
+
             var elements = new List<CCOLElement>
             {
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schfctiming}", 1, CCOLElementTimeTypeEnum.SCH_type, _schfctiming),
@@ -82,6 +90,11 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence12}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence12),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence15}", 1, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence15)
             };
+
+            foreach (var fase in c.Fasen)
+            {
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtimings}{fase.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtimings, fase.Naam));
+            }
             return elements;
         }
         
@@ -120,7 +133,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !timingsModel.TimingsToepassen) return null;
 
             var sb = new StringBuilder();
-
+            
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -205,7 +218,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}/* eigenlijk nog per richting een schakelaar of er altijd NG moet worden gestuurd (nu is het een algemene schakelaar) */");
                     sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar});");
+                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}#endif");  
                     return sb.ToString();
@@ -288,57 +301,47 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     {
                         sb.AppendLine($"{ts}if ((P[{_fcpf}{ing.FaseCyclus}] & BIT11) && C[{_ctpf}{_cvc}{ing.FaseCyclus}{ing.Naam}] && (iRijTimer[prioFC{ing.FaseCyclus}{ing.Naam}] < iRijTijd[prioFC{ing.FaseCyclus}{ing.Naam}])) iRijTijd[prioFC{ing.FaseCyclus}{ing.Naam}] = 0;");
                     }
+                    foreach (var ing in c.PrioData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}if ((P[{_fcpf}{ing.FaseCyclus}] & BIT11) && C[{_ctpf}{_cvchd}{ing.FaseCyclus}] && (iRijTimer[hdFC{ing.FaseCyclus}] < iRijTijd[hdFC{ing.FaseCyclus}])) iRijTijd[hdFC{ing.FaseCyclus}] = 0;");
+                    }
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
                     sb.AppendLine("#ifndef NO_TIMETOX");
-                    var done = new List<string>();
-                    foreach (var ing in c.PrioData.PrioIngrepen)
-                    {
-                        if (done.Contains(ing.FaseCyclus)) continue;
-                        done.Add(ing.FaseCyclus);
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{ing.FaseCyclus}] & BIT11)) {{");
-                        sb.AppendLine($"{ts}{ts}RR[{_fcpf}{ing.FaseCyclus}] &= ~PRIO_RR_BIT;");
-                        foreach (var gs in c.GetGelijkstarten(ing.FaseCyclus))
-                        {
-                            var otherFc = gs.FaseVan == ing.FaseCyclus ? gs.FaseNaar : gs.FaseVan;
-                            if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
-                            {
-                                sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
-                            }
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
-                        }
-                        foreach (var vs in c.GetVoorstartenNaar(ing.FaseCyclus))
-                        {
-                            var otherFc = vs.FaseVan == ing.FaseCyclus ? vs.FaseNaar : vs.FaseVan;
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
-                        }
-                        foreach (var lr in c.GetLateReleasesNaar(ing.FaseCyclus))
-                        {
-                            var otherFc = lr.FaseVan == ing.FaseCyclus ? lr.FaseNaar : lr.FaseVan;
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{otherFc}] &= ~PRIO_RR_BIT;");
-                        }
-                        sb.AppendLine($"{ts}}}");
-                    }
-
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schconfidence15fix}] && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && (P[{_fcpf}{gs:van}] & BIT11)) {{ RR[{_fcpf}{gs:naar}] &= ~PRIO_RR_BIT; }}");
-                        sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schconfidence15fix}] && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) {{ RR[{_fcpf}{gs:van}] &= ~PRIO_RR_BIT; }}");
+                        var sch = $" && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}]";
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:van}] & BIT11)) {{ RR[{_fcpf}{gs:naar}] &= ~PRIO_RR_BIT; }}");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:naar}] & BIT11)) {{ RR[{_fcpf}{gs:van}] &= ~PRIO_RR_BIT; }}");
+                    }
+                    foreach (var vs in c.InterSignaalGroep.Voorstarten)
+                    {
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{vs:naar}] & BIT11)) {{ RR[{_fcpf}{vs:van}] &= ~PRIO_RR_BIT; }}");
+                    }
+                    foreach (var lr in c.InterSignaalGroep.LateReleases)
+                    {
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{lr:naar}] & BIT11)) {{ RR[{_fcpf}{lr:van}] &= ~PRIO_RR_BIT; }}");
                     }
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCAfkappen:
-                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                    sb.AppendLine("#ifndef NO_TIMETOX");
+                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                    {
+                        var sch = $" && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}]";
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:van}] & BIT11)) {{ Z[{_fcpf}{gs:naar}] &= ~PRIO_Z_BIT; }}");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:naar}] & BIT11)) {{ Z[{_fcpf}{gs:van}] &= ~PRIO_Z_BIT; }}");
+                    }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{vs:naar}] && (P[{_fcpf}{vs:naar}] & BIT11)) Z[{_fcpf}{vs:van}] &=~BIT6;");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{vs:naar}] & BIT11)) {{ Z[{_fcpf}{vs:van}] &= ~PRIO_Z_BIT; }}");
                     }
                     foreach (var lr in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{lr:naar}] && (P[{_fcpf}{lr:naar}] & BIT11)) Z[{_fcpf}{lr:van}] &=~BIT6;");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{lr:naar}] & BIT11)) {{ Z[{_fcpf}{lr:van}] &= ~PRIO_Z_BIT; }}");
                     }
-                    sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");

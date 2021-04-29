@@ -42,8 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<CCOLLocalVariable>
                     {
-                        new(c.GetBoolV(), "wijziging", "TRUE"),
-                        new("int", "i"),
+                        new("int", "fc"),
                     };
                 default:
                     return base.GetFunctionLocalVariables(c, type);

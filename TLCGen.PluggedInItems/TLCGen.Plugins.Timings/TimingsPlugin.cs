@@ -255,6 +255,7 @@ namespace TLCGen.Plugins.Timings
             _codeGenerator._mrealtijdmin = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmin");
             _codeGenerator._mrealtijdmax = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmax");
             _codeGenerator._cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            _codeGenerator._cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
             _codeGenerator._schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
 
             return base.SetSettings(settings);
