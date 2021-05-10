@@ -168,6 +168,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var m = c.Data.RangeerData.RangeerUitgangen.FirstOrDefault(x => x.Naam == u.Naam);
                     if (m != null) u.RangeerIndex = m.RangeerIndex;
+                    else
+                    {
+                        int i = -0;
+                        ++i;
+                    }
                 }
             }
 
