@@ -136,8 +136,9 @@ s_int16 reset_fctiming(mulv i, mulv eventnr)
  * de functie msg_fctiming() gebruikt de functies Evenstate_Definition(), set_fctiming() en reset_fctiming(),
  * de functie msg_fctiming() moet worden aangeroepen in de functie system_application2().
  * 
+ * latency_minEndSG_fc1 - hiermee wordt de latency correctie op startgroen ingesteld
  */
-void msg_fctiming(void)
+void msg_fctiming(mulv latency_minEndSG)
 {
    register count i;
    static s_int16 WPS_old= 0;       /* oude programmastatus		*/
@@ -293,7 +294,7 @@ void msg_fctiming(void)
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_STARTTIME | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
                      (s_int16) CCOL_FC_EVENTSTATE[i][CIF_GROEN],   /* eventState */
                      (s_int16) 0,                                  /* startTime  */
-                     (s_int16) TGG_max[i],                         /* minEndTime */
+                     (s_int16) TGG_max[i] + latency_minEndSG,      /* minEndTime */
                      (s_int16) NG,                                 /* maxEndTime */
                      (s_int16) NG,                                 /* likelyTime */
                      (s_int16) NG,                                 /* confidence */

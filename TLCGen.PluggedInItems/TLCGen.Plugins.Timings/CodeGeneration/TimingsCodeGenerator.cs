@@ -58,6 +58,10 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         {
             Default = "timings", Setting = "timings", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
+        private CCOLGeneratorCodeStringSettingModel _prmlatencyminendsg = new CCOLGeneratorCodeStringSettingModel
+        {
+            Default = "latencyminendsg", Setting = "latencyminendsg", Type = CCOLGeneratorSettingTypeEnum.Parameter, Description = ""
+        };
 #pragma warning restore 0649
         
         public string _fcpf;
@@ -88,7 +92,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence6}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence6),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence9}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence9),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence12}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence12),
-                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence15}", 1, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence15)
+                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence15}", 1, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence15),
+                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlatencyminendsg}", 3, CCOLElementTimeTypeEnum.TE_type, _prmlatencyminendsg)
             };
 
             foreach (var fase in c.Fasen)
@@ -150,7 +155,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfctiming}]) msg_fctiming();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfctiming}]) msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}#if !(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM))");
                     sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || defined (VISSIM)");

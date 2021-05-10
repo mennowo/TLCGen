@@ -349,7 +349,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var approach = $"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(prio)}";
                         if (_myElements.All(x => x.Naam != approach))
                         {
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(approach, fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(approach, 999, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                         }
                         foreach (var lane in fcRis.LaneData)
                         {

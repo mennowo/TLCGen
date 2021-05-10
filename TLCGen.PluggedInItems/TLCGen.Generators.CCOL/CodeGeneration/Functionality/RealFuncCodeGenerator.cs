@@ -52,7 +52,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var grsync in _sortedSyncs.oneWay)
             {
-                var max = grsync.Waarde <= 0 ? _trealvs : _treallr;
+                var max = grsync.Richting == -1 ? _trealvs : _treallr;
                 // inlopen voetgangers (eenzijdig)
                 var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                 var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
@@ -316,7 +316,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var hdr1B = mdr1B == null ? "NG" : _hpf + _hmad + mdr1B.Naam;
                             var hdr2A = mdr2A == null ? "NG" : _hpf + _hmad + mdr2A.Naam;
                             var hdr2B = mdr2B == null ? "NG" : _hpf + _hmad + mdr2B.Naam;
-                            sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {dr1A}, {dr1B}, {dr2B}, {dr2A}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:van}, {_schpf}{_schlos}{grsync:van}_1, {_schpf}{_schlos}{grsync:van}_2, {_schpf}{_schlos}{grsync:naar}_1, {_schpf}{_schlos}{grsync:naar}_2);");
+                            sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:van}, SCH[{_schpf}{_schlos}{grsync:van}_1], SCH[{_schpf}{_schlos}{grsync:van}_2], SCH[{_schpf}{_schlos}{grsync:naar}_1], SCH[{_schpf}{_schlos}{grsync:naar}_2]);");
                             startDuringRed = true;
                         }
                         sb.AppendLine();
@@ -350,11 +350,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
-                            var max = grsync.Waarde <= 0 ? _trealvs : _treallr;
+                            var max = grsync.Richting == -1 ? _trealvs : _treallr;
                             // voorstart
-                            if (grsync.Waarde <= 0)
+                            if (grsync.Richting == -1)
                             {
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
                             }
                             // late release of inlopen
                             else
@@ -363,15 +363,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 // maar de groentijdcorrectie van b naar a
                                 var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                                 var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
-                                if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
-                                {
-                                    max = _trealil;
-                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], TRUE);");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
-                                }
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
                             }
                         }
                     }
@@ -410,7 +402,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else sb.Append($"{ts}{ts}");
 
-                            sb.AppendLine($"wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], H[{_hpf}{_hinl}{grsync:van}], H[{_hpf}{_hinl}{grsync:naar}], H[{_hpf}{_hlos}{grsync:van}], H[{_hpf}{_hlos}{grsync:naar}], TRUE);");
+                            sb.AppendLine($"wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, TRUE);");
                         }
                         sb.AppendLine();
                     }
@@ -431,7 +423,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else sb.Append($"{ts}{ts}");
 
-                            sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")});");
+                            sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")}, TRUE);");
                         }
 
                         if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();

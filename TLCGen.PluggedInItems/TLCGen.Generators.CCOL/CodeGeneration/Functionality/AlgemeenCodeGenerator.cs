@@ -211,7 +211,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             var fc = c.Fasen.FirstOrDefault(x => x.Detectoren.Any(x2 => x2.Naam == mad));
                             if (fc == null) continue;
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad}] = SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hmad}{mad}] || D[{_dpf}{mad}] && !G[{_fcpf}{fc.Naam}] && A[{_fcpf}{fc.Naam}];");
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad}] = G[{_fcpf}{fc.Naam}] && !SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hmad}{mad}] || D[{_dpf}{mad}] && A[{_fcpf}{fc.Naam}];");
                         }
                     }
                     return sb.ToString();

@@ -29,8 +29,8 @@ namespace TLCGen.Models
             {
                 var naloop1 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == gs.FaseVan && x.FaseNaar == gs.FaseNaar);
                 var naloop2 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == gs.FaseNaar && x.FaseNaar == gs.FaseVan);
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, Waarde = naloop1?.MaximaleVoorstart ?? 0, AanUit = gs.Schakelbaar });
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseNaar, FaseNaar = gs.FaseVan, Waarde = naloop2?.MaximaleVoorstart ?? 0, AanUit = gs.Schakelbaar });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, Waarde = naloop1?.MaximaleVoorstart ?? 0, Richting = 1, AanUit = gs.Schakelbaar });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = gs.FaseNaar, FaseNaar = gs.FaseVan, Waarde = naloop2?.MaximaleVoorstart ?? 0, Richting = 1, AanUit = gs.Schakelbaar });
                 if (gs.DeelConflict)
                 {
                     result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = gs.FaseVan, FaseNaar = gs.FaseNaar, FictieveOntruimingsTijd = gs.GelijkstartOntruimingstijdFaseVan });
@@ -40,13 +40,13 @@ namespace TLCGen.Models
 
             foreach (var vs in c.InterSignaalGroep.Voorstarten)
             {
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = vs.FaseVan, FaseNaar = vs.FaseNaar, Waarde = vs.VoorstartTijd * -1 });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = vs.FaseVan, FaseNaar = vs.FaseNaar, Waarde = vs.VoorstartTijd * -1, Richting = -1 });
                 result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = vs.FaseNaar, FaseNaar = vs.FaseVan, FictieveOntruimingsTijd = vs.VoorstartOntruimingstijd });
             }
 
             foreach (var lr in c.InterSignaalGroep.LateReleases)
             {
-                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = lr.FaseVan, FaseNaar = lr.FaseNaar, Waarde = lr.LateReleaseTijd });
+                result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = lr.FaseVan, FaseNaar = lr.FaseNaar, Waarde = lr.LateReleaseTijd, Richting = 1 });
                 result.FictieveConflicten.Add(new FictiefConflictModel{ FaseVan = lr.FaseNaar, FaseNaar = lr.FaseVan, FictieveOntruimingsTijd = lr.LateReleaseOntruimingstijd });
             }
 
@@ -55,7 +55,7 @@ namespace TLCGen.Models
                 if (nl.MaximaleVoorstart.HasValue &&
                     !result.GroenSyncFasen.Any(x => x.FaseVan == nl.FaseVan && x.FaseNaar == nl.FaseNaar))
                 {
-                    result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = nl.FaseVan, FaseNaar = nl.FaseNaar, Waarde = nl.MaximaleVoorstart.Value });
+                    result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = nl.FaseNaar, FaseNaar = nl.FaseVan, Waarde = nl.MaximaleVoorstart.Value, Richting = 1 });
                 }
             }
 

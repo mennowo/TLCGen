@@ -498,24 +498,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
-                        foreach (var cf in controller.InterSignaalGroep.Conflicten)
+                        if (controller.InterSignaalGroep.Conflicten != null)
                         {
-                            if (cf.FaseVan == controller.Fasen[i].Naam &&
-                                cf.FaseNaar == controller.Fasen[j].Naam)
+                            foreach (var cf in controller.InterSignaalGroep.Conflicten)
                             {
-                                if (cf.Waarde >= -4)
+                                if (cf.FaseVan == controller.Fasen[i].Naam &&
+                                    cf.FaseNaar == controller.Fasen[j].Naam)
                                 {
-                                    matrix[i, j] = cf.Waarde switch
+                                    if (cf.Waarde >= -4)
                                     {
-                                        -4 => -40,
-                                        -3 => -30,
-                                        -2 => -20,
-                                        _ => cf.Waarde
-                                    };
-                                }
-                                else
-                                {
-                                    matrix[i, j] = -1;
+                                        matrix[i, j] = cf.Waarde switch
+                                        {
+                                            -4 => -40,
+                                            -3 => -30,
+                                            -2 => -20,
+                                            _ => cf.Waarde
+                                        };
+                                    }
+                                    else
+                                    {
+                                        matrix[i, j] = -1;
+                                    }
                                 }
                             }
                         }
@@ -556,6 +559,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
+                foreach (var vs in controller.InterSignaalGroep.LateReleases)
+                {
+                    var fc = controller.Fasen.First(x => x.Naam == vs.FaseVan);
+                    var i = controller.Fasen.IndexOf(fc);
+                    var fc2 = controller.Fasen.First(x => x.Naam == vs.FaseNaar);
+                    var j = controller.Fasen.IndexOf(fc2);
+
+                    for (var k = 0; k < controller.Fasen.Count; ++k)
+                    {
+                        if (matrix[i, k] > -1 && matrix[j, k] == -1)
+                        {
+                            matrix[k, j] = -2;
+                            matrix[j, k] = -2;
+                        }
+                    }
+                }
 
                 foreach (var nl in controller.InterSignaalGroep.Nalopen)
                 {
@@ -571,7 +590,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             switch (nl.Type)
                             {
                                 case NaloopTypeEnum.StartGroen:
-                                    if (nl.InrijdenTijdensGroen)
+                                    if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
                                     {
                                         if (matrix[i, k] > -2) matrix[i, k] = -2;
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
