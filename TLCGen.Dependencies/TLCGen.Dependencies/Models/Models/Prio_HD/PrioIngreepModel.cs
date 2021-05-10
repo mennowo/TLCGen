@@ -19,6 +19,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         [RefersTo(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
         [ModelName(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
+        [Browsable(false)]
         public string DisplayName
         {
             get => FaseCyclus + Naam;

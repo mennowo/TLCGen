@@ -80,6 +80,12 @@
     <Compile Include="UI\DataTypes\PeriodeTemplateViewModel.cs">
       <DependentUpon>PeriodeTemplateView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DataTypes\PrioIngreepTemplateView.xaml.cs">
+      <DependentUpon>PrioIngreepTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\PrioIngreepTemplateViewModel.cs">
+      <DependentUpon>PrioIngreepTemplateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Tabs\Defaults\DefaultsListView.xaml.cs">
       <DependentUpon>DefaultsListView.xaml</DependentUpon>
     </Compile>
@@ -104,6 +110,12 @@
     </Compile>
     <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabViewModel.cs">
       <DependentUpon>PeriodenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\PrioIngrepenTemplatesEditorTabView.xaml.cs">
+      <DependentUpon>PrioIngrepenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\PrioIngrepenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>PrioIngrepenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
@@ -134,6 +146,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\DataTypes\PrioIngreepTemplateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Tabs\Defaults\DefaultsListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -153,6 +169,10 @@
     <Page Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tabs\Templates\PrioIngrepenTemplatesEditorTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\TLCGenSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

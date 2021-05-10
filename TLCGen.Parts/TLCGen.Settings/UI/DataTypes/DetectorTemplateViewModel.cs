@@ -15,7 +15,7 @@ namespace TLCGen.Settings
     {
         #region Fields
 
-        private TLCGenTemplateModel<DetectorModel> _Template;
+        private TLCGenTemplateModel<DetectorModel> _template;
 
         #endregion // Fields
 
@@ -31,7 +31,7 @@ namespace TLCGen.Settings
                 {
                     foreach (var td in t.Templates.DetectorenTemplates)
                     {
-                        if (ReferenceEquals(td, _Template))
+                        if (ReferenceEquals(td, _template))
                         {
                             return t.Editable;
                         }
@@ -41,20 +41,20 @@ namespace TLCGen.Settings
             }
         }
 
-        private List<string> _Locations;
+        private List<string> _locations;
         public List<string> Locations
         {
             get
             {
-                if (_Locations == null)
+                if (_locations == null)
                 {
-                    _Locations = new List<string>();
+                    _locations = new List<string>();
                     foreach (var t in TemplatesProvider.Default.LoadedTemplates)
                     {
-                        _Locations.Add(t.Location);
+                        _locations.Add(t.Location);
                     }
                 }
-                return _Locations;
+                return _locations;
             }
         }
 
@@ -66,7 +66,7 @@ namespace TLCGen.Settings
                 {
                     foreach (var td in t.Templates.DetectorenTemplates)
                     {
-                        if (ReferenceEquals(td, _Template))
+                        if (ReferenceEquals(td, _template))
                         {
                             return t.Location;
                         }
@@ -78,49 +78,49 @@ namespace TLCGen.Settings
             {
                 if (value == null) return;
 
-                var rem = new TLCGenTemplatesModelWithLocation();
+                TLCGenTemplatesModelWithLocation rem = null;
                 foreach (var t in TemplatesProvider.Default.LoadedTemplates)
                 {
-                    if (t.Location != value && t.Templates.DetectorenTemplates.Contains(_Template))
+                    if (t.Location != value && t.Templates.DetectorenTemplates.Contains(_template))
                     {
                         rem = t;
                     }
-                    if (t.Location == value && !t.Templates.DetectorenTemplates.Contains(_Template))
+                    if (t.Location == value && !t.Templates.DetectorenTemplates.Contains(_template))
                     {
-                        t.Templates.DetectorenTemplates.Add(_Template);
+                        t.Templates.DetectorenTemplates.Add(_template);
                     }
                 }
-                if (rem != null) rem.Templates.DetectorenTemplates.Remove(_Template);
+                if (rem != null) rem.Templates.DetectorenTemplates.Remove(_template);
             }
         }
 
         public string Naam
         {
-            get => _Template.Naam;
+            get => _template.Naam;
             set
             {
-                _Template.Naam = value;
-                RaisePropertyChanged("Naam");
+                _template.Naam = value;
+                RaisePropertyChanged();
             }
         }
 
         public string Replace
         {
-            get => _Template.Replace;
+            get => _template.Replace;
             set
             {
-                _Template.Replace = value;
-                RaisePropertyChanged("Replace");
+                _template.Replace = value;
+                RaisePropertyChanged();
             }
         }
 
-        private DetectorModel _SelectedDetector;
+        private DetectorModel _selectedDetector;
         public DetectorModel SelectedDetector
         {
-            get => _SelectedDetector;
+            get => _selectedDetector;
             set
             {
-                _SelectedDetector = value;
+                _selectedDetector = value;
                 if (value != null)
                     SelectedDetectorTypeString = value.Type.GetDescription();
                 else
@@ -131,39 +131,39 @@ namespace TLCGen.Settings
         }
 
 
-        private ObservableCollection<DetectorModel> _Detectoren;
+        private ObservableCollection<DetectorModel> _detectoren;
         public ObservableCollection<DetectorModel> Detectoren
         {
             get
             {
-                if (_Detectoren == null)
+                if (_detectoren == null)
                 {
-                    _Detectoren = new ObservableCollection<DetectorModel>();
+                    _detectoren = new ObservableCollection<DetectorModel>();
                 }
-                return _Detectoren;
+                return _detectoren;
             }
         }
 
-        private List<string> _DetectorTypeOpties;
+        private List<string> _detectorTypeOpties;
         public List<string> DetectorTypeOpties
         {
             get
             {
-                if (_DetectorTypeOpties == null)
+                if (_detectorTypeOpties == null)
                 {
-                    _DetectorTypeOpties = new List<string>();
+                    _detectorTypeOpties = new List<string>();
                 }
-                return _DetectorTypeOpties;
+                return _detectorTypeOpties;
             }
         }
 
-        private string _SelectedDetectorTypeString;
+        private string _selectedDetectorTypeString;
         public string SelectedDetectorTypeString
         {
-            get => _SelectedDetectorTypeString;
+            get => _selectedDetectorTypeString;
             set
             {
-                _SelectedDetectorTypeString = value;
+                _selectedDetectorTypeString = value;
                 if (SelectedDetector != null)
                 {
                     if (value == DetectorTypeEnum.Kop.GetDescription())
@@ -219,7 +219,7 @@ namespace TLCGen.Settings
                         throw new ArgumentOutOfRangeException("Unknown detector type: " + value);
                     }
                 }
-                RaisePropertyChanged("SelectedDetectorTypeString");
+                RaisePropertyChanged();
             }
         }
 
@@ -228,43 +228,43 @@ namespace TLCGen.Settings
         #region Commands
 
 
-        RelayCommand _AddDetectorCommand;
+        RelayCommand _addDetectorCommand;
         public ICommand AddDetectorCommand
         {
             get
             {
-                if (_AddDetectorCommand == null)
+                if (_addDetectorCommand == null)
                 {
-                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
+                    _addDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
                 }
-                return _AddDetectorCommand;
+                return _addDetectorCommand;
             }
         }
 
 
-        RelayCommand _RemoveDetectorCommand;
+        RelayCommand _removeDetectorCommand;
         public ICommand RemoveDetectorCommand
         {
             get
             {
-                if (_RemoveDetectorCommand == null)
+                if (_removeDetectorCommand == null)
                 {
-                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
+                    _removeDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
                 }
-                return _RemoveDetectorCommand;
+                return _removeDetectorCommand;
             }
         }
 
-        RelayCommand _ApplyDefaultsCommand;
+        RelayCommand _applyDefaultsCommand;
         public ICommand ApplyDefaultsCommand
         {
             get
             {
-                if (_ApplyDefaultsCommand == null)
+                if (_applyDefaultsCommand == null)
                 {
-                    _ApplyDefaultsCommand = new RelayCommand(ApplyDefaultsCommand_Executed, ApplyDefaultsCommand_CanExecute);
+                    _applyDefaultsCommand = new RelayCommand(ApplyDefaultsCommand_Executed, ApplyDefaultsCommand_CanExecute);
                 }
-                return _ApplyDefaultsCommand;
+                return _applyDefaultsCommand;
             }
         }
 
@@ -317,7 +317,7 @@ namespace TLCGen.Settings
 
         public object GetItem()
         {
-            return _Template;
+            return _template;
         }
 
         #endregion // IViewModelWithItem
@@ -330,14 +330,14 @@ namespace TLCGen.Settings
             {
                 foreach (DetectorModel d in e.NewItems)
                 {
-                    _Template.Items.Add(d);
+                    _template.Items.Add(d);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (DetectorModel d in e.OldItems)
                 {
-                    _Template.Items.Remove(d);
+                    _template.Items.Remove(d);
                 }
             }
         }
@@ -348,7 +348,7 @@ namespace TLCGen.Settings
 
         public DetectorTemplateViewModel(TLCGenTemplateModel<DetectorModel> template)
         {
-            _Template = template;
+            _template = template;
             foreach (var fc in template.Items)
             {
                 Detectoren.Add(fc);

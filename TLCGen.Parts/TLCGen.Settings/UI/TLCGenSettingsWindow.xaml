@@ -52,7 +52,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TabControl Grid.Row="1">
+                    <TabControl>
                         <TabItem Header="Fasen">
                             <local:FasenTemplatesEditorTabView DataContext="{Binding Path=FasenTemplatesEditorTabVM}" />
                         </TabItem>
@@ -61,6 +61,9 @@
                         </TabItem>
                         <TabItem Header="Perioden">
                             <local:PeriodenTemplatesEditorTabView DataContext="{Binding Path=PeriodenTemplatesEditorTabVM}" />
+                        </TabItem>
+                        <TabItem Header="Prio ingrepen" IsEnabled="False" ToolTip="Coming soon!" ToolTipService.ShowOnDisabled="True">
+                            <local:PrioIngrepenTemplatesEditorTabView DataContext="{Binding Path=PrioIngrepenTemplatesEditorTabVM}" />
                         </TabItem>
                     </TabControl>
                 </Grid>

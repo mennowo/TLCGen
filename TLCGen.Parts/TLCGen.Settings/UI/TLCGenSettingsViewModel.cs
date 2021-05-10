@@ -127,6 +127,19 @@ namespace TLCGen.Settings
             }
         }
 
+        private PrioIngrepenTemplatesEditorTabViewModel _PrioIngrepenTemplatesEditorTabVM;
+        public PrioIngrepenTemplatesEditorTabViewModel PrioIngrepenTemplatesEditorTabVM
+        {
+            get
+            {
+                if (_PrioIngrepenTemplatesEditorTabVM == null)
+                {
+                    _PrioIngrepenTemplatesEditorTabVM = new PrioIngrepenTemplatesEditorTabViewModel();
+                }
+                return _PrioIngrepenTemplatesEditorTabVM;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands

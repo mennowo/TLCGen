@@ -14,12 +14,15 @@ namespace TLCGen.Settings
         public List<TLCGenTemplateModel<DetectorModel>> DetectorenTemplates { get; set; }
         [XmlArrayItem(ElementName = "PeriodeTemplate")]
         public List<TLCGenTemplateModel<PeriodeModel>> PeriodenTemplates { get; set; }
+        [XmlArrayItem(ElementName = "PrioIngreepTemplate")]
+        public List<TLCGenTemplateModel<PrioIngreepModel>> PrioIngreepTemplates { get; set; }
 
         public TLCGenTemplatesModel()
         {
             FasenTemplates = new List<TLCGenTemplateModel<FaseCyclusModel>>();
             DetectorenTemplates = new List<TLCGenTemplateModel<DetectorModel>>();
             PeriodenTemplates = new List<TLCGenTemplateModel<PeriodeModel>>();
+            PrioIngreepTemplates = new List<TLCGenTemplateModel<PrioIngreepModel>>();
         }
     }
 }
