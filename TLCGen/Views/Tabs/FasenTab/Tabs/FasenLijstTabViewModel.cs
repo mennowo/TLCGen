@@ -23,8 +23,9 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private FaseCyclusViewModel _SelectedFaseCyclus;
-        private IList _SelectedFaseCycli = new ArrayList();
+        private FaseCyclusViewModel _selectedFaseCyclus;
+        private IList _selectedFaseCycli = new ArrayList();
+        private TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> _templatesProviderVm;
 
         #endregion // Fields
 
@@ -34,21 +35,21 @@ namespace TLCGen.ViewModels
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get => _SelectedFaseCyclus;
+            get => _selectedFaseCyclus;
             set
             {
-                _SelectedFaseCyclus = value;
+                _selectedFaseCyclus = value;
                 RaisePropertyChanged("SelectedFaseCyclus");
-                if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.FaseCyclus);
+                if (value != null) TemplatesProviderVm.SetSelectedApplyToItem(value.FaseCyclus);
             }
         }
 
         public IList SelectedFaseCycli
         {
-            get => _SelectedFaseCycli;
+            get => _selectedFaseCycli;
             set
             {
-                _SelectedFaseCycli = value;
+                _selectedFaseCycli = value;
                 _SettingMultiple = false;
                 RaisePropertyChanged("SelectedFaseCycli");
                 if (value != null)
@@ -58,23 +59,12 @@ namespace TLCGen.ViewModels
                     {
                         sl.Add((s as FaseCyclusViewModel).FaseCyclus);
                     }
-                    TemplatesProviderVM.SetSelectedApplyToItems(sl);
+                    TemplatesProviderVm.SetSelectedApplyToItems(sl);
                 }
             }
         }
 
-        private TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> _TemplatesProviderVM;
-        public TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> TemplatesProviderVM
-        {
-            get
-            {
-                if (_TemplatesProviderVM == null)
-                {
-                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel>(this);
-                }
-                return _TemplatesProviderVM;
-            }
-        }
+        public TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> TemplatesProviderVm => _templatesProviderVm ??= new TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel>(this);
 
         #endregion // Properties
 

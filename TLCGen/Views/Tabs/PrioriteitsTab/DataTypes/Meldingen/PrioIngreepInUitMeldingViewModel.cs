@@ -10,7 +10,6 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
-using TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels

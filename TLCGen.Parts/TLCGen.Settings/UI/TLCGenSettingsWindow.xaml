@@ -62,7 +62,7 @@
                         <TabItem Header="Perioden">
                             <local:PeriodenTemplatesEditorTabView DataContext="{Binding Path=PeriodenTemplatesEditorTabVM}" />
                         </TabItem>
-                        <TabItem Header="Prio ingrepen" IsEnabled="False" ToolTip="Coming soon!" ToolTipService.ShowOnDisabled="True">
+                        <TabItem Header="Prio ingrepen">
                             <local:PrioIngrepenTemplatesEditorTabView DataContext="{Binding Path=PrioIngrepenTemplatesEditorTabVM}" />
                         </TabItem>
                     </TabControl>

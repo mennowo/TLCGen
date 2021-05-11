@@ -18,11 +18,12 @@ namespace TLCGen.ViewModels
 {
     public class FaseCyclusWithPrioViewModel : PrioItemViewModel, IComparable
     {
+        #region Fields
+
         private RelayCommand _addIngreepCommand;
         private RelayCommand<PrioIngreepViewModel> _removeIngreepCommand;
         private string _naam;
 
-        #region Fields
         #endregion // Fields
 
         #region Properties
@@ -137,9 +138,9 @@ namespace TLCGen.ViewModels
                     ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.Add(prio);
                     ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.BubbleSort();
                     var prioVm = new PrioIngreepViewModel(prio, this);
+                    // needed to regulate dummies for KAR
                     if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                    if (uitM != null)
-                        MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                    if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                     Ingrepen.Add(prioVm);
                 });
             }

@@ -11,38 +11,33 @@ namespace TLCGen.Settings
     {
         #region Fields
 
-        private static readonly object _Locker = new object();
-        private static ITemplatesProvider _Default;
-        private List<TLCGenTemplatesModelWithLocation> _LoadedTemplates;
+        private static readonly object Locker = new object();
+        private static ITemplatesProvider _default;
+        private List<TLCGenTemplatesModelWithLocation> _loadedTemplates;
 
         #endregion // Fields
 
         #region Properties
 
-        public List<TLCGenTemplatesModelWithLocation> LoadedTemplates => _LoadedTemplates;
+        public List<TLCGenTemplatesModelWithLocation> LoadedTemplates => _loadedTemplates;
 
-        private TLCGenTemplatesModel _Templates;
-        public TLCGenTemplatesModel Templates
-        {
-            get => _Templates;
-            set => _Templates = value;
-        }
+        public TLCGenTemplatesModel Templates { get; set; }
 
         public static ITemplatesProvider Default
         {
             get
             {
-                if (_Default == null)
+                if (_default == null)
                 {
-                    lock (_Locker)
+                    lock (Locker)
                     {
-                        if (_Default == null)
+                        if (_default == null)
                         {
-                            _Default = new TemplatesProvider();
+                            _default = new TemplatesProvider();
                         }
                     }
                 }
-                return _Default;
+                return _default;
             }
         }
 
@@ -55,7 +50,7 @@ namespace TLCGen.Settings
             try
             {
                 Templates = new TLCGenTemplatesModel();
-                _LoadedTemplates = new List<TLCGenTemplatesModelWithLocation>();
+                _loadedTemplates = new List<TLCGenTemplatesModelWithLocation>();
                 if (SettingsProvider.Default.Settings.UseFolderForTemplates)
                 {
                     if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
@@ -73,10 +68,11 @@ namespace TLCGen.Settings
                                     Editable = true,
                                     Templates = t
                                 };
-                                _LoadedTemplates.Add(twl);
+                                _loadedTemplates.Add(twl);
                                 if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
                                 if (twl.Templates.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
                                 if (twl.Templates.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                                if (twl.Templates.PrioIngreepTemplates != null) foreach (var tprio in t.PrioIngreepTemplates) Templates.PrioIngreepTemplates.Add(tprio);
                             }
                             catch
                             {
@@ -94,25 +90,25 @@ namespace TLCGen.Settings
                                            $"{SettingsProvider.Default.Settings.TemplatesLocation}\n\n" +
                                            $"De default templates worden geladen", "Map met templates niet gevonden");
 
-                        if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
                         {
-                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
+                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
                             var twl = new TLCGenTemplatesModelWithLocation
                             {
-                                Location = Path.GetFileNameWithoutExtension(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")),
+                                Location = Path.GetFileNameWithoutExtension(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")),
                                 Editable = false,
                                 Templates = t
                             };
-                            _LoadedTemplates.Add(twl);
+                            _loadedTemplates.Add(twl);
                             if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
                             if (t.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
                             if (t.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                            if (t.PrioIngreepTemplates != null) foreach (var tprio in t.PrioIngreepTemplates) Templates.PrioIngreepTemplates.Add(tprio);
                         }
                         else
                         {
                             MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading default template");
                             Templates = new TLCGenTemplatesModel();
-                            return;
                         }
                     }
                 }
@@ -130,10 +126,11 @@ namespace TLCGen.Settings
                                 Editable = true,
                                 Templates = t
                             };
-                            _LoadedTemplates.Add(twl);
+                            _loadedTemplates.Add(twl);
                             if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
                             if (t.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
                             if (t.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                            if (t.PrioIngreepTemplates != null) foreach (var tprio in t.PrioIngreepTemplates) Templates.PrioIngreepTemplates.Add(tprio);
                         }
                         catch
                         {
@@ -152,32 +149,32 @@ namespace TLCGen.Settings
                                            $"{SettingsProvider.Default.Settings.TemplatesLocation}\n\n" +
                                            $"De default templates worden geladen", "Bestand met templates niet gevonden");
 
-                        if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
                         {
-                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
+                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
                             var twl = new TLCGenTemplatesModelWithLocation
                             {
-                                Location = Path.GetFileNameWithoutExtension(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")),
+                                Location = Path.GetFileNameWithoutExtension(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")),
                                 Editable = false,
                                 Templates = t
                             };
-                            _LoadedTemplates.Add(twl);
+                            _loadedTemplates.Add(twl);
                             if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
                             if (twl.Templates.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
                             if (twl.Templates.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                            if (twl.Templates.PrioIngreepTemplates != null) foreach (var tprio in t.PrioIngreepTemplates) Templates.PrioIngreepTemplates.Add(tprio);
                         }
                         else
                         {
                             MessageBox.Show("Could not find defaults for templates. None loaded.", "Error loading default template");
                             Templates = new TLCGenTemplatesModel();
-                            return;
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error while loading templates: " + e.ToString(), "Error while loading templates");
+                MessageBox.Show("Error while loading templates: " + e, "Error while loading templates");
             }
         }
 
@@ -188,7 +185,7 @@ namespace TLCGen.Settings
                 if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
                     Directory.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
-                    foreach (var t in _LoadedTemplates)
+                    foreach (var t in _loadedTemplates)
                     {
                         var fn = Path.Combine(SettingsProvider.Default.Settings.TemplatesLocation, t.Location + ".xml");
                         if (File.Exists(fn))
@@ -199,14 +196,14 @@ namespace TLCGen.Settings
                     }
                 }
             }
-            else if(_LoadedTemplates.Any(x => x.Editable))
+            else if(_loadedTemplates.Any(x => x.Editable))
             {
                 if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
                     File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
                     File.Delete(SettingsProvider.Default.Settings.TemplatesLocation);
                 }
-                TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, _LoadedTemplates.First(x => x.Editable).Templates);
+                TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, _loadedTemplates.First(x => x.Editable).Templates);
             }
         }
 
@@ -216,7 +213,7 @@ namespace TLCGen.Settings
 
         public static void OverrideDefault(ITemplatesProvider provider)
         {
-            _Default = provider;
+            _default = provider;
         }
 
         #endregion // Public Methods

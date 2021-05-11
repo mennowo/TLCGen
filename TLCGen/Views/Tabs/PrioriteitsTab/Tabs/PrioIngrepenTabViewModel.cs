@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -15,7 +17,7 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 0, type: TabItemTypeEnum.PrioriteitTab)]
-    public class PrioIngrepenTabViewModel : TLCGenTabItemViewModel
+    public class PrioIngrepenTabViewModel : TLCGenTabItemViewModel, IAllowTemplates<PrioIngreepModel>
     {
         #region Fields
 
@@ -25,6 +27,7 @@ namespace TLCGen.ViewModels
         private PrioIngreepMeldingenListViewModel _selectedMeldingenList;
         private PrioIngreepViewModel _selectedIngreep;
         private PrioIngreepInUitMeldingViewModel _selectedMelding;
+        private TemplateProviderViewModel<TLCGenTemplateModel<PrioIngreepModel>,PrioIngreepModel> _templatesProviderVm;
 
         #endregion // Fields
 
@@ -114,9 +117,11 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged();
             }
         }
+        
+        public TemplateProviderViewModel<TLCGenTemplateModel<PrioIngreepModel>, PrioIngreepModel> TemplatesProviderVm => 
+            _templatesProviderVm ??= new TemplateProviderViewModel<TLCGenTemplateModel<PrioIngreepModel>, PrioIngreepModel>(this);
 
         #endregion // Properties
-
         
         #region Commands
 
@@ -225,5 +230,33 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Constructor
+
+        #region IAllowTemplates
+
+        public void InsertItemsFromTemplate(List<PrioIngreepModel> items)
+        {
+            if (_Controller == null)
+                return;
+
+            foreach (var prio in items)
+            {
+                ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.Add(prio);
+                ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.BubbleSort();
+                // needed to regulate KAR dummies
+                var inM = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
+                var uitM = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
+                if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                SelectedFaseCyclus.Ingrepen.Add(new PrioIngreepViewModel(prio, SelectedFaseCyclus));
+            }
+            
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        public void UpdateAfterApplyTemplate(PrioIngreepModel item)
+        {
+        }
+
+        #endregion // IAllowTemplates
     }
 }

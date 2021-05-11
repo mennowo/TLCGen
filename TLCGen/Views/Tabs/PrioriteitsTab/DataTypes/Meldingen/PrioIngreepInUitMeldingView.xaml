@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
-             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"

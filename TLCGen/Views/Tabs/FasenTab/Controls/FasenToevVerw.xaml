@@ -7,12 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <StackPanel Grid.Row="1">
+        <StackPanel>
             <WrapPanel >
                 <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
                 <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />
             </WrapPanel>
-            <local:TemplateManagerView DataContext="{Binding TemplatesProviderVM}" AutomationProperties.AutomationId="fasenTemplateManager" />
+            <local:TemplateManagerView DataContext="{Binding TemplatesProviderVm}" AutomationProperties.AutomationId="fasenTemplateManager" />
         </StackPanel>
     </Grid>
 </UserControl>

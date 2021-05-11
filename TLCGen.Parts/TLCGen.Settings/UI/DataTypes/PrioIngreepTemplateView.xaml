@@ -85,8 +85,64 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Inmeldingen">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Bottom" Margin="2" Content="Verwijderen" Command="{Binding Path=RemovePrioIngreepInmeldingCommand}" />
+                            <Button DockPanel.Dock="Bottom" Margin="2" Content="Nieuw" Command="{Binding Path=AddPrioIngreepInmeldingCommand}" />
+                            <ListView DockPanel.Dock="Top"
+                                ItemsSource="{Binding Path=PrioIngreepInmeldingen}"
+                                SelectedItem="{Binding Path=PrioIngreepSelectedInmelding,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
+                                Margin="2">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Naam}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DockPanel>
+                        <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <ct:SimplePropertyEditor BoundObject="{Binding Path=PrioIngreepSelectedInmelding,UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Uitmeldingen">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Bottom" Margin="2" Content="Verwijderen" Command="{Binding Path=RemovePrioIngreepUitmeldingCommand}" />
+                            <Button DockPanel.Dock="Bottom" Margin="2" Content="Nieuw" Command="{Binding Path=AddPrioIngreepUitmeldingCommand}" />
+                            <ListView DockPanel.Dock="Top"
+                                ItemsSource="{Binding Path=PrioIngreepUitmeldingen}"
+                                SelectedItem="{Binding Path=PrioIngreepSelectedUitmelding,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
+                                Margin="2">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Naam}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DockPanel>
+                        <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <ct:SimplePropertyEditor BoundObject="{Binding Path=PrioIngreepSelectedUitmelding,UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>

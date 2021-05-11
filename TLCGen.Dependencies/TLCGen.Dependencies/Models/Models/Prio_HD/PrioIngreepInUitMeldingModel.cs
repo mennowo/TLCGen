@@ -11,16 +11,21 @@ namespace TLCGen.Models
 
         public string Naam { get; set; }
 
+        [Browsable(false)]
         public PrioIngreepInUitMeldingTypeEnum InUit { get; set; }
+
         public PrioIngreepInUitMeldingVoorwaardeTypeEnum Type { get; set; }
 
         #region Reguliere IO (detectie, Vecom, SD via ingang, wissels)
 
+        [Browsable(false)]
         [RefersTo(TLCGenObjectTypeEnum.Input, nameof(InputTLCGenType))]
         [HasDefault(false)]
         public string RelatedInput1 { get; set; }
+
         public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type { get; set; }
 
+        [Browsable(false)]
         public TLCGenObjectTypeEnum InputTLCGenType
         {
             get
@@ -38,22 +43,30 @@ namespace TLCGen.Models
             }
         }
 
+        [Browsable(false)]
         public bool TweedeInput { get; set; }
+        
+        [Browsable(false)]
         [RefersTo(TLCGenObjectTypeEnum.Input, nameof(InputTLCGenType))]
         [HasDefault(false)]
         public string RelatedInput2 { get; set; }
         public PrioIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type { get; set; }
         
+        [Browsable(false)]
         public bool KijkNaarWisselStand { get; set; }
+        
         public bool AlleenIndienGeenInmelding { get; set; }
+        
         public bool AlleenIndienRood { get; set; }
 
         public bool AntiJutterTijdToepassen { get; set; }
+        
         public int AntiJutterTijd { get; set; }
 
         public bool CheckAltijdOpDsinBijVecom { get; set; }
 
         public bool OpvangStoring { get; set; }
+        
         public PrioIngreepInUitMeldingModel MeldingBijstoring { get; set; }
 
         #endregion

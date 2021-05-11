@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 using TLCGen.Extensions;
@@ -23,6 +24,14 @@ namespace TLCGen.Settings
         private RelayCommand _addPrioIngreepCommand;
         private RelayCommand _removePrioIngreepCommand;
         private RelayCommand _applyDefaultsCommand;
+        private RelayCommand _addPrioIngreepInmeldingCommand;
+        private RelayCommand _removePrioIngreepInmeldingCommand;
+        private ObservableCollection<PrioIngreepInUitMeldingModel> _prioIngreepInmeldingen;
+        private PrioIngreepInUitMeldingModel _prioIngreepSelectedInmelding;
+        private ObservableCollection<PrioIngreepInUitMeldingModel> _prioIngreepUitmeldingen;
+        private PrioIngreepInUitMeldingModel _prioIngreepSelectedUitmelding;
+        private RelayCommand _addPrioIngreepUitmeldingCommand;
+        private RelayCommand _removePrioIngreepUitmeldingCommand;
 
         #endregion // Fields
 
@@ -137,7 +146,97 @@ namespace TLCGen.Settings
             get => _selectedPrioIngreep;
             set
             {
-                _selectedPrioIngreep = value; 
+                _selectedPrioIngreep = value;
+                PrioIngreepInmeldingen.CollectionChanged -= PrioIngreepInmeldingenOnCollectionChanged;
+                PrioIngreepUitmeldingen.CollectionChanged -= PrioIngreepUitmeldingenOnCollectionChanged;
+                PrioIngreepInmeldingen.Clear();
+                PrioIngreepUitmeldingen.Clear();
+                foreach (var m in _selectedPrioIngreep.MeldingenData.Inmeldingen) PrioIngreepInmeldingen.Add(m);
+                foreach (var m in _selectedPrioIngreep.MeldingenData.Uitmeldingen) PrioIngreepUitmeldingen.Add(m);
+                PrioIngreepInmeldingen.CollectionChanged += PrioIngreepInmeldingenOnCollectionChanged;
+                PrioIngreepUitmeldingen.CollectionChanged += PrioIngreepUitmeldingenOnCollectionChanged;
+                PrioIngreepSelectedInmelding = PrioIngreepInmeldingen.FirstOrDefault();
+                PrioIngreepSelectedUitmelding = PrioIngreepUitmeldingen.FirstOrDefault();
+                RaisePropertyChanged();
+            }
+        }
+
+        private void PrioIngreepInmeldingenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (PrioIngreepInUitMeldingModel m in e.NewItems)
+                {
+                    _selectedPrioIngreep.MeldingenData.Inmeldingen.Add(m);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (PrioIngreepInUitMeldingModel m in e.OldItems)
+                {
+                    _selectedPrioIngreep.MeldingenData.Inmeldingen.Remove(m);
+                }
+            }
+        }
+
+        private void PrioIngreepUitmeldingenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (PrioIngreepInUitMeldingModel m in e.NewItems)
+                {
+                    _selectedPrioIngreep.MeldingenData.Uitmeldingen.Add(m);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (PrioIngreepInUitMeldingModel m in e.OldItems)
+                {
+                    _selectedPrioIngreep.MeldingenData.Uitmeldingen.Remove(m);
+                }
+            }
+        }
+
+        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepInmeldingen
+        {
+            get
+            {
+                if (_prioIngreepInmeldingen == null)
+                {
+                    _prioIngreepInmeldingen = new ObservableCollection<PrioIngreepInUitMeldingModel>();
+                }
+                return _prioIngreepInmeldingen;
+            }
+        }
+
+        public PrioIngreepInUitMeldingModel PrioIngreepSelectedInmelding
+        {
+            get => _prioIngreepSelectedInmelding;
+            set
+            {
+                _prioIngreepSelectedInmelding = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepUitmeldingen
+        {
+            get
+            {
+                if (_prioIngreepUitmeldingen == null)
+                {
+                    _prioIngreepUitmeldingen = new ObservableCollection<PrioIngreepInUitMeldingModel>();
+                }
+                return _prioIngreepUitmeldingen;
+            }
+        }
+
+        public PrioIngreepInUitMeldingModel PrioIngreepSelectedUitmelding
+        {
+            get => _prioIngreepSelectedUitmelding;
+            set
+            {
+                _prioIngreepSelectedUitmelding = value;
                 RaisePropertyChanged();
             }
         }
@@ -162,8 +261,7 @@ namespace TLCGen.Settings
                 PrioIngrepen.Remove(SelectedPrioIngreep);
                 SelectedPrioIngreep = null;
             }, () => SelectedPrioIngreep != null && PrioIngrepen.Count > 0));
-
-
+        
         public ICommand ApplyDefaultsCommand =>
             _applyDefaultsCommand ?? (_applyDefaultsCommand = new RelayCommand(() =>
             {
@@ -172,7 +270,32 @@ namespace TLCGen.Settings
                 DefaultsProvider.Default.SetDefaultsOnModel(d, d.Type.ToString());
                 SelectedPrioIngreep = d;
             }, () => SelectedPrioIngreep != null && PrioIngrepen.Count > 0));
+        
+        public ICommand AddPrioIngreepInmeldingCommand =>
+            _addPrioIngreepInmeldingCommand ?? (_addPrioIngreepInmeldingCommand = new RelayCommand(() =>
+            {
+                var d = new PrioIngreepInUitMeldingModel{Naam = "inmelding", InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding};
+                _prioIngreepInmeldingen.Add(d);
+            }, () => SelectedPrioIngreep != null && PrioIngreepInmeldingen != null));
 
+        public ICommand RemovePrioIngreepInmeldingCommand =>
+            _removePrioIngreepInmeldingCommand ?? (_removePrioIngreepInmeldingCommand = new RelayCommand(() =>
+            {
+                
+            }, () => SelectedPrioIngreep != null && PrioIngreepSelectedInmelding != null && PrioIngreepInmeldingen.Count > 0));
+        
+        public ICommand AddPrioIngreepUitmeldingCommand =>
+            _addPrioIngreepUitmeldingCommand ?? (_addPrioIngreepUitmeldingCommand = new RelayCommand(() =>
+            {
+                var d = new PrioIngreepInUitMeldingModel{Naam = "uitmelding", InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding};
+                _prioIngreepUitmeldingen.Add(d);
+            }, () => SelectedPrioIngreep != null && PrioIngreepUitmeldingen != null));
+
+        public ICommand RemovePrioIngreepUitmeldingCommand =>
+            _removePrioIngreepUitmeldingCommand ?? (_removePrioIngreepUitmeldingCommand = new RelayCommand(() =>
+            {
+                
+            }, () => SelectedPrioIngreep != null && PrioIngreepSelectedUitmelding != null && PrioIngreepUitmeldingen.Count > 0));
         #endregion // Commands
 
         #region IViewModelWithItem

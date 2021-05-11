@@ -15,8 +15,23 @@ namespace TLCGen.Settings
     {
         #region Fields
 
-        private TLCGenTemplateModel<FaseCyclusModel> _Template;
-
+        private readonly TLCGenTemplateModel<FaseCyclusModel> _template;
+        private FaseCyclusModel _selectedFaseCyclus;
+        private List<string> _locations;
+        private DetectorModel _selectedFaseCyclusDetector;
+        private ObservableCollection<FaseCyclusModel> _fasen;
+        private ObservableCollection<DetectorModel> _faseDetectoren;
+        private List<string> _faseCyclusTypeOpties;
+        private List<string> _detectorTypeOpties;
+        private string _selectedFaseCyclusTypeString;
+        private string _selectedDetectorTypeString;
+        private RelayCommand _addFaseCommand;
+        private RelayCommand _removeFaseCommand;
+        private RelayCommand _addFaseDetectorCommand;
+        private RelayCommand _applyDefaultsToFaseCommand;
+        private RelayCommand _applyDefaultsToFaseDetectorCommand;
+        private RelayCommand _removeFaseDetectorCommand;
+        
         #endregion // Fields
 
         #region Properties
@@ -31,7 +46,7 @@ namespace TLCGen.Settings
                 {
                     foreach (var tfc in t.Templates.FasenTemplates)
                     {
-                        if (ReferenceEquals(tfc, _Template))
+                        if (ReferenceEquals(tfc, _template))
                         {
                             return t.Editable;
                         }
@@ -41,20 +56,19 @@ namespace TLCGen.Settings
             }
         }
 
-        private List<string> _Locations;
         public List<string> Locations
         {
             get
             {
-                if (_Locations == null)
+                if (_locations == null)
                 {
-                    _Locations = new List<string>();
+                    _locations = new List<string>();
                     foreach(var t in TemplatesProvider.Default.LoadedTemplates)
                     {
-                        _Locations.Add(t.Location);
+                        _locations.Add(t.Location);
                     }
                 }
-                return _Locations;
+                return _locations;
             }
         }
 
@@ -66,7 +80,7 @@ namespace TLCGen.Settings
                 {
                     foreach(var tfc in t.Templates.FasenTemplates)
                     {
-                        if(ReferenceEquals(tfc, _Template))
+                        if(ReferenceEquals(tfc, _template))
                         {
                             return t.Location;
                         }
@@ -78,51 +92,50 @@ namespace TLCGen.Settings
             {
                 if (value == null) return;
 
-                var rem = new TLCGenTemplatesModelWithLocation();
+                TLCGenTemplatesModelWithLocation rem = null;
                 foreach (var t in TemplatesProvider.Default.LoadedTemplates)
                 {
-                    if (t.Location != value && t.Templates.FasenTemplates.Contains(_Template))
+                    if (t.Location != value && t.Templates.FasenTemplates.Contains(_template))
                     {
                         rem = t;
                     }
-                    if (t.Location == value && !t.Templates.FasenTemplates.Contains(_Template))
+                    if (t.Location == value && !t.Templates.FasenTemplates.Contains(_template))
                     {
-                        t.Templates.FasenTemplates.Add(_Template);
+                        t.Templates.FasenTemplates.Add(_template);
                     }
                 }
-                if (rem != null) rem.Templates.FasenTemplates.Remove(_Template);
+                if (rem != null) rem.Templates.FasenTemplates.Remove(_template);
             }
         }
 
         public string Naam
         {
-            get => _Template.Naam;
+            get => _template.Naam;
             set
             {
-                _Template.Naam = value;
-                RaisePropertyChanged("Naam");
+                _template.Naam = value;
+                RaisePropertyChanged();
             }
         }
 
         public string Replace
         {
-            get => _Template.Replace;
+            get => _template.Replace;
             set
             {
-                _Template.Replace = value;
-                RaisePropertyChanged("Replace");
+                _template.Replace = value;
+                RaisePropertyChanged();
             }
         }
 
         public bool IsReplaceAvailable => Fasen.Count == 1;
 
-        private FaseCyclusModel _SelectedFaseCyclus;
         public FaseCyclusModel SelectedFaseCyclus
         {
-            get => _SelectedFaseCyclus;
+            get => _selectedFaseCyclus;
             set
             {
-                _SelectedFaseCyclus = value;
+                _selectedFaseCyclus = value;
                 FaseDetectoren.CollectionChanged -= FaseDetectoren_CollectionChanged;
                 FaseDetectoren.Clear();
                 if (value != null)
@@ -145,18 +158,18 @@ namespace TLCGen.Settings
         
         public string SelectedFaseCyclusDetectorNaam
         {
-            get => _SelectedFaseCyclusDetector?.Naam;
+            get => _selectedFaseCyclusDetector?.Naam;
             set
             {
-                _SelectedFaseCyclusDetector.Naam = value;
+                _selectedFaseCyclusDetector.Naam = value;
 
                 // Hack to update name in listview without writing new VMs
                 var sd = SelectedFaseCyclusDetector;
                 FaseDetectoren.CollectionChanged -= FaseDetectoren_CollectionChanged;
                 FaseDetectoren.Clear();
-                if (_SelectedFaseCyclus != null)
+                if (_selectedFaseCyclus != null)
                 {
-                    foreach (var d in _SelectedFaseCyclus.Detectoren)
+                    foreach (var d in _selectedFaseCyclus.Detectoren)
                     {
                         FaseDetectoren.Add(d);
                     }
@@ -165,98 +178,92 @@ namespace TLCGen.Settings
                 SelectedFaseCyclusDetector = sd;
                 // End of trick
 
-                RaisePropertyChanged("SelectedFaseCyclusDetectorNaam");
+                RaisePropertyChanged();
             }
         }
 
         public string SelectedFaseCyclusDetectorVissimNaam
         {
-            get => _SelectedFaseCyclusDetector?.VissimNaam;
+            get => _selectedFaseCyclusDetector?.VissimNaam;
             set
             {
-                _SelectedFaseCyclusDetector.VissimNaam = value;
-                RaisePropertyChanged("SelectedFaseCyclusDetectorVissimNaam");
+                _selectedFaseCyclusDetector.VissimNaam = value;
+                RaisePropertyChanged();
             }
         }
 
-        private DetectorModel _SelectedFaseCyclusDetector;
         public DetectorModel SelectedFaseCyclusDetector
         {
-            get => _SelectedFaseCyclusDetector;
+            get => _selectedFaseCyclusDetector;
             set
             {
-                _SelectedFaseCyclusDetector = value;
+                _selectedFaseCyclusDetector = value;
                 if (value != null)
                     SelectedDetectorTypeString = value.Type.GetDescription();
                 else
                     SelectedDetectorTypeString = null;
 
-                RaisePropertyChanged("SelectedFaseCyclusDetectorNaam");
-                RaisePropertyChanged("SelectedFaseCyclusDetectorVissimNaam");
-                RaisePropertyChanged("SelectedFaseCyclusDetector");
-                RaisePropertyChanged("SelectedDetectorTypeString");
+                RaisePropertyChanged(nameof(SelectedFaseCyclusDetectorNaam));
+                RaisePropertyChanged(nameof(SelectedFaseCyclusDetectorVissimNaam));
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(SelectedDetectorTypeString));
             }
         }
 
-        private ObservableCollection<FaseCyclusModel> _Fasen;
         public ObservableCollection<FaseCyclusModel> Fasen
         {
             get
             {
-                if (_Fasen == null)
+                if (_fasen == null)
                 {
-                    _Fasen = new ObservableCollection<FaseCyclusModel>();
+                    _fasen = new ObservableCollection<FaseCyclusModel>();
                 }
-                return _Fasen;
+                return _fasen;
             }
         }
 
-        private ObservableCollection<DetectorModel> _FaseDetectoren;
         public ObservableCollection<DetectorModel> FaseDetectoren
         {
             get
             {
-                if (_FaseDetectoren == null)
+                if (_faseDetectoren == null)
                 {
-                    _FaseDetectoren = new ObservableCollection<DetectorModel>();
+                    _faseDetectoren = new ObservableCollection<DetectorModel>();
                 }
-                return _FaseDetectoren;
+                return _faseDetectoren;
             }
         }
 
-        private List<string> _FaseCyclusTypeOpties;
         public List<string> FaseCyclusTypeOpties
         {
             get
             {
-                if (_FaseCyclusTypeOpties == null)
+                if (_faseCyclusTypeOpties == null)
                 {
-                    _FaseCyclusTypeOpties = new List<string>();
+                    _faseCyclusTypeOpties = new List<string>();
                 }
-                return _FaseCyclusTypeOpties;
+                return _faseCyclusTypeOpties;
             }
         }
 
-        private List<string> _DetectorTypeOpties;
         public List<string> DetectorTypeOpties
         {
             get
             {
-                if (_DetectorTypeOpties == null)
+                if (_detectorTypeOpties == null)
                 {
-                    _DetectorTypeOpties = new List<string>();
+                    _detectorTypeOpties = new List<string>();
                 }
-                return _DetectorTypeOpties;
+                return _detectorTypeOpties;
             }
         }
 
-        private string _SelectedFaseCyclusTypeString;
         public string SelectedFaseCyclusTypeString
         {
-            get => _SelectedFaseCyclusTypeString;
+            get => _selectedFaseCyclusTypeString;
             set
             {
-                _SelectedFaseCyclusTypeString = value;
+                _selectedFaseCyclusTypeString = value;
                 if (SelectedFaseCyclus != null)
                 {
                     if (value == FaseTypeEnum.Auto.GetDescription())
@@ -287,13 +294,12 @@ namespace TLCGen.Settings
             }
         }
 
-        private string _SelectedDetectorTypeString;
         public string SelectedDetectorTypeString
         {
-            get => _SelectedDetectorTypeString;
+            get => _selectedDetectorTypeString;
             set
             {
-                _SelectedDetectorTypeString = value;
+                _selectedDetectorTypeString = value;
                 if (SelectedFaseCyclusDetector != null)
                 {
                     if (value == DetectorTypeEnum.Kop.GetDescription())
@@ -357,82 +363,75 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        RelayCommand _AddFaseCommand;
         public ICommand AddFaseCommand
         {
             get
             {
-                if (_AddFaseCommand == null)
+                if (_addFaseCommand == null)
                 {
-                    _AddFaseCommand = new RelayCommand(AddFaseCommand_Executed, AddFaseCommand_CanExecute);
+                    _addFaseCommand = new RelayCommand(AddFaseCommand_Executed, AddFaseCommand_CanExecute);
                 }
-                return _AddFaseCommand;
+                return _addFaseCommand;
             }
         }
-
-
-        RelayCommand _RemoveFaseCommand;
+        
         public ICommand RemoveFaseCommand
         {
             get
             {
-                if (_RemoveFaseCommand == null)
+                if (_removeFaseCommand == null)
                 {
-                    _RemoveFaseCommand = new RelayCommand(RemoveFaseCommand_Executed, RemoveFaseCommand_CanExecute);
+                    _removeFaseCommand = new RelayCommand(RemoveFaseCommand_Executed, RemoveFaseCommand_CanExecute);
                 }
-                return _RemoveFaseCommand;
+                return _removeFaseCommand;
             }
         }
 
-        RelayCommand _AddFaseDetectorCommand;
         public ICommand AddFaseDetectorCommand
         {
             get
             {
-                if (_AddFaseDetectorCommand == null)
+                if (_addFaseDetectorCommand == null)
                 {
-                    _AddFaseDetectorCommand = new RelayCommand(AddFaseDetectorCommand_Executed, AddFaseDetectorCommand_CanExecute);
+                    _addFaseDetectorCommand = new RelayCommand(AddFaseDetectorCommand_Executed, AddFaseDetectorCommand_CanExecute);
                 }
-                return _AddFaseDetectorCommand;
+                return _addFaseDetectorCommand;
             }
         }
 
-        RelayCommand _RemoveFaseDetectorCommand;
         public ICommand RemoveFaseDetectorCommand
         {
             get
             {
-                if (_RemoveFaseDetectorCommand == null)
+                if (_removeFaseDetectorCommand == null)
                 {
-                    _RemoveFaseDetectorCommand = new RelayCommand(RemoveFaseDetectorCommand_Executed, RemoveFaseDetectorCommand_CanExecute);
+                    _removeFaseDetectorCommand = new RelayCommand(RemoveFaseDetectorCommand_Executed, RemoveFaseDetectorCommand_CanExecute);
                 }
-                return _RemoveFaseDetectorCommand;
+                return _removeFaseDetectorCommand;
             }
         }
 
-        RelayCommand _ApplyDefaultsToFaseCommand;
         public ICommand ApplyDefaultsToFaseCommand
         {
             get
             {
-                if (_ApplyDefaultsToFaseCommand == null)
+                if (_applyDefaultsToFaseCommand == null)
                 {
-                    _ApplyDefaultsToFaseCommand = new RelayCommand(ApplyDefaultsToFaseCommand_Executed, ApplyDefaultsToFaseCommand_CanExecute);
+                    _applyDefaultsToFaseCommand = new RelayCommand(ApplyDefaultsToFaseCommand_Executed, ApplyDefaultsToFaseCommand_CanExecute);
                 }
-                return _ApplyDefaultsToFaseCommand;
+                return _applyDefaultsToFaseCommand;
             }
         }
 
-        RelayCommand _ApplyDefaultsToFaseDetectorCommand;
         public ICommand ApplyDefaultsToFaseDetectorCommand
         {
             get
             {
-                if (_ApplyDefaultsToFaseDetectorCommand == null)
+                if (_applyDefaultsToFaseDetectorCommand == null)
                 {
-                    _ApplyDefaultsToFaseDetectorCommand = new RelayCommand(ApplyDefaultsToFaseDetectorCommand_Executed, ApplyDefaultsToFaseDetectorCommand_CanExecute);
+                    _applyDefaultsToFaseDetectorCommand = new RelayCommand(ApplyDefaultsToFaseDetectorCommand_Executed, ApplyDefaultsToFaseDetectorCommand_CanExecute);
                 }
-                return _ApplyDefaultsToFaseDetectorCommand;
+                return _applyDefaultsToFaseDetectorCommand;
             }
         }
 
@@ -453,13 +452,13 @@ namespace TLCGen.Settings
             return string.IsNullOrEmpty(Replace);
         }
 
-        void RemoveFaseCommand_Executed(object prm)
+        private void RemoveFaseCommand_Executed(object prm)
         {
             Fasen.Remove(SelectedFaseCyclus);
             SelectedFaseCyclus = null;
         }
 
-        bool RemoveFaseCommand_CanExecute(object prm)
+        private bool RemoveFaseCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null && Fasen.Count > 1;
         }
@@ -473,23 +472,23 @@ namespace TLCGen.Settings
             FaseDetectoren.Add(d);
         }
 
-        bool AddFaseDetectorCommand_CanExecute(object prm)
+        private bool AddFaseDetectorCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null;
         }
 
-        void RemoveFaseDetectorCommand_Executed(object prm)
+        private void RemoveFaseDetectorCommand_Executed(object prm)
         {
             FaseDetectoren.Remove(SelectedFaseCyclusDetector);
             SelectedFaseCyclusDetector = null;
         }
 
-        bool RemoveFaseDetectorCommand_CanExecute(object prm)
+        private bool RemoveFaseDetectorCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
         }
 
-        void ApplyDefaultsToFaseCommand_Executed(object prm)
+        private void ApplyDefaultsToFaseCommand_Executed(object prm)
         {
             var fc = SelectedFaseCyclus;
             SelectedFaseCyclus = null;
@@ -497,12 +496,12 @@ namespace TLCGen.Settings
             SelectedFaseCyclus = fc;
         }
 
-        bool ApplyDefaultsToFaseCommand_CanExecute(object prm)
+        private bool ApplyDefaultsToFaseCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclus != null;
         }
 
-        void ApplyDefaultsToFaseDetectorCommand_Executed(object prm)
+        private void ApplyDefaultsToFaseDetectorCommand_Executed(object prm)
         {
             var d = SelectedFaseCyclusDetector;
             SelectedFaseCyclusDetector = null;
@@ -510,7 +509,7 @@ namespace TLCGen.Settings
             SelectedFaseCyclusDetector = d;
         }
 
-        bool ApplyDefaultsToFaseDetectorCommand_CanExecute(object prm)
+        private bool ApplyDefaultsToFaseDetectorCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
         }
@@ -521,7 +520,7 @@ namespace TLCGen.Settings
 
         public object GetItem()
         {
-            return _Template;
+            return _template;
         }
 
         #endregion // IViewModelWithItem
@@ -534,17 +533,17 @@ namespace TLCGen.Settings
             {
                 foreach(FaseCyclusModel fc in e.NewItems)
                 {
-                    _Template.Items.Add(fc);
+                    _template.Items.Add(fc);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (FaseCyclusModel fc in e.OldItems)
                 {
-                    _Template.Items.Remove(fc);
+                    _template.Items.Remove(fc);
                 }
             }
-            RaisePropertyChanged("IsReplaceAvailable");
+            RaisePropertyChanged(nameof(IsReplaceAvailable));
         }
 
         private void FaseDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -571,7 +570,7 @@ namespace TLCGen.Settings
 
         public FaseCyclusTemplateViewModel(TLCGenTemplateModel<FaseCyclusModel> template)
         {
-            _Template = template;
+            _template = template;
             foreach(var fc in template.Items)
             {
                 Fasen.Add(fc);
