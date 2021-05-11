@@ -136,16 +136,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller = value;
                 if (_Controller == null) return;
-
-                _fasen = null;
-                foreach (var fcm in _Controller.Fasen)
-                {
-                    var fcvm = 
-                        new FaseCyclusWithPrioViewModel(
-                            fcm.Naam, 
-                            _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == fcm.Naam).ToList());
-                    Fasen.Add(fcvm);
-                }
+                RefreshIngrepen();
             }
         }
 
@@ -165,6 +156,19 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
+        private void RefreshIngrepen()
+        {
+            _fasen = null;
+            foreach (var fcm in _Controller.Fasen)
+            {
+                var fcvm = 
+                    new FaseCyclusWithPrioViewModel(
+                        fcm.Naam, 
+                        _Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == fcm.Naam).ToList());
+                Fasen.Add(fcvm);
+            }
+        }
+        
         private void OnFasenChanged(FasenChangedMessage obj)
         {
             if (obj.RemovedFasen?.Any() == true)
@@ -227,6 +231,12 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
+            MessengerInstance.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessageReceived);
+        }
+
+        private void OnPrioIngrepenChangedMessageReceived(PrioIngrepenChangedMessage obj)
+        {
+            RefreshIngrepen();
         }
 
         #endregion // Constructor

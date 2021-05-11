@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object other)
         {
-            return FaseCyclus.CompareTo(((HalfstarOVIngreepViewModel)other).FaseCyclus);
+            return string.Compare(FaseCyclus, ((HalfstarOVIngreepViewModel)other)?.FaseCyclus, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

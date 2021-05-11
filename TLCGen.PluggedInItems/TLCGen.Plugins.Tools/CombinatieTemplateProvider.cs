@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using TLCGen.Extensions;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.Tools
 {
@@ -159,6 +162,16 @@ namespace TLCGen.Plugins.Tools
                             alert += $"Detector {((DetectorModel)o).Naam} uit de template heeft geen waarde voor de fase; deze wordt niet toegevoegd.\n";
                         }
                         break;
+                    case CombinatieTemplateItemTypeEnum.PrioIngreep:
+                        if (fc1 != null)
+                        {
+                            items.Add(new Tuple<object, object>(o, fc1));
+                        }
+                        else
+                        {
+                            alert += $"Prio ingreep {((PrioIngreepModel)o)?.Naam ?? "NULL"} uit de template heeft geen waarde voor de fase; deze wordt niet toegevoegd.\n";
+                        }
+                        break;
                     case CombinatieTemplateItemTypeEnum.Naloop:
                     case CombinatieTemplateItemTypeEnum.Meeaanvraag:
                     case CombinatieTemplateItemTypeEnum.Gelijkstart:
@@ -202,7 +215,7 @@ namespace TLCGen.Plugins.Tools
                         if (ok) items.Add(new Tuple<object, object>(o, null));
                         break;
                     case CombinatieTemplateItemTypeEnum.Rateltikker:
-                        if(!c.Signalen.Rateltikkers.Any(x => x.FaseCyclus == ((RatelTikkerModel)o).FaseCyclus))
+                        if(c.Signalen.Rateltikkers.All(x => x.FaseCyclus != ((RatelTikkerModel) o).FaseCyclus))
                         {
                             items.Add(new Tuple<object, object>(o, null));
                         }
@@ -222,28 +235,38 @@ namespace TLCGen.Plugins.Tools
                     case DetectorModel d:
                         var fc = (FaseCyclusModel)i.Item2;
                         fc.Detectoren.Add(d);
-                        Messenger.Default.Send(new Messaging.Messages.DetectorenChangedMessage(c, new List<DetectorModel> { d }, null));
+                        Messenger.Default.Send(new DetectorenChangedMessage(c, new List<DetectorModel> { d }, null));
                         break;
                     case NaloopModel nl:
                         c.InterSignaalGroep.Nalopen.Add(nl);
-                        Messenger.Default.Send(new Messaging.Messages.InterSignaalGroepChangedMessage(nl.FaseVan, nl.FaseNaar, nl, isnew: true));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(nl.FaseVan, nl.FaseNaar, nl, isnew: true));
                         break;
                     case MeeaanvraagModel ma:
                         c.InterSignaalGroep.Meeaanvragen.Add(ma);
-                        Messenger.Default.Send(new Messaging.Messages.InterSignaalGroepChangedMessage(ma.FaseVan, ma.FaseNaar, ma, isnew: true));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(ma.FaseVan, ma.FaseNaar, ma, isnew: true));
                         break;
                     case GelijkstartModel gs:
                         c.InterSignaalGroep.Gelijkstarten.Add(gs);
-                        Messenger.Default.Send(new Messaging.Messages.InterSignaalGroepChangedMessage(gs.FaseVan, gs.FaseNaar, gs, isnew: true));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(gs.FaseVan, gs.FaseNaar, gs, isnew: true));
                         break;
                     case LateReleaseModel lr:
                         c.InterSignaalGroep.LateReleases.Add(lr);
-                        Messenger.Default.Send(new Messaging.Messages.InterSignaalGroepChangedMessage(lr.FaseVan, lr.FaseNaar, lr, isnew: true));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(lr.FaseVan, lr.FaseNaar, lr, isnew: true));
                         break;
                     case RatelTikkerModel rt:
                         c.Signalen.Rateltikkers.Add(rt);
                         // Trick to force rebuilding list in UI
-                        Messenger.Default.Send(new Messaging.Messages.DetectorenChangedMessage(c, null, null));
+                        Messenger.Default.Send(new DetectorenChangedMessage(c, null, null));
+                        break;
+                    case PrioIngreepModel prio:
+                        c.PrioData.PrioIngrepen.Add(prio);
+                        c.PrioData.PrioIngrepen.BubbleSort();
+                        // needed to regulate KAR dummies
+                        var inM = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
+                        var uitM = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
+                        if (inM != null) Messenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                        if (uitM != null) Messenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                        Messenger.Default.Send(new PrioIngrepenChangedMessage());
                         break;
                 }
             }

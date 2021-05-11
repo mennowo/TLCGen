@@ -7,6 +7,7 @@
         Meeaanvraag,
         Rateltikker,
         Gelijkstart,
-        LateRelease
+        LateRelease,
+        PrioIngreep
     }
 }

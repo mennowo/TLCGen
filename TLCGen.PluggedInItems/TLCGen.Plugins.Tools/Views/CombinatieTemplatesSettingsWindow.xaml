@@ -101,10 +101,10 @@
                                                     <Style TargetType="Border">
                                                         <Setter Property="Background" Value="DarkGray" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOK}" Value="False">
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOk}" Value="False">
                                                                 <Setter Property="Background" Value="DarkRed" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOK}" Value="True">
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOk}" Value="True">
                                                                 <Setter Property="Background" Value="ForestGreen" />
                                                             </DataTrigger>
                                                         </Style.Triggers>

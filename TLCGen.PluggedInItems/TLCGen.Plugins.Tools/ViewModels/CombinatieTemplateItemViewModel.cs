@@ -9,27 +9,13 @@ using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class TemplateObject
-    {
-        public object Object { get; set; }
-        public string Description { get; set; }
-        public CombinatieTemplateItemTypeEnum Type { get; set; }
-
-        public TemplateObject(object @object, CombinatieTemplateItemTypeEnum type, string description)
-        {
-            Object = @object;
-            Type = type;
-            Description = description;
-        }
-    }
-
     public class CombinatieTemplateItemViewModel : ViewModelBase
     {
         #region Fields
 
         private RelayCommand _checkTemplateCommand;
         private RelayCommand _applyItemFromControllerCommand;
-        private bool _isObjectJsonOK;
+        private bool _isObjectJsonOk;
         private TemplateObject _selectedItem;
 
         #endregion // Fields
@@ -75,7 +61,7 @@ namespace TLCGen.Plugins.Tools
         [Browsable(false)]
         public string ObjectJson
         {
-            get => CombinatieTemplateItem.ObjectJson == null ? "" : CombinatieTemplateItem.ObjectJson;
+            get => CombinatieTemplateItem.ObjectJson ?? "";
             set
             {
                 CombinatieTemplateItem.ObjectJson = value;
@@ -85,18 +71,18 @@ namespace TLCGen.Plugins.Tools
         }
 
         [Browsable(false)]
-        public bool IsObjectJsonOK
+        public bool IsObjectJsonOk
         {
-            get => _isObjectJsonOK;
+            get => _isObjectJsonOk;
             set
             {
-                _isObjectJsonOK = value;
+                _isObjectJsonOk = value;
                 RaisePropertyChanged();
             }
         }
 
         [Browsable(false)]
-        public Brush Foreground => IsObjectJsonOK ? Brushes.DarkGreen : Brushes.DarkRed;
+        public Brush Foreground => IsObjectJsonOk ? Brushes.DarkGreen : Brushes.DarkRed;
 
         #endregion // Properties
 
@@ -104,7 +90,7 @@ namespace TLCGen.Plugins.Tools
 
         public void SetSelectableItems()
         {
-            var c = TLCGen.DataAccess.TLCGenControllerDataProvider.Default.Controller;
+            var c = DataAccess.TLCGenControllerDataProvider.Default.Controller;
             SelectableItems.Clear();
             if (c == null) return;
             switch (Type)
@@ -145,6 +131,12 @@ namespace TLCGen.Plugins.Tools
                         SelectableItems.Add(new TemplateObject(lr, CombinatieTemplateItemTypeEnum.LateRelease, $"Late release van {lr.FaseVan} naar {lr.FaseNaar}"));
                     }
                     break;
+                case CombinatieTemplateItemTypeEnum.PrioIngreep:
+                    foreach (var prio in c.PrioData.PrioIngrepen)
+                    {
+                        SelectableItems.Add(new TemplateObject(prio, CombinatieTemplateItemTypeEnum.PrioIngreep, $"Prio ingreep {prio.Naam} voor fase {prio.FaseCyclus}"));
+                    }
+                    break;
             }
         }
 
@@ -177,11 +169,11 @@ namespace TLCGen.Plugins.Tools
                         JsonConvert.DeserializeObject<LateReleaseModel>(ObjectJson);
                         break;
                 }
-                IsObjectJsonOK = true;
+                IsObjectJsonOk = true;
             }
             catch
             {
-                IsObjectJsonOK = false;
+                IsObjectJsonOk = false;
             }
             RaisePropertyChanged(nameof(Foreground));
         }));

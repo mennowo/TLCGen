@@ -7,29 +7,17 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/Properties/AssemblyInfo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/Properties/Resources.Designer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/Properties/Resources.resx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/Properties/Settings.Designer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/Properties/Settings.settings" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TLCGen.SharedControls/TLCGen.SharedControls.csproj" afterDir="false" />
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Templates voor prio mark 1">
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/ViewModels/TemplateObject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Prio_HD/PrioIngreepInUitMeldingModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Prio_HD/PrioIngreepInUitMeldingModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/TemplatesProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/TemplatesProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/FaseCyclusTemplateViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/FaseCyclusTemplateViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/PrioIngreepTemplateView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/PrioIngreepTemplateView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/PrioIngreepTemplateViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/DataTypes/PrioIngreepTemplateViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/TLCGenSettingsWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/TLCGenSettingsWindow.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.sln" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/ViewModels/Other/TemplateProviderViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/ViewModels/Other/TemplateProviderViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Controls/FasenToevVerw.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Controls/FasenToevVerw.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/FaseCyclusWithPrioViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/FaseCyclusWithPrioViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/CombinatieTemplateProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/CombinatieTemplateProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemTypeEnum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemTypeEnum.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGen.Plugins.Tools.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGen.Plugins.Tools.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/ViewModels/CombinatieTemplateItemViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/ViewModels/CombinatieTemplateItemViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Views/CombinatieTemplatesSettingsWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Views/CombinatieTemplatesSettingsWindow.xaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarOVIngreepViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarOVIngreepViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +65,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCExistingControllerImporter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCNewControllerImporter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5F37459E-F130-4442-BA19-EE268C49D074/89/8e8664a7/RuntimeMethodInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportDplCWindow.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.UnitTests/Tabs/OVIngreepSGInstellingenLijstViewModelTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -117,12 +106,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Controller/ControllerDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_ris.c" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/FixatieCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/SourceFiles/timings_uc4.c" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/WachttijdVoorspellerCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RateltikkersCodeGenerator.cs" />
@@ -164,10 +147,16 @@
       <option value="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/UI/TLCGenSettingsWindow.xaml" />
       <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Controls/FasenToevVerw.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/FaseCyclusWithPrioViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/ViewModels/Other/TemplateProviderViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen/ViewModels/Other/TemplateProviderViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/FaseCyclusWithPrioViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemTypeEnum.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Models/CombinatieTemplateItemModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/Views/CombinatieTemplatesSettingsWindow.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/ViewModels/CombinatieTemplateItemViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/CombinatieTemplateProvider.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarOVIngreepViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabViewModel.cs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -363,7 +352,7 @@
       <workItem from="1619698939456" duration="7485000" />
       <workItem from="1620629602781" duration="17946000" />
       <workItem from="1620717186955" duration="640000" />
-      <workItem from="1620717910162" duration="3315000" />
+      <workItem from="1620717910162" duration="5961000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -428,7 +417,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620659543214</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Templates voor prio mark 1">
+      <created>1620722151425</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1620722151425</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -498,7 +494,8 @@
     <MESSAGE value="realfunc update, ris fixes" />
     <MESSAGE value="fix voor fout met handmatig rangeren IO" />
     <MESSAGE value="aanzet templates voor prio" />
-    <option name="LAST_COMMIT_MESSAGE" value="aanzet templates voor prio" />
+    <MESSAGE value="Templates voor prio mark 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Templates voor prio mark 1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -508,19 +505,6 @@
           <line>861</line>
           <properties documentPath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/SynchronisatiesTabViewModel.cs" />
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabViewModel.cs</url>
-          <line>255</line>
-          <properties documentPath="C:\Users\menno\CodingConnected\Repos\TLCGen\TLCGen\Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenTabViewModel.cs" initialLine="254" containingFunctionPresentation="method 'UpdateAfterApplyTemplate'">
-            <startOffsets>
-              <option value="9173" />
-            </startOffsets>
-            <endOffsets>
-              <option value="9217" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

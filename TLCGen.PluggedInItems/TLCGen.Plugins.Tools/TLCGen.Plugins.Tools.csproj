@@ -60,6 +60,7 @@
     <Compile Include="ViewModels\CombinatieTemplateItemViewModel.cs" />
     <Compile Include="ViewModels\CombinatieTemplateOptieViewModel.cs" />
     <Compile Include="ViewModels\CombinatieTemplatesSettingsWindowViewModel.cs" />
+    <Compile Include="ViewModels\TemplateObject.cs" />
     <Compile Include="Views\CombinatieTemplatesSettingsWindow.xaml.cs">
       <DependentUpon>CombinatieTemplatesSettingsWindow.xaml</DependentUpon>
     </Compile>

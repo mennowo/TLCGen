@@ -26,18 +26,10 @@ namespace TLCGen.Plugins.Tools
                     return JsonConvert.DeserializeObject<GelijkstartModel>(ObjectJson);
                 case CombinatieTemplateItemTypeEnum.LateRelease:
                     return JsonConvert.DeserializeObject<LateReleaseModel>(ObjectJson);
+                case CombinatieTemplateItemTypeEnum.PrioIngreep:
+                    return JsonConvert.DeserializeObject<PrioIngreepModel>(ObjectJson);
             }
             return null;
-        }
-
-        public object GetObject<T>()
-        {
-            return (T)GetObject();
-        }
-
-        public CombinatieTemplateItemModel()
-        {
-
         }
     }
 }
