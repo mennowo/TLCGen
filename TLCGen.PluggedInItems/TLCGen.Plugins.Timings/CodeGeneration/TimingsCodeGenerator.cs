@@ -295,7 +295,64 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                             sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{lr:naar}] && !PG[{_fcpf}{lr:naar}] && R[{_fcpf}{lr:van}] && PG[{_fcpf}{lr:van}]) PG[{_fcpf}{lr:van}] = 0;"); 
                         }
                     }
-                    
+
+                    var comment1 = false;
+                    foreach (var gs1 in c.InterSignaalGroep.Gelijkstarten)
+                    {
+                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten)
+                        {
+                            string fcA = null;
+                            string fcB = null;
+                            if (gs1.FaseVan == gs2.FaseVan && gs1.FaseNaar != gs2.FaseNaar)
+                            {
+                                fcA = gs1.FaseNaar;
+                                fcB = gs2.FaseNaar;
+                            }
+                            else if (gs1.FaseNaar == gs2.FaseVan && gs1.FaseVan != gs2.FaseNaar)
+                            {
+                                fcA = gs1.FaseVan;
+                                fcB = gs2.FaseNaar;
+                            }
+                            else if (gs1.FaseNaar == gs2.FaseNaar && gs1.FaseVan != gs2.FaseVan)
+                            {
+                                fcA = gs1.FaseVan;
+                                fcB = gs2.FaseVan;
+                            }
+
+                            if (fcA == null || fcB == null) continue;
+
+                            var start = $"{ts} if (";
+                            var and = false;
+                            if (gs1.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            {
+                                start += $"SCH[{_schpf}{_schgs}{gs1:van}{gs1:naar}]";
+                                and = true;
+                            }
+
+                            if (gs2.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            {
+                                if (and) start += " && ";
+                                start += $"SCH[{_schpf}{_schgs}{gs2:van}{gs2:naar}] && ";
+                                and = false;
+                            }
+
+                            if (and) start += " && ";
+
+                            if (!comment1)
+                            {
+                                sb.AppendLine($"{ts}/* Correctie gelijkstart <> gelijkstart");
+                                sb.AppendLine($"{ts} * Bij een gelijkstart die een fase deelt met een andere gelijsktart");
+                                sb.AppendLine($"{ts} * kan de max-end tijd worden verhoogd op start-geel, daarom wordt");
+                                sb.AppendLine($"{ts} * start geel uitgesteld.");
+                                sb.AppendLine($"{ts} */");
+                                comment1 = true;
+                            }
+
+                            sb.AppendLine($"{start}G[{_fcpf}{fcA}] && R[{_fcpf}{fcB}] && (P[{_fcpf}{fcB}] & BIT11)) YM[{_fcpf}{fcA}] |= BIT11;");
+                            sb.AppendLine($"{start}G[{_fcpf}{fcB}] && R[{_fcpf}{fcA}] && (P[{_fcpf}{fcA}] & BIT11)) YM[{_fcpf}{fcB}] |= BIT11;");
+                        }
+                    }
+
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}#endif");  
                     return sb.ToString();
@@ -332,20 +389,85 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCAfkappen:
                     sb.AppendLine("#ifndef NO_TIMETOX");
+                    sb.AppendLine($"if (SCH[{_schpf}{_schconfidence15fix}])");
+                    sb.AppendLine($"{ts}{{");
+
+                    var tsts = ts + ts;
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        var sch = $" && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}]";
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:van}] & BIT11)) {{ Z[{_fcpf}{gs:naar}] &= ~PRIO_Z_BIT; }}");
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:naar}] & BIT11)) {{ Z[{_fcpf}{gs:van}] &= ~PRIO_Z_BIT; }}");
+                        var sch = "";
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd) sch = $"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ";
+                        sb.AppendLine($"{tsts}if ({sch}(P[{_fcpf}{gs:van}] & BIT11)) {{ Z[{_fcpf}{gs:naar}] &= ~PRIO_Z_BIT; }}");
+                        sb.AppendLine($"{tsts}if ({sch}(P[{_fcpf}{gs:naar}] & BIT11)) {{ Z[{_fcpf}{gs:van}] &= ~PRIO_Z_BIT; }}");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{vs:naar}] & BIT11)) {{ Z[{_fcpf}{vs:van}] &= ~PRIO_Z_BIT; }}");
+                        sb.AppendLine($"{tsts}if ((P[{_fcpf}{vs:naar}] & BIT11)) {{ Z[{_fcpf}{vs:van}] &= ~PRIO_Z_BIT; }}");
                     }
                     foreach (var lr in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}] && (P[{_fcpf}{lr:naar}] & BIT11)) {{ Z[{_fcpf}{lr:van}] &= ~PRIO_Z_BIT; }}");
+                        sb.AppendLine($"{tsts}if ((P[{_fcpf}{lr:naar}] & BIT11)) {{ Z[{_fcpf}{lr:van}] &= ~PRIO_Z_BIT; }}");
                     }
+
+                    var comment = false;
+                    foreach (var gs1 in c.InterSignaalGroep.Gelijkstarten)
+                    {
+                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten)
+                        {
+                            string fcA = null;
+                            string fcB = null;
+                            if (gs1.FaseVan == gs2.FaseVan && gs1.FaseNaar != gs2.FaseNaar)
+                            {
+                                fcA = gs1.FaseNaar;
+                                fcB = gs2.FaseNaar;
+                            }
+                            else if (gs1.FaseNaar == gs2.FaseVan && gs1.FaseVan != gs2.FaseNaar)
+                            {
+                                fcA = gs1.FaseVan;
+                                fcB = gs2.FaseNaar;
+                            }
+                            else if (gs1.FaseNaar == gs2.FaseNaar && gs1.FaseVan != gs2.FaseVan)
+                            {
+                                fcA = gs1.FaseVan;
+                                fcB = gs2.FaseVan;
+                            }
+
+                            if (fcA == null || fcB == null) continue;
+
+                            var start = $"{tsts} if (";
+                            var and = false;
+                            if (gs1.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            {
+                                start += $"SCH[{_schpf}{_schgs}{gs1:van}{gs1:naar}]";
+                                and = true;
+                            }
+
+                            if (gs2.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            {
+                                if (and) start += " && ";
+                                start += $"SCH[{_schpf}{_schgs}{gs2:van}{gs2:naar}] && ";
+                                and = false;
+                            }
+
+                            if (and) start += " && ";
+
+                            if (!comment)
+                            {
+                                sb.AppendLine($"{tsts}/* Correctie gelijkstart <> gelijkstart");
+                                sb.AppendLine($"{tsts} * Bij een gelijkstart die een fase deelt met een andere gelijsktart");
+                                sb.AppendLine($"{tsts} * kan de max-end tijd worden verhoogd op start-geel, daarom wordt");
+                                sb.AppendLine($"{tsts} * start geel uitgesteld.");
+                                sb.AppendLine($"{tsts} */");
+                                comment = true;
+                            }
+
+                            sb.AppendLine($"{start}G[{_fcpf}{fcA}] && R[{_fcpf}{fcB}] && (P[{_fcpf}{fcB}] & BIT11)) Z[{_fcpf}{fcA}] &= ~PRIO_Z_BIT;");
+                            sb.AppendLine($"{start}G[{_fcpf}{fcB}] && R[{_fcpf}{fcA}] && (P[{_fcpf}{fcA}] & BIT11)) Z[{_fcpf}{fcB}] &= ~PRIO_Z_BIT;");
+                        }
+                    }
+
+                    sb.AppendLine($"{ts}}}");
+
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
@@ -353,16 +475,10 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
                         sb.Append($"{ts}if (");
-                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
-                        {
-                            sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
-                        }
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
                         sb.AppendLine($"(P[{_fcpf}{gs:van}] & BIT11) && R[{_fcpf}{gs:naar}] && !kp({_fcpf}{gs:naar}) && A[{_fcpf}{gs:naar}]) {{ PAR[{_fcpf}{gs:naar}] |= BIT11; P[{_fcpf}{gs:naar}] |= BIT11; }}");
                         sb.Append($"{ts}if (");
-                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
-                        {
-                            sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
-                        }
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd) sb.Append($"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ");
                         sb.AppendLine($"(P[{_fcpf}{gs:naar}] & BIT11) && R[{_fcpf}{gs:van}] && !kp({_fcpf}{gs:van}) && A[{_fcpf}{gs:van}]) {{ PAR[{_fcpf}{gs:van}] |= BIT11; P[{_fcpf}{gs:van}] |= BIT11; }}");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)

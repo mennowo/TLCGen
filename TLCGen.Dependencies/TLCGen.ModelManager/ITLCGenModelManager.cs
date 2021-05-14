@@ -21,6 +21,8 @@ namespace TLCGen.ModelManagement
         void ConvertToIntergroen(ControllerModel controller);
         void ConvertToOntruimingstijden(ControllerModel controller);
         void SetSpecialIOPerSignalGroup(ControllerModel controller);
+        void AddControllerAlert(ControllerAlertMessage msg);
+        void RemoveControllerAlert(string id);
         void UpdateControllerAlerts();
         event EventHandler ControllerAlertsUpdated;
     }

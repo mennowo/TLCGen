@@ -16,7 +16,7 @@ namespace TLCGen.Settings
         #region Fields
 
         private static readonly object Locker = new object();
-        private static IDefaultsProvider _default;
+        private static volatile IDefaultsProvider _default;
 
         #endregion // Fields
 
@@ -111,7 +111,7 @@ namespace TLCGen.Settings
                 var att = (HasDefaultAttribute)property.GetCustomAttribute(typeof(HasDefaultAttribute));
                 var attMn = (ModelNameAttribute)property.GetCustomAttribute(typeof(ModelNameAttribute));
                 var attVn = (VissimNameAttribute)property.GetCustomAttribute(typeof(VissimNameAttribute));
-                if ((att == null || att.HasDefault == true) && 
+                if ((att == null || att.HasDefault) && 
                     attMn == null && attVn == null)
                 {
                     if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) ||
@@ -124,46 +124,6 @@ namespace TLCGen.Settings
             }
         }
 
-        private FaseTypeEnum GetFaseCyclusTypeFromName(string name)
-        {
-            if (Controller == null)
-                return FaseTypeEnum.Auto;
-
-            foreach(var fc in Controller.Fasen)
-            {
-                if(fc.Naam == name)
-                {
-                    return fc.Type;
-                }
-            }
-            return FaseTypeEnum.Auto;
-        }
-
-        private DetectorTypeEnum GetDetectorTypeFromName(string name)
-        {
-            if (Controller == null)
-                return DetectorTypeEnum.Kop;
-
-            foreach (var fc in Controller.Fasen)
-            {
-                foreach (var d in fc.Detectoren)
-                {
-                    if (d.Naam == name)
-                    {
-                        return d.Type;
-                    }
-                }
-            }
-            foreach (var d in Controller.Detectoren)
-            {
-                if (d.Naam == name)
-                {
-                    return d.Type;
-                }
-            }
-            return DetectorTypeEnum.Kop;
-        }
-
         #endregion // Private Methods
 
         #region IDefaultsProvider
@@ -173,23 +133,22 @@ namespace TLCGen.Settings
             var type = model.GetType();
             var typename = type.FullName + "," + type.Assembly.GetName().Name;
 
-            var defs = Defaults.Defaults.Where(x => x.DataType == typename);
+            var defs = Defaults.Defaults.Where(x => x.DataType == typename).ToArray();
 
-            if (defs == null || !defs.Any())
+            if (!defs.Any())
                 return;
 
-            if(defs.Count() == 1)
+            if(defs.Length == 1)
             {
                 CopyAllProperties(defs.First().Data, model, onlyvalues);
             }
-            else if(defs.Count() > 1)
+            else if(defs.Length > 1)
             {
                 var found = false;
                 if (selector1 == null && selector2 == null)
                 {
                     CopyAllProperties(defs.First().Data, model, onlyvalues);
                     found = true;
-                    //MessageBox.Show("Fout bij toepassen default instellingen voor " + type.Name + ":\nGeen selector bekend bij meerdere beschikbare defaults.", "Fout bij toepassen defaults");
                 }
                 else
                 {
@@ -299,6 +258,7 @@ namespace TLCGen.Settings
                     {
                         Defaults.Defaults.Remove(d);
                     }
+#if DEBUG
                     if (message.Length > 0 || message2.Length > 0)
                     {
                         var s = "";
@@ -310,10 +270,11 @@ namespace TLCGen.Settings
                         }
                         MessageBox.Show(s, "Defaults updated");
                     }
+#endif
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("An error occured while loading the defaults:\n " + e.ToString() + "\nPlease report this.", "Error while loading defaults");
+                    MessageBox.Show("An error occured while loading the defaults:\n " + e + "\nPlease report this.", "Error while loading defaults");
                 }
             }
             else if(File.Exists(defsetfile))
@@ -370,6 +331,7 @@ namespace TLCGen.Settings
 		    foreach (XmlNode def in defs.ChildNodes)
 		    {
 			    var x = def.SelectSingleNode("DataType");
+                if (x == null) continue;
 			    var t = x.InnerText;
                 // correct old files
 			    if (t.EndsWith(",TLCGen.Model"))
@@ -408,18 +370,6 @@ namespace TLCGen.Settings
 		    return defaults;
 	    }
 
-	    private object ConvertNode(XmlNode node, Type t)
-        {
-            var stm = new MemoryStream();
-            var stw = new StreamWriter(stm);
-            stw.Write(node.OuterXml);
-            stw.Flush();
-            stm.Position = 0;
-            var ser = new System.Xml.Serialization.XmlSerializer(t);
-            var result = ser.Deserialize(stm);
-            return result;
-        }
-
         public void SaveSettings()
         {
             if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation))
@@ -448,7 +398,7 @@ namespace TLCGen.Settings
                     }
                     catch(Exception e)
                     {
-                        MessageBox.Show("Fout bij het opslaan van de TLCGen defaults:\n" + e.ToString(), "Fout bij opslaan defaults");
+                        MessageBox.Show("Fout bij het opslaan van de TLCGen defaults:\n" + e, "Fout bij opslaan defaults");
                     }
                 }
             }

@@ -1017,5 +1017,99 @@
         <DefaultPeriodeNaam></DefaultPeriodeNaam>
       </Data>
     </Default>
+    <Default>
+      <DefaultName>RIS simulatie default</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>DEFAULT</VehicleRole>
+        <VehicleSubrole>UNKNOWN</VehicleSubrole>
+        <Prioriteit>false</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>0</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS simulatie bus</DefaultName>
+      <Category>Other</Category>
+      <Selector1>Auto</Selector1>
+      <Selector2>BUS</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>PUBLICTRANSPORT</VehicleRole>
+        <VehicleSubrole>BUS</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>11</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS simulatie heavy truck</DefaultName>
+      <Category>Other</Category>
+      <Selector1>Auto</Selector1>
+      <Selector2>HEAVYTRUCK</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>COMMERCIAL</VehicleRole>
+        <VehicleSubrole>EXPRESSTRANSIT</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>11</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS simulatie special vehicles</DefaultName>
+      <Category>Other</Category>
+      <Selector1>Auto</Selector1>
+      <Selector2>SPECIALVEHICLES</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>EMERGENCY</VehicleRole>
+        <VehicleSubrole>EMERGENCY</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>15</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS simulatie fiets</DefaultName>
+      <Category>Other</Category>
+      <Selector1>Fiets</Selector1>
+      <Selector2>CYCLIST</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>DEFAULT</VehicleRole>
+        <VehicleSubrole>UNKNOWN</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>15</Snelheid>
+        <Afstand>100</Afstand>
+        <Importance>0</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS simulatie voetganger</DefaultName>
+      <Category>Other</Category>
+      <Selector1>Voetganger</Selector1>
+      <Selector2>PEDESTRIAN</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>DEFAULT</VehicleRole>
+        <VehicleSubrole>UNKNOWN</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>5</Snelheid>
+        <Afstand>15</Afstand>
+        <Importance>0</Importance>
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>

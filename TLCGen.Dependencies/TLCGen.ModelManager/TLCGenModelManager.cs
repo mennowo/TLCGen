@@ -593,6 +593,25 @@ namespace TLCGen.ModelManagement
         
         public ObservableCollection<ControllerAlertMessage> ControllerAlerts { get; } = new ObservableCollection<ControllerAlertMessage>();
 
+        public void AddControllerAlert(ControllerAlertMessage msg)
+        {
+            if (ControllerAlerts.All(x => x.Id != msg.Id))
+            {
+                msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                ControllerAlerts.Add(msg);
+            }
+        }
+
+        public void RemoveControllerAlert(string id)
+        {
+            var alert = ControllerAlerts.FirstOrDefault(x => x.Id == id);
+            if (alert != null)
+            {
+                ControllerAlerts.Remove(alert);
+                alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+            }
+        }
+
         public void UpdateControllerAlerts()
         {
             if (Controller == null)
@@ -607,7 +626,7 @@ namespace TLCGen.ModelManagement
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.WachttijdVoorspeller))
                 {
-                    var msg = new ControllerAlertMessage
+                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
                     {
                         Background = Brushes.Lavender,
                         Shown = true,
@@ -628,44 +647,16 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            // RIS prio
-            if (Controller.RISData.RISToepassen && 
-                (Controller.PrioData.HDIngrepen.Any(x => x.RIS) || 
-                 Controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
-            {
-                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RISPrio))
-                {
-                    var msg = new ControllerAlertMessage
-                    {
-                        Background = Brushes.MistyRose,
-                        Shown = true,
-                        Message = "***Let op!*** Prioriteit via de RIS bevindt zich in de bèta test fase.",
-                        Type = ControllerAlertType.RISPrio
-                    };
-                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
-                    ControllerAlerts.Add(msg);
-                }
-            }
-            else
-            {
-                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.RISPrio);
-                if (alert != null)
-                {
-                    ControllerAlerts.Remove(alert);
-                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
-                }
-            }
-            
             // Syncfunc
             if (Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RealFunc))
                 {
-                    var msg = new ControllerAlertMessage
+                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
                     {
                         Background = Brushes.LightCyan,
                         Shown = true,
-                        Message = "***Let op!*** Realfunc is nog in bèta; niet alle combinaties met andere functies zijn getest.",
+                        Message = "***Let op!*** Realfunc is nog in de bèta test fase.",
                         Type = ControllerAlertType.RealFunc
                     };
                     msg.PropertyChanged += AlertMsgOnPropertyChanged;
@@ -687,7 +678,7 @@ namespace TLCGen.ModelManagement
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RangerenOldNew))
                 {
-                    var msg = new ControllerAlertMessage
+                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
                     {
                         Background = Brushes.BlanchedAlmond,
                         Shown = true,
@@ -733,7 +724,7 @@ namespace TLCGen.ModelManagement
                     Controller.Fasen.Add(fcm);
 
                     // PT Conflict prms
-                    if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
+                    if (Controller.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                     {
                         var prms = new PrioIngreepSignaalGroepParametersModel();
                         _setDefaultsAction?.Invoke(prms, null);
@@ -762,7 +753,7 @@ namespace TLCGen.ModelManagement
                     Controller.Fasen.Remove(fcm);
 
                     // PT Conflict prms
-                    if (Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
+                    if (Controller.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                     {
                         PrioIngreepSignaalGroepParametersModel _prms = null;
                         foreach (var prms in Controller.PrioData.PrioIngreepSignaalGroepParameters)

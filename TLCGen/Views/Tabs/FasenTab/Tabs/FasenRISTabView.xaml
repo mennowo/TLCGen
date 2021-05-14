@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:TLCGen.Models;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
-             mc:Ignorable="d" Name="root"
+             mc:Ignorable="d" Name="Root"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
@@ -53,57 +53,6 @@
             </StackPanel>
         </Grid>
         <TabControl Grid.Row="4" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
-            <!--<TabItem Header="Instellingen fasen">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="RIS fasen instellingen" />
-                    <ct:SpecialDataGrid 
-                        ItemsSource="{Binding Path=RISFasen}" Margin="2"
-                        IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
-                        SelectedItem="{Binding Path=SelectedRISFase}"
-                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                        <DataGrid.Resources>
-                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISRequestStyle">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=RISAanvraag}" Value="false">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="Background" Value="LightGray" />
-                                        <Setter Property="Foreground" Value="LightGray" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISExtendStyle">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=RISVerlengen}" Value="false">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="Background" Value="LightGray" />
-                                        <Setter Property="Foreground" Value="LightGray" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.Resources>
-                        <DataGrid.RowHeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                                  AncestorType={x:Type DataGridRow}}, 
-                                                  Path=Item.FaseCyclus}"/>
-                            </DataTemplate>
-                        </DataGrid.RowHeaderTemplate>
-                        <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
-                            <DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISVerlengen,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
-                        </DataGrid.Columns>
-                    </ct:SpecialDataGrid>
-                </Grid>            
-            </TabItem>-->
-            
             <TabItem Header="Instellingen fasen">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -142,8 +91,8 @@
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
                         <ct:SpecialDataGrid.Resources>
-                            <DataGridTemplateColumn Header="SystemITF" Width="Auto" MinWidth="35" x:Key="SystemITFCol"
-                                                    Visibility="{Binding Path=DataContext.HasMultipleSystemITF,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}">
+                            <DataGridTemplateColumn Header="SystemITF" Width="Auto" MinWidth="35" x:Key="SystemItfCol"
+                                                    Visibility="{Binding Path=DataContext.HasMultipleSystemITF,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=SystemITF,Mode=OneWay}" Margin="2" />
@@ -170,7 +119,7 @@
                             <DataGridTextColumn Binding="{Binding Path=SignalGroupName,Mode=OneWay}" Header="Signaalgroep" CellStyle="{StaticResource ReadOnlyStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=RijstrookIndex,Mode=OneWay}" Header="Index" CellStyle="{StaticResource ReadOnlyStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=LaneID,UpdateSourceTrigger=PropertyChanged}" Header="Lane ID" />
-                            <StaticResource ResourceKey="SystemITFCol" />
+                            <StaticResource ResourceKey="SystemItfCol" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                 </Grid>         
@@ -195,7 +144,7 @@
                                     <Setter Property="Foreground" Value="Black" />
                                 </Style.Setters>
                             </Style>
-                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISRequestStyle">
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRisRequestStyle">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=RISAanvraag}" Value="false">
                                         <Setter Property="IsEnabled" Value="False" />
@@ -243,11 +192,11 @@
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
                             <!--<DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />-->
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
-                    <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+                    <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
                         <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultRequestLanesCommand}" Margin="2" />
                         <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
                                  SelectableItemsVisibility="Collapsed"            
@@ -271,13 +220,7 @@
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
                         <DataGrid.Resources>
-                            <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
-                                <Style.Setters>
-                                    <Setter Property="Background" Value="LightGray" />
-                                    <Setter Property="Foreground" Value="Black" />
-                                </Style.Setters>
-                            </Style>
-                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISExtendStyle">
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRisExtendStyle">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=RISVerlengen}" Value="false">
                                         <Setter Property="IsEnabled" Value="False" />
@@ -325,8 +268,8 @@
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
                             <!--<DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISVerlengen,UpdateSourceTrigger=PropertyChanged}" />-->
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                     <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
@@ -370,8 +313,8 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
-                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
-                        <Button Margin="2" Content="Overnemen van aanvragen" Command="{Binding Path=CopySimulationFromRequestsLanesCommand}"></Button>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Margin="2" Content="Toevoegen defaults" Command="{Binding Path=CopySimulationFromRequestsLanesCommand}"></Button>
                         <Button Margin="2" Content="Genereren simulatie data" Command="{Binding Path=GenerateRISSimulationDataCommand}"></Button>
                     </StackPanel>
                 </Grid>

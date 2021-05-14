@@ -96,6 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 CCOLCodeTypeEnum.RegCSynchronisaties => 10,
                 CCOLCodeTypeEnum.RegCAlternatieven => 30,
+                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => 40,
                 CCOLCodeTypeEnum.PrioCIncludes => 10,
                 _ => 0
             };

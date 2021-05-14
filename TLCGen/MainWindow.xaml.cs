@@ -22,7 +22,7 @@ namespace TLCGen
 
 			DispatcherHelper.Initialize();
 
-            MainToolBarTray.DataContextChanged += (s, e) =>
+            MainToolBarTray.DataContextChanged += (_, e) =>
             {
 	            if (!(e.NewValue is MainWindowViewModel vm)) return;
                 foreach (var pl in vm.ApplicationParts)
@@ -34,19 +34,19 @@ namespace TLCGen
                 }
             };
 
-            RecentFileList.MenuClick += (sender, args) =>
+            RecentFileList.MenuClick += (_, args) =>
             {
                 if (DataContext == null) return;
                 var mymvm = DataContext as MainWindowViewModel;
                 mymvm?.LoadController(args.Filepath);
             };
 
-            var mvm = new ViewModels.MainWindowViewModel();
+            var mvm = new MainWindowViewModel();
             DataContext = mvm;
 
-            mvm.FileSaved += (sender, s) => RecentFileList.InsertFile(s);
-            mvm.FileOpened += (sender, s) => RecentFileList.InsertFile(s);
-            mvm.FileOpenFailed += (sender, s) => RecentFileList.RemoveFile(s);
+            mvm.FileSaved += (_, s) => RecentFileList.InsertFile(s);
+            mvm.FileOpened += (_, s) => RecentFileList.InsertFile(s);
+            mvm.FileOpenFailed += (_, s) => RecentFileList.RemoveFile(s);
 
             mvm.CheckCommandLineArgs();
 

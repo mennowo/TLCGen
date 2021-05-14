@@ -8,8 +8,10 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 using System;
 using TLCGen.Messaging.Messages;
 using System.Linq;
+using System.Windows.Media;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
+using TLCGen.Models;
 
 namespace TLCGen.Plugins.Timings
 {
@@ -17,13 +19,15 @@ namespace TLCGen.Plugins.Timings
     {
         #region Fields
 
-        private TimingsPlugin _plugin;
+        private readonly TimingsPlugin _plugin;
+        private TimingsFaseCyclusDataViewModel _selectedTimingsFase;
+        private TimingsDataModel _timingsModel;
+        private string _betaMsgId;
 
         #endregion // Fields
 
         #region Properties
 
-        private TimingsFaseCyclusDataViewModel _selectedTimingsFase;
         public TimingsFaseCyclusDataViewModel SelectedTimingsFase
         {
             get => _selectedTimingsFase;
@@ -34,14 +38,13 @@ namespace TLCGen.Plugins.Timings
             }
         }
 
-        private TimingsDataModel _TimingsModel;
         public TimingsDataModel TimingsModel
         {
-            get => _TimingsModel;
+            get => _timingsModel;
             set
             {
-                _TimingsModel = value;
-                TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_TimingsModel.TimingsFasen);
+                _timingsModel = value;
+                TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_timingsModel.TimingsFasen);
             }
         }
 
@@ -49,22 +52,38 @@ namespace TLCGen.Plugins.Timings
 
         public bool TimingsToepassen
         {
-            get => _TimingsModel.TimingsToepassen;
+            get => _timingsModel.TimingsToepassen;
             set
             {
-                _TimingsModel.TimingsToepassen = value;
+                _timingsModel.TimingsToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged("TimingsToepassenOK");
+                RaisePropertyChanged(nameof(TimingsToepassenOK));
             }
         }
         
         public bool TimingsUsePredictions
         {
-            get => _TimingsModel.TimingsUsePredictions;
+            get => _timingsModel.TimingsUsePredictions;
             set
             {
-                _TimingsModel.TimingsUsePredictions = value;
+                _timingsModel.TimingsUsePredictions = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                if (value)
+                {
+                    _betaMsgId = Guid.NewGuid().ToString();
+                    var msg = new ControllerAlertMessage(_betaMsgId)
+                    {
+                        Background = Brushes.Lavender,
+                        Shown = true,
+                        Message = "***Let op!*** Timings voorspellingen functiontionaliteit bevindt zich in de bèta test fase.",
+                        Type = ControllerAlertType.FromPlugin
+                    };
+                    TLCGenModelManager.Default.AddControllerAlert(msg);
+                }
+                else
+                {
+                    TLCGenModelManager.Default.RemoveControllerAlert(_betaMsgId);
+                }
             }
         }
 

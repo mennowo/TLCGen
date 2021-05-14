@@ -6,14 +6,23 @@ namespace TLCGen.Models
     public enum ControllerAlertType
     {
         WachttijdVoorspeller,
-        RISPrio,
         RealFunc,
-        RangerenOldNew
+        RangerenOldNew,
+        FromPlugin
     }
 
     public class ControllerAlertMessage : ViewModelBase
     {
+        #region Fields
+
         private bool _shown;
+
+        #endregion // Fields
+        
+
+        #region Properties
+
+        public string Id { get; }
         public ControllerAlertType Type { get; set; }
         public string Message { get; set; }
         public Brush Background { get; set; }
@@ -27,5 +36,16 @@ namespace TLCGen.Models
                 RaisePropertyChanged();
             }
         }
+
+        #endregion // Properties
+        
+        #region Constructor
+
+        public ControllerAlertMessage(string id)
+        {
+            Id = id;
+        }
+
+        #endregion // Constructor
     }
 }

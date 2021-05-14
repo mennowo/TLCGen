@@ -7,6 +7,7 @@ namespace TLCGen.Models
     [Serializable]
     public class RISFaseCyclusLaneSimulatedStationModel
     {
+        [HasDefault(false)]
         public RISStationTypeSimEnum Type { get; set; }
         public RISVehicleRole VehicleRole { get; set; }
         public RISVehicleSubrole VehicleSubrole { get; set; }
@@ -14,19 +15,25 @@ namespace TLCGen.Models
         public int Flow { get; set; }
         public int Snelheid { get; set; }
         public int Afstand { get; set; }
+        public int Importance { get; set; }
         public DetectorSimulatieModel SimulationData { get; set; }
+        [HasDefault(false)]
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
+        [HasDefault(false)]
         public int RijstrookIndex { get; set; }
+        [HasDefault(false)]
         public int LaneID { get; set; }
+        [HasDefault(false)]
         public int ApproachID { get; set; }
+        [HasDefault(false)]
         public string SystemITF { get; set; }
-        public int Importance { get; set; }
 
         [IOElement("ris", BitmappedItemTypeEnum.Ingang, "Naam")]
         public BitmapCoordinatenDataModel StationBitmapData { get; set; }
 
         [Browsable(false)]
+        [HasDefault(false)]
         public string Naam
         {
             get
