@@ -7,7 +7,7 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="RIS defaults, fixes UC4 timings">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RIS/RISFaseCyclusLaneSimulatedStationModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RIS/RISFaseCyclusLaneSimulatedStationModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/ControllerAlertMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/ControllerAlertMessage.cs" afterDir="false" />
@@ -98,6 +98,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/BitmapTab/BitmapTab.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/BitmapTab/BitmapTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/NaloopViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.Dependencies/TLCGen.ModelManager/ControllerAlertMessage.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarPeriodeDataViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeaanvraagViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarGekoppeldeKruisingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -361,7 +362,7 @@
       <workItem from="1620717910162" duration="7182000" />
       <workItem from="1620745171230" duration="609000" />
       <workItem from="1620803439932" duration="5254000" />
-      <workItem from="1620975990820" duration="7252000" />
+      <workItem from="1620975990820" duration="7867000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -440,7 +441,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620723940029</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="RIS defaults, fixes UC4 timings">
+      <created>1620985903435</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1620985903435</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -512,7 +520,8 @@
     <MESSAGE value="aanzet templates voor prio" />
     <MESSAGE value="Templates voor prio mark 1" />
     <MESSAGE value="Combinatie templates for PRIO ingrepen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Combinatie templates for PRIO ingrepen" />
+    <MESSAGE value="RIS defaults, fixes UC4 timings" />
+    <option name="LAST_COMMIT_MESSAGE" value="RIS defaults, fixes UC4 timings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

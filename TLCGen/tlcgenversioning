@@ -1,5 +1,11 @@
-TLCGen=0.9.4.0
+TLCGen=0.9.5.0
 RN==TLCGen
+TLCGen versie: 0.9.5.0
+- Timings predicties toegevoegd
+- Defaults voor RIS simulatie
+- Templates en combi-templates voor OV ingrepen
+- Nieuwe versie realfunc
+- Veelheid aan kleine fixes
 TLCGen versie: 0.9.4.0
 - Fix import ontruimingstijden in bestaande regeling
 - Heel veel kleine verbeteringen
