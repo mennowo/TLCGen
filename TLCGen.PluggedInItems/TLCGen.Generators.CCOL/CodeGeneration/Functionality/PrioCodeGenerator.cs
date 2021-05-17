@@ -1106,9 +1106,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             PrioIngreepVoertuigTypeEnum.Tram => "CIF_TRAM",
                             PrioIngreepVoertuigTypeEnum.Bus => "CIF_BUS",
                             PrioIngreepVoertuigTypeEnum.Vrachtwagen => "NG",
+                            PrioIngreepVoertuigTypeEnum.Auto => "NG",
                             PrioIngreepVoertuigTypeEnum.Fiets => "NG",
                             PrioIngreepVoertuigTypeEnum.NG => "NG",
-                            _ => throw new IndexOutOfRangeException()
+                            _ => throw new IndexOutOfRangeException($"PrioIngreepVoertuigTypeEnum {prio.Type} wordt niet ondersteund")
                         };
 
                         if (prio.MeldingenData.Inmeldingen.Any())
