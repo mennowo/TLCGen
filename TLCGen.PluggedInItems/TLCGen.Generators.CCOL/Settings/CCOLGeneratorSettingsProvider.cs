@@ -122,7 +122,7 @@ namespace TLCGen.Generators.CCOL.Settings
         {
             var t = TranslateType(element.Type);
             // synch names
-            ioElementData.Naam = name;
+            ioElementData.Naam ??= name;
             return new CCOLElement(name, t, GetElementDescription(element.Description, t, elementnames), ioElementData);
         }
 
