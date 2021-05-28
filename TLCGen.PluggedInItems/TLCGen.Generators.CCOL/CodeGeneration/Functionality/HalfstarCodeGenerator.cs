@@ -925,7 +925,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 xnl = $"{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}";
                             }
-							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
+
+                            var nlv = "NG";
+                            if (nl.VasteNaloop)
+                            {
+	                            nlv = $"{_tpf}{t}{nl.FaseVan}{nl.FaseNaar}";
+                            }
+							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {nlv});");
 						}
 
                         if(nl.Type == NaloopTypeEnum.StartGroen)

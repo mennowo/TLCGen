@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033"
-    Version="0.9.5"
+    Version="0.9.6"
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -205,6 +205,7 @@
         <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
         <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB2" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsfunc.c" />
         <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsvar.c" />
+        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timings_uc4.c" />
         <File Id="fil2E1DB38115F3B820EBC2C980F2B2F729" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.c" />
         <File Id="filEAB7EBA79349A3C4DDF6069B282EC308" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.h" />
         <File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />

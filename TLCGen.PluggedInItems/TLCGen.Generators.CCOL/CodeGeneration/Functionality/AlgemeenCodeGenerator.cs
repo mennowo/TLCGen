@@ -183,10 +183,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}#define PASSWORD \"{c.Data.CCOLParserPassword}\"");
                     }
-                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && !c.Data.Intergroen)
-                    {
-                        sb.AppendLine($"{ts}#define NO_TIGMAX");
-                    }
                     sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define TESTOMGEVING");
                     sb.AppendLine($"#endif");

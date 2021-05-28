@@ -6,6 +6,7 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -92,8 +93,20 @@
                 </Grid.RowDefinitions>
                 <CheckBox Content="Dimming uitgang per rateltikker" 
                           IsChecked="{Binding DimUitgangPerTikker,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Row="0" Grid.ColumnSpan="2" />
-                <CheckBox Content="Dimming niveau vanuit applicatie (hoeflake bewaakt)" 
-                          IsChecked="{Binding DimmingNiveauVanuitApplicatie,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Row="1" Grid.ColumnSpan="2" />
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <CheckBox Content="Dimming niveau vanuit applicatie (hoeflake bewaakt)" 
+                              IsChecked="{Binding DimmingNiveauVanuitApplicatie,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" />
+                    <controls:InfoElement Margin="5,0">
+                        <controls:InfoElement.InfoPopup>
+                            <TextBlock>
+                                LET OP!<LineBreak/>
+                                Het betreft hier een omgekeerde aansturing:<LineBreak/>
+                                het niveau van de <Span FontStyle="Italic">dimming</Span> wordt ingesteld!<LineBreak/>
+                                Een hoger niveau betekent dus een lager volume. 
+                            </TextBlock>
+                        </controls:InfoElement.InfoPopup>
+                    </controls:InfoElement>
+                </StackPanel>
                 <DataGrid ItemsSource="{Binding Path=RatelTikkersBewaakt}" Grid.Row="2" IsEnabled="{Binding Path=DimmingNiveauVanuitApplicatie}"
                           AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2">
                     <DataGrid.RowHeaderTemplate>

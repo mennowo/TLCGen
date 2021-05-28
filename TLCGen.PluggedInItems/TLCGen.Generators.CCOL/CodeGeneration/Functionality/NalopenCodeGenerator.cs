@@ -127,19 +127,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}gk_InitGK();");
                         sb.AppendLine($"{ts}gk_InitNL();");
                     }
-                    // TODO: eerst controleren
-                    //if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen && x.InrijdenTijdensGroen))
-                    //{
-                    //    sb.AppendLine($"{ts}/* Corrigeren FK<>GKL tbv nalopen met inrijden tijdens groen */");
-                    //    sb.AppendLine($"{ts}/* Dit gebeurt hier i.p.v. in de tab.c om waarschuwingen door CCOL te voorkomen */");
-                    //    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
-                    //    {
-                    //        foreach(var kfc in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseVan))
-                    //        {
-                    //            sb.AppendLine($"{ts}TO_max[{_fcpf}{nl.FaseVan}][{_fcpf}{kfc.FaseNaar}] = GKL;");
-                    //        }
-                    //    }
-                    //}
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
@@ -174,14 +161,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue))
                         {
                             var nls = c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue);
-                            sb.AppendLine($"{ts}/* Tegenhouden voedende fietsers tot tijd t voor naloop mag komen */");
+                            sb.AppendLine($"{ts}/* Tegenhouden voedende richtingen tot tijd t voor naloop mag komen */");
                             sb.AppendLine($"{ts}/* afzetten X */");
                             foreach (var nl in nls)
                             {
                                 sb.AppendLine($"{ts}X[{_fcpf}{nl.FaseVan}] &= ~{_BITxnl};");
                             }
                             sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Vasthouden voedende fietsrichtingen tot in 1 keer kan worden overgefietst */");
+                            sb.AppendLine($"{ts}/* Vasthouden voedende richtingen tot in 1 keer kan worden overgefietst */");
                             sb.AppendLine($"{ts}/* Betekenis {_prmpf}x##: tijd dat fase ## eerder mag komen dan SG nalooprichting */");
                             foreach (var nl in nls)
                             {
@@ -294,7 +281,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var i = 0;
                                 foreach (var d in nl.Detectoren)
                                 {
-                                    if (i < 0) sb.Append(" || ");
+                                    if (i > 0) sb.Append(" || ");
                                     ++i;
                                     sb.Append($"IH[{_hpf}{_hnla}{d.Detector}]");
                                 }

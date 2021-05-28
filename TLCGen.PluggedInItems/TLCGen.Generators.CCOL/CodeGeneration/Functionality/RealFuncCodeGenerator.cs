@@ -262,8 +262,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}");
-                        sb.AppendLine($"{ts}}}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                        sb.AppendLine($"{ts}}}");
                         sb.AppendLine($"{ts}else");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
@@ -361,9 +361,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
                                 // maar de groentijdcorrectie van b naar a
-                                var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
-                                var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
                             }
                         }
                     }
@@ -469,7 +467,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Uitvoeren synchronisaties */");
                     if (c.HalfstarData.IsHalfstar)
-                        sb.AppendLine($"{ts}Synchroniseer_SP(); /* synchronisatie intrekken tbv SP */");
+                        sb.AppendLine($"{ts}Synchroniseer_SP(TRUE); /* synchronisatie intrekken tbv SP */");
                     sb.AppendLine($"{ts}Synchroniseer_SG(); /* synchronisatie obv realtijd (startgroenmomenten) */");
                     sb.AppendLine($"{ts}Synchroniseer_FO(); /* synchronisatie obv fictieve ontruiming */");
                     return sb.ToString();

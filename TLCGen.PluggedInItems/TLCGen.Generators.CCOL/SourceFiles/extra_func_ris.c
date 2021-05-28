@@ -421,7 +421,7 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
                              
                   /* Normal Flow - [processing] -> granted - test de realisatie en ook de meerealisaties op de approach voor de hulpdiensten */
                   /* ----------------------------------------------------------------------------------------------------------------------- */ 
-                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id]) {     /* test fasecyclus */
+                  if (G[fc] && !iOnderMaximumVerstreken[priotypefc_id] && !iMaximumWachtTijdOverschreden[priotypefc_id]) {/* test fasecyclus */
                      j = 0;
                      while (iPrioMeeRealisatie[fc][j] >= 0) {  /* test ook de meerealisaties van de fasecyclus op de approach  */
                         if (!G[iPrioMeeRealisatie[fc][j]] /* && !iOnderMaximumVerstreken[priotypefc_id]??? - priotypefc_id van deze fasecyclus is niet bekend */ ) { 

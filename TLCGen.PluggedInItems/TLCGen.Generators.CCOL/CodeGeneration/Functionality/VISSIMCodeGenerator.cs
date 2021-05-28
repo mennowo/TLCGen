@@ -32,27 +32,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 	            case CCOLCodeTypeEnum.TabCControlParameters:
 		            sb.AppendLine("#ifdef VISSIM");
-		            foreach (var d in c.Fasen.SelectMany(x => x.Detectoren))
+		            var ovdummydets = c.PrioData.GetAllDummyDetectors();
+		            var alldets = c.GetAllDetectors().Concat(ovdummydets);
+		            foreach (var d in alldets)
 		            {
 			            if (!string.IsNullOrWhiteSpace(d.VissimNaam))
 			            {
 				            sb.AppendLine($"{ts}D_code[{_dpf}{d.Naam}] = \"{d.VissimNaam}\";");
 			            }
 		            }
-		            foreach (var d in c.Detectoren)
-		            {
-			            if (!string.IsNullOrWhiteSpace(d.VissimNaam))
-			            {
-				            sb.AppendLine($"{ts}D_code[{_dpf}{d.Naam}] = \"{d.VissimNaam}\";");
-			            }
-		            }
-                    foreach (var d in c.SelectieveDetectoren)
-                    {
-                        if (!string.IsNullOrWhiteSpace(d.VissimNaam))
-                        {
-                            sb.AppendLine($"{ts}D_code[{_dpf}{d.Naam}] = \"{d.VissimNaam}\";");
-                        }
-                    }
 					sb.AppendLine("#endif");
 					return sb.ToString();
 

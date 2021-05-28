@@ -8,6 +8,7 @@ using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using Xceed.Wpf.Toolkit;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -597,8 +598,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     }
                                     else if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                                     {
-                                        if (matrix[i, k] > -3) matrix[i, k] = -3;
-                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        if (nl.InrijdenTijdensGroen)
+                                        {
+                                            if (matrix[i, k] > -2) matrix[i, k] = -2;
+                                            if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        }
+                                        else
+                                        {
+                                            if (matrix[i, k] > -3) matrix[i, k] = -3;
+                                            if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        }
                                     }
                                     break;
                                 case NaloopTypeEnum.CyclischVerlengGroen:
@@ -606,33 +615,86 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
-                                    if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
+                                    if (nl.InrijdenTijdensGroen)
                                     {
-                                        if (nl.InrijdenTijdensGroen)
-                                        {
-                                            // TODO: eerst controleren
-                                            // Dit wordt gecorrigeerd in RegCInitApplication door NalopenCodeGenerator
-                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                            //if (matrix[i, k] > -4) matrix[i, k] = -2; // wordt gecorrigeerd naar -4
-                                            if (matrix[k, i] > -2) matrix[k, i] = -2;
-                                        }
-                                        else
-                                        {
-                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                            if (matrix[k, i] > -3) matrix[k, i] = -3;
-                                        }
+                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
                                     else
                                     {
-                                        if (matrix[i, k] > -2) matrix[i, k] = -2;
-                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
                                     }
-
                                     break;
                             }
                         }
                     }
                 }
+                
+                // corrections
+                foreach (var nl1 in controller.InterSignaalGroep.Nalopen)
+                {
+                    var fc1Name = nl1.FaseVan;
+                    var fc2Name = nl1.FaseNaar;
+                    var fc1 = controller.Fasen.FirstOrDefault(x => x.Naam == fc1Name);
+                    var fc2 = controller.Fasen.FirstOrDefault(x => x.Naam == fc2Name);
+                    var i1 = controller.Fasen.IndexOf(fc1);
+                    var i2 = controller.Fasen.IndexOf(fc2);
+                    // loop de conflicten van de nalooprichting
+                    foreach (var cf in controller.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == fc2Name))
+                    {
+                        // loop nalopen waarin zo'n conflict deelneemt
+                        foreach (var nl2 in controller.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == cf.FaseNaar || x.FaseNaar == cf.FaseNaar))
+                        {
+                            var fc3Name = nl2.FaseVan;
+                            var fc4Name = nl2.FaseNaar;
+                            var fc3 = controller.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
+                            var fc4 = controller.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
+                            var i3 = controller.Fasen.IndexOf(fc3);
+                            var i4 = controller.Fasen.IndexOf(fc4);
+                            // indien er van de naloop richting van naloop1 een FK/GK/GKL bestaat naar de 
+                            // tweede richting van naloop2, nemen we FK/GK/GKL over tussen de voedende richting
+                            // van naloop1 naar die tweede richting van naloop2
+                            if (matrix[i2, i4] < -1 && matrix[i1, i4] == -1)
+                            {
+                                matrix[i1, i4] = matrix[i2, i4];
+                                matrix[i4, i1] = matrix[i2, i4];
+                            }
+                        }
+                    }
+                }
+                // // loop alle richtingen
+                // var fcmax = matrix.GetLength(0);
+                // for (var fc = 0; fc < matrix.GetLength(0); fc++)
+                // {
+                //     // loop alle conflicten van de richting
+                //     for (var k = 0; k < fcmax; k++)
+                //     {
+                //         // bekijk alleen FK/GK/GKL
+                //         if (fc != k && matrix[fc,k] < -1)
+                //         {
+                //             // loop alle conflicten van het FK/GK/GKL conflict
+                //             for (var kk = 0; kk < fcmax; kk++)
+                //             {
+                //                 // bekijk alleen echte conflicten
+                //                 if (k != kk && matrix[k,kk] > -1)
+                //                 {
+                //                     // loop alle conflicten van het conflict van het FK/GK/GKL conflict
+                //                     for (var kkk = 0; kkk < fcmax; kkk++)
+                //                     {
+                //                         // bekijk alleen FK/GK/GKL
+                //                         if (fc != kkk && kk != kkk && matrix[kk,kkk] < -1 && matrix[fc,kkk] == -1)
+                //                         {
+                //                             matrix[fc, kkk] = matrix[kk, kkk];
+                //                             matrix[kkk, fc] = matrix[kk, kkk];
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                
                 sb.AppendLine();
                 for (var i = 0; i < controller.Fasen.Count; ++i)
                 {

@@ -46,12 +46,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseNaar, gs.FaseVan));
                 }
-                if (gs.Schakelbaar != Models.Enumerations.AltijdAanUitEnum.Altijd)
+                if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_schgs}{gs.FaseVan}{gs.FaseNaar}",
-                            gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.SchAan ? 1 : 0,
+                            gs.Schakelbaar == AltijdAanUitEnum.SchAan ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             _schgs, gs.FaseNaar, gs.FaseVan));
                 }
@@ -173,7 +173,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ------------------------------ */");
                     foreach(var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        if(gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
+                        if(gs.Schakelbaar == AltijdAanUitEnum.Altijd)
                         {
                             sb.AppendLine($"{ts}GelijkStarten_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
                         }
@@ -191,7 +191,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* -------------- */");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        if (gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
+                        if (gs.Schakelbaar == AltijdAanUitEnum.Altijd)
                         {
                             sb.AppendLine($"{ts}GelijkStarten(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, ({c.GetBoolV()}) FALSE);");
                         }

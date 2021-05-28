@@ -55,7 +55,7 @@ namespace TLCGen.Models
                 if (nl.MaximaleVoorstart.HasValue &&
                     !result.GroenSyncFasen.Any(x => x.FaseVan == nl.FaseVan && x.FaseNaar == nl.FaseNaar))
                 {
-                    result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = nl.FaseNaar, FaseNaar = nl.FaseVan, Waarde = nl.MaximaleVoorstart.Value, Richting = 1 });
+                    result.GroenSyncFasen.Add(new GroenSyncModel{ FaseVan = nl.FaseVan, FaseNaar = nl.FaseNaar, Waarde = nl.MaximaleVoorstart.Value, Richting = 1 });
                 }
             }
 

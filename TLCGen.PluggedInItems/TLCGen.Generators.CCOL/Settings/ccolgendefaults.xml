@@ -1488,7 +1488,7 @@
             <Default>pmgt</Default>
             <Setting>pmgt</Setting>
             <Type>Parameter</Type>
-            <Description>Minimale groentijd primair terugkomen fase _E1_</Description>
+            <Description>Minimaal percentage groentijd primair tbv. terugkomen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ognt</Default>

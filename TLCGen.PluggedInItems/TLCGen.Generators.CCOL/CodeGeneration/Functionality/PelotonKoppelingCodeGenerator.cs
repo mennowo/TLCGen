@@ -285,7 +285,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}/* Uitgaande peloton koppeling naar {pk.KoppelingNaam} */");
                                     foreach (var sg in sgWithD)
                                     {
-                                        sb.AppendLine($"{ts}IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = SCH[{_schpf}{_schpku}{pk.KoppelingNaam}{sg.Key.Naam}] && (SG[{_fcpf}{pk.GekoppeldeSignaalGroep}] || FG[{_fcpf}{pk.GekoppeldeSignaalGroep}]);");
+                                        sb.AppendLine($"{ts}IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = SCH[{_schpf}{_schpku}{pk.KoppelingNaam}{sg.Key.Naam}] && (SG[{_fcpf}{sg.Key.Naam}] || FG[{_fcpf}{sg.Key.Naam}]);");
                                         foreach (var d in sg.Value)
                                         {
                                             ipl = CCOLElementCollector.GetKoppelSignaalCount(pk.PTPKruising, $"{pk.KoppelingNaam}d{d}", KoppelSignaalRichtingEnum.Uit);
@@ -320,7 +320,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         sb.Append($"{ts}{"".PadRight(st.Length)}");
                                     }
                                     firstsg = false;
-                                    sb.Append($"SCH[{_schpf}{_schpku}{pk.KoppelingNaam}{sg.Key.Naam}] && G[fc{sg.Key.Naam}] && (");
+                                    sb.Append($"SCH[{_schpf}{_schpku}{pk.KoppelingNaam}{sg.Key.Naam}] && G[{_fcpf}{sg.Key.Naam}] && (");
                                     var firstd = true;
                                     foreach (var d in sg.Value)
                                     {
