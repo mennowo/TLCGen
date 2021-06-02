@@ -538,6 +538,10 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
   bool result = 0;
   mulv hulp   = 0;
 
+  /* -------------------------------------------------------------------------- */
+  /* Vlag tbv fictieve ontruimingstijd, van fc1 naar fc2                        */
+  /* -------------------------------------------------------------------------- */
+  REAL_FOT[fc1][fc2] = period;
 
   /* -------------------------------------------------------------------------- */
   /* Herstarten fictieve ontruimingstijden                                      */

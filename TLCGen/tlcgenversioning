@@ -1,5 +1,7 @@
-TLCGen=0.9.6.0
+TLCGen=0.9.7.0
 RN==TLCGen
+TLCGen versie: 0.9.7.0
+- Fix realfunc corr_fot
 TLCGen versie: 0.9.6.0
 - Diverse fixes omtrent synchronisaties
 TLCGen versie: 0.9.5.0
