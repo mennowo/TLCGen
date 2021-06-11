@@ -119,8 +119,9 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             var dvm1 = new SelectieveDetectorViewModel(dm);
             SelectieveDetectoren.Add(dvm1);
-            Messenger.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
+            MessengerInstance.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
             SelectedSelectieveDetectoren.BubbleSort();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         bool AddSelectieveDetectorCommand_CanExecute(object prm)
@@ -148,11 +149,11 @@ namespace TLCGen.ViewModels
                 Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedSelectieveDetector.Naam, TLCGenObjectTypeEnum.SelectieveDetector);
             }
             RebuildSelectieveDetectorenList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                Messenger.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
+                MessengerInstance.Send(new ControllerDataChangedMessage());
+                MessengerInstance.Send(new SelectieveDetectorenChangedMessage(null, removed));
             }
         }
 

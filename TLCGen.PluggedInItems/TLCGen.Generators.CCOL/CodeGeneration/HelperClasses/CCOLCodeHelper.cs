@@ -4,15 +4,17 @@ using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using TLCGen.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
-        public static string GetPriorityName(PrioIngreepModel prio)
+        public static string GetPriorityName(ControllerModel c, PrioIngreepModel prio)
         {
-            return prio.FaseCyclus + prio.Naam;
+            return prio.FaseCyclus + 
+                (c.PrioData.WeglatenIngreepNaamBijEnkeleIngreepPerFase && c.PrioData.PrioIngrepen.Count(x => x.FaseCyclus == prio.FaseCyclus) == 1 
+                ? "" 
+                : prio.Naam);
         }
 
         public static bool HasSignalGroupConflictWithPT(ControllerModel c, string sgname)

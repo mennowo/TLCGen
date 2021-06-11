@@ -337,6 +337,13 @@ namespace TLCGen.ModelManagement
                 }
             }
 
+            checkVer = Version.Parse("0.9.8.0");
+            if (v < checkVer)
+            {
+                // de uitgang perbeldim heeft nu eigen bitmap data  
+                if (controller.Signalen.BellenDimmenBitmapData.Naam == "perbeldim") controller.Signalen.BellenDimmenBitmapData.Naam = "beldim";
+            }
+
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)

@@ -148,7 +148,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 var lijn = "0";
                                 if (prio != null && prio.CheckLijnNummer && prio.LijnNummers.Any())
                                 {
-                                    lijn = $"PRM[{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(prio)}_01]";
+                                    lijn = $"PRM[{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(c, prio)}_01]";
                                     sb.AppendLine($"{ts}{ts}sprintf(buffer, \"%d\", {lijn});");
                                 }
                                 else
@@ -197,7 +197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                           $"RIF_VEHICLEROLE_{s.VehicleRole}," +
                                           $"RIF_VEHICLESUBROLE_{s.VehicleSubrole}," +
                                           $"25," +
-                                          $"NG," +
+                                          $"{(s.SimulationData.FCNr == "NG" ? "NG" : $"{_fcpf}{s.SimulationData.FCNr}")}," +
                                           $"PRM[{_prmpf}{_prmrisapproachid}{s.SignalGroupName}]," +
                                           $"\"NG\"," +
                                           $"123," +

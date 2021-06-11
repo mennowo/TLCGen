@@ -20,16 +20,18 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private RoBuGroverInstellingenViewModel _roBuGroverInstellingenInstellingen;
-        private RoBuGroverConflictGroepViewModel _SelectedConflictGroep;
-        private RoBuGroverSignaalGroepInstellingenViewModel _SelectedSignaalGroepInstelling;
+        private RoBuGroverConflictGroepViewModel _selectedConflictGroep;
+        private RoBuGroverSignaalGroepInstellingenViewModel _selectedSignaalGroepInstelling;
 
-        private ObservableCollection<RoBuGroverTabFaseViewModel> _Fasen;
-        private RoBuGroverTabFaseViewModel _SelectedFaseCyclus;
+        private ObservableCollection<RoBuGroverTabFaseViewModel> _fasen;
+        private RoBuGroverTabFaseViewModel _selectedFaseCyclus;
 
-        private Dictionary<string, string> _ControllerRGVFileDetectoren;
-        private Dictionary<string, string> _ControllerRGVHiaatDetectoren;
-
-        private bool _AutomaticallySetSelectableSignalGroups;
+        private Dictionary<string, string> _controllerRgvFileDetectoren;
+        private Dictionary<string, string> _controllerRgvHiaatDetectoren;
+        
+        private RelayCommand _addConflictGroepCommand;
+        private RelayCommand _removeConflictGroepCommand;
+        private RelayCommand _addRemoveFaseCommand;
 
         #endregion // Fields
 
@@ -37,46 +39,46 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverModel RoBuGrover => _Controller.RoBuGrover;
 
-        public bool AutomaticallySetSelectableSignalGroups
+        public bool ToestaanNietConflictenInConflictGroepen
         {
-            get => _AutomaticallySetSelectableSignalGroups;
+            get => RoBuGrover.ToestaanNietConflictenInConflictGroepen;
             set
             {
-                _AutomaticallySetSelectableSignalGroups = value;
-                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, null, AutomaticallySetSelectableSignalGroups));
-                RaisePropertyChanged("AutomaticallySetSelectableSignalGroups");
+                RoBuGrover.ToestaanNietConflictenInConflictGroepen = value;
+                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public RoBuGroverConflictGroepViewModel SelectedConflictGroep
         {
-            get => _SelectedConflictGroep;
+            get => _selectedConflictGroep;
             set
             {
-                var oldval = _SelectedConflictGroep;
-                _SelectedConflictGroep = value;
-                RaisePropertyChanged("SelectedConflictGroep");
-                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, AutomaticallySetSelectableSignalGroups));
+                var oldval = _selectedConflictGroep;
+                _selectedConflictGroep = value;
+                RaisePropertyChanged();
+                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
             }
         }
 
         public RoBuGroverSignaalGroepInstellingenViewModel SelectedSignaalGroepInstelling
         {
-            get => _SelectedSignaalGroepInstelling;
+            get => _selectedSignaalGroepInstelling;
             set
             {
-                _SelectedSignaalGroepInstelling = value;
+                _selectedSignaalGroepInstelling = value;
                 RaisePropertyChanged<object>(nameof(SelectedSignaalGroepInstelling), null, null, true);
             }
         }
 
         public RoBuGroverTabFaseViewModel SelectedFaseCyclus
         {
-            get => _SelectedFaseCyclus;
+            get => _selectedFaseCyclus;
             set
             {
-                _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                _selectedFaseCyclus = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -92,62 +94,48 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        public ObservableCollection<RoBuGroverTabFaseViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<RoBuGroverTabFaseViewModel>();
-                }
-                return _Fasen;
-            }
-        }
+        public ObservableCollection<RoBuGroverTabFaseViewModel> Fasen => _fasen ??= new ObservableCollection<RoBuGroverTabFaseViewModel>();
 
         public RoBuGroverInstellingenViewModel RoBuGroverInstellingen =>
-            _roBuGroverInstellingenInstellingen ?? (_roBuGroverInstellingenInstellingen =
-                new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover));
+            _roBuGroverInstellingenInstellingen ??= new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover);
 
         #endregion // Properties
 
         #region Commands
 
-        RelayCommand _AddConflictGroepCommand;
         public ICommand AddConflictGroepCommand
         {
             get
             {
-                if (_AddConflictGroepCommand == null)
+                if (_addConflictGroepCommand == null)
                 {
-                    _AddConflictGroepCommand = new RelayCommand(AddConflictGroepCommand_Executed, AddConflictGroepCommand_CanExecute);
+                    _addConflictGroepCommand = new RelayCommand(AddConflictGroepCommand_Executed, AddConflictGroepCommand_CanExecute);
                 }
-                return _AddConflictGroepCommand;
+                return _addConflictGroepCommand;
             }
         }
 
-        RelayCommand _RemoveConflictGroepCommand;
         public ICommand RemoveConflictGroepCommand
         {
             get
             {
-                if (_RemoveConflictGroepCommand == null)
+                if (_removeConflictGroepCommand == null)
                 {
-                    _RemoveConflictGroepCommand = new RelayCommand(RemoveConflictGroepCommand_Executed, RemoveConflictGroepCommand_CanExecute);
+                    _removeConflictGroepCommand = new RelayCommand(RemoveConflictGroepCommand_Executed, RemoveConflictGroepCommand_CanExecute);
                 }
-                return _RemoveConflictGroepCommand;
+                return _removeConflictGroepCommand;
             }
         }
 
-        RelayCommand _AddRemoveFaseCommand;
         public ICommand AddRemoveFaseCommand
         {
             get
             {
-                if (_AddRemoveFaseCommand == null)
+                if (_addRemoveFaseCommand == null)
                 {
-                    _AddRemoveFaseCommand = new RelayCommand(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
+                    _addRemoveFaseCommand = new RelayCommand(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
                 }
-                return _AddRemoveFaseCommand;
+                return _addRemoveFaseCommand;
             }
         }
 
@@ -174,7 +162,7 @@ namespace TLCGen.ViewModels
 
         private void RemoveConflictGroepCommand_Executed(object obj)
         {
-            var _SelectedConflictGroep = SelectedConflictGroep;
+            var selectedConflictGroep = SelectedConflictGroep;
             ConflictGroepen.Remove(SelectedConflictGroep);
 
             if (ConflictGroepen.Count == 0)
@@ -183,14 +171,14 @@ namespace TLCGen.ViewModels
             }
             else if(SignaalGroepInstellingen.Count > 0)
             {
-                foreach(var fc in _SelectedConflictGroep.Fasen)
+                foreach(var fc in selectedConflictGroep.Fasen)
                 {
 
-                    if ((!ConflictGroepen.SelectMany(x => x.Fasen).Any() ||
-                         !ConflictGroepen.SelectMany(x => x.Fasen).Where(y => y.FaseCyclus == fc.FaseCyclus).Any()) &&
-                          SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
+                    if ((!ConflictGroepen.SelectMany(x => x.Fasen).Any() || 
+                         ConflictGroepen.SelectMany(x => x.Fasen).All(y => y.FaseCyclus != fc.FaseCyclus)) &&
+                         SignaalGroepInstellingen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                     {
-                        var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclus).First();
+                        var instvm = SignaalGroepInstellingen.First(x => x.FaseCyclus == fc.FaseCyclus);
                         SignaalGroepInstellingen.Remove(instvm);
                         SignaalGroepInstellingen.BubbleSort();
                         SignaalGroepInstellingen.RebuildList();
@@ -206,47 +194,47 @@ namespace TLCGen.ViewModels
         {
             var fc = prm as RoBuGroverTabFaseViewModel;
             SelectedFaseCyclus = fc;
-            if (fc.CanBeAddedToConflictGroep && !fc.IsInConflictGroep)
+            if (fc is {CanBeAddedToConflictGroep: true, IsInConflictGroep: false})
             {
-                var fcm = new RoBuGroverConflictGroepFaseModel();
-                fcm.FaseCyclus = fc.FaseCyclusNaam;
+                var fcm = new RoBuGroverConflictGroepFaseModel {FaseCyclus = fc.FaseCyclusNaam};
                 var fcvm = new RoBuGroverConflictGroepFaseViewModel(fcm);
                 SelectedConflictGroep.Fasen.Add(fcvm);
-                if(!SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).Any())
+                if(SignaalGroepInstellingen.All(x => x.FaseCyclus != fc.FaseCyclusNaam))
                 {
                     var inst = new RoBuGroverFaseCyclusInstellingenModel();
                     inst.FaseCyclus = fc.FaseCyclusNaam;
-                    if (Controller.Fasen.Where(x => x.Naam == fc.FaseCyclusNaam).Any())
+                    if (Controller.Fasen.Any(x => x.Naam == fc.FaseCyclusNaam))
                     {
-                        var type = Controller.Fasen.Where(x => x.Naam == fc.FaseCyclusNaam).First().Type.ToString();
+                        var type = Controller.Fasen.First(x => x.Naam == fc.FaseCyclusNaam).Type.ToString();
                         DefaultsProvider.Default.SetDefaultsOnModel(inst, type);
                     }
                     var instvm = new RoBuGroverSignaalGroepInstellingenViewModel(inst);
                     try
                     {
-                        var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
-                        if(addfc.Type != FaseTypeEnum.Fiets || addfc.Type == FaseTypeEnum.Voetganger)
-                        foreach (var dm in addfc.Detectoren)
+                        var addfc = _Controller.Fasen.First(x => x.Naam == instvm.FaseCyclus);
+                        if (addfc.Type != FaseTypeEnum.Fiets || addfc.Type == FaseTypeEnum.Voetganger)
                         {
-                            if (dm.Type == DetectorTypeEnum.Lang)
+                            foreach (var dm in addfc.Detectoren)
                             {
-                                var hd = new RoBuGroverHiaatDetectorModel();
-                                hd.Detector = dm.Naam;
-                                DefaultsProvider.Default.SetDefaultsOnModel(hd);
-                                instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
-                            }
-                            if (dm.Type == DetectorTypeEnum.Kop)
-                            {
-                                var fd = new RoBuGroverFileDetectorModel();
-                                fd.Detector = dm.Naam;
-                                DefaultsProvider.Default.SetDefaultsOnModel(fd);
-                                instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
+                                if (dm.Type == DetectorTypeEnum.Lang)
+                                {
+                                    var hd = new RoBuGroverHiaatDetectorModel {Detector = dm.Naam};
+                                    DefaultsProvider.Default.SetDefaultsOnModel(hd);
+                                    instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
+                                }
+
+                                if (dm.Type == DetectorTypeEnum.Kop)
+                                {
+                                    var fd = new RoBuGroverFileDetectorModel {Detector = dm.Naam};
+                                    DefaultsProvider.Default.SetDefaultsOnModel(fd);
+                                    instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
+                                }
                             }
                         }
                     }
                     catch
                     {
-
+                        // ignored
                     }
                     SignaalGroepInstellingen.Add(instvm);
                     SignaalGroepInstellingen.BubbleSort();
@@ -254,17 +242,16 @@ namespace TLCGen.ViewModels
                 }
                 MessengerInstance.Send(new ControllerDataChangedMessage());
             }
-            else if (fc.IsInConflictGroep)
+            else if (fc is {IsInConflictGroep: true})
             {
                 // Use custom method instead of Remove method:
                 // it removes based on name instead of reference
-                RoBuGroverConflictGroepFaseViewModel removevm = null;
-                removevm = SelectedConflictGroep.Fasen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
+                var removevm = SelectedConflictGroep.Fasen.First(x => x.FaseCyclus == fc.FaseCyclusNaam);
                 SelectedConflictGroep.Fasen.Remove(removevm);
-                if (!ConflictGroepen.SelectMany(x => x.Fasen).Where(y => y.FaseCyclus == fc.FaseCyclusNaam).Any() &&
-                    SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).Any())
+                if (ConflictGroepen.SelectMany(x => x.Fasen).All(y => y.FaseCyclus != fc.FaseCyclusNaam) &&
+                    SignaalGroepInstellingen.Any(x => x.FaseCyclus == fc.FaseCyclusNaam))
                 {
-                    var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
+                    var instvm = SignaalGroepInstellingen.First(x => x.FaseCyclus == fc.FaseCyclusNaam);
                     SignaalGroepInstellingen.Remove(instvm);
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
@@ -297,16 +284,16 @@ namespace TLCGen.ViewModels
             }
             SelectedConflictGroep = SelectedConflictGroep;
 
-            _ControllerRGVFileDetectoren = new Dictionary<string, string>();
-            _ControllerRGVHiaatDetectoren = new Dictionary<string, string>();
+            _controllerRgvFileDetectoren = new Dictionary<string, string>();
+            _controllerRgvHiaatDetectoren = new Dictionary<string, string>();
             foreach (var fcm in _Controller.Fasen)
             {
                 foreach (var dm in fcm.Detectoren)
                 {
-                    if (dm.Type == Models.Enumerations.DetectorTypeEnum.Kop)
-                        _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Naam);
-                    if (dm.Type == Models.Enumerations.DetectorTypeEnum.Lang)
-                        _ControllerRGVHiaatDetectoren.Add(dm.Naam, fcm.Naam);
+                    if (dm.Type == DetectorTypeEnum.Kop)
+                        _controllerRgvFileDetectoren.Add(dm.Naam, fcm.Naam);
+                    if (dm.Type == DetectorTypeEnum.Lang)
+                        _controllerRgvHiaatDetectoren.Add(dm.Naam, fcm.Naam);
                 }
             }
         }
@@ -343,9 +330,8 @@ namespace TLCGen.ViewModels
                     ConflictGroepen = null;
                     SignaalGroepInstellingen = null;
                 }
-                RaisePropertyChanged("ConflictGroepen");
-                RaisePropertyChanged("SignaalGroepInstellingen");
-                AutomaticallySetSelectableSignalGroups = true;
+                RaisePropertyChanged(nameof(ConflictGroepen));
+                RaisePropertyChanged(nameof(SignaalGroepInstellingen));
             }
         }
 
@@ -376,7 +362,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public RoBuGroverTabViewModel() : base()
+        public RoBuGroverTabViewModel()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));

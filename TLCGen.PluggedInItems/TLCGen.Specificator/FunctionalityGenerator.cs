@@ -696,6 +696,7 @@ namespace TLCGen.Specificator
             var sb = new StringBuilder();
             
             if (!c.Data.NietGebruikenBitmap &&
+                !string.IsNullOrWhiteSpace(c.Data.BitmapNaam) &&
                 !string.IsNullOrEmpty(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
             {
                 var path = Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);

@@ -53,18 +53,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 if(ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovstipt}{CCOLCodeHelper.GetPriorityName(ov)}", ov.GeconditioneerdePrioriteit == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schovstipt, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovstipt}{CCOLCodeHelper.GetPriorityName(c, ov)}", ov.GeconditioneerdePrioriteit == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schovstipt, ov.FaseCyclus, ov.Type.GetDescription()));
                 }
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}", _mstp, ov.FaseCyclus, ov.Type.GetDescription()));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hstp}{CCOLCodeHelper.GetPriorityName(ov)}", _hstp, ov.FaseCyclus, ov.Type.GetDescription()));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstipttevroeg}{CCOLCodeHelper.GetPriorityName(ov)}", ov.GeconditioneerdePrioTeVroeg, CCOLElementTimeTypeEnum.None, _prmovstipttevroeg, ov.FaseCyclus, ov.Type.GetDescription()));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstiptoptijd}{CCOLCodeHelper.GetPriorityName(ov)}", ov.GeconditioneerdePrioOpTijd, CCOLElementTimeTypeEnum.None, _prmovstiptoptijd, ov.FaseCyclus, ov.Type.GetDescription()));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstipttelaat}{CCOLCodeHelper.GetPriorityName(ov)}", ov.GeconditioneerdePrioTeLaat, CCOLElementTimeTypeEnum.None, _prmovstipttelaat, ov.FaseCyclus, ov.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}", _mstp, ov.FaseCyclus, ov.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}", _hstp, ov.FaseCyclus, ov.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstipttevroeg}{CCOLCodeHelper.GetPriorityName(c, ov)}", ov.GeconditioneerdePrioTeVroeg, CCOLElementTimeTypeEnum.None, _prmovstipttevroeg, ov.FaseCyclus, ov.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstiptoptijd}{CCOLCodeHelper.GetPriorityName(c, ov)}", ov.GeconditioneerdePrioOpTijd, CCOLElementTimeTypeEnum.None, _prmovstiptoptijd, ov.FaseCyclus, ov.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstipttelaat}{CCOLCodeHelper.GetPriorityName(c, ov)}", ov.GeconditioneerdePrioTeLaat, CCOLElementTimeTypeEnum.None, _prmovstipttelaat, ov.FaseCyclus, ov.Type.GetDescription()));
                 if (!c.PrioData.PrioUitgangPerFase)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtevroeg, ov.GeconditioneerdePrioTeVroegBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}", _usovoptijd, ov.GeconditioneerdePrioOpTijdBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}", _usovtelaat, ov.GeconditioneerdePrioTeLaatBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(c, ov)}", _usovtevroeg, ov.GeconditioneerdePrioTeVroegBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{CCOLCodeHelper.GetPriorityName(c, ov)}", _usovoptijd, ov.GeconditioneerdePrioOpTijdBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{CCOLCodeHelper.GetPriorityName(c, ov)}", _usovtelaat, ov.GeconditioneerdePrioTeLaatBitmapData, ov.FaseCyclus, ov.Type.GetDescription()));
                 }
             }
             if (c.PrioData.PrioUitgangPerFase)
@@ -104,7 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"/* Variabelen tbv registreren stiptheid bij inmelding via KAR: tbv bepalen prioriteit in OV.ADD */");
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"int iKARInSTP{CCOLCodeHelper.GetPriorityName(ov)}[MAX_AANTAL_INMELDINGEN] = {{ 0 }}; int iAantInm{CCOLCodeHelper.GetPriorityName(ov)} = 0;");
+                        sb.AppendLine($"int iKARInSTP{CCOLCodeHelper.GetPriorityName(c, ov)}[MAX_AANTAL_INMELDINGEN] = {{ 0 }}; int iAantInm{CCOLCodeHelper.GetPriorityName(c, ov)} = 0;");
                     }
                     return sb.ToString();
 
@@ -114,11 +114,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov)}, &iAantInm{CCOLCodeHelper.GetPriorityName(ov)}, iKARInSTP{CCOLCodeHelper.GetPriorityName(ov)}, {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(ov)}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
+                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, ov)}, {_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, ov)}, &iAantInm{CCOLCodeHelper.GetPriorityName(c, ov)}, iKARInSTP{CCOLCodeHelper.GetPriorityName(c, ov)}, {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(c, ov)}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] = iAantInm{CCOLCodeHelper.GetPriorityName(ov)} > 0 ? iKARInSTP{CCOLCodeHelper.GetPriorityName(ov)}[0] : 0;");
+                        sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] = iAantInm{CCOLCodeHelper.GetPriorityName(c, ov)} > 0 ? iKARInSTP{CCOLCodeHelper.GetPriorityName(c, ov)}[0] : 0;");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
@@ -136,7 +136,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var hasconditions = false;
                         var sbc = new StringBuilder();
-                        sbc.Append($"{tsts}IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(ov)}] = ");
+                        sbc.Append($"{tsts}IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] = ");
                         var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
                         if (hd != null)
                         {
@@ -150,7 +150,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						if (ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
 						{
 							if (hd != null) sbc.Append(" && ");
-							sbc.Append($"SCH[{_schpf}{_schovstipt}{CCOLCodeHelper.GetPriorityName(ov)}]");
+							sbc.Append($"SCH[{_schpf}{_schovstipt}{CCOLCodeHelper.GetPriorityName(c, ov)}]");
                             hasconditions = true;
                         }
                         if (hasconditions)
@@ -161,18 +161,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_VROEG || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}])) ");
-                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstipttevroeg}{CCOLCodeHelper.GetPriorityName(ov)});");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_VROEG || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}])) ");
+                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstipttevroeg}{CCOLCodeHelper.GetPriorityName(c, ov)});");
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_OP_TIJD || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}])) ");
-                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstiptoptijd}{CCOLCodeHelper.GetPriorityName(ov)});");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_OP_TIJD || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}])) ");
+                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstiptoptijd}{CCOLCodeHelper.GetPriorityName(c, ov)});");
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}])) ");
-                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstipttelaat}{CCOLCodeHelper.GetPriorityName(ov)});");
+                        sb.Append($"{tsts}if (IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] && (MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}])) ");
+                        sb.AppendLine($"iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}] = BepaalPrioriteitsOpties({_prmpf}{_prmovstipttelaat}{CCOLCodeHelper.GetPriorityName(c, ov)});");
                     }
                     if (c.HalfstarData.IsHalfstar)
                     {
@@ -186,9 +186,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                         {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_VROEG;");
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovoptijd}{CCOLCodeHelper.GetPriorityName(ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_OP_TIJD;");
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtelaat}{CCOLCodeHelper.GetPriorityName(ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_LAAT;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtevroeg}{CCOLCodeHelper.GetPriorityName(c, ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_VROEG;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovoptijd}{CCOLCodeHelper.GetPriorityName(c, ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_OP_TIJD;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtelaat}{CCOLCodeHelper.GetPriorityName(c, ov)}] = MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_LAAT;");
                         }
                     }
                     else
@@ -205,7 +205,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var ov in ingSg)
                             {
                                 if (!firstIng) sb.Append(" || ");
-                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_VROEG");
+                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_VROEG");
                                 firstIng = false;
                             }
                             sb.AppendLine(";");
@@ -215,7 +215,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var ov in ingSg)
                             {
                                 if (!firstIng) sb.Append(" || ");
-                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_OP_TIJD");
+                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_OP_TIJD");
                                 firstIng = false;
                             }
                             sb.AppendLine(";");
@@ -226,7 +226,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var ov in ingSg)
                             {
                                 if (!firstIng) sb.Append(" || ");
-                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(ov)}] == CIF_TE_LAAT");
+                                sb.Append($"MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] == CIF_TE_LAAT");
                                 firstIng = false;
                             }
                             sb.AppendLine(";");

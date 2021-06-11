@@ -233,13 +233,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var ov in ovRis)
                         {
                             var lijncheck = ov.CheckLijnNummer && ov.LijnNummers.Any()
-                                ? $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(ov)}_01, {ov.LijnNummers.Count}"
+                                ? $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(c, ov)}_01, {ov.LijnNummers.Count}"
                                 : "NG, NG";
                             sb.AppendLine($"{ts}ris_srm_put_signalgroup(" +
                                           $"{_fcpf}{ov.FaseCyclus}, " +
                                           $"PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], " +
-                                          $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
-                                          $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(ov)}], " +
+                                          $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, ov)}], " +
+                                          $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, ov)}], " +
                                           lijncheck +
                                           ");");
                         }

@@ -27,7 +27,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
                 }
             }
-            sb.AppendLine("#define TVGAMAX \"/* gebruik van TVGA_max[] */\"");
+            sb.AppendLine("#define TVGAMAX /* gebruik van TVGA_max[] */");
             sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
@@ -59,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (var ovFC in c.PrioData.PrioIngrepen)
                 {
-                    sb.AppendLine($"{ts}#define prioFC{ovFC.FaseCyclus}{ovFC.Naam} {ov}");
+                    sb.AppendLine($"{ts}#define prioFC{CCOLCodeHelper.GetPriorityName(c, ovFC)} {ov}");
                     ++ov;
                 }
                 foreach (var hdFC in c.PrioData.HDIngrepen)
@@ -213,7 +213,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad2 = c.Fasen.Count.ToString().Length;
 
             var index = 0;
-            var detectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors().OrderBy(x => x.RangeerIndex) : c.GetAllDetectors();
+            var detectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors().OrderBy(x => x is SelectieveDetectorModel ? x.RangeerIndex2 : x.RangeerIndex) : c.GetAllDetectors();
             foreach (var dm in detectors)
             {
                 if (dm.Dummy) continue;
@@ -230,7 +230,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 ovdummies.Any())
             {
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
-                var dummyDetectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors(x => x.Dummy).OrderBy(x => x.RangeerIndex) : c.GetAllDetectors(x => x.Dummy);
+                var dummyDetectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors(x => x.Dummy).OrderBy(x =>  x is SelectieveDetectorModel ? x.RangeerIndex2 : x.RangeerIndex) : c.GetAllDetectors(x => x.Dummy);
                 foreach (var dm in dummyDetectors)
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));

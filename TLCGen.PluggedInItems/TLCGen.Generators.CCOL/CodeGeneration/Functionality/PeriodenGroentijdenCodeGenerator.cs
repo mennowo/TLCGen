@@ -140,7 +140,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperrta > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerActiefBitmapData, _prmperrta.Description));
             if (iperrtdim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerDimmenBitmapData, _prmperrtdim.Description));
             if (iperbel > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenActiefBitmapData, _prmperbel.Description));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenDimmenBitmapData, _prmperbeldim.Description));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, c.Signalen.PeriodeBellenDimmenBitmapData, _prmperbeldim.Description));
 
             // groentijden
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";

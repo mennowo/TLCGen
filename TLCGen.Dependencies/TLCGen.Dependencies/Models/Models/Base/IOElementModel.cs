@@ -17,8 +17,6 @@ namespace TLCGen.Models
     [Serializable]
     public abstract class IOElementModel
     {
-        private int _rangeerIndex;
-
         [HasDefault(false)]
         public abstract string Naam { get; set; }
 
@@ -26,11 +24,11 @@ namespace TLCGen.Models
 
         [XmlIgnore]
         [HasDefault(false)]
-        public int RangeerIndex
-        {
-            get => _rangeerIndex;
-            set => _rangeerIndex = value;
-        }
+        public int RangeerIndex { get; set; }
+        
+        [XmlIgnore]
+        [HasDefault(false)]
+        public int RangeerIndex2 { get; set; }
 
         [HasDefault(false)]
         public IOElementTypeEnum ElementType { get; set; }

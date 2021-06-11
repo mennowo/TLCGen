@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -12,8 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class NevenMeldingenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private string _hplact;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _prmtdbl;
         private CCOLGeneratorCodeStringSettingModel _prmtdbh;
@@ -95,9 +92,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var ov2 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus2);
                         var ov3 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus3);
 
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov1)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov1)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] && TDH[{_dpf}{nm.Item2}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov2)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov2)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] && TDH[{_dpf}{nm.Item2}];");
-                        if (nm.Item1.FaseCyclus3 != "NG") sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(ov3)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(ov3)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] && TDH[{_dpf}{nm.Item2}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(c, ov1)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(c, ov1)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus1}] && TDH[{_dpf}{nm.Item2}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(c, ov2)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(c, ov2)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus2}] && TDH[{_dpf}{nm.Item2}];");
+                        if (nm.Item1.FaseCyclus3 != "NG") sb.AppendLine($"{ts}IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] = SD[{_dpf}{nm.Item2}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(c, ov3)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(c, ov3)}] >= PRM[{_prmpf}{_prmrtn}{nm.Item3}]) ? TRUE : IH[{_hpf}{_hovss}{nm.Item1.FaseCyclus3}] && TDH[{_dpf}{nm.Item2}];");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Nevenmeldingen: in- en uitmelden */");
@@ -107,16 +104,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var ov2 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus2);
                         var ov3 = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == nm.Item1.FaseCyclus3);
 
-                        var prioFC3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : "prioFC" + CCOLCodeHelper.GetPriorityName(ov3);
+                        var prioFC3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : "prioFC" + CCOLCodeHelper.GetPriorityName(c, ov3);
                         var hovss3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : _hpf + _hovss + nm.Item1.FaseCyclus3;
                         var hneven3 = nm.Item1.FaseCyclus3 == "NG" ? "NG" : _hpf + _hneven + nm.Item1.FaseCyclus3;
-                        sb.AppendLine($"{ts}NevenMelding(prioFC{CCOLCodeHelper.GetPriorityName(ov1)}, prioFC{CCOLCodeHelper.GetPriorityName(ov2)}, {prioFC3}, {_dpf}{nm.Item2}, {_prmpf}{_prmtdbl}{nm.Item2}, {_prmpf}{_prmtdbh}{nm.Item2}, {_hpf}{_hovss}{nm.Item1.FaseCyclus1}, {_hpf}{_hovss}{nm.Item1.FaseCyclus2}, {hovss3}, {_hpf}{_hneven}{nm.Item1.FaseCyclus1}, {_hpf}{_hneven}{nm.Item1.FaseCyclus2}, {hneven3});");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov1)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov2)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
-                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(ov3)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov1)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov2)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
-                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(ov3)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
+                        sb.AppendLine($"{ts}NevenMelding(prioFC{CCOLCodeHelper.GetPriorityName(c, ov1)}, prioFC{CCOLCodeHelper.GetPriorityName(c, ov2)}, {prioFC3}, {_dpf}{nm.Item2}, {_prmpf}{_prmtdbl}{nm.Item2}, {_prmpf}{_prmtdbh}{nm.Item2}, {_hpf}{_hovss}{nm.Item1.FaseCyclus1}, {_hpf}{_hovss}{nm.Item1.FaseCyclus2}, {hovss3}, {_hpf}{_hneven}{nm.Item1.FaseCyclus1}, {_hpf}{_hneven}{nm.Item1.FaseCyclus2}, {hneven3});");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, ov1)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, ov2)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
+                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, ov3)}] |= SH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, ov1)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus1}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, ov2)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus2}];");
+                        if (nm.Item1.FaseCyclus3 !="NG") sb.AppendLine($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, ov3)}] |= EH[{_hpf}{_hneven}{nm.Item1.FaseCyclus3}];");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
@@ -132,7 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(
                                 $"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{f}, ");
 
-                            if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
+                            if (dm != null && dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
                             {
                                 if (!dm.AanvraagHardOpStraat)
                                 {

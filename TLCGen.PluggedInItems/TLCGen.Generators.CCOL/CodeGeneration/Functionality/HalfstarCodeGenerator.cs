@@ -147,9 +147,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.PrioData.PrioIngrepen.Any())
                 {
-                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}{CCOLCodeHelper.GetPriorityName(prio)}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, prio.FaseCyclus, prio.Type.GetDescription()));
-                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{CCOLCodeHelper.GetPriorityName(prio)}", prio.HalfstarIngreepData.Prioriteit, CCOLElementTimeTypeEnum.None, _prmpriohst, prio.FaseCyclus, prio.Type.GetDescription()));
-                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(prio)}", prio.HalfstarIngreepData.GroenNaTXDTijd, CCOLElementTimeTypeEnum.TE_type, _prmnatxdhst, prio.FaseCyclus, prio.Type.GetDescription()));
+                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}{CCOLCodeHelper.GetPriorityName(c, prio)}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, prio.FaseCyclus, prio.Type.GetDescription()));
+                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.HalfstarIngreepData.Prioriteit, CCOLElementTimeTypeEnum.None, _prmpriohst, prio.FaseCyclus, prio.Type.GetDescription()));
+                    foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.HalfstarIngreepData.GroenNaTXDTijd, CCOLElementTimeTypeEnum.TE_type, _prmnatxdhst, prio.FaseCyclus, prio.Type.GetDescription()));
                 }
                 if (c.PrioData.HDIngrepen.Any())
                 {
@@ -832,7 +832,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}/* Prio meetkriterium bij PL bedrijf */");
                         foreach (var prio in c.PrioData.PrioIngrepen)
                         {
-                            sb.AppendLine($"{ts}{ts}yv_PRIO_pl_halfstar({_fcpf}{prio.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(prio)}]);");
+                            sb.AppendLine($"{ts}{ts}yv_PRIO_pl_halfstar({_fcpf}{prio.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]);");
                         }
                         sb.AppendLine($"{ts}}}");
                     }
@@ -1525,14 +1525,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach (var ov in c.PrioData.PrioIngrepen)
                             {
-                                sb.AppendLine($"{ts}iExtraGroenNaTXD[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = PRM[{_prmpf}{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(ov)}];");
+                                sb.AppendLine($"{ts}iExtraGroenNaTXD[prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}] = PRM[{_prmpf}{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(c, ov)}];");
                             }
                         }
                         else if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit)
                         {
                             foreach (var ov in c.PrioData.PrioIngrepen)
                             {
-                                sb.AppendLine($"{ts}iExtraGroenNaTXD[prioFC{CCOLCodeHelper.GetPriorityName(ov)}] = PRM[{_prmpf}{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(ov)}];");
+                                sb.AppendLine($"{ts}iExtraGroenNaTXD[prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}] = PRM[{_prmpf}{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(c, ov)}];");
                             }
                         }
                         enter = true;
@@ -1588,7 +1588,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var prio in c.PrioData.PrioIngrepen)
                         {
-                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(prio)}] |= PrioHalfstarBepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{CCOLCodeHelper.GetPriorityName(prio)});");
+                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] |= PrioHalfstarBepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{CCOLCodeHelper.GetPriorityName(c, prio)});");
                         }
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();

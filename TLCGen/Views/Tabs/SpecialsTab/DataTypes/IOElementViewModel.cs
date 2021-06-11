@@ -13,13 +13,20 @@ namespace TLCGen.ViewModels
 
         public int RangeerIndex
         {
-            get => Element.RangeerIndex;
+            get => !UseSecondaryIndex ? Element.RangeerIndex : Element.RangeerIndex2;
             set
             {
-                Element.RangeerIndex = value;
-                if (SavedData != null) SavedData.RangeerIndex = value;
+                if (!UseSecondaryIndex) Element.RangeerIndex = value;
+                else Element.RangeerIndex2 = value;
+                if (SavedData != null)
+                {
+                    if (!UseSecondaryIndex) SavedData.RangeerIndex = value;
+                    else SavedData.RangeerIndex2 = value;
+                }
             }
         }
+        
+        public bool UseSecondaryIndex { get; set; }
 
         public IOElementModel Element { get; }
 

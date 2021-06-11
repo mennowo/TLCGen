@@ -27,6 +27,7 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum VerklikkenPrioTellerUber { get; set; }
         public bool VerlaagHogeSignaalGroepNummers { get; set; }
         public bool KARSignaalGroepNummersInParameters { get; set; }
+        public bool WeglatenIngreepNaamBijEnkeleIngreepPerFase { get; set; }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]

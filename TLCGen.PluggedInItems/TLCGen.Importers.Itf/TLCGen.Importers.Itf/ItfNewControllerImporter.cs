@@ -161,35 +161,6 @@ namespace TLCGen.Importers.Itf
                     newc.Data.GarantieOntruimingsTijden = true;
                     newc.Data.Intergroen = intergreen;
 
-                    //if (lanes.Any())
-                    //{
-                    //    foreach (var fc in newc.Fasen)
-                    //    {
-                    //        newc.RISData.RISFasen.Add(new RISFaseCyclusDataModel
-                    //        {
-                    //            FaseCyclus = fc.Naam
-                    //        });
-                    //    }
-                    //    foreach (var lane in lanes)
-                    //    {
-                    //        var topoSg = signalGroups.FirstOrDefault(x => x.TopologyId == lane.SignalGroup);
-                    //        if (topoSg != null)
-                    //        {
-                    //            var sg = newc.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == topoSg.Name);
-                    //            if (sg != null && int.TryParse(lane.LaneId, out var laneId))
-                    //            {
-                    //                var sgLaneId = sg.LaneData.Count;
-                    //                sg.LaneData.Add(new RISFaseCyclusLaneDataModel
-                    //                {
-                    //                    LaneID = laneId,
-                    //                    RijstrookIndex = sgLaneId,
-                    //                    SignalGroupName = sg.FaseCyclus
-                    //                });
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
                     return newc;
                 }
                 catch (Exception e)

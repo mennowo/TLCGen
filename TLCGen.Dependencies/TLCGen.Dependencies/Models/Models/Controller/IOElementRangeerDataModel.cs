@@ -7,5 +7,6 @@ namespace TLCGen.Models
     {
         public string Naam { get; set; }
         public int RangeerIndex { get; set; }
+        public int RangeerIndex2 { get; set; } = -1;
     }
 }

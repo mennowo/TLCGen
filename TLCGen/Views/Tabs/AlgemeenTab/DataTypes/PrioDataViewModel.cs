@@ -182,6 +182,17 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(KARSignaalGroepNummersInParameters), broadcast: true);
             }
         }
+        
+        [Description("Weglaten naam ingreep bij enkele ingreep per fase")]
+        public bool WeglatenIngreepNaamBijEnkeleIngreepPerFase
+        {
+            get => _Controller?.PrioData.WeglatenIngreepNaamBijEnkeleIngreepPerFase ?? false;
+            set
+            {
+                _Controller.PrioData.WeglatenIngreepNaamBijEnkeleIngreepPerFase = value;
+                RaisePropertyChanged<object>(nameof(WeglatenIngreepNaamBijEnkeleIngreepPerFase), broadcast: true);
+            }
+        }
 
         #endregion // Properties
     }

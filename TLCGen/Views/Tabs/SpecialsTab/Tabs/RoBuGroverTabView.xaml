@@ -71,8 +71,8 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <CheckBox Grid.Row="4" Margin="4" Content="Autom. selectie" 
-                      IsChecked="{Binding Path=AutomaticallySetSelectableSignalGroups,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox Grid.Row="4" Grid.Column="0" Margin="4" Content="Niet-confl." 
+                      IsChecked="{Binding Path=ToestaanNietConflictenInConflictGroepen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     <ListView 
                         Name="ConflictGroepsLB" Grid.Row="1"
                         Grid.Column="1" Grid.RowSpan="2" Margin="2" 

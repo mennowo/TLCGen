@@ -23,7 +23,7 @@ var setupDir = Directory("./TLCGen.Setup");
 var outputDir = Directory("./published") + Directory(configuration);
 var outputDirBase = Directory("./published");
 // varia
-var prev_version = "0_9_7_0";
+var prev_version = "0_9_8_0";
 var backupOld = false;
 var deployDev = false;
 //////////////////////////////////////////////////////////////////////

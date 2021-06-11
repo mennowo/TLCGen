@@ -30,6 +30,8 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel BellenActiefBitmapData { get; set; }
         [IOElement("beldim", BitmappedItemTypeEnum.Uitgang, "", "BellenDimmenBitmapDataRelevant")]
         public BitmapCoordinatenDataModel BellenDimmenBitmapData { get; set; }
+        [IOElement("perbeldim", BitmappedItemTypeEnum.Uitgang, "", "BellenDimmenBitmapDataRelevant")]
+        public BitmapCoordinatenDataModel PeriodeBellenDimmenBitmapData { get; set; }
 
         [XmlIgnore]
         public bool ControllerHasPeriodRtAanvraag { get; set; }
@@ -66,6 +68,7 @@ namespace TLCGen.Models
             RatelTikkerAltijdBitmapData = new BitmapCoordinatenDataModel();
             RatelTikkerDimmenBitmapData = new BitmapCoordinatenDataModel();
             BellenActiefBitmapData = new BitmapCoordinatenDataModel();
+            PeriodeBellenDimmenBitmapData = new BitmapCoordinatenDataModel();
             BellenDimmenBitmapData = new BitmapCoordinatenDataModel();
         }
     }

@@ -22,6 +22,7 @@ namespace TLCGen.Models
         public int GroenVerlaagFactor { get; set; }
         public int GroenVerlaagFactorNietPrimair { get; set; }
         public bool OphogenTijdensGroen { get; set; }
+        public bool ToestaanNietConflictenInConflictGroepen { get; set; }
 
         [Browsable(false)]
         [IOElement("rgv", BitmappedItemTypeEnum.Uitgang, "", "BitmapDataRelevant")]

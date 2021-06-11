@@ -195,6 +195,17 @@ namespace TLCGen.ViewModels
                 {
                     vms[i].items.Add(new IOElementViewModel(e));
                 }
+                // for regular detectors, also add selective detectors with non-dummy coupled regular detector
+                if (i == 1 && models[4] != null)
+                {
+                    foreach (var e in elements.Where(x => x != null && x.ElementType == vms[4].type))
+                    {
+                        if (e is SelectieveDetectorModel { Dummy: false })
+                        {
+                            vms[i].items.Add(new IOElementViewModel(e));
+                        }
+                    }
+                }
 
                 // for each item, match with saved data
                 foreach (var vm in vms[i].items)
@@ -202,7 +213,18 @@ namespace TLCGen.ViewModels
                     var model = models[i].FirstOrDefault(x => x != null && x.Naam == vm.Element.Naam);
                     if (model != null)
                     {
-                        vm.RangeerIndex = model.RangeerIndex;
+                        // for regular detector list, load secondary index for selective detectors
+                        if (i == 1 && vm.Element is SelectieveDetectorModel)
+                        {
+                            vm.RangeerIndex = model.RangeerIndex2;
+                            vm.UseSecondaryIndex = true;
+                        }
+                        else
+                        {
+                            vm.RangeerIndex = model.RangeerIndex;
+                            vm.UseSecondaryIndex = false;
+                        }
+
                         vm.SavedData = model;
                     }
                     else
