@@ -29,8 +29,11 @@ namespace TLCGen
                 {
                     if ((pl.Item1 & TLCGenPluginElems.ToolBarControl) != TLCGenPluginElems.ToolBarControl) continue;
                     var tb = new ToolBar();
-	                if (pl.Item2 is ITLCGenToolBar tlcGenToolBar) tb.Items.Add(tlcGenToolBar.ToolBarView);
-                    MainToolBarTray.ToolBars.Add(tb);
+                    if (pl.Item2 is ITLCGenToolBar {IsVisible: true} tlcGenToolBar)
+                    {
+	                    tb.Items.Add(tlcGenToolBar.ToolBarView);
+						MainToolBarTray.ToolBars.Add(tb);
+                    }
                 }
             };
 

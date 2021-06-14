@@ -1083,9 +1083,17 @@
       <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
       <Name>TLCGen.Importers.TabC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Additor\TLCGen.Plugins.Additor.csproj">
+      <Project>{e8eab6e3-b769-481a-8712-12442767742c}</Project>
+      <Name>TLCGen.Plugins.Additor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.AFM\TLCGen.Plugins.AFM.csproj">
       <Project>{688e5fbb-f084-4169-b484-5c5947720e38}</Project>
       <Name>TLCGen.Plugins.AFM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.AutoBuild\TLCGen.Plugins.AutoBuild.csproj">
+      <Project>{73afe044-0175-4ea0-bc0d-7e9a5386dab6}</Project>
+      <Name>TLCGen.Plugins.AutoBuild</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.DynamischHiaat\TLCGen.Plugins.DynamischeHiaat.csproj">
       <Project>{470913de-034e-4502-aac8-e62aab880bd1}</Project>
@@ -1163,6 +1171,15 @@ move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </Target>
   -->
   <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.0.3')">
+      <ItemGroup>
+        <Reference Include="ICSharpCode.AvalonEdit">
+          <HintPath>..\packages\AvalonEdit\lib\net40\ICSharpCode.AvalonEdit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
       <ItemGroup>
         <Reference Include="ICSharpCode.AvalonEdit">

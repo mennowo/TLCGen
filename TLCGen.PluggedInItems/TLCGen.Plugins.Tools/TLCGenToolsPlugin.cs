@@ -110,6 +110,9 @@ namespace TLCGen.Plugins.Tools
             get => true;
             set { }
         }
+
+        public bool Visibility { get; set; } = true;
+
         public ControllerModel Controller
         {
             get => _controller;

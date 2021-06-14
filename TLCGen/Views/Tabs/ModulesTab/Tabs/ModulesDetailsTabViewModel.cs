@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public Visibility HasMultiML => _Controller.Data.MultiModuleReeksen ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility HasMultiML => _Controller.Data.MultiModuleReeksen ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
         #endregion // Properties
 

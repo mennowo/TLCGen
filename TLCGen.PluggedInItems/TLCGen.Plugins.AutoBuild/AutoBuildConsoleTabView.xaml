@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="TLCGen.Plugins.AutoBuild.AutoBuildConsoleTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Plugins.AutoBuild"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type local:ErrorLogMessage}" >
+            <TextBox Text="{Binding Mode=OneWay}" TextWrapping="Wrap" Foreground="Red" FontFamily="Consolas" Height="Auto" Background="Transparent"
+                     BorderBrush="Transparent" BorderThickness="0" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:LogMessage}" >
+            <TextBox Text="{Binding Mode=OneWay}" TextWrapping="Wrap" Foreground="White" FontFamily="Consolas" Height="Auto" Background="Transparent"
+                     BorderBrush="Transparent" BorderThickness="0" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:WarningLogMessage}" >
+            <TextBox Text="{Binding Mode=OneWay}" TextWrapping="Wrap" Foreground="Yellow" FontFamily="Consolas" Height="Auto" Background="Transparent"
+                     BorderBrush="Transparent" BorderThickness="0" />
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer Name="LogScroller" Margin="2" Background="Black" ScrollChanged="Scroller_ScrollChanged">
+            <StackPanel Margin="5" VerticalAlignment="Bottom">
+                <ItemsControl Name="ItemCT" ItemsSource="{Binding Path=ConsoleVM.BuildAndRunConsoleOutput}">
+
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

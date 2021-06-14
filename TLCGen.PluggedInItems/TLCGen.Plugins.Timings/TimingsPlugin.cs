@@ -85,6 +85,8 @@ namespace TLCGen.Plugins.Timings
 
         public bool IsEnabled { get; set; }
 
+        public bool Visibility { get; set; } = true;
+
         public bool CanBeEnabled()
         {
             return true;

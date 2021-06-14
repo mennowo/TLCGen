@@ -144,6 +144,8 @@ namespace TLCGen.Plugins.Sumo
         //return (DrawingImage)dict["AdditorIconDrawingImage"];
         public ImageSource Icon => null;
 
+        public bool Visibility { get; set; } = true;
+
         public bool CanBeEnabled()
         {
             return true;

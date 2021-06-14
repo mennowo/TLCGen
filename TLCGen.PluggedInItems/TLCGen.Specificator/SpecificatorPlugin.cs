@@ -134,6 +134,8 @@ namespace TLCGen.Specificator
             set => _IsEnabled = value;
         }
 
+        public bool Visibility { get; set; } = true;
+
         //ResourceDictionary dict = new ResourceDictionary();
         //Uri u = new Uri("pack://application:,,,/" +
         //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
