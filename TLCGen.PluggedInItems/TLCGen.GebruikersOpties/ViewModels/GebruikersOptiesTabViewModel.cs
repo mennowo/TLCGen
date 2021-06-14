@@ -730,6 +730,8 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        public bool Visibility { get; set; } = true;
+
         public ImageSource Icon
         {
             get

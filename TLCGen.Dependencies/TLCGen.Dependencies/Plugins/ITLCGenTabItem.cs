@@ -11,6 +11,7 @@ namespace TLCGen.Plugins
         DataTemplate ContentDataTemplate { get; }
         
         bool IsEnabled { get; set; }
+        bool Visibility { get; set; }
 
         void LoadTabs();
         bool CanBeEnabled();

@@ -98,6 +98,8 @@ namespace TLCGen.Plugins.DynamischHiaat
         }
 
         public bool IsEnabled { get; set; }
+        
+        public bool Visibility { get; set; }
 
         public bool CanBeEnabled()
         {

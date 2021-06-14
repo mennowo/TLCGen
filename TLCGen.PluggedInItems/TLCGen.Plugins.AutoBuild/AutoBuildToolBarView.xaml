@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="TLCGen.Plugins.AutoBuild.AutoBuildToolBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Plugins.AutoBuild" Margin="0" Padding="0"
+             Loaded="UserControl_Loaded"
+             d:DataContext="{d:DesignInstance local:AutoBuildToolBarViewModel}"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen.Plugins.AutoBuild;component/Resources/Icon.xaml" />
+                <ResourceDictionary>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style TargetType="Polygon">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Modifiers="Ctrl" Command="{Binding Path=BuildAndRunCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Content="AutoBuild" />
+        <Button Command="{Binding Path=RefreshCommand}" Grid.Column="1" Margin="0" Padding="4,0" Name="RefreshButton"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Image Source="{StaticResource RefreshIconDrawingImage}" Height="15" />
+        </Button>
+        <ComboBox ItemsSource="{Binding Path=VcxProjects}" MinWidth="100" Grid.Column="2"
+                  DisplayMemberPath="Name" Margin="0" Padding="0"
+                  SelectedItem="{Binding Path=SelectedVcxProject}"
+                  IsEnabled="{Binding ElementName=RefreshButton,Path=IsEnabled}"
+                  Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}" />
+        <Button Command="{Binding Path=BuildCommand}" Grid.Column="3" Margin="0" Padding="4,0"
+                ToolTip="Build (compileren)"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Polygon Points="0,0 11,7, 0,14" Stroke="Black" Fill="Yellow" />
+        </Button>
+        <Button Command="{Binding Path=BuildAndRunCommand}" Grid.Column="4" Margin="0" Padding="4,0"
+                ToolTip="Run (compileren en starten)"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+            <Polygon Points="0,0 11,7, 0,14" Stroke="Black" Fill="Green" />
+        </Button>
+    </Grid>
+</UserControl>

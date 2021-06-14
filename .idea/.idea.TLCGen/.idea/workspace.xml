@@ -8,35 +8,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorSettingsView.xaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorSettingsView.xaml.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorSettingsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Models/AutoBuildSettingsModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Models/AutoBuildTabVisibilityChangedMessage.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Models/AutoBuildToolBarVisibilityChangedMessage.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Resources/settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/paket.references" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/paket.references" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Base/IOElementModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Base/IOElementModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Controller/IOElementRangeerDataModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Controller/IOElementRangeerDataModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Prio_HD/PrioriteitDataModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Prio_HD/PrioriteitDataModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RoBuGrover/RoBuGroverModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RoBuGrover/RoBuGroverModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/SignalenDataModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/SignalenDataModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/TLCGenModelManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/TLCGenModelManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NevenMeldingenCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NevenMeldingenCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/OVGeconditioneerdePrioGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/OVGeconditioneerdePrioGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PeriodenGroentijdenCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PeriodenGroentijdenCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/HelperClasses/CCOLCodeHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/HelperClasses/CCOLCodeHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGeneratePrioC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGeneratePrioC.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRisSimC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRisSimC.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateSysH.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateSysH.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/ItfNewControllerImporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/ItfNewControllerImporter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/FunctionalityGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/FunctionalityGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenTabItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenTabItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenToolBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenToolBar.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.GebruikersOpties/ViewModels/GebruikersOptiesTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.GebruikersOpties/ViewModels/GebruikersOptiesTabViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AFM/AFMPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AFM/AFMPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.DynamischHiaat/DynamischHiaatPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.DynamischHiaat/DynamischHiaatPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.MultiSim/MultiSimPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.MultiSim/MultiSimPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Sumo/SumoPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Sumo/SumoPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGen.Plugins.Tools.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGen.Plugins.Tools.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGenToolsPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGenToolsPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/SpecificatorPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/SpecificatorPlugin.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/PrioDataViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/PrioDataViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/DetectorenTab/Tabs/SelectieveDetectorenTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/DetectorenTab/Tabs/SelectieveDetectorenTabViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/IOElementViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/IOElementViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RangeerElementenTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RangeerElementenTabViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/tlcgenversioning" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/tlcgenversioning" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.cake" beforeDir="false" afterPath="$PROJECT_DIR$/build.cake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.sln" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/TLCGen.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/TLCGen.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/ViewModels/TLCGenTabItemViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/ViewModels/TLCGenTabItemViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/ControllerView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/ControllerView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Tabs/ModulesDetailsTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Tabs/ModulesDetailsTabViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paket.dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/paket.dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paket.lock" beforeDir="false" afterPath="$PROJECT_DIR$/paket.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +95,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/ViewModels/Other/DetectorManagerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCImportHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCExistingControllerImporter.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/E8B582F9-E526-4A0E-B1C0-F71951C9959B/d3/45f6ecef/Visibility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeaanvraagViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportDplCWindow.xaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportDplCWindow.xaml" root0="FORCE_HIGHLIGHTING" />
@@ -118,7 +120,6 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/MainWindowViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/obj/Debug/AboutWindow.g.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateHstC.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/SignaalPlanViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Controls/SimplePropertyEditor.xaml.cs" root0="FORCE_HIGHLIGHTING" />
@@ -132,43 +133,10 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AddFileViewModel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/Tabs/PrioIngrepenTabView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/ControllerAlertMessage.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/ViewModels/TimingsTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/Settings/tlcgendefaultdefaults.xml" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenRISTabView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/DefaultsProvider.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenRISTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RIS/RISFaseCyclusLaneSimulatedStationModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/InterSignaalGroep/RealFunc/GroenSyncDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/halfstar.c" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VISSIMCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/AlgemeenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/SignalenTabView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/GelijkstartenVoorstartenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Controls/PelotonKoppelingView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PelotonKoppelingCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateTabC.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_ris.c" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RoBuGrover/RoBuGroverModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RoBuGroverTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/DetectorenTab/Tabs/SelectieveDetectorenTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Controller/IOElementRangeerDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/IOElementViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Base/IOElementModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/RangeerElementenTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateSysH.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Prio_HD/PrioriteitDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/PrioDataViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NevenMeldingenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGeneratePrioC.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
@@ -184,8 +152,42 @@
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/ItfNewControllerImporter.cs" />
       <option value="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" />
       <option value="$PROJECT_DIR$/TLCGen/tlcgenversioning" />
-      <option value="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" />
       <option value="$PROJECT_DIR$/build.cake" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildConsoleTabViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/VCXProjectDataViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/Models/AutoBuildToolBarVisibilityChangedMessage.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/Models/AutoBuildSettingsModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenTabItem.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/ControllerView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.DynamischHiaat/DynamischHiaatPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/ViewModels/TLCGenTabItemViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Tabs/ModulesDetailsTabViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.GebruikersOpties/ViewModels/GebruikersOptiesTabViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AFM/AFMPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/SpecificatorPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGenToolsPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Sumo/SumoPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.MultiSim/MultiSimPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Plugins/ITLCGenToolBar.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/MainWindow.xaml.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildSettingsView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildToolBarView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorTabView.xaml.cs" />
+      <option value="$PROJECT_DIR$/paket.dependencies" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/paket.references" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorTabView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorTabViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildSettingsViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildToolBarViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Models/AutoBuildSettingsModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AutoBuildSettingsView.xaml.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AutoBuildSettingsView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AutoBuildSettingsViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Resources/settings.xml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -252,6 +254,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies.sln" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="project.propDebugger" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -390,7 +393,8 @@
       <workItem from="1622116954975" duration="1415000" />
       <workItem from="1622203971655" duration="1670000" />
       <workItem from="1623224750946" duration="899000" />
-      <workItem from="1623311018251" duration="12327000" />
+      <workItem from="1623311018251" duration="12482000" />
+      <workItem from="1623653501076" duration="13996000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -497,7 +501,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622205367167</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Version 0.9.8.0">
+      <created>1623418464238</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1623418464238</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -573,7 +584,8 @@
     <MESSAGE value="TLCGen versie 0.9.5" />
     <MESSAGE value="fix voor prio type Auto" />
     <MESSAGE value="Version 0.9.6" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 0.9.6" />
+    <MESSAGE value="Version 0.9.8.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 0.9.8.0" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

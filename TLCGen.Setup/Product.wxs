@@ -20,8 +20,8 @@
 
     <MediaTemplate EmbedCab="yes" />
 
-		<Feature Id="Complete" Title="TLCGen" Level="1" AllowAdvertise='no' Absent='disallow' InstallDefault='local'
-		         ConfigurableDirectory='INSTALLFOLDER' Display='expand' >
+    <Feature Id="Complete" Title="TLCGen" Level="1" AllowAdvertise='no' Absent='disallow' InstallDefault='local'
+	         ConfigurableDirectory='INSTALLFOLDER' Display='expand' >
       <Feature Id='MainProgram' Title='TLCGen' Description='TLCGen programma bestanden' Level='1' AllowAdvertise='no' Absent='disallow'>
         <ComponentGroupRef Id="TLCGenMain" />
         <ComponentGroupRef Id="TLCGenUpdater" />
@@ -34,6 +34,13 @@
         <ComponentGroupRef Id="TLCGenCCOLSourcesToCopy" />
         <ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
         <ComponentRef Id="ProgramMenuDir" />
+      </Feature>
+      <Feature Id='TLCGenAutoBuild' Title='AutoBuild plugin' Description='Plugin waarmee direct vanuit TLCGen regelingen kunnen worden gecompileerd' Level='2' AllowAdvertise='no' Absent="allow">
+        <ComponentGroupRef Id="TLCGenAutoBuildPlugin" />
+        <ComponentGroupRef Id="TLCGenAutoBuildPluginDeps" />
+      </Feature>
+      <Feature Id='TLCGenAdditor' Title='Additor plugin' Description='Plugin waarmee binnen TLCGen .add en .c bestanden kunnen worden bewerkt' Level='2' AllowAdvertise='no' Absent="allow">
+        <ComponentGroupRef Id="TLCGenAdditorPlugin" />
       </Feature>
     </Feature>
     
@@ -88,6 +95,8 @@
         </ProgId>
       </Component>
     </ComponentGroup>
+    
+    <!-- Updater -->
     <ComponentGroup Id="TLCGenUpdater" Directory="UPDATERFOLDER">
       <Component Id='UpdaterExecutable' Guid='888E5F09-ECCF-4E75-B15E-05B743F1B9DB'>
         <File Id='TLCGenUpdaterEXE' Name='TLCGen.Updater.exe' Source='$(var.UpdaterDir)/TLCGen.Updater.exe' KeyPath='no' />
@@ -95,6 +104,8 @@
         <File Id='GalaSoft.MvvmLight.Updater' Name='GalaSoft.MvvmLight.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
+    <!-- External dependencies -->
     <ComponentGroup Id="TLCGenDependencies" Directory="DEPSFOLDER">
       <Component Id='AllDependencies' Guid='4C9EE2EC-0333-4AEC-8A7C-C006F052558E'>
         <File Id='CommonServiceLocator' Name='CommonServiceLocator.dll' Source='$(var.ReleaseDir)/CommonServiceLocator.dll' KeyPath='no' />
@@ -114,6 +125,8 @@
         <File Id='Xceed.Wpf.Toolkit' Name='Xceed.Wpf.Toolkit.dll' Source='$(var.ReleaseDir)/Xceed.Wpf.Toolkit.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
+    <!-- Internal components -->
     <ComponentGroup Id="TLCGenComponents" Directory="LIBSFOLDER">
       <Component Id='AllComponents' Guid='4B43DC27-A5B8-4D18-8850-65FC69B9D090'>
         <File Id='TLCGen.Controls' Name='TLCGen.Controls.dll' Source='$(var.ReleaseDir)/TLCGen.Controls.dll' KeyPath='no' />
@@ -125,6 +138,8 @@
         <File Id='TLCGen.ModelManagement' Name='TLCGen.ModelManagement.dll' Source='$(var.ReleaseDir)/TLCGen.ModelManagement.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
+    <!-- TLCGen internal plugins -->
     <ComponentGroup Id="TLCGenPlugins" Directory="PLUGINSFOLDER">
       <Component Id='AllPlugins' Guid='29508888-3720-4415-8318-3B39424F553D'>
         <File Id='TLCGen.GebruikersOpties' Name='TLCGen.GebruikersOpties.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.GebruikersOpties.dll' KeyPath='no' />
@@ -141,12 +156,16 @@
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
+    <!-- TLCGen settings -->
     <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
       <Component Id='AllSettings' Guid='A7F61BAA-AAA1-4BF7-B2BD-200FF1E83123'>
         <File Id='tlcgendefaultdefaults' Name='tlcgendefaultdefaults.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaultdefaults.xml' KeyPath='no' />
         <File Id='tlcgendefaulttemplates' Name='tlcgendefaulttemplates.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaulttemplates.xml' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
+    <!-- Visual Studio templates -->
     <ComponentGroup Id="TLCGenCCOLVisualTemplates" Directory="VISUALTEMPLATESFOLDER">
       <Component Id='AllCCOLVisualTemplates' Guid='3ED972D5-FB4B-43FE-8486-EDE282B3B534'>
         <File Id="VisualTemplatesReadme" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Readme.txt" />
@@ -162,11 +181,15 @@
         <File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
       </Component>
     </ComponentGroup>
+    
+    <!-- Various documents -->
     <ComponentGroup Id="TLCGenCCOLDocs" Directory="CCOLDOCSFOLDER">
       <Component Id='AllCCOLDocs' Guid='343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9'>
         <File Id="fildocD3B88A5E78E73E3F80CF84F42E47C" KeyPath="no" Source="$(var.ReleaseDir)\Docs\BITSturing.ods" />
       </Component>
     </ComponentGroup>
+    
+    <!-- Source files -->
     <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
       <Component Id='AllCCOLSources' Guid='F49B3B56-5D3E-4279-811B-778E1BE2C91F'>
         <File Id="filD3B88A5E78E73E3F80CF84F42E47C65E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.h" />
@@ -217,12 +240,31 @@
       </Component>
     </ComponentGroup>
 
+    <!-- Sources to copy: to enable user sources -->
     <ComponentGroup Id="TLCGenCCOLSourcesToCopy" Directory="CCOLSOURCEFILESTOCOPYFOLDER">
       <Component Id='AllCCOLSourcesToCopy' Guid='C142297C-DC60-4286-93E0-E243CE3293D4'>
         <File Id="SourceFilesToCopyReadmeTXT" KeyPath="no" Source="$(var.ReleaseDir)\SourceFilesToCopy\Readme.txt" />
       </Component>
     </ComponentGroup>
-    
+
+    <!-- AutoBuilder plugin -->
+    <ComponentGroup Id="TLCGenAutoBuildPlugin" Directory="PLUGINSFOLDER">
+      <Component Id='AutoBuildPlugin' Guid='0CA0C7F0-7CCD-49EA-A3B1-F3DDA339491E'>
+        <File Id='TLCGen.Plugins.AutoBuild.dll' Name='TLCGen.Plugins.AutoBuild.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AutoBuild.dll' KeyPath='no' />
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="TLCGenAutoBuildPluginDeps" Directory="DEPSFOLDER">
+      <Component Id='AutoBuildPluginDependencies' Guid='2E092419-2E62-4EB5-8D89-3542EBA0B65B'>
+        <File Id='ICSharpCode.AvalonEdit.dll' Name='ICSharpCode.AvalonEdit.dll' Source='$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll' KeyPath='no' />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Additor plugin -->
+    <ComponentGroup Id="TLCGenAdditorPlugin" Directory="PLUGINSFOLDER">
+      <Component Id='AdditorPlugin' Guid='5CEFEF5A-580A-4E0B-929C-34C1E98964B8'>
+        <File Id='TLCGen.Plugins.Additor.dll' Name='TLCGen.Plugins.Additor.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Additor.dll' KeyPath='no' />
+      </Component>
+    </ComponentGroup>
   </Fragment>
   
 </Wix>

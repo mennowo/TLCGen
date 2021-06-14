@@ -1,0 +1,181 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="AdditorIconGeometry1">F0 M32,32z M0,0z M369.33752,514.93099L369.33752,494.51781 361.17224,486.35254 348.92434,486.35254 348.92434,514.93099z</Geometry>
+  <Geometry x:Key="AdditorIconGeometry2">F0 M32,32z M0,0z M361.17224,486.35254L361.17224,494.51231 369.33752,494.51731z</Geometry>
+  <Geometry x:Key="AdditorIconGeometry3">F1 M32,32z M0,0z M374.15826,494.78627L360.49188,508.45264 355.05609,509.33299 355.93645,503.89721 369.60283,490.23084z</Geometry>
+  <Geometry x:Key="AdditorIconGeometry4">F0 M32,32z M0,0z M301.71446,483.07236L301.71446,461.85915 303.17154,461.85915 303.12864,482.68861 307.37128,482.68861 307.23799,461.85915 308.78549,461.85915 308.78549,483.07236 305.24996,487.97438z</Geometry>
+  <Geometry x:Key="AdditorIconGeometry5">F1 M32,32z M0,0z M301.74998,460.74207C301.74998,458.80908 303.31698,457.24208 305.24997,457.24207 307.18297,457.24207 308.74997,458.80907 308.74997,460.74207</Geometry>
+  <DrawingGroup x:Key="AdditorIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="0.91648401,0,0,0.91648401,24.653792,41.826967">
+        <GeometryDrawing Geometry="{StaticResource AdditorIconGeometry1}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+              <GradientStop Color="#FF63BFFF" Offset="0" />
+              <GradientStop Color="#7FB1E4FF" Offset="0.72727275" />
+              <GradientStop Color="#00FFFFFF" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF3C3C54" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AdditorIconGeometry2}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+              <GradientStop Color="#FF63BFFF" Offset="0" />
+              <GradientStop Color="#7FB1E4FF" Offset="0.72727275" />
+              <GradientStop Color="#00FFFFFF" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF3C3C54" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Brush="#FFFFFFFF" Geometry="{StaticResource AdditorIconGeometry3}" />
+      <DrawingGroup Transform="0.57482011,0.57482011,-0.57482011,0.57482011,461.20678,52.254668">
+        <GeometryDrawing Brush="#FF2A69CB" Geometry="{StaticResource AdditorIconGeometry4}" />
+        <GeometryDrawing Brush="#FF2A69CB" Geometry="{StaticResource AdditorIconGeometry5}" />
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="AdditorIconDrawingImage" Drawing="{StaticResource AdditorIconDrawingGroup}" />
+  <Geometry x:Key="SaveFileIconGeometry1">F1 M32,32z M0,0z M345.07382,486.13364L345.07382,509.49193 350.16473,514.58284 373.42319,514.58284 373.42319,486.13364z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry2">F1 M32,32z M0,0z M348.76254,486.13364L348.76254,499.7502 369.73447,499.7502 369.73447,486.13364z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry3">F1 M32,32z M0,0z M350.16473,514.58284L350.16473,501.88984 370.04281,501.88984 370.04281,514.58284z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry4">F1 M32,32z M0,0z M352.76334,515.63284L352.76334,504.3829 363.93912,504.3829 363.93912,515.63284z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry5">F1 M32,32z M0,0z M354.48269,506.11348L354.48269,513.3063 358.00735,513.3063 358.00735,506.01628z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry6">F1 M32,32z M0,0z M369.73447,486.13364L348.75595,486.13364</Geometry>
+  <DrawingGroup x:Key="SaveFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.0307297,0,0,1.0307297,-11.288099,-15.371882">
+        <GeometryDrawing Brush="#FF717272" Geometry="{StaticResource SaveFileIconGeometry1}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF5B5A5B" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource SaveFileIconGeometry2}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="359.48474,499.37524" EndPoint="360.0079,486.50861" MappingMode="Absolute" Opacity="1">
+              <LinearGradientBrush.Transform>
+                <TransformGroup>
+                  <TransformGroup>
+                    <ScaleTransform ScaleX="40.087017027533179" ScaleY="40.087017027533179" />
+                    <TranslateTransform X="-14061.908350793727" Y="-19783.414231908126" />
+                  </TransformGroup>
+                  <RotateTransform Angle="45" CenterX="0.5" CenterY="0.5" />
+                </TransformGroup>
+              </LinearGradientBrush.Transform>
+              <GradientStop Color="#FFBECED6" Offset="0" />
+              <GradientStop Color="#FFF7F9FA" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF5B5A5B" Geometry="{StaticResource SaveFileIconGeometry3}" />
+        <GeometryDrawing Geometry="{StaticResource SaveFileIconGeometry4}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" Opacity="1" Transform="1.2356011,0,0,1.2849671,-112.82805,-72.316063">
+              <GradientStop Color="#FF989898" Offset="0" />
+              <GradientStop Color="#FFC6C3CB" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF464647" Geometry="{StaticResource SaveFileIconGeometry5}" />
+        <GeometryDrawing Brush="#FFB5B3B5" Geometry="{StaticResource SaveFileIconGeometry6}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFB8C7C9" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="SaveFileIconDrawingImage" Drawing="{StaticResource SaveFileIconDrawingGroup}" />
+  <Geometry x:Key="RefreshIconGeometry1">F1 M32,32z M0,0z M365.3696,493.19179C367.27139,494.93439 368.46384,497.4386 368.46384,500.22133 368.46384,505.48563 364.19628,509.7532 358.93198,509.7532 353.66767,509.7532 349.40011,505.48564 349.40011,500.22133 349.40011,495.83933 352.35706,492.14796 356.38447,491.0337</Geometry>
+  <Geometry x:Key="RefreshIconGeometry2">F0 M32,32z M0,0z M357.83291,495.16887L363.93616,488.8121 355.36099,486.78119z</Geometry>
+  <DrawingGroup x:Key="RefreshIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="0.99550973,0,0,0.99550973,1.6797246,2.2191112">
+        <GeometryDrawing Brush="#FF0066FF">
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="16.0722" RadiusY="16.0722" Center="358.932,500.39" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource RefreshIconGeometry1}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFFFFFFF" Thickness="4.00600004" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFFFFFFF" Geometry="{StaticResource RefreshIconGeometry2}" />
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="RefreshIconDrawingImage" Drawing="{StaticResource RefreshIconDrawingGroup}" />
+  <Geometry x:Key="LicenseNoneIconGeometry1">F1 M32,32z M0,0z M365.15118,493.80125C366.57021,495.22028 366.57021,497.55294 365.15118,498.97197 363.73215,500.391 361.39811,500.39238 359.97908,498.97297 358.56005,497.55394 358.56005,495.21852 359.97908,493.79949 361.39811,492.38047 363.73215,492.38184 365.15118,493.80049z M363.57952,495.37291C363.00994,494.80333 362.12032,494.80195 361.55074,495.37191 360.98115,495.9415 360.98115,496.8325 361.55073,497.40208 362.12032,497.97167 363.00994,497.97029 363.57953,497.40108 364.14911,496.8315 364.14911,495.94326 363.57952,495.37367z</Geometry>
+  <Geometry x:Key="LicenseNoneIconGeometry2">F1 M32,32z M0,0z M360.04883,497.85547A1.0178172,1.0178172,0,0,0,359.34961,498.16406L353.75,503.76172A1.0178449,1.0178449,0,1,0,355.18945,505.20117L360.78906,499.60156A1.0178172,1.0178172,0,0,0,360.04883,497.85547z</Geometry>
+  <DrawingGroup x:Key="LicenseNoneIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.0500387,0,0,1.0500387,-17.86369,-25.401729">
+        <GeometryDrawing Brush="#FF666666">
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="14.8359" RadiusY="14.8359" Center="358.9046,500.7091" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFB3B3B3">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFFFFFFF" Thickness="1.61219645" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Bevel" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="12.3444" RadiusY="12.3444" Center="358.9046,500.7091" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Transform="1.3360128,0,0,1.3360128,-121.74224,-166.78588">
+        <GeometryDrawing Brush="#FFC83737" Geometry="{StaticResource LicenseNoneIconGeometry1}" />
+        <GeometryDrawing Brush="#FFC83737" Geometry="{StaticResource LicenseNoneIconGeometry2}" />
+        <GeometryDrawing>
+          <GeometryDrawing.Brush>
+            <SolidColorBrush Color="#FFC83737" Opacity="1" Transform="-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0" />
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.614" RadiusY="0.614" Rect="-610.9844,101.2172,2.9566,4.2429" Transform="-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="LicenseNoneIconDrawingImage" Drawing="{StaticResource LicenseNoneIconDrawingGroup}" />
+  <Geometry x:Key="LicenseOkIconGeometry1">F1 M32,32z M0,0z M365.15118,493.80125C366.57021,495.22028 366.57021,497.55294 365.15118,498.97197 363.73215,500.391 361.39811,500.39238 359.97908,498.97297 358.56005,497.55394 358.56005,495.21852 359.97908,493.79949 361.39811,492.38047 363.73215,492.38184 365.15118,493.80049z M363.57952,495.37291C363.00994,494.80333 362.12032,494.80195 361.55074,495.37191 360.98115,495.9415 360.98115,496.8325 361.55073,497.40208 362.12032,497.97167 363.00994,497.97029 363.57953,497.40108 364.14911,496.8315 364.14911,495.94326 363.57952,495.37367z</Geometry>
+  <Geometry x:Key="LicenseOkIconGeometry2">F1 M32,32z M0,0z M360.04883,497.85547A1.0178172,1.0178172,0,0,0,359.34961,498.16406L353.75,503.76172A1.0178449,1.0178449,0,1,0,355.18945,505.20117L360.78906,499.60156A1.0178172,1.0178172,0,0,0,360.04883,497.85547z</Geometry>
+  <DrawingGroup x:Key="LicenseOkIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.0500387,0,0,1.0500387,-17.86369,-25.401729">
+        <GeometryDrawing Brush="#FF666666">
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="14.8359" RadiusY="14.8359" Center="358.9046,500.7091" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFB3B3B3">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFFFFFFF" Thickness="1.61219645" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Bevel" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="12.3444" RadiusY="12.3444" Center="358.9046,500.7091" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Transform="1.3360128,0,0,1.3360128,-121.74224,-166.78588">
+        <GeometryDrawing Brush="#FF2CA02C" Geometry="{StaticResource LicenseOkIconGeometry1}" />
+        <GeometryDrawing Brush="#FF2CA02C" Geometry="{StaticResource LicenseOkIconGeometry2}" />
+        <GeometryDrawing>
+          <GeometryDrawing.Brush>
+            <SolidColorBrush Color="#FF2CA02C" Opacity="1" Transform="-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0" />
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.614" RadiusY="0.614" Rect="-610.9844,101.2172,2.9566,4.2429" Transform="-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="LicenseOkIconDrawingImage" Drawing="{StaticResource LicenseOkIconDrawingGroup}" />
+</ResourceDictionary>

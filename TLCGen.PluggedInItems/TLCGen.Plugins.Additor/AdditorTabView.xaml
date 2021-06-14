@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="TLCGen.Plugins.Additor.AdditorTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Plugins.Additor"
+             xmlns:ad="http://icsharpcode.net/sharpdevelop/avalonedit"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance local:AdditorTabViewModel}"
+             DataContextChanged="UserControl_DataContextChanged"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen.Plugins.Additor;component/Resources/Icon.xaml" />
+                <ResourceDictionary>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top">
+                <Button Command="{Binding Path=RefreshFilesListCommand}" Margin="2" DockPanel.Dock="Right" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Image Source="{StaticResource RefreshIconDrawingImage}" Width="15" />
+                </Button>
+                <Label Content="Add files" />
+            </DockPanel>
+            <ListView ItemsSource="{Binding Path=AddFiles}" SelectedItem="{Binding Path=SelectedAddFile}" DisplayMemberPath="FileName" Margin="2" />
+        </DockPanel>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+        <DockPanel Grid.Column="2">
+            <DockPanel DockPanel.Dock="Top">
+                <ToolBarPanel DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Command="{Binding Path=SaveAddFileCommand}">
+                        <Image Source="{StaticResource SaveFileIconDrawingImage}" Width="16" Height="16" />
+                    </Button>
+                </ToolBar>
+            </ToolBarPanel>
+            </DockPanel>
+            <ad:TextEditor Margin="2"
+                Name="textEditor"
+                ShowLineNumbers="True"
+                SyntaxHighlighting="C++"
+                FontFamily="Consolas"
+                WordWrap="True"
+                FontSize="10pt">
+            </ad:TextEditor>
+        </DockPanel>
+    </Grid>
+</UserControl>
