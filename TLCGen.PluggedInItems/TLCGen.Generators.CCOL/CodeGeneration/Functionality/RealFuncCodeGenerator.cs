@@ -453,8 +453,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0
                         && c.InterSignaalGroep?.Voorstarten?.Count == 0
-                        && c.InterSignaalGroep?.LateReleases?.Count == 0) return null;
-
+                        && c.InterSignaalGroep?.LateReleases?.Count == 0
+                        && c.InterSignaalGroep?.Nalopen?.Count == 0) return null;
+                    
                     sb.AppendLine($"{ts}/* Reset synchronisatie BITs */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");

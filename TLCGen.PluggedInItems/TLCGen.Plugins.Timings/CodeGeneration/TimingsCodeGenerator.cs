@@ -14,10 +14,6 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
     public class TimingsCodeGenerator
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _schfctiming = new CCOLGeneratorCodeStringSettingModel
-        {
-            Default = "fctiming", Setting = "fctiming", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = "Timings activeren"
-        };
         private CCOLGeneratorCodeStringSettingModel _prmttxconfidence15 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "ttxconfidence15", Setting = "ttxconfidence15", Type = CCOLGeneratorSettingTypeEnum.Parameter, Description = ""
@@ -80,7 +76,6 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         {
             var elements = new List<CCOLElement>
             {
-                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schfctiming}", 1, CCOLElementTimeTypeEnum.SCH_type, _schfctiming),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmttxconfidence15}", 30, CCOLElementTimeTypeEnum.None, _prmttxconfidence15),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schconfidence15fix}", 0, CCOLElementTimeTypeEnum.SCH_type, _schconfidence15fix),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtxconfidence15ar}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtxconfidence15ar),
@@ -152,7 +147,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfctiming}]) msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
+                    sb.AppendLine($"{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}#if !(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM))");
                     sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || defined (VISSIM)");

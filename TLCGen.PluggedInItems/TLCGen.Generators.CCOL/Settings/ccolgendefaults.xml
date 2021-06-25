@@ -1982,12 +1982,6 @@
             <Type>Schakelaar</Type>
             <Description>Niet checken op signaalgroep bij RIS aanvragen en verlengen</Description>
           </Setting>
-          <Setting>
-            <Default>ris</Default>
-            <Setting>ris</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Wel/niet aanroepen RIS controller</Description>
-          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

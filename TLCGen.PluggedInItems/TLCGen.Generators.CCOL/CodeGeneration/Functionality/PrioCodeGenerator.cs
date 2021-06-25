@@ -643,6 +643,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 CCOLCodeTypeEnum.RegCTop => 61,
                 CCOLCodeTypeEnum.RegCPreApplication => 41,
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules => 41,
                 CCOLCodeTypeEnum.RegCSystemApplication => 41,
                 CCOLCodeTypeEnum.RegCPostSystemApplication => 31,
                 CCOLCodeTypeEnum.PrioCInUitMelden => 11,
@@ -1032,6 +1033,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
+                    var naloopWithPrioConflicts2 = GetNaloopWithPrioConflicts(c);
+                    sb.AppendLine($"{ts}/* Tegenhouden voedende richting, bij een conflicterende prio-ingreep van de nalooprichting */");
+                    sb.AppendLine($"{ts}/* Afzetten RR */");
+                    foreach (var nl in naloopWithPrioConflicts2)
+                    {
+                        sb.Append($"{ts}if (");
+                        first = true;
+                        foreach (var conflict in nl.conflicts)
+                        {
+                            if (!first)
+                            {
+                                sb.AppendLine(" &&");
+                                sb.Append($"{ts}    ");
+                            }
+                            sb.Append($"(G[{_fcpf}{conflict:naar}] || !(YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT))");
+                            first = false;
+                        }
+                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT10;");
+                    }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -1490,10 +1514,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
-                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
-                                {
-                                    sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
-                                }
+                                sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~PRIO_FM_BIT;");
                                 sb.AppendLine($"{ts}}}");
@@ -1503,43 +1524,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    var naloopWithPrioConflicts = new List<(NaloopModel naloop, List<ConflictModel> conflicts)>();
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
-                    {
-                        // search conflicts of naloop fc (search nl 'to' and conflict 'from')
-                        var conflicts = c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseNaar);
-                        if (!conflicts.Any()) continue;
-                        // find out if conflict has prio (search conflict 'to')
-                        var prioConflicts = new List<ConflictModel>();
-                        foreach (var conflict in conflicts)
-                        {
-                            var prio = c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == conflict.FaseNaar);
-                            if (prio) prioConflicts.Add(conflict);
-                        }
-                        if (prioConflicts.Any()) naloopWithPrioConflicts.Add((nl, prioConflicts));
-                    }
+                    var naloopWithPrioConflicts = GetNaloopWithPrioConflicts(c);
 
                     if (!naloopWithPrioConflicts.Any()) return "";
-
-                    sb.AppendLine($"{ts}/* Tegenhouden voedende richting, bij een conflicterende prio-ingreep van de nalooprichting */");
-                    sb.AppendLine($"{ts}/* Afzetten RR */");
-                    foreach (var nl in naloopWithPrioConflicts)
-                    {
-                        sb.Append($"{ts}if (");
-                        first = true;
-                        foreach (var conflict in nl.conflicts)
-                        {
-                            if (!first)
-                            {
-                                sb.AppendLine(" &&");
-                                sb.Append($"{ts}    ");
-                            }
-                            sb.Append($"(G[{_fcpf}{conflict:naar}] || !(YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT))");
-                            first = false;
-                        }
-                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT10;");
-                    }
-                    sb.AppendLine();
+                    
                     sb.AppendLine($"{ts}/* Opzetten RR */");
                     foreach (var nl in naloopWithPrioConflicts)
                     {
@@ -1562,6 +1550,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
+        }
+
+        private static List<(NaloopModel naloop, List<ConflictModel> conflicts)> GetNaloopWithPrioConflicts(ControllerModel c)
+        {
+            var naloopWithPrioConflicts = new List<(NaloopModel naloop, List<ConflictModel> conflicts)>();
+            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+            {
+                // search conflicts of naloop fc (search nl 'to' and conflict 'from')
+                var conflicts = c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseNaar);
+                if (!conflicts.Any()) continue;
+                // find out if conflict has prio (search conflict 'to')
+                var prioConflicts = new List<ConflictModel>();
+                foreach (var conflict in conflicts)
+                {
+                    var prio = c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == conflict.FaseNaar);
+                    if (prio) prioConflicts.Add(conflict);
+                }
+
+                if (prioConflicts.Any()) naloopWithPrioConflicts.Add((nl, prioConflicts));
+            }
+
+            return naloopWithPrioConflicts;
         }
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)

@@ -7,10 +7,12 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Fix !kcv in set_MRLW bij nalopen">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Fixes voor timings, default uitgeschakeld, RGV xyprintf in commentaar">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,61 +64,60 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeAanvragenCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/PTPKoppelingenTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/PTPKoppelingenTabView.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCNewControllerImporter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/ViewModels/Other/DetectorManagerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCImportHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCExistingControllerImporter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/E8B582F9-E526-4A0E-B1C0-F71951C9959B/d3/45f6ecef/Visibility.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeaanvraagViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportDplCWindow.xaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportDplCWindow.xaml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeAanvraagView.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/ControllerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/NaloopViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Updater/obj/Debug/UpdaterDownload.g.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9B25E913-D31D-4B8B-83EB-DE8A2012E613/c4/4d0c7cfa/XmlTextReaderImpl.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarGekoppeldeKruisingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/VAOntruimenTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.UnitTests/Tabs/OVIngreepSGInstellingenLijstViewModelTests.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/PTPKoppelingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarPeriodeDataViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VasteAanvraagCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.UnitTests/Tabs/FasenTab/Tabs/FasenLijstTabViewModelTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/UnhandledExceptionWindow.xaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusView.xaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Dialogs/UnhandledExceptionWindow.xaml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/MainWindowViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5F37459E-F130-4442-BA19-EE268C49D074/89/8e8664a7/RuntimeMethodInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AddFileViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/obj/Release/Views/Tabs/InterSignaalGroepTab/DataTypes/SynchronisatieView.g.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeAanvragenCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/ViewModels/Other/DetectorManagerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/E8B582F9-E526-4A0E-B1C0-F71951C9959B/d3/45f6ecef/Visibility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeaanvraagViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeAanvraagView.xaml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/ControllerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/NaloopViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Updater/obj/Debug/UpdaterDownload.g.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9B25E913-D31D-4B8B-83EB-DE8A2012E613/c4/4d0c7cfa/XmlTextReaderImpl.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarGekoppeldeKruisingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/PTPKoppelingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarPeriodeDataViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VasteAanvraagCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateHstC.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/SignaalPlanViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Parts/TLCGen.Controls/SimplePropertyEditor.xaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/BitmapTab/BitmapTab.xaml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5F37459E-F130-4442-BA19-EE268C49D074/89/8e8664a7/RuntimeMethodInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/BitmapTab/BitmapTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0C285EE5-6767-4513-BB6D-88C242FEC00E/43/649c25e4/PropertyPathWorker.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/DetectorenTab/DataTypes/DetectorViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/394C8FAE-4BA1-4DD2-A259-BD441D5BEF25/e4/50243725/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AddFileViewModel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/TLCGenModelManager.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RIS/RISFaseCyclusLaneDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/ItfNewControllerImporter.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" />
       <option value="$PROJECT_DIR$/TLCGen/tlcgenversioning" />
       <option value="$PROJECT_DIR$/build.cake" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildConsoleTabViewModel.cs" />
@@ -163,6 +164,10 @@
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RISCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" />
     </changedPaths>
   </component>
@@ -374,7 +379,7 @@
       <workItem from="1623653501076" duration="14080000" />
       <workItem from="1623763787011" duration="685000" />
       <workItem from="1623833117824" duration="1312000" />
-      <workItem from="1624604819453" duration="1800000" />
+      <workItem from="1624604819453" duration="3247000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -509,7 +514,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624606394936</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Fixes voor timings, default uitgeschakeld, RGV xyprintf in commentaar">
+      <created>1624607359863</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1624607359864</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -589,7 +601,8 @@
     <MESSAGE value="Version 0.9.8.0" />
     <MESSAGE value="Additor plugin / AutoBuild plugin" />
     <MESSAGE value="Fix !kcv in set_MRLW bij nalopen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix !kcv in set_MRLW bij nalopen" />
+    <MESSAGE value="Fixes voor timings, default uitgeschakeld, RGV xyprintf in commentaar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes voor timings, default uitgeschakeld, RGV xyprintf in commentaar" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
