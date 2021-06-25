@@ -445,30 +445,36 @@ void NevenMelding(count ov1,      /* OV fasecyclus 1                */
                (fc3 != NG) && IH[hovss3] ? PRM[prmrtbh] : PRM[prmrtbl];
 }
 
-boolv fietsprio_inmelding (
+void fietsprio_update(
+     count fc,          /* Fasecyclus */
+     count dvw,         /* Verweg detector */
+     count c_priocount, /* Counter tellen voertuigen */
+     count c_priocyc)   /* Counter aantal keer prio per cyclus */
+{
+    /* fietsprioriteit */
+    /* eenmaal per cyclus */
+    RC[c_priocyc] = SML && (ml==ML1);
+    INC[c_priocyc] = prioin;
+    /* aantal fietsers tellen */
+    if (dvw != NG)
+    {
+        RC[c_priocount] = !R[fc];
+        INC[c_priocount] = R[fc] && SD[dvw];
+    }
+}
+
+boolv fietsprio_inmelding(
      count fc,            /* Fasecyclus */
-     count dvw,              /* Verweg detector */
-     count c_priocount,      /* Counter tellen voertuigen */
+     count dvw,           /* Verweg detector */
+     count c_priocount,   /* Counter tellen voertuigen */
      count c_priocyc,     /* Counter aantal keer prio per cyclus */
      count prm_prioblok,  /* Bitwise bepalen toegestane blokken */
-     count prm_priocyc,      /* Maximum aantal keer prio per cyclus */
+     count prm_priocyc,   /* Maximum aantal keer prio per cyclus */
      count prm_priocount, /* Minimum aantal voertuigen voor prio */
-     count prm_priowt,      /* Minimum wachttijd voor prio */
-     boolv prioin,         /* Hulpelement inmelding prio */
+     count prm_priowt,    /* Minimum wachttijd voor prio */
+     boolv prioin,        /* Hulpelement inmelding prio */
 	 count ml)            /* Actieve module */
 {
-     /* fietsprioriteit */
-     /* eenmaal per cyclus */
-     RC[c_priocyc] = SML && (ml==ML1);
-     INC[c_priocyc] = prioin;
-
-     /* aantal fietsers tellen */
-   	if (dvw != NG)
-	{
-       RC[c_priocount] = !R[fc];
-       INC[c_priocount] = R[fc] && SD[dvw];
-	}
-
      /* Check juiste blok */
      if (!(PRM[prm_prioblok] & (1 << ml))) return FALSE;
 
