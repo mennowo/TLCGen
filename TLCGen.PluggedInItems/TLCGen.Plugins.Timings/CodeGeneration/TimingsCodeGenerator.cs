@@ -75,17 +75,14 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         public string _cvc;
         public string _cvchd;
         public string _schgs;
-        private List<string> _fasenMetIngrepen;
 
         public List<CCOLElement> GetCCOLElements(ControllerModel c)
         {
-            _fasenMetIngrepen = c.PrioData.PrioIngrepen.Select(x => x.FaseCyclus).Concat(c.PrioData.HDIngrepen.Select(x => x.FaseCyclus)).Distinct().ToList();
-
             var elements = new List<CCOLElement>
             {
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schfctiming}", 1, CCOLElementTimeTypeEnum.SCH_type, _schfctiming),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmttxconfidence15}", 30, CCOLElementTimeTypeEnum.None, _prmttxconfidence15),
-                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schconfidence15fix}", 1, CCOLElementTimeTypeEnum.SCH_type, _schconfidence15fix),
+                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schconfidence15fix}", 0, CCOLElementTimeTypeEnum.SCH_type, _schconfidence15fix),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtxconfidence15ar}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtxconfidence15ar),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence1}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence1),
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schspatconfidence3}", 0, CCOLElementTimeTypeEnum.SCH_type, _schspatconfidence3),
@@ -98,7 +95,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
             foreach (var fase in c.Fasen)
             {
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtimings}{fase.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtimings, fase.Naam));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtimings}{fase.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schtimings, fase.Naam));
             }
             return elements;
         }
@@ -224,6 +221,13 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
+                    sb.AppendLine($"{ts}{ts}{ts}}}");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}#endif");  
                     return sb.ToString();

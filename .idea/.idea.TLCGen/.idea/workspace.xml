@@ -7,10 +7,11 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Fix !kcv in set_MRLW bij nalopen">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +93,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/MainWindowViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateHstC.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/SignaalPlanViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -102,6 +104,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0C285EE5-6767-4513-BB6D-88C242FEC00E/43/649c25e4/PropertyPathWorker.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/DetectorenTab/DataTypes/DetectorViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/394C8FAE-4BA1-4DD2-A259-BD441D5BEF25/e4/50243725/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -110,9 +113,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/SignalenDataModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/WaarschuwingsLichtenCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/TLCGenModelManager.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/RIS/RISFaseCyclusLaneDataModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/ItfNewControllerImporter.cs" />
@@ -161,6 +161,9 @@
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/RatelTikkerModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Attributes/IOElementAttribute.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/CodeGeneration/TimingsCodeGenerator.cs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -371,7 +374,7 @@
       <workItem from="1623653501076" duration="14080000" />
       <workItem from="1623763787011" duration="685000" />
       <workItem from="1623833117824" duration="1312000" />
-      <workItem from="1624604819453" duration="993000" />
+      <workItem from="1624604819453" duration="1800000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -499,7 +502,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623682770202</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Fix !kcv in set_MRLW bij nalopen">
+      <created>1624606394936</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1624606394936</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -578,7 +588,8 @@
     <MESSAGE value="Version 0.9.6" />
     <MESSAGE value="Version 0.9.8.0" />
     <MESSAGE value="Additor plugin / AutoBuild plugin" />
-    <option name="LAST_COMMIT_MESSAGE" value="Additor plugin / AutoBuild plugin" />
+    <MESSAGE value="Fix !kcv in set_MRLW bij nalopen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix !kcv in set_MRLW bij nalopen" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

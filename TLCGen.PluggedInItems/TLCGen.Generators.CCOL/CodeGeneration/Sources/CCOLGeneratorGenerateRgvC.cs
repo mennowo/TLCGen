@@ -442,7 +442,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}TVG_rgv[j] = TVG_rgv_old[j]; /* minder verhoogde groentijd */");
             sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
             sb.AppendLine($"{ts}{ts}{ts}}}");
-            sb.Append(sb2.ToString());
+            sb.Append(sb2);
             sb.AppendLine($"{ts}{ts}}}");
             sb.AppendLine($"{ts}}}");
             sb.AppendLine();
@@ -461,8 +461,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined (VISSIM))");
-            sb.AppendLine($"{ts}{ts}/* Toon de waarden in de tesstomgeving */");
-            sb.AppendLine($"{ts}{ts}/* ----------------------------------- */ ");
+            sb.AppendLine($"{ts}{ts}/* Toon de waarden in de testomgeving */");
+            sb.AppendLine($"{ts}{ts}/* ---------------------------------- */ ");
+            sb.AppendLine($"{ts}{ts}/* RoBuGrover verklikking in F11 scherm");
             sb.AppendLine($"{ts}{ts}for (teller = 10; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
             sb.AppendLine($"{ts}{ts}{{");
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (32, teller + 1, \"%10s\",TC_string$[teller]);");
@@ -475,6 +476,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 ++teller;
             }
             sb.AppendLine($"{ts}{ts}");
+            sb.AppendLine($"{ts}{ts}*/");
             if (c.RoBuGrover.RoBuGroverVenster)
             {
                 sb.AppendLine($"{ts}{ts}#ifndef DUURTEST");
