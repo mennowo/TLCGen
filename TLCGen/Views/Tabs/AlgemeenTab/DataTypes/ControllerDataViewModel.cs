@@ -439,7 +439,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(CCOLMulti), broadcast: true);
             }
         }
-
+        
         [Browsable(false)]
         public bool NotMultiModuleReeksen => !MultiModuleReeksen;
 

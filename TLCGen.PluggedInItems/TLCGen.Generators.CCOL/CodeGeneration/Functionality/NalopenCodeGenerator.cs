@@ -285,11 +285,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     ++i;
                                     sb.Append($"IH[{_hpf}{_hnla}{d.Detector}]");
                                 }
-                                sb.AppendLine(")));");
+                                sb.AppendLine($") && !kcv({_fcpf}{nl.FaseNaar})));");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
 							}
                         }
                     }
