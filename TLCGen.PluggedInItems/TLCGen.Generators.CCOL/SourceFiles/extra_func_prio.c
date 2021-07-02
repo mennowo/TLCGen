@@ -449,7 +449,9 @@ void fietsprio_update(
      count fc,          /* Fasecyclus */
      count dvw,         /* Verweg detector */
      count c_priocount, /* Counter tellen voertuigen */
-     count c_priocyc)   /* Counter aantal keer prio per cyclus */
+     count c_priocyc,   /* Counter aantal keer prio per cyclus */
+     boolv prioin,      /* Hulpelement inmelding prio */
+     count ml)          /* Actieve module */
 {
     /* fietsprioriteit */
     /* eenmaal per cyclus */

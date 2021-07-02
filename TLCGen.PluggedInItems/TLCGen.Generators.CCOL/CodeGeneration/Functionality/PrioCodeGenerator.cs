@@ -647,7 +647,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCSystemApplication => 41,
                 CCOLCodeTypeEnum.RegCPostSystemApplication => 31,
                 CCOLCodeTypeEnum.PrioCInUitMelden => 11,
-                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 10,
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 11,
                 _ => 0
             };
@@ -1036,10 +1035,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
-                    var naloopWithPrioConflicts2 = GetNaloopWithPrioConflicts(c);
+                    var naloopWithPrioConflicts = GetNaloopWithPrioConflicts(c);
+                    if (naloopWithPrioConflicts.Count == 0) return "";
+                    
                     sb.AppendLine($"{ts}/* Tegenhouden voedende richting, bij een conflicterende prio-ingreep van de nalooprichting */");
                     sb.AppendLine($"{ts}/* Afzetten RR */");
-                    foreach (var nl in naloopWithPrioConflicts2)
+                    foreach (var nl in naloopWithPrioConflicts)
                     {
                         sb.Append($"{ts}if (");
                         first = true;
@@ -1056,6 +1057,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT10;");
                     }
                     sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Opzetten RR */");
+                    foreach (var nl in naloopWithPrioConflicts)
+                    {
+                        sb.Append($"{ts}if (");
+                        first = true;
+                        foreach (var conflict in nl.conflicts)
+                        {
+                            if (!first)
+                            {
+                                sb.AppendLine(" ||");
+                                sb.Append($"{ts}    ");
+                            }
+                            sb.Append($"((Z[{_fcpf}{nl.naloop:van}] & PRIO_Z_BIT) && (YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT) && !G[{_fcpf}{conflict:naar}])");
+                            first = false;
+                        }
+                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] |= BIT10;");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -1144,10 +1162,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton))
                             {
+                                var hov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _hprioin.ToString() : _hpriouit.ToString();
+                                var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
                                 sb.AppendLine($"{ts}fietsprio_update({_fcpf}{prio.FaseCyclus}, " +
                                               (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
                                               (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
-                                              $"{_ctpf}{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)});");
+                                              $"{_ctpf}{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}," +
+                                              $"SH[{he}], ML);");
                             }
                             
                             var sb2 = new StringBuilder();
@@ -1530,31 +1551,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
-
-                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    var naloopWithPrioConflicts = GetNaloopWithPrioConflicts(c);
-
-                    if (!naloopWithPrioConflicts.Any()) return "";
-                    
-                    sb.AppendLine($"{ts}/* Opzetten RR */");
-                    foreach (var nl in naloopWithPrioConflicts)
-                    {
-                        sb.Append($"{ts}if (");
-                        first = true;
-                        foreach (var conflict in nl.conflicts)
-                        {
-                            if (!first)
-                            {
-                                sb.AppendLine(" ||");
-                                sb.Append($"{ts}    ");
-                            }
-                            sb.Append($"((Z[{_fcpf}{nl.naloop:van}] & PRIO_Z_BIT) && (YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT) && !G[{_fcpf}{conflict:naar}])");
-                            first = false;
-                        }
-                        sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] |= BIT10;");
-                    }
-                    return sb.ToString();
-
+                
                 default:
                     return null;
             }

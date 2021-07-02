@@ -88,6 +88,8 @@ namespace TLCGen.Plugins.Timings
         }
 
         public bool TimingsToepassenAllowed => _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL9;
+        
+        public bool TimingsPredictionsToepassenAllowed => _timingsModel.TimingsToepassen && _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL110;
 
         public bool TimingsToepassenOK => TimingsToepassenAllowed && TimingsToepassen;
 

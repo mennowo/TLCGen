@@ -147,13 +147,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX = {k.AantalsignalenIn};   /* aantal inkomende koppelsignalen    */ /* @ verhogen in stappen van 8 */");
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX = {k.AantalsignalenUit};   /* aantal uitgaande koppelsignalen    */ /* @ verhogen in stappen van 8 */");
-                if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
-                {
-                    sb.AppendLine($"{ts}{ts}#if CCOL_V >= 110 && !defined NO_PTP_MULTIVALENT");
-                    sb.AppendLine($"{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.IKSM_MAX = 0;");
-                    sb.AppendLine($"{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKSM_MAX = 0;");
-                    sb.AppendLine($"{ts}{ts}#endif");
-                }
+                
+                sb.AppendLine($"{ts}#if (CCOL_V >= 110) && !defined NO_PTP_MULTIVALENT");
+                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.IKSM_MAX = 0;");
+                sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKSM_MAX = 0;");
+                sb.AppendLine($"{ts}#endif");
+                
                 sb.AppendLine($"{ts}#endif");
                 sb.AppendLine();
             }
@@ -217,20 +216,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}/* ------------------------------------------------- */      ");
                 sb.AppendLine($"{ts}{ts}if (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) /* status regelen - set uitgaande koppelsignalen  */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = IH[{_hpf}{k.TeKoppelenKruispunt}{hptpuks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpuks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpuks}01 + i] == 1;");
+                //sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpuks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] == 1;");
+                sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) {{");
+                sb.AppendLine($"{ts}#if (CCOL_V >= 110) && !defined NO_PTP_MULTIVALENT");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}if (i < (PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX - PTP_{k.TeKoppelenKruispunt}KS.UKSM_MAX)) {{");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = IH[{_hpf}{k.TeKoppelenKruispunt}{hptpuks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpuks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpuks}01 + i] == 1;");
+                sb.AppendLine($"{ts}#if (CCOL_V >= 110) && !defined NO_PTP_MULTIVALENT");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}else {{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = (PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpuks}01 + i] >= 2) ? IH[{_hpf}{k.TeKoppelenKruispunt}{hptpuks}01 + i] : 0;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine($"{ts}{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}else /* niet regelen - reset uitgaande koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
                 sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = FALSE;");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine();
-                sb.AppendLine($"{ts}{ts}/* opzetten van ingaande koppelsignalen PTP_{k.TeKoppelenKruispunt} */");
+                sb.AppendLine($"{ts}{ts}/* opzetten van inkomende koppelsignalen PTP_{k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"{ts}{ts}/* ---------------------------------------------- */");
-                sb.AppendLine($"{ts}{ts}if (PTP_{k.TeKoppelenKruispunt}KS.OKE) /* goede verbinding - set ingaande koppelsignalen */");
+                sb.AppendLine($"{ts}{ts}if (PTP_{k.TeKoppelenKruispunt}KS.OKE) /* goede verbinding - set inkomende koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = PTP_{k.TeKoppelenKruispunt}KS.IKS[i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] == 1;");
+                //sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = PTP_{k.TeKoppelenKruispunt}KS.IKS[i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] == 1;");
+                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) {{");
+                sb.AppendLine($"{ts}#if (CCOL_V >= 110) && !defined NO_PTP_MULTIVALENT");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}if (i < (PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX - PTP_{k.TeKoppelenKruispunt}KS.IKSM_MAX)) {{");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = PTP_{k.TeKoppelenKruispunt}KS.IKS[i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] == 1;");
+                sb.AppendLine($"{ts}#if (CCOL_V >= 110) && !defined NO_PTP_MULTIVALENT");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}else {{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = (PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] >= 2) ? PTP_{k.TeKoppelenKruispunt}KS.IKS[i] : 0;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine($"{ts}{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}}}");
-                sb.AppendLine($"{ts}{ts}else /* geen goede verbinding - reset ingaande koppelsignalen */");
+                sb.AppendLine($"{ts}{ts}else /* geen goede verbinding - reset inkomende koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
                 sb.AppendLine($"{ts}{ts}    for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = FALSE;");
                 sb.AppendLine($"{ts}{ts}}}");

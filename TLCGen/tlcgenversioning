@@ -1,5 +1,9 @@
-TLCGen=0.9.8.0
+TLCGen=0.9.9.0
 RN==TLCGen
+TLCGen versie: 0.9.9.0
+- Diverse fixes rond timings
+- Fix prio voor fietsers
+- Fix multivalente IO in ptp.c
 TLCGen versie: 0.9.8.0
 - Optie niet gebruiken prio ingreep naam in code
 - Fixes voor rangering

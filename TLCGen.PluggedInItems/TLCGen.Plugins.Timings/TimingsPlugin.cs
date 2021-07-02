@@ -271,6 +271,11 @@ namespace TLCGen.Plugins.Timings
         {
             if (_controller != null && _timingsModel != null)
             {
+                if (_controller.Data.CCOLVersie < CCOLVersieEnum.CCOL110)
+                {
+                    _timingsModel.TimingsUsePredictions = false;
+                }
+                
                 foreach (var fc in Controller.Fasen)
                 {
                     if (_timingsVM.TimingsFasen.All(x => x.FaseCyclus != fc.Naam))

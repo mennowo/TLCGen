@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:models="clr-namespace:TLCGen.Plugins.Timings.Models"
-             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
-             mc:Ignorable="d" Name="root"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:timings="clr-namespace:TLCGen.Plugins.Timings"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance timings:TimingsTabViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +23,7 @@
                 IsEnabled="{Binding Path=TimingsToepassenAllowed,Mode=OneWay}"
                 IsChecked="{Binding Path=TimingsToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Timings toepassen" Margin="5" />
             <CheckBox 
-                IsEnabled="{Binding Path=TimingsToepassen,Mode=OneWay}"
+                IsEnabled="{Binding Path=TimingsPredictionsToepassenAllowed,Mode=OneWay}"
                 IsChecked="{Binding Path=TimingsUsePredictions,UpdateSourceTrigger=PropertyChanged}" Content="Timings met voorspellingen" Margin="5" />
         </StackPanel>
         <Label Content="Instellingen timings per fase" Grid.Row="1" />

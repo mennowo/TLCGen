@@ -134,7 +134,6 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
-
                     // Generate rissim.c now
                     GenerateFcTimingsC(c, timingsModel, ts);
 
@@ -146,45 +145,42 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     }
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
                     return sb.ToString();
+                
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     sb.AppendLine($"{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}#if !(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM))");
-                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || defined (VISSIM)");
-                    sb.AppendLine($"{ts}{ts}for (i=0; i<FCMAX; i++)");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 44,\"fc%s\", FC_code[i]);");
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 45, \"CIF_TIMING_MASK       : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 46, \"CIF_TIMING_EVENTSTATE : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 47, \"CIF_TIMING_STARTTIME  : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 48, \"CIF_TIMING_MINENDTIME : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 49, \"CIF_TIMING_MAXENDTIME : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 50, \"CIF_TIMING_LIKELYTIME : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 51, \"CIF_TIMING_CONFIDENCE : \");");
-                    sb.AppendLine($"{ts}{ts}xyprintf(40, 52, \"CIF_TIMING_NEXTTIME   : \");");
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; i++)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 45, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_MASK]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 46, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_EVENTSTATE]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 47, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_STARTTIME]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 48, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 49, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 50, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 51, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(63+(i*7), 52, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_NEXTTIME]);");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}#endif");
-                    sb.AppendLine($"{ts}#endif");
-                    
+                    sb.AppendLine("#if !(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM))");
+                    sb.AppendLine($"{ts}xyprintf(118, 2 + FCMAX,\"----\");");
+                    sb.AppendLine($"{ts}xyprintf(123, 2 + FCMAX,\"EVENTSTATE\");");
+                    sb.AppendLine($"{ts}xyprintf(134, 2 + FCMAX,\"MINEND\");");
+                    sb.AppendLine($"{ts}xyprintf(141, 2 + FCMAX,\"MAXEND\");");
+                    sb.AppendLine($"{ts}xyprintf(148, 2 + FCMAX,\"LIKELY\");");
+                    sb.AppendLine($"{ts}xyprintf(155, 2 + FCMAX,\"CONFIDENCE\");");
+                    sb.AppendLine($"{ts}xyprintf(166, 2 + FCMAX,\"MASK\");");
+                    sb.AppendLine($"{ts}xyprintf(171, 2 + FCMAX,\"STARTTIME\");");
+                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; i++) {{");
+                    sb.AppendLine($"{ts}{ts}xyprintf(118, 3 + i + FCMAX, \"fc%s\", FC_code[i]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(123, 3 + i + FCMAX, \"%10d\", CIF_FC_TIMING[i][0][CIF_TIMING_EVENTSTATE]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(134, 3 + i + FCMAX, \"%6d\", CIF_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(141, 3 + i + FCMAX, \"%6d\", CIF_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(148, 3 + i + FCMAX, \"%6d\", CIF_FC_TIMING[i][0][CIF_TIMING_LIKELYTIME]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(155, 3 + i + FCMAX, \"%10d\", CIF_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(166, 3 + i + FCMAX, \"%4d\", CIF_FC_TIMING[i][0][CIF_TIMING_MASK]);");
+                    sb.AppendLine($"{ts}{ts}xyprintf(171, 3 + i + FCMAX, \"%9d\", CIF_FC_TIMING[i][0][CIF_TIMING_STARTTIME]);");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine("#endif");
                     return sb.ToString();
+                
                 case CCOLCodeTypeEnum.TabCIncludes:
                     sb.AppendLine($"{ts}void Timings_Eventstate_Definition(void);");
                     return sb.ToString();
+                
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     sb.AppendLine($"{ts}Timings_Eventstate_Definition();");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+                        
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
@@ -193,6 +189,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         {
                             sch = $"SCH[{_schpf}{_schgs}{gs:van}{gs:naar}] && ";
                         }
+
                         sb.AppendLine($"{ts}if ({sch}(P[{_fcpf}{gs:van}] & BIT11) && R[{_fcpf}{gs:naar}] && !kp({_fcpf}{gs:naar}) && A[{_fcpf}{gs:naar}]) {{ PAR[{_fcpf}{gs:naar}] |= BIT11; P[{_fcpf}{gs:naar}] |= BIT11; }}");
                         sb.AppendLine($"{ts}if ({sch}(P[{_fcpf}{gs:naar}] & BIT11) && R[{_fcpf}{gs:van}] && !kp({_fcpf}{gs:van}) && A[{_fcpf}{gs:van}]) {{ PAR[{_fcpf}{gs:van}] |= BIT11; P[{_fcpf}{gs:van}] |= BIT11; }}");
                     }
@@ -209,6 +206,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (!timingsModel.TimingsUsePredictions) return null;
+                    
                     var fcf = c.Fasen.First().Naam;
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}{ts}/* UC4 */");
@@ -228,6 +226,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
                     
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}])");
                     sb.AppendLine($"{ts}{{");
@@ -357,6 +357,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCRijTijdScenario:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
                     sb.AppendLine("#ifndef NO_TIMETOX");
                     foreach (var ing in c.PrioData.PrioIngrepen)
                     {
@@ -369,6 +371,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
                     sb.AppendLine("#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
@@ -387,6 +391,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCAfkappen:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
                     sb.AppendLine("#ifndef NO_TIMETOX");
                     sb.AppendLine($"if (SCH[{_schpf}{_schconfidence15fix}])");
                     sb.AppendLine($"{ts}{{");
@@ -470,6 +476,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
