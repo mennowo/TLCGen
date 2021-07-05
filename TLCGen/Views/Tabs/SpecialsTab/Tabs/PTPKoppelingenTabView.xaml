@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:local="clr-namespace:TLCGen.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:PTPKoppelingenTabViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300" x:Name="Root">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+    </UserControl.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="PTP koppelingen">
@@ -15,6 +18,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <FrameworkElement x:Name="ProxyElement" DataContext="{Binding}" />
                     <DataGrid Grid.Row="0" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
                               SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}"
                               CanUserAddRows="False"
@@ -24,6 +28,12 @@
                             <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=TeKoppelenKruispunt,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="# In" Binding="{Binding Path=AantalsignalenIn,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="# Uit" Binding="{Binding Path=AantalsignalenUit,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn
+                                Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
+                                Header="# In multiv." Binding="{Binding Path=AantalsignalenMultivalentIn,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn
+                                Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
+                                Header="# Uit multiv." Binding="{Binding Path=AantalsignalenMultivalentUit,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />

@@ -54,6 +54,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged("SelectedPTPKoppeling");
             }
         }
+        
+        public bool ShowMultivalent => DataAccess.TLCGenControllerDataProvider.Default.Controller?.Data?.CCOLVersie >= CCOLVersieEnum.CCOL110;
 
         #endregion // Properties
 

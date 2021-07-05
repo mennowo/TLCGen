@@ -265,23 +265,23 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ICommand RemoveKoppelSignaalInCommand => _removeKoppelSignaalInCommand ?? (_removeKoppelSignaalInCommand = new RelayCommand(
+        public ICommand RemoveKoppelSignaalInCommand => _removeKoppelSignaalInCommand ??= new RelayCommand(
             () =>
             {
                 SelectedKoppelSignaalIn.KoppelSignaal.Count = 0;
                 KoppelSignalenInBeschikbaar.Add(SelectedKoppelSignaalIn.KoppelSignaal);
                 SelectedKoppelSignaalIn.KoppelSignaal = null;
             },
-            () => SelectedKoppelSignaalIn != null));
+            () => SelectedKoppelSignaalIn != null);
 
-        public ICommand RemoveKoppelSignaalUitCommand => _removeKoppelSignaalUitCommand ?? (_removeKoppelSignaalUitCommand = new RelayCommand(
+        public ICommand RemoveKoppelSignaalUitCommand => _removeKoppelSignaalUitCommand ??= new RelayCommand(
             () =>
             {
                 SelectedKoppelSignaalUit.KoppelSignaal.Count = 0;
                 KoppelSignalenUitBeschikbaar.Add(SelectedKoppelSignaalUit.KoppelSignaal);
                 SelectedKoppelSignaalUit.KoppelSignaal = null;
             },
-            () => SelectedKoppelSignaalUit != null));
+            () => SelectedKoppelSignaalUit != null);
 
         public PTPKoppelingModel PTPKoppeling => _PTPKoppeling;
 
@@ -345,6 +345,37 @@ namespace TLCGen.ViewModels
             {
                 _PTPKoppeling.AantalsignalenUit = value;
                 RaisePropertyChanged<object>(nameof(AantalsignalenUit), broadcast: true);
+                UpdateSignalen();
+            }
+        }
+
+        public int AantalsignalenMultivalentIn
+        {
+            get => _PTPKoppeling.AantalsignalenMultivalentIn;
+            set
+            {
+                _PTPKoppeling.AantalsignalenMultivalentIn = value;
+                if (_PTPKoppeling.AantalsignalenMultivalentIn > _PTPKoppeling.AantalsignalenIn)
+                {
+                    _PTPKoppeling.AantalsignalenMultivalentIn = _PTPKoppeling.AantalsignalenIn;
+                }
+                RaisePropertyChanged<object>(nameof(AantalsignalenMultivalentIn), broadcast: true);
+                UpdateSignalen();
+
+            }
+        }
+
+        public int AantalsignalenMultivalentUit
+        {
+            get => _PTPKoppeling.AantalsignalenMultivalentUit;
+            set
+            {
+                _PTPKoppeling.AantalsignalenMultivalentUit = value;
+                if (_PTPKoppeling.AantalsignalenMultivalentUit > _PTPKoppeling.AantalsignalenUit)
+                {
+                    _PTPKoppeling.AantalsignalenMultivalentUit = _PTPKoppeling.AantalsignalenUit;
+                }
+                RaisePropertyChanged<object>(nameof(AantalsignalenMultivalentUit), broadcast: true);
                 UpdateSignalen();
             }
         }

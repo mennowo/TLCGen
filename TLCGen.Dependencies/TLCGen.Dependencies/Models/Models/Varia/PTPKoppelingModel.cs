@@ -12,6 +12,8 @@ namespace TLCGen.Models
         public string TeKoppelenKruispunt { get; set; }
         public int AantalsignalenIn { get; set; }
         public int AantalsignalenUit { get; set; }
+        public int AantalsignalenMultivalentIn { get; set; }
+        public int AantalsignalenMultivalentUit { get; set; }
         public int PortnummerSimuatieOmgeving { get; set; }
         public int PortnummerAutomaatOmgeving { get; set; }
         public int NummerSource { get; set; }
