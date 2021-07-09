@@ -212,7 +212,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return new List<CCOLLocalVariable> { new("int", "fc") };
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc 
-                        || c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0 && c.InterSignaalGroep?.LateReleases?.Count == 0)
+                        || 
+                        c.InterSignaalGroep?.Gelijkstarten?.Count == 0 
+                        && c.InterSignaalGroep?.Voorstarten?.Count == 0 
+                        && c.InterSignaalGroep?.LateReleases?.Count == 0
+                        && c.InterSignaalGroep?.Nalopen?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<CCOLLocalVariable> { new("int", "fc") };
                 default:
