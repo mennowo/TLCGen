@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
@@ -27,11 +26,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return;
-
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
-                if (gs.DeelConflict)
+                if (gs.DeelConflict && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -57,20 +54,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            foreach(var vs in c.InterSignaalGroep.Voorstarten)
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
             {
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
-                        vs.VoorstartTijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        _tvs, vs.FaseVan, vs.FaseNaar));
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
-                        vs.VoorstartOntruimingstijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        _tvsot, vs.FaseVan, vs.FaseNaar));
+                foreach (var vs in c.InterSignaalGroep.Voorstarten)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
+                            vs.VoorstartTijd,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            _tvs, vs.FaseVan, vs.FaseNaar));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
+                            vs.VoorstartOntruimingstijd,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            _tvsot, vs.FaseVan, vs.FaseNaar));
+                }
             }
         }
 

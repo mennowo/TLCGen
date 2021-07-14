@@ -376,7 +376,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        var sch = $" && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}]";
+                        var sch = "";
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd) sch = $" && SCH[{_schpf}{_schgs}{gs:van}{gs:naar}]";
                         sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:van}] & BIT11)) {{ RR[{_fcpf}{gs:naar}] &= ~PRIO_RR_BIT; }}");
                         sb.AppendLine($"{ts}if (SCH[{_schpf}{_schconfidence15fix}]{sch} && (P[{_fcpf}{gs:naar}] & BIT11)) {{ RR[{_fcpf}{gs:van}] &= ~PRIO_RR_BIT; }}");
                     }

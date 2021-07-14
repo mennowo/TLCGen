@@ -299,7 +299,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // find signalgroup instance
                             var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
                             // if the sg has no predictor
-                            if (ffc != null && !ffc.WachttijdVoorspeller)
+                            if (ffc is {WachttijdVoorspeller: false})
                             {
                                 // find a potential feeding sg
                                 var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
@@ -307,7 +307,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
                             }
                             // if the instance is not null, and it has a predictor, skip setting RR
-                            if (ffc != null && ffc.WachttijdVoorspeller) continue;
+                            if (ffc is {WachttijdVoorspeller: true}) continue;
                             sb.AppendLine(
                                 $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
                         }
@@ -316,6 +316,45 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         List<Tuple<string, List<string>>> gelijkstarttuples = null;
                         gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                         var yes = false;
+                        
+                        if (c.InterSignaalGroep.Nalopen.Any())
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
+                            foreach (var fc in c.Fasen)
+                            {
+                                // zoeken naloop waarvan deze fase de naloop richting is
+                                var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.Naam);
+                                if (nl != null)
+                                {
+                                    sb.Append($"{ts}if (");
+                                    var first = true;
+                                    foreach (var nlt in nl.Tijden)
+                                    {
+                                        if (!first) sb.Append(" || ");
+                                        first = false;
+                                        var tnl = nlt.Type switch
+                                        {
+                                            NaloopTijdTypeEnum.StartGroen => _tnlsg,
+                                            NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
+                                            NaloopTijdTypeEnum.VastGroen => _tnlfg,
+                                            NaloopTijdTypeEnum.VastGroenDetectie => _tnlfgd,
+                                            NaloopTijdTypeEnum.EindeGroen => _tnleg,
+                                            NaloopTijdTypeEnum.EindeGroenDetectie => _tnlegd,
+                                            NaloopTijdTypeEnum.EindeVerlengGroen => _tnlcv,
+                                            NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
+                                            _ => throw new ArgumentOutOfRangeException()
+                                        };
+                                        sb.Append($"RT[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]");
+                                    }
+                                    sb.AppendLine(")");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT5;");
+                                    sb.AppendLine($"{ts}}}");
+                                }
+                            }
+                        }
+                        
                         if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc) // TODO how is this with REALFUNC?
                         {
                             foreach (var gs in gelijkstarttuples.Where(x =>

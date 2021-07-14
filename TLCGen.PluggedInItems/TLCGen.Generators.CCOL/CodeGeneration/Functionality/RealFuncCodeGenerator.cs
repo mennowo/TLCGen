@@ -398,13 +398,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
 
-                            if (grsync.AanUit != AltijdAanUitEnum.Altijd)
-                            {
-                                sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{grsync}]) ");
-                            }
-                            else sb.Append($"{ts}{ts}");
-
-                            sb.AppendLine($"wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, TRUE);");
+                            sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, " +
+                                          $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "TRUE")});");
                         }
                         sb.AppendLine();
                     }
@@ -418,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var (m1, m2, gs) = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fot.FaseVan && x.m1.FaseNaar == fot.FaseNaar || x.m2.FaseVan == fot.FaseVan && x.m2.FaseNaar == fot.FaseNaar);
                             if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
 
-                            var lr = ow != null && ow.Waarde > 0;
+                            var lr = ow is {Waarde: > 0};
                             if (gs && m1.AanUit != AltijdAanUitEnum.Altijd)
                             {
                                 sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{m1}]) ");
