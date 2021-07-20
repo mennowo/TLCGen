@@ -26,9 +26,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return;
+
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
-                if (gs.DeelConflict && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
+                if (gs.DeelConflict)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -43,6 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseNaar, gs.FaseVan));
                 }
+
                 if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
@@ -54,23 +57,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
+            foreach (var vs in c.InterSignaalGroep.Voorstarten)
             {
-                foreach (var vs in c.InterSignaalGroep.Voorstarten)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
-                            vs.VoorstartTijd,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tvs, vs.FaseVan, vs.FaseNaar));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
-                            vs.VoorstartOntruimingstijd,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tvsot, vs.FaseVan, vs.FaseNaar));
-                }
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
+                        vs.VoorstartTijd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        _tvs, vs.FaseVan, vs.FaseNaar));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
+                        vs.VoorstartOntruimingstijd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        _tvsot, vs.FaseVan, vs.FaseNaar));
             }
         }
 
@@ -84,7 +84,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc ||
                         c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                         return base.GetFunctionLocalVariables(c, type);
-                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
+                    return new List<CCOLLocalVariable> { new("int", "fc") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }

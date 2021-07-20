@@ -70,9 +70,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             var helps = new List<string>();
 
-            foreach (var (gs1, _, gelijkstart) in _sortedSyncs.twoWay)
+            foreach (var (gs1, _, _) in _sortedSyncs.twoWay)
             {
-                if (gelijkstart && gs1.AanUit != AltijdAanUitEnum.Altijd)
+                if (gs1.AanUit != AltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(

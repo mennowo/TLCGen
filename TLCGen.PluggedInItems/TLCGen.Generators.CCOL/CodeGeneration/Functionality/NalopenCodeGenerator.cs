@@ -290,7 +290,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             else
                             {
                                 sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
-							}
+                            }
                         }
                     }
                     return sb.ToString();
@@ -312,12 +312,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return null;
             }
         }
-		
-	    public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-	    {
-		    _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
-		    
-		    return base.SetSettings(settings);
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings) 
+        { 
+            _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
+            return base.SetSettings(settings);
 	    }
     }
 }
