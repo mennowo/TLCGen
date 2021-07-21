@@ -103,11 +103,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
                             var verschil = fcm.MeeverlengenVerschil?.ToString() ?? "NG";
-                            var hf_wsg = "hf_wsg";
-                            var hf_wsg_args = "";
+                            var hfWsg = "hf_wsg";
+                            var hfWsgArgs = "";
                             if (c.Data.MultiModuleReeksen)
                             {
-                                hf_wsg = "hf_wsg_fcfc";
+                                hfWsg = "hf_wsg_fcfc";
                                 var reeks = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fcm.Naam)));
                                 if (reeks != null)
                                 {
@@ -115,29 +115,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     var rfc2 = c.Fasen.LastOrDefault(x => reeks.Modules.SelectMany(x2 => x2.Fasen).Any(x3 => x3.FaseCyclus == x.Naam));
                                     if (rfc1 == null || rfc2 == null)
                                     {
-                                        hf_wsg_args = "0, FCMAX";
+                                        hfWsgArgs = "0, FCMAX";
                                     }
                                     else
                                     {
                                         var id2 = c.Fasen.IndexOf(rfc2);
                                         ++id2;
-                                        hf_wsg_args = $"{_fcpf}{rfc1.Naam}, {(id2 == c.Fasen.Count ? "FCMAX" : $"{_fcpf}{c.Fasen[id2].Naam}")}";
+                                        hfWsgArgs = $"{_fcpf}{rfc1.Naam}, {(id2 == c.Fasen.Count ? "FCMAX" : $"{_fcpf}{c.Fasen[id2].Naam}")}";
                                     }
                                 }
                                 else
                                 {
-                                    hf_wsg_args = "0, FCMAX";
+                                    hfWsgArgs = "0, FCMAX";
                                 }
                             }
                             if(c.InterSignaalGroep.Nalopen.Any())
                             {
                                 var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == fcm.Naam);
-                                if (nl != null && nl.Type == NaloopTypeEnum.EindeGroen)
+                                if (nl is {Type: NaloopTypeEnum.EindeGroen})
                                 {
-                                    hf_wsg = "hf_wsg_nl";
+                                    hfWsg = "hf_wsg_nl";
                                     if (c.Data.MultiModuleReeksen)
                                     {
-                                        hf_wsg = "hf_wsg_nl_fcfc";
+                                        hfWsg = "hf_wsg_nl_fcfc";
                                     }
                                 }
                             }
@@ -146,25 +146,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 switch (fcm.MeeverlengenType)
                                 {
                                     case MeeVerlengenTypeEnum.Default:
-                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.To:
-                                        sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.MKTo:
-                                        sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.Voetganger:
-                                        sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.DefaultCCOL:
-                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.ToCCOL:
-                                        sb.AppendLine($"{totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"{totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.MKToCCOL:
-                                        sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.MaatgevendGroen:
+                                        sb.AppendLine($"!Maatgevend_Groen({fcm.GetDefine()}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                                         break;
                                     default:
                                         throw new ArgumentOutOfRangeException();
@@ -172,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
                             }
                         }
                     }
@@ -180,30 +183,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var tts = ts;
                     foreach (var fcm in c.Fasen)
                     {
-                        if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                        if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                         {
-                            foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
+                            foreach (var fm in c.FileIngrepen.Where(x =>
+                                x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep &&
+                                x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                             {
-                                if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
+                                if (!file)
                                 {
-                                    if (!file)
+                                    file = true;
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file (meting na ss) */");
+                                    if (c.HalfstarData.IsHalfstar)
                                     {
-                                        file = true;
-                                        sb.AppendLine();
-                                        sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file (meting na ss) */");
+                                        tts = ts;
                                         if (c.HalfstarData.IsHalfstar)
                                         {
-                                            tts = ts;
-                                            if (c.HalfstarData.IsHalfstar)
-                                            {
-                                                tts += ts;
-                                                sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
-                                                sb.AppendLine($"{ts}{{");
-                                            }
+                                            tts += ts;
+                                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                                            sb.AppendLine($"{ts}{{");
                                         }
                                     }
-                                    sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
                                 }
+
+                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
                             }
                         }
                     }

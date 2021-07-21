@@ -145,7 +145,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     amlfc.FaseCyclus, 
                                     new List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>
                                     {
-                                        new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc)
+                                        new(amlfc, mlfc)
                                     });
                             }
                         }
@@ -216,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new List<CCOLLocalVariable>{new("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -405,7 +405,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         AppendNalopenEG_RRFMCorrection(c, sb, ts);
 
                         var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
-
+                        
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             Tuple<string, List<string>> hasgs = null;
@@ -421,10 +421,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
 
+                            var fcf = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
+
+                            if (fcf == null) continue;
+                            
                             if (hasgs != null)
                             {
-                                sb.Append(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                switch (fcf.AlternatieveRuimteType)
+                                {
+                                    case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                        break;
+                                    case AlternatieveRuimteTypeEnum.MaxTar:
+                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                        break;
+                                    case AlternatieveRuimteTypeEnum.RealRuimte:
+                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
                                 foreach (var ofc in hasgs.Item2)
                                 {
                                     sb.Append(ofc);
@@ -440,8 +456,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ");
+                                switch (fcf.AlternatieveRuimteType)
+                                {
+                                    case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                        sb.Append($"({maxtartotig}({_fcpf}{fc.FaseCyclus})");
+                                        break;
+                                    case AlternatieveRuimteTypeEnum.MaxTar:
+                                        sb.Append($"(max_tar({_fcpf}{fc.FaseCyclus})");
+                                        break;              
+                                    case AlternatieveRuimteTypeEnum.RealRuimte:
+                                        sb.Append($"(Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus})");
+                                        break;                                        
+                                }
+                                sb.AppendLine($" >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                             }
                         }
                         sb.AppendLine();
@@ -684,7 +712,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 amlfc.FaseCyclus,
                                                 new List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>
                                                 {
-                                                    new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc,
+                                                    new(amlfc,
                                                         mlfc)
                                                 });
                                         }

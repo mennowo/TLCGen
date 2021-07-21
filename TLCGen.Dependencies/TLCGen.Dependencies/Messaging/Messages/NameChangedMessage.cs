@@ -2,6 +2,11 @@
 
 namespace TLCGen.Messaging.Messages
 {
+    public class SynchronisatiesTypeChangedMessage
+    {
+        
+    }
+    
 	public class NameChangedMessage
     {
         public TLCGenObjectTypeEnum ObjectType { get; }

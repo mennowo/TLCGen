@@ -205,6 +205,7 @@ namespace TLCGen.ViewModels
                 TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
                 RaisePropertyChanged(nameof(IsSynchRealType));
+                MessengerInstance.Send(new SynchronisatiesTypeChangedMessage());
             }
         }
 

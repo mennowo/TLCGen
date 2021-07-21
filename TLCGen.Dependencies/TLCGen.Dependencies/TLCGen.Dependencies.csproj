@@ -130,6 +130,7 @@
     <Compile Include="Messaging\Requests\RefreshBitmapRequest.cs" />
     <Compile Include="Messaging\Responses\GetDetectorListResponse.cs" />
     <Compile Include="Models.Enumerations\AansturingWaitsignalenEnum.cs" />
+    <Compile Include="Models.Enumerations\AlternatieveRuimteTypeEnum.cs" />
     <Compile Include="Models.Enumerations\AltijdAanUitEnum.cs" />
     <Compile Include="Models.Enumerations\BitmappedItemTypeEnum.cs" />
     <Compile Include="Models.Enumerations\CCOLCodeCaseEnum.cs" />

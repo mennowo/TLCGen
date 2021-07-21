@@ -47,6 +47,7 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
+        public AlternatieveRuimteTypeEnum AlternatieveRuimteType { get; set; }
         public bool MeeverlengenTypeInstelbaarOpStraat { get; set; }
         public int? MeeverlengenVerschil { get; set; }
         public bool UitgesteldeVasteAanvraag { get; set; }

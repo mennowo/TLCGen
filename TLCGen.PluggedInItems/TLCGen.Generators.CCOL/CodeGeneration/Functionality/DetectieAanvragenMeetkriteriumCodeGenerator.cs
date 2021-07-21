@@ -120,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     return c.Fasen.Any(x => x.Detectoren?.Count > 0 && x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen && x2.ResetAanvraag)) 
-                        ? new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") } 
+                        ? new List<CCOLLocalVariable> { new("int", "fc") } 
                         : base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);

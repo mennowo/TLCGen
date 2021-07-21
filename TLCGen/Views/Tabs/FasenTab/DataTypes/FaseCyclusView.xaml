@@ -227,6 +227,24 @@
                             <TextBox 
                                 Text="{Binding Path=SeniorenIngreepBezetTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                         </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel>
+                                <Label Content="Type alternatieve ruimte" />
+                                <ct:InfoElement>
+                                    <ct:InfoElement.InfoPopup>
+                                        <TextBlock>
+                                            Opties voor alternatieve ruimte:<LineBreak />
+                                            max_tar_to/tig - CCOL functies alternatieve ruimte, met TO of TIG<LineBreak />
+                                            max_tar - CCOL functies alternatieve ruimte, zonder TO of TIG<LineBreak />
+                                            Real_Ruimte - alternatieve ruimte obv realfunc methodiek
+                                        </TextBlock>
+                                    </ct:InfoElement.InfoPopup>
+                                </ct:InfoElement>
+                            </DockPanel>
+                            <ComboBox 
+                                ItemsSource="{Binding Path=AlternatieveRuimteOpties}"
+                                SelectedValue="{Binding Path=AlternatieveRuimteTypeString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

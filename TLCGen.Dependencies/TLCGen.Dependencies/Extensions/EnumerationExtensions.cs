@@ -12,13 +12,10 @@ namespace TLCGen.Extensions
     {
         public static string GetDescription(this Enum enumValue)
         {
-            var descriptionAttribute = enumValue.GetType()
-              .GetField(enumValue.ToString())
-              .GetCustomAttributes(typeof(DescriptionAttribute), false)
-              .FirstOrDefault() as DescriptionAttribute;
-
-
-            return descriptionAttribute != null
+            return enumValue.GetType()
+                .GetField(enumValue.ToString())
+                .GetCustomAttributes(typeof(DescriptionAttribute), false)
+                .FirstOrDefault() is DescriptionAttribute descriptionAttribute
               ? descriptionAttribute.Description
               : enumValue.ToString();
         }

@@ -127,8 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.RegCAanvragen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -191,7 +190,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    sb.AppendLine($"{ts}/* RIS aanvragen */");
+                    sb.AppendLine($"{ts}{ts}/* RIS aanvragen */");
                     foreach (var l in risModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
                         var sitf = "SYSTEM_ITF";
@@ -221,14 +220,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (ovRis.Any() || hdRis.Any())
                     {
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}/* Ris PRIO: verstuur SSM */");
-                        sb.AppendLine($"{ts}#ifdef RIS_SSM");
+                        sb.AppendLine($"{ts}{ts}#ifdef RIS_SSM");
+                        sb.AppendLine($"{ts}{ts}{ts}/* Ris PRIO: verstuur SSM */");
                         foreach (var ov in ovRis)
                         {
                             var lijncheck = ov.CheckLijnNummer && ov.LijnNummers.Any()
                                 ? $"{_prmpf}{_prmlijn}{CCOLCodeHelper.GetPriorityName(c, ov)}_01, {ov.LijnNummers.Count}"
                                 : "NG, NG";
-                            sb.AppendLine($"{ts}ris_srm_put_signalgroup(" +
+                            sb.AppendLine($"{ts}{ts}{ts}ris_srm_put_signalgroup(" +
                                           $"{_fcpf}{ov.FaseCyclus}, " +
                                           $"PRM[{_prmpf}{_prmrisapproachid}{ov.FaseCyclus}], " +
                                           $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, ov)}], " +
@@ -238,13 +237,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         foreach (var ov in ovRis)
                         {
-                            sb.AppendLine($"{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
+                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
                         }
                         foreach (var hd in hdRis)
                         {
-                            sb.AppendLine($"{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus});");
+                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus});");
                         }
-                        sb.AppendLine($"{ts}#endif");
+                        sb.AppendLine($"{ts}{ts}#endif");
                     }
 
                     sb.AppendLine($"{ts}#endif");

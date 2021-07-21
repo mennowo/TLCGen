@@ -67,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (c?.RichtingGevoeligeAanvragen.Any(x => x.ResetAanvraag) == true)
-                        return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
+                        return new List<CCOLLocalVariable> { new("int", "fc") };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);

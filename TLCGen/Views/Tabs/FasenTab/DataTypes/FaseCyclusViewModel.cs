@@ -304,6 +304,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public AlternatieveRuimteTypeEnum AlternatieveRuimteType
+        {
+            get => FaseCyclus.AlternatieveRuimteType;
+            set
+            {
+                FaseCyclus.AlternatieveRuimteType = value;
+                RaisePropertyChanged<object>(nameof(AlternatieveRuimteType), broadcast: true);
+            }
+        }
+
         public int? MeeverlengenVerschil
         {
             get => FaseCyclus.MeeverlengenVerschil;
@@ -527,6 +537,8 @@ namespace TLCGen.ViewModels
         }
 
         private ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> _hardMeeverlengenFaseCycli;
+        private ObservableCollection<string> _alternatieveRuimteOpties;
+        private string _alternatieveRuimteTypeString;
         public ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli => _hardMeeverlengenFaseCycli ??= new ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel>(FaseCyclus.HardMeeverlengenFaseCycli);
 
         public HardMeeverlengenFaseCyclusViewModel SelectedHardMeeverlengenFase
@@ -560,7 +572,7 @@ namespace TLCGen.ViewModels
 
         public bool HasHardMeeverlengenFasen => HardMeeverlengenFaseCycli.Any();
 
-        public ObservableCollection<string> MeeverlengenOpties => _meeverlengenOpties ?? (_meeverlengenOpties = new ObservableCollection<string>());
+        public ObservableCollection<string> MeeverlengenOpties => _meeverlengenOpties ??= new ObservableCollection<string>();
 
         public string MeeverlengenTypeString
         {
@@ -596,9 +608,43 @@ namespace TLCGen.ViewModels
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.MKToCCOL;
                 }
+                else if (value == MeeVerlengenTypeEnum.MaatgevendGroen.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.MaatgevendGroen;
+                }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("MeeverlengenTypeString",
+                    throw new ArgumentOutOfRangeException(nameof(MeeverlengenTypeString),
+                        "MeeverlengenTypeString was set to value that is not defined for MeeverlengenType");
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+        
+        public ObservableCollection<string> AlternatieveRuimteOpties => _alternatieveRuimteOpties ??= new ObservableCollection<string>();
+
+        public string AlternatieveRuimteTypeString
+        {
+            get => _alternatieveRuimteTypeString;
+            set
+            {
+                _alternatieveRuimteTypeString = value;
+                if (value == AlternatieveRuimteTypeEnum.MaxTarToTig.GetDescription())
+                {
+                    AlternatieveRuimteType = AlternatieveRuimteTypeEnum.MaxTarToTig;
+                }
+                else if (value == AlternatieveRuimteTypeEnum.MaxTar.GetDescription())
+                {
+                    AlternatieveRuimteType = AlternatieveRuimteTypeEnum.MaxTar;
+                }
+                else if (value == AlternatieveRuimteTypeEnum.RealRuimte.GetDescription())
+                {
+                    AlternatieveRuimteType = AlternatieveRuimteTypeEnum.RealRuimte;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(MeeverlengenTypeString),
                         "MeeverlengenTypeString was set to value that is not defined for MeeverlengenType");
                 }
 
@@ -730,13 +776,33 @@ namespace TLCGen.ViewModels
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.To.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKTo.GetDescription());
             if (FaseCyclus.Type == FaseTypeEnum.Voetganger)
+            {
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger.GetDescription());
+            }
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.DefaultCCOL.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.ToCCOL.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKToCCOL.GetDescription());
+            if (TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MaatgevendGroen.GetDescription());
+            }
 
             _meeverlengenTypeString = MeeverlengenType.GetDescription();
             RaisePropertyChanged(nameof(MeeverlengenTypeString));
+        }
+
+        private void SetAlternatieveRuimteTypeOpties()
+        {
+            AlternatieveRuimteOpties.Clear();
+            AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.MaxTarToTig.GetDescription());
+            AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.MaxTar.GetDescription());
+            if (TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.RealRuimte.GetDescription());
+            }
+
+            _alternatieveRuimteTypeString = AlternatieveRuimteType.GetDescription();
+            RaisePropertyChanged(nameof(AlternatieveRuimteTypeString));
         }
 
         #endregion // Private Methods
@@ -753,6 +819,12 @@ namespace TLCGen.ViewModels
             _hardMeeverlengenFasenManager?.Refresh();
         }
 
+        private void OnSynchronisatiesTypeChanged(SynchronisatiesTypeChangedMessage obj)
+        {
+            SetMeeverlengenOpties();
+            SetAlternatieveRuimteTypeOpties();
+        }
+
         #endregion // TLCGen events
 
         #region Constructor
@@ -761,9 +833,11 @@ namespace TLCGen.ViewModels
         {
             FaseCyclus = fasecyclus;
             SetMeeverlengenOpties();
+            SetAlternatieveRuimteTypeOpties();
 
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            MessengerInstance.Register<SynchronisatiesTypeChangedMessage>(this, OnSynchronisatiesTypeChanged);
         }
 
         #endregion // Constructor

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
@@ -262,21 +263,83 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     sb.AppendLine($"{ts}/* Alternatieve ruimte in memory element schrijven */");
                     var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
-                    if (c.HalfstarData.IsHalfstar)
+                    var arTypes = new HashSet<AlternatieveRuimteTypeEnum>();
+                    foreach (var f in c.Fasen)
                     {
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}else");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
-                        sb.AppendLine($"{ts}}}");
+                        arTypes.Add(f.AlternatieveRuimteType);
                     }
-                    else
+
+                    if (arTypes.Count == 1 && arTypes.First() != AlternatieveRuimteTypeEnum.RealRuimte)
                     {
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                        var tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            tts += ts;
+                        }
+
+                        switch (arTypes.First())
+                        {
+                            case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                                break;
+                            case AlternatieveRuimteTypeEnum.MaxTar:
+                                sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = max_tar(fc);");
+                                break;
+                            case AlternatieveRuimteTypeEnum.RealRuimte:
+                                // niets nodig, is reeds gebeurt
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                        }
                     }
+                    else if (arTypes.Any(x => x != AlternatieveRuimteTypeEnum.RealRuimte))
+                    {
+                        var tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                        }
+
+                        foreach (var f in c.Fasen)
+                        {
+                            switch (f.AlternatieveRuimteType)
+                            {
+                                case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                    sb.AppendLine($"{tts}MM[{_mpf}{_mar}{f.Naam}] = {maxtartotig}({_fcpf}{f.Naam});");
+                                    break;
+                                case AlternatieveRuimteTypeEnum.MaxTar:
+                                    sb.AppendLine($"{tts}MM[{_mpf}{_mar}{f.Naam}] = max_tar({_fcpf}{f.Naam});");
+                                    break;
+                                case AlternatieveRuimteTypeEnum.RealRuimte:
+                                    // niets nodig, is reeds gebeurt
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                        }
+                    }
+
                     return sb.ToString();
                     
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
@@ -358,14 +421,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // voorstart
                             if (grsync.Richting == -1)
                             {
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
                             }
                             // late release of inlopen
                             else
                             {
-                                // bij voetgangers waarbij éénzijdig ingelopen mag worden moet de correctie omgekeerd: de synchronisatie (naloop) is van a naar b,
-                                // maar de groentijdcorrectie van b naar a
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync}], !G[{_fcpf}{grsync:van}] || TGG_timer[{_fcpf}{grsync:van}] < T_max[{_tpf}{max}{grsync}]);");
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
                             }
                         }
                     }
@@ -413,14 +474,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var (m1, m2, gs) = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fot.FaseVan && x.m1.FaseNaar == fot.FaseNaar || x.m2.FaseVan == fot.FaseVan && x.m2.FaseNaar == fot.FaseNaar);
                             if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
 
-                            var lr = ow is {Waarde: > 0};
+                            var max = ow.Richting == -1 ? _trealvs : _treallr;
+                            
+                            var lr = ow is {Waarde: >= 0};
                             if (gs && m1.AanUit != AltijdAanUitEnum.Altijd)
                             {
                                 sb.Append($"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{m1}]) ");
                             }
                             else sb.Append($"{ts}{ts}");
 
-                            sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{_treallr}{fot:naarvan}]" : "0")}, TRUE);");
+                            sb.AppendLine($"wijziging |= Corr_FOT({_fcpf}{fot:naar}, {_fcpf}{fot:van}, {_tpf}{_tfo}{fot}, {(lr ? $"T_max[{_tpf}{max}{fot:naarvan}]" : "0")}, TRUE);");
                         }
 
                         if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
