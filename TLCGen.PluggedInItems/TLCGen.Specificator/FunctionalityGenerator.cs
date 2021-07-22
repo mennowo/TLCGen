@@ -690,7 +690,7 @@ namespace TLCGen.Specificator
                 $"Dit document beschrijft de functionele eisen aangaande de verkeersregelinstallatie (VRI) op het " +
                 $"kruispunt " +
                 GetKruisingNaam(c) +
-                (Regex.IsMatch(c.Data.Stad, @"^(g|G)emeente") ? $"in de {c.Data.Stad}" : $"te {c.Data.Stad} ({c.Data.Naam}).");
+                (c.Data.Stad != null && Regex.IsMatch(c.Data.Stad, @"^(g|G)emeente") ? $"in de {c.Data.Stad}" : $"te {c.Data.Stad ?? "Onbekend"} ({c.Data.Naam}).");
             body.Append(OpenXmlHelper.GetTextParagraph(text));
 
             var sb = new StringBuilder();

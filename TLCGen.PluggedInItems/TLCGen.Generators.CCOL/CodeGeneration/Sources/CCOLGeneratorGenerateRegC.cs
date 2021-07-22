@@ -163,6 +163,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
+
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.AppendLine($"{ts}#include \"realfunc.c\"");
+            }
+            
             if(c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
             {
                 if(c.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
@@ -183,10 +189,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            
             if (c.Data.FixatieMogelijk)
             {
                 sb.AppendLine($"{ts}#include \"fixatie.c\"");
             }
+            
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
                 (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any()))
             {
@@ -197,10 +205,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        {
 		        sb.AppendLine($"{ts}#include \"{c.Data.Naam}hst.c\"");
 	        }
+            
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCIncludes])
             {
                 sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCIncludes, ts));
             }
+            
             sb.AppendLine();
 
             return sb.ToString();

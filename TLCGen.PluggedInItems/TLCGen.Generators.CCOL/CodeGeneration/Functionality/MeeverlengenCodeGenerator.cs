@@ -103,11 +103,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
                             var verschil = fcm.MeeverlengenVerschil?.ToString() ?? "NG";
-                            var hfWsg = "hf_wsg";
                             var hfWsgArgs = "";
+                            var extraConditions = "hf_wsg()";
                             if (c.Data.MultiModuleReeksen)
                             {
-                                hfWsg = "hf_wsg_fcfc";
+                                var hfWsg = "hf_wsg_fcfc";
                                 var reeks = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fcm.Naam)));
                                 if (reeks != null)
                                 {
@@ -128,17 +128,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     hfWsgArgs = "0, FCMAX";
                                 }
+
+                                extraConditions = $"{hfWsg}({hfWsgArgs})";
                             }
                             if(c.InterSignaalGroep.Nalopen.Any())
                             {
                                 var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == fcm.Naam);
                                 if (nl is {Type: NaloopTypeEnum.EindeGroen})
                                 {
-                                    hfWsg = "hf_wsg_nl";
+                                    var hfWsg = "hf_wsg_nl";
                                     if (c.Data.MultiModuleReeksen)
                                     {
                                         hfWsg = "hf_wsg_nl_fcfc";
                                     }
+                                    
+                                    extraConditions = $"!fka({_fcpf}{fcm.Naam}) && {hfWsg}({hfWsgArgs})";
                                 }
                             }
                             if (!fcm.MeeverlengenTypeInstelbaarOpStraat)
@@ -146,28 +150,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 switch (fcm.MeeverlengenType)
                                 {
                                     case MeeVerlengenTypeEnum.Default:
-                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.To:
-                                        sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.MKTo:
-                                        sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.Voetganger:
-                                        sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.DefaultCCOL:
-                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.ToCCOL:
-                                        sb.AppendLine($"{totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"{totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.MKToCCOL:
-                                        sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     case MeeVerlengenTypeEnum.MaatgevendGroen:
-                                        sb.AppendLine($"!Maatgevend_Groen({fcm.GetDefine()}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                        sb.AppendLine($"!Maatgevend_Groen({fcm.GetDefine()}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     default:
                                         throw new ArgumentOutOfRangeException();
@@ -175,7 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {hfWsg}({hfWsgArgs}) ? BIT4 : 0;");
+                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                             }
                         }
                     }

@@ -122,6 +122,10 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
 #else
 		return ym_max(i, to_verschil) || MK[i] && ym_max_to(i, to_verschil);
 #endif
+#ifdef REALFUNC
+    case 8:
+        return !Maatgevend_Groen(i);
+#endif
 	}
 	return FALSE;
 }

@@ -229,7 +229,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCIncludes => 50,
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => 10,
                 CCOLCodeTypeEnum.RegCSynchronisaties => 30,
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => 10,
@@ -256,10 +255,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    sb.AppendLine($"{ts}#include \"realfunc.c\"");
-                    return sb.ToString();
-
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     sb.AppendLine($"{ts}/* Alternatieve ruimte in memory element schrijven */");
                     var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
