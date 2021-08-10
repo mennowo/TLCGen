@@ -147,6 +147,27 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
+                    
+                    if (!timingsModel.TimingsUsePredictions) return null;
+                    
+                    var fcf = c.Fasen.First().Naam;
+                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                    sb.AppendLine($"{ts}{ts}/* UC4 */");
+                    sb.AppendLine($"{ts}{ts}/* eigenlijk nog per richting een schakelaar of er altijd NG moet worden gestuurd (nu is het een algemene schakelaar) */");
+                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
+                    sb.AppendLine($"{ts}{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine();
+                    
                     sb.AppendLine($"{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine("#if !(defined NO_TIMETOX) && (!defined (AUTOMAAT) || defined (VISSIM))");
                     sb.AppendLine($"{ts}xyprintf(118, 2 + FCMAX,\"----\");");
@@ -203,28 +224,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
-                
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (!timingsModel.TimingsUsePredictions) return null;
-                    
-                    var fcf = c.Fasen.First().Naam;
-                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
-                    sb.AppendLine($"{ts}{ts}/* UC4 */");
-                    sb.AppendLine($"{ts}{ts}/* eigenlijk nog per richting een schakelaar of er altijd NG moet worden gestuurd (nu is het een algemene schakelaar) */");
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
-                    sb.AppendLine($"{ts}{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}#endif");  
-                    return sb.ToString();
-                    
+
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     if (!timingsModel.TimingsUsePredictions) return null;
 

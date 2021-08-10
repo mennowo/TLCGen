@@ -956,7 +956,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
                 foreach (var delem in data.Elements)
                 {
                     if (!delem.Dummy)

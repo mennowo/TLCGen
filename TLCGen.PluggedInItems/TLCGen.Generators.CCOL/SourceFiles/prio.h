@@ -8,7 +8,7 @@
 #define   PRIO_RR_BIT      BIT6
 #define   PRIO_YV_BIT      BIT6
 #define   PRIO_YM_BIT      BIT6
-#define   PRIO_MK_BIT      BIT6
+#define   PRIO_MK_BIT      BIT10 /* Hier geen BIT6 wegens conflict met MeetKriteriumRGprm */
 #define   PRIO_PP_BIT      BIT6
 #define  PRIO_PAR_BIT      BIT6
 #define PRIO_RTFB_BIT      BIT6

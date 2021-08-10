@@ -378,7 +378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var hdr1B = mdr1B == null ? "NG" : _hpf + _hmad + mdr1B.Naam;
                             var hdr2A = mdr2A == null ? "NG" : _hpf + _hmad + mdr2A.Naam;
                             var hdr2B = mdr2B == null ? "NG" : _hpf + _hmad + mdr2B.Naam;
-                            sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:van}, SCH[{_schpf}{_schlos}{grsync:van}_1], SCH[{_schpf}{_schlos}{grsync:van}_2], SCH[{_schpf}{_schlos}{grsync:naar}_1], SCH[{_schpf}{_schlos}{grsync:naar}_2]);");
+                            sb.AppendLine($"{ts}Inlopen_Los2({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, {hdr1A}, {hdr1B}, {hdr2B}, {hdr2A}, {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync.FaseNaar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, SCH[{_schpf}{_schlos}{grsync:van}_1], SCH[{_schpf}{_schlos}{grsync:van}_2], SCH[{_schpf}{_schlos}{grsync:naar}_1], SCH[{_schpf}{_schlos}{grsync:naar}_2]);");
                             startDuringRed = true;
                         }
                         sb.AppendLine();
@@ -455,7 +455,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
 
                             sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, " +
-                                          $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "TRUE")});");
+                                          $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "FALSE")});");
                         }
                         sb.AppendLine();
                     }
@@ -469,7 +469,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var (m1, m2, gs) = _sortedSyncs.twoWay.FirstOrDefault(x => x.m1.FaseVan == fot.FaseVan && x.m1.FaseNaar == fot.FaseNaar || x.m2.FaseVan == fot.FaseVan && x.m2.FaseNaar == fot.FaseNaar);
                             if (ow == null && m1 == null || m1 != null && (m1.Waarde != 0 || m2.Waarde != 0)) continue;
 
-                            var max = ow.Richting == -1 ? _trealvs : _treallr;
+                            var max = ow?.Richting == -1 ? _trealvs : _treallr;
                             
                             var lr = ow is {Waarde: >= 0};
                             if (gs && m1.AanUit != AltijdAanUitEnum.Altijd)

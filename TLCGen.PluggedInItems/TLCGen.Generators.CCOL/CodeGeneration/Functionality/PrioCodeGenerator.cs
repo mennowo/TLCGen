@@ -1518,16 +1518,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer een naloop tijd nog loopt */");
                         foreach (var fc in c.Fasen)
                         {
-                            var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.Naam);
-                            if (nl != null)
+                            var found = false;
+                            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.FaseNaar == fc.Naam))
                             {
+                                found = true;
                                 sb.Append($"{ts}if (");
                                 first = true;
                                 foreach (var nlt in nl.Tijden)
                                 {
                                     if (!first) sb.Append(" || ");
                                     first = false;
-                                    var _tnl = nlt.Type switch
+                                    var tnl = nlt.Type switch
                                     {
                                         NaloopTijdTypeEnum.StartGroen => _tnlsg,
                                         NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
@@ -1539,8 +1540,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
                                         _ => throw new ArgumentOutOfRangeException()
                                     };
-                                    sb.Append($"RT[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}]");
+                                    sb.Append($"RT[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]");
                                 }
+                            }
+
+                            if (found)
+                            {
                                 sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");

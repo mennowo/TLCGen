@@ -168,7 +168,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}X[{_fcpf}{nl.FaseVan}] &= ~{_BITxnl};");
                             }
                             sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Vasthouden voedende richtingen tot in 1 keer kan worden overgefietst */");
+                            sb.AppendLine($"{ts}/* Tegenhouden voedende richtingen tot in 1 keer kan worden overgestoken */");
                             sb.AppendLine($"{ts}/* Betekenis {_prmpf}x##: tijd dat fase ## eerder mag komen dan SG nalooprichting */");
                             foreach (var nl in nls)
                             {
