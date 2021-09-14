@@ -1518,12 +1518,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer een naloop tijd nog loopt */");
                         foreach (var fc in c.Fasen)
                         {
-                            var found = false;
+                            var found = false; 
+                            first = true;
                             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.FaseNaar == fc.Naam))
                             {
+                                if (!found)
+                                {
+                                    sb.Append($"{ts}if (");
+                                }
                                 found = true;
-                                sb.Append($"{ts}if (");
-                                first = true;
                                 foreach (var nlt in nl.Tijden)
                                 {
                                     if (!first) sb.Append(" || ");
