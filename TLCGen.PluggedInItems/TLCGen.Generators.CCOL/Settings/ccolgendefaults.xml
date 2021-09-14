@@ -1752,13 +1752,13 @@
             <Default>ftscyc</Default>
             <Setting>ftscyc</Setting>
             <Type>Counter</Type>
-            <Description>Bijhouden cycli tbv peloton prio voor fase _E1_</Description>
+            <Description>Bijhouden realisaties tbv peloton prio voor fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ftsvtg</Default>
             <Setting>ftsvtg</Setting>
             <Type>Counter</Type>
-            <Description>Bijhouden wachttijd tbv peloton prio voor fase _E1_</Description>
+            <Description>Bijhouden aantal fietsers tbv peloton prio voor fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

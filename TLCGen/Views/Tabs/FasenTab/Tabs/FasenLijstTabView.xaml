@@ -8,7 +8,6 @@
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
-             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" AutomationProperties.AutomationId="fasenLijstTab"

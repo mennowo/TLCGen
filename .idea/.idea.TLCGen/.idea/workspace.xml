@@ -7,14 +7,17 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Version 0.9.10">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.paket/Paket.Restore.targets" beforeDir="false" afterPath="$PROJECT_DIR$/.paket/Paket.Restore.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/DetectieAanvragenMeetkriteriumCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/DetectieAanvragenMeetkriteriumCodeGenerator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/tlcgenversioning" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/tlcgenversioning" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.cake" beforeDir="false" afterPath="$PROJECT_DIR$/build.cake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RichtingGevoeligCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RichtingGevoeligCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/SeniorenIngreepCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/SeniorenIngreepCodeGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateTabC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateTabC.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +93,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AddFileViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/obj/Release/Views/Tabs/InterSignaalGroepTab/DataTypes/SynchronisatieView.g.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeAanvragenCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/ViewModels/Other/DetectorManagerViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/E8B582F9-E526-4A0E-B1C0-F71951C9959B/d3/45f6ecef/Visibility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/MeeaanvraagViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -98,6 +102,7 @@
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/DataTypes/NaloopViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Updater/obj/Debug/UpdaterDownload.g.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9B25E913-D31D-4B8B-83EB-DE8A2012E613/c4/4d0c7cfa/XmlTextReaderImpl.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/menno/CodingConnected/Repos/TLCGen/TLCGen/Properties/AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarGekoppeldeKruisingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/PTPKoppelingViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/DataTypes/HalfstarPeriodeDataViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -117,20 +122,12 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AutoBuildSettingsView.xaml" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AutoBuildSettingsViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/Resources/settings.xml" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Additor/AdditorPlugin.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/AutoBuildPlugin.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/BitmapTab/BitmapTabViewModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/AlgemeenTab/DataTypes/ControllerDataViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateDplC.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/WaarschuwingsGroepModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/RatelTikkerModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Attributes/IOElementAttribute.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_prio.c" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_prio.h" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/Views/TimingsTabView.xaml" />
@@ -166,8 +163,16 @@
       <option value="$PROJECT_DIR$/TLCGen/Properties/AssemblyInfo.cs" />
       <option value="$PROJECT_DIR$/TLCGen/tlcgenversioning" />
       <option value="$PROJECT_DIR$/TLCGen.Setup/Product.wxs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/build.cake" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/DetectieAanvragenMeetkriteriumCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RichtingGevoeligCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/SeniorenIngreepCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTabView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/Tabs/FasenLijstTimersTabView.xaml" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateTabC.cs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -396,7 +401,7 @@
       <workItem from="1628760340743" duration="1811000" />
       <workItem from="1629108099522" duration="949000" />
       <workItem from="1629620947930" duration="1397000" />
-      <workItem from="1631520841737" duration="650000" />
+      <workItem from="1631520841737" duration="5414000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -608,7 +613,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628605120618</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Fix for prio met nalopen">
+      <created>1631601884508</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1631601884508</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Version 0.9.10">
+      <created>1631601899631</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1631601899631</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -670,8 +689,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="uc4 update en bewaakte rateltikker update" />
-    <MESSAGE value="fixes/toev RIS" />
     <MESSAGE value="realfunc update, ris fixes" />
     <MESSAGE value="fix voor fout met handmatig rangeren IO" />
     <MESSAGE value="aanzet templates voor prio" />
@@ -695,7 +712,9 @@
     <MESSAGE value="Realfunc fixes and enhancements" />
     <MESSAGE value="Real func fixes, meeverlengen fixes" />
     <MESSAGE value="Variety of small fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Variety of small fixes" />
+    <MESSAGE value="Fix for prio met nalopen" />
+    <MESSAGE value="Version 0.9.10" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version 0.9.10" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

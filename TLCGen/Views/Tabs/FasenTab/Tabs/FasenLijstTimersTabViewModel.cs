@@ -96,6 +96,8 @@ namespace TLCGen.ViewModels
         #region Properties
 
         public ObservableCollection<FaseCyclusViewModel> Fasen => ControllerAccessProvider.Default.AllSignalGroups;
+
+        public bool IsNotInterGreen => !Controller.Data.Intergroen;
         
         #endregion // Properties
 

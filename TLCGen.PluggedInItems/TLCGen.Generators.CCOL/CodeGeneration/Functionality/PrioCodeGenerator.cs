@@ -411,10 +411,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 999, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
                 if (melding.FietsPrioriteitGebruikLus)
                 {
-                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _cftsvtg, prio.FaseCyclus));
+                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 999, CCOLElementTimeTypeEnum.None, _cftsvtg, prio.FaseCyclus));
                 }
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsblok}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _prmftsblok, prio.FaseCyclus));
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsmaxpercyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitAantalKeerPerCyclus, CCOLElementTimeTypeEnum.None, _prmftsmaxpercyc, prio.FaseCyclus));
@@ -489,7 +489,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.HasDSI())
                 {
-                    var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 120, CCOLElementTimeTypeEnum.None, _prmtestdsivert);
+                    var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 120, CCOLElementTimeTypeEnum.TS_type, _prmtestdsivert);
                     var prmtest2 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsilyn}", 0, CCOLElementTimeTypeEnum.None, _prmtestdsilyn);
                     var prmtest3 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsicat}", 10, CCOLElementTimeTypeEnum.None, _prmtestdsicat);
                     prmtest1.Dummy = true;

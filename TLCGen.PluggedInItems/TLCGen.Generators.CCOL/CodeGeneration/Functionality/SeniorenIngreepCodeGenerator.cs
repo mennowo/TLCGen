@@ -44,7 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmsiexgrperc}{fc.Naam}",
                         fc.SeniorenIngreepExtraGroenPercentage,
-                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTimeTypeEnum.None,
                         _prmsiexgrperc,
                         fc.Naam));
                 _myElements.Add(

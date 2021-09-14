@@ -55,7 +55,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         $"{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", _hrgv, rgv.FaseCyclus, rgv.VanDetector));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_prmmkrg}{_dpf}{rgv.VanDetector}", (int)rgv.TypeVerlengen, CCOLElementTimeTypeEnum.TE_type, _prmmkrg, rgv.FaseCyclus));
+                        $"{_prmmkrg}{_dpf}{rgv.VanDetector}", (int)rgv.TypeVerlengen, CCOLElementTimeTypeEnum.None, _prmmkrg, rgv.FaseCyclus));
             }
         }
 

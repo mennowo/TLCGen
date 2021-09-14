@@ -434,7 +434,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min}; ");
                 sb.Append($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG}; ");
                 sb.Append($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
-                sb.Append($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min}; ");
+                sb.Append($"TGL_min[{fcm.GetDefine()}] = {(controller.Data.Intergroen ? fcm.TGL : fcm.TGL_min)}; ");
+                sb.Append($"TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
                 var tvg = "NG";
                 if (gs != null)
                 {
@@ -1265,7 +1266,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}1{programma.Naam}{sg.FaseCyclus}]; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}1{programma.Naam}{sg.FaseCyclus}];");
                         if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
                         {
-                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}2{programma.Naam}{sg.FaseCyclus}; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}2{programma.Naam}{sg.FaseCyclus}];");
+                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}2{programma.Naam}{sg.FaseCyclus}]; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}2{programma.Naam}{sg.FaseCyclus}];");
                         }           
                     }
                     else

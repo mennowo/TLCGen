@@ -87,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_prmmk}{dm.Naam}", GetVerlengenSetting(fc, dm), CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
+                                $"{_prmmk}{dm.Naam}", GetVerlengenSetting(fc, dm), CCOLElementTimeTypeEnum.None, _prmmk, dm.Naam));
                     }
                 }
             }

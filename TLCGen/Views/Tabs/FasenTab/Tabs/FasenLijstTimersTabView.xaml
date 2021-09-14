@@ -5,8 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Name="Root"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:FasenLijstTimersTabViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+        <DataGridTextColumn
+            x:Key="TglMinColumn"
+            Binding="{Binding Path=(viewModels:FaseCyclusViewModel.TGL_min)}" 
+            Header="TGL_min"
+            Visibility="{Binding Path=DataContext.(viewModels:FasenLijstTimersTabViewModel.IsNotInterGreen),Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -28,16 +36,13 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-
-                <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
-                <!--<DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" IsReadOnly="True" />-->
                 <DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
                 <DataGridTextColumn Binding="{Binding Path=TRG}" Header="TRG" />
                 <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
                 <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
-                <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />
+                <StaticResource ResourceKey="TglMinColumn" />
                 <DataGridTextColumn Binding="{Binding Path=Kopmax}" Header="Kopmax"  >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
