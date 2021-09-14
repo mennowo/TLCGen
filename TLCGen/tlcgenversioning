@@ -1,5 +1,7 @@
-TLCGen=0.9.9.0
+TLCGen=0.9.10.0
 RN==TLCGen
+TLCGen versie: 0.9.10.0
+- Veelheid aan kleine fixes
 TLCGen versie: 0.9.9.0
 - Diverse fixes rond timings
 - Fix prio voor fietsers
