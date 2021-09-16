@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schmv;
+        private CCOLGeneratorCodeStringSettingModel _schhardmv;
         private CCOLGeneratorCodeStringSettingModel _prmmv;
 #pragma warning restore 0649
         private string _hfile;
@@ -50,6 +51,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 _schmv, fcm.Naam));
                     }
 
+                    if (fcm.HardMeeverlengenFaseCycli.Any())
+                    {
+                        foreach (var mvfc in fcm.HardMeeverlengenFaseCycli)
+                        {
+                            _myElements.Add(
+                                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                    $"{_schhardmv}{fcm.Naam}{mvfc.FaseCyclus}", 
+                                    1, 
+                                    CCOLElementTimeTypeEnum.SCH_type, 
+                                    _schhardmv, fcm.Naam, mvfc.FaseCyclus));    
+                        }
+                    }
                 }
             }
         }
@@ -232,7 +245,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             foreach(var mvfc in fcm.HardMeeverlengenFaseCycli)
                             {
-                                sb.Append($"{ts}if (");
+                                sb.Append($"{ts}if (SCH[{_schpf}{_schhardmv}{fcm.Naam}{mvfc.FaseCyclus}] && ");
                                 switch (mvfc.Type)
                                 {
                                     case HardMeevelengenTypeEnum.Groen:

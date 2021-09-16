@@ -70,6 +70,11 @@ namespace TLCGen.ViewModels
                     if (raise) RaisePropertyChanged<object>(broadcast: true);
                 }
 
+                if (Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde && !RISViewModel.RisEta.HasValue)
+                {
+                    RISViewModel.RisEta = _ingreep.RijTijdGehinderd;
+                }
+
                 RaisePropertyChanged("");
 
                 var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);

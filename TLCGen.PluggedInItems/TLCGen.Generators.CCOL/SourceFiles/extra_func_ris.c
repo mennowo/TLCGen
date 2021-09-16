@@ -80,14 +80,16 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
 
          /* test op juiste signalgroup en approach */
          /* -------------------------------------- */
-         if ( ( (fc >= 0 )  && ( fc < FC_MAX ) ) && (strcmp(RIS_PRIOREQUEST_AP[r].signalGroup, FC_code[fc]) == 0) ) {   /* test op juiste signalgroup - voor openbaar vervoer */
-            correct= TRUE;    /* signalGroup is correct  */
-         }
-         else if  (RIS_PRIOREQUEST_AP[r].approach == approach_id) {           /* test op juiste approach - voor hulpdiensten */
-            correct= TRUE;    /* approach is correct */
-         }
-         else {
-             /*  correct= FALSE; */ /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
+         if ( !strlen(intersection) || (strcmp(RIS_PRIOREQUEST_AP[r].intersection, intersection) == 0) ) {                /* test op juiste intersection */
+            if ( ( (fc >= 0 ) && ( fc < FC_MAX ) ) && (strcmp(RIS_PRIOREQUEST_AP[r].signalGroup, FC_code[fc]) == 0) ) {   /* test op juiste signalgroup - voor openbaar vervoer */
+               correct= TRUE;    /* signalGroup is correct  */
+            }
+            else if  (RIS_PRIOREQUEST_AP[r].approach == approach_id) {           /* test op juiste approach - voor hulpdiensten */
+               correct= TRUE;    /* approach is correct */
+            }
+            else {
+                /*  correct= FALSE; */ /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
+            }
          }
 
          /* test op inmelding */

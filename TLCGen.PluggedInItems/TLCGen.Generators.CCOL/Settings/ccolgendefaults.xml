@@ -810,6 +810,12 @@
             <Description>Meeverlengen fase _E1_</Description>
           </Setting>
           <Setting>
+            <Default>hardmv</Default>
+            <Setting>hardmv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Hard meeverlengen fase _E1_ met fase _E2_</Description>
+          </Setting>
+          <Setting>
             <Default>mv</Default>
             <Setting>mv</Setting>
             <Type>Parameter</Type>
