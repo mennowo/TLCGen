@@ -7,12 +7,9 @@
     <projectFile>TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="Variety of small fixes 2">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeverlengenCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeverlengenCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_ris.c" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_ris.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/TableGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/TableGenerator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,8 +113,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/Signalen/RatelTikkerModel.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Attributes/IOElementAttribute.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RoBuGroverCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Sources/CCOLGeneratorGenerateRgvC.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_prio.c" />
@@ -165,8 +160,10 @@
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeverlengenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func_ris.c" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/PrioriteitsTab/DataTypes/Meldingen/PrioIngreepInUitMeldingViewModel.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/TableGenerator.cs" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/SpecificationGenerator.cs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -397,7 +394,7 @@
       <workItem from="1629620947930" duration="1397000" />
       <workItem from="1631520841737" duration="5761000" />
       <workItem from="1631717702655" duration="1193000" />
-      <workItem from="1631776568474" duration="2244000" />
+      <workItem from="1631776568474" duration="6316000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -630,7 +627,14 @@
       <option name="project" value="LOCAL" />
       <updated>1631608944934</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Variety of small fixes 2">
+      <created>1631779273693</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1631779273693</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -692,7 +696,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="realfunc update, ris fixes" />
     <MESSAGE value="fix voor fout met handmatig rangeren IO" />
     <MESSAGE value="aanzet templates voor prio" />
     <MESSAGE value="Templates voor prio mark 1" />
@@ -717,7 +720,8 @@
     <MESSAGE value="Fix for prio met nalopen" />
     <MESSAGE value="Version 0.9.10" />
     <MESSAGE value="Variety of small fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Variety of small fixes" />
+    <MESSAGE value="Variety of small fixes 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Variety of small fixes 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -766,19 +770,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Specificator/SpecificationGenerator.cs</url>
-          <line>95</line>
-          <properties documentPath="C:\Users\menno\CodingConnected\Repos\TLCGen\TLCGen.PluggedInItems\TLCGen.Specificator\SpecificationGenerator.cs" initialLine="95" containingFunctionPresentation="method 'GenerateSpecification'">
-            <startOffsets>
-              <option value="4000" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4054" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TLCGen/ViewModels/Other/TemplateProviderViewModel.cs</url>

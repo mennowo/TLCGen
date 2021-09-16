@@ -556,7 +556,17 @@ namespace TLCGen.Specificator
             {
                 new List<string> { (string)Texts["Generic_Modulen"], (string)Texts["Generic_Fasen"] }
             };
-            c.ModuleMolen.Modules.ForEach(m => l.Add(new List<string> { m.Naam, m.Fasen.Select(x => x.FaseCyclus).Aggregate((y, z) => y + ", " + z) }));
+            foreach (var m in c.ModuleMolen.Modules)
+            {
+                if (m.Fasen.Any())
+                {
+                    l.Add(new List<string> { m.Naam, m.Fasen.Select(x => x.FaseCyclus).Aggregate((y, z) => y + ", " + z) });
+                }
+                else
+                {
+                    l.Add(new List<string> {"leeg"});
+                }
+            }
             items.Add(OpenXmlHelper.GetTable(l));
 
             return items;
