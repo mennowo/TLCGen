@@ -155,7 +155,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         hfWsg = "hf_wsg_nl_fcfc";
                                     }
                                     
-                                    extraConditions = $"!fka({_fcpf}{fcm.Naam}) && {hfWsg}({hfWsgArgs})";
+                                    extraConditions = $"{hfWsg}({hfWsgArgs})";
                                 }
                             }
                             if (!fcm.MeeverlengenTypeInstelbaarOpStraat)

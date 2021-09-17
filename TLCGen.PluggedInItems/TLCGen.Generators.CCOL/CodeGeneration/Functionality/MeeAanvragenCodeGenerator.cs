@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -67,6 +68,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
         
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (!c.InterSignaalGroep.Meeaanvragen.Any()) return base.GetFunctionLocalVariables(c, type);
+                    return new List<CCOLLocalVariable> {new("int", "fc")};
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+        
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
@@ -83,8 +96,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (!c.InterSignaalGroep.Meeaanvragen.Any()) return "";
+                    
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Reset meeaanvraag BIT */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FC_MAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}A[fc] &= ~BIT4;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine("");
                     
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
@@ -174,7 +197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch(ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (!G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (R[{_fcpf}{ma.FaseVan}] && !TRG[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
                                     sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}]));");

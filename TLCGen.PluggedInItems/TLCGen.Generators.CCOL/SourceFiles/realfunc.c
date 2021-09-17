@@ -829,7 +829,8 @@ bool Maatgevend_Groen(count fc)   /* fasecyclus                                 
       k = TO_pointer[fc][n];
 #endif
 
-      if(A[k] && (AAPR[k] || PAR[k] || RA[k] || AA[k]))
+      if (A[k] && (AAPR[k] /* && (AAPR[k] < BIT4)*/ || PAR[k]) || RA[k] || AA[k]) /* AAPR & BIT4 = RR, AAPR & BIT5 = PFPR nog niet waar, zie extra_func.c */
+      /* AAPR & BIT6 = Priomelding via set_PRIRLW , zie ccolfunc.c */
       {
         /* bepaal of G[fc] maatgevend is voor een groen-conflict */
         /* ----------------------------------------------------- */

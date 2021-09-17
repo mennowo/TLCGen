@@ -705,6 +705,32 @@ namespace TLCGen.ModelManagement
                     alert.PropertyChanged -= AlertMsgOnPropertyChanged;
                 }
             }
+            
+            // Rangeer elementen
+            if (Controller.Data.Intergroen && Controller.Fasen.Any(x => x.TGL != x.TGL_min))
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.TglMinChanged))
+                {
+                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
+                    {
+                        Background = Brushes.Thistle,
+                        Shown = true,
+                        Message = "***Let op!*** Deze intergroen regeling heeft TGLmin tijden die afwijken van TGL. Pas TGLmin desgewenst aan in de tab.add.",
+                        Type = ControllerAlertType.RangerenOldNew
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.TglMinChanged);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
         }
 
         private void AlertMsgOnPropertyChanged(object sender, PropertyChangedEventArgs e)

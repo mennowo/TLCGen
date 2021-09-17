@@ -1111,5 +1111,37 @@
         <Importance>0</Importance>
       </Data>
     </Default>
+    <Default>
+      <DefaultName>RIS OV simulatie bus</DefaultName>
+      <Category>Other</Category>
+      <Selector1>OV</Selector1>
+      <Selector2>BUS</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>PUBLICTRANSPORT</VehicleRole>
+        <VehicleSubrole>BUS</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>11</Importance>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RIS OV simulatie special vehicles</DefaultName>
+      <Category>Other</Category>
+      <Selector1>OV</Selector1>
+      <Selector2>SPECIALVEHICLES</Selector2>
+      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <VehicleRole>EMERGENCY</VehicleRole>
+        <VehicleSubrole>EMERGENCY</VehicleSubrole>
+        <Prioriteit>true</Prioriteit>
+        <Flow>0</Flow>
+        <Snelheid>50</Snelheid>
+        <Afstand>300</Afstand>
+        <Importance>15</Importance>
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>

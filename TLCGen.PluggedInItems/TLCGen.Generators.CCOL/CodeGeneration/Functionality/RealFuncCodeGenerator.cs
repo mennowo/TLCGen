@@ -484,6 +484,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     }
 
+                    sb.AppendLine($"{ts}{ts}CorrectieRealisatieTijd_Add();");
+                    sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
                     sb.AppendLine($"{ts}}}");
                     

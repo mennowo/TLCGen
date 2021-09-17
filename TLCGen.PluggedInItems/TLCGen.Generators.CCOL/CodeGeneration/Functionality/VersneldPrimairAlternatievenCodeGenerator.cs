@@ -31,6 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _hplact;
 	    private string _hnla;
 	    private string _schgs;
+	    private string _schrealgs;
 	    private string _hlos;
 	    private string _mar;
 
@@ -608,9 +609,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                                 if (first == false) sb.AppendLine();
                             }
+
+                            if (c.InterSignaalGroep.Gelijkstarten.Any())
+                            {
+                                foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                                {
+                                    var front = gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{gs:vannaar}]) " : $"{ts}{ts}";
+                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && (PAR[{_fcpf}{gs:naar}] || !A[PAR[{_fcpf}{gs:naar}]);");
+                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && (PAR[{_fcpf}{gs:van}] || !A[PAR[{_fcpf}{gs:van}]);");
+                                }
+                            }
+                            
                             sb.AppendLine($"{ts}}}");
-
-
                         }
 
                         yes = false;
@@ -851,6 +861,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
+            _schrealgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schrealgs");
             _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
             _mar = CCOLGeneratorSettingsProvider.Default.GetElementName("mar");
 

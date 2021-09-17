@@ -8,6 +8,7 @@ namespace TLCGen.Models
         WachttijdVoorspeller,
         RealFunc,
         RangerenOldNew,
+        TglMinChanged,
         FromPlugin
     }
 

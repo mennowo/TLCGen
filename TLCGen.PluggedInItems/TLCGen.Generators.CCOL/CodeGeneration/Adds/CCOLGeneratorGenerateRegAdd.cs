@@ -59,6 +59,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 sb.AppendLine();
+                sb.AppendLine("void CorrectieRealisatieTijd_Add(void)");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}/* let op! deze functie wordt in een loop aangeroepen (max. 100 iteraties). */");
+                sb.AppendLine("}");
+                sb.AppendLine();
                 sb.AppendLine("void BepaalRealisatieTijden_Add(void)");
                 sb.AppendLine("{");
                 sb.AppendLine("");

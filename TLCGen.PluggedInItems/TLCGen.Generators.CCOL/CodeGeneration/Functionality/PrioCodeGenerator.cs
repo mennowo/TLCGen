@@ -618,7 +618,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        var result2 = new List<CCOLLocalVariable> {new CCOLLocalVariable(c.GetBoolV(), "isHD", "FALSE")};
+                        var result2 = new List<CCOLLocalVariable> {new(c.GetBoolV(), "isHD", "FALSE")};
                         if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isWTV", "FALSE"));
                         return result2;
                     }
@@ -628,7 +628,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
                                                          x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)))
                     {
-                        return new List<CCOLLocalVariable> {new CCOLLocalVariable("int", "i", "0")};
+                        return new List<CCOLLocalVariable> {new("int", "i", "0")};
                     }
                     else return base.GetFunctionLocalVariables(c, type);
 
@@ -1552,7 +1552,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
-                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
+                                sb.AppendLine(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc 
+                                    ? $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~(BIT1|BIT2|BIT6);" 
+                                    : $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~PRIO_FM_BIT;");
                                 sb.AppendLine($"{ts}}}");
                             }
