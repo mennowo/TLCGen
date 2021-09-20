@@ -219,7 +219,7 @@ namespace TLCGen.Plugins.Timings
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if (!_timingsModel.TimingsToepassen)
                         return base.GetFunctionLocalVariables(c, type);
-                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i", defineCondition: "(defined NO_TIMETOX)") };
+                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i", defineCondition: "(!defined NO_TIMETOX)") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }

@@ -203,12 +203,19 @@ namespace TLCGen.ViewModels
             get => FaseCyclus.TGL;
             set
             {
-                if (value >= 0 && value >= TGL_min)
+                if (value >= 0 && (value >= TGL_min || ControllerAccessProvider.Default.Controller.Data.Intergroen))
                 {
                     FaseCyclus.TGL = value;
+                    if (ControllerAccessProvider.Default.Controller.Data.Intergroen)
+                    {
+                        FaseCyclus.TGL_min = value;
+                        RaisePropertyChanged<object>(nameof(TGL_min), broadcast: true);
+                    }
                 }
                 else
+                {
                     FaseCyclus.TGL = TGL_min;
+                }
                 RaisePropertyChanged<object>(nameof(TGL), broadcast: true);
             }
         }
@@ -221,8 +228,7 @@ namespace TLCGen.ViewModels
                 if (value >= 0)
                 {
                     FaseCyclus.TGL_min = value;
-                    if (TGL < value)
-                        TGL = value;
+                    if (TGL < value) TGL = value;
                 }
                 RaisePropertyChanged<object>(nameof(TGL_min), broadcast: true);
             }

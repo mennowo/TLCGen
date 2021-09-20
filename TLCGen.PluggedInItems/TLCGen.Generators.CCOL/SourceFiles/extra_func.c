@@ -173,7 +173,6 @@ bool ym_max_toV1(count i, mulv to_verschil)
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
 				if (TIG_max[i][k] < GK)  break;
 #else
-				if (TO_max[i][k] < GK)  break;
 				if (TO_max[i][k] <= GK)
                 {
 #ifndef NO_GGCONFLICT 

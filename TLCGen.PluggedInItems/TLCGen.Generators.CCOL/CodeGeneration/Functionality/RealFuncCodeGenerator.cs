@@ -256,14 +256,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-                    sb.AppendLine($"{ts}/* Alternatieve ruimte in memory element schrijven */");
-                    var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
                     var arTypes = new HashSet<AlternatieveRuimteTypeEnum>();
                     foreach (var f in c.Fasen)
                     {
                         arTypes.Add(f.AlternatieveRuimteType);
                     }
 
+                    if (arTypes.All(x => x == AlternatieveRuimteTypeEnum.RealRuimte)) return "";
+                    
+                    sb.AppendLine($"{ts}/* Alternatieve ruimte in memory element schrijven */");
+                    var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
+                    
+                    
                     if (arTypes.Count == 1 && arTypes.First() != AlternatieveRuimteTypeEnum.RealRuimte)
                     {
                         var tts = ts;

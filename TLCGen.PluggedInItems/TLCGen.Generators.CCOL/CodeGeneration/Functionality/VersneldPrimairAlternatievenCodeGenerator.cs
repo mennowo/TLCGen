@@ -612,11 +612,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             if (c.InterSignaalGroep.Gelijkstarten.Any())
                             {
+                                first = true;
                                 foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                                 {
+                                    if (first)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}/* PAR correcties gelijkstart synchronisaties */");
+                                        first = false;
+                                    }
+                                    
                                     var front = gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{gs:vannaar}]) " : $"{ts}{ts}";
-                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && (PAR[{_fcpf}{gs:naar}] || !A[PAR[{_fcpf}{gs:naar}]);");
-                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && (PAR[{_fcpf}{gs:van}] || !A[PAR[{_fcpf}{gs:van}]);");
+                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && (PAR[{_fcpf}{gs:naar}] || !A[{_fcpf}{gs:naar}]);");
+                                    sb.AppendLine($"{front}PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && (PAR[{_fcpf}{gs:van}] || !A[{_fcpf}{gs:van}]);");
                                 }
                             }
                             
