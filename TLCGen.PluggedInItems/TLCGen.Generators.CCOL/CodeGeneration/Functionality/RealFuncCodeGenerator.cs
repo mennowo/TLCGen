@@ -182,7 +182,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
 
                     if (fc1 == null || fc2 == null ||
-                        fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                        fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger ||
+                        c.InterSignaalGroep != null &&
+                        !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseVan && fc2.Naam == x.FaseNaar))
                     {
                         continue;
                     }
@@ -493,7 +495,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var fc2 = c.Fasen.First(x => x.Naam == grsync.FaseNaar);
 
                             if (fc1 == null || fc2 == null ||
-                                fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                                fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger ||
+                                c.InterSignaalGroep != null &&
+                                !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseVan && fc2.Naam == x.FaseNaar))
                             {
                                 continue;
                             }
