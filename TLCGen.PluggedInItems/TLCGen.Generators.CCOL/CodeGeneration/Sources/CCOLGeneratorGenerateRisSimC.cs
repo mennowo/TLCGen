@@ -38,7 +38,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#include \"xyprintf.h\"         /* declaratie xyprintf-functie   */");
             sb.AppendLine("#include \"prmvar.h\"           /* declaratie PRM[]              */");
             sb.AppendLine();
-            sb.AppendLine($"extern {c.GetBoolV()} display;");
+            sb.AppendLine("#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+            sb.AppendLine($"{ts}extern {c.GetBoolV()} display;");
+            sb.AppendLine("#endif");
             sb.AppendLine();
             sb.AppendLine("/* RIS-FI - ObjectID<Intersection, LaneID en ObjectID<SIgnalGroupID> */");
             sb.AppendLine("/* ================================================================= */");

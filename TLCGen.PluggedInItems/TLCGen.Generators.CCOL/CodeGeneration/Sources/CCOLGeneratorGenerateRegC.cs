@@ -237,6 +237,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCTop, ts));
             }
             sb.AppendLine();
+            sb.AppendLine($"{ts}#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+            sb.AppendLine($"{ts}{ts}extern {c.GetBoolV()} display;");
+            sb.AppendLine($"{ts}#endif");
+            sb.AppendLine();
 
            
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}reg.add\"");
