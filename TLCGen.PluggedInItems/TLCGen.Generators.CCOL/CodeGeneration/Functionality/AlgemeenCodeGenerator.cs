@@ -388,28 +388,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
-                    if (c.Data.PrmLoggingTfbMax)
+                     if (c.Data.PrmLoggingTfbMax)
                     {
                         if (c.Data.UitgangPerModule && c.Data.ModulenDisplayBitmapData.Any())
                             sb.AppendLine();
                         sb.AppendLine($"{ts}/* Onthouden hoogste tfb waarde + tijdstip */");
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FC_MAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}if (TFB_timer[fc]>PRM[{_prmpf}tfbmax])");
                         sb.AppendLine($"{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(100, 0, \"Hoogste TFB waarde\");");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(100, 1, \"------------------\");");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(100, 2, \"Fc %s TFB:%4d sec\", FC_code[fc], TFB_timer[fc]);");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 92, 0, \"Hoogste TFB waarde\");");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 92, 1, \"------------------\");");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 92, 2, \"Fc %s TFB:%4d sec\", FC_code[fc], TFB_timer[fc]);");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(100, 3, \"Tijd %02d\", (CIF_KLOK[CIF_UUR]));");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(107, 3,     \":%02d\", (CIF_KLOK[CIF_MINUUT]));");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(110, 3,     \":%02d\", (CIF_KLOK[CIF_SECONDE]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 92, 3, \"Tijd %02d\", (CIF_KLOK[CIF_UUR]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 99, 3,     \":%02d\", (CIF_KLOK[CIF_MINUUT]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(102, 3,     \":%02d\", (CIF_KLOK[CIF_SECONDE]));");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(100, 4, \"d.d. %02d\", (CIF_KLOK[CIF_DAG]));");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(107, 4,     \"-%02d\", (CIF_KLOK[CIF_MAAND]));");
-                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(110, 4,     \"-%04d\", (CIF_KLOK[CIF_JAAR]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 92, 4, \"d.d. %02d\", (CIF_KLOK[CIF_DAG]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf( 99, 4,     \"-%02d\", (CIF_KLOK[CIF_MAAND]));");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(102, 4,     \"-%04d\", (CIF_KLOK[CIF_JAAR]));");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}{ts}{ts}#endif");
                         sb.AppendLine();

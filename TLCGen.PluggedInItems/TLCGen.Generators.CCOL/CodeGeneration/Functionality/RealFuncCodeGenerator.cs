@@ -540,13 +540,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
                     sb.AppendLine($"{ts}}}");
                     
-                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || defined (VISSIM)");
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}#if (!defined (AUTOMAAT) && !defined AUTOMAAT_TEST || defined (VISSIM)) && !defined NO_PRINT_REALTIJD");
+                    sb.AppendLine($"{ts}if (display) {{");
+                    sb.AppendLine($"{ts}{ts}xyprintf(92, 6, \"REALtijden  min  max \");");
+                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FC_MAX; ++i)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(118, 1 + i, \"MM[mrealtijd%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(139, 1 + i, \"MM[mrealtijdmin%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(163, 1 + i, \"MM[mrealtijdmax%s]=%4d\", FC_code[i], MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(108, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
                     sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}#endif");
                     
                     return sb.ToString();

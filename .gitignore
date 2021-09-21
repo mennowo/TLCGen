@@ -212,6 +212,7 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 .paket/paket.exe
+.idea/.idea.TLCGen/.idea/workspace.xml
 
 # dlls
 *.dll

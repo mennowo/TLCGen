@@ -103,6 +103,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"rissimvar.h\"   /* RIS routines                   */");
             }
+            sb.AppendLine($"{ts}{ts}extern {c.GetBoolV()} display;");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");

@@ -38,6 +38,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#include \"xyprintf.h\"         /* declaratie xyprintf-functie   */");
             sb.AppendLine("#include \"prmvar.h\"           /* declaratie PRM[]              */");
             sb.AppendLine();
+            sb.AppendLine($"extern {c.GetBoolV()} display;");
+            sb.AppendLine();
             sb.AppendLine("/* RIS-FI - ObjectID<Intersection, LaneID en ObjectID<SIgnalGroupID> */");
             sb.AppendLine("/* ================================================================= */");
             sb.AppendLine("/* The ID of the intersection can be retrieved from the ITF controlData section, ");
@@ -215,17 +217,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"");
             sb.AppendLine($"{ts}/* Display ris_lanes met ItsStations */");
             sb.AppendLine($"{ts}/* --------------------------------- */");
-            var i = 15;
+            sb.AppendLine($"{ts}if (display) {{");
+            var i = 16;
             foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
-                sb.AppendLine($"{ts}xyprintf(40, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
+                sb.AppendLine($"{ts}{ts}xyprintf(32, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
                 ++i;
             }
+            sb.AppendLine($"{ts}}}");
             sb.AppendLine($"");
             sb.AppendLine($"{ts}/* Display aantal ItsStations en PrioRequests */");
             sb.AppendLine($"{ts}/* ------------------------------------------ */  ");
-            sb.AppendLine($"{ts}xyprintf(40, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
-            sb.AppendLine($"{ts}xyprintf(40, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}if (display) {{");
+            sb.AppendLine($"{ts}{ts}xyprintf(32, {i + 1}, \"ItsStation  =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}{ts}xyprintf(32, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex  =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}}}");
             sb.AppendLine($"{ts}#endif");
 
             sb.AppendLine("}");
