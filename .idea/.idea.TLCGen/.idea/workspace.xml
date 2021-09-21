@@ -9,12 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.paket/Paket.Restore.targets" beforeDir="false" afterPath="$PROJECT_DIR$/.paket/Paket.Restore.targets" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/InterSignaalGroep/GelijkstartModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/InterSignaalGroep/GelijkstartModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VersneldPrimairAlternatievenCodeGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VersneldPrimairAlternatievenCodeGenerator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func.c" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/realfunc.c" beforeDir="false" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/realfunc.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,9 +154,7 @@
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/prio.c" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Adds/CCOLGeneratorGenerateRegAdd.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/PrioCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/realfunc.c" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/MeeverlengenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Parts/TLCGen.Settings/Settings/tlcgendefaultdefaults.xml" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/ControllerAlertMessage.cs" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.ModelManager/TLCGenModelManager.cs" />
@@ -167,9 +162,11 @@
       <option value="$PROJECT_DIR$/build.cake" />
       <option value="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Dependencies/Models/Models/InterSignaalGroep/GelijkstartModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/VersneldPrimairAlternatievenCodeGenerator.cs" />
-      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Plugins.Timings/TimingsPlugin.cs" />
+      <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/FasenTab/DataTypes/FaseCyclusViewModel.cs" />
       <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/extra_func.c" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/SourceFiles/realfunc.c" />
+      <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/RealFuncCodeGenerator.cs" />
     </changedPaths>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -402,7 +399,9 @@
       <workItem from="1631717702655" duration="1193000" />
       <workItem from="1631776568474" duration="7100000" />
       <workItem from="1631862214799" duration="10504000" />
-      <workItem from="1632141076651" duration="1326000" />
+      <workItem from="1632141076651" duration="2209000" />
+      <workItem from="1632208357309" duration="315000" />
+      <workItem from="1632213885510" duration="1301000" />
     </task>
     <task id="LOCAL-00001" summary="Rider, fix voor oud detectortype VecomIngang">
       <created>1616147072185</created>
@@ -656,7 +655,14 @@
       <option name="project" value="LOCAL" />
       <updated>1631874776685</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Variety of small fixes 4">
+      <created>1632142684145</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1632142684145</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -718,7 +724,6 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Templates voor prio mark 1" />
     <MESSAGE value="Combinatie templates for PRIO ingrepen" />
     <MESSAGE value="RIS defaults, fixes UC4 timings" />
     <MESSAGE value="TLCGen versie 0.9.5" />
@@ -743,7 +748,8 @@
     <MESSAGE value="Variety of small fixes 2" />
     <MESSAGE value="Fix MK PRIO bit" />
     <MESSAGE value="Variery of small fixes 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Variery of small fixes 3" />
+    <MESSAGE value="Variety of small fixes 4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Variety of small fixes 4" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

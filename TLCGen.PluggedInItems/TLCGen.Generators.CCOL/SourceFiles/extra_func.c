@@ -698,7 +698,7 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition)
     switch (PRM[prm])
     {
     case 1:
-        if (A[j] && R[i] && !TRG[i]) A[i] |= BIT4;
+        if (A[j] && R[j] && !TRG[j]) A[i] |= BIT4;
         break;
     case 2:
         if (RA[j]) A[i] |= BIT4;

@@ -1394,3 +1394,29 @@ mulv Real_Ruimte(count fc,    /* fasecyclus                                     
   return ruimte;
 
 }
+
+bool Real_Los(count fc1,        /* fasecyclus 1                                       */
+               count fc2,        /* fasecyclus 2                                       */
+               mulv  t2_t1,      /* inlooptijd  fc2 op fc1                             */
+               count hlos2,      /* hulpelement fc2 los toegestaan                     */
+               bool gelijk)      /* extra voorwaarde t.b.v. gelijkstart               */
+{
+   bool result = 0;
+   
+   hlos2 = A[fc2] && !(A[fc2] & ~(BIT4 | BIT8));    /* aanvraag dan mag hij los                        */
+   gelijk |= A[fc1] && !(A[fc1] & ~(BIT4|BIT8)) &&  /* Sowieso gelijk als beide alleen mee-aanvraag.   */
+             A[fc2] && !(A[fc2] & ~(BIT4|BIT8)) ||
+      !A[fc1] && !A[fc2];                           /* Bij beide geen A ook uitgaan van gelijk,         */
+                                                    /* van belang tbv eventueel onderling doorzetten PG */
+
+   /* -------------------------------------------------------------------------------------------------------------------------------------------------------- */
+   /* tbv gelijkstart/inlopen                                                                                                                                  */
+   /* -------------------------------------------------------------------------------------------------------------------------------------------------------- */
+   if (gelijk)     result |= Corr_Gel(fc1, fc2, TRUE);         /* beide alleen meeanvraag, gelijkstart */
+   else if (hlos2) result |= Corr_Min(fc1, fc2, t2_t1,  TRUE); /* fc2 inlopen op fc1 */
+   
+   /* --------------------------------- */
+   /* Wijzigingen aangeven via result   */
+   /* --------------------------------- */
+   return result;
+}

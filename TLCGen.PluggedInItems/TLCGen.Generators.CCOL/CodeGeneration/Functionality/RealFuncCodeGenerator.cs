@@ -173,6 +173,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _mrealtijdmax, fc.Naam));
                 }
             }
+            
+            if (_sortedSyncs.oneWay.Any())
+            {
+                foreach (var grsync in _sortedSyncs.oneWay)
+                {
+                    var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
+                    var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
+
+                    if (fc1 == null || fc2 == null ||
+                        fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                    {
+                        continue;
+                    }
+
+                    if (!helps.Contains($"h{_hlos}{grsync.FaseNaar}"))
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hlos}{grsync.FaseNaar}", _hlos, grsync.FaseNaar));
+                        helps.Add($"h{_hlos}{grsync.FaseNaar}");
+                    }
+                }
+            }
 
             foreach (var fot in _groenSyncData.FictieveConflicten)
             {
@@ -462,6 +483,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                           $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "FALSE")});");
                         }
                         sb.AppendLine();
+                    }
+
+                    if (_sortedSyncs.oneWay.Any())
+                    {
+                        foreach (var grsync in _sortedSyncs.oneWay)
+                        {
+                            var fc1 = c.Fasen.First(x => x.Naam == grsync.FaseVan);
+                            var fc2 = c.Fasen.First(x => x.Naam == grsync.FaseNaar);
+
+                            if (fc1 == null || fc2 == null ||
+                                fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                            {
+                                continue;
+                            }
+
+                            sb.AppendLine($"{ts}{ts}wijziging |= Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, 0, {_hpf}{_hlos}{grsync:naar}, FALSE);");
+                        }
                     }
 
                     if (_groenSyncData.FictieveConflicten.Any())
