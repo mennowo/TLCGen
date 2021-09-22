@@ -14,7 +14,7 @@ BESTAND:   realfunc.c
 *                                   - CCA/Ddo   04032021: (AAPR[fc1] && (AAPR[fc1]<BIT6)) aangevuld bij AAPR[fc1]
 *                                   - CCA/Ddo   07032021: Alleen ophogin minend en maxend tijd toegestaan
 *                                   - CCA/DDo   08032021: && !(P[fc1] || P[fc2])
-* 3.0     14-04-2021                - CCA       14042021: Aanpassingen Steven Oostdorp verwerkt:
+* 3.0     14-04-2021                - CCA       14042021: Aanpassingen Steven van Oostendorp verwerkt:
 *                                                         Bugfix REALTIJD[fc2] ivm voorstart > 0, regel 217(11112020)
 *                                                         Bij realtijd<=1 geen sync als RV[fc1] , regel 204 (07122020) 
 *                                                         VTG3_Real_Los gewijzigd                                                   

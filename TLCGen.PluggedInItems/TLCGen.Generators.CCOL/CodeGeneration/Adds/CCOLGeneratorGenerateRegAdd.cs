@@ -59,9 +59,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 sb.AppendLine();
-                sb.AppendLine("void CorrectieRealisatieTijd_Add(void)");
+                sb.AppendLine($"{c.GetBoolV()} CorrectieRealisatieTijd_Add(void)");
                 sb.AppendLine("{");
                 sb.AppendLine($"{ts}/* let op! deze functie wordt in een loop aangeroepen (max. 100 iteraties). */");
+                sb.AppendLine($"{ts}boolv aanpassing = FALSE;");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine($"{ts}/* Voeg hier zonodig eigen code toe, bijv:"); 
+                sb.AppendLine($"{ts} * aanpassing |= VTG2_Real_Los(fc32, fc31, T_max[tinl3231], T_max[tinl3132], hinl32, hinl31, hlos32, hlos31, (IH[hdrtk311] && IH[hdrtk321]));");
+                sb.AppendLine($"{ts} * aanpassing |= VTG2_Real_Los(fc31, fc32, T_max[tinl3132], T_max[tinl3231], hinl31, hinl32, hlos31, hlos32, (IH[hdrtk311] && IH[hdrtk321]));");
+                sb.AppendLine($"{ts} */");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine($"{ts}return aanpassing;");
                 sb.AppendLine("}");
                 sb.AppendLine();
                 sb.AppendLine("void BepaalRealisatieTijden_Add(void)");

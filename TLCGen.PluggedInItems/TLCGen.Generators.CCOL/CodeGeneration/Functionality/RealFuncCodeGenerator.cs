@@ -184,15 +184,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (fc1 == null || fc2 == null ||
                         fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger ||
                         c.InterSignaalGroep != null &&
-                        !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseVan && fc2.Naam == x.FaseNaar))
+                        !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseNaar && fc2.Naam == x.FaseVan))
                     {
                         continue;
                     }
 
-                    if (!helps.Contains($"h{_hlos}{grsync.FaseNaar}"))
+                    if (!helps.Contains($"h{_hlos}{grsync.FaseVan}"))
                     {
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hlos}{grsync.FaseNaar}", _hlos, grsync.FaseNaar));
-                        helps.Add($"h{_hlos}{grsync.FaseNaar}");
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hlos}{grsync.FaseVan}", _hlos, grsync.FaseVan));
+                        helps.Add($"h{_hlos}{grsync.FaseVan}");
                     }
                 }
             }
@@ -489,20 +489,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (_sortedSyncs.oneWay.Any())
                     {
+                        first = true;
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
-                            var fc1 = c.Fasen.First(x => x.Naam == grsync.FaseVan);
-                            var fc2 = c.Fasen.First(x => x.Naam == grsync.FaseNaar);
+                            var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
+                            var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
 
                             if (fc1 == null || fc2 == null ||
                                 fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger ||
                                 c.InterSignaalGroep != null &&
-                                !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseVan && fc2.Naam == x.FaseNaar))
+                                !c.InterSignaalGroep.Nalopen.Any(x => fc1.Naam == x.FaseNaar && fc2.Naam == x.FaseVan))
                             {
                                 continue;
                             }
+                            
+                            if (first)
+                            {
+                                sb.AppendLine($"{ts}{ts}/* Inrijden */");
+                                first = false;
+                            }
 
-                            sb.AppendLine($"{ts}{ts}wijziging |= Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, 0, {_hpf}{_hlos}{grsync:naar}, FALSE);");
+                            sb.AppendLine($"{ts}{ts}wijziging |= Real_Los({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, 0, {_hpf}{_hlos}{grsync:van}, FALSE);");
                         }
                     }
 
@@ -530,7 +537,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     }
 
-                    sb.AppendLine($"{ts}{ts}CorrectieRealisatieTijd_Add();");
+                    sb.AppendLine($"{ts}{ts}wijziging |= CorrectieRealisatieTijd_Add();");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
                     sb.AppendLine($"{ts}}}");
