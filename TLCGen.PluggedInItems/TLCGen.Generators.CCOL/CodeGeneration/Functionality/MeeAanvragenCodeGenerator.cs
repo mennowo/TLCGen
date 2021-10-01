@@ -101,12 +101,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
 
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Reset meeaanvraag BIT */");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FC_MAX; ++fc)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}A[fc] &= ~BIT4;");
-                    sb.AppendLine($"{ts}}}");
                     sb.AppendLine("");
                     
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
