@@ -1397,3 +1397,201 @@ boolv kp(count i)
    return FALSE;
 }
 #endif
+
+#ifndef AUTOMAAT
+
+/* Controleer of de naloop er niet eerder uit gaat dan de voedende richting.
+*
+* Parameters:
+* voedend: de voedende richting
+* volg: de volgrichting
+* tnlfg: naloop na vast groen
+* tnlfg: vaste naloop na groen
+* tnldet: detectie afhanelijke naloop
+* halt: halteer de simulatie als de naloop niet wordt gerespecteerd.
+*
+* Returnwaardes: TRUE als OK, FALSE als de naloop er eerder uit is dan
+* de voedende richting.
+*/
+
+boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt)
+{
+#ifndef AUTOMAAT
+   if (EG[volg] && (G[voedend] || T[tnlfg] || (TR_timer[voedend] < (T_max[tnleg] - TGL_max[voedend])) || (tnldet == NG ? FALSE : T[tnldet]) ))
+   {
+      /* Schrijf naar de CCOL-terminal */
+      code helpstr[30]; /* help string */
+      uber_puts(PROMPT_code);
+      uber_puts("Ongewenste situatie: EG[");
+      uber_puts(FC_code[volg]);
+      uber_puts("] en G[");
+      uber_puts(FC_code[voedend]);
+      uber_puts("]");
+      uber_puts(" / ");
+      datetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts(" / ");
+      timetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts("\n");
+
+      /* Schrijf naar de debugwindow in de testomgeving. */
+      xyprintf(0, 0, "Ongewenste situatie: naloop niet gerespecteerd. Zie terminal.");
+      if (halt)
+      {
+         stuffkey(F5KEY);
+      }
+      return FALSE;
+   }
+#endif /* AUTOMAAT */
+   return TRUE; /* Alles OK. */
+}
+
+
+/* Controleer of de voedende richting er niet eerder uit gaat dan dat de
+* naloop is gerealiseerd.
+*
+* Parameters:
+* voedend: de voedende richting
+* volg: de volgrichting
+* t/prm: maximale inrijtijd
+* halt: halteer de simulatie als de naloop niet wordt gerespecteerd.
+*
+* Return waardes: TRUE als OK, FALSE als de voedende richting er eerder uit
+* is dan startgroen van de naloop.
+*/
+
+boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt)
+{
+#ifndef AUTOMAAT
+   if (!G[volg] && G[voedend]  && (TG_timer[voedend] > (tinr == NG ? TRUE : T_max[tinr])))
+   {
+      /* Schrijf naar de CCOL-terminal */
+      code helpstr[30]; /* help string */
+      uber_puts(PROMPT_code);
+      uber_puts("Ongewenste situatie: R[");
+      uber_puts(FC_code[volg]);
+      uber_puts("] en niet tijdig groen ");
+      uber_puts(FC_code[voedend]);
+      uber_puts("]");
+      uber_puts(" / ");
+      datetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts(" / ");
+      timetostr(helpstr);
+      uber_puts(helpstr);
+      uber_puts("\n");
+
+      /* Schrijf naar de debugwindow in de testomgeving. */
+      xyprintf(31, 2, "Ongewenste situatie: naloop niet gerespecteerd. Zie terminal.");
+      if (halt)
+      {
+         stuffkey(F5KEY);
+      }
+      return FALSE;
+   }
+#endif /* AUTOMAAT */
+   return TRUE; /* Alles OK. */
+}
+
+/* Controleer gelijkstart */
+boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt)
+{
+   {
+
+      if (cond)
+      {
+         if ((EVS[fc1] && !G[fc2]) || (EVS[fc2] && !G[fc1]))
+         {
+            /* Schrijf naar de CCOL-terminal */
+            code helpstr[30];  /* help string */
+            uber_puts(PROMPT_code);
+            uber_puts("Ongewenste situatie: !GS fc");
+            uber_puts(FC_code[fc1]);
+            uber_puts(" en fc");
+            uber_puts(FC_code[fc2]);
+            uber_puts("");
+            uber_puts(" / ");
+            datetostr(helpstr);
+            uber_puts(helpstr);
+            uber_puts(" / ");
+            timetostr(helpstr);
+            uber_puts(helpstr);
+            uber_puts("\n");
+
+            /* Schrijf naar de debugwindow in de testomgeving. */
+            xyprintf(0, 0, "Ongewenste situatie: gelijstart niet gerespecteerd. Zie terminal.");
+            if (halt)
+            {
+               stuffkey(F5KEY);
+            }
+            return FALSE;
+         }
+      }
+
+      return TRUE; /* Alles OK. */
+   }
+}
+
+/* Controleer voorstart */
+boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt)
+{
+   {
+
+      if (cond)
+      {
+         if ((EVS[fc1] && !(G[fc2]||GL[fc2]) && !RR[fc2]&BIT6))
+         {
+            /* Schrijf naar de CCOL-terminal */
+            code helpstr[30];  /* help string */
+            uber_puts(PROMPT_code);
+            uber_puts("Ongewenste situatie: !VS fc");
+            uber_puts(FC_code[fc1]);
+            uber_puts(" en fc");
+            uber_puts(FC_code[fc2]);
+            uber_puts("");
+            uber_puts(" / ");
+            datetostr(helpstr);
+            uber_puts(helpstr);
+            uber_puts(" / ");
+            timetostr(helpstr);
+            uber_puts(helpstr);
+            uber_puts("\n");
+
+            /* Schrijf naar de debugwindow in de testomgeving. */
+            xyprintf(0, 0, "Ongewenste situatie: VS niet gerespecteerd. Zie terminal.");
+            if (halt)
+            {
+               stuffkey(F5KEY);
+            }
+            return FALSE;
+         }
+      }
+
+      return TRUE; /* Alles OK. */
+   }
+}
+
+#endif
+
+boolv set_MRLW_nl(count i, count j, boolv period)
+/* meerealisatie uitgebreid */
+/* Als de voedende richting niet primair komt ten gevolge van een ov ingreep (BIT6), 
+ * sturen wij de naloop middels een aangepast set_MRLW (zonder !fkaa) naar RA.
+ * set_MRLW volstaat niet omdat hier op !fkaa wordt getest. 
+ * i=naloop, j=voedend, period=voorwaarde 
+ */
+{
+   if (AA[j] && period /* && RV[i] */ && !AA[i] && (!RR[i] || P[i]) && !BL[i] && !kaa(i) /* !fkaa */ 
+      && (!RR[j] || P[j]) && !BL[j]) {
+      PR[i] = AR[i] = BR[i] = MR[i] = FALSE;  /* reset old realizationtype   */
+      AA[i] = MR[i] = TRUE;                   /* set actuation               */
+      A[i] |= BIT4;                           /* set demand                  */
+      if (PR[j])  PR[i] = PR[j];              /* set primary realization     */
+      if (AR[j])  AR[i] = AR[j];              /* set alternative realization */
+      if (BR[j])  BR[i] = BR[j];              /* set priority realization    */
+      return (TRUE);
+   }
+   return (FALSE);
+}
+

@@ -212,10 +212,6 @@ namespace TLCGen.Plugins.Timings
                     if (!_timingsModel.TimingsUsePredictions)
                         return base.GetFunctionLocalVariables(c, type);
                     return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "fc") };
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (!_timingsModel.TimingsUsePredictions)
-                        return base.GetFunctionLocalVariables(c, type);
-                    return new List<CCOLLocalVariable> { new CCOLLocalVariable("int", "i") };
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if (!_timingsModel.TimingsToepassen)
                         return base.GetFunctionLocalVariables(c, type);

@@ -43,10 +43,12 @@ void NaloopVtgDet(count fc1, count fc2, count dk, count hdk, count tnl)
  *  Functionele omschrijving :
  *    Verzorgt een naloop van fc1 naar fc2 vanaf eindgroen fc1
  *    Nalooptijd wordt geherstart tijdens G aanvoerrichting
+ *    Naloop wordt tevens vastgehouden tijdens RA van een voedende richting
  **************************************************************************/
 void NaloopEG(count fc1, count fc2, count tnl)
 {
    RT[tnl] = G[fc1];
+   if (RA[fc1])             RW[fc2] |= BIT2;
    if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
    berekenTGK_max(fc1,fc2,T_max[tnl]);
    berekenTNL(fc2,tnl);
@@ -84,7 +86,7 @@ void NaloopEGDet(count fc1, count fc2, count tnl, ...)
 
 
 /**************************************************************************
- *  Functie  : NaloopEG
+ *  Functie  : NaloopCV
  *
  *  Functionele omschrijving :
  *    Verzorgt een naloop van fc1 naar fc2 vanaf eindgroen fc1
@@ -182,7 +184,7 @@ void NaloopFGDet(count fc1, count fc2, count tnl, ...)
  */
 #if !defined (CCOLFUNC) || defined (LWMLFUNC2)
 
-bool yml_cv_pr_nl(bool *prml[], count ml, count ml_max)
+boolv yml_cv_pr_nl(boolv *prml[], count ml, count ml_max)
 {
 	register count i;
 	register count hml = ml + 1;		/* next module			*/

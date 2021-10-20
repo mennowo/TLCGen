@@ -631,7 +631,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
-                
+
                 // corrections
                 foreach (var nl1 in controller.InterSignaalGroep.Nalopen)
                 {
@@ -641,6 +641,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var fc2 = controller.Fasen.FirstOrDefault(x => x.Naam == fc2Name);
                     var i1 = controller.Fasen.IndexOf(fc1);
                     var i2 = controller.Fasen.IndexOf(fc2);
+                    
+                    foreach (var nl2 in controller.InterSignaalGroep.Nalopen)
+                    {
+                        var fc12Name = nl2.FaseVan;
+                        var fc22Name = nl2.FaseNaar;
+                        var fc12 = controller.Fasen.FirstOrDefault(x => x.Naam == fc12Name);
+                        var fc22 = controller.Fasen.FirstOrDefault(x => x.Naam == fc22Name);
+                        var i12 = controller.Fasen.IndexOf(fc12);
+                        var i22 = controller.Fasen.IndexOf(fc22);
+                        if (matrix[i2, i22] > -1)
+                        {
+                            matrix[i1, i12] = -2;
+                            matrix[i12, i1] = -2;
+                        }
+                    }
+                    
                     // loop de conflicten van de nalooprichting
                     foreach (var cf in controller.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == fc2Name))
                     {

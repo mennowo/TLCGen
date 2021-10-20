@@ -9,6 +9,11 @@
 	#include "nlvar.h"
 #endif
 
+#if !defined (AUTOMAAT)
+    #include "keysdef.c"   /* Definitie toetsenbord t.b.v. stuffkey  */
+    #include "xyprintf.h" /* Printen debuginfo                      */
+#endif 
+
 bool ym_maxV1(count i, mulv to_verschil);
 bool ym_max_prmV1(count i, count prm, mulv to_verschil);
 bool ym_max_toV1(count i, mulv to_verschil);
@@ -84,4 +89,13 @@ extern mulv DVG[];
 extern int Knipper_1Hz;
 extern int Knipper_2Hz;
 
-#endif
+#if !defined (AUTOMAAT) 
+   boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt);
+   boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt);
+   boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt);
+   boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt);
+#endif 
+
+boolv set_MRLW_nl(count i, count j, boolv period);
+
+#endif // #define EXTRA_FUNC

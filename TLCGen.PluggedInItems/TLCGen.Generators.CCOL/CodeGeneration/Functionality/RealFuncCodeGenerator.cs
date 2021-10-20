@@ -448,7 +448,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // late release of inlopen
                             else
                             {
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == NaloopTypeEnum.EindeGroen && x.FaseVan == grsync.FaseNaar);
+                                if (nl == null)
+                                {
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min_nl({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                }
                             }
                         }
                     }
@@ -492,6 +500,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         first = true;
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
+                            var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == NaloopTypeEnum.EindeGroen && x.FaseVan == grsync.FaseNaar);
+                            if (nl != null) continue;
+                            
                             var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                             var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
 

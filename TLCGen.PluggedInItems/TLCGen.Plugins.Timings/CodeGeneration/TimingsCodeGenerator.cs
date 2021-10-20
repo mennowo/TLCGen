@@ -99,8 +99,6 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    return 40;
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 50;
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
@@ -119,7 +117,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 case CCOLCodeTypeEnum.PrioCAfkappen:
                     return 20;
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    return 30;
+                    return 40;
                 default:
                     return 0;
             }

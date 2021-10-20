@@ -237,7 +237,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCSystemApplication => 10,
                 CCOLCodeTypeEnum.RegCWachtgroen => 20,
                 CCOLCodeTypeEnum.RegCFileVerwerking => 10,
-                CCOLCodeTypeEnum.PrioCPARCorrecties => 10,
+                CCOLCodeTypeEnum.PrioCPARCorrecties => 20,
                 CCOLCodeTypeEnum.RegCVerlenggroen => 40,
                 CCOLCodeTypeEnum.RegCMaxgroen => 40,
                 _ => 0
