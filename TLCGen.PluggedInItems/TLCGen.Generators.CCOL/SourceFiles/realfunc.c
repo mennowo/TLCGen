@@ -737,17 +737,15 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
 /* gewenst is. Als dit niet is gebeurd (bewust of onbewust) kan er geen synchronisatie plaatsvinden.                                                                                                          */
 /* ========================================================================================================================================================================================================== */
 #if PLMAX
-void Synchroniseer_SP(bool period)
+void Synchroniseer_SP(bool  period)
 {
   register count fc1, fc2;
-
-  if (!period) return;
 
   for (fc1=0; fc1<FC_MAX; fc1++)
   {
     for (fc2=0; fc2<FC_MAX; fc2++)
     {
-      if (REAL_SYN[fc1][fc2] && ((TOTXA_PL[fc2]==0) && (TOTXB_PL[fc2]>0) && (REALTIJD[fc2] > (TOTXB_PL[fc2] + 10)) || (TX_timer==TXB_PL[fc2]) && (REALTIJD[fc2] >= 10)))
+      if (period && REAL_SYN[fc1][fc2] && ((TOTXA_PL[fc2]==0) && (TOTXB_PL[fc2]>0) && (REALTIJD[fc2] > (TOTXB_PL[fc2] + 10)) || (TX_timer==TXB_PL[fc2]) && (REALTIJD[fc2] >= 10)))
       {
          REAL_SYN[fc1][fc2] = FALSE;
       }
