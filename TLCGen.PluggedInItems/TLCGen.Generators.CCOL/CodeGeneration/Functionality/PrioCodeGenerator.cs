@@ -121,6 +121,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmftsminwt;
         private CCOLGeneratorCodeStringSettingModel _cftsvtg;
         private CCOLGeneratorCodeStringSettingModel _cftscyc;
+        private CCOLGeneratorCodeStringSettingModel _prmvtgcat;
 
 #pragma warning restore 0649
 
@@ -257,6 +258,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 !string.IsNullOrWhiteSpace(prio.Koplus) && prio.Koplus != "NG")
             {
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schvi}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvi, prio.FaseCyclus, prio.Type.GetDescription()));
+            }
+
+            if (prio.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector) ||
+                prio.MeldingenData.Uitmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
+            {
+                var vtgtype = prio.Type
+                    switch
+                    {
+                        PrioIngreepVoertuigTypeEnum.Bus => 1,
+                        PrioIngreepVoertuigTypeEnum.Tram => 2,
+                        _ => 0
+                    };
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvtgcat}{CCOLCodeHelper.GetPriorityName(c, prio)}", vtgtype, CCOLElementTimeTypeEnum.None, _prmvtgcat, CCOLCodeHelper.GetPriorityName(c, prio)));
             }
 
             var opties = 0;
@@ -1141,18 +1155,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
                     foreach (var prio in c.PrioData.PrioIngrepen)
                     {
-                        var vtgType = "";
+                        var vtgType = $"PRM[{_prmpf}{_prmvtgcat}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
                         if (!int.TryParse(prio.FaseCyclus, out var fcNmr)) fcNmr = -1;
-                        vtgType = prio.Type switch
-                        {
-                            PrioIngreepVoertuigTypeEnum.Tram => "CIF_TRAM",
-                            PrioIngreepVoertuigTypeEnum.Bus => "CIF_BUS",
-                            PrioIngreepVoertuigTypeEnum.Vrachtwagen => "NG",
-                            PrioIngreepVoertuigTypeEnum.Auto => "NG",
-                            PrioIngreepVoertuigTypeEnum.Fiets => "NG",
-                            PrioIngreepVoertuigTypeEnum.NG => "NG",
-                            _ => throw new IndexOutOfRangeException($"PrioIngreepVoertuigTypeEnum {prio.Type} wordt niet ondersteund")
-                        };
 
                         if (prio.MeldingenData.Inmeldingen.Any())
                         {

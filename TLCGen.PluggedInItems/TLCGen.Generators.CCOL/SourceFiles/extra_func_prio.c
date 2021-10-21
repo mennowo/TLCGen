@@ -15,7 +15,7 @@ bool DSIMeldingPRIO_V1(
 #endif
 
 	if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) return FALSE;
-	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
+	if (vtgtype > 0 && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
 	if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
 	if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
 
