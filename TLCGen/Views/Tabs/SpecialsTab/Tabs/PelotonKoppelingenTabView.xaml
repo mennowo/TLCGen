@@ -41,7 +41,7 @@
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=Richting}" Value="Uitgaand">
+                                    <DataTrigger Binding="{Binding Path=HasRichting}" Value="False">
                                         <Setter Property="IsEnabled" Value="False" />
                                         <Setter Property="Background" Value="LightGray" />
                                         <Setter Property="Foreground" Value="LightGray" />

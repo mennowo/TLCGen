@@ -28,7 +28,7 @@
 #include "lwmlvar.h"    /* uitgebreide modulen                                            */
 #include "plvar.h"      /* signaalplannen                                                 */
 #include "plevar.h"     /* uitgebreide signaalplannen                                     */
-#if (CCOL_V >= 95) && !defined NO_TIGMAX
+#if (CCOL_V >= 95)
 #include "trigvar.h"    /* intergroen variabelen                                          */
 #else
 #include "tigvar.h"     /* intergroen variabelen                                          */

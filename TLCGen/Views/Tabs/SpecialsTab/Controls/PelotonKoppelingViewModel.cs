@@ -245,6 +245,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool HasRichting => !(Richting == PelotonKoppelingRichtingEnum.Uitgaand && Type == PelotonKoppelingTypeEnum.RHDHV);
+        
         public PelotonKoppelingRichtingEnum Richting
         {
             get => PelotonKoppeling.Richting;
@@ -264,6 +266,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(IsInkomendDenHaag));
                 RaisePropertyChanged(nameof(IsInkomendRHDHV));
                 RaisePropertyChanged(nameof(IsUitgaand));
+                RaisePropertyChanged(nameof(HasRichting));
             }
         }
 
@@ -278,6 +281,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(IsInkomendDenHaag));
                 RaisePropertyChanged(nameof(IsInkomendRHDHV));
                 RaisePropertyChanged(nameof(IsUitgaand));
+                RaisePropertyChanged(nameof(HasRichting));
             }
         }
 

@@ -200,8 +200,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.SynchronisatiesType = value;
-                MatrixChanged = true;
-                SelectedSynchronisatie = ConflictMatrix?[0, 1];
+                SelectedSynchronisatie.UpdateView();
                 TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
                 RaisePropertyChanged(nameof(IsSynchRealType));

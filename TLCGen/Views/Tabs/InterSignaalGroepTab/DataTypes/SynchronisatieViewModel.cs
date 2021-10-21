@@ -769,6 +769,12 @@ namespace TLCGen.ViewModels
             return true;
         }
 
+        public void UpdateView()
+        {
+            RaisePropertyChanged("");
+            if (SelectedObject is ViewModelBase vmb) vmb.RaisePropertyChanged("");
+        }
+
         #endregion // Public methods
 
         #region Constructor
