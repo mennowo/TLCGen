@@ -1766,6 +1766,12 @@
             <Type>Counter</Type>
             <Description>Bijhouden aantal fietsers tbv peloton prio voor fase _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>vtgcat</Default>
+            <Setting>vtgcat</Setting>
+            <Type>Parameter</Type>
+            <Description>Voertuigcategorie DSI voor prio ingreep _E1_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

@@ -359,22 +359,15 @@ bool Corr_Real(count fc1,        /* fasecyclus 1                                
   /* - FC2 MOET DAN NIET SYNCHRONISEREN MET FC1, WANT DIE IS AL GEWEEST!!!!!                       */
   /* - FC2 MOET NOG WEL PRIMAIR REALISEREN.                                                        */
   /* --------------------------------------------------------------------------------------------- */
-  if (PG[fc1] && RV[fc1] && !TRG[fc1] && PR[fc2] && !PG[fc2]
-  #if CCOL_V >= 110 
-      && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) /* CCA/DDo 08032021: && !(P[fc1] || P[fc2]) toegevoegd om synchroniseren af te dwingen als richtingen moeten komen */
-  #endif
-     )
-  {
-     REAL_SYN[fc1][fc2] = period;
-     PG[fc1] &= ~PRIMAIR_OVERSLAG; 
-  }
-
-  /* --------------------------------------------------------------------------------------------- */
   /* - Bij een realtijd van <= 1 hoeft er geen synchronisatie plaats te vinden, als RV[fc1].       */
   /*   Fc1 had op dat moment al in RA moeten staan, er kan niet langer gewacht worden op fc1.      */
   /*   Dus dan geen correcties/synchronisaties obv fc1. De regeling moet door.                     */
   /* --------------------------------------------------------------------------------------------- */
-  if (RV[fc1] && (REALTIJD[fc1] <= 1))
+  if (PG[fc1] && RV[fc1] && !TRG[fc1] && PR[fc2] && !PG[fc2]
+#if CCOL_V >= 110 
+     && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) /* CCA/DDo 08032021: && !(P[fc1] || P[fc2]) toegevoegd om synchroniseren af te dwingen als richtingen moeten komen */
+#endif
+     || RV[fc1] && (REALTIJD[fc1] <= 1))
   {
      REAL_SYN[fc1][fc2] = FALSE;
   }
@@ -383,7 +376,7 @@ bool Corr_Real(count fc1,        /* fasecyclus 1                                
   /* --------------------------------------------------------------------------------------------- */
   else
   {
-    REAL_SYN[fc1][fc2] = period;
+     REAL_SYN[fc1][fc2] = period;
   }
 
   /* --------------------------------------------------------------------------------------------- */
@@ -744,17 +737,15 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
 /* gewenst is. Als dit niet is gebeurd (bewust of onbewust) kan er geen synchronisatie plaatsvinden.                                                                                                          */
 /* ========================================================================================================================================================================================================== */
 #if PLMAX
-void Synchroniseer_SP(bool period)
+void Synchroniseer_SP(bool  period)
 {
   register count fc1, fc2;
-
-  if (!period) return;
 
   for (fc1=0; fc1<FC_MAX; fc1++)
   {
     for (fc2=0; fc2<FC_MAX; fc2++)
     {
-      if (REAL_SYN[fc1][fc2] && ((TOTXA_PL[fc2]==0) && (TOTXB_PL[fc2]>0) && (REALTIJD[fc2] > (TOTXB_PL[fc2] + 10)) || (TX_timer==TXB_PL[fc2]) && (REALTIJD[fc2] >= 10)))
+      if (period && REAL_SYN[fc1][fc2] && ((TOTXA_PL[fc2]==0) && (TOTXB_PL[fc2]>0) && (REALTIJD[fc2] > (TOTXB_PL[fc2] + 10)) || (TX_timer==TXB_PL[fc2]) && (REALTIJD[fc2] >= 10)))
       {
          REAL_SYN[fc1][fc2] = FALSE;
       }
