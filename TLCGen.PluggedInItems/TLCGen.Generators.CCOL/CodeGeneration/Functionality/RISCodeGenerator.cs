@@ -21,6 +21,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
         private CCOLGeneratorCodeStringSettingModel _prmrisapproachid;
         private CCOLGeneratorCodeStringSettingModel _schrisgeencheckopsg;
+        private CCOLGeneratorCodeStringSettingModel _schrisaanvraag;
+        private CCOLGeneratorCodeStringSettingModel _schrisverlengen;
 #pragma warning restore 0649
         
         private string _prmlijn;
@@ -45,6 +47,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     0,
                     CCOLElementTimeTypeEnum.SCH_type,
                     _schrisgeencheckopsg));
+                
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schrisaanvraag}",
+                    1,
+                    CCOLElementTimeTypeEnum.SCH_type,
+                    _schrisaanvraag));
+                
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schrisverlengen}",
+                    1,
+                    CCOLElementTimeTypeEnum.SCH_type,
+                    _schrisverlengen));
 
                 foreach (var l in risModel.RISFasen.Where(l => l.LaneData.Any()))
                 {
@@ -128,6 +142,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.PrioCInitPrio => new List<CCOLLocalVariable>{new("int", "i")},  
+                CCOLCodeTypeEnum.RegCAanvragen => new List<CCOLLocalVariable>{new("int", "fc")},  
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new("int", "i")},  
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -141,6 +158,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCMeetkriterium => 110,
                 CCOLCodeTypeEnum.RegCPostSystemApplication => 110,
                 CCOLCodeTypeEnum.SysHBeforeUserDefines => 110,
+                CCOLCodeTypeEnum.PrioCIncludes => 20,
+                CCOLCodeTypeEnum.PrioCTop => 60,
+                CCOLCodeTypeEnum.PrioCInitPrio => 20,
+                CCOLCodeTypeEnum.PrioCInUitMelden => 90,
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 20,
                 _ => 0
             };
         }
@@ -157,6 +179,57 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.PrioCIncludes:
+                    sb.AppendLine($"{ts}#include \"extra_func_ris.h\"");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.PrioCTop:
+                    sb.AppendLine("extern mulv granted_verstrekt[FCMAX];");
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.PrioCInitPrio:
+                    sb.AppendLine("{ts}/* initialisatie variabelen granted_verstrekt */");
+                    sb.AppendLine("{ts}/* ------------------------------------------ */");
+                    sb.AppendLine("{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine("{ts}{{");
+                    sb.AppendLine("{ts}{ts}granted_verstrekt[i] = 0;");
+                    sb.AppendLine("{ts}}}");
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.PrioCInUitMelden:
+                    sb.AppendLine($"{ts}/* Bijhouden granted verstrekt */");
+                    sb.AppendLine($"{ts}Bepaal_Granted_Verstrekt();");
+                    if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
+                    {
+                        sb.AppendLine();
+                        foreach (var hd in c.PrioData.HDIngrepen)
+                        {
+                            if (hd.MeerealiserendeFaseCycli.Any())
+                            {
+                                foreach (var fc in hd.MeerealiserendeFaseCycli)
+                                {
+                                    sb.AppendLine($"{ts}if (granted_verstrekt[{_fcpf}{fc.FaseCyclus}] == 2) granted_verstrekt[{_fcpf}{hd.FaseCyclus}] = 2;");
+                                }
+                            }
+                        }
+                    }
+
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
+                    sb.AppendLine($"{ts}/* nooit einde groen als granted verstrekt */");
+                    sb.AppendLine($"{ts}/* --------------------------------------- */");
+                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}if (granted_verstrekt[i] > 0)     /* als granted is verstrekt dan altijd groen aanhouden */");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}if (G[i] && !MG[i]) YV[i] |= PRIO_YV_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}YM[i] |= PRIO_YM_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}Z[i] = FALSE;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     sb.AppendLine($"/* Systeem naam in het topologiebestand */");
                     sb.AppendLine($"/* ------------------------------------ */");
@@ -210,6 +283,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
+
+                    sb.AppendLine($"{ts}/* aanvragen RIS schakelbaar, 1 schakelaar voor het schakelen van alle aanvragen */");
+                    sb.AppendLine($"{ts}if (!SCH[schrisaanvraag])");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}A[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
 
                     var ovRis = c.PrioData.PrioIngrepen
                         .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => 
@@ -274,6 +356,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* verlengen RIS schakelbaar, 1 schakelaar voor het schakelen van alle verlengfuncties */");
+                    sb.AppendLine($"{ts}if (!SCH[schrisverlengen])");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}");
+                    sb.AppendLine($"{ts}");
+                    sb.AppendLine($"{ts}");
+                    sb.AppendLine($"{ts}");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");

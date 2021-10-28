@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
@@ -34,6 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         // read from other objects
         private string _mperiod;
         private string _hplact;
+        private string _hhd;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -233,11 +233,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCTop => 10,
+                CCOLCodeTypeEnum.RegCAanvragen => 80, 
                 CCOLCodeTypeEnum.RegCInitApplication => 10,
                 CCOLCodeTypeEnum.RegCSystemApplication => 10,
                 CCOLCodeTypeEnum.RegCWachtgroen => 20,
                 CCOLCodeTypeEnum.RegCFileVerwerking => 10,
                 CCOLCodeTypeEnum.PrioCPARCorrecties => 20,
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => 30,
                 CCOLCodeTypeEnum.RegCVerlenggroen => 40,
                 CCOLCodeTypeEnum.RegCMaxgroen => 40,
                 _ => 0
@@ -251,6 +253,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    foreach (var fi in c.FileIngrepen.Where(x => x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep))
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* Geen wachtstand aanvraag bij file stroomafwaarts */");
+                            first = false;
+                        }
+
+                        foreach (var f in fi.TeDoserenSignaalGroepen)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}] && !G[{_fcpf}{f.FaseCyclus}]) A[{_fcpf}{f.FaseCyclus}] &= ~BIT2;");
+                        }
+                    }
+
+                    first = true;
+                    foreach (var fi in c.FileIngrepen.Where(x => x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep))
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* Geen mee aanvraag bij file stroomafwaarts */");
+                            first = false;
+                        }
+
+                        foreach (var f in fi.TeDoserenSignaalGroepen)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}] && !G[{_fcpf}{f.FaseCyclus}]) A[{_fcpf}{f.FaseCyclus}] &= ~BIT4;");
+                        }
+                    }
+
+                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     if (c.FileIngrepen.Any(x => x.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit && 
@@ -258,7 +292,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 x.AlternatieveGroentijdenSet != "NG") && 
                         c.Fasen.Any())
                     {
-                        first = true;
                         foreach (var fi in c.FileIngrepen.Where(x => x.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit &&
                                                                      !string.IsNullOrWhiteSpace(x.AlternatieveGroentijdenSet) &&
                                                                      x.AlternatieveGroentijdenSet != "NG"))
@@ -298,7 +331,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine("");
 
                         foreach (var fi in c.FileIngrepen)
-                            {
+                        {
                             if (fi.EerlijkDoseren)
                             {
                                 sb.AppendLine($"/* File ingreep {fi.Naam} */");
@@ -390,6 +423,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}}}");
                     }
+
+                    if (c.FileIngrepen.Any(x => x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep))
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Geen wachtstand bij file stroomafwaarts */");
+                        tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            tts += ts;
+                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                        }
+
+                        foreach (var fi in c.FileIngrepen)
+                        {
+                            foreach (var tdfc in fi.TeDoserenSignaalGroepen)
+                            {
+                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fi.Naam}]) WS[{_fcpf}{tdfc.FaseCyclus}] &= ~BIT4;");
+                            }
+                        }
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                        }
+                    }
+
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
@@ -407,12 +467,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MaximaleGroentijd)))
                             sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
                         if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MinimaleRoodtijd)))
-                            sb.AppendLine($"{ts}{ts}X[fc] &= ~BIT5;");
+                            sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT5;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }
 
-                    first = true;
                     foreach (var fm in c.FileIngrepen)
                     {
                         if (!first) sb.AppendLine();
@@ -646,14 +705,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     _ => ""
                                 };
                                 sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
                                 sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
                                 var rest = "";
                                 var irest = 1;
                                 if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
                                 {
-                                    rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}";
+                                    rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}]";
                                 }
                                 else
                                 {
@@ -667,7 +726,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
                                     {
                                         ++irest;
-                                        rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
+                                        rest += $", PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}]";
                                     }
                                 }
 
@@ -709,23 +768,50 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
                         {
-                            sb.AppendLine($"{ts}/* Eenmalige afkappen op start file ingreep {fm.Naam} */");
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.AfkappenOpStartFile))
+                            sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
+                            foreach (var tdfc in fm.TeDoserenSignaalGroepen)
                             {
-                                sb.AppendLine($"{ts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !(MK[{_fcpf}{tdfc.FaseCyclus}] & BIT6)) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                if (tdfc.AfkappenOpStartFile)
+                                {
+                                    sb.AppendLine($"{ts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SH[{_hpf}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                }
+                                
+                                if (tdfc.MaximaleGroentijd)
+                                {
+                                    sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                }
+
+                                sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.Append($"{ts}{ts}if (");
+                                if (tdfc.AfkappenOpStartFile)
+                                {
+                                    sb.Append($"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
+                                }
+
+                                if (tdfc.MaximaleGroentijd)
+                                {
+                                    sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
+                                }
+                                sb.AppendLine($") Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+
+                                sb.AppendLine($"{ts}}}");
                             }
                             sb.AppendLine();
                         }
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
                         {
-                            sb.AppendLine($"{ts}/* Afkappen op bereiken maximaal groen tijdens file ingreep {fm.Naam} */");
+                            first = true;
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MaximaleGroentijd))
                             {
+                                if (first)
+                                {
+                                    sb.AppendLine($"{ts}/* Afkappen op bereiken maximaal groen tijdens file ingreep {fm.Naam} */");
+                                    first = false;
+                                }
                                 sb.AppendLine($"{ts}/* Maximale groentijd fase {tdfc.FaseCyclus} */");
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
                                 sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && ET[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
@@ -739,8 +825,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
                             {
                                 sb.AppendLine($"{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) X[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}}}");
                             }
                         }
 
@@ -805,6 +894,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
+                    var fcWithFileIngreep = c.FileIngrepen.SelectMany(x => x.TeDoserenSignaalGroepen).Distinct();
+                    first = true;
+                    foreach (var fc in fcWithFileIngreep)
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
+                            first = false;
+                        }
+                        if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                            sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                            sb.AppendLine($"{ts}}}");
+                        }
+                    }
+                    
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -826,7 +935,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                         {
-                            if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
+                            if (fm is { FileMetingLocatie: FileMetingLocatieEnum.NaStopstreep })
                             {
                                 if (!yes)
                                 {
@@ -842,6 +951,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
+                    foreach (var fi in c.FileIngrepen.Where(x => x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep))
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* Geen prioriteit bij file stroom afwaarts */");
+                            first = false;
+                        }
+
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}])");
+                        sb.AppendLine($"{ts}{{");
+                        foreach (var f in fi.TeDoserenSignaalGroepen)
+                        {
+                            var prios = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == f.FaseCyclus);
+                            foreach (var p in prios)
+                            {
+                                sb.AppendLine($"{ts}{ts}iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = poGeenPrioriteit;");
+                            }
+                        }
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    return sb.ToString();
+
                 default:
                     return null;
             }
@@ -851,6 +983,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
 
             return base.SetSettings(settings);
         }

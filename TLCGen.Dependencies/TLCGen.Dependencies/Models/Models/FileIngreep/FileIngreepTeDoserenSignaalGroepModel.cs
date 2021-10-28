@@ -4,7 +4,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class FileIngreepTeDoserenSignaalGroepModel : IComparable
+    public class FileIngreepTeDoserenSignaalGroepModel : IComparable, IEquatable<FileIngreepTeDoserenSignaalGroepModel>
     {
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
@@ -20,6 +20,26 @@ namespace TLCGen.Models
         public int CompareTo(object obj)
         {
             return FaseCyclus.CompareTo(((FileIngreepTeDoserenSignaalGroepModel)obj).FaseCyclus);
+        }
+
+        public bool Equals(FileIngreepTeDoserenSignaalGroepModel other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return FaseCyclus == other.FaseCyclus;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((FileIngreepTeDoserenSignaalGroepModel)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (FaseCyclus != null ? FaseCyclus.GetHashCode() : 0);
         }
     }
 }

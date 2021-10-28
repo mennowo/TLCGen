@@ -540,3 +540,28 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
    }
    return (number);
 }
+
+void Bepaal_Granted_Verstrekt(void)
+{
+   count    fc, i;
+   rif_int  priotypefc_id;
+   register rif_int r = 0;
+
+   for (i = 0; i < FCMAX; ++i)
+   {
+      granted_verstrekt[i] = 0;
+   }
+
+   while (r < RIS_PRIOREQUEST_AP_NUMBER)
+   {
+      if (RIS_PRIOREQUEST_EX_AP[r].prioState == RIF_PRIORITIZATIONSTATE_GRANTED)
+      {
+         priotypefc_id = RIS_PRIOREQUEST_EX_AP[r].prioControlState;
+         fc = (count)iFC_PRIOix[priotypefc_id];
+         granted_verstrekt[fc] = 1;
+         if ((RIS_PRIOREQUEST_AP[r].role == RIF_VEHICLEROLE_EMERGENCY) && (RIS_PRIOREQUEST_AP[r].subrole == RIF_VEHICLESUBROLE_EMERGENCY)) { granted_verstrekt[fc] = 2; }   /* granted verstrekt door hulpdienst ingreep */
+      }
+      r++;
+   }
+}
+

@@ -15,7 +15,9 @@
    #include "sysdef.c"  /* definitie typen variabelen	    */
    #include "rif.inc"   /* declaratie RIS Interface         */
 
-
+/* Dedicated variabelen */
+/* ==================== */
+   mulv granted_verstrekt[FCMAX];  /* granted via SSM verstrekt, richting mag niet naar rood gestuurd worden       */
 
 /* declaratie functies */
 /* =================== */
@@ -27,5 +29,7 @@
 
    rif_int ris_verstuur_ssm(rif_int priotypefc_id);
 
+   void Bepaal_Granted_Verstrekt(void);
+    
 #endif /* __EXTRA_FUNC_RIS_H  */
 

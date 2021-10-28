@@ -1994,6 +1994,18 @@
             <Type>Schakelaar</Type>
             <Description>Niet checken op signaalgroep bij RIS aanvragen en verlengen</Description>
           </Setting>
+          <Setting>
+            <Default>risaanvraag</Default>
+            <Setting>risaanvraag</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Globaal in of uitschakelen aanvragen via RIS</Description>
+          </Setting>
+          <Setting>
+            <Default>risverlengen</Default>
+            <Setting>risverlengen</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Globaal in of uitschakelen verlengen via RIS</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
