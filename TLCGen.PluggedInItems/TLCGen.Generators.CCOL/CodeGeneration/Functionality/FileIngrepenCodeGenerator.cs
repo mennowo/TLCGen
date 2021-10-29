@@ -802,23 +802,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
-                        if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
-                        {
-                            first = true;
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MaximaleGroentijd))
-                            {
-                                if (first)
-                                {
-                                    sb.AppendLine($"{ts}/* Afkappen op bereiken maximaal groen tijdens file ingreep {fm.Naam} */");
-                                    first = false;
-                                }
-                                sb.AppendLine($"{ts}/* Maximale groentijd fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && ET[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
-                            }
-                            sb.AppendLine();
-                        }
-
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
                         {
                             sb.AppendLine($"{ts}/* Minimale roodtijden tijdens file ingreep {fm.Naam} */");
