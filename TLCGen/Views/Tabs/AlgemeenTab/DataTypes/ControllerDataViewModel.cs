@@ -166,6 +166,7 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged(nameof(IsCCOLVersieLowerThan9));
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThan9));
+                RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo110));
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
                 MessengerInstance.Send(new CCOLVersionChangedMessage(oldValue, _Controller.Data.CCOLVersie));
@@ -249,6 +250,10 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public bool IsCCOLVersieHigherThanOrEqualTo9 => CCOLVersie >= CCOLVersieEnum.CCOL9;
+        
+        
+        [Browsable(false)]
+        public bool IsCCOLVersieHigherThanOrEqualTo110 => CCOLVersie >= CCOLVersieEnum.CCOL110;
 
         [Browsable(false)]
         public bool IsCCOLVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;
@@ -286,7 +291,7 @@ namespace TLCGen.ViewModels
                     _Controller.Data.SegmentDisplayType = value;
                     _Controller.Data.SetSegmentOutputs();
                 }
-                RaisePropertyChanged<object>(nameof(SegmentDisplayType), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -330,7 +335,7 @@ namespace TLCGen.ViewModels
                         _Controller.Data.ModulenDisplayBitmapData.Clear();
                     }
                 }
-                RaisePropertyChanged<object>(nameof(SegmentDisplayType), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -341,7 +346,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.FixatieMogelijk = value;
-                RaisePropertyChanged<object>(nameof(FixatieMogelijk), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -352,7 +357,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.BijkomenTijdensFixatie = value;
-                RaisePropertyChanged<object>(nameof(BijkomenTijdensFixatie), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -363,7 +368,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.TypeGroentijden = value;
-                RaisePropertyChanged<object>(nameof(TypeGroentijden), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }
@@ -375,7 +380,19 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.TVGAMaxAlsDefaultGroentijdSet = value;
-                RaisePropertyChanged<object>(nameof(TVGAMaxAlsDefaultGroentijdSet), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        [Description("TDHA_max gebruikt voor hiaatijden")]
+        [BrowsableCondition("IsCCOLVersieHigherThanOrEqualTo110")]
+        public bool TDHAMaxToepassen
+        {
+            get => _Controller?.Data?.TDHAMaxToepassen ?? false;
+            set
+            {
+                _Controller.Data.TDHAMaxToepassen = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -386,7 +403,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.ToevoegenOVM = value;
-                RaisePropertyChanged<object>(nameof(ToevoegenOVM), broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 

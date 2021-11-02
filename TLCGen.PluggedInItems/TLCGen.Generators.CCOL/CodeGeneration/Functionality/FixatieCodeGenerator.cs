@@ -51,16 +51,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override bool HasCCOLElements() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.PrioCAfkappen: return 50;
+                case CCOLCodeTypeEnum.PrioCAfkappen: return new []{50};
             }
-            return 0;
+            return null;
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
             switch (type)

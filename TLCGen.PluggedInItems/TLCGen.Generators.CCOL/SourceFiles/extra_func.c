@@ -1399,6 +1399,7 @@ boolv kp(count i)
 #endif
 
 #ifndef AUTOMAAT
+#if CCOL_V >= 110
 
 /* Controleer of de naloop er niet eerder uit gaat dan de voedende richting.
 *
@@ -1416,7 +1417,6 @@ boolv kp(count i)
 
 boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt)
 {
-#ifndef AUTOMAAT
    if (EG[volg] && (G[voedend] || T[tnlfg] || (TR_timer[voedend] < (T_max[tnleg] - TGL_max[voedend])) || (tnldet == NG ? FALSE : T[tnldet]) ))
    {
       /* Schrijf naar de CCOL-terminal */
@@ -1443,7 +1443,6 @@ boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, co
       }
       return FALSE;
    }
-#endif /* AUTOMAAT */
    return TRUE; /* Alles OK. */
 }
 
@@ -1463,7 +1462,6 @@ boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, co
 
 boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt)
 {
-#ifndef AUTOMAAT
    if (!G[volg] && G[voedend]  && (TG_timer[voedend] > (tinr == NG ? TRUE : T_max[tinr])))
    {
       /* Schrijf naar de CCOL-terminal */
@@ -1490,7 +1488,6 @@ boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt)
       }
       return FALSE;
    }
-#endif /* AUTOMAAT */
    return TRUE; /* Alles OK. */
 }
 
@@ -1572,7 +1569,8 @@ boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt)
    }
 }
 
-#endif
+#endif // #if CCOL_V >= 110
+#endif // #ifndef AUTOMAAT
 
 boolv set_MRLW_nl(count i, count j, boolv period)
 /* meerealisatie uitgebreid */
@@ -1582,8 +1580,13 @@ boolv set_MRLW_nl(count i, count j, boolv period)
  * i=naloop, j=voedend, period=voorwaarde 
  */
 {
-   if (AA[j] && period /* && RV[i] */ && !AA[i] && (!RR[i] || P[i]) && !BL[i] && !kaa(i) /* !fkaa */ 
-      && (!RR[j] || P[j]) && !BL[j]) {
+#if CCOL_V >= 110
+   if (AA[j] && period /* && RV[i] */ && !AA[i] && (!RR[i] || P[i]) && !BL[i] && !kaa(i) /* !fkaa */
+      && (!RR[j] || P[j]) && !BL[j]) {         
+#else
+   if (AA[j] && period /* && RV[i] */ && !AA[i] && !RR[i] && !BL[i] && !kaa(i) /* !fkaa */
+      && !RR[j] && !BL[j]) {         
+#endif
       PR[i] = AR[i] = BR[i] = MR[i] = FALSE;  /* reset old realizationtype   */
       AA[i] = MR[i] = TRUE;                   /* set actuation               */
       A[i] |= BIT4;                           /* set demand                  */

@@ -85,17 +85,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             throw new NotSupportedException();
         }
 
-        public virtual int HasCode(CCOLCodeTypeEnum type)
+        public virtual int[] HasCode(CCOLCodeTypeEnum type)
         {
-            return 0;
+            return null;
         }
 
         public virtual bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            return HasCode(type) != 0;
+            return HasCode(type) != null;
         }
 
-        public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             throw new NotSupportedException();
         }

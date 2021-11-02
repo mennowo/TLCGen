@@ -221,12 +221,12 @@ namespace TLCGen.Plugins.Timings
             }
         }
         
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return _codeGenerator.HasCode(type);
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             _codeGenerator._fcpf = _fcpf;
             _codeGenerator._schpf = _schpf;

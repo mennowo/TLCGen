@@ -44,13 +44,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
         
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.PrioCInUitMelden => 30,
-                CCOLCodeTypeEnum.RegCAanvragen => 90,
-                _ => 0
+                CCOLCodeTypeEnum.PrioCInUitMelden => new []{30},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{90},
+                _ => null
             };
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return result;
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

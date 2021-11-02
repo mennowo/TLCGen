@@ -67,19 +67,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         //public override bool HasCCOLBitmapInputs() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => 70,
-                CCOLCodeTypeEnum.RegCMeetkriterium => 40,
-                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => 20,
-                CCOLCodeTypeEnum.RegCPostSystemApplication => 90,
-                _ => 0
+                CCOLCodeTypeEnum.RegCPreApplication => new []{70},
+                CCOLCodeTypeEnum.RegCMeetkriterium => new []{40},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new []{20},
+                CCOLCodeTypeEnum.RegCPostSystemApplication => new []{90},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

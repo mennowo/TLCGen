@@ -149,25 +149,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCInitApplication => 110,
-                CCOLCodeTypeEnum.RegCAanvragen => 110,
-                CCOLCodeTypeEnum.RegCMeetkriterium => 110,
-                CCOLCodeTypeEnum.RegCPostSystemApplication => 110,
-                CCOLCodeTypeEnum.SysHBeforeUserDefines => 110,
-                CCOLCodeTypeEnum.PrioCIncludes => 20,
-                CCOLCodeTypeEnum.PrioCTop => 60,
-                CCOLCodeTypeEnum.PrioCInitPrio => 20,
-                CCOLCodeTypeEnum.PrioCInUitMelden => 90,
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 20,
-                _ => 0
+                CCOLCodeTypeEnum.RegCInitApplication => new []{110},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{110},
+                CCOLCodeTypeEnum.RegCMeetkriterium => new []{110},
+                CCOLCodeTypeEnum.RegCPostSystemApplication => new []{110},
+                CCOLCodeTypeEnum.SysHBeforeUserDefines => new []{110},
+                CCOLCodeTypeEnum.PrioCIncludes => new []{20},
+                CCOLCodeTypeEnum.PrioCTop => new []{60},
+                CCOLCodeTypeEnum.PrioCInitPrio => new []{20},
+                CCOLCodeTypeEnum.PrioCInUitMelden => new []{90},
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{20},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var risModel = c.RISData;
 
@@ -184,7 +184,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCTop:
-                    sb.AppendLine("extern mulv granted_verstrekt[FCMAX];");
+                    //sb.AppendLine("extern mulv granted_verstrekt[FCMAX];");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:

@@ -72,7 +72,7 @@ void NaloopEGDet(count fc1, count fc2, count tnl, ...)
 	RT[tnl] = FALSE;
 	while ((dp = va_arg(argpt, va_count)) != END)
 	{
-		RT[tnl] |= D[dp] && (G[fc1] || GL[fc1]);
+		RT[tnl] |= D[dp] && G[fc1] || ED[dp] && GL[fc1];
 	}
 	va_end(argpt);
 	if (RT[tnl] || T[tnl] || G[fc1] || GL[fc1]) RW[fc2] |= BIT2;

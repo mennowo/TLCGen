@@ -176,21 +176,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCTop => 70,
-                CCOLCodeTypeEnum.RegCPreApplication => 50,
-                CCOLCodeTypeEnum.RegCAanvragen => 70,
-                CCOLCodeTypeEnum.RegCMeetkriterium => 30,
-                CCOLCodeTypeEnum.RegCPostApplication => 40,
-                CCOLCodeTypeEnum.RegCWachtgroen => 30,
-                _ => 0
+                CCOLCodeTypeEnum.RegCTop => new []{70},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{50},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{70},
+                CCOLCodeTypeEnum.RegCMeetkriterium => new []{30},
+                CCOLCodeTypeEnum.RegCPostApplication => new []{40},
+                CCOLCodeTypeEnum.RegCWachtgroen => new []{30},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
             var ff = false;

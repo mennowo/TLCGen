@@ -68,19 +68,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override bool HasCCOLElements() => true;
         
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => 60,
-                CCOLCodeTypeEnum.RegCTop => 30,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 30,
-                CCOLCodeTypeEnum.RegCMaxgroen => 30,
-                _ => 0
+                CCOLCodeTypeEnum.RegCPreApplication => new []{60},
+                CCOLCodeTypeEnum.RegCTop => new []{30},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{30},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{30},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             if(c.RoBuGrover.ConflictGroepen?.Count == 0)
             {

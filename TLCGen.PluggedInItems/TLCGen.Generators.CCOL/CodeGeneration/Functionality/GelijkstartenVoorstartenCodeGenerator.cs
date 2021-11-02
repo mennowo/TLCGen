@@ -90,19 +90,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCSynchronisaties => 10,
-                CCOLCodeTypeEnum.RegCAlternatieven => 30,
-                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => 40,
-                CCOLCodeTypeEnum.PrioCIncludes => 10,
-                _ => 0
+                CCOLCodeTypeEnum.RegCSynchronisaties => new []{10},
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{30},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new []{40},
+                CCOLCodeTypeEnum.PrioCIncludes => new []{10},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             // return if no sync
             if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)

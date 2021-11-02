@@ -248,21 +248,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
         
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => 10,
-                CCOLCodeTypeEnum.RegCSynchronisaties => 30,
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => 10,
-                CCOLCodeTypeEnum.RegCMaxgroen => 70,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 70,
-                CCOLCodeTypeEnum.RegCAlternatieven => 90,
-                _ => 0
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{10},
+                CCOLCodeTypeEnum.RegCSynchronisaties => new []{30},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => new []{10},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{70},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{70},
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{90},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             // return if no sync
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc ||

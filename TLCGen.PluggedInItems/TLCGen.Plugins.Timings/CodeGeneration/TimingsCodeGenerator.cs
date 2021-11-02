@@ -95,31 +95,22 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             return elements;
         }
         
-        public int HasCode(CCOLCodeTypeEnum type)
+        public int[] HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    return 50;
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
-                    return 30;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 120;
-                case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    return 120;
-                case CCOLCodeTypeEnum.TabCIncludes:
-                case CCOLCodeTypeEnum.TabCControlParameters:
-                    return 120;
-                case CCOLCodeTypeEnum.PrioCRijTijdScenario:
-                    return 10;
-                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    return 40;
-                case CCOLCodeTypeEnum.PrioCAfkappen:
-                    return 20;
-                case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    return 40;
+                case CCOLCodeTypeEnum.RegCAlternatieven: return new []{50};
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling: return new []{30};
+                case CCOLCodeTypeEnum.RegCIncludes: return new []{120};
+                case CCOLCodeTypeEnum.RegCSystemApplication2: return new []{120};
+                case CCOLCodeTypeEnum.TabCIncludes: return new []{120};
+                case CCOLCodeTypeEnum.TabCControlParameters: return new []{120};
+                case CCOLCodeTypeEnum.PrioCRijTijdScenario: return new []{10};
+                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten: return new []{40};
+                case CCOLCodeTypeEnum.PrioCAfkappen: return new []{20};
+                case CCOLCodeTypeEnum.PrioCPARCorrecties: return new []{40};
                 default:
-                    return 0;
+                    return null;
             }
         }
 

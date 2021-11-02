@@ -170,19 +170,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override bool HasCCOLElements() => true;
     
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCKlokPerioden => 10,
-                CCOLCodeTypeEnum.RegCMaxgroen => 10,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 20,
-                CCOLCodeTypeEnum.RegCSystemApplication => 50,
-                _ => 0
+                CCOLCodeTypeEnum.RegCKlokPerioden => new []{10},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{10},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{20},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{50},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
             int iper;

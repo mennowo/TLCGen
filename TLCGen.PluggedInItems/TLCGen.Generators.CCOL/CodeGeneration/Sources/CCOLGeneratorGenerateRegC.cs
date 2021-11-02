@@ -208,7 +208,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCIncludes])
             {
-                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCIncludes, ts));
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCIncludes, ts, gen.Key));
             }
             
             sb.AppendLine();
@@ -234,7 +234,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCTop])
             {
-                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCTop, ts));
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCTop, ts, gen.Key));
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
@@ -258,7 +258,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCKwcApplication])
             {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCKwcApplication, ts));
+                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCKwcApplication, ts, gen.Key));
             }
             
             sb.AppendLine($"{ts}KwcApplication_Add();");

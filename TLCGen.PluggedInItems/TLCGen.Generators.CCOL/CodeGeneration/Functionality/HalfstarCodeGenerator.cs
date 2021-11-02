@@ -374,43 +374,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => 20,
-                CCOLCodeTypeEnum.HstCPreApplication => 10,
-                CCOLCodeTypeEnum.HstCKlokPerioden => 10,
-                CCOLCodeTypeEnum.HstCAanvragen => 10,
-                CCOLCodeTypeEnum.HstCVerlenggroen => 10,
-                CCOLCodeTypeEnum.HstCMaxgroen => 10,
-                CCOLCodeTypeEnum.HstCWachtgroen => 10,
-                CCOLCodeTypeEnum.HstCMeetkriterium => 10,
-                CCOLCodeTypeEnum.HstCMeeverlengen => 10,
-                CCOLCodeTypeEnum.HstCSynchronisaties => 10,
-                CCOLCodeTypeEnum.HstCAlternatief => 20,
-                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => 10,
-                CCOLCodeTypeEnum.HstCPostApplication => 10,
-                CCOLCodeTypeEnum.HstCPreSystemApplication => 10,
-                CCOLCodeTypeEnum.HstCPostSystemApplication => 10,
-                CCOLCodeTypeEnum.HstCPostDumpApplication => 10,
-                CCOLCodeTypeEnum.HstCPrioHalfstarSettings => 10,
-                CCOLCodeTypeEnum.PrioCInitPrio => 10,
-                CCOLCodeTypeEnum.PrioCInstellingen => 10,
-                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => 20,
-                CCOLCodeTypeEnum.PrioCOnderMaximum => 10,
-                CCOLCodeTypeEnum.PrioCAfkapGroen => 10,
-                CCOLCodeTypeEnum.PrioCStartGroenMomenten => 10,
-                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => 20,
-                CCOLCodeTypeEnum.PrioCAfkappen => 10,
-                CCOLCodeTypeEnum.PrioCTerugkomGroen => 10,
-                CCOLCodeTypeEnum.PrioCGroenVasthouden => 10,
-                CCOLCodeTypeEnum.PrioCMeetkriterium => 10,
-                _ => 0
+                CCOLCodeTypeEnum.RegCPreApplication => new []{20},
+                CCOLCodeTypeEnum.HstCPreApplication => new []{10},
+                CCOLCodeTypeEnum.HstCKlokPerioden => new []{10},
+                CCOLCodeTypeEnum.HstCAanvragen => new []{10},
+                CCOLCodeTypeEnum.HstCVerlenggroen => new []{10},
+                CCOLCodeTypeEnum.HstCMaxgroen => new []{10},
+                CCOLCodeTypeEnum.HstCWachtgroen => new []{10},
+                CCOLCodeTypeEnum.HstCMeetkriterium => new []{10},
+                CCOLCodeTypeEnum.HstCMeeverlengen => new []{10},
+                CCOLCodeTypeEnum.HstCSynchronisaties => new []{10},
+                CCOLCodeTypeEnum.HstCAlternatief => new []{20},
+                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new []{10},
+                CCOLCodeTypeEnum.HstCPostApplication => new []{10},
+                CCOLCodeTypeEnum.HstCPreSystemApplication => new []{10},
+                CCOLCodeTypeEnum.HstCPostSystemApplication => new []{10},
+                CCOLCodeTypeEnum.HstCPostDumpApplication => new []{10},
+                CCOLCodeTypeEnum.HstCPrioHalfstarSettings => new []{10},
+                CCOLCodeTypeEnum.PrioCInitPrio => new []{10},
+                CCOLCodeTypeEnum.PrioCInstellingen => new []{10},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{20},
+                CCOLCodeTypeEnum.PrioCOnderMaximum => new []{10},
+                CCOLCodeTypeEnum.PrioCAfkapGroen => new []{10},
+                CCOLCodeTypeEnum.PrioCStartGroenMomenten => new []{10},
+                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => new []{20},
+                CCOLCodeTypeEnum.PrioCAfkappen => new []{10},
+                CCOLCodeTypeEnum.PrioCTerugkomGroen => new []{10},
+                CCOLCodeTypeEnum.PrioCGroenVasthouden => new []{10},
+                CCOLCodeTypeEnum.PrioCMeetkriterium => new []{10},
+                _ => null
             };
         }
 
-		public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+		public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
 		{
 			if (!c.HalfstarData.IsHalfstar || !c.HalfstarData.SignaalPlannen.Any())
 			{

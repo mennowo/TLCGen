@@ -227,18 +227,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => 10,
-                CCOLCodeTypeEnum.HstCAlternatief => 10,
-                CCOLCodeTypeEnum.PrioCPARCorrecties => 10,
-                _ => 0
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new []{10},
+                CCOLCodeTypeEnum.HstCAlternatief => new []{10},
+                CCOLCodeTypeEnum.PrioCPARCorrecties => new []{10},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 
@@ -251,7 +251,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    sb.Append(GetRealFuncPARCorrections(c, ts, false));
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc) sb.Append(GetRealFuncPARCorrections(c, ts, false));
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
@@ -601,7 +601,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
                         {
-                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
+                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts, order));
                             sb.AppendLine();
                         }
 

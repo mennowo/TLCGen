@@ -44,17 +44,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCWachtgroen => 10,
-                CCOLCodeTypeEnum.RegCAanvragen => 60,
-                _ => 0
+                CCOLCodeTypeEnum.RegCWachtgroen => new []{10},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{60},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

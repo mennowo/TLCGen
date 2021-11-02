@@ -90,10 +90,12 @@ extern int Knipper_1Hz;
 extern int Knipper_2Hz;
 
 #if !defined (AUTOMAAT) 
+#if CCOL_V >= 110
    boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt);
    boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt);
    boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt);
    boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt);
+#endif 
 #endif 
 
 boolv set_MRLW_nl(count i, count j, boolv period);

@@ -28,21 +28,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.TabCControlDefaults => 10,
-                CCOLCodeTypeEnum.TabCControlParameters => 0,
-                CCOLCodeTypeEnum.TabCBeforeIncludes => 10,
-                CCOLCodeTypeEnum.RegCBeforeIncludes => 10,
-                CCOLCodeTypeEnum.RegCSystemApplication => 30,
-                CCOLCodeTypeEnum.RegCSystemApplication2 => 30,
-                _ => 0
+                CCOLCodeTypeEnum.TabCControlDefaults => new []{10},
+                CCOLCodeTypeEnum.TabCControlParameters => new []{0},
+                CCOLCodeTypeEnum.TabCBeforeIncludes => new []{10},
+                CCOLCodeTypeEnum.RegCBeforeIncludes => new []{10},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{30},
+                CCOLCodeTypeEnum.RegCSystemApplication2 => new []{30},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

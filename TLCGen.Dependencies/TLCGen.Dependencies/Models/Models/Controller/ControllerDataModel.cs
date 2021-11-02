@@ -81,6 +81,7 @@ namespace TLCGen.Models
         public bool GenererenCyclustijdMeting { get; set; }
 
         public bool TVGAMaxAlsDefaultGroentijdSet { get; set; }
+        public bool TDHAMaxToepassen { get; set; }
 
         [Browsable(false)]
         public string TLCGenVersie { get; set; }

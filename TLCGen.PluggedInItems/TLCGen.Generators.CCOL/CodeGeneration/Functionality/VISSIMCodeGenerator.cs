@@ -7,17 +7,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VISSIMCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCTop => 40,
-                CCOLCodeTypeEnum.TabCControlParameters => 10,
-                _ => 0
+                CCOLCodeTypeEnum.RegCTop => new []{40},
+                CCOLCodeTypeEnum.TabCControlParameters => new []{10},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

@@ -648,9 +648,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (var codetype in codetypes)
                 {
                     var index = genPlugin.HasCode((CCOLCodeTypeEnum)codetype);
-                    if (index > 0)
+                    if (index != null)
                     {
-                        OrderedPieceGenerators[(CCOLCodeTypeEnum)codetype].Add(index, genPlugin);
+                        foreach (var i in index)
+                        {
+                            OrderedPieceGenerators[(CCOLCodeTypeEnum)codetype].Add(i, genPlugin);
+                        }
                     }
                 }
             }
@@ -741,7 +744,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type)))
                     {
-                        var code = gen.Value.GetCode(c, type, ts);
+                        var code = gen.Value.GetCode(c, type, ts, gen.Key);
                         
                         if (string.IsNullOrWhiteSpace(code)) continue;
 
@@ -1026,11 +1029,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (var codetype in codetypes)
                     {
                         var index = v.HasCode((CCOLCodeTypeEnum) codetype);
-                        if (index > 0)
+                        if (index != null)
                         {
                             try
                             {
-                                OrderedPieceGenerators[(CCOLCodeTypeEnum) codetype].Add(index, v);
+                                foreach (var i in index)
+                                    OrderedPieceGenerators[(CCOLCodeTypeEnum) codetype].Add(i, v);
                             }
                             catch
                             {

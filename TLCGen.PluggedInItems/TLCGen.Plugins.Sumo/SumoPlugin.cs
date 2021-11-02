@@ -224,30 +224,23 @@ namespace TLCGen.Plugins.Sumo
 
         #region CCOLCodePieceGenerator
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.TabCIncludes:
-                    return 201;
-                case CCOLCodeTypeEnum.TabCControlParameters:
-                    return 201;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 201;
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 201;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 201;
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 201;
-                case CCOLCodeTypeEnum.RegCSpecialSignals:
-                    return 201;
+                case CCOLCodeTypeEnum.TabCIncludes: return new []{201};
+                case CCOLCodeTypeEnum.TabCControlParameters: return new []{201};
+                case CCOLCodeTypeEnum.RegCIncludes: return new []{201};
+                case CCOLCodeTypeEnum.RegCTop: return new []{201};
+                case CCOLCodeTypeEnum.RegCPreApplication: return new []{201};
+                case CCOLCodeTypeEnum.RegCPostApplication: return new []{201};
+                case CCOLCodeTypeEnum.RegCSpecialSignals: return new []{201};
                 default:
-                    return 0;
+                    return null;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

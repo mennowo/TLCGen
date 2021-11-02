@@ -85,23 +85,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.TabCIncludes => 100,
-                CCOLCodeTypeEnum.RegCIncludes => 100,
-                CCOLCodeTypeEnum.RegCTop => 100,
-                CCOLCodeTypeEnum.RegCPreApplication => 100,
-                CCOLCodeTypeEnum.RegCKlokPerioden => 20,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 60,
-                CCOLCodeTypeEnum.RegCMaxgroen => 60,
-                CCOLCodeTypeEnum.RegCPostApplication => 50,
-                _ => 0
+                CCOLCodeTypeEnum.TabCIncludes => new []{100},
+                CCOLCodeTypeEnum.RegCIncludes => new []{100},
+                CCOLCodeTypeEnum.RegCTop => new []{100},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{100},
+                CCOLCodeTypeEnum.RegCKlokPerioden => new []{20},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{60},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{60},
+                CCOLCodeTypeEnum.RegCPostApplication => new []{50},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             if (!c.StarData.ToepassenStar) return null;
 

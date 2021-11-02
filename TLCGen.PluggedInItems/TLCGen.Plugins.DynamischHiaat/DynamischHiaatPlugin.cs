@@ -14,6 +14,8 @@ using TLCGen.Models;
 using TLCGen.Dependencies.Providers;
 using System;
 using System.IO;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.DynamischHiaat
 {
@@ -233,7 +235,6 @@ namespace TLCGen.Plugins.DynamischHiaat
                 _myElements.Add(new CCOLElement($"edkop_{msg.SignalGroupName}", msg.KijkenNaarKoplus ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Start timers dynamische hiaat fase {msg.SignalGroupName} op einde detectie koplus"));
                 foreach(var d in msg.DynamischHiaatDetectoren)
                 {
-                    _myElements.Add(new CCOLElement($"TDHst{_dpf}{d.DetectorName}", 999, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter, $"Onthouden oorspronkelijke TDH voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"{d.DetectorName}_1", d.Moment1, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden moment 1 voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"{d.DetectorName}_2", d.Moment2, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden moment 2 voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"tdh_{d.DetectorName}_1", d.TDH1, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden TDH 1 voor detector {d.DetectorName}"));
@@ -251,34 +252,33 @@ namespace TLCGen.Plugins.DynamischHiaat
             }
         }
 
-        public override bool HasCCOLElements()
+        public override bool HasCCOLElements() => true;
+
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            return true;
+            if (!_myModel.SignaalGroepenMetDynamischHiaat.Any(x => x.HasDynamischHiaat)) return base.GetFunctionLocalVariables(c, type);
+            return type switch
+            {
+                CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new("int", "d", defineCondition:"(defined TDHAMAX)")},
+                _ => base.GetFunctionLocalVariables(c, type)
+            };
         }
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 115;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 115;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 115;
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    return 115;
+                case CCOLCodeTypeEnum.RegCIncludes: return new []{115};
+                case CCOLCodeTypeEnum.RegCInitApplication: return new []{115};
+                case CCOLCodeTypeEnum.RegCPreApplication: return new []{115};
+                case CCOLCodeTypeEnum.RegCMeetkriterium: return new []{9, 115};
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines: return new []{115};
                 default:
-                    return 0;
+                    return null;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 
@@ -287,16 +287,21 @@ namespace TLCGen.Plugins.DynamischHiaat
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    sb.AppendLine($"{ts}/* Dynamische hiaattijden: initialiseren oorspronkelijke statische hiaattijden */");
-                    sb.AppendLine($"{ts}if (!SAPPLPROG)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}InitTDHstdtijden();");
-                    sb.AppendLine($"{ts}}}");
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
+                    {
+                        sb.AppendLine($"#define TDHAMAX /* gebruik van TDHA_max[] */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine($"{ts}#include \"dynamischhiaat.c\"");
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    sb.AppendLine($"{ts}#if (CCOL_V >= 110 && !defined TDHAMAX) || (CCOL_V < 110)");
+                    sb.AppendLine($"{ts}{ts}init_tdhdyn();");
+                    sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
@@ -316,31 +321,48 @@ namespace TLCGen.Plugins.DynamischHiaat
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    foreach(var sg in sgs)
+                    switch (order)
                     {
-                        var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
-                        if (ofc == null) continue;
-                        sb.AppendLine($"{ts}hiaattijden_verlenging(IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {(c.Data.ExtraMeeverlengenInWG ? "TRUE" : "FALSE")}, {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
-                        for (var i = 0; i < ofc.AantalRijstroken; i++)
-                        {
-                            foreach(var dd in sg.DynamischHiaatDetectoren)
+                        case 9:
+                            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
                             {
-                                var od = ofc.Detectoren.FirstOrDefault(x => x.Naam == dd.DetectorName);
-                                if (od == null || od.Rijstrook - 1 != i) continue;
-                                sb.AppendLine(
-                                    $"{ts}{ts}{i + 1}, " +
-                                    $"{_dpf}{od.Naam}, " +
-                                    $"{_tpf}{dd.DetectorName}_1, " +
-                                    $"{_tpf}{dd.DetectorName}_2, " +
-                                    $"{_tpf}tdh_{dd.DetectorName}_1, " +
-                                    $"{_tpf}tdh_{dd.DetectorName}_2, " +
-                                    $"{_tpf}max_{dd.DetectorName}, " +
-                                    $"{_prmpf}springverleng_{dd.DetectorName}, " +
-                                    $"{_hpf}verleng_{dd.DetectorName}, " +
-                                    $"{_prmpf}TDHst{_dpf}{dd.DetectorName}, ");
+                                sb.AppendLine("#ifdef TDHAMAX");
+                                sb.AppendLine($"{ts}/* TDH_max vullen bij gebruik van TDHAMAX */");
+                                sb.AppendLine($"{ts}for (d = 0; d < DP_MAX; ++d)");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}TDH_max[d] = TDHA_max[d];");
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine("#endif // TDHAMAX");
                             }
-                        }
-                        sb.AppendLine($"{ts}{ts}END);");
+
+                            break;
+                        case 115:
+                            foreach(var sg in sgs)
+                            {
+                                var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
+                                if (ofc == null) continue;
+                                sb.AppendLine($"{ts}hiaattijden_verlenging(IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {(c.Data.ExtraMeeverlengenInWG ? "TRUE" : "FALSE")}, {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
+                                for (var i = 0; i < ofc.AantalRijstroken; i++)
+                                {
+                                    foreach(var dd in sg.DynamischHiaatDetectoren)
+                                    {
+                                        var od = ofc.Detectoren.FirstOrDefault(x => x.Naam == dd.DetectorName);
+                                        if (od == null || od.Rijstrook - 1 != i) continue;
+                                        sb.AppendLine(
+                                            $"{ts}{ts}{i + 1}, " +
+                                            $"{_dpf}{od.Naam}, " +
+                                            $"{_tpf}{dd.DetectorName}_1, " +
+                                            $"{_tpf}{dd.DetectorName}_2, " +
+                                            $"{_tpf}tdh_{dd.DetectorName}_1, " +
+                                            $"{_tpf}tdh_{dd.DetectorName}_2, " +
+                                            $"{_tpf}max_{dd.DetectorName}, " +
+                                            $"{_prmpf}springverleng_{dd.DetectorName}, " +
+                                            $"{_hpf}verleng_{dd.DetectorName}, ");
+                                    }
+                                }
+                                sb.AppendLine($"{ts}{ts}END);");
+                            }
+                            break;
                     }
                     return sb.ToString();
                 default:

@@ -228,25 +228,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCTop => 10,
-                CCOLCodeTypeEnum.RegCAanvragen => 80, 
-                CCOLCodeTypeEnum.RegCInitApplication => 10,
-                CCOLCodeTypeEnum.RegCSystemApplication => 10,
-                CCOLCodeTypeEnum.RegCWachtgroen => 20,
-                CCOLCodeTypeEnum.RegCFileVerwerking => 10,
-                CCOLCodeTypeEnum.PrioCPARCorrecties => 20,
-                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => 30,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 40,
-                CCOLCodeTypeEnum.RegCMaxgroen => 40,
-                _ => 0
+                CCOLCodeTypeEnum.RegCTop => new []{10},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{80}, 
+                CCOLCodeTypeEnum.RegCInitApplication => new []{10},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{10},
+                CCOLCodeTypeEnum.RegCWachtgroen => new []{20},
+                CCOLCodeTypeEnum.RegCFileVerwerking => new []{10},
+                CCOLCodeTypeEnum.PrioCPARCorrecties => new []{20},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{30},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{40},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{40},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
             var first = true;
@@ -793,6 +793,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                                 if (tdfc.MaximaleGroentijd)
                                 {
+                                    if (tdfc.AfkappenOpStartFile) sb.Append(" || ");
                                     sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
                                 }
                                 sb.AppendLine($") Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");

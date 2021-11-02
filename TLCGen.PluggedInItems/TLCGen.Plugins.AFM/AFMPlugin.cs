@@ -210,34 +210,25 @@ namespace TLCGen.Plugins.AFM
             return _myElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 105;
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 105;
-                case CCOLCodeTypeEnum.PrioCTop:
-                    return 105;
-                case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    return 105;
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines: return new []{105};
+                case CCOLCodeTypeEnum.RegCIncludes: return new []{105};
+                case CCOLCodeTypeEnum.RegCInitApplication: return new []{105};
+                case CCOLCodeTypeEnum.RegCPreApplication: return new []{105};
+                case CCOLCodeTypeEnum.RegCAlternatieven: return new []{105};
+                case CCOLCodeTypeEnum.RegCPostApplication: return new []{105};
+                case CCOLCodeTypeEnum.RegCPostSystemApplication: return new []{105};
+                case CCOLCodeTypeEnum.PrioCTop: return new []{105};
+                case CCOLCodeTypeEnum.PrioCPARCorrecties: return new []{105};
                 default:
-                    return 0;
+                    return null;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             if (!_afmModel.AFMToepassen || !_afmModel.AFMFasen.Any()) return "";
 

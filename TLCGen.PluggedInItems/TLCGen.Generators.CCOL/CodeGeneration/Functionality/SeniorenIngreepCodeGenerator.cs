@@ -89,18 +89,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => 80,
-                CCOLCodeTypeEnum.RegCVerlenggroen => 50,
-                CCOLCodeTypeEnum.RegCMaxgroen => 50,
-                _ => 0
+                CCOLCodeTypeEnum.RegCPreApplication => new []{80},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{50},
+                CCOLCodeTypeEnum.RegCMaxgroen => new []{50},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var fcs = c.Fasen.Where(x => x.SeniorenIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                                          x.Detectoren.Any(x2 => x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)).ToList();

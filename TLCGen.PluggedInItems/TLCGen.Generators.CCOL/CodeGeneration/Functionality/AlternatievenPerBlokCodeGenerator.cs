@@ -41,17 +41,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCAlternatieven => 40,
-                CCOLCodeTypeEnum.PrioCPARCorrecties => 30,
-                _ => 0
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{40},
+                CCOLCodeTypeEnum.PrioCPARCorrecties => new []{30},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

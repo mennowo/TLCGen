@@ -6,18 +6,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class KWCCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCIncludes => 10,
-                CCOLCodeTypeEnum.RegCKwcApplication => 10,
-                CCOLCodeTypeEnum.RegCSystemApplication => 20,
-                _ => 0
+                CCOLCodeTypeEnum.RegCIncludes => new []{10},
+                CCOLCodeTypeEnum.RegCKwcApplication => new []{10},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{20},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

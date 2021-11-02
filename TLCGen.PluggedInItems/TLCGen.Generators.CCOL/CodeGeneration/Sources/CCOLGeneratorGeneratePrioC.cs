@@ -993,7 +993,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.PrioCRijTijdScenario])
                 {
-                    sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.PrioCRijTijdScenario, ts));
+                    sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.PrioCRijTijdScenario, ts, gen.Key));
                 }
             }
             sb.AppendLine();

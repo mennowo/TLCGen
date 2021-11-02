@@ -651,18 +651,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCTop => 61,
-                CCOLCodeTypeEnum.RegCPreApplication => 41,
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules => 41,
-                CCOLCodeTypeEnum.RegCSystemApplication => 41,
-                CCOLCodeTypeEnum.RegCPostSystemApplication => 31,
-                CCOLCodeTypeEnum.PrioCInUitMelden => 11,
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => 11,
-                _ => 0
+                CCOLCodeTypeEnum.RegCTop => new []{61},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{41},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules => new []{41},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{41},
+                CCOLCodeTypeEnum.RegCPostSystemApplication => new []{31},
+                CCOLCodeTypeEnum.PrioCInUitMelden => new []{11},
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{11},
+                _ => null
             };
         }
 
@@ -965,7 +965,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return inmHelems;
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen) return null;
 

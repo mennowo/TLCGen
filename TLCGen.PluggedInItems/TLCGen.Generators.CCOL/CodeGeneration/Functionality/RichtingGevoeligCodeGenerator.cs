@@ -74,17 +74,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCMeetkriterium => 20,
-                CCOLCodeTypeEnum.RegCAanvragen => 40,
-                _ => 0
+                CCOLCodeTypeEnum.RegCMeetkriterium => new []{20},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{40},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

@@ -86,17 +86,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPostApplication => 90,
-                CCOLCodeTypeEnum.RegCInitApplication => 90,
-                _ => 0
+                CCOLCodeTypeEnum.RegCPostApplication => new []{90},
+                CCOLCodeTypeEnum.RegCInitApplication => new []{90},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             if (!c.Data.ModulenInParameters) return null;
 

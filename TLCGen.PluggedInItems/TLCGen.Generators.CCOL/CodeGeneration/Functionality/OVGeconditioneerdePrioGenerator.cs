@@ -81,19 +81,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override int HasCode(CCOLCodeTypeEnum type)
+        public override int[] HasCode(CCOLCodeTypeEnum type)
         {
             return type switch
             {
-                CCOLCodeTypeEnum.PrioCTop => 50,
-                CCOLCodeTypeEnum.PrioCInUitMelden => 20,
-                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => 10,
-                CCOLCodeTypeEnum.RegCPostApplication => 10,
-                _ => 0
+                CCOLCodeTypeEnum.PrioCTop => new []{50},
+                CCOLCodeTypeEnum.PrioCInUitMelden => new []{20},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{10},
+                CCOLCodeTypeEnum.RegCPostApplication => new []{10},
+                _ => null
             };
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
 

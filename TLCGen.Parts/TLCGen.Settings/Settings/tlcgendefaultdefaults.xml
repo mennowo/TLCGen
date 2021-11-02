@@ -737,6 +737,7 @@
         <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
         <ModulenDisplayBitmapData />
         <UitgangPerModule>false</UitgangPerModule>
+        <TDHAMaxToepassen>true</TDHAMaxToepassen>
         <FixatieData>
           <FixatieMogelijk>true</FixatieMogelijk>
           <BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>

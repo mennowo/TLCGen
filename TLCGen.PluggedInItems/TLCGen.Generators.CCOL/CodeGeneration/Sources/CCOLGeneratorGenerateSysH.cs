@@ -113,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.SysHBeforeUserDefines])
             {
-                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts));
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts, gen.Key));
             }
 
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
