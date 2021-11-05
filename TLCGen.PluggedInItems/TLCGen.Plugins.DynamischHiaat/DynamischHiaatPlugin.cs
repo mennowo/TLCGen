@@ -272,7 +272,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                 case CCOLCodeTypeEnum.RegCInitApplication: return new []{115};
                 case CCOLCodeTypeEnum.RegCPreApplication: return new []{115};
                 case CCOLCodeTypeEnum.RegCMeetkriterium: return new []{9, 115};
-                case CCOLCodeTypeEnum.SysHBeforeUserDefines: return new []{115};
+                case CCOLCodeTypeEnum.SysHDefines: return new []{115};
                 default:
                     return null;
             }
@@ -287,7 +287,7 @@ namespace TLCGen.Plugins.DynamischHiaat
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                case CCOLCodeTypeEnum.SysHDefines:
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
                     {
                         sb.AppendLine($"#define TDHAMAX /* gebruik van TDHA_max[] */");

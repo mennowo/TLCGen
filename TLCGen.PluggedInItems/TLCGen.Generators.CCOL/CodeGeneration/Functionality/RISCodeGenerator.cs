@@ -138,7 +138,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            if (!c.RISData?.RISToepassen == true) return base.GetFunctionLocalVariables(c, type);
+            if (c.RISData?.RISToepassen != true) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
                 CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new("int", "fc")},
@@ -175,8 +175,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             var sb = new StringBuilder();
 
-            var lanes = risModel.RISFasen.SelectMany(x => x.LaneData);
-
             switch (type)
             {
                 case CCOLCodeTypeEnum.PrioCIncludes:
@@ -188,12 +186,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
-                    sb.AppendLine("{ts}/* initialisatie variabelen granted_verstrekt */");
-                    sb.AppendLine("{ts}/* ------------------------------------------ */");
-                    sb.AppendLine("{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine("{ts}{{");
-                    sb.AppendLine("{ts}{ts}granted_verstrekt[i] = 0;");
-                    sb.AppendLine("{ts}}}");
+                    sb.AppendLine($"{ts}/* initialisatie variabelen granted_verstrekt */");
+                    sb.AppendLine($"{ts}/* ------------------------------------------ */");
+                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}granted_verstrekt[i] = 0;");
+                    sb.AppendLine($"{ts}}}");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:

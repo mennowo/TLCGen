@@ -837,7 +837,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
                 foreach (var elem in elements)
                 {
                     if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
@@ -959,7 +959,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
                 foreach (var delem in data.Elements)
                 {
                     if (!delem.Dummy)

@@ -355,20 +355,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.HalfstarData.IsHalfstar) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.HstCAanvragen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCVerlenggroen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCMaxgroen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCMeetkriterium => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCMeeverlengen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCSynchronisaties => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCPreSystemApplication => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
-                CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "ov"), new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.HstCAanvragen => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCVerlenggroen => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCMaxgroen => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCMeetkriterium => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCMeeverlengen => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCSynchronisaties => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCRealisatieAfhandeling => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCPreSystemApplication => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new("int", "ov"), new("int", "fc")},
                 CCOLCodeTypeEnum.HstCKlokPerioden => new List<CCOLLocalVariable>
                 {
-                    new CCOLLocalVariable("char", "volgMaster", "TRUE")
+                    new("char", "volgMaster", "TRUE")
                 },
                 _ => base.GetFunctionLocalVariables(c, type)
             };

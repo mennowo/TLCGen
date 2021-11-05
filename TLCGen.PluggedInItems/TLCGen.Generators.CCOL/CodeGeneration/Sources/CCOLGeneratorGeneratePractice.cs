@@ -19,6 +19,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GeneratePraticeCcolReg2(ControllerModel controller)
         {
             var sb = new StringBuilder();
+
+            sb.AppendLine("#define CCOL_IS_SPECIAL");
+            sb.AppendLine();
+
             if (controller.ModuleMolen.LangstWachtendeAlternatief)
             {
                 sb.AppendLine("#include \"lwmlfunc.c\"");

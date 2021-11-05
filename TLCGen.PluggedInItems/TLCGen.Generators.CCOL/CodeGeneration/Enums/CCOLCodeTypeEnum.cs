@@ -66,6 +66,7 @@
 	    TabCControlParameters,
 
         // SYS
+        SysHDefines,
         SysHBeforeUserDefines,
 
         // HST

@@ -259,6 +259,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
                     return sb.ToString();
+                
                 case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
                         sb.AppendLine($"{ts}gk_ControlGK();");

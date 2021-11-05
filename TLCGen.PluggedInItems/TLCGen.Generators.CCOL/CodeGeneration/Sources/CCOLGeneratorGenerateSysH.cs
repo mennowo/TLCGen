@@ -27,8 +27,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
                 }
             }
-            sb.AppendLine("#define TVGAMAX /* gebruik van TVGA_max[] */");
+            if (c.Data.TVGAMaxAlsDefaultGroentijdSet)
+            {
+                sb.AppendLine("#define TVGAMAX /* gebruik van TVGA_max[] */");
+            }
+            
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.SysHDefines, true, true, false, false);
             sb.AppendLine();
+            
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
             sb.Append(GenerateSysHUitgangen(c));
@@ -111,10 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#define MPERIODMAX {c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.SysHBeforeUserDefines])
-            {
-                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts, gen.Key));
-            }
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.SysHBeforeUserDefines, true, true, false, true);
 
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");

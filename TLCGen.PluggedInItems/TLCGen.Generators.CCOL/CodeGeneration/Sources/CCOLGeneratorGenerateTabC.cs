@@ -8,7 +8,6 @@ using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using Xceed.Wpf.Toolkit;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -435,7 +434,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG}; ");
                 sb.Append($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
                 sb.Append($"TGL_min[{fcm.GetDefine()}] = {(controller.Data.Intergroen ? fcm.TGL : fcm.TGL_min)}; ");
-                sb.Append($"TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
+                if (!controller.Data.PracticeOmgeving)
+                {
+                    sb.Append($"TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
+                }
                 var tvg = "NG";
                 if (gs != null)
                 {
@@ -447,6 +449,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
                 sb.AppendLine($"TVGA_max[{fcm.GetDefine()}] = {tvg};");
+            }
+
+            // In geval van Practice, apart opnemen TMGL_max
+            if (controller.Data.PracticeOmgeving)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"#ifndef NO_TMGLMAX");
+                foreach (var fcm in controller.Fasen)
+                {
+                    sb.Append($"{ts}TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
+                }
+                sb.AppendLine($"#endif // NO_TMGLMAX");
             }
 
             return sb.ToString();
@@ -663,11 +677,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         // loop nalopen waarin zo'n conflict deelneemt
                         foreach (var nl2 in controller.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == cf.FaseNaar || x.FaseNaar == cf.FaseNaar))
                         {
-                            var fc3Name = nl2.FaseVan;
+                            // var fc3Name = nl2.FaseVan;
                             var fc4Name = nl2.FaseNaar;
-                            var fc3 = controller.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
+                            // var fc3 = controller.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
                             var fc4 = controller.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
-                            var i3 = controller.Fasen.IndexOf(fc3);
+                            // var i3 = controller.Fasen.IndexOf(fc3);
                             var i4 = controller.Fasen.IndexOf(fc4);
                             // indien er van de naloop richting van naloop1 een FK/GK/GKL bestaat naar de 
                             // tweede richting van naloop2, nemen we FK/GK/GKL over tussen de voedende richting
@@ -799,7 +813,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? tflmax = 0;
 
             var ovdummydets = c.PrioData.GetAllDummyDetectors();
-            var alldets = c.GetAllDetectors().Concat(ovdummydets);
+            var alldets = c.GetAllDetectors().Concat(ovdummydets).ToList();
 
             var nondummydets = alldets.Where(x => !x.Dummy);
             var detectorModels = nondummydets as DetectorModel[] ?? nondummydets.ToArray();
@@ -815,8 +829,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
             }
             dbmax = dbmax.ToString().Length;
-            dhmax = dhmax.ToString().Length;
-            ogmax = ogmax.ToString().Length;
+            // dhmax = dhmax.ToString().Length;
+            // ogmax = ogmax.ToString().Length;
             bgmax = bgmax.ToString().Length;
             tflmax = tflmax.ToString().Length;
 
@@ -863,8 +877,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
                 }
                 dbmax = dbmax.ToString().Length;
-                dhmax = dhmax.ToString().Length;
-                ogmax = ogmax.ToString().Length;
+                // dhmax = dhmax.ToString().Length;
+                // ogmax = ogmax.ToString().Length;
                 bgmax = bgmax.ToString().Length;
                 tflmax = tflmax.ToString().Length;
                 pad1 = "D_code[] ".Length + defmax;
@@ -913,7 +927,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (dm.TDH != null)
             {
-                sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
+                if (c.Data.TDHAMaxToepassen)
+                {
+                    sb.Append($"TDHA_max[{dm.GetDefine()}] ".PadRight(pad5));
+                }
+                else
+                {
+                    sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
+                }
                 sb.AppendLine($"= {dm.TDH};");
             }
 
@@ -1127,7 +1148,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (controller.ModuleMolen.Modules.Any(x => x.Fasen.Any()))
                 {
-                    ml = true;
                     foreach (var mm in controller.ModuleMolen.Modules.Where(x => x.Fasen.Any()))
                     {
                         foreach (var mfcm in mm.Fasen)
@@ -1261,8 +1281,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            var _prmstarstart = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstarstart");
-            var _prmstareind = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstareind");
+            var prmstarstart = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstarstart");
+            var prmstareind = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstareind");
 
             sb.AppendLine("void star_instellingen(void)");
             sb.AppendLine("{");
@@ -1279,10 +1299,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (controller.StarData.ProgrammaTijdenInParameters)
                     {
-                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}1{programma.Naam}{sg.FaseCyclus}]; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}1{programma.Naam}{sg.FaseCyclus}];");
+                        sb.AppendLine($"{ts}STAR_start1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{prmstarstart}1{programma.Naam}{sg.FaseCyclus}]; STAR_eind1[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{prmstareind}1{programma.Naam}{sg.FaseCyclus}];");
                         if (sg.Start2.HasValue && sg.Start2 != 0 && sg.Eind2.HasValue && sg.Eind2 != 0)
                         {
-                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstarstart}2{programma.Naam}{sg.FaseCyclus}]; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{_prmstareind}2{programma.Naam}{sg.FaseCyclus}];");
+                            sb.AppendLine($"{ts}STAR_start2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{prmstarstart}2{programma.Naam}{sg.FaseCyclus}]; STAR_eind2[STAR{pr}][{_fcpf}{sg.FaseCyclus}] = PRM[{_prmpf}{prmstareind}2{programma.Naam}{sg.FaseCyclus}];");
                         }           
                     }
                     else

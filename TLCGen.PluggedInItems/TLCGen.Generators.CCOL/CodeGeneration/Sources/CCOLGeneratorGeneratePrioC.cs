@@ -272,7 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioInitExtra(void) ");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInitPrio, true, false, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInitPrio, true, true, true, true);
 
             sb.AppendLine("}");
             sb.AppendLine();

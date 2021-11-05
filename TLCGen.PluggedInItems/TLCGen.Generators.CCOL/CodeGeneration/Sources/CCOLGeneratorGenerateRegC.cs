@@ -164,11 +164,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
 
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
-            {
-                sb.AppendLine($"{ts}#include \"realfunc.c\"");
-            }
-            
             if(c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
             {
                 if(c.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
@@ -189,6 +184,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.AppendLine($"{ts}#include \"realfunc.c\"");
+            }
             
             if (c.Data.FixatieMogelijk)
             {
@@ -255,11 +255,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void KwcApplication(void)");
             sb.AppendLine("{");
-
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCKwcApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCKwcApplication, ts, gen.Key));
-            }
+            
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCKwcApplication, true, true, false, true);
             
             sb.AppendLine($"{ts}KwcApplication_Add();");
             sb.AppendLine("}");
