@@ -12,6 +12,7 @@
         RegCAanvragen,
         RegCBepaalRealisatieTijden,
         RegCVerlenggroen,
+        RegCVerlenggroenNaAdd,
         RegCMaxgroen,
         RegCMaxgroenNaAdd,
         RegCWachtgroen,

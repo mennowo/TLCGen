@@ -105,6 +105,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCPreApplication => new []{30},
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{20},
                 CCOLCodeTypeEnum.RegCMaxgroenNaAdd => new []{10},
+                CCOLCodeTypeEnum.RegCVerlenggroenNaAdd => new []{10},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{20},
                 CCOLCodeTypeEnum.RegCVerlenggroen => new []{10},
                 CCOLCodeTypeEnum.RegCAlternatieven => new []{20},
@@ -264,7 +265,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
                         sb.AppendLine($"{ts}gk_ControlGK();");
                     return sb.ToString();
-
+                
+                case CCOLCodeTypeEnum.RegCVerlenggroenNaAdd:
+                    if (c.InterSignaalGroep.Nalopen.Count > 0)
+                        sb.AppendLine($"{ts}gk_ControlGK();");
+                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
                     {

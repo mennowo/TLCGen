@@ -390,11 +390,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.VerlengGroentijden:
                     sb.AppendLine("void Verlenggroen(void)");
                     sb.AppendLine("{");
-
-                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroen, true, true, false, true);
+                    
+                    var vars2 = new List<CCOLLocalVariable>();
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroen, true, true, false, true, vars2);
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroenNaAdd, true, false, false, true, vars2);
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
+                    
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroenNaAdd, false, true, false, false);
+
                     sb.AppendLine("}");
 
                     sb.AppendLine();
