@@ -1283,7 +1283,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PostAfhandelingPrio(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPostAfhandelingPrio, true, true, false, false);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPostAfhandelingPrio, true, true, false, true);
 
             sb.AppendLine("}");
 

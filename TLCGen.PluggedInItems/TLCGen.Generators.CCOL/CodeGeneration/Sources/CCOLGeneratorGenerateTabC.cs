@@ -927,14 +927,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (dm.TDH != null)
             {
-                if (c.Data.TDHAMaxToepassen)
-                {
-                    sb.Append($"TDHA_max[{dm.GetDefine()}] ".PadRight(pad5));
-                }
-                else
-                {
+                //if (c.Data.TDHAMaxToepassen)
+                //{
+                //    sb.Append($"TDHA_max[{dm.GetDefine()}] ".PadRight(pad5));
+                //}
+                //else
+                //{
                     sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
-                }
+                //}
                 sb.AppendLine($"= {dm.TDH};");
             }
 

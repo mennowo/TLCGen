@@ -9,7 +9,7 @@
 #define TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF   15    /* Richting is Rood, ... , wordt zeker groen */
 #define TIMING_CONFIDENCE_RD_MAX                16    /* hoogste waarde stadium ( wordt gebruikt voor interne Array ) */
 
-boolv NaarConfidence9(count i)
+bool NaarConfidence9(count i)
 {
    /* De functie NaarConfidence9 wordt gebruik voor de overgang van de confidence stadium 6-->9. 
    * De functie bepaalt of alle primaire conflicten uit het voorgaande blokeen PG hebben.  
@@ -33,7 +33,7 @@ boolv NaarConfidence9(count i)
    }
 }
 
-boolv NaarConfidence9_15prio(count i)
+bool NaarConfidence9_15prio(count i)
 {
    /* De functie NaarConfidence9_15prio wordt gebruik voor de overgang van de confidence stadium 6-->9 en van 12-->15. 
     * De functie bepaalt of alle conflicten worden tegengehouden met RR BIT6 && !P tijdens geel of rood en of de eigen richting YV BIT6 of YM BIT6 heeft.  
@@ -57,10 +57,11 @@ boolv NaarConfidence9_15prio(count i)
 }
 
 
-static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count prm_ttxconfidence15, count s_conf15ar, count s_timingsfc)
+static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mrealtijdmax, count prm_ttxconfidence15, count s_conf15ar, count s_timingsfc)
 {
-   int min = mrealtijdmin; /* eerst MM min met daarna FCMAX x MM */
-   int max = mrealtijdmax; /* eerst MM max met daarna FCMAX x MM */
+   int real = mrealtijd;    
+   int min  = mrealtijdmin; /* eerst MM min met daarna FCMAX x MM */
+   int max  = mrealtijdmax; /* eerst MM max met daarna FCMAX x MM */
    int i = fc;
 
    if (!TE) return;
@@ -151,7 +152,7 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
          /* geen conflicterende groenfase (G) */
          !kg(i) &&
          /* voorwaarde 12 --> 15 */
-         (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[min] <= PRM[prmttxconfidence15]) && (MM[max] <= PRM[prmttxconfidence15])))) || P[i] & BIT11)
+         (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[real] <= PRM[prmttxconfidence15]) && (MM[min] <= PRM[prmttxconfidence15]) && (MM[max] <= PRM[prmttxconfidence15])))) || P[i] & BIT11)
       {
          if (P[i] & BIT11) CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF; /* 15 */ /* 1 machineslag vertragen ivm acties door P bij gelijk- en voorstart */
          P[i] |= BIT11;
@@ -224,4 +225,3 @@ static void timings_uc4(count fc, count mrealtijdmin, count mrealtijdmax, count 
    }
 #endif
 }
-

@@ -224,7 +224,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
-                        sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTCTRLF3KEY);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");
+                        }
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F11KEY);");

@@ -233,6 +233,7 @@ namespace TLCGen.Plugins.Timings
             _codeGenerator._prmpf = _prmpf;
             _codeGenerator._mpf = _mpf;
             _codeGenerator._ctpf = _ctpf;
+            _codeGenerator._tpf = _tpf;
             return _codeGenerator.GetCode(_timingsModel, c, type, ts);
         }
 
@@ -250,11 +251,13 @@ namespace TLCGen.Plugins.Timings
         
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            _codeGenerator._mrealtijd = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijd");
             _codeGenerator._mrealtijdmin = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmin");
             _codeGenerator._mrealtijdmax = CCOLGeneratorSettingsProvider.Default.GetElementName("mrealtijdmax");
             _codeGenerator._cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             _codeGenerator._cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
             _codeGenerator._schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
+            _codeGenerator._tfo = CCOLGeneratorSettingsProvider.Default.GetElementName("tfo");
 
             return base.SetSettings(settings);
         }

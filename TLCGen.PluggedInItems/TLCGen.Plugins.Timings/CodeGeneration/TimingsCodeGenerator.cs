@@ -14,47 +14,47 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
     public class TimingsCodeGenerator
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _prmttxconfidence15 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _prmttxconfidence15 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "ttxconfidence15", Setting = "ttxconfidence15", Type = CCOLGeneratorSettingTypeEnum.Parameter, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schconfidence15fix = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schconfidence15fix = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "confidence15fix", Setting = "confidence15fix", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schtxconfidence15ar = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schtxconfidence15ar = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "txconfidence15ar", Setting = "txconfidence15ar", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence1 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence1 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence1", Setting = "spatconfidence1", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence3 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence3 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence3", Setting = "spatconfidence3", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence6 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence6 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence6", Setting = "spatconfidence6", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence9 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence9 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence9", Setting = "spatconfidence9", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence12 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence12 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence12", Setting = "spatconfidence12", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schspatconfidence15 = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schspatconfidence15 = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "spatconfidence15", Setting = "spatconfidence15", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _schtimings = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _schtimings = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "timings", Setting = "timings", Type = CCOLGeneratorSettingTypeEnum.Schakelaar, Description = ""
         };
-        private CCOLGeneratorCodeStringSettingModel _prmlatencyminendsg = new CCOLGeneratorCodeStringSettingModel
+        private readonly CCOLGeneratorCodeStringSettingModel _prmlatencyminendsg = new CCOLGeneratorCodeStringSettingModel
         {
             Default = "latencyminendsg", Setting = "latencyminendsg", Type = CCOLGeneratorSettingTypeEnum.Parameter, Description = ""
         };
@@ -65,12 +65,15 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         public string _mpf;
         public string _prmpf;
         public string _ctpf;
+        public string _tpf;
         
+        public string _mrealtijd;
         public string _mrealtijdmin;
         public string _mrealtijdmax;
         public string _cvc;
         public string _cvchd;
         public string _schgs;
+        public string _tfo;
 
         public List<CCOLElement> GetCCOLElements(ControllerModel c)
         {
@@ -108,7 +111,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 case CCOLCodeTypeEnum.PrioCRijTijdScenario: return new []{10};
                 case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten: return new []{40};
                 case CCOLCodeTypeEnum.PrioCAfkappen: return new []{20};
-                case CCOLCodeTypeEnum.PrioCPARCorrecties: return new []{40};
+                case CCOLCodeTypeEnum.PrioCPARCorrecties: return new []{40}; 
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio: return new[] {30};
                 default:
                     return null;
             }
@@ -145,7 +149,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}/* eigenlijk nog per richting een schakelaar of er altijd NG moet worden gestuurd (nu is het een algemene schakelaar) */");
                     sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
+                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijd}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
                     sb.AppendLine($"{ts}{ts}{{");
@@ -154,6 +158,15 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
                     sb.AppendLine($"{ts}{ts}{ts}}}");
                     sb.AppendLine($"{ts}{ts}}}");
+                    var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
+                    if (groenSyncData.FictieveConflicten.Any())
+                    {
+                        sb.AppendLine();
+                        foreach (var fo in groenSyncData.FictieveConflicten)
+                        {
+                            sb.AppendLine($"{ts}{ts}if (RT[{_tpf}{_tfo}{fo:vannaar}] || T[{_tpf}{_tfo}{fo:vannaar}]) P[{_fcpf}{fo:van}] &= ~BIT11;");
+                        }
+                    }
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();
                     
@@ -491,6 +504,63 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                     
+
+                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
+                    if (!timingsModel.TimingsUsePredictions) return null;
+
+                    if (c.InterSignaalGroep.Nalopen.Any())
+                    {
+                        sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                        sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer voedende een P[]&BIT11 heeft */");
+                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        {
+                            sb.AppendLine($"{ts}if (P[{_fcpf}{nl:van}] & BIT11) {{");
+                            sb.AppendLine($"{ts}{ts} Z[{_fcpf}{nl:naar}] &= ~BIT6;");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:naar}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}FM[{_fcpf}{nl:naar}] &= ~PRIO_FM_BIT;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"");
+                        }
+                        sb.AppendLine($"{ts}#endif // NO_TIMETOX");
+                    }
+                    
+                    if (c.InterSignaalGroep.Voorstarten.Any())
+                    {
+                        if (c.InterSignaalGroep.Nalopen.Any()) sb.AppendLine();
+                        
+                        sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                        sb.AppendLine($"{ts}/* Niet afkappen voorstartende richting wanneer voedende een P[]&BIT11 heeft */");
+                        foreach (var vs in c.InterSignaalGroep.Voorstarten)
+                        {
+                            sb.AppendLine($"{ts}if (P[{_fcpf}{vs:naar}] & BIT11) {{");
+                            sb.AppendLine($"{ts}{ts} Z[{_fcpf}{vs:van}] &= ~BIT6;");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}FM[{_fcpf}{vs:van}] &= ~PRIO_FM_BIT;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"");
+                        }
+                        sb.AppendLine($"{ts}#endif // NO_TIMETOX");
+                    }
+                    
+                    if (c.InterSignaalGroep.LateReleases.Any())
+                    {
+                        if (c.InterSignaalGroep.Nalopen.Any() || c.InterSignaalGroep.Voorstarten.Any()) sb.AppendLine();
+                        
+                        sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                        sb.AppendLine($"{ts}/* Niet afkappen laterelease richting wanneer voedende een P[]&BIT11 heeft */");
+                        foreach (var vs in c.InterSignaalGroep.LateReleases)
+                        {
+                            sb.AppendLine($"{ts}if (P[{_fcpf}{vs:naar}] & BIT11) {{");
+                            sb.AppendLine($"{ts}{ts} Z[{_fcpf}{vs:van}] &= ~BIT6;");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}FM[{_fcpf}{vs:van}] &= ~PRIO_FM_BIT;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"");
+                        }
+                        sb.AppendLine($"{ts}#endif // NO_TIMETOX");
+                    }
+
+                    return sb.ToString();
                 default:
                     return null;
             }

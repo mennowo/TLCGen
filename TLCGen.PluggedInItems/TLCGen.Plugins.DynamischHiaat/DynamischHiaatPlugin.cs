@@ -288,10 +288,10 @@ namespace TLCGen.Plugins.DynamischHiaat
             switch (type)
             {
                 case CCOLCodeTypeEnum.SysHDefines:
-                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
-                    {
-                        sb.AppendLine($"#define TDHAMAX /* gebruik van TDHA_max[] */");
-                    }
+                    //if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
+                    //{
+                    //    sb.AppendLine($"#define TDHAMAX /* gebruik van TDHA_max[] */");
+                    //}
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -324,16 +324,16 @@ namespace TLCGen.Plugins.DynamischHiaat
                     switch (order)
                     {
                         case 9:
-                            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
-                            {
-                                sb.AppendLine("#ifdef TDHAMAX");
-                                sb.AppendLine($"{ts}/* TDH_max vullen bij gebruik van TDHAMAX */");
-                                sb.AppendLine($"{ts}for (d = 0; d < DP_MAX; ++d)");
-                                sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}TDH_max[d] = TDHA_max[d];");
-                                sb.AppendLine($"{ts}}}");
-                                sb.AppendLine("#endif // TDHAMAX");
-                            }
+                            //if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.TDHAMaxToepassen)
+                            //{
+                            //    sb.AppendLine("#ifdef TDHAMAX");
+                            //    sb.AppendLine($"{ts}/* TDH_max vullen bij gebruik van TDHAMAX */");
+                            //    sb.AppendLine($"{ts}for (d = 0; d < DP_MAX; ++d)");
+                            //    sb.AppendLine($"{ts}{{");
+                            //    sb.AppendLine($"{ts}{ts}TDH_max[d] = TDHA_max[d];");
+                            //    sb.AppendLine($"{ts}}}");
+                            //    sb.AppendLine("#endif // TDHAMAX");
+                            //}
 
                             break;
                         case 115:

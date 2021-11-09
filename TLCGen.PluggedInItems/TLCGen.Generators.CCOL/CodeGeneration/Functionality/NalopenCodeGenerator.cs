@@ -300,7 +300,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
-
+                
                 case CCOLCodeTypeEnum.PrioCPrioriteitsNiveau:
                     //if(!c.InterSignaalGroep.Nalopen.Any()) return "";
                     //sb.AppendLine($"{ts}/* Tegenhouden OV prio met conflict met nalooprichting indien die nog moet komen */");
