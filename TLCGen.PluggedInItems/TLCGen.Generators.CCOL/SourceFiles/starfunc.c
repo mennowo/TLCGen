@@ -109,37 +109,44 @@ boolv star_test_alles_rood()
 
 void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel)
 {
+    int fc = 0; /* tbv resette aanvraag op einde star programma  JDV*/
+
     /* omschakelen naar gewenste programma keuze */
     if (MM[mgewenst] != MM[mwerkelijk])
     {
-		if (((MM[mwerkelijk] != 0 && star_cyclustimer == 1) ||
-			 MM[mgewenst] != 0 ||
-			 (MM[mprogwissel])))
+        if (((MM[mwerkelijk] != 0 && star_cyclustimer == 1) ||
+             MM[mgewenst] != 0 ||
+             (MM[mprogwissel])))
         {
             MM[mprogwissel] = TRUE;
             if (star_test_alles_rood())
-			{
+            {
                 CIF_PARM1WIJZAP=CIF_MEER_PARMWIJZ;
-				MM[mwerkelijk] = MM[mgewenst];
-				MM[mprogwissel] = FALSE;
-			}
-		}
-	}
-	else
-	{
-		MM[mprogwissel] = FALSE;
-	}
+                MM[mwerkelijk] = MM[mgewenst];
+                MM[mprogwissel] = FALSE;
+ 
+                for (; fc < FCMAX; ++fc)
+                {
+                    A[fc] = FALSE;
+                }
+            }
+        }
+    }
+    else
+    {
+        MM[mprogwissel] = FALSE;
+    }
 
-	/* stuur alles rood tbv programmawisseling     */
+    /* stuur alles rood tbv programmawisseling     */
     if (MM[mprogwissel])
-	{
-		int fc;
+    {
+       int fc;
 
-    	/* stuur alle signaalgroepen naar rood */
+        /* stuur alle signaalgroepen naar rood */
         for (fc = 0; fc < FCMAX; fc++)
-		{
-			RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
-			Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
-		}
-	}
+        {
+            RR[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
+            Z[fc] = (RW[fc]&BIT2 || YV[fc]&BIT2) ? FALSE : BIT14;
+        }
+    }
 }
