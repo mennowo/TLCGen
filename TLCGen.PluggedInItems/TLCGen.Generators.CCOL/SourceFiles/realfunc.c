@@ -21,6 +21,7 @@ BESTAND:   realfunc.c
 *                                                         Minder argumenten voetgangersfuncties + detailwijzigingen (10032021) 
 * 3.1     16-10-2021                - CCA       Corr_Min_nl gemaakt waarniet naar de aanwezigheid voor A voor de naloop wordt gekeken
 *                                               _temp interne variabelen verwijderd (CCA/Ddo 07032021)
+* 3.2      9-11-2021                - CCA       MG && TGG toegevoegd in berekeningen
 ************************************************************************************/
 
 mulv REALTIJD[FCMAX];
@@ -112,18 +113,22 @@ void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
        else if((TO_max[k][fc]>=0))
 #endif
        {
-         conflicttijd = ( G[k] && !MG[k]) ? TFG_max[k] - TFG_timer[k] + /* conflict G (uitgezonderd MG) */
-                                            TVG_max[k] - TVG_timer[k] +
+         conflicttijd = ( G[k] && !MG[k])    ? TFG_max[k] - TFG_timer[k] +                                         /* conflict G (uitgezonderd MG) */
+                                               TVG_max[k] - TVG_timer[k] +
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
-                                             TIG_max[k][fc]                  :
-                               MG[k]      ?  TIG_max[k][fc]                  :    /* conflict MG */
-                               TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]   : 0; /* ontruimen */
+                                                TIG_max[k][fc]                               :
+                          (MG[k] && !TGG[k]) ?  TIG_max[k][fc]                               :                     /* conflict MG !TGG */
+                          (MG[k] &&  TGG[k]) ?  TIG_max[k][fc] + (TGG_max[k] - TGG_timer[k]) :                     /* conflict MG  TGG */
+                                  TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]                : 0;                  /* ontruimen        */
 #else
-                                            TGL_max[k] +
-                                             TO_max[k][fc]                  :
-                         (GL[k] || MG[k]) ? TGL_max[k] - TGL_timer[k] +           /* conflict GL of MG */
-                                             TO_max[k][fc]                  :
-                                TO[k][fc] ?  TO_max[k][fc] - TO_timer[k]    : 0;  /* ontruimen */
+                                  TGL_max[k] +  TO_max[k][fc]                                :
+                          (MG[k] && !TGG[k]) ?  TGL_max[k] +                                                       /* conflict MG !TGG */
+                                                 TO_max[k][fc]                               :
+                          (MG[k] &&  TGG[k]) ?  TGL_max[k] + (TGG_max[k] - TGG_timer[k]) +                         /* conflict MG TGG */
+                                                 TO_max[k][fc]                               :
+                                       GL[k] ?  TGL_max[k] - TGL_timer[k] +                                        /* conflict GL     */
+                                                 TO_max[k][fc]                               :
+                                   TO[k][fc] ?  TO_max[k][fc] - TO_timer[k]                  : 0;                  /* ontruimen       */
 
 #endif
 
@@ -258,16 +263,21 @@ void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
          else if((TO_max[k][fc]>=0))
 #endif
          {
-            conflicttijd = ( G[k] && !MG[k]) ? TFG_max[k] - TFG_timer[k] + 
+         conflicttijd = ( G[k] && !MG[k])    ? TFG_max[k] - TFG_timer[k] +                                         /* conflict G (uitgezonderd MG) */
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
-                                                TIG_max[k][fc]                  :
-                                       MG[k] ?  TIG_max[k][fc]                  :    /* conflict MG       */
-                                  TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]   : 0; /* ontruimen   of MG */
+                                                TIG_max[k][fc]                               :
+                          (MG[k] && !TGG[k]) ?  TIG_max[k][fc]                               :                     /* conflict MG !TGG */
+                          (MG[k] &&  TGG[k]) ?  TIG_max[k][fc] + (TGG_max[k] - TGG_timer[k]) :                     /* conflict MG  TGG */
+                                  TIG[k][fc] ?  TIG_max[k][fc] - TIG_timer[k]                : 0;                  /* ontruimen        */
 #else
-                                  TGL_max[k] +   TO_max[k][fc]                  :
-                           (GL[k] ||  MG[k]) ?  TGL_max[k] - TGL_timer[k] +          /* conflict GL of MG */
-                                                 TO_max[k][fc]                  :
-                                   TO[k][fc] ?  TO_max[k][fc] - TO_timer[k]     : 0; /* ontruimen   of MG */
+                                  TGL_max[k] +  TO_max[k][fc]                                :
+                          (MG[k] && !TGG[k]) ?  TGL_max[k] +                                                       /* conflict MG !TGG */
+                                                 TO_max[k][fc]                               :
+                          (MG[k] &&  TGG[k]) ?  TGL_max[k] + (TGG_max[k] - TGG_timer[k]) +                         /* conflict MG TGG */
+                                                 TO_max[k][fc]                               :
+                                       GL[k] ?  TGL_max[k] - TGL_timer[k] +                                        /* conflict GL     */
+                                                 TO_max[k][fc]                               :
+                                   TO[k][fc] ?  TO_max[k][fc] - TO_timer[k]                  : 0;                  /* ontruimen       */
 
 #endif
 

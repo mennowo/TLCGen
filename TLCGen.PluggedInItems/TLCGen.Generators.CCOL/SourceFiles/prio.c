@@ -1458,7 +1458,7 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #endif
             ))
         {
-            Z[k] |= PRIO_Z_BIT;
+            if (!VS[k] && !FG[k]) Z[k] |= PRIO_Z_BIT;
             if (PR[k] && CV[k])
             {
                 iAantalMalenNietAfkappen[k] = iInstAantalMalenNietAfkappen[k];
@@ -1500,7 +1500,7 @@ void AfkappenMG(int fc, int iStartGr)
 #endif
 		)
         {
-            Z[k] |= PRIO_Z_BIT;
+            if (!VS[k] && !FG[k]) Z[k] |= PRIO_Z_BIT;
         }
     }
 }
@@ -1572,7 +1572,7 @@ void PrioAfkappen(void)
                 ka(fc) &&
                 !iPrioriteit[prio]) /* toevoeging Ane 20100204 ikv. niet afbreken fc wanneer fc prioriteit moet hebben  */
             {
-                FM[fc] |= PRIO_FM_BIT;
+                if (!VS[fc] && !FG[fc]) FM[fc] |= PRIO_FM_BIT;
             }
         }
         if (EG[fc] && !MK[fc] && !iTerugKomen[fc] || R[fc] && !TRG[fc] && !A[fc])

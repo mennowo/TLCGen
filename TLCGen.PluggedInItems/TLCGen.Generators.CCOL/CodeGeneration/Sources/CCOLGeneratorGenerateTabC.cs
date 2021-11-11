@@ -149,10 +149,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TFG_defmax = NG;");
             sb.AppendLine($"{ts}TVG_defmax = NG;");
             sb.AppendLine();
-            sb.AppendLine($"{ts}TRG_type    |= RO_type; /* Garantieroodtijden  read-only */");
             sb.AppendLine($"{ts}TGG_type    |= RO_type; /* Garantiegroentijden read-only */");
-            sb.AppendLine($"{ts}TVG_deftype |= RO_type; /* Verlenggroentijden  read-only */");
-
+            
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, false, true, true, false);
             
             sb.AppendLine("}");

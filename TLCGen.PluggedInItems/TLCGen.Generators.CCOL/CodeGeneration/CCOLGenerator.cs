@@ -527,6 +527,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
                     var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
                     var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
+                    var corrrealAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
 
                     var sb = new StringBuilder();
 
@@ -537,6 +538,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
                             sb.AppendLine("{");
                             sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (corrrealAdd && l.Contains("Maxgroen_Add"))
+                        {
+                            sb.AppendLine($"{c.GetBoolV()} CorrectieRealisatieTijd_Add(void)");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}/* let op! deze functie wordt in een loop aangeroepen (max. 100 iteraties). */");
+                            sb.AppendLine($"{ts}boolv aanpassing = FALSE;");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine($"{ts}/* Voeg hier zonodig eigen code toe, bijv:"); 
+                            sb.AppendLine($"{ts} * aanpassing |= VTG2_Real_Los(fc32, fc31, T_max[tinl3231], T_max[tinl3132], hinl32, hinl31, hlos32, hlos31, (IH[hdrtk311] && IH[hdrtk321]));");
+                            sb.AppendLine($"{ts} * aanpassing |= VTG2_Real_Los(fc31, fc32, T_max[tinl3132], T_max[tinl3231], hinl31, hinl32, hlos31, hlos32, (IH[hdrtk311] && IH[hdrtk321]));");
+                            sb.AppendLine($"{ts} */");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine($"{ts}return aanpassing;");
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }

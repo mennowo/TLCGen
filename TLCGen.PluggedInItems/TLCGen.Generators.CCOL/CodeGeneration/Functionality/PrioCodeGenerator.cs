@@ -1530,7 +1530,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (!found)
                                 {
-                                    sb.Append($"{ts}if (");
+                                    sb.Append($"{ts}if (RA[{_fcpf}{nl.FaseVan}] || ");
                                 }
                                 found = true;
                                 foreach (var nlt in nl.Tijden)
