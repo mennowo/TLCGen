@@ -1598,3 +1598,46 @@ boolv set_MRLW_nl(count i, count j, boolv period)
    return (FALSE);
 }
 
+void set_parm1wijzap(mulv *parm)
+{
+   if (CIF_PARM1WIJZAP == CIF_GEEN_PARMWIJZ) {
+   CIF_PARM1WIJZAP= parm - CIF_PARM1;
+   }
+   else {
+   CIF_PARM1WIJZAP= CIF_MEER_PARMWIJZ;
+   }
+}
+
+bool set_parm1wijzpb_tvgmax (mulv periode, count startprm, mulv ifc_prm[], count ifc_prm_max)
+{
+	 count fci, i;
+	 bool tvgmaxwijzpb; /* max. verlenggroentijd wijziging via procesbesturing */
+	 
+/* wanneer via procesbesturing TVG_max[] wordt gewijzigd, aanpassen in de parameter in de betreffende periode   */
+
+/*   de index van de FASECYCLUS, waarvan de TVG_max[] is gewijzigd = 
+     CIF_PARM1WIJZPB minus het aantal ontruimingstijden (= FCMAX * FCMAX)
+                     minus het aantal detectortijden (= 6 (bezettijd, hiaattijd, bovengedrag, ondergedrag, fluttergedrag, fluttergedrag) * DPMAX)
+                     minus het aantal signaalgroeptijden (= 4 (garantieroodtijd, garantiegroentijd, garantiegeeltijd, vastgroentijd) * FCMAX)
+     fcindex_gewijzigde_maxverlenggroentijd = CIF_PARM1WIJZPB - FCMAX*FCMAX - 6 * DPMAX - 4 * FCMAX
+     aan de hand hiervan kun je het indexnummer van de te wijzigen verlengroenparameter bepalen.
+
+    dat is dan: PRM[startprm + (periode - 1) * ifc_prm_max  + fcindex_gewijzigde_maxverlenggroentijd]
+
+*/
+    tvgmaxwijzpb = FALSE;
+    
+    fci =  CIF_PARM1WIJZPB - (FCMAX*FCMAX) - (6 * DPMAX) - (4 * FCMAX);
+    if(fci >=0 && fci < FCMAX) /* de gewijzigde parameter is gewijzgde max. verlenggroentijd */ { 
+    	 for(i=0; i<ifc_prm_max; i++) if(ifc_prm[i] == fci) break;
+
+       if((startprm + (periode - 1) * ifc_prm_max  + i) < PRMMAX) {
+          PRM[startprm + (periode - 1) * ifc_prm_max  + fci] = TVG_max[fci];
+          set_parm1wijzap(&PRM[startprm + (periode - 1) * ifc_prm_max  + i]);
+          tvgmaxwijzpb = TRUE;
+       }
+    }
+    
+    return (tvgmaxwijzpb);
+}
+

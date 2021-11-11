@@ -62,7 +62,8 @@ namespace TLCGen.Models
         [IsDocumented(conditionProperty: "CCOLVersie", conditionPropertyValue: "CCOL8")]
         public bool Intergroen { get; set; }
 
-        public bool PracticeOmgeving { get; set; }
+        public bool PracticeOmgeving { get; set; } 
+        public bool ParameterwijzigingPBBijTVGMax { get; set; }
         public bool NietGebruikenBitmap { get; set; }
         public CCOLCodeCaseEnum CCOLCodeCase { get; set; }
 

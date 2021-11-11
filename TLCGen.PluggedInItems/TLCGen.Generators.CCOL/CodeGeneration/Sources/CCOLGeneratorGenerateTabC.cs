@@ -34,6 +34,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.Append(GenerateTabCIncludes(controller));
             sb.AppendLine();
+            sb.Append(GenerateTabCTop(controller));
+            sb.AppendLine();
             sb.Append(GenerateTabCControlDefaults(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParameters(controller));
@@ -59,6 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             return sb.ToString();
         }
+        
         private string GenerateTabCIncludes(ControllerModel c)
         {
             var sb = new StringBuilder();
@@ -129,6 +132,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateTabCTop(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCTop, false, true, false, true);
+
+            return sb.ToString();
+        }
+        
         private string GenerateTabCControlDefaults(ControllerModel controller)
         {
             var sb = new StringBuilder();

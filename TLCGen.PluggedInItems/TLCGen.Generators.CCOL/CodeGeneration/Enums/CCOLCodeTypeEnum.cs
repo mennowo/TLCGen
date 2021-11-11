@@ -63,6 +63,7 @@
         // TAB
         TabCBeforeIncludes,
 	    TabCIncludes,
+	    TabCTop,
         TabCControlDefaults,
 	    TabCControlParameters,
 

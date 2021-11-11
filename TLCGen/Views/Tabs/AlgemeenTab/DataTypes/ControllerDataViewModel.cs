@@ -435,7 +435,7 @@ namespace TLCGen.ViewModels
         }
 
         [Category("CCOL specifieke opties")]
-        [Description("CCOL parser password ")]
+        [Description("CCOL parser password")]
         public string CCOLParserPassword
         {
             get => _Controller?.Data?.CCOLParserPassword;
@@ -644,6 +644,19 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(PracticeOmgeving), broadcast: true);
             }
         }
+        
+        [Description("Parameterwijziging PB bij TVG_max")]
+        public bool ParameterwijzigingPBBijTVGMax
+        {
+            get => _Controller?.Data?.ParameterwijzigingPBBijTVGMax ?? false;
+            set
+            {
+                _Controller.Data.ParameterwijzigingPBBijTVGMax = value;
+                RaisePropertyChanged<object>(nameof(ParameterwijzigingPBBijTVGMax), broadcast: true);
+            }
+        }
+        
+        
 
         [Description("Opnemen code mirakel monitor")]
         public bool MirakelMonitor

@@ -58,6 +58,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
     <Compile Include="CodeGeneration\Functionality\NevenMeldingenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\AlternatievenPerBlokCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\ParameterwijzigingPBBijTVGMaxCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\PrioCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\RealFuncCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\RISCodeGenerator.cs" />

@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define TVGAMAX /* gebruik van TVGA_max[] */");
             }
-            
+
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.SysHDefines, true, true, false, false);
             sb.AppendLine();
             

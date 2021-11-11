@@ -80,6 +80,8 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
 	count exgperc, count verlengen, count meergroen, ...);
 void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, count mlcyclus);
 void maximumgroentijden_va_arg(count fc, ...);
+void set_parm1wijzap(mulv *parm);
+bool set_parm1wijzpb_tvgmax(mulv periode, count startprm, mulv *ifc_prm, count ifc_prm_max); /* argumenten: actuele periode, index eerste verlenggroen parameter, array van fc met prmvg#_$$, max aantal fasen met prmvg */
 #if CCOL_V >= 110
 boolv kp(count i);
 #endif

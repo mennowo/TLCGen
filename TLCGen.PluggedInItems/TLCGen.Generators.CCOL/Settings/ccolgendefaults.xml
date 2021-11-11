@@ -1028,6 +1028,27 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="ParameterwijzigingPBBijTVGMaxCodeGenerator">
+      <CodePieceData>
+        <ClassName>ParameterwijzigingPBBijTVGMaxCodeGenerator</ClassName>
+        <Description>Parameterwijziging PB bij TVG_max</Description>
+        <ElementGenerationOrder>350</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>wijzpb</Default>
+            <Setting>wijzpb</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Wijziging aan PB doorgeven</Description>
+          </Setting>
+          <Setting>
+            <Default>aantalvgtwijzpb</Default>
+            <Setting>aantalvgtwijzpb</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Aantal doorgegeven wijzigingen aan PB bijhouden</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="PelotonKoppelingCodeGenerator">
       <CodePieceData>
         <ClassName>PelotonKoppelingCodeGenerator</ClassName>
