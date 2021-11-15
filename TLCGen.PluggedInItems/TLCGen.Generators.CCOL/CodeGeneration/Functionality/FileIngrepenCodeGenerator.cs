@@ -773,8 +773,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (tdfc.AfkappenOpStartFile)
                                 {
-                                    sb.AppendLine($"{ts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SH[{_hpf}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
                                 }
                                 
                                 if (tdfc.MaximaleGroentijd)

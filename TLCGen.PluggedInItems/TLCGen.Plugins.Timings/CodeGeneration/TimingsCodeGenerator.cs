@@ -516,7 +516,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         {
                             sb.AppendLine($"{ts}if (P[{_fcpf}{nl:van}] & BIT11) {{");
                             sb.AppendLine($"{ts}{ts} Z[{_fcpf}{nl:naar}] &= ~BIT6;");
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:naar}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:naar}] &= ~(BIT1 | BIT2 | BIT4 | BIT6);");
                             sb.AppendLine($"{ts}{ts}FM[{_fcpf}{nl:naar}] &= ~PRIO_FM_BIT;");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"");
@@ -534,7 +534,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         {
                             sb.AppendLine($"{ts}if (P[{_fcpf}{vs:naar}] & BIT11) {{");
                             sb.AppendLine($"{ts}{ts} Z[{_fcpf}{vs:van}] &= ~BIT6;");
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT4 | BIT6);");
                             sb.AppendLine($"{ts}{ts}FM[{_fcpf}{vs:van}] &= ~PRIO_FM_BIT;");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"");
@@ -552,7 +552,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         {
                             sb.AppendLine($"{ts}if (P[{_fcpf}{vs:naar}] & BIT11) {{");
                             sb.AppendLine($"{ts}{ts} Z[{_fcpf}{vs:van}] &= ~BIT6;");
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{vs:van}] &= ~(BIT1 | BIT2 | BIT4 | BIT6);");
                             sb.AppendLine($"{ts}{ts}FM[{_fcpf}{vs:van}] &= ~PRIO_FM_BIT;");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"");

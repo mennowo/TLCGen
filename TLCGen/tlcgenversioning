@@ -1,5 +1,11 @@
-TLCGen=0.10.2.0
+TLCGen=0.10.3.0
 RN==TLCGen
+TLCGen versie: 0.10.3.0
+- Verbeterde omgang met synchronisaties bij realfunc
+- Optie parameterwijziging PB bij TVG_max
+- Fix omschakelen star naar ML
+- Aangepaste code file ingrepen
+- Aangepaste code dynamische hiaattijden
 TLCGen versie: 0.10.2.0
 - Hotfix meeaanvragen
 TLCGen versie: 0.10.1.0

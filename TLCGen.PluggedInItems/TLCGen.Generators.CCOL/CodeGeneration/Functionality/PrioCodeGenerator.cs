@@ -1559,7 +1559,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc 
-                                    ? $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~(BIT1|BIT2|BIT6);" 
+                                    ? $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~(BIT1 | BIT2 | BIT4 | BIT6);" 
                                     : $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~PRIO_FM_BIT;");
                                 sb.AppendLine($"{ts}}}");
