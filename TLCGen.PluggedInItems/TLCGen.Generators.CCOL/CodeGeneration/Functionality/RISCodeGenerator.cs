@@ -153,6 +153,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
+                CCOLCodeTypeEnum.SysHDefines => new []{110},
                 CCOLCodeTypeEnum.RegCInitApplication => new []{110},
                 CCOLCodeTypeEnum.RegCAanvragen => new []{110},
                 CCOLCodeTypeEnum.RegCMeetkriterium => new []{110},
@@ -171,12 +172,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             var risModel = c.RISData;
 
-            if (!risModel.RISToepassen) return "";
+            if (!risModel.RISToepassen || c.Data.CCOLVersie < CCOLVersieEnum.CCOL110) return "";
 
             var sb = new StringBuilder();
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHDefines:
+                    sb.AppendLine("#define RIS_GEEN_INDEXERING");
+                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.PrioCIncludes:
                     sb.AppendLine($"{ts}#include \"extra_func_ris.h\"");
                     return sb.ToString();

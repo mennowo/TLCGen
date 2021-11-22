@@ -1024,6 +1024,9 @@
     <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.7.0.0.rtf" />
+    <None Include="tlcgenversioning_oldvers">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -1140,6 +1143,11 @@
     <None Include="tlcgenversioning">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Licenses\TLCGen_EULA.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -546,7 +546,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{c.GetBoolV()} CorrectieRealisatieTijd_Add(void)");
                             sb.AppendLine("{");
                             sb.AppendLine($"{ts}/* let op! deze functie wordt in een loop aangeroepen (max. 100 iteraties). */");
-                            sb.AppendLine($"{ts}boolv aanpassing = FALSE;");
+                            sb.AppendLine($"{ts}{c.GetBoolV()} aanpassing = FALSE;");
                             sb.AppendLine($"{ts}");
                             sb.AppendLine($"{ts}/* Voeg hier zonodig eigen code toe, bijv:"); 
                             sb.AppendLine($"{ts} * aanpassing |= VTG2_Real_Los(fc32, fc31, T_max[tinl3231], T_max[tinl3132], hinl32, hinl31, hlos32, hlos31, (IH[hdrtk311] && IH[hdrtk321]));");

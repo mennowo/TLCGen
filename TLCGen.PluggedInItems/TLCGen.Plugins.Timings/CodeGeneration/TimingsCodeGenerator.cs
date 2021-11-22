@@ -120,7 +120,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
         public string GetCode(TimingsDataModel timingsModel, ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 || !timingsModel.TimingsToepassen) return null;
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL110 || !timingsModel.TimingsToepassen) return null;
 
             var sb = new StringBuilder();
             
@@ -167,10 +167,12 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                             sb.AppendLine($"{ts}{ts}if (RT[{_tpf}{_tfo}{fo:vannaar}] || T[{_tpf}{_tfo}{fo:vannaar}]) P[{_fcpf}{fo:van}] &= ~BIT11;");
                         }
                     }
+                    sb.AppendLine();
+                    // sb.AppendLine($"{ts}{ts}msg_fctiming_add();");
+                    // sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();
-                    
-                    sb.AppendLine($"{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine("#if !(defined NO_TIMETOX) && !defined NO_TIMINGS_PRINT && (!defined (AUTOMAAT) || defined (VISSIM)) && !defined AUTOMAAT_TEST");
                     sb.AppendLine($"{ts}if (display) {{");
                     sb.AppendLine($"{ts}{ts}xyprintf( 92, 8 + FC_MAX,\"-----\");");

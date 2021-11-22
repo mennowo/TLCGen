@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CodingConnected e.U.")]
 [assembly: AssemblyProduct("TLCGen.Generators.CCOL")]
-[assembly: AssemblyCopyright("Copyright © CodingConnected e.U. 2016-2018")]
+[assembly: AssemblyCopyright("Copyright © CodingConnected e.U. 2016-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

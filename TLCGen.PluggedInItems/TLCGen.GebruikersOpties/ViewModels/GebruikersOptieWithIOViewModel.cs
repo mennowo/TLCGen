@@ -40,6 +40,16 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        public bool Multivalent
+        {
+            get => _GebruikersOptieWithOI.Multivalent;
+            set
+            {
+                _GebruikersOptieWithOI.Multivalent = value;
+                RaisePropertyChanged<object>(nameof(Multivalent), broadcast: true);
+            }
+        }
+
         public bool Dummy
         {
             get => _GebruikersOptieWithOI.Dummy;

@@ -228,6 +228,11 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override bool CanBeEnabled()
+        {
+            return _Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110;
+        }
+        
         #endregion
 
         #region Commands

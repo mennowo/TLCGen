@@ -46,12 +46,12 @@
         <TabControl TabStripPlacement="Left" SelectedIndex="{Binding Path=SelectedTabIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0">
             <TabItem Header="Uitgangen">
                 <local:GebruikersOptiesLijst 
-                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ShowMultivalent="True"
                     ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Ingangen">
                 <local:GebruikersOptiesLijst 
-                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ShowMultivalent="True"
                     ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Hulpelementen">

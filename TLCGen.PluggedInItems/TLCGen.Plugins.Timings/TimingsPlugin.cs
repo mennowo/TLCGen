@@ -89,7 +89,7 @@ namespace TLCGen.Plugins.Timings
 
         public bool CanBeEnabled()
         {
-            return true;
+            return _controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110;
         }
 
         public void LoadTabs()

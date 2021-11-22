@@ -623,13 +623,6 @@ namespace TLCGen.ViewModels
 
         private void OnCCOLVersionChanged(CCOLVersionChangedMessage obj)
         {
-            if (obj.OldVersion >= CCOLVersieEnum.CCOL110 && obj.NewVersion < CCOLVersieEnum.CCOL110 &&
-                MeldingenLists.SelectMany(x => x.Meldingen).Any(x => x.Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
-            {
-                TLCGenDialogProvider.Default.ShowMessageBox(
-                    "In CCOL versies lager dan 11 is prioriteit via de RIS niet beschikbaar; controleer de prio instellingen.",
-                    "Prioriteit RIS niet beschikbaar", MessageBoxButton.OK);
-            }
             foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
         }
 

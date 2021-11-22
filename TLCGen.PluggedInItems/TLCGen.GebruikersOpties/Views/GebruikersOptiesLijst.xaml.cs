@@ -28,6 +28,15 @@ namespace TLCGen.GebruikersOpties
         public static readonly DependencyProperty ShowInstellingProperty =
             DependencyProperty.Register("ShowInstelling", typeof(bool), typeof(GebruikersOptiesLijst), new PropertyMetadata(true));
 
+        public bool ShowMultivalent
+        {
+            get => (bool)GetValue(ShowMultivalentProperty);
+            set => SetValue(ShowMultivalentProperty, value);
+        }
+
+        public static readonly DependencyProperty ShowMultivalentProperty =
+            DependencyProperty.Register("ShowMultivalent", typeof(bool), typeof(GebruikersOptiesLijst), new PropertyMetadata(true));
+        
         public bool ShowDummy
         {
             get => (bool)GetValue(ShowDummyProperty);

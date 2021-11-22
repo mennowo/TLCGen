@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033"
-    Version="0.10.3"
+    Version="0.10.4"
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -26,6 +26,7 @@
         <ComponentGroupRef Id="TLCGenMain" />
         <ComponentGroupRef Id="TLCGenUpdater" />
         <ComponentGroupRef Id="TLCGenDependencies" />
+        <ComponentGroupRef Id="TLCGenLicenses" />
         <ComponentGroupRef Id="TLCGenComponents" />
         <ComponentGroupRef Id="TLCGenPlugins" />
         <ComponentGroupRef Id="TLCGenSettings" />
@@ -66,6 +67,7 @@
           </Directory>
           <Directory Id="CCOLSOURCEFILESFOLDER" Name="SourceFiles" />
           <Directory Id="CCOLDOCSFOLDER" Name="Docs" />
+          <Directory Id="LICENSESFOLDER" Name="Licenses" />
           <Directory Id="CCOLSOURCEFILESTOCOPYFOLDER" Name="SourceFilesToCopy" />
         </Directory>
 			</Directory>
@@ -102,6 +104,13 @@
         <File Id='TLCGenUpdaterEXE' Name='TLCGen.Updater.exe' Source='$(var.UpdaterDir)/TLCGen.Updater.exe' KeyPath='no' />
         <File Id='TLCGenUpdaterEXEConfig' Name='TLCGen.Updater.exe.config' Source='$(var.UpdaterDir)/TLCGen.Updater.exe.config' KeyPath='no' />
         <File Id='GalaSoft.MvvmLight.Updater' Name='GalaSoft.MvvmLight.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.dll' KeyPath='no' />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Licensing -->
+    <ComponentGroup Id="TLCGenLicenses" Directory="LICENSESFOLDER">
+      <Component Id='AllLicenses' Guid='69F35ABD-8434-47C3-901F-EAD57D8E7205'>
+        <File Id='TLCGenEULA' Name='TLCGen_EULA.rtf' Source='$(var.ReleaseDir)/Licenses/TLCGen_EULA.rtf' KeyPath='no' />
       </Component>
     </ComponentGroup>
     

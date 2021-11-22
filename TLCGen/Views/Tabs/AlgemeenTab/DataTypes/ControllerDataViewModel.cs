@@ -9,6 +9,7 @@ using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
 using System;
 using System.Linq;
+using System.Windows;
 using TLCGen.Dependencies.Models.Enumerations;
 
 namespace TLCGen.ViewModels
@@ -162,6 +163,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                     MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());
+                    Messenger.Default.Send(new UpdateTabsEnabledMessage());
                     RaisePropertyChanged<object>(nameof(CCOLVersie), broadcast: true);
                 }
                 RaisePropertyChanged(nameof(IsCCOLVersieLowerThan9));
@@ -169,11 +171,21 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo110));
                 RaisePropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                
+                if (oldValue >= CCOLVersieEnum.CCOL110 && _Controller.Data.CCOLVersie < CCOLVersieEnum.CCOL110 &&
+                    _Controller.PrioData.HasPrio &&
+                    (_Controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                    || _Controller.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                {
+                    TLCGenDialogProvider.Default.ShowMessageBox(
+                        "In CCOL versies lager dan 11 is prioriteit via de RIS niet beschikbaar; controleer de prio instellingen.",
+                        "Prioriteit RIS niet beschikbaar", MessageBoxButton.OK);
+                }
+                
                 MessengerInstance.Send(new CCOLVersionChangedMessage(oldValue, _Controller.Data.CCOLVersie));
             }
         }
-
-
+        
         [Description("Intergroen")]
         [BrowsableCondition("IsCCOLVersieHigherThan9")]
         public bool Intergroen

@@ -468,7 +468,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#ifndef NO_TMGLMAX");
                 foreach (var fcm in controller.Fasen)
                 {
-                    sb.Append($"{ts}TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
+                    sb.AppendLine($"{ts}TMGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
                 }
                 sb.AppendLine($"#endif // NO_TMGLMAX");
             }
