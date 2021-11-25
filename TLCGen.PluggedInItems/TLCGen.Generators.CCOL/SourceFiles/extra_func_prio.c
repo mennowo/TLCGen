@@ -42,8 +42,8 @@ bool DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 	for (index = 0; index < lijnmax; ++index)
 	{
 		if (PRM[lijnparm + 1 + index] != 0 && CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index] &&
-			(PRM[lijnparm + 11 + index] != 0 && CIF_DSI[CIF_DSI_RITC] == PRM[lijnparm + 11 + index] ||
-				PRM[lijnparm + 11 + index] == 999)) return TRUE;
+			(PRM[lijnparm + 1 + lijnmax + index] != 0 && CIF_DSI[CIF_DSI_RITC] == PRM[lijnparm + 1 + lijnmax + index] ||
+				PRM[lijnparm + 1 + lijnmax + index] == 999)) return TRUE;
 	}
 	return FALSE;
 }

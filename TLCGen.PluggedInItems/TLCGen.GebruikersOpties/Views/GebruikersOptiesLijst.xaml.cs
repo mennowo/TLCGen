@@ -35,7 +35,7 @@ namespace TLCGen.GebruikersOpties
         }
 
         public static readonly DependencyProperty ShowMultivalentProperty =
-            DependencyProperty.Register("ShowMultivalent", typeof(bool), typeof(GebruikersOptiesLijst), new PropertyMetadata(true));
+            DependencyProperty.Register("ShowMultivalent", typeof(bool), typeof(GebruikersOptiesLijst), new PropertyMetadata(false));
         
         public bool ShowDummy
         {
