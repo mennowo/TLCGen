@@ -1,14 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Linq;
 using TLCGen.Helpers;
-using TLCGen.Plugins.Timings.Models;
+using TLCGen.Models;
 
-namespace TLCGen.Plugins.Timings
+namespace TLCGen.ViewModels
 {
     public class TimingsFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        private TimingsFaseCyclusDataModel _faseCyclus;
+        #region Fields
+
+        private readonly TimingsFaseCyclusDataModel _faseCyclus;
+
+        #endregion // Fields
+
+        #region Properties
 
         public string FaseCyclus
         {
@@ -31,19 +36,33 @@ namespace TLCGen.Plugins.Timings
             }
         }
 
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
         public object GetItem()
         {
             return _faseCyclus;
         }
+
+        #endregion // IViewModelWithItem
+
+        #region IComparable
 
         public int CompareTo(object obj)
         {
             return string.CompareOrdinal(FaseCyclus, ((TimingsFaseCyclusDataViewModel)obj).FaseCyclus);
         }
 
+        #endregion // IComparable
+
+        #region Constructor
+
         public TimingsFaseCyclusDataViewModel(TimingsFaseCyclusDataModel faseCyclus)
         {
             _faseCyclus = faseCyclus;
         }
+
+        #endregion // Constructor
     }
 }

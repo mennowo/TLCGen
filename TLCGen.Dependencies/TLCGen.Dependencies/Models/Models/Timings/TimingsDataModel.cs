@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace TLCGen.Plugins.Timings.Models
+namespace TLCGen.Models
 {
 
     [Serializable]

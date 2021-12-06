@@ -2,7 +2,7 @@
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
-namespace TLCGen.Plugins.Timings.Models
+namespace TLCGen.Models
 {
     [Serializable]
     public class TimingsFaseCyclusDataModel

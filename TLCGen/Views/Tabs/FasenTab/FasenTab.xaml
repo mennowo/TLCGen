@@ -23,6 +23,9 @@
         <DataTemplate DataType="{x:Type vm:FasenRISTabViewModel}">
             <local:FasenRISTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FasenTimingsTabViewModel}">
+            <local:FasenTimingsTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" AutomationProperties.AutomationId="fasenTab"

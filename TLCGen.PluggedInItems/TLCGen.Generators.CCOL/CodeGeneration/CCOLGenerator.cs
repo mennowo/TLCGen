@@ -212,6 +212,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}hst.c");
                     }
+
+                    if (c.TimingsData.TimingsToepassen)
+                    {
+                        File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}fctimings.c"), GenerateFcTimingsC(c), Encoding.Default);
+                    }
                     if (c.Data.GenererenEnkelCompilatieBestand)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}regeling.c"), GenerateRegelingC(c), Encoding.Default);

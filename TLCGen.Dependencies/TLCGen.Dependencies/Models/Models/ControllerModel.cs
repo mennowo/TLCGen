@@ -70,6 +70,8 @@ namespace TLCGen.Models
 		
         public StarDataModel StarData { get; set; }
 
+        public TimingsDataModel TimingsData { get; set; }
+        
 		public CustomDataModel CustomData { get; set; }
 
         #endregion // Properties
@@ -102,6 +104,7 @@ namespace TLCGen.Models
             RISData = new RISDataModel();
             AlternatievenPerBlokData = new AlternatievenPerBlokModel();
             StarData = new StarDataModel();
+            TimingsData = new TimingsDataModel();
         }
 
         #endregion // Constructor

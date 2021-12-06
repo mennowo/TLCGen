@@ -1,10 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using TLCGen.Helpers;
-using TLCGen.Plugins.Timings.Models;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+﻿using TLCGen.Helpers;
 using System;
 using TLCGen.Messaging.Messages;
 using System.Linq;
@@ -12,22 +6,28 @@ using System.Windows.Media;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
+using TLCGen.Plugins;
+using TimingsFaseCyclusDataModel = TLCGen.Models.TimingsFaseCyclusDataModel;
 
-namespace TLCGen.Plugins.Timings
+namespace TLCGen.ViewModels
 {
-    public class TimingsTabViewModel : ViewModelBase
+    [TLCGenTabItem(index: -1, type: TabItemTypeEnum.FasenTab)]
+    public class FasenTimingsTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
-        private readonly TimingsPlugin _plugin;
         private TimingsFaseCyclusDataViewModel _selectedTimingsFase;
-        private TimingsDataModel _timingsModel;
         private string _betaMsgId;
+        private ControllerModel _controller;
 
         #endregion // Fields
 
         #region Properties
 
+        public override string DisplayName => "Timings";
+        
+        public ImageSource Icon => null;
+        
         public TimingsFaseCyclusDataViewModel SelectedTimingsFase
         {
             get => _selectedTimingsFase;
@@ -38,13 +38,17 @@ namespace TLCGen.Plugins.Timings
             }
         }
 
-        public TimingsDataModel TimingsModel
+        public override ControllerModel Controller
         {
-            get => _timingsModel;
+            get => _controller;
             set
             {
-                _timingsModel = value;
-                TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_timingsModel.TimingsFasen);
+                _controller = value;
+                if (_controller != null)
+                {
+                    TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_controller.TimingsData.TimingsFasen);
+                }
+                RaisePropertyChanged();
             }
         }
 
@@ -52,10 +56,10 @@ namespace TLCGen.Plugins.Timings
 
         public bool TimingsToepassen
         {
-            get => _timingsModel.TimingsToepassen;
+            get => _controller.TimingsData.TimingsToepassen;
             set
             {
-                _timingsModel.TimingsToepassen = value;
+                _controller.TimingsData.TimingsToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(TimingsToepassenOK));
             }
@@ -63,10 +67,10 @@ namespace TLCGen.Plugins.Timings
         
         public bool TimingsUsePredictions
         {
-            get => _timingsModel.TimingsUsePredictions;
+            get => _controller.TimingsData.TimingsUsePredictions;
             set
             {
-                _timingsModel.TimingsUsePredictions = value;
+                _controller.TimingsData.TimingsUsePredictions = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 if (value)
                 {
@@ -87,9 +91,9 @@ namespace TLCGen.Plugins.Timings
             }
         }
 
-        public bool TimingsToepassenAllowed => _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL9;
+        public bool TimingsToepassenAllowed => _controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL9;
         
-        public bool TimingsPredictionsToepassenAllowed => _timingsModel.TimingsToepassen && _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL110;
+        public bool TimingsPredictionsToepassenAllowed => _controller.TimingsData.TimingsToepassen && _controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110;
 
         public bool TimingsToepassenOK => TimingsToepassenAllowed && TimingsToepassen;
 
@@ -126,16 +130,6 @@ namespace TLCGen.Plugins.Timings
             TimingsFasen.BubbleSort();
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
-        {
-            if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
-            {
-                TLCGenModelManager.Default.ChangeNameOnObject(TimingsModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
-                TimingsFasen.Rebuild();
-                TimingsFasen.BubbleSort();
-            }
-        }
-
         #endregion // TLCGen messaging
 
         #region Private Methods 
@@ -147,18 +141,8 @@ namespace TLCGen.Plugins.Timings
         public void UpdateMessaging()
         {
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Public Methods
-
-        #region Constructor
-
-        public TimingsTabViewModel(TimingsPlugin plugin)
-        {
-            _plugin = plugin;
-        }
-
-        #endregion // Constructor
     }
 }

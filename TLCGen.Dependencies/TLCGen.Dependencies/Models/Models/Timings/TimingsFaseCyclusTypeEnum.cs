@@ -1,4 +1,4 @@
-﻿namespace TLCGen.Plugins.Timings.Models
+﻿namespace TLCGen.Models
 {
     public enum TimingsFaseCyclusTypeEnum
     {

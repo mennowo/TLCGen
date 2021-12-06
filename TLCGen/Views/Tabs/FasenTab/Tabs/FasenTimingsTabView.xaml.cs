@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TLCGen.Plugins.Timings
+namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for TimingsTabView.xaml
+    /// Interaction logic for FasenTimingsTabView.xaml
     /// </summary>
-    public partial class TimingsTabView : UserControl
+    public partial class FasenTimingsTabView : UserControl
     {
-        public TimingsTabView()
+        public FasenTimingsTabView()
         {
             InitializeComponent();
         }

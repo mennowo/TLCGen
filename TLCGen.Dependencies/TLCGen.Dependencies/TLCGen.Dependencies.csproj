@@ -278,6 +278,9 @@
     <Compile Include="Models\Models\Star\StarPeriodeDataModel.cs" />
     <Compile Include="Models\Models\Star\StarProgrammaFase.cs" />
     <Compile Include="Models\Models\Star\StarProgrammaModel.cs" />
+    <Compile Include="Models\Models\Timings\TimingsDataModel.cs" />
+    <Compile Include="Models\Models\Timings\TimingsFaseCyclusDataModel.cs" />
+    <Compile Include="Models\Models\Timings\TimingsFaseCyclusTypeEnum.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinaatModel.cs" />
     <Compile Include="Models\Models\Varia\BitmapCoordinatenDataModel.cs" />
     <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />

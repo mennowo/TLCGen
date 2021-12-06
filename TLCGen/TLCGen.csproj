@@ -111,6 +111,13 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\TimingsFaseCyclusDataViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabView.xaml.cs">
+      <DependentUpon>FasenTimingsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabViewModel.cs">
+      <DependentUpon>FasenTimingsTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\MeldingTemplateSelector.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepFietsPrioriteitMeldingView.xaml</DependentUpon>
@@ -672,6 +679,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -74,6 +74,7 @@
     <Compile Include="CodeGeneration\Functionality\HalfstarCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\OVGeconditioneerdePrioGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\StarCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\TimingsCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VISSIMCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VeiligheidsGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\NalopenCodeGenerator.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRisSimC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRegelingC.cs" />
+    <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratorTimingsC.cs" />
     <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs">
       <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
     </Compile>
@@ -201,6 +203,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SourceFiles\nlvar.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\timingsfunc.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\timingsvar.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\timings_uc4.c">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SourceFiles\wtv_testwin.c">
