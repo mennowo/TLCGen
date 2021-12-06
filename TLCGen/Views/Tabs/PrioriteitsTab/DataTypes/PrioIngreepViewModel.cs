@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -62,6 +63,12 @@ namespace TLCGen.ViewModels
                 foreach (var m in PrioIngreep.MeldingenData.Inmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
                 foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
 
+                var meldingen = MeldingenLists.SelectMany(x => x.Meldingen);
+                foreach (var melding in meldingen)
+                {
+                    SetRisRoles(melding);
+                }
+                
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
                 RaisePropertyChanged(nameof(IsTypeBus));
                 RaisePropertyChanged(nameof(IsTypeBicycle));
@@ -577,6 +584,43 @@ namespace TLCGen.ViewModels
 
         #endregion // Private Methods
 
+        #region Public Methods
+        
+        public void SetRisRoles(PrioIngreepInUitMeldingViewModel ingreepMelding)
+        {
+            switch (Type)
+            {
+                case PrioIngreepVoertuigTypeEnum.Tram:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.TRAM;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.Bus:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.BUS;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.Fiets:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.DEFAULT;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.COMMERCIAL | RISVehicleRole.SPECIALTRANSPORT;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.Auto:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.DEFAULT;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.NG:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            ingreepMelding.RISViewModel.UpdateRoles();
+        }
+
+        #endregion // Public Methods
+        
         #region TLCGen Messaging
 
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)

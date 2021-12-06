@@ -115,19 +115,27 @@
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepFietsPrioriteitMeldingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingViewModel.cs" />
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepFietsPrioriteitMeldingViewModel.cs">
+      <DependentUpon>PrioIngreepFietsPrioriteitMeldingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingViewModel.cs">
+      <DependentUpon>PrioIngreepRegularMeldingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepPelotonMeldingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepPelotonMeldingViewModel.cs">
+      <DependentUpon>PrioIngreepPelotonMeldingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRegularMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepRegularMeldingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingView.xaml.cs">
       <DependentUpon>PrioIngreepRISMeldingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\Meldingen\PrioIngreepRISMeldingViewModel.cs">
+      <DependentUpon>PrioIngreepRISMeldingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PrioriteitsTab\DataTypes\PrioItemViewModel.cs" />
     <Compile Include="Views\Tabs\PrioriteitsTab\Tabs\PrioIngrepenOverzichtTabView.xaml.cs">
       <DependentUpon>PrioIngrepenOverzichtTabView.xaml</DependentUpon>

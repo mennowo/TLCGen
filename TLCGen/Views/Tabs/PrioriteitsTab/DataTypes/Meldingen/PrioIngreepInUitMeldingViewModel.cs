@@ -70,9 +70,13 @@ namespace TLCGen.ViewModels
                     if (raise) RaisePropertyChanged<object>(broadcast: true);
                 }
 
-                if (Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde && !RISViewModel.RisEta.HasValue)
+                if (Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
                 {
-                    RISViewModel.RisEta = _ingreep.RijTijdGehinderd;
+                    RISViewModel.RisEta ??= _ingreep.RijTijdGehinderd;
+                    if (PrioIngreepInUitMelding is { RisRole: 0, RisSubrole: 0 })
+                    {
+                        _ingreep.SetRisRoles(this);
+                    }
                 }
 
                 RaisePropertyChanged("");
@@ -148,20 +152,19 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _removeMeldingCommand ?? (_removeMeldingCommand =
-                           new RelayCommand(() =>
-                           {
-                               switch (_parent)
-                               {
-                                   case PrioIngreepInUitMeldingViewModel iu:
-                                       iu.OpvangStoring = false;
-                                       break;
-                                   case PrioIngreepMeldingenListViewModel list:
-                                       MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
-                                       list.Meldingen.Remove(this);
-                                       break;
-                               }
-                           }));
+                return _removeMeldingCommand ??= new RelayCommand(() =>
+                {
+                    switch (_parent)
+                    {
+                        case PrioIngreepInUitMeldingViewModel iu:
+                            iu.OpvangStoring = false;
+                            break;
+                        case PrioIngreepMeldingenListViewModel list:
+                            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
+                            list.Meldingen.Remove(this);
+                            break;
+                    }
+                });
             }
         }
 

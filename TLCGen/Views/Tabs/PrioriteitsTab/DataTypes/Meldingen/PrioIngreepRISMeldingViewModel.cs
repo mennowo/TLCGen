@@ -48,12 +48,32 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<RISVehicleRoleViewModel> AvailableRoles { get; } = new ObservableCollection<RISVehicleRoleViewModel>();
+        public ObservableCollection<RISVehicleRoleViewModel> AvailableRoles { get; } = new();
         
-        public ObservableCollection<RISVehicleSubroleViewModel> AvailableSubroles { get; } = new ObservableCollection<RISVehicleSubroleViewModel>();
+        public ObservableCollection<RISVehicleSubroleViewModel> AvailableSubroles { get; } = new();
 
         #endregion // Properties
 
+        #region Public Methods
+
+        public void UpdateRoles()
+        {
+            foreach (var role in AvailableRoles)
+            {
+                role.PropertyChanged -= RvmOnPropertyChanged;
+                role.IsSelected = Parent.PrioIngreepInUitMelding.RisRole.HasFlag(role.Role);
+                role.PropertyChanged += RvmOnPropertyChanged;
+            }
+            foreach (var role in AvailableSubroles)
+            {
+                role.PropertyChanged -= SrvmOnPropertyChanged;
+                role.IsSelected = Parent.PrioIngreepInUitMelding.RisSubrole.HasFlag(role.Subrole);
+                role.PropertyChanged += SrvmOnPropertyChanged;
+            }
+        }
+
+        #endregion // Public Methods
+        
         #region Constructor
 
         public PrioIngreepRISMeldingViewModel(PrioIngreepInUitMeldingViewModel parent)
