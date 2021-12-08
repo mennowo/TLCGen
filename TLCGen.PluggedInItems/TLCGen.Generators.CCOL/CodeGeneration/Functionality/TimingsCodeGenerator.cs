@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.Timings.CodeGeneration
 {
+    [CCOLCodePieceGenerator]
     public class TimingsCodeGenerator : CCOLCodePieceGeneratorBase
     {
 #pragma warning disable 0649
@@ -25,14 +27,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
         private CCOLGeneratorCodeStringSettingModel _schtimings;
         private CCOLGeneratorCodeStringSettingModel _prmlatencyminendsg;
 #pragma warning restore 0649
-        
-        public string _fcpf;
-        public string _schpf;
-        public string _mpf;
-        public string _prmpf;
-        public string _ctpf;
-        public string _tpf;
-        
+
         public string _mrealtijd;
         public string _mrealtijdmin;
         public string _mrealtijdmax;
@@ -82,6 +77,19 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio: return new[] {30};
                 default:
                     return null;
+            }
+        }
+        
+        public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCSystemApplication2:
+                    if(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen)
+                        return new List<CCOLLocalVariable> { new("int", "i") };
+                    return base.GetFunctionLocalVariables(c, type);
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 
@@ -134,8 +142,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     }
 
                     sb.AppendLine();
-                    // sb.AppendLine($"{ts}{ts}msg_fctiming_add();");
-                    // sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}pre_msg_fctiming();");
+                    sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();

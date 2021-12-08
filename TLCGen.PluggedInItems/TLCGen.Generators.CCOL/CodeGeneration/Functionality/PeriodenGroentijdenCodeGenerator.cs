@@ -186,7 +186,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
             int iper;
-            int ipero;
 
             switch (type)
             {

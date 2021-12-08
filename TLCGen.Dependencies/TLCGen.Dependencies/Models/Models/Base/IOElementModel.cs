@@ -33,7 +33,6 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public IOElementTypeEnum ElementType { get; set; }
 
-        [XmlIgnore]
         [HasDefault(false)]
         public bool Multivalent { get; set; }
 

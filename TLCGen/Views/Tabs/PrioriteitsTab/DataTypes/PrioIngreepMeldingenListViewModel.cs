@@ -21,8 +21,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private RelayCommand _addMeldingCommand;
-        private RelayCommand _removeMeldingCommand;
-        private PrioIngreepViewModel _ingreep;
+        private readonly PrioIngreepViewModel _ingreep;
 
         #endregion // Fields
 

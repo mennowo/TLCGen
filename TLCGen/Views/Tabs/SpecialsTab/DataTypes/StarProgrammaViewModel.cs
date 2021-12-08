@@ -22,7 +22,7 @@ namespace TLCGen.ViewModels
             set
             {
                 var oldName = StarProgramma.Naam;
-                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, value));
+                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, value))
                 {
                     StarProgramma.Naam = value;
                     MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));

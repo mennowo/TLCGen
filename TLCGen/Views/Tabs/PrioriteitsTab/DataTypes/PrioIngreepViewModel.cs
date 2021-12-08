@@ -22,9 +22,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private OVIngreepLijnNummerViewModel _selectedLijnNummer;
-        private OVIngreepRitCategorieViewModel _selectedRitCategorie;
         private string _newLijnNummer;
-        private string _newRitCategorie;
         private RelayCommand _addLijnNummerCommand;
         private RelayCommand _add10LijnNummersCommand;
         private RelayCommand _removeLijnNummerCommand;

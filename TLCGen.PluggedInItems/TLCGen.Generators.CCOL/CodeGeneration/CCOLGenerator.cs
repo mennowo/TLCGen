@@ -533,6 +533,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
                     var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
                     var corrrealAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
+                    var preMsgFcTimingAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen && addlines.All(x => !x.Contains("pre_msg_fctiming"));
 
                     var sb = new StringBuilder();
 
@@ -566,7 +567,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.AppendLine("void BepaalRealisatieTijden_Add()");
                             sb.AppendLine("{");
-                            sb.AppendLine("");
+                            sb.AppendLine();
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (preMsgFcTimingAdd && l.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void pre_msg_fctiming()");
+                            sb.AppendLine("{");
+                            sb.AppendLine();
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
@@ -574,7 +583,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.AppendLine("void post_system_application2()");
                             sb.AppendLine("{");
-                            sb.AppendLine("");
+                            sb.AppendLine();
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
