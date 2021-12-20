@@ -9,6 +9,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
+        public static List<List<string>> GetSyncGroupsForController(ControllerModel c)
+        {
+            var syncGroups = new List<List<string>>();
+            var syncs = c.InterSignaalGroep.Gelijkstarten.Cast<IInterSignaalGroepElement>()
+                .Concat(c.InterSignaalGroep.Voorstarten)
+                .Concat(c.InterSignaalGroep.LateReleases)
+                .Concat(c.InterSignaalGroep.Nalopen).ToList();
+            foreach (var sync in syncs)
+            {
+                var sgV = syncGroups.FirstOrDefault(x => x.Contains(sync.FaseVan));
+                var sgN = syncGroups.FirstOrDefault(x => x.Contains(sync.FaseNaar));
+                // all new
+                if (sgV == null && sgN == null) syncGroups.Add(new List<string>{sync.FaseVan, sync.FaseNaar});
+                // from is new, add to existing group
+                else if (sgV == null && sgN != null) sgN.Add(sync.FaseVan);
+                // to is new, add to existing group
+                else if (sgN == null && sgV != null) sgV.Add(sync.FaseNaar);
+                // both exist in diferent groups: merge
+                else if (!ReferenceEquals(sgV, sgN))
+                {
+                    syncGroups.Remove(sgV);
+                    foreach (var g in sgV) if (!sgN.Contains(g)) sgN.Add(g);
+                }
+            }
+
+            return syncGroups;
+        }
+        
         public static string GetPriorityName(ControllerModel c, PrioIngreepModel prio)
         {
             return prio.FaseCyclus + 

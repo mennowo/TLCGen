@@ -406,6 +406,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 
+                        if (c.TimingsData.TimingsToepassen && c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                        {
+                            sb.AppendLine($"#ifndef NO_TIMETOX");
+                            foreach (var sg in c.Fasen)
+                            {
+                                sb.AppendLine($"{ts}if (P[{_fcpf}{sg.Naam}]) {{ RR[{_fcpf}{sg.Naam}] &= ~BIT5; }}");
+                            }
+                            sb.AppendLine($"#endif // NO_TIMETOX");
+                            sb.AppendLine();
+                        }
+
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             sb.AppendLine(

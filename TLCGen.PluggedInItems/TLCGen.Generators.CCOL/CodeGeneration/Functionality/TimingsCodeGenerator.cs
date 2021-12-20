@@ -86,7 +86,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen)
-                        return new List<CCOLLocalVariable> { new("int", "i") };
+                        return new List<CCOLLocalVariable> { new("int", "i", defineCondition: "(!defined NO_TIMETOX)") };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -137,7 +137,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         sb.AppendLine();
                         foreach (var fo in groenSyncData.FictieveConflicten)
                         {
-                            sb.AppendLine($"{ts}{ts}if (RT[{_tpf}{_tfo}{fo:vannaar}] || T[{_tpf}{_tfo}{fo:vannaar}]) P[{_fcpf}{fo:van}] &= ~BIT11;");
+                            sb.AppendLine($"{ts}{ts}if (RT[{_tpf}{_tfo}{fo:vannaar}] || T[{_tpf}{_tfo}{fo:vannaar}]) {{ P[{_fcpf}{fo:van}] &= ~BIT11; P[{_fcpf}{fo:naar}] &= ~BIT11; }}");
                         }
                     }
 
@@ -145,6 +145,43 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}pre_msg_fctiming();");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
+                    sb.AppendLine();
+
+                    var syncGroups = CCOLCodeHelper.GetSyncGroupsForController(c);
+                    foreach (var g in syncGroups)
+                    {
+                        sb.Append($"{ts}{ts}if(!(");
+                        var first1 = true;
+                        foreach (var fc in g)
+                        {
+                            if (!first1)
+                            {
+                                sb.AppendLine(" && ");
+                                sb.Append($"{ts}{ts}     ");
+                            }
+                            first1 = false;
+                            sb.Append($"(P[{_fcpf}{fc}] || G[{_fcpf}{fc}])");
+                        }
+                        sb.AppendLine($"))");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        foreach (var fc in g)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}P[{_fcpf}{fc}] &= ~BIT11;");
+                        }
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}");
+                        sb.AppendLine($"{ts}{ts}");
+                        sb.AppendLine($"{ts}{ts}");
+                    }
+                    
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
+                    {
+                        sb.AppendLine($"        /* Interne koppeling {_fcpf}{nl:van} alleen P als {_fcpf}{nl:van} een P heeft */");
+                        sb.AppendLine($"        if (!(P[{_fcpf}{nl:naar}] & BIT11) && !(P[{_fcpf}{nl:van}] & BIT11)) P[{_fcpf}{nl:van}] &= ~BIT11;");
+                        sb.AppendLine($"        /* P doorzetten */");
+                        sb.AppendLine($"        if (P[{_fcpf}{nl:van}] & BIT11) P[{_fcpf}{nl:naar}] |= BIT11;");    
+                        sb.AppendLine();
+                    }
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();
                     sb.AppendLine("#if !(defined NO_TIMETOX) && !defined NO_TIMINGS_PRINT && (!defined (AUTOMAAT) || defined (VISSIM)) && !defined AUTOMAAT_TEST");
@@ -260,34 +297,36 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && !PG[{_fcpf}{gs:naar}] && R[{_fcpf}{gs:van}] && PG[{_fcpf}{gs:van}]) PG[{_fcpf}{gs:naar}] = 0;");
                         if (!gs.DeelConflict)
                         {
-                            sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) YM[{_fcpf}{gs:van}] |= BIT11;");
-                            sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11)) YM[{_fcpf}{gs:naar}] |= BIT11;");
+                            sb.AppendLine($"{ts}{ts}if ({sch}G[{_fcpf}{gs:van}] && R[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) YM[{_fcpf}{gs:van}] |= BIT11;");
+                            sb.AppendLine($"{ts}{ts}if ({sch}G[{_fcpf}{gs:naar}] && R[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11)) YM[{_fcpf}{gs:naar}] |= BIT11;");
                         }
                     }
 
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{vs:naar}] && (P[{_fcpf}{vs:naar}] & BIT11)) YM[{_fcpf}{vs:van}] |= BIT11;");
                         if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseNaar == vs.FaseVan || x.FaseVan == vs.FaseVan))
                         {
                             sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{vs:naar}] && !PG[{_fcpf}{vs:naar}] && R[{_fcpf}{vs:van}] && PG[{_fcpf}{vs:van}]) PG[{_fcpf}{vs:van}] = 0;");
                         }
+                        sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{vs:van}] && R[{_fcpf}{vs:naar}] && (P[{_fcpf}{vs:naar}] & BIT11)) YM[{_fcpf}{vs:van}] |= BIT11;");
                     }
 
                     foreach (var lr in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{lr:naar}] && (P[{_fcpf}{lr:naar}] & BIT11)) YM[{_fcpf}{lr:van}] |= BIT11;");
                         if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseNaar == lr.FaseVan || x.FaseVan == lr.FaseVan))
                         {
                             sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{lr:naar}] && !PG[{_fcpf}{lr:naar}] && R[{_fcpf}{lr:van}] && PG[{_fcpf}{lr:van}]) PG[{_fcpf}{lr:van}] = 0;");
                         }
+                        sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{lr:van}] && R[{_fcpf}{lr:naar}] && (P[{_fcpf}{lr:naar}] & BIT11)) YM[{_fcpf}{lr:van}] |= BIT11;");
                     }
 
                     var comment1 = false;
                     foreach (var gs1 in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten)
+                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten.Cast<IInterSignaalGroepElement>().Concat(c.InterSignaalGroep.Nalopen))
                         {
+                            if (gs1 is NaloopModel && gs2 is NaloopModel) continue;
+                            
                             string fcA = null;
                             string fcB = null;
                             if (gs1.FaseVan == gs2.FaseVan && gs1.FaseNaar != gs2.FaseNaar)
@@ -308,15 +347,15 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
                             if (fcA == null || fcB == null) continue;
 
-                            var start = $"{ts} if (";
+                            var start = $"{ts}{ts}if (";
                             var and = false;
-                            if (gs1.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            if (gs1 is GelijkstartModel gsM1 && gsM1.Schakelbaar != AltijdAanUitEnum.Altijd)
                             {
                                 start += $"SCH[{_schpf}{_schgs}{gs1:van}{gs1:naar}]";
                                 and = true;
                             }
 
-                            if (gs2.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            if (gs2 is GelijkstartModel gsM2 && gsM2.Schakelbaar != AltijdAanUitEnum.Altijd)
                             {
                                 if (and) start += " && ";
                                 start += $"SCH[{_schpf}{_schgs}{gs2:van}{gs2:naar}] && ";
@@ -327,16 +366,45 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
                             if (!comment1)
                             {
-                                sb.AppendLine($"{ts}/* Correctie gelijkstart <> gelijkstart");
-                                sb.AppendLine($"{ts} * Bij een gelijkstart die een fase deelt met een andere gelijsktart");
-                                sb.AppendLine($"{ts} * kan de max-end tijd worden verhoogd op start-geel, daarom wordt");
-                                sb.AppendLine($"{ts} * start geel uitgesteld.");
-                                sb.AppendLine($"{ts} */");
+                                sb.AppendLine($"{ts}{ts}/* Correctie gelijkstart <> gelijkstart of naloop");
+                                sb.AppendLine($"{ts}{ts} * Bij een gelijkstart die een fase deelt met een andere gelijsktart of naloop");
+                                sb.AppendLine($"{ts}{ts} * kan de max-end tijd worden verhoogd op start-geel, daarom wordt");
+                                sb.AppendLine($"{ts}{ts} * start geel uitgesteld.");
+                                sb.AppendLine($"{ts}{ts} */");
                                 comment1 = true;
                             }
 
                             sb.AppendLine($"{start}G[{_fcpf}{fcA}] && R[{_fcpf}{fcB}] && (P[{_fcpf}{fcB}] & BIT11)) YM[{_fcpf}{fcA}] |= BIT11;");
                             sb.AppendLine($"{start}G[{_fcpf}{fcB}] && R[{_fcpf}{fcA}] && (P[{_fcpf}{fcA}] & BIT11)) YM[{_fcpf}{fcB}] |= BIT11;");
+                        }
+                    }
+                    
+                    var first = true;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        switch (nl.Type)
+                        {
+                            case NaloopTypeEnum.StartGroen:
+                                if (first)
+                                {
+                                    sb.AppendLine($"{ts}{ts} /* YM nalopen P */");
+                                    first = false;
+                                }
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:van}] && R[{_fcpf}{nl:naar}] && (P[{_fcpf}{nl:naar}] & BIT11)) YM[{_fcpf}{nl:van}] |= BIT11;");
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:naar}] && R[{_fcpf}{nl:van}] && (P[{_fcpf}{nl:van}] & BIT11)) YM[{_fcpf}{nl:naar}] |= BIT11;");
+                                break;
+                            case NaloopTypeEnum.EindeGroen:
+                                if (first)
+                                {
+                                    sb.AppendLine($"{ts}{ts} /* YM nalopen P */");
+                                    first = false;
+                                }
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:naar}] && R[{_fcpf}{nl:van}] && (P[{_fcpf}{nl:van}] & BIT11)) YM[{_fcpf}{nl:naar}] |= BIT11;");
+                                break;
+                            case NaloopTypeEnum.CyclischVerlengGroen:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
 
@@ -413,8 +481,10 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     var comment = false;
                     foreach (var gs1 in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten)
+                        foreach (var gs2 in c.InterSignaalGroep.Gelijkstarten.Cast<IInterSignaalGroepElement>().Concat(c.InterSignaalGroep.Nalopen))
                         {
+                            if (gs1 is NaloopModel && gs2 is NaloopModel) continue;
+                            
                             string fcA = null;
                             string fcB = null;
                             if (gs1.FaseVan == gs2.FaseVan && gs1.FaseNaar != gs2.FaseNaar)
@@ -443,7 +513,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                                 and = true;
                             }
 
-                            if (gs2.Schakelbaar != AltijdAanUitEnum.Altijd)
+                            if (gs2 is GelijkstartModel gsM2 && gsM2.Schakelbaar != AltijdAanUitEnum.Altijd)
                             {
                                 if (and) start += " && ";
                                 start += $"SCH[{_schpf}{_schgs}{gs2:van}{gs2:naar}] && ";
@@ -464,6 +534,35 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
                             sb.AppendLine($"{start}G[{_fcpf}{fcA}] && R[{_fcpf}{fcB}] && (P[{_fcpf}{fcB}] & BIT11)) Z[{_fcpf}{fcA}] &= ~PRIO_Z_BIT;");
                             sb.AppendLine($"{start}G[{_fcpf}{fcB}] && R[{_fcpf}{fcA}] && (P[{_fcpf}{fcA}] & BIT11)) Z[{_fcpf}{fcB}] &= ~PRIO_Z_BIT;");
+                        }
+                    }
+                    
+                    first = true;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        switch (nl.Type)
+                        {
+                            case NaloopTypeEnum.StartGroen:
+                                if (first)
+                                {
+                                    //sb.AppendLine($"{ts}{ts} /* YM nalopen P */");
+                                    first = false;
+                                }
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:van}] && R[{_fcpf}{nl:naar}] && (P[{_fcpf}{nl:naar}] & BIT11)) Z[{_fcpf}{nl:van}] &= ~PRIO_Z_BIT;");
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:naar}] && R[{_fcpf}{nl:van}] && (P[{_fcpf}{nl:van}] & BIT11)) Z[{_fcpf}{nl:naar}] &= ~PRIO_Z_BIT;"); 
+                                break;
+                            case NaloopTypeEnum.EindeGroen:
+                                if (first)
+                                {
+                                    //sb.AppendLine($"{ts}{ts} /* YM nalopen P */");
+                                    first = false;
+                                }
+                                sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{nl:naar}] && R[{_fcpf}{nl:van}] && (P[{_fcpf}{nl:van}] & BIT11)) Z[{_fcpf}{nl:naar}] &= ~PRIO_Z_BIT;");
+                                break;
+                            case NaloopTypeEnum.CyclischVerlengGroen:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
 

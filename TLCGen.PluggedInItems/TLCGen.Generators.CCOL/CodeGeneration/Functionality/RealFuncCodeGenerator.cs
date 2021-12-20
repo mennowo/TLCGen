@@ -548,6 +548,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (_groenSyncData.FictieveConflicten.Count > 0) sb.AppendLine();
                     }
 
+                    if (c.TimingsData.TimingsToepassen && c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                    {
+                        var syncGroups = CCOLCodeHelper.GetSyncGroupsForController(c);
+                        
+                        sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                        sb.AppendLine($"{ts}{ts}/* Hoogste realtijd_max voor alle richtingen uit een synchronisatiegroep */");
+                        foreach (var sg in syncGroups)
+                        {
+                            for (var i = 1; i < sg.Count; i++)
+                            {
+                                sb.AppendLine($"{ts}{ts}REALTIJD_max[{_fcpf}{sg[0]}] = max(REALTIJD_max[{_fcpf}{sg[0]}], REALTIJD_max[{_fcpf}{sg[i]}]);");
+                            }
+
+                            sb.Append($"{ts}{ts}");
+                            for (var i = 1; i < sg.Count; i++)
+                            {
+                                sb.Append($"REALTIJD_max[{_fcpf}{sg[i]}] = ");
+                            }
+                            sb.AppendLine($"REALTIJD_max[{_fcpf}{sg[0]}];");
+                            sb.AppendLine();
+                        }
+                        sb.AppendLine($"{ts}#endif");
+                    }
+
                     sb.AppendLine($"{ts}{ts}wijziging |= CorrectieRealisatieTijd_Add();");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}if (!wijziging) break;");
