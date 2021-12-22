@@ -7,7 +7,7 @@ namespace TLCGen.Models
     /// Represents green moment synchronisation between two signalgroups
     /// </summary>
     [Serializable]
-    public class GroenSyncModel : IFormattable
+    public class GroenSyncModel : IFormattable, IInterSignaalGroepElement
     {
         /// <summary>
         /// The origin/determining signalgroup

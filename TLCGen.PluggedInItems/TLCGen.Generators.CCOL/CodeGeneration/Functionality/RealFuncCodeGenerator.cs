@@ -556,6 +556,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}/* Hoogste realtijd_max voor alle richtingen uit een synchronisatiegroep */");
                         foreach (var sg in syncGroups)
                         {
+                            sb.AppendLine($"{ts}{ts}/* Syncgroep: {string.Join(";", sg)} */");
                             for (var i = 1; i < sg.Count; i++)
                             {
                                 sb.AppendLine($"{ts}{ts}REALTIJD_max[{_fcpf}{sg[0]}] = max(REALTIJD_max[{_fcpf}{sg[0]}], REALTIJD_max[{_fcpf}{sg[i]}]);");

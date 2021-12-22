@@ -11,30 +11,41 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         public static List<List<string>> GetSyncGroupsForController(ControllerModel c)
         {
-            var syncGroups = new List<List<string>>();
-            var syncs = c.InterSignaalGroep.Gelijkstarten.Cast<IInterSignaalGroepElement>()
-                .Concat(c.InterSignaalGroep.Voorstarten)
-                .Concat(c.InterSignaalGroep.LateReleases)
-                .Concat(c.InterSignaalGroep.Nalopen).ToList();
-            foreach (var sync in syncs)
+            var syncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
+            
+            var syncGroups = new List<List<IInterSignaalGroepElement>>();
+
+            foreach (var sync in syncData.GroenSyncFasen)
             {
-                var sgV = syncGroups.FirstOrDefault(x => x.Contains(sync.FaseVan));
-                var sgN = syncGroups.FirstOrDefault(x => x.Contains(sync.FaseNaar));
-                // all new
-                if (sgV == null && sgN == null) syncGroups.Add(new List<string>{sync.FaseVan, sync.FaseNaar});
-                // from is new, add to existing group
-                else if (sgV == null && sgN != null) sgN.Add(sync.FaseVan);
-                // to is new, add to existing group
-                else if (sgN == null && sgV != null) sgV.Add(sync.FaseNaar);
-                // both exist in diferent groups: merge
-                else if (!ReferenceEquals(sgV, sgN))
+                var existing = syncGroups.FirstOrDefault(x => x.Any(x2 => x2.FaseNaar == sync.FaseVan));
+                if (existing != null)
                 {
-                    syncGroups.Remove(sgV);
-                    foreach (var g in sgV) if (!sgN.Contains(g)) sgN.Add(g);
+                    existing.Add(sync);
+                    continue;
                 }
+                syncGroups.Add(new List<IInterSignaalGroepElement>{ sync });
+            }
+            
+            var syncGroups1 = new List<List<IInterSignaalGroepElement>>();
+            foreach (var group in syncGroups)
+            {
+                var existing = syncGroups1.FirstOrDefault(x => x.Any(x2 => group.Any(x3 => x2.FaseVan == x3.FaseNaar)));
+                if (existing != null)
+                {
+                    existing.AddRange(group);
+                    continue;
+                }
+                syncGroups1.Add(group);
             }
 
-            return syncGroups;
+            return syncGroups1
+                .Select(x => x
+                    .Select(x2 => x2.FaseVan)
+                    .Concat(x
+                        .Select(x2 => x2.FaseNaar))
+                    .Distinct()
+                    .ToList())
+                .ToList();
         }
         
         public static string GetPriorityName(ControllerModel c, PrioIngreepModel prio)
