@@ -1,3 +1,5 @@
+/* extra_func.c - gegenereerd met TLCGen 0.10.4.0 */
+
 #include "extra_func.h"
 
 int Knipper_1Hz = 0;
@@ -461,7 +463,7 @@ bool Rateltikkers(   count fc,        /* fase                                   
     return (IH[has]); /* positieve uitsturing bij niet-bewaakte tikkers */
   }
   else {
-    return (!IH[has]); /* ge�nverteerde uitsturing bij bewaakte tikkers */
+    return (!IH[has]); /* geinverteerde uitsturing bij bewaakte tikkers */
   }
 }
 
@@ -1378,7 +1380,7 @@ void maximumgroentijden_va_arg(count fc, ...)
 }
 
 #if CCOL_V >= 110
-boolv kp(count i)
+bool kp(count i)
 {
    register count n, j;
 
@@ -1415,7 +1417,7 @@ boolv kp(count i)
 * de voedende richting.
 */
 
-boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt)
+bool ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, bool halt)
 {
    if (EG[volg] && (G[voedend] || T[tnlfg] || (TR_timer[voedend] < (T_max[tnleg] - TGL_max[voedend])) || (tnldet == NG ? FALSE : T[tnldet]) ))
    {
@@ -1460,7 +1462,7 @@ boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, co
 * is dan startgroen van de naloop.
 */
 
-boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt)
+bool ControleerInrijden(count voedend, count volg, bool tinr, bool halt)
 {
    if (!G[volg] && G[voedend]  && (TG_timer[voedend] > (tinr == NG ? TRUE : T_max[tinr])))
    {
@@ -1492,7 +1494,7 @@ boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt)
 }
 
 /* Controleer gelijkstart */
-boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt)
+bool ControleerGS(count fc1, count fc2, bool cond, bool halt)
 {
    {
 
@@ -1531,7 +1533,7 @@ boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt)
 }
 
 /* Controleer voorstart */
-boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt)
+bool ControleerVS(count fc1, count fc2, bool cond, bool halt)
 {
    {
 
@@ -1572,17 +1574,18 @@ boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt)
 #endif // #if CCOL_V >= 110
 #endif // #ifndef AUTOMAAT
 
-boolv set_MRLW_nl(count i, count j, boolv period)
+bool set_MRLW_nl(count i, count j, bool period)
 /* meerealisatie uitgebreid */
-/* Als de voedende richting niet primair komt ten gevolge van een ov ingreep (BIT6), 
+/* Als de voedende richting niet primair komt ten gevolge , 
  * sturen wij de naloop middels een aangepast set_MRLW (zonder !fkaa) naar RA.
- * set_MRLW volstaat niet omdat hier op !fkaa wordt getest. 
+ * set_MRLW volstaat niet omdat hier op !fkaa wordt getest en 
+ * de naloop ook moet komen als de voedende richting groen is of RR heeft. 
  * i=naloop, j=voedend, period=voorwaarde 
  */
 {
 #if CCOL_V >= 110
    if (AA[j] && period /* && RV[i] */ && !AA[i] && (!RR[i] || P[i]) && !BL[i] && !kaa(i) /* !fkaa */
-      && (!RR[j] || P[j]) && !BL[j]) {         
+      && (!RR[j] || G[j]) && !BL[j]) {
 #else
    if (AA[j] && period /* && RV[i] */ && !AA[i] && !RR[i] && !BL[i] && !kaa(i) /* !fkaa */
       && !RR[j] && !BL[j]) {         

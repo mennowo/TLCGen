@@ -30,7 +30,7 @@ namespace TLCGen.Models
                 case "naar": return FaseNaar;
             }
 
-            return ToString();
+            return FaseVan + FaseNaar;
         }
 
         #endregion // ToString

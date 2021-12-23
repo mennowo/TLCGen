@@ -1,3 +1,5 @@
+/* realfunc.c - gegenereerd met TLCGen 0.10.4.0 */
+
 /*
 BESTAND:   realfunc.c
 */
@@ -22,6 +24,7 @@ BESTAND:   realfunc.c
 * 3.1     16-10-2021                - CCA       Corr_Min_nl gemaakt waarniet naar de aanwezigheid voor A voor de naloop wordt gekeken
 *                                               _temp interne variabelen verwijderd (CCA/Ddo 07032021)
 * 3.2      9-11-2021                - CCA       MG && TGG toegevoegd in berekeningen
+* 3.3      6-12-2021                - CCA       _temp interne variabelen wederom toegevoegd
 ************************************************************************************/
 
 mulv REALTIJD[FCMAX];
@@ -351,6 +354,9 @@ bool Corr_Real(count fc1,        /* fasecyclus 1                                
                bool  period)     /* extra voorwaarde                                   */
 {
   bool result = 0;
+  mulv REALTIJD_temp;      
+  mulv REALTIJD_min_temp;  
+  mulv REALTIJD_max_temp;  
   /* --------------------------------------------------------------------------------------------- */
   /* Bepaal synchronisatie ongewenst                                                               */
   /* --------------------------------------------------------------------------------------------- */
@@ -375,7 +381,7 @@ bool Corr_Real(count fc1,        /* fasecyclus 1                                
   /* --------------------------------------------------------------------------------------------- */
   if (PG[fc1] && RV[fc1] && !TRG[fc1] && PR[fc2] && !PG[fc2]
 #if CCOL_V >= 110 
-     && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) /* CCA/DDo 08032021: && !(P[fc1] || P[fc2]) toegevoegd om synchroniseren af te dwingen als richtingen moeten komen */
+     && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) 
 #endif
      || RV[fc1] && (REALTIJD[fc1] <= 1))
   {
@@ -398,36 +404,31 @@ bool Corr_Real(count fc1,        /* fasecyclus 1                                
   /* - realtijd fc2 kleiner dan die van fc1 + correctie                                            */
   if (REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD[fc2] < (REALTIJD[fc1] + t1_t2)))
   {
-     REALTIJD[fc2] =   !G[fc1] && REALTIJD[fc1] == 9999 ? 9999 :
+     REALTIJD_temp =   !G[fc1] && REALTIJD[fc1] == 9999 ? 9999 :
                        !G[fc1] ? REALTIJD[fc1] + t1_t2 :
                        TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];               /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
-                                                                                                                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+     if (REALTIJD_temp > REALTIJD[fc2]) REALTIJD[fc2] = REALTIJD_temp; /* alleen maar ophogen */                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
      result = TRUE;                                                                                           
   }
 
-  /* CCA/PSN: toevoeging ophoging minend tijd */
   if (REAL_SYN[fc1][fc2] && !G[fc2] && (A[fc1] || GL[fc1] || TRG[fc1]) && (REALTIJD_min[fc2] < (REALTIJD_min[fc1] + t1_t2)))
   {
-     REALTIJD_min[fc2] =  !G[fc1] && REALTIJD_min[fc1] == 9999 ? 9999 :
+     REALTIJD_min_temp =  !G[fc1] && REALTIJD_min[fc1] == 9999 ? 9999 :
                           !G[fc1] ? REALTIJD_min[fc1] + t1_t2 :
                           TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_min[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
-                                                                                                                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+     if (REALTIJD_min_temp > REALTIJD_min[fc2]) REALTIJD_min[fc2] = REALTIJD_min_temp; /* alleen maar ophogen */    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
      result = TRUE;                                                                                           
   }
 
-    /* CCA/PSN: toevoeging ophoging maxend tijd */
-    /* CCA: aanvraag etc. niet van belang voor de max. end tijd */
-    /* CCA: alleen gelijkstartende richting RR krijgt dan geen 9999 overnemen */
     if (REAL_SYN[fc1][fc2] && !G[fc2] && /* (A[fc1] || !PG[fc1] || GL[fc1] || TRG[fc1]) &&*/ (REALTIJD_max[fc2] < (REALTIJD_max[fc1] + t1_t2)) && (REALTIJD_max[fc1]!=9999))
     {  
-     REALTIJD_max[fc2] =  !G[fc1] && REALTIJD_max[fc1] == 9999 ? 9999 :  
+     REALTIJD_max_temp =  !G[fc1] && REALTIJD_max[fc1] == 9999 ? 9999 :  
                           !G[fc1] ? REALTIJD_max[fc1] + t1_t2 :
                           TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_max[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
-                                                                                                                    /* of als voorstarttijd verstreken.                        */
-                                                                                                                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
-     result = TRUE;                                                                                           
+    if (REALTIJD_max_temp > REALTIJD_max[fc2]) REALTIJD_max[fc2] = REALTIJD_max_temp; /* alleen maar ophogen */    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+    result = TRUE;                                                                                           
   }
 
   /* --------------------------------- */
@@ -446,6 +447,9 @@ bool Corr_Real_nl(count fc1,        /* fasecyclus 1                             
                bool  period)     /* extra voorwaarde                                   */
 {
   bool result = 0;
+  mulv REALTIJD_temp;      
+  mulv REALTIJD_min_temp;  
+  mulv REALTIJD_max_temp;  
   /* --------------------------------------------------------------------------------------------- */
   /* Bepaal synchronisatie ongewenst                                                               */
   /* --------------------------------------------------------------------------------------------- */
@@ -466,7 +470,7 @@ bool Corr_Real_nl(count fc1,        /* fasecyclus 1                             
   /* --------------------------------------------------------------------------------------------- */
   if (PG[fc1] && RV[fc1] && !TRG[fc1] && PR[fc2] && !PG[fc2]
   #if CCOL_V >= 110 
-      && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) /* CCA/DDo 08032021: && !(P[fc1] || P[fc2]) toegevoegd om synchroniseren af te dwingen als richtingen moeten komen */
+      && !((P[fc1] & BIT11) || (P[fc2] & BIT11)) 
   #endif
      )
   {
@@ -496,40 +500,35 @@ bool Corr_Real_nl(count fc1,        /* fasecyclus 1                             
   /* --------------------------------------------------------------------------------------------- */
   /* - synchronisatie gewenst                                                                      */
   /* - fc2 geen groen                                                                              */
-  /* - fc1 ALTIJD                                                                        */
+  /* - fc1 ALTIJD                                                                                  */
   /* - realtijd fc2 kleiner dan die van fc1 + correctie                                            */
   if (REAL_SYN[fc1][fc2] && !G[fc2] /*&& (A[fc1] || GL[fc1] || TRG[fc1])*/ && (REALTIJD[fc2] < (REALTIJD[fc1] + t1_t2)))
   {
-     REALTIJD[fc2] =   !G[fc1] && REALTIJD[fc1] == 9999 ? 9999 :
+    REALTIJD_temp =   !G[fc1] && REALTIJD[fc1] == 9999 ? 9999 :
                        !G[fc1] ? REALTIJD[fc1] + t1_t2 :
                        TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD[fc2];               /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
                                                                                                                     /* of als voorstarttijd verstreken.                        */
-                                                                                                                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+     if (REALTIJD_temp > REALTIJD[fc2]) REALTIJD[fc2] = REALTIJD_temp; /* alleen maar ophogen */                    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
      result = TRUE;                                                                                           
-  }
+   }
 
-  /* CCA/PSN: toevoeging ophoging minend tijd */
   if (REAL_SYN[fc1][fc2] && !G[fc2] /*&& (A[fc1] || GL[fc1] || TRG[fc1])*/ && (REALTIJD_min[fc2] < (REALTIJD_min[fc1] + t1_t2)))
   {
-     REALTIJD_min[fc2] =  !G[fc1] && REALTIJD_min[fc1] == 9999 ? 9999 :
-                     !     G[fc1] ? REALTIJD_min[fc1] + t1_t2 :
-                         TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_min[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
-                                                                                                                   /* of als voorstarttijd verstreken.                        */
-                                                                                                                   /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+     REALTIJD_min_temp =  !G[fc1] && REALTIJD_min[fc1] == 9999 ? 9999 :
+                          !G[fc1] ? REALTIJD_min[fc1] + t1_t2 :
+                          TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_min[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
+                                                                                                                    /* of als voorstarttijd verstreken.                        */
+     if (REALTIJD_min_temp > REALTIJD_min[fc2]) REALTIJD_min[fc2] = REALTIJD_min_temp; /* alleen maar ophogen */    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
      result = TRUE;                                                                                           
   }
 
-    /* CCA/PSN: toevoeging ophoging maxend tijd */
-    /* CCA: aanvraag etc. niet van belang voor de max. end tijd */
-    /* CCA: alleen gelijkstartende richting RR krijgt dan geen 9999 overnemen */
     if (REAL_SYN[fc1][fc2] && !G[fc2] && /* (A[fc1] || !PG[fc1] || GL[fc1] || TRG[fc1]) &&*/ (REALTIJD_max[fc2] < (REALTIJD_max[fc1] + t1_t2)) && (REALTIJD_max[fc1]!=9999))
     {  
-       REALTIJD_max[fc2] =  !G[fc1] && REALTIJD_max[fc1] == 9999 ? 9999 :  
-                            !G[fc1] ? REALTIJD_max[fc1] + t1_t2 :
-                           TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_max[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
-                                                                                                                     /* of als voorstarttijd verstreken.                        */
-                                                                                                                     /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
-     result = TRUE;                                                                                           
+     REALTIJD_max_temp =  !G[fc1] && REALTIJD_max[fc1] == 9999 ? 9999 :  
+                          !G[fc1] ? REALTIJD_max[fc1] + t1_t2 :
+                          TGG[fc1] && (t1_t2 > TGG_timer[fc1]) ? t1_t2 - TGG_timer[fc1] : REALTIJD_max[fc2];        /* Geen aanpassing als garantiegroen[fc1] verstreken is    */
+    if (REALTIJD_max_temp > REALTIJD_max[fc2]) REALTIJD_max[fc2] = REALTIJD_max_temp; /* alleen maar ophogen */    /* Voorstarttijd groter dan TGG_max wordt niet ondersteund */
+    result = TRUE;                                                                                           
   }
 
   /* --------------------------------- */

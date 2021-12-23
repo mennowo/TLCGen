@@ -138,6 +138,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmrislaneid;
         private string _prmrisapproachid;
         private string _hperiod;
+        private string _treallr;
 
         #endregion // Fields
 
@@ -1559,11 +1560,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc 
-                                    ? $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~(BIT1 | BIT2 | BIT4 | BIT6);" 
+                                    ? $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~(BIT1 | BIT2 | BIT4 | BIT5 | BIT6);" 
                                     : $"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~PRIO_FM_BIT;");
                                 sb.AppendLine($"{ts}}}");
                             }
+                        }
+                    }
+                    if (c.InterSignaalGroep.LateReleases.Any())
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Niet afkappen late release richtingen wanneer de laterelease tijd nog loopt */");
+                        foreach (var lr in c.InterSignaalGroep.LateReleases)
+                        {
+                            var t = $"{_tpf}{_treallr}{lr}";
+                            sb.AppendLine($"{ts}RT[{t}] = ER[{_fcpf}{lr:naar}];");
+
+                            sb.AppendLine($"{ts}if (RT[{t}] || T[{t}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}Z[{_fcpf}{lr:van}] &= ~BIT6;");
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{lr:van}] &= ~(BIT1 | BIT2 | BIT4 | BIT5 | BIT6);");
+                            sb.AppendLine($"{ts}{ts}FM[{_fcpf}{lr:van}] &= ~PRIO_FM_BIT;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
                         }
                     }
                     return sb.ToString();
@@ -1610,6 +1629,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
             _prmrisapproachid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisapproachid");
             _hperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("hperiod");
+            _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
 
             return base.SetSettings(settings);
         }
