@@ -1539,7 +1539,7 @@ bool ControleerVS(count fc1, count fc2, bool cond, bool halt)
 
       if (cond)
       {
-         if ((EVS[fc1] && !(G[fc2]||GL[fc2]) && !RR[fc2]&BIT6))
+         if ((EVS[fc1] && !(G[fc2]||GL[fc2]) && !(RR[fc2]&BIT6)))
          {
             /* Schrijf naar de CCOL-terminal */
             code helpstr[30];  /* help string */

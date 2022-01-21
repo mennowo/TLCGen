@@ -23,9 +23,9 @@ var setupDir = Directory("./TLCGen.Setup");
 var outputDir = Directory("./published") + Directory(configuration);
 var outputDirBase = Directory("./published");
 // varia
-var prev_version = "0_10_3_0";
+var prev_version = "0_10_4_0";
 var backupOld = false;
-var deployDev = true;
+var deployDev = false;
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -139,6 +139,15 @@ Task("PackPortable")
     CopyDirectory(buildDir.Path + "/SourceFiles", packedDir.Path + "/SourceFiles");
     CopyDirectory(buildDir.Path + "/SourceFilesToCopy", packedDir.Path + "/SourceFilesToCopy");
     CopyDirectory(buildDir.Path + "/Updater", packedDir.Path + "/Updater");
+    CopyDirectory(buildDir.Path + "/Licenses", packedDir.Path + "/Licenses");
+    
+    if (DirectoryExists(buildDir.Path + "/TLCGen_v" + version))
+    {
+        DeleteDirectory(buildDir.Path + "/TLCGen_v" + version, new DeleteDirectorySettings {
+                Recursive = true,
+                Force = true
+            });
+    }
     
     if (!DirectoryExists(buildDir.Path + "/TLCGen_v" + version))
         MoveDirectory(packedDir, buildDir.Path + "/TLCGen_v" + version);

@@ -93,7 +93,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         }
                                         else
                                         {
-                                            sb.Append($" && (D[{_dpf}{va.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Detector}]) &&");
+                                            sb.Append($" && (D[{_dpf}{va.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Detector}])");
                                         }
                                     }
                                     if (va.Wissel2)

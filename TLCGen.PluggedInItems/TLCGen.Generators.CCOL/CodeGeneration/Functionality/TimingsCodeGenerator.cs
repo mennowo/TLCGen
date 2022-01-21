@@ -147,32 +147,32 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine();
 
-                    var syncGroups = CCOLCodeHelper.GetSyncGroupsForController(c);
-                    foreach (var g in syncGroups)
-                    {
-                        sb.Append($"{ts}{ts}if(!(");
-                        var first1 = true;
-                        foreach (var fc in g)
-                        {
-                            if (!first1)
-                            {
-                                sb.AppendLine(" && ");
-                                sb.Append($"{ts}{ts}     ");
-                            }
-                            first1 = false;
-                            sb.Append($"(P[{_fcpf}{fc}] || G[{_fcpf}{fc}])");
-                        }
-                        sb.AppendLine($"))");
-                        sb.AppendLine($"{ts}{ts}{{");
-                        foreach (var fc in g)
-                        {
-                            sb.AppendLine($"{ts}{ts}{ts}P[{_fcpf}{fc}] &= ~BIT11;");
-                        }
-                        sb.AppendLine($"{ts}{ts}}}");
-                        sb.AppendLine($"{ts}{ts}");
-                        sb.AppendLine($"{ts}{ts}");
-                        sb.AppendLine($"{ts}{ts}");
-                    }
+                    // var syncGroups = CCOLCodeHelper.GetSyncGroupsForController(c);
+                    // foreach (var g in syncGroups)
+                    // {
+                    //     sb.Append($"{ts}{ts}if(!(");
+                    //     var first1 = true;
+                    //     foreach (var fc in g)
+                    //     {
+                    //         if (!first1)
+                    //         {
+                    //             sb.AppendLine(" && ");
+                    //             sb.Append($"{ts}{ts}     ");
+                    //         }
+                    //         first1 = false;
+                    //         sb.Append($"(P[{_fcpf}{fc}] || G[{_fcpf}{fc}])");
+                    //     }
+                    //     sb.AppendLine($"))");
+                    //     sb.AppendLine($"{ts}{ts}{{");
+                    //     foreach (var fc in g)
+                    //     {
+                    //         sb.AppendLine($"{ts}{ts}{ts}P[{_fcpf}{fc}] &= ~BIT11;");
+                    //     }
+                    //     sb.AppendLine($"{ts}{ts}}}");
+                    //     sb.AppendLine($"{ts}{ts}");
+                    //     sb.AppendLine($"{ts}{ts}");
+                    //     sb.AppendLine($"{ts}{ts}");
+                    // }
                     
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
                     {

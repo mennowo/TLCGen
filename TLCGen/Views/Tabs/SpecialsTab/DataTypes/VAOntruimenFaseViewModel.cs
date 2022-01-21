@@ -201,7 +201,7 @@ namespace TLCGen.ViewModels
             get;
         }
 
-        public Dictionary<string, int> ConflicterendeFasen => _ConflicterendeFasen ?? (_ConflicterendeFasen = new Dictionary<string, int>());
+        public Dictionary<string, int> ConflicterendeFasen => _ConflicterendeFasen ??= new Dictionary<string, int>();
 
         public VAOntruimenNaarFaseViewModel[,] VAOntruimenMatrix
         {
@@ -210,12 +210,10 @@ namespace TLCGen.ViewModels
         }
 
         public ObservableCollection<string> VAOntruimenMatrixColumnHeaders =>
-            _VAOntruimenMatrixColumnHeaders ??
-            (_VAOntruimenMatrixColumnHeaders = new ObservableCollection<string>());
+            _VAOntruimenMatrixColumnHeaders ??= new ObservableCollection<string>();
 
         public ObservableCollection<string> VAOntruimenMatrixRowHeaders =>
-            _VAOntruimenMatrixRowHeaders ??
-            (_VAOntruimenMatrixRowHeaders = new ObservableCollection<string>());
+            _VAOntruimenMatrixRowHeaders ??= new ObservableCollection<string>();
 
         public ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
         {
@@ -312,64 +310,24 @@ namespace TLCGen.ViewModels
         {
             _detectorManager?.Refresh();
 
-            //var sd1 = "";
-            //var sd2 = "";
-            //if (KijkNaarWisselstand && Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
-            //{
-            //    sd1 = Wissel1Detector;
-            //}
-            //if (Wissel2 && Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector)
-            //{
-            //    sd2 = Wissel2Detector;
-            //}
-
             WisselDetectoren.Clear();
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.WisselDetector)))
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.WisselStandDetector)))
             {
                 WisselDetectoren.Add(d.Naam);
             }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren.Where(x => x.Type == DetectorTypeEnum.WisselDetector))
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren.Where(x => x.Type == DetectorTypeEnum.WisselStandDetector))
             {
                 WisselDetectoren.Add(d.Naam);
             }
-
-            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
-            //{
-            //    Wissel1Detector = sd1;
-            //}
-            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
-            //{
-            //    Wissel2Detector = sd2;
-            //}
         }
 
         private void OnIngangenChanged(IngangenChangedMessage obj)
         {
-            //var sd1 = "";
-            //var sd2 = "";
-            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-            //{
-            //    sd1 = Wissel1Input;
-            //}
-            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-            //{
-            //    sd2 = Wissel2Input;
-            //}
-
             WisselInputs.Clear();
             foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
             {
                 WisselInputs.Add(seld.Naam);
             }
-
-            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
-            //{
-            //    Wissel1Input = sd1;
-            //}
-            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
-            //{
-            //    Wissel2Input = sd2;
-            //}
         }
 
         private void OnNameChanged(NameChangedMessage obj)

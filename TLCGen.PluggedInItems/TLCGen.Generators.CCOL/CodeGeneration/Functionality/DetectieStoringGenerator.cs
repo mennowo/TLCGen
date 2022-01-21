@@ -367,14 +367,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else
                     {
-                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, ");
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmperc}{fc.Naam}], ");
                         sb.Append("".PadLeft($"{ts1}{ts}{grfunc}(".Length));
 
                         var rest = "";
                         var irest = 1;
                         if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
                         {
-                            rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{fc.Naam}";
+                            rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{fc.Naam}]";
                         }
                         else
                         {
@@ -389,7 +389,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
                             {
                                 ++irest;
-                                rest += $", {_prmpf}{greentimeSet.Naam.ToLower()}_{fc.Naam}";
+                                rest += $", PRM[{_prmpf}{greentimeSet.Naam.ToLower()}_{fc.Naam}]";
                             }
                         }
 

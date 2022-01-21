@@ -187,6 +187,21 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="DetectieAanvraagDirectCodeGenerator">
+      <CodePieceData>
+        <ClassName>DetectieAanvraagDirectCodeGenerator</ClassName>
+        <Description>Detectie aanvragen direct</Description>
+        <ElementGenerationOrder>370</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>snel</Default>
+            <Setting>snel</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Aanvraag snel voor detector _E1_ aan of uit</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="DetectieAanvragenMeetkriteriumCodeGenerator">
       <CodePieceData>
         <ClassName>DetectieAanvragenMeetkriteriumCodeGenerator</ClassName>

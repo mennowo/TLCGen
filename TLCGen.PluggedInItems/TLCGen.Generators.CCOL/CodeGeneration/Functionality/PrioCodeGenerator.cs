@@ -309,7 +309,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             // Help elements to store wissel condition
-            if (prio.Type == PrioIngreepVoertuigTypeEnum.Tram && prio.HasOVIngreepWissel())
+            if (prio.HasOVIngreepWissel())
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwissel}{CCOLCodeHelper.GetPriorityName(c, prio)}", _hwissel, prio.FaseCyclus, prio.Type.GetDescription()));
@@ -1531,7 +1531,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (!found)
                                 {
-                                    sb.Append($"{ts}if (RA[{_fcpf}{nl.FaseVan}] || ");
+                                    sb.Append($"{ts}if (");
                                 }
                                 found = true;
                                 foreach (var nlt in nl.Tijden)
