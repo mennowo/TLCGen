@@ -646,6 +646,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         return new List<CCOLLocalVariable> {new("int", "i", "0")};
                     }
                     else return base.GetFunctionLocalVariables(c, type);
+                
+                case CCOLCodeTypeEnum.PrioCInitPrio:
+                    return new List<CCOLLocalVariable> {new("int", "i")};
 
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -663,6 +666,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{31},
                 CCOLCodeTypeEnum.PrioCInUitMelden => new []{11},
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{11},
+                CCOLCodeTypeEnum.PrioCInitPrio => new []{11},
+                CCOLCodeTypeEnum.PrioCTop => new []{11},
                 _ => null
             };
         }
@@ -861,7 +866,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
                             ? $"PRM[{_prmpf}{_prmkarsg}{prio.FaseCyclus}]"
                             : fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString();
-                    sb.AppendLine($"DSIMeldingPRIO_V1(0, " +
+                    sb.AppendLine($"DSIMeldingPRIO{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "_V1" : "_V2")}(" +
+                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
+                                                        ? ""
+                                                        : $"{_fcpf}{prio.FaseCyclus}, prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}, ") +
+                                                    $"0, " +
                                                     $"{vtgType}, " +
                                                     "TRUE, " +
                                                     $"{(fcNmr == -1 ? "NG" : sgCheck)}," +
@@ -975,6 +984,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.PrioCTop:
+                    sb.AppendLine("boolv vertraag_kar_uitm[prioFCMAX];");
+                    return sb.ToString();
+                    
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine("mulv C_counter_old[CTMAX];");
                     return sb.ToString();
@@ -1311,142 +1324,159 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     #region HD meldingen
 
                     // Inmelding HD
-                    foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom))
+                    foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom || x.RIS))
                     {
-                        if (int.TryParse(hd.FaseCyclus, out var ifc))
+                        var ifc = -1;
+                        if (int.TryParse(hd.FaseCyclus, out var ifc2))
                         {
-                            var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters 
-                                ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
-                                : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
-                            var inmHelems = new List<string>();
-                            if (!first) sb.AppendLine(); 
-                            first = false;
-                            sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
-                            if (hd.KAR)
-                            {
-                                if(hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
-                                {
-                                    var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
-                                    sb.AppendLine($"{ts}" +
-                                        $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
-                                        $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
-                                        $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
-                                        $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
-                                        $"((DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
-                                        $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
-                                }
-                                inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
-                            }
-                            
-                            var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == hd.FaseCyclus);
-                            if (risFc != null && hd.RIS)
-                            {
-                                sb.AppendLine("#ifndef NO_RIS");
-                                
-                                sb.Append($"{ts}" +
-                                              $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}ris] = " +
-                                              $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}ris] && (");
-
-                                first = true;
-                                if (risFc != null)
-                                {
-                                    sb.AppendLine();
-                                    foreach (var lane in risFc.LaneData)
-                                    {
-                                        if (!first) sb.AppendLine(" ||");
-                                        var itf = c.RISData.HasMultipleSystemITF
-                                            ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
-                                        sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
-                                                  $"{_fcpf}{risFc.FaseCyclus}, " +
-                                                  $"PRM[{_prmpf}{_prmrisapproachid}{risFc.FaseCyclus}hd], " +
-                                                  $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                                  $"PRM[{_prmpf}{_prmrislaneid}{risFc.FaseCyclus}hd_{lane.RijstrookIndex}], " +
-                                                  $"PRM[{_prmpf}{_prmrisstationtype}{risFc.FaseCyclus}hd], " +
-                                                  $"PRM[{_prmpf}{_prmrisstart}{hd.FaseCyclus}hd], " +
-                                                  $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd], " +
-                                                  $"PRM[{_prmpf}{_prmrisrole}{risFc.FaseCyclus}hd], " +
-                                                  $"PRM[{_prmpf}{_prmrissubrole}{risFc.FaseCyclus}hd], " +
-                                                  $"{(hd.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{risFc.FaseCyclus}hd]" : "NG")}, " +
-                                                  $"hdFC{hd.FaseCyclus})");
-                                        first = false;
-                                    }
-                                }
-                                sb.AppendLine(");");
-                                inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}ris");
-                                
-                                sb.AppendLine("#endif /* NO_RIS */");
-                            }
-
-                            if (hd.Opticom)
-                            {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}opt] = !T[{_tpf}{_thdin}{hd.FaseCyclus}opt] && SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && DB[{_dpf}{hd.OpticomRelatedInput}];");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_thdin}{hd.FaseCyclus}opt] = G[{_fcpf}{hd.FaseCyclus}] && C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
-                                inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}opt");
-                            }
-                            sb.Append($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = ");
-                            first = true;
-                            foreach (var i in inmHelems)
-                            {
-                                if (!first) sb.Append(" || ");
-                                sb.Append($"IH[{i}]");
-                                first = false;
-                            }
-                            sb.AppendLine(";");
+                            ifc = ifc2;
                         }
+
+                        var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
+                            ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
+                            : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
+                                ? (ifc - 200).ToString()
+                                : ifc.ToString();
+                        var inmHelems = new List<string>();
+                        if (!first) sb.AppendLine();
+                        first = false;
+                        sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
+                        if (hd.KAR && ifc >= 0)
+                        {
+                            if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
+                            {
+                                var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                sb.AppendLine($"{ts}" +
+                                              $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
+                                              $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
+                                              $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
+                                              $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
+                                              $"((DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
+                                              $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                            }
+
+                            inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
+                        }
+
+                        var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == hd.FaseCyclus);
+                        if (risFc != null && hd.RIS)
+                        {
+                            sb.AppendLine("#ifndef NO_RIS");
+
+                            sb.Append($"{ts}" +
+                                      $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}ris] = " +
+                                      $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}ris] && (");
+
+                            first = true;
+                            if (risFc != null)
+                            {
+                                sb.AppendLine();
+                                foreach (var lane in risFc.LaneData)
+                                {
+                                    if (!first) sb.AppendLine(" ||");
+                                    var itf = c.RISData.HasMultipleSystemITF
+                                        ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF)
+                                        : -1;
+                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
+                                              $"{_fcpf}{risFc.FaseCyclus}, " +
+                                              $"PRM[{_prmpf}{_prmrisapproachid}{risFc.FaseCyclus}hd], " +
+                                              $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
+                                              $"PRM[{_prmpf}{_prmrislaneid}{risFc.FaseCyclus}hd_{lane.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrisstationtype}{risFc.FaseCyclus}hd], " +
+                                              $"PRM[{_prmpf}{_prmrisstart}{hd.FaseCyclus}hd], " +
+                                              $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd], " +
+                                              $"PRM[{_prmpf}{_prmrisrole}{risFc.FaseCyclus}hd], " +
+                                              $"PRM[{_prmpf}{_prmrissubrole}{risFc.FaseCyclus}hd], " +
+                                              $"{(hd.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{risFc.FaseCyclus}hd]" : "NG")}, " +
+                                              $"hdFC{hd.FaseCyclus})");
+                                    first = false;
+                                }
+                            }
+
+                            sb.AppendLine(");");
+                            inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}ris");
+
+                            sb.AppendLine("#endif /* NO_RIS */");
+                        }
+
+                        if (hd.Opticom)
+                        {
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}opt] = !T[{_tpf}{_thdin}{hd.FaseCyclus}opt] && SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && DB[{_dpf}{hd.OpticomRelatedInput}];");
+                            sb.AppendLine($"{ts}RT[{_tpf}{_thdin}{hd.FaseCyclus}opt] = G[{_fcpf}{hd.FaseCyclus}] && C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
+                            inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}opt");
+                        }
+
+                        sb.Append($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = ");
+                        first = true;
+                        foreach (var i in inmHelems)
+                        {
+                            if (!first) sb.Append(" || ");
+                            sb.Append($"IH[{i}]");
+                            first = false;
+                        }
+
+                        sb.AppendLine(";");
                     }
 
                     // Uitmelding HD
-                    foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom))
+                    foreach (var hd in c.PrioData.HDIngrepen.Where(x => x.KAR || x.Opticom || x.RIS))
                     {
-                        if (int.TryParse(hd.FaseCyclus, out var ifc))
+                        var ifc = -1;
+                        if (int.TryParse(hd.FaseCyclus, out var ifc2))
                         {
-                            var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
-                            var uitmHelems = new List<string>();
-                            if (!first) sb.AppendLine(); first = false;
-                            sb.AppendLine($"{ts}/* Uitmelding HD {_fcpf}{hd.FaseCyclus} */");
-                            if (hd.KAR)
-                            {
-                                if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
-                                {
-                                    var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
-                                }
-                                uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
-                            }
-
-                            if (hd.RIS)
-                            {
-                                sb.AppendLine("#ifndef NO_RIS");
-                                
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}ris] = SCH[{_schpf}{_schhduit}{hd.FaseCyclus}ris] && (ris_uitmelding_selectief(hdFC{hd.FaseCyclus}));");
-                                uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}ris");
-                                
-                                sb.AppendLine("#endif /* NO_RIS */");
-                            }
-
-                            if (hd.Opticom)
-                            {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}opt] = SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !TDH[{_dpf}{hd.OpticomRelatedInput}] && TDH_old[{_dpf}{hd.OpticomRelatedInput}];");
-                                uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}opt");
-                            }
-                            sb.Append($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = ");
-                            first = true;
-                            foreach (var i in uitmHelems)
-                            {
-                                if (!first) sb.Append(" || ");
-                                sb.Append($"IH[{i}]");
-                                first = false;
-                            }
-                            sb.AppendLine(";");
+                            ifc = ifc2;
                         }
+
+                        var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+                        var uitmHelems = new List<string>();
+                        if (!first) sb.AppendLine();
+                        first = false;
+                        sb.AppendLine($"{ts}/* Uitmelding HD {_fcpf}{hd.FaseCyclus} */");
+                        if (hd.KAR && ifc >= 0)
+                        {
+                            if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
+                            {
+                                var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
+                            }
+
+                            uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
+                        }
+
+                        if (hd.RIS)
+                        {
+                            sb.AppendLine("#ifndef NO_RIS");
+
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}ris] = SCH[{_schpf}{_schhduit}{hd.FaseCyclus}ris] && (ris_uitmelding_selectief(hdFC{hd.FaseCyclus}));");
+                            uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}ris");
+
+                            sb.AppendLine("#endif /* NO_RIS */");
+                        }
+
+                        if (hd.Opticom)
+                        {
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}opt] = SCH[{_schpf}{_schhdinuit}{hd.FaseCyclus}opt] && !TDH[{_dpf}{hd.OpticomRelatedInput}] && TDH_old[{_dpf}{hd.OpticomRelatedInput}];");
+                            uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}opt");
+                        }
+
+                        sb.Append($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = ");
+                        first = true;
+                        foreach (var i in uitmHelems)
+                        {
+                            if (!first) sb.Append(" || ");
+                            sb.Append($"IH[{i}]");
+                            first = false;
+                        }
+
+                        sb.AppendLine(";");
                     }
                     
                     #endregion // HD meldingen
@@ -1585,6 +1615,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
                     }
+                    return sb.ToString();
+                
+                case CCOLCodeTypeEnum.PrioCInitPrio:
+                    sb.AppendLine($"{ts}/* initialisatie variabelen vertraag_kar_uitm */");
+                    sb.AppendLine($"{ts}/* ------------------------------------------ */");
+                    sb.AppendLine($"{ts}for (i = 0; i < prioFCMAX; ++i)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}vertraag_kar_uitm[i] = 0;");
+                    sb.AppendLine($"{ts}}}");
                     return sb.ToString();
                 
                 default:

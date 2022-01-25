@@ -22,6 +22,48 @@ bool DSIMeldingPRIO_V1(
 	return TRUE;
 }
 
+bool DSIMeldingPRIO_V2(           /* Fik220201 */
+   count fc,                       /* fasecyclus */
+   count prio_fc,                  /* index prioriteit */
+   count dslus,                    /* lusnummer in Kar bericht */
+   count vtgtype,                  /* voertuigtype */
+   bool checkfcnmr,               /* controleer fasecyclus nummer in Kar bericht */
+   count fcnmr,                    /* ... -> ... fasecyclus nummer in Kar bericht */
+   bool checktype,                /* controleer meldingstype in Kar bericht */
+   count meldingtype,              /* ... -> ... meldingstype in Kar bericht */
+   bool extra)                    /* */
+{
+   bool melding = TRUE;
+
+   /* Correctie uitmelding van eerste bus fc tijdens rood */
+   if (vertraag_kar_uitm[prio_fc]) PrioUitmelden(prio_fc, SG[fc]); /* vertraagde uitmelding op start groen */
+   if (SG[fc]) vertraag_kar_uitm[prio_fc] = FALSE;
+
+#if !defined (VISSIM) && DSMAX
+   if (!DS_MSG || !extra) melding = FALSE;
+#endif
+
+   if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) melding = FALSE;
+   if (vtgtype > 0 && vtgtype != CIF_DSI[CIF_DSI_VTG]) melding = FALSE;
+   if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) melding = FALSE;
+   if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) melding = FALSE;
+
+   /* uitmelding eerste bus tijdens rood, tijdens 1e seconde rood gaan we ervan uit dat de bus toch doorgereden is */
+   if (R[fc] && TR_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
+   {
+      if (iAantalInmeldingen[prio_fc] > 0 && dslus == 0 && CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT)
+      {
+        if (melding)
+        {
+          vertraag_kar_uitm[prio_fc] = TRUE;    /* correctie, uitmelding vertragen tot start groen */
+          melding = FALSE;   /* intrekken eerste uitmelding tijdens rood */
+        }
+      }
+   }
+
+   return melding;
+}
+
 bool DSIMeldingPRIO_LijnNummer_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;

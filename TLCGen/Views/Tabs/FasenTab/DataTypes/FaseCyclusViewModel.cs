@@ -74,8 +74,8 @@ namespace TLCGen.ViewModels
                         var hds = TLCGenControllerDataProvider.Default.Controller.PrioData.HDIngrepen.Where(x => x.FaseCyclus == FaseCyclus.Naam);
                         foreach (var prio in prios)
                         {
-                            foreach (var melding in prio.MeldingenData.Inmeldingen) RenameDetector(melding.DummyKARMelding, oldname);
-                            foreach (var melding in prio.MeldingenData.Uitmeldingen) RenameDetector(melding.DummyKARMelding, oldname);
+                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.DummyKARMelding != null)) RenameDetector(melding.DummyKARMelding, oldname);
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.DummyKARMelding != null)) RenameDetector(melding.DummyKARMelding, oldname);
                         }
 
                         foreach (var hd in hds)
