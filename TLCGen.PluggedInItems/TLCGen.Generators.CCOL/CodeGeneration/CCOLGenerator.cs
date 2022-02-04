@@ -216,6 +216,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (c.TimingsData.TimingsToepassen)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}fctimings.c"), GenerateFcTimingsC(c), Encoding.Default);
+                        CopySourceIfNeeded(c, "timingsvar.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "timingsfunc.c", sourcefilepath);
+                        if (c.TimingsData.TimingsUsePredictions)
+                        {
+                            CopySourceIfNeeded(c, "timings_uc4.c", sourcefilepath);
+                        }
                     }
                     if (c.Data.GenererenEnkelCompilatieBestand)
                     {
@@ -299,7 +305,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case SynchronisatiesTypeEnum.RealFunc when (c.InterSignaalGroep.Voorstarten.Any() 
                                                                     || c.InterSignaalGroep.Gelijkstarten.Any()
                                                                     || c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue)
-                                                                    || c.InterSignaalGroep.LateReleases.Any()):
+                                                                    || c.InterSignaalGroep.LateReleases.Any()
+                                                                    || c.Data.RealFuncBepaalRealisatieTijdenAltijd):
                             CopySourceIfNeeded(c, "realfunc.c", sourcefilepath);
                             break;
                     }

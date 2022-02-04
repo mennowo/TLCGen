@@ -1182,6 +1182,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 var hov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _hprioin.ToString() : _hpriouit.ToString();
                                 var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+                                if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton && melding.FietsPrioriteitGebruikLus)
+                                {
+                                    he += melding.RelatedInput1;
+                                }
                                 sb.AppendLine($"{ts}fietsprio_update({_fcpf}{prio.FaseCyclus}, " +
                                               (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
                                               (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +

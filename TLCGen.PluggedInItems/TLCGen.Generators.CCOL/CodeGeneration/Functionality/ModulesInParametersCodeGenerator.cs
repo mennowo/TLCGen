@@ -79,7 +79,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.Data.ModulenInParameters) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPostApplication => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.RegCPostApplication => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.RegCInitApplication => new List<CCOLLocalVariable>{new("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -118,6 +119,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}   - alleen indien de actuele instellingen door een check heen komen");
                     sb.AppendLine($"{ts}     waarbij middels een functie de blokkenstructuur wordt gecheckt");
                     sb.AppendLine($"{ts}     (op toedeling en conflicten) */");
+                    sb.AppendLine($"{ts}/* Reset blokkering voor niet-toegedeelde fasen */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}}}");
                     if (c.Data.MultiModuleReeksen)
                     {
                         sb.AppendLine($"{ts}if (SCH[{_schpf}{_schmlprm}])");

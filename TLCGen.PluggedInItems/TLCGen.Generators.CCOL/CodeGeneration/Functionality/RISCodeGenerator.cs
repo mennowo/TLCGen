@@ -200,6 +200,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
+                    sb.AppendLine($"#ifndef NO_RIS");
                     sb.AppendLine($"{ts}/* Bijhouden granted verstrekt */");
                     sb.AppendLine($"{ts}Bepaal_Granted_Verstrekt();");
                     if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
@@ -216,6 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    sb.AppendLine($"#endif /* NO_RIS */");
 
                     return sb.ToString();
                 

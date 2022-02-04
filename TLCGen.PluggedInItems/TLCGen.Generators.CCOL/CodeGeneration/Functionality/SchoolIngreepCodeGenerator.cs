@@ -104,7 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var d in dets)
                     {
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] = D[{_dpf}{d.Item2.Naam}] && !(RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] || T[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}]) && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && (R[{_fcpf}{d.Item1.Naam}] || FG[{_fcpf}{d.Item1.Naam}] || H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}]) || TDH[{_dpf}{d.Item2.Naam}] && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] = D[{_dpf}{d.Item2.Naam}] && !(RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] || T[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}]) && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && (R[{_fcpf}{d.Item1.Naam}] || G[{_fcpf}{d.Item1.Naam}] || H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}]) || TDH[{_dpf}{d.Item2.Naam}] && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
                     }
                     break;
                 case CCOLCodeTypeEnum.RegCMeetkriterium:

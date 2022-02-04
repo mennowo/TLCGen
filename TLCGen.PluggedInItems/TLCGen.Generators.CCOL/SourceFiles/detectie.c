@@ -41,7 +41,7 @@ void PercentageMaxGroenTijden(count fc, count periode, mulv percentage, count n,
 {
     va_list argp;
     mulv  i;
-    mulv mgnr;
+    mulv mgnr = 300;
 
     va_start(argp, n);
 
@@ -73,7 +73,7 @@ void PercentageVerlengGroenTijden(count fc, count periode, mulv percentage, coun
 {
     va_list argp;
     mulv  i;
-    mulv mgnr;
+    mulv mgnr = 300;
 
     va_start(argp, n);
 

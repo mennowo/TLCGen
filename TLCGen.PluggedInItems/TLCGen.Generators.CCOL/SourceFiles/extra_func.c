@@ -1104,27 +1104,31 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 		for (fc = fcfirst; fc < fclast; ++fc)
 		{
 			PRML_x[fc] = FALSE;
-			/* Bewust niet toegedeeld */
-			if (PRM[prmfcml + fc] & BIT10)
-			{
-				PRML_temp[ml][fc] = FALSE;
-				PRML_x[fc] = TRUE;
-				BL[fc] |= BIT10;
-				continue;
-			}
+			
 			/* ML toedeling */
 			for (ml = 0; ml < ml_max; ++ml)
 			{
-				/* Toegedeeld aan dit blok */
-				if (PRM[prmfcml + fc] & (1 << ml))
-				{
-					PRML_temp[ml][fc] = PRIMAIR;
-					PRML_x[fc] = TRUE;
-				}
-				/* Niet toegedeeld aan dit blok */
+			    /* Bewust niet toegedeeld */
+                if (PRM[prmfcml + fc] & BIT10)
+                {
+                    PRML_temp[ml][fc] = FALSE;
+                    PRML_x[fc] = TRUE;
+                    BL[fc] |= BIT10;
+                    continue;
+                }
 				else
 				{
-					PRML_temp[ml][fc] = FALSE;
+				    /* Toegedeeld aan dit blok */
+			    	if (PRM[prmfcml + fc] & (1 << ml))
+			    	{
+			    		PRML_temp[ml][fc] = PRIMAIR;
+			    		PRML_x[fc] = TRUE;
+			    	}
+			    	/* Niet toegedeeld aan dit blok */
+			    	else
+			    	{
+			    		PRML_temp[ml][fc] = FALSE;
+			    	}
 				}
 			}
 		}

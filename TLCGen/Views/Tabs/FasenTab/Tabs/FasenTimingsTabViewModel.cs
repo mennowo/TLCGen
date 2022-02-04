@@ -111,10 +111,10 @@ namespace TLCGen.ViewModels
             {
                 foreach(var fc in msg.RemovedFasen)
                 {
-                    var TimingsFc = TimingsFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
-                    if(TimingsFc != null)
+                    var timingsFc = TimingsFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                    if(timingsFc != null)
                     {
-                        TimingsFasen.Remove(TimingsFc);
+                        TimingsFasen.Remove(timingsFc);
                     }
                 }
             }
@@ -122,9 +122,9 @@ namespace TLCGen.ViewModels
             {
                 foreach (var fc in msg.AddedFasen)
                 {
-                    var Timingsfc = new TimingsFaseCyclusDataViewModel(
+                    var timingsfc = new TimingsFaseCyclusDataViewModel(
                                 new TimingsFaseCyclusDataModel { FaseCyclus = fc.Naam });
-                    TimingsFasen.Add(Timingsfc);
+                    TimingsFasen.Add(timingsfc);
                 }
             }
             TimingsFasen.BubbleSort();
@@ -136,13 +136,13 @@ namespace TLCGen.ViewModels
 
         #endregion // Private Methods 
 
-        #region Public Methods
+        #region Constructor
 
-        public void UpdateMessaging()
+        public FasenTimingsTabViewModel()
         {
             MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
-        #endregion // Public Methods
+        #endregion // Constructor
     }
 }
