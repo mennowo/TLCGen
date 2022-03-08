@@ -102,6 +102,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
+                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}#include \"timingsvar.c\" /* FCTiming functies */");
                     sb.AppendLine($"{ts}#include \"timingsfunc.c\" /* FCTiming functies */");
                     if (c.TimingsData.TimingsUsePredictions)
@@ -110,6 +111,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     }
 
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}fctimings.c\" /* FCTiming functies */");
+                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
@@ -213,7 +215,9 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.TabCControlParameters:
+                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}Timings_Eventstate_Definition();");
+                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
@@ -418,7 +422,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#ifndef NO_TIMETOX");
                     foreach (var ing in c.PrioData.PrioIngrepen)
                     {
-                        sb.AppendLine($"{ts}if ((P[{_fcpf}{ing.FaseCyclus}] & BIT11) && C[{_ctpf}{_cvc}{ing.FaseCyclus}{ing.Naam}] && (iRijTimer[prioFC{ing.FaseCyclus}{ing.Naam}] < iRijTijd[prioFC{ing.FaseCyclus}{ing.Naam}])) iRijTijd[prioFC{ing.FaseCyclus}{ing.Naam}] = 0;");
+                        sb.AppendLine($"{ts}if ((P[{_fcpf}{ing.FaseCyclus}] & BIT11) && C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, ing)}] && (iRijTimer[prioFC{CCOLCodeHelper.GetPriorityName(c, ing)}] < iRijTijd[prioFC{CCOLCodeHelper.GetPriorityName(c, ing)}])) iRijTijd[prioFC{CCOLCodeHelper.GetPriorityName(c, ing)}] = 0;");
                     }
 
                     foreach (var ing in c.PrioData.HDIngrepen)

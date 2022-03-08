@@ -1117,6 +1117,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             #endregion // Noodaanvragen
+            
+            #region PRACTICE
+            
+            sb.AppendLine("#if defined CCOL_IS_SPECIAL && defined PRACTICE_TEST");
+            sb.AppendLine($"{ts}is_special_signals();");
+            sb.AppendLine("#endif");
+            
+            #endregion // PRACTICE
 
             sb.AppendLine("}");
             sb.AppendLine();

@@ -159,7 +159,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCMeetkriterium => new []{110},
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{110},
                 CCOLCodeTypeEnum.SysHBeforeUserDefines => new []{110},
-                CCOLCodeTypeEnum.PrioCIncludes => new []{20},
                 CCOLCodeTypeEnum.PrioCTop => new []{60},
                 CCOLCodeTypeEnum.PrioCInitPrio => new []{20},
                 CCOLCodeTypeEnum.PrioCInUitMelden => new []{90},
@@ -181,22 +180,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.SysHDefines:
                     sb.AppendLine("#define RIS_GEEN_INDEXERING");
                     return sb.ToString();
-                
-                case CCOLCodeTypeEnum.PrioCIncludes:
-                    sb.AppendLine($"{ts}#include \"extra_func_ris.h\"");
-                    return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCTop:
                     //sb.AppendLine("extern mulv granted_verstrekt[FCMAX];");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
+                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}/* initialisatie variabelen granted_verstrekt */");
                     sb.AppendLine($"{ts}/* ------------------------------------------ */");
                     sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}granted_verstrekt[i] = 0;");
                     sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
@@ -222,6 +219,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
+                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}/* nooit einde groen als granted verstrekt */");
                     sb.AppendLine($"{ts}/* --------------------------------------- */");
                     sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
@@ -233,6 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}Z[i] = FALSE;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
@@ -324,7 +323,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         foreach (var ov in ovRis)
                         {
-                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(prioFC{ov.FaseCyclus}{ov.Naam});");
+                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(prioFC{CCOLCodeHelper.GetPriorityName(c, ov)});");
                         }
                         foreach (var hd in hdRis)
                         {
