@@ -678,8 +678,11 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
   /* -------------------------------------------------------------------------- */
   /* Herstarten fictieve ontruimingstijden                                      */
   /* -------------------------------------------------------------------------- */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+  RT[fot1_2] = (G[fc1] && (TGG_timer[fc1] > gg1 || !TGG[fc1])) && REAL_FOT[fc1][fc2];
+#else
   RT[fot1_2] = (GL[fc1] || G[fc1] && (TGG_timer[fc1] > gg1 || !TGG[fc1])) && REAL_FOT[fc1][fc2];
-
+#endif
   /* -------------------------------------------------------------------------- */
   /* Realisatietijd fc2 wijzigen mits:                                          */
   /* -------------------------------------------------------------------------- */
@@ -692,6 +695,7 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
   {
      /* hulp = resterend groen + geel + FOT                                        */
      /* tijdens groen check op RT, om correctie obv FOT vorige cyclus te voorkomen */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
      hulp = RT[fot1_2] && G[fc1] && !MG[fc1] ? TFG_max[fc1]    - TFG_timer[fc1] +
                                                TVG_max[fc1]    - TVG_timer[fc1] +
                                                TGL_max[fc1]                     +
@@ -701,7 +705,14 @@ bool Corr_FOT(count fc1,     /* fasecyclus VAN                       */
                                      GL[fc1] ? TGL_max[fc1]    - TGL_timer[fc1] +
                                                  T_max[fot1_2]                  :
                                                  T_max[fot1_2] - T_timer[fot1_2];
-
+#else
+     hulp = RT[fot1_2] && G[fc1] && !MG[fc1] ? TFG_max[fc1]    - TFG_timer[fc1] +
+                                               TVG_max[fc1]    - TVG_timer[fc1] +
+                                                 T_max[fot1_2]                  :
+            RT[fot1_2] &&            MG[fc1] ? TGL_max[fc1]                     +
+                                                 T_max[fot1_2]                  :
+                                                 T_max[fot1_2] - T_timer[fot1_2];
+#endif
     if(REALTIJD[fc2] < hulp)
     {
       REALTIJD[fc2] = hulp;

@@ -400,14 +400,12 @@ namespace TLCGen.ViewModels
 
         public bool DetectorCanHaveTDH =>
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.WisselDetector &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
             Type != DetectorTypeEnum.KnopBuiten;
 
         public bool DetectorCanHaveTDB =>
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.WisselDetector &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
             Type != DetectorTypeEnum.KnopBuiten;

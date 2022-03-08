@@ -334,12 +334,13 @@ namespace TLCGen.ViewModels
         {
             get
             {
+                var tijd = _Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd";
                 switch (DisplayType)
                 {
                     case IntersignaalGroepTypeEnum.Gelijkstart:
-                        return $"Fictieve ontruimingstijd van {SelectedSynchronisatie.FaseNaar} naar {SelectedSynchronisatie.FaseVan}";
+                        return $"Fictieve {tijd} van {SelectedSynchronisatie.FaseNaar} naar {SelectedSynchronisatie.FaseVan}";
                     case IntersignaalGroepTypeEnum.Voorstart:
-                        return $"Voorstart ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
+                        return $"Voorstart {tijd} van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     default:
                         return "";
                 }

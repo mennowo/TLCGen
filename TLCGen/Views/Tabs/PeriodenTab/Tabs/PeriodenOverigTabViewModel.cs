@@ -119,51 +119,60 @@ namespace TLCGen.ViewModels
 
         private void MovePeriodeUpCommand_Executed(object obj)
         {
-            var index = -1;
-            foreach (var mvm in Periodes)
+            var index = Periodes.IndexOf(SelectedPeriode);
+            if (index >= 1)
             {
-                ++index;
-                if (mvm == SelectedPeriode)
+                var repeat = true;
+                while(repeat)
                 {
-                    break;
-                }
-            }
-            if (index >= 1 && Periodes[index - 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
-            {
-                var mvm = SelectedPeriode;
-                SelectedPeriode = null;
-                Periodes.Remove(mvm);
-                Periodes.Insert(index - 1, mvm);
-                SelectedPeriode = mvm;
-                Periodes.RebuildList();
-                Messenger.Default.Send(new PeriodenChangedMessage());
-            }
+                    var mvm = SelectedPeriode;
+                    SelectedPeriode = null;
+                    Periodes.Remove(mvm);
+                    Periodes.Insert(index - 1, mvm);
+                    SelectedPeriode = mvm;
+                    Periodes.RebuildList();
+                    Messenger.Default.Send(new PeriodenChangedMessage());
+                    index = Periodes.IndexOf(SelectedPeriode);
 
+                    if (index == 0 || index + 1 < Periodes.Count && Periodes[index + 1].Type != PeriodeTypeEnum.Groentijden)
+                    {
+                        repeat = false;
+                    }
+                }   
+            }
         }
 
 
         private void MovePeriodeDownCommand_Executed(object obj)
         {
-            var index = -1;
-            foreach (var mvm in Periodes)
+            var index = Periodes.IndexOf(SelectedPeriode);
+            if (index - 1 < Periodes.Count)
             {
-                ++index;
-                if (mvm == SelectedPeriode)
+                var repeat = true;
+                while(repeat)
                 {
-                    break;
-                }
-            }
-            if (index >= 0 && (index <= (Periodes.Count - 2)) && Periodes[index + 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
-            {
-                var mvm = SelectedPeriode;
-                SelectedPeriode = null;
-                Periodes.Remove(mvm);
-                Periodes.Insert(index + 1, mvm);
-                SelectedPeriode = mvm;
-                Periodes.RebuildList();
-                Messenger.Default.Send(new PeriodenChangedMessage());
-            }
+                    var mvm = SelectedPeriode;
+                    SelectedPeriode = null;
+                    Periodes.Remove(mvm);
+                    if (index >= Periodes.Count - 1)
+                    {
+                        Periodes.Add(mvm);
+                    }
+                    else
+                    {
+                        Periodes.Insert(index + 1, mvm);   
+                    }
+                    SelectedPeriode = mvm;
+                    Periodes.RebuildList();
+                    Messenger.Default.Send(new PeriodenChangedMessage());
+                    index = Periodes.IndexOf(SelectedPeriode);
 
+                    if (index == Periodes.Count - 1 || index - 1 >= 0 && Periodes[index - 1].Type != PeriodeTypeEnum.Groentijden)
+                    {
+                        repeat = false;
+                    }
+                }   
+            }
         }
 
         void AddNewPeriodeCommand_Executed(object prm)

@@ -145,6 +145,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+
+                    foreach (var cFase in cfasen)
+                    {
+                        var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == cFase).ToArray();
+                        if (gss.Length > 0)
+                        {
+                            foreach (var gs in gss)
+                            {
+                                cfasen.Add(gs.FaseNaar);
+                            }
+                        }
+                        
+                        var vss = c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == cFase).ToArray();
+                        if (vss.Length > 0)
+                        {
+                            foreach (var vs in vss)
+                            {
+                                cfasen.Add(vs.FaseNaar);
+                            }
+                        }
+                    }
+                    
                     foreach(var fc in cfasen)
                     {
                         sb.AppendLine($"{ts}X[{_fcpf}{fc}] &= ~BIT9;");
@@ -172,8 +194,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine($") X[{_fcpf}{cf.FaseCyclus}] |= BIT9;");
                             }
+                        }   
+                    }
+                    
+                    foreach (var cFase in cfasen)
+                    {
+                        var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == cFase).ToArray();
+                        if (gss.Length > 0)
+                        {
+                            foreach (var gs in gss)
+                            {
+                                sb.AppendLine($"{ts}if (X[{_fcpf}{gs.FaseVan}] & BIT9) X[{_fcpf}{gs.FaseNaar}] |= BIT9;");
+                            }
+                        }
+                        
+                        var vss = c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == cFase).ToArray();
+                        if (vss.Length > 0)
+                        {
+                            foreach (var vs in vss)
+                            {
+                                sb.AppendLine($"{ts}if (X[{_fcpf}{vs.FaseVan}] & BIT9) X[{_fcpf}{vs.FaseNaar}] |= BIT9;");
+                            }
                         }
                     }
+                    
                     return sb.ToString();
                 default:
                     return null;

@@ -60,6 +60,21 @@ namespace TLCGen.ViewModels
             set
             {
                 _controller.TimingsData.TimingsToepassen = value;
+                if (value)
+                {
+                    var changed = false;
+                    foreach (var fc in _controller.Fasen)
+                    {
+                        if (TimingsFasen.All(x => x.FaseCyclus != fc.Naam))
+                        {
+                            var model = new TimingsFaseCyclusDataModel { FaseCyclus = fc.Naam };
+                            _controller.TimingsData.TimingsFasen.Add(model);
+                            TimingsFasen.Add(new TimingsFaseCyclusDataViewModel(model));
+                            changed = true;
+                        }
+                    }
+                    if (changed) TimingsFasen.BubbleSort();
+                }
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(TimingsToepassenOK));
             }

@@ -273,7 +273,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 return null;
 
             var sb = new StringBuilder();
-            var firstFcName = c.Fasen.First().Naam;
+
+            string firstFcName = null;
+            if (c.Data.RangeerData.RangerenFasen)
+            {
+                firstFcName = c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex).First()?.Naam;
+            }
+            if (firstFcName == null)
+            {
+                firstFcName = c.Fasen.First().Naam;
+            }
+            
             var first = true;
 
             switch (type)
