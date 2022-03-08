@@ -359,7 +359,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}", stationtype, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
                     
-                    if (fcRis != null)
+                    // we only need these elements if they differ from the elements already created for signalgroups
+                    if (fcRis != null && CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
                     {
                         var approach = $"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(c, prio)}";
                         if (_myElements.All(x => x.Naam != approach))
