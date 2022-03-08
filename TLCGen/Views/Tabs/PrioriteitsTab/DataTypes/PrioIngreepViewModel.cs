@@ -572,7 +572,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _removeIngreepCommand ??= new RelayCommand(() => { _parentIngreep.Ingrepen.Remove(this); });
+                return _removeIngreepCommand ??= new RelayCommand(() =>
+                {
+                    _parentIngreep.Ingrepen.Remove(this);
+                    MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
+                });
             }
         }
         

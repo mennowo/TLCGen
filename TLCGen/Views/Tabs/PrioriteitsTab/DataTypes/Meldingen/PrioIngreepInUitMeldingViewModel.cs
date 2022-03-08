@@ -160,8 +160,8 @@ namespace TLCGen.ViewModels
                             iu.OpvangStoring = false;
                             break;
                         case PrioIngreepMeldingenListViewModel list:
-                            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
                             list.Meldingen.Remove(this);
+                            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
                             break;
                     }
                 });
