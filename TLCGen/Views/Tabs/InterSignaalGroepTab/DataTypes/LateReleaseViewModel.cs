@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -37,7 +38,8 @@ namespace TLCGen.ViewModels
             $"Late release tijd van {_lateRelease.FaseVan} naar {_lateRelease.FaseNaar}";
 
         public string Comment2 =>
-            $"Late release ontruimingstijd van {_lateRelease.FaseNaar} naar {_lateRelease.FaseVan}";
+            $"Late release {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} " +
+            $"van {_lateRelease.FaseNaar} naar {_lateRelease.FaseVan}";
 
         #endregion // Properties
 

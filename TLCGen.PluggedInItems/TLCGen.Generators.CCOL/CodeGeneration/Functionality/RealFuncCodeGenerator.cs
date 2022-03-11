@@ -458,6 +458,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // late release of inlopen
                             else
                             {
+                                var fc1 = c.Fasen.FirstOrDefault(x => grsync.FaseVan == x.Naam);
+                                var fc2 = c.Fasen.FirstOrDefault(x => grsync.FaseNaar == x.Naam);
+                                if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
+                                {
+                                    max = _trealil;
+                                }
                                 var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == NaloopTypeEnum.EindeGroen && x.FaseVan == grsync.FaseNaar);
                                 if (nl == null)
                                 {
@@ -590,22 +596,50 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Realisatie tijd naar geheugenelement */");
-                    sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}Realisatietijd_MM({_fcpf}{firstFcName} + i, {_mpf}{_mrealtijd}{firstFcName} + i);");
-                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmin}{firstFcName} + i] = REALTIJD_min[{_fcpf}{firstFcName} + i];");
-                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
-                    sb.AppendLine($"{ts}}}");
-                    
+                    if (c.Data.RangeerData.RangerenFasen)
+                    {
+                        foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                        {
+                            sb.AppendLine($"{ts}Realisatietijd_MM({_fcpf}{fc.Naam}, {_mpf}{_mrealtijd}{fc.Naam});");
+                            sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmin}{fc.Naam}] = REALTIJD_min[{_fcpf}{fc.Naam}];");
+                            sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmax}{fc.Naam}] = REALTIJD_max[{_fcpf}{fc.Naam}];");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}Realisatietijd_MM({_fcpf}{firstFcName} + i, {_mpf}{_mrealtijd}{firstFcName} + i);");
+                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmin}{firstFcName} + i] = REALTIJD_min[{_fcpf}{firstFcName} + i];");
+                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
+                        sb.AppendLine($"{ts}}}");
+                    }
+
                     sb.AppendLine($"{ts}#if (!defined (AUTOMAAT) && !defined AUTOMAAT_TEST || defined (VISSIM)) && !defined NO_PRINT_REALTIJD");
                     sb.AppendLine($"{ts}if (display) {{");
+                    if (c.Data.RangeerData.RangerenFasen)
+                    {
+                        sb.AppendLine($"{ts}{ts}int i = 0;");
+                    }
                     sb.AppendLine($"{ts}{ts}xyprintf(92, 6, \"REALtijden  min  max \");");
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FC_MAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(108, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
-                    sb.AppendLine($"{ts}{ts}}}");
+                    if (c.Data.RangeerData.RangerenFasen)
+                    {
+                        foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                        {
+                            sb.AppendLine($"{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[{_fcpf}{fc.Naam}], MM[{_mpf}{_mrealtijd}{fc.Naam}]);");
+                            sb.AppendLine($"{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{fc.Naam}]);");
+                            sb.AppendLine($"{ts}{ts}xyprintf(108, 7 + i++, \"%4d\",                 MM[{_mpf}{_mrealtijdmax}{fc.Naam}]);");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < FC_MAX; ++i)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
+                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(108, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
+                        sb.AppendLine($"{ts}{ts}}}");
+                    }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}#endif");
                     

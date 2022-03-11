@@ -54,7 +54,7 @@ int iKPrioriteitsOpties[FCMAX];
 int iStartGroen[prioFCMAX];
 int iBijzonderRealiseren[prioFCMAX];
 int iWachtOpKonflikt[prioFCMAX];
-boolv bMagEerst[FCMAX];
+bool bMagEerst[FCMAX];
 int iAantalPrioriteitsInmeldingen[prioFCMAX];
 int iRijTijdScenario[prioFCMAX];
 int iRTSOngehinderd[prioFCMAX];
@@ -628,7 +628,7 @@ void PrioInmelden(int prio,
 void PrioUitmeldenIndex(int prio,
                       int inm,
                       int iUitmelding,
-                      boolv bGeforceerd)
+                      bool bGeforceerd)
 {
     int i;
     int fc = iFC_PRIOix[prio];
@@ -1351,11 +1351,11 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
             }
             else
             {
-                iRealisatieTijd[fc][k] = iKonfliktTijd[k] + iGroenTijd + (TGL_max[k] > 0 ? TGL_max[k] : 1) +
+                iRealisatieTijd[fc][k] = iKonfliktTijd[k] + iGroenTijd +
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
                 TIG_max[k][fc];
 #else
-                TO_max[k][fc];
+                (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc];
 #endif
             }
         }

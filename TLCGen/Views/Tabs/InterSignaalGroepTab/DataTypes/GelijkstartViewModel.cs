@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -97,10 +98,12 @@ namespace TLCGen.ViewModels
         }
 
         public string Comment1 =>
-			$"Fictive ontruimingstijd van {_gelijkstart.FaseVan} naar {_gelijkstart.FaseNaar}";
+			$"Fictive {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} " +
+			$"van {_gelijkstart.FaseVan} naar {_gelijkstart.FaseNaar}";
 
 		public string Comment2 =>
-			$"Fictive ontruimingstijd van {_gelijkstart.FaseNaar} naar {_gelijkstart.FaseVan}";
+			$"Fictive {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} " +
+			$"van {_gelijkstart.FaseNaar} naar {_gelijkstart.FaseVan}";
 
         #endregion // Properties
 
