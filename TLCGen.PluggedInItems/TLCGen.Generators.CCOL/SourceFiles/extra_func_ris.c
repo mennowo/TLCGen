@@ -30,8 +30,6 @@
    #define snprintf sprintf_s
 #endif
 
-
-
 /* RIS INMELDING SELECTIEF */ 
 /* ======================= */
 /* ris_inmelding_selectief() is gebaseerd op de functie ris_detectie_selectief() uit de Toolkit CCOL. 
@@ -563,5 +561,171 @@ void Bepaal_Granted_Verstrekt(void)
       }
       r++;
    }
+}
+
+/* DEFINITIE RIS APPLICATIEFUNCTIES - HEADING */
+/* ========================================== */
+
+/* RIS CHECK HEADING */
+/* ================= */
+/* ris_check_heading() geeft als return waarde waar (TRUE) als de berekende afwijking van de heading binnen de opgegeven heading_marge valt,
+ * anders niet waar (FALSE).
+ * ItsStations die geen goede heading-informatie hebben (heading<=0) worden buiten beschouwing gelaten:
+ * - bij geen heading informatie (heading = -1).
+ * - bij stilstand van de ItsStation (heading = 0).
+ * voor de berekening van de afwijking van de heading wordt gebruik gemaakt van een formule die Jonathan de Vries (gemeente Utrecht) heeft
+ * gevonden op internet.
+ * ris_check_heading() wordt aangeroepen vanuit de functies ris_detectie_heading() en ris_itsstations_heading().
+ */
+
+rif_bool ris_check_heading(rif_float itsstation_heading, mulv heading, mulv heading_marge)
+{
+   rif_bool heading_correct = FALSE;
+   mulv heading_afwijking = 0;
+
+
+  /* bereken de afwijking van de heading */
+   /* ---------------------------------- */
+   if (	(itsstation_heading <  0) ||      /* ItsStation heeft geen heading informatie  */
+        (itsstation_heading == 0) ) {     /* ItsStation die stilstaat                  */ 
+      heading_afwijking = 9999;
+   }
+   else {
+      heading_afwijking = ( (mulv) heading - (mulv) itsstation_heading + 180 + 360) % 360 - 180; 
+   }
+
+   /* controleer de heading afwijking */
+   /* ------------------------------- */
+   if (	(heading_afwijking <= heading_marge) && (heading_afwijking >= -heading_marge) ) {   /* rijdt ItsStation richting de stopstreep? */       
+      heading_correct = TRUE;
+   }
+
+   return (heading_correct);
+}
+
+/* RIS DETECTIE HEADING */
+/* ==================== */
+/* ris_detectie_heading() geeft als return waarde waar (TRUE), als er in de RIS_ITSSTATION_AP-buffer een RIS-voertuig aanwezig is van het juiste stationtype
+ * in het opgegeven gebied van de rijstrook t.o.v. de stopstreep met een correcte heading, anders niet waar (FALSE). length_start ligt dichter bij de stopstreep dan length_end. 
+ * indien match_signalgroup waar (TRUE) is, dient er ook een signalgroup-match te zijn, anders wordt signalgroup buiten beschouwing gelaten.
+ * ris_detetectie_heading() gebruikt de functie ris_check_heading() voor het controleren van de heading afwijking.
+ * ris_detetectie_heading() wordt aangeroepen door de functies ris_aanvraag_heading() en ris_verlengen_heading().
+ * ris_detectie_heading() kan ook worden aangeroepen vanuit de functie application().
+ *
+ * voorbeelden: IH[hmvtg081]= ris_detectie_heading (fc08, "", ris_lane081, RIS_MOTORVEHICLES, 0, 90, FALSE 270, 45));          // geen test op intersection
+ *              IH[hmvtg281]= ris_detectie_heading (fc28, SYSTEM_ITF, ris_lane28, RIS_CYCLIST, 0, 90, FALSE 90, 45));
+ */
+
+rif_bool ris_detectie_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge)
+{
+   register count i = 0, j;
+
+   while (i < RIS_ITSSTATION_AP_NUMBER) { /* doorloop alle ItsStation objecten */
+      if (stationtype_bits & (1 << RIS_ITSSTATION_AP[i].stationType) ) {     /* test stationType - bit   */
+         for (j = 0; j < RIF_MAXLANES; j++) {
+            if (!strlen(RIS_ITSSTATION_AP[i].matches[j].intersection) || (strlen(intersection) && (strcmp(RIS_ITSSTATION_AP[i].matches[j].intersection, intersection) != 0))) {   /* test intersection ID */
+               break;
+            }
+            if (lane_id == RIS_ITSSTATION_AP[i].matches[j].lane) {  /* test op juiste lane id */
+               if (!match_signalgroup || (strcmp(RIS_ITSSTATION_AP[i].matches[j].signalGroup, FC_code[fc]) == 0)) { /* test op juiste signaalgroep */
+                  if ((RIS_ITSSTATION_EX_AP[i].matches[j].distance > length_start) && (RIS_ITSSTATION_EX_AP[i].matches[j].distance <= length_end)) {  /* test op distance */
+                     if (ris_check_heading(RIS_ITSSTATION_AP[i].heading, heading, heading_marge)) { /* is heading correct? */
+                        return ( (rif_bool) TRUE);
+                     }
+                  }
+               }
+            }
+         }
+      }
+      i++;
+   }
+   return ( (rif_bool) FALSE);
+}
+
+/* RIS AANVRAAG HEADING */
+/* ==================== */
+/* ris_aanvraag_heading() geeft als return waarde waar (TRUE), als er een aanvraag moet worden opzet, anders niet waar (FALSE).
+ * een aanvraag moet worden opgezet indien tijdens de roodfase en geen garantieroodtijd er in de RIS_ITSSTATION_AP-buffer
+ * een RIS-voertuig aanwezig is van het juiste stationtype in het opgegeven gebied van de rijstrook t.o.v. de stopstreep met een correcte heading.
+ * length_start ligt dichter bij de stopstreep dan length_end. indien match_signalgroup waar (TRUE) is, dient er ook een signalgroup-match te zijn,
+ * anders wordt signalgroup buiten beschouwing gelaten.
+ * ris_aanvraag_heading() gebruikt de functie ris_detectie() voor het detecteren van een RIS-voertuig in het opgegeven gebied.
+ * ris_aanvraag_heading() kan worden aangeroepen vanuit de functie application().
+ *
+ * voorbeelden: if (ris_aanvraag_heading (fc08, "", ris_lane081, RIS_VEHICLES, 0, 90, FALSE, 270, 45))  A[fc08] |= BIT8;          // geen test op intersection
+ *              if (ris_aanvraag_heading (fc28, SYSTEM_ITF, ris_lane281, RIS_CYCLIST, 0, 90, FALSE, 90, 45))  A[fc28] |= BIT8;
+ */
+
+rif_bool ris_aanvraag_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge)
+{
+   if (R[fc] && !TRG[fc]) {  /* ivm snelheid - test op aanvraag tijdens rood en garantieroodtijd verstreken */
+      if (ris_detectie_heading(fc, intersection, lane_id, stationtype_bits, length_start, length_end, match_signalgroup, heading, heading_marge) ) return ( (rif_bool) TRUE);
+   }
+   return ( (rif_bool) FALSE);
+}
+
+/* RIS VERLENGEN HEADING */
+/* ===================== */
+/* ris_verlengen_heading() geeft als return waarde waar (TRUE), als het meetkriterium moet worden opzet ,anders niet waar (FALSE).
+ * het meetkriterium moet worden opgezet indien tijdens de groenfase er in de RIS_ITSSTATION_AP-buffer een RIS-voertuig aanwezig is van
+ * het juiste stationtype in het opgegeven gebied van de rijstrook t.o.v. de stopstreep met een correcte heading.
+ * length_start ligt dichter bij de stopstreep dan length_end.
+ * indien match_signalgroup waar (TRUE) is, dient er ook een signalgroup-match te zijn, anders wordt signalgroup buiten beschouwing gelaten.
+ * ris_verlengen() gebruikt de functie ris_detectie() voor het detecteren van een RIS-voertuig in het opgegeven gebied.
+ * ris_verlengen() kan worden aangeroepen vanuit de functie application().
+ *
+ * voorbeelden: if (ris_verlengen_heading(fc08, "", ris_lane081, RIS_VEHICLES, 10, 90, FALSE, 270, 45)))  MK[fc08] |= BIT8; else  MK[fc08] &= ~BIT8;          // geen test op intersection 
+ *              if (ris_verlengen_heading(fc28, SYSTEM_ITF, ris_lane281, RIS_CYCLIST, 10, 90, FALSE, 90, 45)))  MK[fc28] |= BIT8; else  MK[fc28] &= ~BIT8; 
+ */
+
+rif_bool ris_verlengen_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge)
+{
+   if (G[fc]) {      /* ivm snelheid - alleen afhandelen tijdens groen */
+      if (ris_detectie_heading(fc, intersection, lane_id, stationtype_bits, length_start, length_end, match_signalgroup, heading, heading_marge) )  return ( (rif_bool) TRUE);
+   }
+   return ( (rif_bool) FALSE);
+}
+
+/* RIS ITSSTATIONS HEADING */
+/* ======================= */
+/* ris_itsstations_heading() berekent voor de opgegeven lane het aantal aanwezige ItsStations van het juiste stationtype
+ * in het opgegeven gebied van de rijstrook t.o.v de stopstreep met een correcte heading.
+ * length_start ligt dichter bij de stopstreep dan length_end.
+ * Indien match_signalgroup niet waar (FALSE) is, wordt de opgegeven signalgroup buiten beschouwing gelaten en worden alle ItsStations
+ * in de lane meegerekend, er wordt dan niet getest op een signalgroup-match.
+ * ris_itsstations_heading() geeft als return waarde het berekende aantal ItsStations.
+ * ris_itsstations_heading() gebruikt de functie ris_check_heading() voor het controleren van de heading afwijking.
+ * ris_itsstations_heading() kan worden aangeroepen vanuit de functie application().
+ *
+ * voorbeeld: MM[m051] = ris_itsstations_heading(fc05, "", ris_lane051, RIS_MOTORVEHICLES, 50.0, 100.0, FALSE, 180, 45);          // geen test op intersection
+ * voorbeeld: MM[m011] = ris_itsstations_heading(fc11, SYSTEM_ITF, ris_lane111, RIS_MOTORVEHICLES, 50.0, 100.0, FALSE, 359, 45);
+ * 
+ */
+
+mulv ris_itsstations_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge)
+{
+   register count i = 0, j;
+   mulv number = 0;
+
+   while (i < RIS_ITSSTATION_AP_NUMBER) { /* doorloop alle ItsStation objecten */
+      if (stationtype_bits & (1 << RIS_ITSSTATION_AP[i].stationType) ) {   /* test stationType - bit  */
+         for (j = 0; j < RIF_MAXLANES; j++) {
+            if (!strlen(RIS_ITSSTATION_AP[i].matches[j].intersection) || (strlen(intersection) && (strcmp(RIS_ITSSTATION_AP[i].matches[j].intersection, intersection) != 0))) {    /* test intersection ID */
+               break;
+            }
+            if (lane_id == RIS_ITSSTATION_AP[i].matches[j].lane) {  /* test op juiste lane id */
+               if ( !match_signalgroup || (strcmp(RIS_ITSSTATION_AP[i].matches[j].signalGroup, FC_code[fc]) == 0) ) {  /* test op juiste signaalgroep */
+                  if ((RIS_ITSSTATION_EX_AP[i].matches[j].distance > length_start) && (RIS_ITSSTATION_EX_AP[i].matches[j].distance <= length_end)) {  /* test op distance */
+                     if (ris_check_heading(RIS_ITSSTATION_AP[i].heading, heading, heading_marge)) { /* is heading correct? */
+                        number++;
+                     }                     
+                  }
+               }
+            }
+         }
+      }
+      i++;
+   }
+   return (number);
 }
 

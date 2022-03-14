@@ -986,7 +986,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.PrioCTop:
-                    sb.AppendLine("boolv vertraag_kar_uitm[prioFCMAX];");
+                    sb.AppendLine($"{c.GetBoolV()} vertraag_kar_uitm[prioFCMAX];");
                     return sb.ToString();
                     
                 case CCOLCodeTypeEnum.RegCTop:

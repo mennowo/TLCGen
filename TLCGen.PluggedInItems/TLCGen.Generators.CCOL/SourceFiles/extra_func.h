@@ -83,7 +83,7 @@ void maximumgroentijden_va_arg(count fc, ...);
 void set_parm1wijzap(mulv *parm);
 bool set_parm1wijzpb_tvgmax(mulv periode, count startprm, mulv *ifc_prm, count ifc_prm_max); /* argumenten: actuele periode, index eerste verlenggroen parameter, array van fc met prmvg#_$$, max aantal fasen met prmvg */
 #if CCOL_V >= 110
-boolv kp(count i);
+bool kp(count i);
 #endif
 
 extern mulv FC_type[];
@@ -93,13 +93,13 @@ extern int Knipper_2Hz;
 
 #if !defined (AUTOMAAT) 
 #if CCOL_V >= 110
-   boolv ControleerGS(count fc1, count fc2, boolv cond, boolv halt);
-   boolv ControleerVS(count fc1, count fc2, boolv cond, boolv halt);
-   boolv ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, boolv halt);
-   boolv ControleerInrijden(count voedend, count volg, boolv tinr, boolv halt);
+   bool ControleerGS(count fc1, count fc2, bool cond, bool halt);
+   bool ControleerVS(count fc1, count fc2, bool cond, bool halt);
+   bool ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, count tnldet, bool halt);
+   bool ControleerInrijden(count voedend, count volg, bool tinr, bool halt);
 #endif 
 #endif 
 
-boolv set_MRLW_nl(count i, count j, boolv period);
+bool set_MRLW_nl(count i, count j, bool period);
 
 #endif // #define EXTRA_FUNC

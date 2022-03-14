@@ -11,6 +11,9 @@ namespace TLCGen.Models
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }
         public string SystemITF { get; set; }
+        public bool UseHeading { get; set; }
+        public int Heading { get; set; }
+        public int HeadingMarge { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }

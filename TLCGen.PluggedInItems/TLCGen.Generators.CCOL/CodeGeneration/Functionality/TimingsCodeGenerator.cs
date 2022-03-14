@@ -122,17 +122,36 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}{ts}/* UC4 */");
                     sb.AppendLine($"{ts}{ts}/* eigenlijk nog per richting een schakelaar of er altijd NG moet worden gestuurd (nu is het een algemene schakelaar) */");
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijd}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i)");
-                    sb.AppendLine($"{ts}{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
-                    sb.AppendLine($"{ts}{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}}}");
+                    if (c.Data.RangeerData.RangerenFasen)
+                    {
+                        foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                        {
+                            sb.AppendLine($"{ts}{ts}timings_uc4({_fcpf}{fc.Naam}, {_mpf}{_mrealtijd}{fc.Naam}, {_mpf}{_mrealtijdmin}{fc.Naam}, {_mpf}{_mrealtijdmax}{fc.Naam}, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fc.Naam});");
+                        }
+                        sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
+                        sb.AppendLine($"{ts}{ts}{{");
+
+                        foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}P[{_fcpf}{fc.Naam}] &= ~BIT11;");
+                        }
+                        sb.AppendLine($"{ts}{ts}}}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}timings_uc4({_fcpf}{fcf} + i, {_mpf}{_mrealtijd}{fcf} + i, {_mpf}{_mrealtijdmin}{fcf} + i, {_mpf}{_mrealtijdmax}{fcf} + i, {_prmpf}{_prmttxconfidence15}, {_schpf}{_schtxconfidence15ar}, {_schpf}{_schtimings}{fcf} + i);");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schconfidence15fix}])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i)");
+                        sb.AppendLine($"{ts}{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}P[{_fcpf}{fcf} + i] &= ~BIT11;");
+                        sb.AppendLine($"{ts}{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}}}");
+                    }
+
                     var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
                     if (groenSyncData.FictieveConflicten.Any())
                     {

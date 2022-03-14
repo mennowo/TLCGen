@@ -660,7 +660,7 @@ void PrioHalfstarTegenhouden(void)
 	if (IH[hplact])
 	{
 		int prio, fc;
-		boolv magUitstellen;
+		bool magUitstellen;
 
 		for (fc = 0; fc < FCMAX; ++fc)
 		{

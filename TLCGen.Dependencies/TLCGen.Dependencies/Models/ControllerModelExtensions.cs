@@ -54,6 +54,15 @@ namespace TLCGen.Models
 
         #region Synchronisations
 
+        public static IEnumerable<IInterSignaalGroepElement> GetAllSynchronisations(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Gelijkstarten
+                .Cast<IInterSignaalGroepElement>()
+                .Concat(c.InterSignaalGroep.Voorstarten)
+                .Concat(c.InterSignaalGroep.LateReleases)
+                .Concat(c.InterSignaalGroep.Nalopen);
+        }
+
         public static IEnumerable<GelijkstartModel> GetGelijkstarten(this ControllerModel c, string fc)
         {
             return c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc || x.FaseNaar == fc);

@@ -10,7 +10,7 @@ void update_cyclustimer(count cyclustijd)
 	DICG_TX_timer = star_cyclustimer;
 }
 
-boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count einde_groen)
+bool periode(count	cyclustijd, count cyclustimer, count begin_groen, count einde_groen)
 {
 	count einde = einde_groen;
 	count ctk = cyclustimer;
@@ -29,12 +29,12 @@ boolv periode(count	cyclustijd, count cyclustimer, count begin_groen, count eind
 
 void commando_groen(count fc)
 {
-	B[fc] = (boolv)(R[fc] && A[fc]);
+	B[fc] = (bool)(R[fc] && A[fc]);
 	YM[fc] |= BIT14;
 	RR[fc] = FALSE;
 }
 
-void star_reset_bits(boolv star)
+void star_reset_bits(bool star)
 {
 	int i;
 
@@ -97,7 +97,7 @@ void star_regelen()
 	}
 }
 
-boolv star_test_alles_rood()
+bool star_test_alles_rood()
 {
 	int fc = 0;
 	for (; fc < FCMAX; ++fc)

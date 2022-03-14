@@ -496,7 +496,7 @@ void fietsprio_update(
      count dvw,         /* Verweg detector */
      count c_priocount, /* Counter tellen voertuigen */
      count c_priocyc,   /* Counter aantal keer prio per cyclus */
-     boolv prioin,      /* Hulpelement inmelding prio */
+     bool prioin,      /* Hulpelement inmelding prio */
      count ml)          /* Actieve module */
 {
     /* fietsprioriteit */
@@ -511,7 +511,7 @@ void fietsprio_update(
     }
 }
 
-boolv fietsprio_inmelding(
+bool fietsprio_inmelding(
      count fc,            /* Fasecyclus */
      count dvw,           /* Verweg detector */
      count c_priocount,   /* Counter tellen voertuigen */
@@ -520,7 +520,7 @@ boolv fietsprio_inmelding(
      count prm_priocyc,   /* Maximum aantal keer prio per cyclus */
      count prm_priocount, /* Minimum aantal voertuigen voor prio */
      count prm_priowt,    /* Minimum wachttijd voor prio */
-     boolv prioin,        /* Hulpelement inmelding prio */
+     bool prioin,        /* Hulpelement inmelding prio */
 	 count ml)            /* Actieve module */
 {
      /* Check juiste blok */

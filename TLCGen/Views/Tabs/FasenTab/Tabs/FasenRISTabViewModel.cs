@@ -13,7 +13,6 @@ using TLCGen.Models.Enumerations;
 using System.Collections.Generic;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Settings;
-using Xceed.Wpf.Toolkit;
 
 namespace TLCGen.ViewModels
 {
@@ -489,10 +488,7 @@ namespace TLCGen.ViewModels
 
         private RISStationTypeEnum GetTypeForFase(FaseCyclusModel fc, string faseName = null)
         {
-            if (fc == null)
-            {
-                fc = Controller.Fasen.FirstOrDefault(x => x.Naam == faseName);
-            }
+            fc ??= Controller.Fasen.FirstOrDefault(x => x.Naam == faseName);
             var t = RISStationTypeEnum.UNKNOWN;
             if (fc == null) return t;
             switch (fc.Type)
@@ -715,11 +711,16 @@ namespace TLCGen.ViewModels
 
         internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg, int laneId, int rijstrookIndex, string systemITF)
         {
-            var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel());
-            st.StationData.SignalGroupName = sg.Naam;
-            st.StationData.RijstrookIndex = rijstrookIndex;
-            st.StationData.LaneID = laneId;
-            st.StationData.SystemITF = systemITF;
+            var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel())
+            {
+                StationData =
+                {
+                    SignalGroupName = sg.Naam,
+                    RijstrookIndex = rijstrookIndex,
+                    LaneID = laneId,
+                    SystemITF = systemITF
+                }
+            };
             switch (sg.Type)
             {
                 case FaseTypeEnum.Auto:

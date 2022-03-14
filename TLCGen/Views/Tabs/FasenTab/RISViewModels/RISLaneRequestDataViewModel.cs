@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-
+        
         public RISStationTypeEnum Type
         {
             get => _laneData.Type;

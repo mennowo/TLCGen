@@ -31,5 +31,15 @@
 
    void Bepaal_Granted_Verstrekt(void);
     
+   rif_bool ris_check_heading(rif_float itsstation_heading, mulv heading, mulv heading_marge);
+
+   rif_bool ris_detectie_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge);
+
+   rif_bool ris_aanvraag_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge);
+
+   rif_bool ris_verlengen_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge);
+ 
+   mulv ris_itsstations_heading(count fc, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_bool match_signalgroup, mulv heading, mulv heading_marge);
+
 #endif /* __EXTRA_FUNC_RIS_H  */
 

@@ -308,7 +308,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            if (c.Data.RangeerData.RangerenFasen)
+                            {
+                                foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                                {
+                                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mar}{fc.Naam}] = tar_max_ple({_fcpf}{fc.Naam});");
+                                }
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            }
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"{ts}else");
                             sb.AppendLine($"{ts}{{");
@@ -318,10 +328,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         switch (arTypes.First())
                         {
                             case AlternatieveRuimteTypeEnum.MaxTarToTig:
-                                sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                                if (c.Data.RangeerData.RangerenFasen)
+                                {
+                                    foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                                    {
+                                        sb.AppendLine($"{tts}MM[{_mpf}{_mar}{fc.Naam}] = {maxtartotig}({_fcpf}{fc.Naam});");
+                                    }
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = {maxtartotig}(fc);");
+                                }
                                 break;
                             case AlternatieveRuimteTypeEnum.MaxTar:
-                                sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = max_tar(fc);");
+                                if (c.Data.RangeerData.RangerenFasen)
+                                {
+                                    foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                                    {
+                                        sb.AppendLine($"{tts}MM[{_mpf}{_mar}{fc.Naam}] = max_tar({_fcpf}{fc.Naam});");
+                                    }
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{tts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = max_tar(fc);");
+                                }
                                 break;
                             case AlternatieveRuimteTypeEnum.RealRuimte:
                                 // niets nodig, is reeds gebeurt
@@ -342,7 +372,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            if (c.Data.RangeerData.RangerenFasen)
+                            {
+                                foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
+                                {
+                                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mar}{fc.Naam}] = tar_max_ple({_fcpf}{fc.Naam});");
+                                }
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc) MM[{_mpf}{_mar}{firstFcName} + fc] = tar_max_ple(fc);");
+                            }
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"{ts}else");
                             sb.AppendLine($"{ts}{{");

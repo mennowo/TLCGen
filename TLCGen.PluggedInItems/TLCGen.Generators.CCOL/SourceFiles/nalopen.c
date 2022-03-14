@@ -184,7 +184,7 @@ void NaloopFGDet(count fc1, count fc2, count tnl, ...)
  */
 #if !defined (CCOLFUNC) || defined (LWMLFUNC2)
 
-boolv yml_cv_pr_nl(boolv *prml[], count ml, count ml_max)
+bool yml_cv_pr_nl(bool *prml[], count ml, count ml_max)
 {
 	register count i;
 	register count hml = ml + 1;		/* next module			*/

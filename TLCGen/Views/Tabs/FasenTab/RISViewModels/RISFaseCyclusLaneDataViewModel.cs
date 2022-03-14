@@ -54,6 +54,36 @@ namespace TLCGen.ViewModels
                 }
             }
         }
+        
+        public bool UseHeading
+        {
+            get => _laneData.UseHeading;
+            set
+            {
+                _laneData.UseHeading = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public int Heading
+        {
+            get => _laneData.Heading;
+            set
+            {
+                _laneData.Heading = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int HeadingMarge
+        {
+            get => _laneData.HeadingMarge;
+            set
+            {
+                _laneData.HeadingMarge = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         public string SignalGroupName => _laneData.SignalGroupName;
 

@@ -20,6 +20,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmrisvend;
         private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
         private CCOLGeneratorCodeStringSettingModel _prmrisapproachid;
+        private CCOLGeneratorCodeStringSettingModel _prmrislaneheading;
+        private CCOLGeneratorCodeStringSettingModel _prmrislaneheadingmarge;
         private CCOLGeneratorCodeStringSettingModel _schrisgeencheckopsg;
         private CCOLGeneratorCodeStringSettingModel _schrisaanvraag;
         private CCOLGeneratorCodeStringSettingModel _schrisverlengen;
@@ -68,10 +70,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var l in risModel.RISFasen.SelectMany(x => x.LaneData))
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}",
-                            l.LaneID,
+                        $"{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}",
+                        l.LaneID,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrislaneid, l.RijstrookIndex.ToString(), l.SignalGroupName));
+
+                    if (l.UseHeading)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}",
+                            l.Heading,
                             CCOLElementTimeTypeEnum.None,
-                            _prmrislaneid, l.RijstrookIndex.ToString(), l.SignalGroupName));
+                            _prmrislaneheading, l.RijstrookIndex.ToString(), l.SignalGroupName));
+
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}",
+                            l.HeadingMarge,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmrislaneheadingmarge, l.RijstrookIndex.ToString(), l.SignalGroupName));
+                    }
                 }
                 foreach (var l in risModel.RISRequestLanes.Where(l => l.RISAanvraag))
                 {
@@ -270,11 +287,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* RIS aanvragen */");
                     foreach (var l in risModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
+                        var risfcl = risModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
+
                         var sitf = "SYSTEM_ITF";
                         if (risModel.HasMultipleSystemITF)
                         {
                             sitf = "SYSTEM_ITF1";
-                            var risfcl = risModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
                             if (risfcl != null)
                             {
                                 var msitf = risModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == risfcl.SystemITF);
@@ -285,7 +303,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+
+                        if (risfcl is { UseHeading: true })
+                        {
+                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        }
                     }
 
                     sb.AppendLine($"{ts}/* aanvragen RIS schakelbaar, 1 schakelaar voor het schakelen van alle aanvragen */");
@@ -343,10 +371,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var l in risModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
                         var sitf = "SYSTEM_ITF";
+                        var risfcl = risModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
+
                         if (risModel.HasMultipleSystemITF)
                         {
                             sitf = "SYSTEM_ITF1";
-                            var risfcl = risModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
                             if (risfcl != null)
                             {
                                 var msitf = risModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == risfcl.SystemITF);
@@ -357,7 +386,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        if (risfcl is { UseHeading: true })
+                        {
+                            sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        }
                     }
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();

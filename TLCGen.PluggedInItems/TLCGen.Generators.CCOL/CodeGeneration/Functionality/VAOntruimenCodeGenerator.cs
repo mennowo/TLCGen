@@ -208,33 +208,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }   
                     }
-                    
+
+                    var first = true;
+                    var allSyncs = c.GetAllSynchronisations().Where(x => x is not NaloopModel).ToList();
                     foreach (var cFase in cFasen)
                     {
-                        var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == cFase).ToArray();
-                        if (gss.Length > 0)
+                        var syncs = allSyncs.Where(x => x.FaseVan == cFase);
+                        foreach (var sync in syncs)
                         {
-                            foreach (var gs in gss)
+                            if (first)
                             {
-                                sb.AppendLine($"{ts}if (X[{_fcpf}{gs.FaseVan}] & BIT9) X[{_fcpf}{gs.FaseNaar}] |= BIT9;");
+                                sb.AppendLine($"{ts}/* opzetten X voor synchronisaties */");
+                                first = false;
                             }
-                        }
-                        
-                        var vss = c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == cFase).ToArray();
-                        if (vss.Length > 0)
-                        {
-                            foreach (var vs in vss)
+                            sb.AppendLine($"{ts}if (X[{_fcpf}{sync.FaseVan}] & BIT9) X[{_fcpf}{sync.FaseNaar}] |= BIT9;");
+                            if (sync is GelijkstartModel)
                             {
-                                sb.AppendLine($"{ts}if (X[{_fcpf}{vs.FaseVan}] & BIT9) X[{_fcpf}{vs.FaseNaar}] |= BIT9;");
-                            }
-                        }
-                        
-                        var lrr = c.InterSignaalGroep.LateReleases.Where(x => x.FaseVan == cFase).ToArray();
-                        if (lrr.Length > 0)
-                        {
-                            foreach (var lr in lrr)
-                            {
-                                sb.AppendLine($"{ts}if (X[{_fcpf}{lr.FaseVan}] & BIT9) X[{_fcpf}{lr.FaseNaar}] |= BIT9;");
+                                sb.AppendLine($"{ts}if (X[{_fcpf}{sync.FaseNaar}] & BIT9) X[{_fcpf}{sync.FaseVan}] |= BIT9;");
                             }
                         }
                     }
