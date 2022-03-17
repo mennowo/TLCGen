@@ -1,5 +1,8 @@
-TLCGen=0.10.6.0
+TLCGen=0.10.7.0
 RN==TLCGen
+TLCGen versie: 0.10.7.0
+- Verbeteringen VA ontruiming icm. synchronisaties
+- Ondersteuning voor heading bij RIS
 TLCGen versie: 0.10.6.0
 - Fix voor timings bij toevoegen van fasen
 - Diverse kleine verbeteringen
