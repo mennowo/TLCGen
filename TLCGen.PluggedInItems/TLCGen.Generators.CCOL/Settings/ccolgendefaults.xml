@@ -2097,13 +2097,13 @@
             <Default>nivongedimd</Default>
             <Setting>nivongedimd</Setting>
             <Type>Parameter</Type>
-            <Description>Dimming niveau rateltikker periode gedimd fase _E1_</Description>
+            <Description>Dimming niveau rateltikker periode ongedimd fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>nivgedimd</Default>
             <Setting>nivgedimd</Setting>
             <Type>Parameter</Type>
-            <Description>Dimming niveau rateltikker periode ongedimd fase _E1_</Description>
+            <Description>Dimming niveau rateltikker periode gedimd fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

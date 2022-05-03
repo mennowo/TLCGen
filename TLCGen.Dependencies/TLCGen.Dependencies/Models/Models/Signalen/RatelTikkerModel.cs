@@ -33,7 +33,8 @@ namespace TLCGen.Models
 
         public bool ShouldSerializeNaloopTijd()
         {
-            return Type == RateltikkerTypeEnum.Hoeflake;
+            return Type == RateltikkerTypeEnum.Hoeflake ||
+                   Type == RateltikkerTypeEnum.HoeflakeBewaakt;
         }
 
         public RatelTikkerModel()
