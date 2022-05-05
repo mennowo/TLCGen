@@ -1,4 +1,3 @@
-#addin nuget:?package=Cake.Paket
 #tool nuget:?package=Paket
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool nuget:?package=WiX.Toolset
@@ -40,7 +39,7 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    PaketRestore();
+    //PaketRestore();
 });
 
 Task("Build")
@@ -81,7 +80,7 @@ Task("BuildSetup")
         OutputDirectory = setupBuildDir,
         WorkingDirectory = setupDir
     });
-    WiXLight(setupBuildDir + File("Product.wixobj"), new LightSettings
+    WiXLight(setupBuildDir.Path + "/Product.wixobj", new LightSettings
     {
         WorkingDirectory = setupDir,
         Extensions = new[] { "WixUIExtension" },
@@ -95,7 +94,7 @@ Task("SignSetup")
     .Does(() =>
 {
     var file = outputDir + new FilePath("TLCGen.Setup.msi");
-    Sign(file, new SignToolSignSettings {
+    Sign(file.Path, new SignToolSignSettings {
             TimeStampUri = certUri,
             CertPath = certPath,
             Password = signPass,
