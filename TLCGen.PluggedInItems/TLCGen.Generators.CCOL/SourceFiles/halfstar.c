@@ -1,5 +1,7 @@
 #include "halfstar.h"
-#include "halfstar_prio.h"     /* declaratie functies                                      */
+#if defined prioFCMAX && (prioFCMAX > 0)
+   #include "halfstar_prio.h"     /* declaratie functies                                      */
+#endif
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */

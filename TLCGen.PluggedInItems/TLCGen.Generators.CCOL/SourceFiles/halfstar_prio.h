@@ -51,5 +51,6 @@ void PrioHalfstarAfkappen(void);
 void PrioHalfstarTerugkomGroen(void);
 void PrioHalfstarGroenVasthouden(void);
 void PrioHalfstarMeetKriterium(void);
+void PrioHalfstarPARCorrectieAlternatievenZonderPrio(void);
 
 #endif

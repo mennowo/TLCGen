@@ -360,6 +360,8 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
 
 #define NO_WATCHOTHERTRAFFIC
 
+#if defined prioFCMAX && (prioFCMAX > 0) /* alleen indien PRIO */
+
 rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
 
    register rif_int r = 0;
@@ -562,6 +564,8 @@ void Bepaal_Granted_Verstrekt(void)
       r++;
    }
 }
+
+#endif /* prioFCMAX - alleen indien PRIO */
 
 /* DEFINITIE RIS APPLICATIEFUNCTIES - HEADING */
 /* ========================================== */

@@ -271,6 +271,12 @@
             <Type>Timer</Type>
             <Description>Vertraging vaste aanvraag bij storing op alle detectie voor fase _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>dstvertd</Default>
+            <Setting>dstvertd</Setting>
+            <Type>Timer</Type>
+            <Description>Vertraging vaste aanvraag bij storing op detector _E1_</Description>
+          </Setting>
           dstvert
         </Settings>
       </CodePieceData>

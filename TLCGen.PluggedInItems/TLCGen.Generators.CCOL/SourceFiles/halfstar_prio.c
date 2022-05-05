@@ -786,3 +786,26 @@ void PrioHalfstarMeetKriterium(void)
 		}
 	}
 }
+
+void PrioHalfstarPARCorrectieAlternatievenZonderPrio(void)
+{
+	int fc = 0;
+	int ov = 0;
+	/* PAR correctie: PRIO alternatieven enkel voor richtingen met actieve PRIO ingreep */
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		char hasOV = FALSE;
+		for (ov = 0; ov < prioFCMAX; ++ov)
+		{
+			if (iAantalInmeldingen[ov] > 0 && iFC_PRIOix[ov] == fc)
+			{
+				hasOV = TRUE;
+				break;
+			}
+		}
+		if (!hasOV)
+		{
+			PAR[fc] &= ~PRIO_PAR_BIT;
+		}
+	}
+}

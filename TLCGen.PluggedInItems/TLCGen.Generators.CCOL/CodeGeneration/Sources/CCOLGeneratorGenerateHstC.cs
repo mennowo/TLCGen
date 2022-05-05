@@ -14,7 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
             sb.AppendLine("/* HALFSTARRE APPLICATIE */");
             sb.AppendLine("/* --------------------- */");
-            sb.AppendLine();
+			sb.AppendLine();
             sb.Append(GenerateFileHeader(c.Data, "hst.c"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(c.Data));
@@ -413,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            if (!c.PrioData.PrioIngrepen.Any()) return "";
+            if (!c.PrioData.PrioIngrepen.Any() && !c.PrioData.HDIngrepen.Any()) return "";
 
             sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
             sb.AppendLine("void PrioHalfstarSettings(void)");

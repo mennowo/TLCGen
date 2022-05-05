@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schdvak;
         private CCOLGeneratorCodeStringSettingModel _thdv;
         private CCOLGeneratorCodeStringSettingModel _tdstvert;
+        private CCOLGeneratorCodeStringSettingModel _tdstvertd;
         private CCOLGeneratorCodeStringSettingModel _prmperc;
 #pragma warning restore 0649
         private string _mperiod;
@@ -84,44 +85,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         #region Code gen methods
 
-        private void AanvraagPerDetector(StringBuilder sb, ControllerModel c, string ts)
-        {
-            sb.AppendLine($"{ts}/* Vaste aanvraag bij detectie storing (per detector) */");
-            foreach (var fc in c.Fasen)
-            {
-                foreach (var d in fc.Detectoren)
-                {
-                    if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.Altijd)
-                    {
-                        sb.AppendLine($"{ts}{ts}A[{_fcpf}{fc.Naam}] |= (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING);");
-                    }
-                    else if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ||
-                            d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
-                    {
-                        sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= SCH[{_schpf}{_schdvak}{_dpf}{d.Naam}] && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING);");
-                    }
-                }
-            }
-            sb.AppendLine();
-        }
-
         private void AanvraagAlleDetectoren(StringBuilder sb, ControllerModel c, string ts)
         {
-            sb.AppendLine($"{ts}/* vaste aanvraag bij detectiestoring alle aanvraaglussen */");
+            sb.AppendLine($"{ts}/* vaste/vertraagde aanvraag bij detectiestoring */");
             foreach (var fc in c.Fasen.Where(x => 
-                x.AanvraagBijDetectieStoring &&
+                (x.AanvraagBijDetectieStoring || x.Detectoren.Any(x => x.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit)) &&
                 x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen)))
             {
                 var pre = "";
-                if (fc.AanvraagBijDetectieStoringVertraagd)
+                if (fc.AanvraagBijDetectieStoringVertraagd && fc.AanvraagBijDetectieStoring)
                 {
                     pre = "".PadLeft($"{ts}RT[{_tpf}{_tdstvert}{fc.Naam}] = ".Length);
-                    sb.Append($"{ts}RT[{_tpf}{_tdstvert}{fc.Naam}] = !T[{_tpf}{_tdstvert}{fc.Naam}] && R[{_fcpf}{fc.Naam}] && !A[{_fcpf}{fc.Naam}] && (");
+                    sb.AppendLine($"{ts}RT[{_tpf}{_tdstvert}{fc.Naam}] = !T[{_tpf}{_tdstvert}{fc.Naam}] && R[{_fcpf}{fc.Naam}] && !A[{_fcpf}{fc.Naam}] && (");
                 }
                 else
                 {
-                    pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
-                    sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
+                    pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= (".Length);
+                    sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (");
+                }
+
+                var first = true;
+                
+                // aanvraag per lus
+                if (fc.Detectoren.Any(x => x.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit))
+                {
+                    foreach (var d in fc.Detectoren)
+                    {
+                        if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.Altijd)
+                        {
+                            if (!first) sb.AppendLine(" ||");
+                            sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                        }
+                        else if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ||
+                                 d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
+                        {
+                            if (!first) sb.AppendLine(" ||");
+                            sb.Append($"{pre}SCH[{_schpf}{_schdvak}{_dpf}{d.Naam}] && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                        }
+                        first = false;
+                    }
+                }
+
+                // shortcut indien geen aanvraag voor fase
+                if (!fc.AanvraagBijDetectieStoring)
+                {
+                    sb.AppendLine(") ? BIT5 : 0;");
+                    continue;
                 }
 
                 // voor niet-voetgangers
@@ -155,7 +164,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         var det = 0;
-                        if (str > 1)
+                        if (str > 1 || !first)
                         {
                             sb.AppendLine(" ||");
                         }
@@ -183,15 +192,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (!d.AanvraagHardOpStraat)
                                 {
-                                    sb.Append(str > 1
-                                    ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})"
-                                    : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})");
+                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})");
                                 }
                                 else
                                 {
-                                    sb.Append(str > 1
-                                    ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
-                                    : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                                 }
                             }
                             if (!d.AanvraagHardOpStraat && !rgv)
@@ -232,8 +237,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else
                         {
                             sb.Append(!d.AanvraagHardOpStraat
-                                ? $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
-                                : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
+                                : $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                         }
                         if (!d.AanvraagHardOpStraat)
                         {
@@ -254,14 +259,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
 
-                sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ";");
+                sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ") ? BIT5 : 0;");
             }
             foreach (var fc in c.Fasen.Where(x =>
                 x.AanvraagBijDetectieStoring &&
                 x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
                 x.AanvraagBijDetectieStoringVertraagd)))
             {
-                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= ET[{_tpf}{_tdstvert}{fc.Naam}];");
+                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (ET[{_tpf}{_tdstvert}{fc.Naam}] ? BIT5 : 0);");
             }
             sb.AppendLine();
         }
@@ -424,8 +429,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
                     sb.AppendLine();
-
-                    AanvraagPerDetector(sb, c, ts);
 
                     AanvraagAlleDetectoren(sb, c, ts);
 

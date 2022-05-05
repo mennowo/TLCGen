@@ -176,6 +176,13 @@ namespace TLCGen.Models
         {
             return c.PrioData.HDIngrepen.Any();
         }
+        
+        public static bool HasPrioRis(this ControllerModel c)
+        {
+            return c.PrioData.HDIngrepen.Any(x => x.RIS) ||
+                   c.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                                    x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
+        }
 
         public static bool HasHDKAR(this ControllerModel c)
         {

@@ -668,7 +668,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.PrioCInUitMelden => new []{11},
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{11},
                 CCOLCodeTypeEnum.PrioCInitPrio => new []{11},
-                CCOLCodeTypeEnum.PrioCTop => new []{11},
+                CCOLCodeTypeEnum.PrioCIncludes => new []{11},
                 _ => null
             };
         }
@@ -985,7 +985,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.PrioCTop:
+                case CCOLCodeTypeEnum.PrioCIncludes:
                     sb.AppendLine($"{c.GetBoolV()} vertraag_kar_uitm[prioFCMAX];");
                     return sb.ToString();
                     

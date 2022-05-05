@@ -352,18 +352,6 @@ namespace TLCGen.ViewModels
 
         public bool UitgesteldeVasteAanvraagPossible => VasteAanvraag != NooitAltijdAanUitEnum.Nooit;
 
-        //public bool AlternatiefBinnenDrukknopPossible => _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBinnen);
-        //
-        //public bool AlternatiefBinnenDrukknop
-        //{
-        //    get => _faseCyclus.AlternatiefBinnenDrukknop;
-        //    set
-        //    {
-        //        _faseCyclus.AlternatiefBinnenDrukknop = value;
-        //        RaisePropertyChanged<object>(nameof(AlternatiefBinnenDrukknop), broadcast: true);
-        //    }
-        //}
-
         public bool HiaatKoplusBijDetectieStoring
         {
             get => FaseCyclus.HiaatKoplusBijDetectieStoring;
@@ -388,6 +376,7 @@ namespace TLCGen.ViewModels
                 FaseCyclus.AanvraagBijDetectieStoring = value;
                 RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoring), broadcast: true);
                 RaisePropertyChanged(nameof(AanvraagBijDetectieStoringKoplusKnopVisible));
+                RaisePropertyChanged(nameof(AanvraagBijDetectieStoringVertraagdVisible));
             }
         }
 
@@ -618,7 +607,7 @@ namespace TLCGen.ViewModels
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.MaatgevendGroen;
                 }
-                else
+                else if (value != null)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MeeverlengenTypeString),
                         "MeeverlengenTypeString was set to value that is not defined for MeeverlengenType");
@@ -648,7 +637,7 @@ namespace TLCGen.ViewModels
                 {
                     AlternatieveRuimteType = AlternatieveRuimteTypeEnum.RealRuimte;
                 }
-                else
+                else if (value != null)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MeeverlengenTypeString),
                         "MeeverlengenTypeString was set to value that is not defined for MeeverlengenType");

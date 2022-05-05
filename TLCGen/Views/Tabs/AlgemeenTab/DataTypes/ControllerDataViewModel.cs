@@ -396,17 +396,6 @@ namespace TLCGen.ViewModels
             }
         }
         
-        //[Description("TDHA_max gebruikt voor hiaatijden")]
-        //[BrowsableCondition("IsCCOLVersieHigherThanOrEqualTo110")]
-        //public bool TDHAMaxToepassen
-        //{
-        //    get => _Controller?.Data?.TDHAMaxToepassen ?? false;
-        //    set
-        //    {
-        //        _Controller.Data.TDHAMaxToepassen = value;
-        //        RaisePropertyChanged<object>(broadcast: true);
-        //    }
-        //}
 
         [Description("Toevoegen OVM code")]
         public bool ToevoegenOVM

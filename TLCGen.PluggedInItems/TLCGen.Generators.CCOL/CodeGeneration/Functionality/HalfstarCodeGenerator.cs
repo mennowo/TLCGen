@@ -365,7 +365,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.HstCPreSystemApplication => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new("int", "fc")},
-                CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new("int", "ov"), new("int", "fc")},
+                CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.HstCKlokPerioden => new List<CCOLLocalVariable>
                 {
                     new("char", "volgMaster", "TRUE")
@@ -985,23 +985,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCAlternatief:
                     var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
 
-                    sb.AppendLine($"{ts}/* PAR correctie: PRIO alternatieven enkel voor richtingen met actieve PRIO ingreep */");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}char hasOV = FALSE;");
-                    sb.AppendLine($"{ts}{ts}for (ov = 0; ov < prioFCMAX; ++ov)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}if (iAantalInmeldingen[ov] > 0 && iFC_PRIOix[ov] == fc)");
-                    sb.AppendLine($"{ts}{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}hasOV = TRUE;");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}break;");
-                    sb.AppendLine($"{ts}{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}{ts}if (!hasOV)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}PAR[fc] &= ~PRIO_PAR_BIT;");
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine($"{ts}}}");
+                    if (c.HasPTorHD())
+                    {
+	                    sb.AppendLine($"{ts}PrioHalfstarPARCorrectieAlternatievenZonderPrio();");   
+	                    sb.AppendLine();   
+                    }
 
                     foreach (var fc in c.ModuleMolen.FasenModuleData)
                     {
@@ -1149,7 +1137,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"");
 					sb.AppendLine($"{ts}/* primaire realisaties signaalplansturing */");
 					sb.AppendLine($"{ts}/* --------------------------------------- */");
-					if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen)
+					if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen ||
+					    !c.HasPTorHD())
 					{
 						sb.AppendLine($"{ts}signaalplan_primair();");
 					}
@@ -1167,7 +1156,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine();
 					sb.AppendLine($"{ts}/* afsluiten primaire aanvraaggebieden */");
 					sb.AppendLine($"{ts}/* ----------------------------------- */");
-					if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen)
+					if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen ||
+						!c.HasPTorHD())
 					{
 						sb.AppendLine($"{ts}set_pg_primair_fc();");
 					}

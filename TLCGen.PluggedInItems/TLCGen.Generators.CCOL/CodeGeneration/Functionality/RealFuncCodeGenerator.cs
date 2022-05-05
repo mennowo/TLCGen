@@ -147,6 +147,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc &&
                 (c.Data.RealFuncBepaalRealisatieTijdenAltijd
+                 || c.TimingsData.TimingsUsePredictions
                  || c.InterSignaalGroep?.Gelijkstarten?.Count > 0
                  || c.InterSignaalGroep?.Voorstarten?.Count > 0
                  || c.InterSignaalGroep?.LateReleases?.Count > 0))
@@ -267,6 +268,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // return if no sync
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc ||
                 !c.Data.RealFuncBepaalRealisatieTijdenAltijd &&
+                !c.TimingsData.TimingsUsePredictions &&
                 c.InterSignaalGroep?.Gelijkstarten?.Count == 0
                 && c.InterSignaalGroep?.Voorstarten?.Count == 0
                 && c.InterSignaalGroep?.LateReleases?.Count == 0)

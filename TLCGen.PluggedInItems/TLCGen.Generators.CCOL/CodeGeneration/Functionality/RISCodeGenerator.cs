@@ -161,7 +161,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCMeetkriterium => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.PrioCInitPrio => new List<CCOLLocalVariable>{new("int", "i")},  
                 CCOLCodeTypeEnum.RegCAanvragen => new List<CCOLLocalVariable>{new("int", "fc")},  
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new("int", "i")},  
+                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio =>
+                    c.HasPrioRis() ? new List<CCOLLocalVariable> { new("int", "i") } : base.GetFunctionLocalVariables(c, type),  
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -203,6 +204,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
+                    if (!c.HasPrioRis()) return "";
+                    
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}/* initialisatie variabelen granted_verstrekt */");
                     sb.AppendLine($"{ts}/* ------------------------------------------ */");
@@ -214,6 +217,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
+                    if (!c.HasPrioRis()) return "";
+                    
                     sb.AppendLine($"#ifndef NO_RIS");
                     sb.AppendLine($"{ts}/* Bijhouden granted verstrekt */");
                     sb.AppendLine($"{ts}Bepaal_Granted_Verstrekt();");
@@ -236,6 +241,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
+                    if (!c.HasPrioRis()) return "";
+
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     sb.AppendLine($"{ts}/* nooit einde groen als granted verstrekt */");
                     sb.AppendLine($"{ts}/* --------------------------------------- */");

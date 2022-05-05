@@ -306,7 +306,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                                     || c.InterSignaalGroep.Gelijkstarten.Any()
                                                                     || c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue)
                                                                     || c.InterSignaalGroep.LateReleases.Any()
-                                                                    || c.Data.RealFuncBepaalRealisatieTijdenAltijd):
+                                                                    || c.Data.RealFuncBepaalRealisatieTijdenAltijd
+                                                                    || c.TimingsData.TimingsUsePredictions):
                             CopySourceIfNeeded(c, "realfunc.c", sourcefilepath);
                             break;
                     }

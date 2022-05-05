@@ -9,6 +9,11 @@
 #define TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF   15    /* Richting is Rood, ... , wordt zeker groen */
 #define TIMING_CONFIDENCE_RD_MAX                16    /* hoogste waarde stadium ( wordt gebruikt voor interne Array ) */
 
+/* In de afwezigheid van PRIO: dummy kg() functie */
+#if !defined prioFCMAX || (prioFCMAX == 0)
+   boolv kg(int i) { return 0; }
+#endif
+
 bool NaarConfidence9(count i)
 {
    /* De functie NaarConfidence9 wordt gebruik voor de overgang van de confidence stadium 6-->9. 

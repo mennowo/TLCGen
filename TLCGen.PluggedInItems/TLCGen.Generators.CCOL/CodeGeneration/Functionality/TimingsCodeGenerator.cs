@@ -197,10 +197,10 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
                     {
-                        sb.AppendLine($"        /* Interne koppeling {_fcpf}{nl:van} alleen P als {_fcpf}{nl:van} een P heeft */");
-                        sb.AppendLine($"        if (!(P[{_fcpf}{nl:naar}] & BIT11) && !(P[{_fcpf}{nl:van}] & BIT11)) P[{_fcpf}{nl:van}] &= ~BIT11;");
+                        sb.AppendLine($"        /* Voedende richting {_fcpf}{nl:van} alleen P als naloop een P heeft of al groen is */");
+                        sb.AppendLine($"        if (!((P[{_fcpf}{nl:naar}] & BIT11) || G[{_fcpf}{nl:van}]) && (P[{_fcpf}{nl:van}] & BIT11)) P[{_fcpf}{nl:van}] &= ~BIT11;");
                         sb.AppendLine($"        /* P doorzetten */");
-                        sb.AppendLine($"        if (P[{_fcpf}{nl:van}] & BIT11) P[{_fcpf}{nl:naar}] |= BIT11;");    
+                        sb.AppendLine($"        if ((P[{_fcpf}{nl:van}] & BIT11) && R[{_fcpf}{nl:van}]) P[{_fcpf}{nl:naar}] |= BIT11;");    
                         sb.AppendLine();
                     }
                     sb.AppendLine($"{ts}#endif");
