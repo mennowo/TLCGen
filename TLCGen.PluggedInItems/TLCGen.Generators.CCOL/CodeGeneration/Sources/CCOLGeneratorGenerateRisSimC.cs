@@ -134,7 +134,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case RISStationTypeSimEnum.MOPED:
                         case RISStationTypeSimEnum.MOTORCYCLE:
                         case RISStationTypeSimEnum.PASSENGERCAR:
-                            sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{s.SimulationData.FCNr}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
+                            sb.AppendLine(
+                                $"{ts}if (SIS({_ispf}{s.Naam})) " +
+                                $"ris_simulation_put_itsstation_pb(" +
+                                $"{sitf}, " +
+                                $"PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                $"{_fcpf}{s.SimulationData.FCNr}, " +
+                                $"RIF_STATIONTYPE_{s.Type}, " +
+                                $"0, " +
+                                $"{(s.Prioriteit ? "1" : "0")}, " +
+                                $"{s.Snelheid}, " +
+                                $"{s.Afstand}, " +
+                                $"1);");
                             break;
                         case RISStationTypeSimEnum.LIGHTTRUCK:
                         case RISStationTypeSimEnum.HEAVYTRUCK:
@@ -143,7 +154,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case RISStationTypeSimEnum.TRAM:
                             if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL100)
                             {
-                                sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{s.SimulationData.FCNr}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
+                                sb.AppendLine(
+                                    $"{ts}if (SIS({_ispf}{s.Naam})) " +
+                                    $"ris_simulation_put_itsstation_pb({sitf}, " +
+                                    $"PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                    $"{_fcpf}{s.SimulationData.FCNr}, " +
+                                    $"RIF_STATIONTYPE_{s.Type}, " +
+                                    $"0, " +
+                                    $"{(s.Prioriteit ? "1" : "0")}, " +
+                                    $"{s.Snelheid}, " +
+                                    $"{s.Afstand}, " +
+                                    $"1);");
                             }
                             else
                             {
@@ -183,7 +204,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case RISStationTypeSimEnum.SPECIALVEHICLES:
                             if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL100)
                             {
-                                sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{s.SimulationData.FCNr}, RIF_STATIONTYPE_{s.Type}, 0, {(s.Prioriteit ? "1" : "0")}, {s.Snelheid}, {s.Afstand}, 1);");
+                                sb.AppendLine(
+                                    $"{ts}if (SIS({_ispf}{s.Naam})) " +
+                                    $"ris_simulation_put_itsstation_pb({sitf}, " +
+                                    $"PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                    $"{_fcpf}{s.SimulationData.FCNr}, " +
+                                    $"RIF_STATIONTYPE_{s.Type}, " +
+                                    $"0, " +
+                                    $"{(s.Prioriteit ? "1" : "0")}, " +
+                                    $"{s.Snelheid}, " +
+                                    $"{s.Afstand}, " +
+                                    $"1);");
                             }
                             else
                             {

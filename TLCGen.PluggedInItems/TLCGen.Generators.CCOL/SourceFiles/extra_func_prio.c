@@ -49,7 +49,7 @@ bool DSIMeldingPRIO_V2(           /* Fik220201 */
    if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) melding = FALSE;
 
    /* uitmelding eerste bus tijdens rood, tijdens 1e seconde rood gaan we ervan uit dat de bus toch doorgereden is */
-#if (CCOL_V >= 95)
+#if (CCOL_V >= 110)
    if (R[fc] && TR_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
 #else
    if (R[fc] && TFB_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
@@ -398,34 +398,6 @@ bool WDNST_check_uit(count fc)
 }
 
 #endif // PRIO_CHECK_WAGENNMR
-
-/* KG */
-/* kg() tests G for the conflicting phasecycles.
- * kg() returns TRUE if an "G[]" is detected, otherwise FALSE.
- * kg() can be used in the function application().
- */
-#if !defined (CCOLFUNC)
-
-bool kg(count i)
-{
-   register count n, j;
-
-#ifndef NO_GGCONFLICT
-   for (n = 0; n < GKFC_MAX[i]; ++n) {
-#else
-   for (n = 0; n < KFC_MAX[i]; ++n) {
-#endif
-#if (CCOL_V >= 95)
-      j = KF_pointer[i][n];
-#else
-      j = TO_pointer[i][n];
-#endif
-      if (G[j]) return TRUE;
-   }
-   return FALSE;
-}
-
-#endif
 
 void NevenMelding(count ov1,      /* OV fasecyclus 1                */
                   count ov2,      /* OV fasecyclus 2                */

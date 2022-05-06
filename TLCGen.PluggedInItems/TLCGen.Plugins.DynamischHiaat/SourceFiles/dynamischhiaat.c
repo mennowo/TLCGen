@@ -153,6 +153,7 @@
 		
    ======================================================================================================== */
 
+#define DYN_HIAAT
 
 #if (CCOL_V >= 110 /* && !defined TDHAMAX */) || (CCOL_V < 110)
 
@@ -176,8 +177,14 @@ void init_tdhdyn(void) /* aanroepen onder init_application() of post_init_applic
   }
 }
 
-void tdhdyn(count dp) /* verwerk TDHDYN per detector */
+void tdhdyn(count dp dp, count fc) /* verwerk TDHDYN per detector */
 {
+  if (RV[fc]) {
+    TDHDYN_timer[dp]  = 0;
+    TDHDYN_timer0[dp] = 0;
+    TDHDYN[dp]        = FALSE;
+  }
+  
   if (CIF_IS[dp] & CIF_DET_BEZET) {
     if (D[dp]) {
       TDHDYN_timer [dp] = 0;
@@ -250,6 +257,11 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
         prmdetvw   = va_arg(argpt, va_count);     /* ongebruikt tijdens R[]                                    */
         hevlvw     = va_arg(argpt, va_count);     /* ongebruikt tijdens R[]                                    */
   
+#if (CCOL_V >= 110 /*&& !defined TDHAMAX*/) || (CCOL_V < 110)
+        /* bijwerken TDHDYN[dpnr] en TDHDYN_timer[dpnr] */
+        tdhdyn(dpnr, fc);
+#endif
+  
         if (!TRG[fc] && !ERV[fc]) {
   #if defined (DL_type) && !defined (NO_DDFLUTTER) /* CCOL7 of hoger */  
           if (CIF_IS[dpnr] >= CIF_DET_STORING /*|| OG[dpnr]*/ || BG[dpnr] || FL[dpnr])   detstor[fc] |= TRUE;
@@ -288,7 +300,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
         
 #if (CCOL_V >= 110 && !defined TDHAMAX) || (CCOL_V < 110)
         /* bijwerken TDHDYN[dpnr] en TDHDYN_timer[dpnr] */  /*--*/
-        tdhdyn(dpnr);
+        tdhdyn(dpnr, fc);
 #endif
 
         max_rijstrook = rijstrook;                    /* onthoud hoogste rijstrooknummer                                  */

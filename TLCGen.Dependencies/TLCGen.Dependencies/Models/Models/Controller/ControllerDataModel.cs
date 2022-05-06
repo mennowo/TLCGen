@@ -130,6 +130,18 @@ namespace TLCGen.Models
         public ControllerRangeerDataModel RangeerData { get; set; }
         
         public string CCOLParserPassword { get; set; }
+        
+        public bool GeenControlGeenFileBasedVLOG { get; set; }
+        
+        [Browsable(false)]
+        [IOElement("incontrol", BitmappedItemTypeEnum.Uitgang, "", "HasInNoControlOutputs")]
+        public BitmapCoordinatenDataModel InControlBitmapData { get; set; }
+        
+        [Browsable(false)]
+        [IOElement("nocontrol", BitmappedItemTypeEnum.Uitgang, "", "HasInNoControlOutputs")]
+        public BitmapCoordinatenDataModel NoControlBitmapData { get; set; }
+
+        public bool HasInNoControlOutputs => CCOLVersie >= CCOLVersieEnum.CCOL110;
 
         #endregion // Properties
 
@@ -193,6 +205,8 @@ namespace TLCGen.Models
             SegmentenDisplayBitmapData = new List<SegmentDisplayElementModel>();
             ModulenDisplayBitmapData = new List<ModuleDisplayElementModel>();
             RangeerData = new ControllerRangeerDataModel();
+            InControlBitmapData = new BitmapCoordinatenDataModel();
+            NoControlBitmapData = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

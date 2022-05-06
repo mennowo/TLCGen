@@ -256,6 +256,18 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(VLOGType), broadcast: true);
             }
         }
+        
+        [Description("Geen filebased VLOG indien niet in control")]
+        [BrowsableCondition("IsCCOLVersieHigherThanOrEqualTo110")]
+        public bool GeenControlGeenFileBasedVLOG
+        {
+            get => _Controller?.Data?.GeenControlGeenFileBasedVLOG == true;
+            set
+            {
+                _Controller.Data.GeenControlGeenFileBasedVLOG = value;
+                RaisePropertyChanged<object>(nameof(GeenControlGeenFileBasedVLOG), broadcast: true);
+            }
+        }
 
         [Browsable(false)]
         public bool IsCCOLVersieHigherThan9 => CCOLVersie > CCOLVersieEnum.CCOL9;

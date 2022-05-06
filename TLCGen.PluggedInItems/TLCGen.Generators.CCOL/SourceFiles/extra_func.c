@@ -1648,3 +1648,30 @@ bool set_parm1wijzpb_tvgmax (mulv periode, count startprm, mulv ifc_prm[], count
     return (tvgmaxwijzpb);
 }
 
+/* KG */
+/* kg() tests G for the conflicting phasecycles.
+ * kg() returns TRUE if an "G[]" is detected, otherwise FALSE.
+ * kg() can be used in the function application().
+ */
+#if !defined (CCOLFUNC)
+
+bool kg(count i)
+{
+   register count n, j;
+
+#ifndef NO_GGCONFLICT
+   for (n = 0; n < GKFC_MAX[i]; ++n) {
+#else
+   for (n = 0; n < KFC_MAX[i]; ++n) {
+#endif
+#if (CCOL_V >= 95)
+      j = KF_pointer[i][n];
+#else
+      j = TO_pointer[i][n];
+#endif
+      if (G[j]) return TRUE;
+   }
+   return FALSE;
+}
+
+#endif

@@ -102,4 +102,8 @@ extern int Knipper_2Hz;
 
 bool set_MRLW_nl(count i, count j, bool period);
 
+#if !defined (CCOLFUNC)
+bool kg(count i);
+#endif
+
 #endif // #define EXTRA_FUNC

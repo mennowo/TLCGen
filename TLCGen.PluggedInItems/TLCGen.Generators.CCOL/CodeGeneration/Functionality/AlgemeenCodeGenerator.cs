@@ -30,6 +30,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schcycl_reset;
         private CCOLGeneratorCodeStringSettingModel _mlcycl;
         private CCOLGeneratorCodeStringSettingModel _hmad;
+        private CCOLGeneratorCodeStringSettingModel _usincontrol;
+        private CCOLGeneratorCodeStringSettingModel _usnocontrol;
 #pragma warning restore 0649
 
 
@@ -137,6 +139,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcycl_reset}", 0, CCOLElementTimeTypeEnum.TE_type, _schcycl_reset));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mlcycl}", _mlcycl));
             }
+            
+            // Verklikken applicatie daadwerkelijk de TLC aanstuurt
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usincontrol}", _usincontrol, c.Data.InControlBitmapData));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usnocontrol}", _usnocontrol, c.Data.NoControlBitmapData));
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -150,6 +159,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCAanvragen => new []{91},
                 CCOLCodeTypeEnum.RegCInitApplication => new []{40},
                 CCOLCodeTypeEnum.RegCPostApplication => new []{30},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{100},
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{20},
                 _ => null
             };
@@ -326,6 +336,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCSystemApplication:
+                    sb.AppendLine($"{ts}#ifdef AUTOMAAT");
+                    sb.AppendLine($"{ts}{ts}/* verklikken of applicatie daadwerkelijk de TLC aanstuurt */");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usincontrol}] = (CIF_WPS[3] == 5) ? TRUE : FALSE;");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}/* verklikken of applicatie niet in staat is te regelen */");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usnocontrol}] = (CIF_GPS[3] != 0) ? TRUE : FALSE;");
+                    if (c.Data.GeenControlGeenFileBasedVLOG)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}/* uitschakelen vlog indien applicatie niet in control is */");
+                        sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] &= ~(BIT5);");
+                        sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] |= CIF_GUS[{_uspf}{_usincontrol}] ? 0 : BIT5;");
+                    }
+                    sb.AppendLine($"{ts}#endif");
+                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.EnkelDisplay)
                     {
