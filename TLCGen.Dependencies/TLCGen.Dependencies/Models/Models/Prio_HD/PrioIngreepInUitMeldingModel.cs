@@ -90,7 +90,9 @@ namespace TLCGen.Models
         public int FietsPrioriteitAantalKeerPerCyclus { get; set; }
         public int FietsPrioriteitMinimumAantalVoertuigen { get; set; }
         public int FietsPrioriteitMinimumWachttijdVoorPrioriteit { get; set; }
-        
+        public bool FietsPrioriteitGebruikRIS { get; set; }
+        public int FietsPrioriteitMinimumAantalVoertuigenRIS { get; set; }
+
         #endregion
         
         #region Peloton koppeling
@@ -98,7 +100,7 @@ namespace TLCGen.Models
 
         [Browsable(false)]
         public DetectorModel DummyKARMelding { get; set; }
-
+        
         #endregion // Properties
 
         #region Constructor

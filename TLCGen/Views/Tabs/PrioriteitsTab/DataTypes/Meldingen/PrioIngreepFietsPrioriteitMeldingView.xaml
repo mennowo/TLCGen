@@ -11,6 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepFietsPrioriteitMeldingViewModel}">
     <UserControl.Resources>
         <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
@@ -26,22 +27,34 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="Fiets prioriteit obv. massa detectie en/of wachttijd" FontWeight="Bold" Grid.ColumnSpan="2" />
             <Label Grid.Row="1" Grid.Column="0" Content="Aantal keer prio per cyclus" />
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitAantalKeerPerCyclus}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitAantalKeerPerCyclus,UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="2" Grid.Column="0" Content="Toegestaan blok" />
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitBlok}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitBlok,UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="3" Grid.Column="0" Content="Minimaal aantal voertuigen" />
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumAantalVoertuigen}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="4" Grid.Column="0" Content="Minimale wachttijd voor prio" />
-            <TextBox Grid.Row="4" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumWachttijdVoorPrioriteit}" />
+            <TextBox Grid.Row="4" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumWachttijdVoorPrioriteit,UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="5" Grid.Column="0" Content="Gebruik tel detector" />
-            <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Path=FietsPrioriteitGebruikLus}" />
+            <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Path=FietsPrioriteitGebruikLus,UpdateSourceTrigger=PropertyChanged}"
+                      VerticalAlignment="Center" />
             <Label Grid.Row="6" Grid.Column="0" Content="Tel detector" />
             <ComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Path=AvailableDetectors}" Margin="2"
-                      IsEnabled="{Binding Path=FietsPrioriteitGebruikLus}"
+                      IsEnabled="{Binding Path=FietsPrioriteitGebruikLus}" 
                       SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <Label Grid.Row="7" Grid.Column="0" Content="Gebruik RIS (peloton)"
+                   Visibility="{Binding Path=HasRIS,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <CheckBox Grid.Row="7" Grid.Column="1" IsChecked="{Binding Path=FietsPrioriteitGebruikRIS,UpdateSourceTrigger=PropertyChanged}"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding Path=HasRIS,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Label Grid.Row="8" Grid.Column="0" Content="Min. aantal voertuigen (RIS)"
+                   Visibility="{Binding Path=HasAndUsesRIS,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBox Grid.Row="8" Grid.Column="1" Margin="2" Text="{Binding Path=FietsPrioriteitMinimumAantalVoertuigenRIS,UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding Path=HasAndUsesRIS,Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>

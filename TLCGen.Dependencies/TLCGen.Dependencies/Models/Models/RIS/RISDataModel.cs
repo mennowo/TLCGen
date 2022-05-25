@@ -21,12 +21,16 @@ namespace TLCGen.Models
 
         [XmlArray(ElementName = "RISLaneExtendData")]
         public List<RISLaneExtendDataModel> RISExtendLanes { get; set; }
+        
+        [XmlArray(ElementName = "RISLanePelotonData")]
+        public List<RISLanePelotonDataModel> RISPelotonLanes { get; set; }
 
         public RISDataModel()
         {
             RISFasen = new List<RISFaseCyclusDataModel>();
             RISRequestLanes = new List<RISLaneRequestDataModel>();
             RISExtendLanes = new List<RISLaneExtendDataModel>();
+            RISPelotonLanes = new List<RISLanePelotonDataModel>();
             MultiSystemITF = new List<RISSystemITFModel>();
         }
     }

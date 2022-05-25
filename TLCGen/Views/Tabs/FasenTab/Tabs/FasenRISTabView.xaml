@@ -302,6 +302,81 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
+            <TabItem Header="Pelotons">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Afstanden voor lanes voor bepalen pelotons" />
+                    <ct:SpecialDataGrid 
+                        ItemsSource="{Binding Path=RISPelotonLanes}" Margin="2"
+                        SelectedItem="{Binding Path=LanesPelotonManager.SelectedItem}"
+                        IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
+                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRisPelotonStyle">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=RISPelotonBepaling}" Value="false">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Signaalgroep" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=SignalGroupName}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.RISFasen,RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                            DisplayMemberPath="FaseCyclus"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=SignalGroupName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            SelectedValuePath="FaseCyclus"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Rijstrook" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=RijstrookIndex}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=Rijstroken}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=RijstrookIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Type" 
+                                SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
+                            <!--<DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISPelotonBepaling,UpdateSourceTrigger=PropertyChanged}" />-->
+                            <DataGridTextColumn Binding="{Binding Path=PelotonBepalingStart,UpdateSourceTrigger=PropertyChanged}" Header="Pel.bep. start" CellStyle="{StaticResource FaseNoRisPelotonStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=PelotonBepalingEnd,UpdateSourceTrigger=PropertyChanged}" Header="Pel.bep. einde" CellStyle="{StaticResource FaseNoRisPelotonStyle}" />
+                        </DataGrid.Columns>
+                    </ct:SpecialDataGrid>
+                    <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+                        <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
+                                 SelectableItemsVisibility="Collapsed"
+                                 AddItemCommand="{Binding Path=LanesPelotonManager.AddItemCommand}"
+                                 RemoveItemCommand="{Binding Path=LanesPelotonManager.RemoveItemCommand}"
+                                 SelectedItemToRemove="{Binding Path=LanesPelotonManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    </DockPanel>
+                </Grid>
+            </TabItem>
             <TabItem Header="Simulatie">
                 <Grid>
                     <Grid.ColumnDefinitions>

@@ -26,6 +26,7 @@ namespace TLCGen.ViewModels
         private RISDataModel _risModel;
         private AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> _lanesRequestManager;
         private AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> _lanesExtendManager;
+        private AddRemoveItemsManager<RISLanePelotonDataViewModel,RISLanePelotonDataModel,string> _lanesPelotonManager;
         private RelayCommand _addDefaultRequestLanesCommand;
         private RelayCommand _addDefaultExtendLanesCommand;
         private RelayCommand _addSystemITFCommand;
@@ -68,6 +69,7 @@ namespace TLCGen.ViewModels
                 RISFasen = value != null ? new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_risModel.RISFasen) : null;
                 RISRequestLanes = value != null ? new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_risModel?.RISRequestLanes) : null;
                 RISExtendLanes = value != null ? new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_risModel.RISExtendLanes) : null;
+                RISPelotonLanes = value != null ? new ObservableCollectionAroundList<RISLanePelotonDataViewModel, RISLanePelotonDataModel>(_risModel.RISPelotonLanes) : null;
                 _lanesRequestManager = null;
                 _lanesExtendManager = null;
                 if (MultiSystemITF != null) MultiSystemITF.CollectionChanged -= MultiSystemITF_CollectionChanged;
@@ -87,6 +89,7 @@ namespace TLCGen.ViewModels
     
         public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes { get; private set; }
         public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes { get; private set; }
+        public ObservableCollectionAroundList<RISLanePelotonDataViewModel, RISLanePelotonDataModel> RISPelotonLanes { get; private set; }
         public ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel> MultiSystemITF { get; private set; }
         public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
 
@@ -210,6 +213,24 @@ namespace TLCGen.ViewModels
                 (_, _) => false,
                 () => MessengerInstance.Send(new ControllerDataChangedMessage())
             );
+        
+        public AddRemoveItemsManager<RISLanePelotonDataViewModel, RISLanePelotonDataModel, string> LanesPelotonManager =>
+            _lanesPelotonManager ??= new AddRemoveItemsManager<RISLanePelotonDataViewModel, RISLanePelotonDataModel, string>(
+                RISPelotonLanes,
+                _ =>
+                {
+                    if (!RISFasen.Any()) return null;
+                    var lre = new RISLanePelotonDataViewModel(new RISLanePelotonDataModel()
+                    {
+                        SignalGroupName = RISPelotonLanes.Any() ? RISPelotonLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus,
+                        RijstrookIndex = 1,
+                        Type = GetTypeForFase(null, RISPelotonLanes.Any() ? RISPelotonLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus)
+                    });
+                    return lre;
+                },
+                (_, _) => false,
+                () => MessengerInstance.Send(new ControllerDataChangedMessage())
+            );
 
         #endregion // Properties
 
@@ -224,6 +245,10 @@ namespace TLCGen.ViewModels
             if (!RISExtendLanes.IsSorted())
             {
                 RISExtendLanes.BubbleSort();
+            }
+            if (!RISPelotonLanes.IsSorted())
+            {
+                RISPelotonLanes.BubbleSort();
             }
         }
 
@@ -559,6 +584,7 @@ namespace TLCGen.ViewModels
             RISFasen.BubbleSort();
             RISRequestLanes.BubbleSort();
             RISExtendLanes.BubbleSort();
+            RISPelotonLanes.BubbleSort();
             UpdateRISLanes();
         }
 
@@ -573,6 +599,7 @@ namespace TLCGen.ViewModels
                 RISFasen.BubbleSort();
                 RISRequestLanes.BubbleSort();
                 RISExtendLanes.BubbleSort();
+                RISPelotonLanes.BubbleSort();
             }
         }
 
@@ -609,10 +636,13 @@ namespace TLCGen.ViewModels
                     foreach (var r in rem) RISRequestLanes.Remove(r);
                     var rem2 = RISExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam && x.RijstrookIndex >= obj.AantalRijstroken).ToList();
                     foreach (var r in rem2) RISExtendLanes.Remove(r);
+                    var rem3 = RISPelotonLanes.Where(x => x.SignalGroupName == obj.Fase.Naam && x.RijstrookIndex >= obj.AantalRijstroken).ToList();
+                    foreach (var r in rem3) RISPelotonLanes.Remove(r);
                 }
             }
             foreach (var lre in RISRequestLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
             foreach (var lre in RISExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
+            foreach (var lre in RISPelotonLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
             UpdateRISLanes();
         }
 
@@ -690,6 +720,8 @@ namespace TLCGen.ViewModels
                                 foreach (var r in rem) _risModel.RISRequestLanes.Remove(r);
                                 var rem2 = _risModel.RISExtendLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
                                 foreach (var r in rem2) _risModel.RISExtendLanes.Remove(r);
+                                var rem3 = _risModel.RISPelotonLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem3) _risModel.RISPelotonLanes.Remove(r);
                             }
                         }
                     }
@@ -702,8 +734,10 @@ namespace TLCGen.ViewModels
                 RISFasen.BubbleSort();
                 foreach (var lre in RISRequestLanes) lre.UpdateRijstroken();
                 foreach (var lre in RISExtendLanes) lre.UpdateRijstroken();
+                foreach (var lre in RISPelotonLanes) lre.UpdateRijstroken();
                 RISRequestLanes.BubbleSort();
                 RISExtendLanes.BubbleSort();
+                RISPelotonLanes.BubbleSort();
                 UpdateRISLanes();
                 RaisePropertyChanged("");
             }

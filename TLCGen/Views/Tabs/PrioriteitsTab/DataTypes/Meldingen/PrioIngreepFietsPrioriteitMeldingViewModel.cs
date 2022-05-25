@@ -83,6 +83,31 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool FietsPrioriteitGebruikRIS
+        {
+            get => Parent.PrioIngreepInUitMelding.FietsPrioriteitGebruikRIS;
+            set
+            {
+                Parent.PrioIngreepInUitMelding.FietsPrioriteitGebruikRIS = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasAndUsesRIS));
+            }
+        }
+
+        public int FietsPrioriteitMinimumAantalVoertuigenRIS
+        {
+            get => Parent.PrioIngreepInUitMelding.FietsPrioriteitMinimumAantalVoertuigenRIS;
+            set 
+            { 
+                Parent.PrioIngreepInUitMelding.FietsPrioriteitMinimumAantalVoertuigenRIS = value; 
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
+        public bool HasRIS => ControllerAccessProvider.Default.Controller.RISData.RISToepassen;
+
+        public bool HasAndUsesRIS => HasRIS && FietsPrioriteitGebruikRIS;
+
         #endregion // Properties
 
         #region Constructor

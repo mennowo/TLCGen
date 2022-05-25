@@ -18,6 +18,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmrisaend;
         private CCOLGeneratorCodeStringSettingModel _prmrisvstart;
         private CCOLGeneratorCodeStringSettingModel _prmrisvend;
+        private CCOLGeneratorCodeStringSettingModel _prmrispstart;
+        private CCOLGeneratorCodeStringSettingModel _prmrispend;
         private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
         private CCOLGeneratorCodeStringSettingModel _prmrisapproachid;
         private CCOLGeneratorCodeStringSettingModel _prmrislaneheading;
@@ -121,6 +123,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         l.VerlengenEnd,
                         CCOLElementTimeTypeEnum.None,
                         _prmrisvend, l.SignalGroupName));
+                }
+                foreach (var l in risModel.RISPelotonLanes.Where(l => l.RISPelotonBepaling))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrispstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.PelotonBepalingStart,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrispstart, l.SignalGroupName));
+                }
+                foreach (var l in risModel.RISPelotonLanes.Where(l => l.RISPelotonBepaling))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrispend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.PelotonBepalingEnd,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrispend, l.SignalGroupName));
                 }
             }
             var lanesSim = risModel.RISFasen.SelectMany(x => x.LaneData);

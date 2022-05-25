@@ -122,6 +122,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _cftsvtg;
         private CCOLGeneratorCodeStringSettingModel _cftscyc;
         private CCOLGeneratorCodeStringSettingModel _prmvtgcat;
+        private CCOLGeneratorCodeStringSettingModel _mftstelris;
+        private CCOLGeneratorCodeStringSettingModel _prmftsminvtgris;
 
 #pragma warning restore 0649
 
@@ -139,6 +141,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmrisapproachid;
         private string _hperiod;
         private string _treallr;
+        private string _prmrispstart;
+        private string _prmrispend;
+        private string _schrisgeencheckopsg;
+        private string _prmrislaneheading;
+        private string _prmrislaneheadingmarge;
 
         #endregion // Fields
 
@@ -328,7 +335,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             var inRis = prio.MeldingenData.Inmeldingen.Where(x =>
-                x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
+                x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde ||
+                x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton && x.FietsPrioriteitGebruikRIS).ToList();
             var uitRis = prio.MeldingenData.Uitmeldingen.Where(x =>
                 x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
 
@@ -372,11 +380,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{lane.RijstrookIndex}", lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, ""));
                         }
                     }
-                }
-
-                foreach (var inR in uitRis)
-                {
-
                 }
             }
         }
@@ -425,7 +428,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
+            if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && 
+                melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 999, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
                 if (melding.FietsPrioriteitGebruikLus)
@@ -439,6 +443,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitMinimumAantalVoertuigen, CCOLElementTimeTypeEnum.None, _prmftsminvtg, prio.FaseCyclus));
                 }
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminwt}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitMinimumWachttijdVoorPrioriteit, CCOLElementTimeTypeEnum.TS_type, _prmftsminwt, prio.FaseCyclus));
+
+                if (melding.FietsPrioriteitGebruikRIS)
+                {
+                    elements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", _mftstelris, CCOLCodeHelper.GetPriorityName(c, prio)));
+                    elements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 
+                            melding.FietsPrioriteitMinimumAantalVoertuigenRIS, CCOLElementTimeTypeEnum.None, _prmftsminvtgris, prio.FaseCyclus));
+                }
             }
 
             if (addHov)
@@ -809,6 +824,42 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
+            if (melding.FietsPrioriteitGebruikRIS)
+            {
+                var mm = $"{_mpf}{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+                sb.AppendLine($"{tts}MM[{mm}] = 0;");
+                var lanes = c.RISData.RISPelotonLanes.Where(x => x.SignalGroupName == prio.FaseCyclus).ToArray();
+                if (lanes.Length > 0)
+                {
+                    var itf = c.RISData.SystemITF;
+                    foreach (var l in lanes)
+                    {
+                        // opzoeken lane instellingen en systemITF (indien nodig)
+                        var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
+                        if (risFc == null) continue;
+                        
+                        var fcLane = risFc.LaneData.FirstOrDefault(x => x.RijstrookIndex == l.RijstrookIndex);
+                        if (c.RISData.HasMultipleSystemITF && fcLane != null) itf = fcLane.SystemITF;
+
+                        var laneIdPrm = $"{_prmpf}{_prmrislaneid}_{l.RijstrookIndex}";
+                        if (CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
+                        {
+                            laneIdPrm = $"{_prmpf}{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{l.RijstrookIndex}";
+                        }
+                        sb.AppendLine($"{tts}MM[{mm}] += ris_itsstations_heading(" +
+                                      $"{_fcpf}{prio.FaseCyclus}, " +
+                                      $"{itf}, " +
+                                      $"PRM[{laneIdPrm}], " +
+                                      $"RIS_{l.Type}, " +
+                                      $"PRM[{_prmpf}{_prmrispstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
+                                      $"PRM[{_prmpf}{_prmrispend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
+                                      $"SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                      $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                      $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]);");
+                    }
+                }
+            }
+            
             sb.Append($"{tts}IH[{he}] = ");
             if (melding.AntiJutterTijdToepassen)
             {
@@ -910,7 +961,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                       $"{_prmpf}{_prmftsmaxpercyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
                                       (melding.FietsPrioriteitGebruikLus ? $"{_prmpf}{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
                                       $"{_prmpf}{_prmftsminwt}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
-                                      $"SH[{he}], ML);");
+                                      $"SH[{he}], ML, " +
+                                      (melding.FietsPrioriteitGebruikRIS 
+                                          ? $"{_mpf}{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, {_prmpf}{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}" 
+                                          : "NG, NG") +
+                                      ");");
                     }
                     else
                     {
@@ -1674,6 +1729,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmrisapproachid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisapproachid");
             _hperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("hperiod");
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
+            _prmrispstart = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrispstart");
+            _prmrispend = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrispend");
+            _schrisgeencheckopsg = CCOLGeneratorSettingsProvider.Default.GetElementName("schrisgeencheckopsg");
+            _prmrislaneheading = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneheading");
+            _prmrislaneheadingmarge = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneheadingmarge");
 
             return base.SetSettings(settings);
         }

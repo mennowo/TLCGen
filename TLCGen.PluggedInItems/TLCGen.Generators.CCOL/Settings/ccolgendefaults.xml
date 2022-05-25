@@ -1826,6 +1826,18 @@
             <Type>Parameter</Type>
             <Description>Voertuigcategorie DSI voor prio ingreep _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>ftstelris</Default>
+            <Setting>ftstelris</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Tellen fietsers obv. RIS voor prio ingreep _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ftsminvtgris</Default>
+            <Setting>ftsminvtgris</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimaal aantal gemeten fietsers via RIS tbv peloton prio voor fase _E1_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
@@ -2023,6 +2035,18 @@
             <Setting>risvend</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rispstart</Default>
+            <Setting>rispstart</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start peloton bepaal gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rispend</Default>
+            <Setting>rispend</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde peloton bepaal gebied RIS fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rissim</Default>

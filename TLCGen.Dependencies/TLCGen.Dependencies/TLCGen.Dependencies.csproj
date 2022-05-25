@@ -241,6 +241,7 @@
     <Compile Include="Models\Models\RIS\RISFaseCyclusLaneDataModel.cs" />
     <Compile Include="Models\Models\RIS\RISFaseCyclusLaneSimulatedStationModel.cs" />
     <Compile Include="Models\Models\RIS\RISLaneExtendDataModel.cs" />
+    <Compile Include="Models\Models\RIS\RISLanePelotonDataModel.cs" />
     <Compile Include="Models\Models\RIS\RISLaneRequestDataModel.cs" />
     <Compile Include="Models\Models\RIS\RISStationTypeEnum.cs" />
     <Compile Include="Models\Models\RIS\RISStationTypeSimEnum.cs" />

@@ -177,7 +177,7 @@ void init_tdhdyn(void) /* aanroepen onder init_application() of post_init_applic
   }
 }
 
-void tdhdyn(count dp dp, count fc) /* verwerk TDHDYN per detector */
+void tdhdyn(count dp, count fc) /* verwerk TDHDYN per detector */
 {
   if (RV[fc]) {
     TDHDYN_timer[dp]  = 0;
