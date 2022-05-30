@@ -95,15 +95,19 @@ public class RISLanePelotonDataViewModel : ViewModelBase, IViewModelWithItem, IC
 
     public int CompareTo(object obj)
     {
-        var other = obj as RISLaneExtendDataViewModel;
-        if(_laneData.SignalGroupName == other.SignalGroupName)
+        if (obj is RISLanePelotonDataViewModel other)
         {
-            return RijstrookIndex.CompareTo(other.RijstrookIndex);
+            if (_laneData.SignalGroupName == other.SignalGroupName)
+            {
+                return RijstrookIndex.CompareTo(other.RijstrookIndex);
+            }
+            else
+            {
+                return string.CompareOrdinal(_laneData.SignalGroupName, other.SignalGroupName);
+            }
         }
-        else
-        {
-            return string.CompareOrdinal(_laneData.SignalGroupName, other.SignalGroupName);
-        }
+
+        return 0;
     }
 
     public RISLanePelotonDataViewModel(RISLanePelotonDataModel laneData)

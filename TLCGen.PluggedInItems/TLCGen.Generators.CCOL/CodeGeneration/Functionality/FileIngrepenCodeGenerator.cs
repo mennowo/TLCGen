@@ -954,6 +954,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{ts}iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = poGeenPrioriteit;");
                             }
                         }
+
+                        sb.AppendLine();
+                        foreach (var f in fi.TeDoserenSignaalGroepen)
+                        {
+                            var prios = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == f.FaseCyclus);
+                            foreach (var p in prios)
+                            {
+                                sb.AppendLine($"{ts}{ts}iPrioriteit[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = 0;");
+                            }
+                        }
+                        
                         sb.AppendLine($"{ts}}}");
                     }
                     return sb.ToString();

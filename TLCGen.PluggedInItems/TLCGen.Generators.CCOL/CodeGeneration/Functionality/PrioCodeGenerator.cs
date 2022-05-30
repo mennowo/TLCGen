@@ -831,31 +831,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var lanes = c.RISData.RISPelotonLanes.Where(x => x.SignalGroupName == prio.FaseCyclus).ToArray();
                 if (lanes.Length > 0)
                 {
-                    var itf = c.RISData.SystemITF;
                     foreach (var l in lanes)
                     {
-                        // opzoeken lane instellingen en systemITF (indien nodig)
+                        // opzoeken lane instellingen
                         var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
                         if (risFc == null) continue;
                         
                         var fcLane = risFc.LaneData.FirstOrDefault(x => x.RijstrookIndex == l.RijstrookIndex);
-                        if (c.RISData.HasMultipleSystemITF && fcLane != null) itf = fcLane.SystemITF;
+                        
+                        var itf = c.RISData.HasMultipleSystemITF
+                            ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == fcLane?.SystemITF) : -1;
 
                         var laneIdPrm = $"{_prmpf}{_prmrislaneid}_{l.RijstrookIndex}";
                         if (CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
                         {
                             laneIdPrm = $"{_prmpf}{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{l.RijstrookIndex}";
                         }
-                        sb.AppendLine($"{tts}MM[{mm}] += ris_itsstations_heading(" +
+
+                        sb.AppendLine($"{tts}MM[{mm}] += {(fcLane.UseHeading ? "ris_itsstations_heading" : "ris_itsstations")}(" +
                                       $"{_fcpf}{prio.FaseCyclus}, " +
-                                      $"{itf}, " +
+                                      $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
                                       $"PRM[{laneIdPrm}], " +
                                       $"RIS_{l.Type}, " +
                                       $"PRM[{_prmpf}{_prmrispstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
                                       $"PRM[{_prmpf}{_prmrispend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
-                                      $"SCH[{_schpf}{_schrisgeencheckopsg}], " +
-                                      $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                      $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]);");
+                                      $"SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                      (fcLane.UseHeading 
+                                          ? $", PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                            $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]);"
+                                          : ");"));
                     }
                 }
             }
@@ -969,7 +973,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else
                     {
-                        sb.AppendLine($"C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && G[{_fcpf}{prio.FaseCyclus}];");
+                        sb.AppendLine($"C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && G[{_fcpf}{prio.FaseCyclus}] && (T[{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, prio)}] && (T_timer[{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, prio)}] > 1));");
                     }
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
