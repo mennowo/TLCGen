@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -108,6 +109,9 @@ namespace TLCGen.Settings
             var props = type.GetProperties();
             foreach (var property in props)
             {
+                var browsable = (BrowsableAttribute)property.GetCustomAttribute(typeof(BrowsableAttribute));
+                if (browsable != null && !browsable.Browsable) continue;
+
                 var att = (HasDefaultAttribute)property.GetCustomAttribute(typeof(HasDefaultAttribute));
                 var attMn = (ModelNameAttribute)property.GetCustomAttribute(typeof(ModelNameAttribute));
                 var attVn = (VissimNameAttribute)property.GetCustomAttribute(typeof(VissimNameAttribute));

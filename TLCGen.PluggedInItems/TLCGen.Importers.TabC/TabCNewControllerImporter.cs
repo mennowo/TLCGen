@@ -40,7 +40,7 @@ namespace TLCGen.Importers.TabC
 			{
 				CheckFileExists = true,
 				Title = "Selecteer tab.c file voor importeren",
-				Filter = "Import files|*tab.c;*.ccol|Alle files|*.*"
+				Filter = "Import files|*tab.c;*rea.c;*.ccol|Alle files|*.*"
 			};
 
 			var newc = new ControllerModel();

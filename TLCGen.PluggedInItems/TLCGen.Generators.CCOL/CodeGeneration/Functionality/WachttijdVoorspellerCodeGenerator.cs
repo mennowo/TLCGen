@@ -103,14 +103,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
+                    
                     sb.AppendLine("/* Include files wachttijdvoorspeller*/");
                     sb.AppendLine("#include \"wtvfunc.c\" /* berekening van de wachttijden voorspelling */");
                     sb.AppendLine("#include \"wtlleds.c\" /* aansturing van de wachttijdlantaarn met leds */");
+                    
                     if (c.Data.WachttijdvoorspellerVensterTestomgeving)
                     {
                         sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
                         sb.AppendLine($"{ts}#include \"wtv_testwin.c\"");
                         sb.AppendLine("#endif");
+                    }
+
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"#include \"halfstar_wtv.c\"");
                     }
                     return sb.ToString();
 

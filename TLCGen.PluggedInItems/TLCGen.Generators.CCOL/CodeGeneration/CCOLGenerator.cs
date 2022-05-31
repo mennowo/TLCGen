@@ -615,7 +615,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var addlines = File.ReadAllLines(filename);
 
-                    var addLnkmax = addlines.All(x => !x.Contains("LNKMAX"));
+                    var addLnkMax = addlines.All(x => !x.Contains("LNKMAX"));
+                    var addPlMax = c.HalfstarData.IsHalfstar && addlines.All(x => !x.Contains("PLMAX"));
                     
                     var sb = new StringBuilder();
 
@@ -624,10 +625,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine(l);
                     }
 
-                    if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
-                        addLnkmax)
+                    if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating)
                     {
-                        sb.AppendLine("#define LNKMAX (LNKMAX1+0) /* Totaal aantal gebruikte simulatie elementen */");
+                        if (addLnkMax)
+                        {
+                            sb.AppendLine("#define LNKMAX (LNKMAX1+0) /* Totaal aantal gebruikte simulatie elementen */");
+                        }
+                        if (addPlMax)
+                        {
+                            sb.AppendLine("#define PLMAX (PLMAX1+0) /* Totaal aantal gebruikte signaalplannen */");
+                        }
                     }
 
                     File.Delete(filename);

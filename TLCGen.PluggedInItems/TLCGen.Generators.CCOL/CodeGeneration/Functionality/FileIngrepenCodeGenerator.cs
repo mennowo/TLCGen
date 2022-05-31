@@ -240,6 +240,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCFileVerwerking => new []{10},
                 CCOLCodeTypeEnum.PrioCPARCorrecties => new []{20},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{30},
+                CCOLCodeTypeEnum.PrioCPrioriteitsToekenning => new []{10},
                 CCOLCodeTypeEnum.RegCVerlenggroen => new []{40},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{40},
                 _ => null
@@ -954,8 +955,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{ts}iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = poGeenPrioriteit;");
                             }
                         }
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    return sb.ToString();
 
-                        sb.AppendLine();
+                case CCOLCodeTypeEnum.PrioCPrioriteitsToekenning:
+                    foreach (var fi in c.FileIngrepen.Where(x => x.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep))
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* Geen prioriteit bij file stroom afwaarts */");
+                            first = false;
+                        }
+
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}])");
+                        sb.AppendLine($"{ts}{{");
                         foreach (var f in fi.TeDoserenSignaalGroepen)
                         {
                             var prios = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == f.FaseCyclus);
@@ -964,11 +978,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{ts}iPrioriteit[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = 0;");
                             }
                         }
-                        
+
                         sb.AppendLine($"{ts}}}");
                     }
-                    return sb.ToString();
 
+                    return sb.ToString();
+                
                 default:
                     return null;
             }

@@ -129,7 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // shortcut indien geen aanvraag voor fase
                 if (!fc.AanvraagBijDetectieStoring)
                 {
-                    sb.AppendLine(") ? BIT10 : 0;");
+                    sb.AppendLine(") ? BIT11 : 0;");
                     continue;
                 }
 
@@ -259,14 +259,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
 
-                sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ") ? BIT10 : 0;");
+                sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ") ? BIT11 : 0;");
             }
             foreach (var fc in c.Fasen.Where(x =>
                 x.AanvraagBijDetectieStoring &&
                 x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
                 x.AanvraagBijDetectieStoringVertraagd)))
             {
-                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (ET[{_tpf}{_tdstvert}{fc.Naam}] ? BIT10 : 0);");
+                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (ET[{_tpf}{_tdstvert}{fc.Naam}] ? BIT11 : 0);");
             }
             sb.AppendLine();
         }

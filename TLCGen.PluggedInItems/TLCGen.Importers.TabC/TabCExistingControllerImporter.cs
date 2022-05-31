@@ -41,7 +41,7 @@ namespace TLCGen.Importers.TabC
             if (TLCGenDialogProvider.Default
                 .ShowOpenFileDialog(
                     "Selecteer tab.c file voor importeren", 
-                    "tab.c files|*tab.c;*.ccol|Alle files|*.*", true, out var filename))
+                    "tab.c files|*tab.c;*rea.c;*.ccol|Alle files|*.*", true, out var filename))
             {
                 try
                 {

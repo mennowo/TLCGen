@@ -141,6 +141,7 @@ namespace TLCGen.Models
         [IOElement("nocontrol", BitmappedItemTypeEnum.Uitgang, "", "HasInNoControlOutputs")]
         public BitmapCoordinatenDataModel NoControlBitmapData { get; set; }
 
+        [Browsable(false)]
         public bool HasInNoControlOutputs => CCOLVersie >= CCOLVersieEnum.CCOL110;
 
         #endregion // Properties
