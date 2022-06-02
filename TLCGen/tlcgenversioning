@@ -1,5 +1,7 @@
-TLCGen=0.11.0.0
+TLCGen=0.11.1.0
 RN==TLCGen
+TLCGen versie: 0.11.1.0
+- Hotfix code detectie storing
 TLCGen versie: 0.11.0.0
 - RIS prio voor fietsers
 - Uitgestelde A bij det.storing ook voor enkele lussen

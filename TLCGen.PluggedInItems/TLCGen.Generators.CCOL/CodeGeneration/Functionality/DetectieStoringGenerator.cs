@@ -109,7 +109,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // aanvraag per lus
                 if (fc.Detectoren.Any(x => x.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit))
                 {
-                    foreach (var d in fc.Detectoren)
+                    foreach (var d in fc.Detectoren.Where(x => x.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit))
                     {
                         if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.Altijd)
                         {
@@ -222,6 +222,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // voor voetgangers
                 else
                 {
+                    if (!first)
+                    {
+                        sb.AppendLine(" ||");
+                    }
+                    
                     var det = 0;
                     var ds = new List<string>();
                     foreach (var d in fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen))
@@ -247,7 +252,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (fc.Detectoren.Any(x => !x.AanvraagHardOpStraat))
                     {
-                        sb.Append(" && !(");
+                        sb.AppendLine(" &&");
+                        sb.Append($"{pre}!(");
                         det = 0;
                         foreach (var d in ds)
                         {
