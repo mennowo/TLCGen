@@ -209,7 +209,7 @@ bool ym_max_toV1(count i, mulv to_verschil)
 							TVG_max[m] - TVG_timer[m] +
 							TIG_max[m][k] - TIG_timer[m]))
 						|| (to_verschil < 0))
-						|| TIG[m][k]
+						|| TIG[m][k] && !(RM[m] & BIT2)
 						&& ((TIG_max[i][k]) < (TIG_max[m][k] - TIG_timer[m])))
 #else
 					if (CV[m] && !(RW[m] & BIT2) && (((TGL_max[i] + TO_max[i][k] - to_verschil) <=
@@ -218,7 +218,7 @@ bool ym_max_toV1(count i, mulv to_verschil)
 							TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m] +
 							TO_max[m][k] - TO_timer[m]))
 						|| (to_verschil < 0))
-						|| TO[m][k]
+						|| TO[m][k] && !(RM[m] & BIT2)
 						&& ((TGL_max[i] + TO_max[i][k]) < (TGL_max[m] + TO_max[m][k] -
 							TGL_timer[m] - TO_timer[m])))
 #endif

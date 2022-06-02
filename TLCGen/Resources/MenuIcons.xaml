@@ -1,235 +1,83 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Color x:Key="Color1">#FF3C543C</Color>
-  <Color x:Key="Color2">#FFFFCC00</Color>
-  <Color x:Key="Color3">#FFD2B26B</Color>
-  <Color x:Key="Color4">#FFFFFFFF</Color>
-  <Color x:Key="Color5">#FFD7B671</Color>
-  <Color x:Key="Color6">#FF83FC83</Color>
-  <Color x:Key="Color7">#FF04AE04</Color>
-  <Color x:Key="Color8">#FFFF5555</Color>
-  <Color x:Key="Color9">#FF800000</Color>
-  <Color x:Key="Color10">#FFA6A4A6</Color>
-  <Color x:Key="Color11">#FFF7F9FA</Color>
-  <Color x:Key="Color12">#FFA5A3A5</Color>
-  <Color x:Key="Color13">#FF9C9A9C</Color>
-  <Color x:Key="Color14">#FFB5B3B5</Color>
-  <Color x:Key="Color15">#FFC9D6DD</Color>
-  <Color x:Key="Color16">#FF717272</Color>
-  <Color x:Key="Color17">#FF5B5A5B</Color>
-  <Color x:Key="Color18">#FF464647</Color>
-  <Color x:Key="Color19">#FFB8C7C9</Color>
-  <Color x:Key="Color20">#FF000000</Color>
-  <Color x:Key="Color21">#FF00FF00</Color>
-  <SolidColorBrush x:Key="Color1Brush" Color="{DynamicResource Color1}" />
-  <SolidColorBrush x:Key="Color2Brush" Color="{DynamicResource Color2}" />
-  <SolidColorBrush x:Key="Color3Brush" Color="{DynamicResource Color3}" />
-  <SolidColorBrush x:Key="Color4Brush" Color="{DynamicResource Color4}" />
-  <SolidColorBrush x:Key="Color5Brush" Color="{DynamicResource Color5}" />
-  <SolidColorBrush x:Key="Color6Brush" Color="{DynamicResource Color6}" />
-  <SolidColorBrush x:Key="Color7Brush" Color="{DynamicResource Color7}" />
-  <SolidColorBrush x:Key="Color8Brush" Color="{DynamicResource Color8}" />
-  <SolidColorBrush x:Key="Color9Brush" Color="{DynamicResource Color9}" />
-  <SolidColorBrush x:Key="Color10Brush" Color="{DynamicResource Color10}" />
-  <SolidColorBrush x:Key="Color11Brush" Color="{DynamicResource Color11}" />
-  <SolidColorBrush x:Key="Color12Brush" Color="{DynamicResource Color12}" />
-  <SolidColorBrush x:Key="Color13Brush" Color="{DynamicResource Color13}" />
-  <SolidColorBrush x:Key="Color14Brush" Color="{DynamicResource Color14}" />
-  <SolidColorBrush x:Key="Color15Brush" Color="{DynamicResource Color15}" />
-  <SolidColorBrush x:Key="Color16Brush" Color="{DynamicResource Color16}" />
-  <SolidColorBrush x:Key="Color17Brush" Color="{DynamicResource Color17}" />
-  <SolidColorBrush x:Key="Color18Brush" Color="{DynamicResource Color18}" />
-  <SolidColorBrush x:Key="Color19Brush" Color="{DynamicResource Color19}" />
-  <SolidColorBrush x:Key="Color20Brush" Color="{DynamicResource Color20}" />
-  <SolidColorBrush x:Key="Color21Brush" Color="{DynamicResource Color21}" />
   <Geometry x:Key="ImportExistingIconGeometry1">F0 M32,32z M0,0z M369.33752,514.93099L369.33752,494.51781 361.17224,486.35254 348.92434,486.35254 348.92434,514.93099z</Geometry>
   <Geometry x:Key="ImportExistingIconGeometry2">F0 M32,32z M0,0z M361.17224,486.35254L361.17224,494.51231 369.33752,494.51731z</Geometry>
-  <Geometry x:Key="ImportExistingIconGeometry3">F1 M32,32z M0,0z M15.88678,1021.0133L10.803345,1021.0133 10.803345,1041.3473 5.7199099,1041.3473 13.853387,1048.464 20.970217,1041.3473 15.88678,1041.3473z</Geometry>
-  <SolidColorBrush x:Key="ImportExistingIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="ImportExistingIconColor2Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="ImportExistingIconColor3Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
-  <SolidColorBrush x:Key="ImportExistingIconColor4Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <Geometry x:Key="ImportExistingIconGeometry3">F1 M32,32z M0,0z M15.853682,1021.2119L10.770247,1021.2119 10.770247,1041.5459 5.6868115,1041.5459 13.820289,1048.6626 20.937119,1041.5459 15.853682,1041.5459z</Geometry>
   <DrawingGroup x:Key="ImportExistingIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,0,-1020.3622">
-      <DrawingGroup Transform="0.91817921,0,0,0.91817921,-312.73232,578.47693">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,0,-1020.3622">
+      <DrawingGroup Opacity="1" Transform="0.91817921,0,0,0.91817921,-312.73232,578.47693">
         <GeometryDrawing Geometry="{StaticResource ImportExistingIconGeometry1}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource ImportExistingIconColor1Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
         <GeometryDrawing Geometry="{StaticResource ImportExistingIconGeometry2}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource ImportExistingIconColor2Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
-      <GeometryDrawing Brush="{DynamicResource ImportExistingIconColor3Brush}" Geometry="{StaticResource ImportExistingIconGeometry3}">
+      <GeometryDrawing Brush="#FFFFCC00" Geometry="{StaticResource ImportExistingIconGeometry3}">
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource ImportExistingIconColor4Brush}" Thickness="1.12472248" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF3C543C" Thickness="1.12472248" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="ImportExistingIconDrawingImage" Drawing="{StaticResource ImportExistingIconDrawingGroup}" />
-  <Geometry x:Key="OpenFileIconGeometry1">F1 M32,32z M0,0z M346.34191,485.75887L367.73171,485.75887 367.73171,510.42613 356.69182,510.42613 346.16942,510.42613z</Geometry>
-  <Geometry x:Key="OpenFileIconGeometry2">F0 M32,32z M0,0z M368.36652,514.93099L368.36652,494.51781 360.20124,486.35254 347.95334,486.35254 347.95334,514.93099z</Geometry>
-  <Geometry x:Key="OpenFileIconGeometry3">F0 M32,32z M0,0z M368.36652,514.93099L368.36652,494.51781 360.20124,486.35254 347.95334,486.35254 347.95334,514.93099z</Geometry>
-  <Geometry x:Key="OpenFileIconGeometry4">F0 M32,32z M0,0z M360.20124,486.35254L360.20124,494.51231 368.36652,494.51731z</Geometry>
-  <Geometry x:Key="OpenFileIconGeometry5">F1 M32,32z M0,0z M346.34191,485.75887L346.16942,510.42613 355.59301,514.96555 355.59301,489.89882z</Geometry>
-  <SolidColorBrush x:Key="OpenFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
-  <SolidColorBrush x:Key="OpenFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color4Brush}}" />
-  <SolidColorBrush x:Key="OpenFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="OpenFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="OpenFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="OpenFileIconColor6Brush" Color="{Binding Color, Source={StaticResource Color5Brush}}" />
-  <DrawingGroup x:Key="OpenFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry1}">
-        <GeometryDrawing.Brush>
-          <LinearGradientBrush StartPoint="373.0206,451.85254" EndPoint="373.09534,471.68121" MappingMode="Absolute" Opacity="1">
-            <LinearGradientBrush.Transform>
-              <TransformGroup>
-                <TransformGroup>
-                  <ScaleTransform ScaleX="288.49727558131411" ScaleY="288.49727558131411" />
-                  <TranslateTransform X="-107269.25740211339" Y="-132720.39289241793" />
-                </TransformGroup>
-                  <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
-                  <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
-              </TransformGroup>
-            </LinearGradientBrush.Transform>
-            <GradientStop Color="#FFFBE8A2" Offset="0" />
-            <GradientStop Color="#FFECCD83" Offset="1" />
-          </LinearGradientBrush>
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource OpenFileIconColor1Brush}" Thickness="1.86300004" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-        </GeometryDrawing.Pen>
-      </GeometryDrawing>
-      <DrawingGroup Transform="0.79575883,0,0,0.79575883,77.935413,104.21845">
-        <GeometryDrawing Brush="{DynamicResource OpenFileIconColor2Brush}" Geometry="{StaticResource OpenFileIconGeometry2}">
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource OpenFileIconColor3Brush}" Thickness="2.6247561" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-        <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry3}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
-              <GradientStop Color="#FF84FF63" Offset="0" />
-              <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
-              <GradientStop Color="#00FFFFFF" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource OpenFileIconColor4Brush}" Thickness="2.6247561" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-        <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry4}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="368.44913,489.65439" EndPoint="364.71014,493.38834" MappingMode="Absolute" Opacity="1">
-              <LinearGradientBrush.Transform>
-                <TransformGroup>
-                  <TransformGroup>
-                    <ScaleTransform ScaleX="2.186629281135732" ScaleY="2.186629281135732" />
-                    <TranslateTransform X="-445.46567426320394" Y="-584.34008774815538" />
-                  </TransformGroup>
-                    <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
-                    <MatrixTransform>1.0919066,0,0,1.0919066,-38.028153,-44.221683</MatrixTransform>
-                </TransformGroup>
-              </LinearGradientBrush.Transform>
-              <GradientStop Color="#FFB4FFA0" Offset="0" />
-              <GradientStop Color="#FFD9FFCF" Offset="0.71428573" />
-              <GradientStop Color="#FFFFFFFF" Offset="1" />
-              <GradientStop Color="#FFFFFFFF" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource OpenFileIconColor5Brush}" Thickness="2.1838131" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-      </DrawingGroup>
-      <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry5}">
-        <GeometryDrawing.Brush>
-          <LinearGradientBrush StartPoint="373.0206,451.85254" EndPoint="373.09534,471.68121" MappingMode="Absolute" Opacity="1">
-            <LinearGradientBrush.Transform>
-              <TransformGroup>
-                <TransformGroup>
-                  <ScaleTransform ScaleX="126.08488071143303" ScaleY="126.08488071143303" />
-                  <TranslateTransform X="-46686.088420313426" Y="-57721.459122472654" />
-                </TransformGroup>
-                  <!-- ReSharper disable once Xaml.UnexpectedTextToken -->
-                  <MatrixTransform>0.88734371,0,0,0.88734371,19.452948,93.635034</MatrixTransform>
-              </TransformGroup>
-            </LinearGradientBrush.Transform>
-            <GradientStop Color="#FFFBE8A2" Offset="0" />
-            <GradientStop Color="#FFECCD83" Offset="1" />
-          </LinearGradientBrush>
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource OpenFileIconColor6Brush}" Thickness="1.86300004" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-        </GeometryDrawing.Pen>
-      </GeometryDrawing>
-    </DrawingGroup>
-  </DrawingGroup>
-  <DrawingImage x:Key="OpenFileIconDrawingImage" Drawing="{StaticResource OpenFileIconDrawingGroup}" />
   <Geometry x:Key="ImportNewIconGeometry1">F0 M32,32z M0,0z M369.33752,514.93099L369.33752,494.51781 361.17224,486.35254 348.92434,486.35254 348.92434,514.93099z</Geometry>
   <Geometry x:Key="ImportNewIconGeometry2">F0 M32,32z M0,0z M361.17224,486.35254L361.17224,494.51231 369.33752,494.51731z</Geometry>
   <Geometry x:Key="ImportNewIconGeometry3">F1 M32,32z M0,0z M365.6204,504.51417L365.6204,508.28407 361.8505,508.28407 361.8505,510.85774 365.6204,510.85774 365.6204,514.62764 368.19407,514.62764 368.19407,510.85774 371.96398,510.85774 371.96398,508.28407 368.19407,508.28407 368.19407,504.51417 365.6204,504.51417z</Geometry>
-  <Geometry x:Key="ImportNewIconGeometry4">F1 M32,32z M0,0z M15.88678,1021.0133L10.803345,1021.0133 10.803345,1041.3473 5.7199099,1041.3473 13.853387,1048.464 20.970217,1041.3473 15.88678,1041.3473z</Geometry>
-  <SolidColorBrush x:Key="ImportNewIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="ImportNewIconColor2Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="ImportNewIconColor3Brush" Color="{Binding Color, Source={StaticResource Color6Brush}}" />
-  <SolidColorBrush x:Key="ImportNewIconColor4Brush" Color="{Binding Color, Source={StaticResource Color7Brush}}" />
-  <SolidColorBrush x:Key="ImportNewIconColor5Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
-  <SolidColorBrush x:Key="ImportNewIconColor6Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <Geometry x:Key="ImportNewIconGeometry4">F1 M32,32z M0,0z M15.721288,1021.0795L10.637853,1021.0795 10.637853,1041.4135 5.5544178,1041.4135 13.687895,1048.5302 20.804725,1041.4135 15.721288,1041.4135z</Geometry>
   <DrawingGroup x:Key="ImportNewIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,0,-1020.3622">
-      <DrawingGroup Transform="0.91817921,0,0,0.91817921,-312.73232,578.47693">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,0,-1020.3622">
+      <DrawingGroup Opacity="1" Transform="0.91817921,0,0,0.91817921,-312.73232,578.47693">
         <GeometryDrawing Geometry="{StaticResource ImportNewIconGeometry1}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource ImportNewIconColor1Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
         <GeometryDrawing Geometry="{StaticResource ImportNewIconGeometry2}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource ImportNewIconColor2Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource ImportNewIconColor3Brush}" Geometry="{StaticResource ImportNewIconGeometry3}">
+        <GeometryDrawing Brush="#FF83FC83" Geometry="{StaticResource ImportNewIconGeometry3}">
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource ImportNewIconColor4Brush}" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF04AE04" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
-      <GeometryDrawing Brush="{DynamicResource ImportNewIconColor5Brush}" Geometry="{StaticResource ImportNewIconGeometry4}">
+      <GeometryDrawing Brush="#FFFFCC00" Geometry="{StaticResource ImportNewIconGeometry4}">
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource ImportNewIconColor6Brush}" Thickness="1.12472248" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF3C543C" Thickness="1.12472248" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
@@ -237,206 +85,187 @@
   <DrawingImage x:Key="ImportNewIconDrawingImage" Drawing="{StaticResource ImportNewIconDrawingGroup}" />
   <Geometry x:Key="CloseFileIconGeometry1">F0 M32,32z M0,0z M369.33752,514.76941L369.33752,494.35623 361.17224,486.19096 348.92434,486.19096 348.92434,514.76941z</Geometry>
   <Geometry x:Key="CloseFileIconGeometry2">F0 M32,32z M0,0z M361.17224,486.19096L361.17224,494.35073 369.33752,494.35573z</Geometry>
-  <Geometry x:Key="CloseFileIconGeometry3">F1 M32,32z M0,0z M362.14046,501.53065L359.47474,504.19637 356.80901,501.53065 354.98916,503.35051 357.65488,506.01623 354.98916,508.68195 356.80901,510.50181 359.47474,507.83609 362.14047,510.50182 363.96032,508.68196 361.2946,506.01623 363.96032,503.35051 362.14046,501.53065z</Geometry>
-  <SolidColorBrush x:Key="CloseFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="CloseFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="CloseFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color8Brush}}" />
-  <SolidColorBrush x:Key="CloseFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color9Brush}}" />
+  <Geometry x:Key="CloseFileIconGeometry3">F1 M32,32z M0,0z M361.99908,501.47006L359.33336,504.13578 356.66763,501.47006 354.84778,503.28992 357.5135,505.95564 354.84778,508.62136 356.66763,510.44122 359.33336,507.7755 361.99909,510.44123 363.81894,508.62137 361.15322,505.95564 363.81894,503.28992z</Geometry>
   <DrawingGroup x:Key="CloseFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
       <GeometryDrawing Geometry="{StaticResource CloseFileIconGeometry1}">
         <GeometryDrawing.Brush>
-          <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.383259">
+          <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.383259">
             <GradientStop Color="#FF84FF63" Offset="0" />
             <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
             <GradientStop Color="#00FFFFFF" Offset="1" />
           </LinearGradientBrush>
         </GeometryDrawing.Brush>
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource CloseFileIconColor1Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
       <GeometryDrawing Geometry="{StaticResource CloseFileIconGeometry2}">
         <GeometryDrawing.Brush>
-          <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.383259">
+          <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.383259">
             <GradientStop Color="#FF84FF63" Offset="0" />
             <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
             <GradientStop Color="#00FFFFFF" Offset="1" />
           </LinearGradientBrush>
         </GeometryDrawing.Brush>
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource CloseFileIconColor2Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <GeometryDrawing Brush="{DynamicResource CloseFileIconColor3Brush}" Geometry="{StaticResource CloseFileIconGeometry3}">
+      <GeometryDrawing Brush="#FFFF5555" Geometry="{StaticResource CloseFileIconGeometry3}">
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource CloseFileIconColor4Brush}" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF800000" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="CloseFileIconDrawingImage" Drawing="{StaticResource CloseFileIconDrawingGroup}" />
-  <Geometry x:Key="SaveFileIcon___CopyGeometry1">F1 M32,32z M0,0z M345.07382,486.13364L345.07382,509.49193 350.16473,514.58284 373.42319,514.58284 373.42319,486.13364z</Geometry>
-  <Geometry x:Key="SaveFileIcon___CopyGeometry2">F1 M32,32z M0,0z M348.76254,486.13364L348.76254,499.7502 369.73447,499.7502 369.73447,486.13364z</Geometry>
-  <Geometry x:Key="SaveFileIcon___CopyGeometry3">F1 M32,32z M0,0z M350.16473,514.58284L350.16473,501.88984 370.04281,501.88984 370.04281,514.58284z</Geometry>
-  <Geometry x:Key="SaveFileIcon___CopyGeometry4">F1 M32,32z M0,0z M352.76334,515.20064L352.76334,504.3829 363.93912,504.3829 363.93912,515.20064z</Geometry>
-  <Geometry x:Key="SaveFileIcon___CopyGeometry5">F1 M32,32z M0,0z M354.48269,506.10225L354.48269,512.46384 358.00735,512.46384 358.00735,506.01628z</Geometry>
-  <Geometry x:Key="SaveFileIcon___CopyGeometry6">F1 M32,32z M0,0z M369.73447,486.13364L348.75595,486.13364</Geometry>
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor1Brush" Color="{Binding Color, Source={StaticResource Color10Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor2Brush" Color="{Binding Color, Source={StaticResource Color11Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor3Brush" Color="{Binding Color, Source={StaticResource Color12Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor4Brush" Color="{Binding Color, Source={StaticResource Color13Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor5Brush" Color="{Binding Color, Source={StaticResource Color14Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIcon___CopyColor6Brush" Color="{Binding Color, Source={StaticResource Color15Brush}}" />
-  <DrawingGroup x:Key="SaveFileIcon___CopyDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <DrawingGroup Transform="1,0,0,1,-0.248505,0.00397">
-        <GeometryDrawing Geometry="{StaticResource SaveFileIcon___CopyGeometry1}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="370.09037,445.5472" EndPoint="394.03416,445.5472" MappingMode="Absolute" Opacity="1" Transform="1.2356011,0,0,1.2356011,-112.82805,-50.160372">
-              <GradientStop Color="#FFB5B3B5" Offset="0" />
-              <GradientStop Color="#FFDFDEDF" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveFileIcon___CopyColor1Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveFileIcon___CopyColor2Brush}" Geometry="{StaticResource SaveFileIcon___CopyGeometry2}" />
-        <GeometryDrawing Brush="{DynamicResource SaveFileIcon___CopyColor3Brush}" Geometry="{StaticResource SaveFileIcon___CopyGeometry3}" />
-        <GeometryDrawing Geometry="{StaticResource SaveFileIcon___CopyGeometry4}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" Opacity="1" Transform="1.2356011,0,0,1.2356011,-112.82805,-50.160372">
-              <GradientStop Color="#FFECECEC" Offset="0" />
-              <GradientStop Color="#FFD5D3D9" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-        </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveFileIcon___CopyColor4Brush}" Geometry="{StaticResource SaveFileIcon___CopyGeometry5}" />
-        <GeometryDrawing Brush="{DynamicResource SaveFileIcon___CopyColor5Brush}" Geometry="{StaticResource SaveFileIcon___CopyGeometry6}">
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveFileIcon___CopyColor6Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-      </DrawingGroup>
-    </DrawingGroup>
-  </DrawingGroup>
-  <DrawingImage x:Key="SaveFileIcon___CopyDrawingImage" Drawing="{StaticResource SaveFileIcon___CopyDrawingGroup}" />
   <Geometry x:Key="ExitApplicationIconGeometry">F1 M32,32z M0,0z M363.95156,492.03025L359,496.98182 354.04842,492.03026 350.66806,495.41065 355.61962,500.3622 350.66806,505.31377 354.04842,508.69414 359,503.74259 363.95158,508.69417 367.33194,505.31378 362.38038,500.3622 367.33194,495.41065 363.95156,492.03026z</Geometry>
-  <SolidColorBrush x:Key="ExitApplicationIconColor1Brush" Color="{Binding Color, Source={StaticResource Color9Brush}}" />
-  <SolidColorBrush x:Key="ExitApplicationIconColor2Brush" Color="{Binding Color, Source={StaticResource Color9Brush}}" />
   <DrawingGroup x:Key="ExitApplicationIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
       <GeometryDrawing>
         <GeometryDrawing.Brush>
-          <RadialGradientBrush Center="-25.852156,-24.228441" RadiusX="18.817694" RadiusY="18.817694" GradientOrigin="-25.852156,-24.228441" MappingMode="Absolute" Opacity="1" Transform="0.81734076,0,0,0.81734076,380.13002,520.1651">
+          <RadialGradientBrush Center="-25.852156,-24.228441" RadiusX="18.817694" RadiusY="18.817694" GradientOrigin="-25.852156,-24.228441" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="0.81734076,0,0,0.81734076,379.99566,520.1651">
             <GradientStop Color="#FFFFB5B5" Offset="0" />
             <GradientStop Color="#FFFF5555" Offset="1" />
           </RadialGradientBrush>
         </GeometryDrawing.Brush>
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource ExitApplicationIconColor1Brush}" Thickness="2.56930781" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF800000" Thickness="2.1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
         <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="EvenOdd" Transform="0.81734076,0,0,0.81734076,380.13002,520.1651" Figures="M32,32z M0,0z M-8.0787983,-24.228441A17.773357,17.773357,0,1,1,-43.625513,-24.228441A17.773357,17.773357,0,1,1,-8.0787983,-24.228441z" />
+          <EllipseGeometry RadiusX="14.5269" RadiusY="14.5269" Center="358.8656,500.3622" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
       <GeometryDrawing Geometry="{StaticResource ExitApplicationIconGeometry}">
         <GeometryDrawing.Brush>
-          <RadialGradientBrush Center="359,500.36221" RadiusX="8.7897476" RadiusY="8.7897476" GradientOrigin="359,500.36221" MappingMode="Absolute" Opacity="1" Transform="1,0,0,1.0000023,0,-0.00113851">
+          <RadialGradientBrush Center="359,500.36221" RadiusX="8.7897476" RadiusY="8.7897476" GradientOrigin="359,500.36221" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1,0,0,1.0000023,0,-0.00113851">
             <GradientStop Color="#FFFFFFFF" Offset="0" />
             <GradientStop Color="#FFF5F5F5" Offset="0.5" />
             <GradientStop Color="#FFB7B7B7" Offset="1" />
           </RadialGradientBrush>
         </GeometryDrawing.Brush>
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource ExitApplicationIconColor2Brush}" Thickness="0.91561526" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF800000" Thickness="0.91561526" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="ExitApplicationIconDrawingImage" Drawing="{StaticResource ExitApplicationIconDrawingGroup}" />
-  <Geometry x:Key="SaveAsFileIconGeometry1">F1 M32,32z M0,0z M345.07382,486.13364L345.07382,509.49193 350.16473,514.58284 373.42319,514.58284 373.42319,486.13364z</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry2">F1 M32,32z M0,0z M348.76254,486.13364L348.76254,499.7502 369.73447,499.7502 369.73447,486.13364z</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry3">F1 M32,32z M0,0z M350.16473,514.58284L350.16473,501.88984 370.04281,501.88984 370.04281,514.58284z</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry4">F1 M32,32z M0,0z M352.76334,515.63284L352.76334,504.3829 363.93912,504.3829 363.93912,515.63284z</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry5">F1 M32,32z M0,0z M354.48269,506.11348L354.48269,513.3063 358.00735,513.3063 358.00735,506.01628z</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry6">F1 M32,32z M0,0z M369.73447,486.13364L348.75595,486.13364</Geometry>
-  <Geometry x:Key="SaveAsFileIconGeometry7">F1 M32,32z M0,0z M367.64354,485.3486L367.64354,489.1185 363.87364,489.1185 363.87364,491.69217 367.64354,491.69217 367.64354,495.46207 370.21721,495.46207 370.21721,491.69217 373.98712,491.69217 373.98712,489.1185 370.21721,489.1185 370.21721,485.3486 367.64354,485.3486z</Geometry>
-  <SolidColorBrush x:Key="SaveAsFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color16Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color17Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color17Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color18Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color14Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor6Brush" Color="{Binding Color, Source={StaticResource Color19Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor7Brush" Color="{Binding Color, Source={StaticResource Color6Brush}}" />
-  <SolidColorBrush x:Key="SaveAsFileIconColor8Brush" Color="{Binding Color, Source={StaticResource Color7Brush}}" />
+  <Geometry x:Key="SaveAsFileIconGeometry1">F1 M32,32z M0,0z M344.82531,486.13761L344.82531,509.4959 349.91622,514.58681 373.17468,514.58681 373.17468,486.13761z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry2">F1 M32,32z M0,0z M348.51403,486.13761L348.51403,499.75417 369.48596,499.75417 369.48596,486.13761z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry3">F1 M32,32z M0,0z M349.91622,514.58681L349.91622,501.89381 369.7943,501.89381 369.7943,514.58681z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry4">F1 M32,32z M0,0z M352.51483,515.63681L352.51483,504.38687 363.69061,504.38687 363.69061,515.63681z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry5">F1 M32,32z M0,0z M354.23418,506.11745L354.23418,513.31027 357.75884,513.31027 357.75884,506.02025z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry6">F1 M32,32z M0,0z M369.48596,486.13761L348.50744,486.13761</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry7">F1 M32,32z M0,0z M367.94989,485.04225L367.94989,488.81215 364.17999,488.81215 364.17999,491.38582 367.94989,491.38582 367.94989,495.15572 370.52356,495.15572 370.52356,491.38582 374.29347,491.38582 374.29347,488.81215 370.52356,488.81215 370.52356,485.04225z</Geometry>
   <DrawingGroup x:Key="SaveAsFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <DrawingGroup Transform="1,0,0,1,-0.248505,0.00397">
-        <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor1Brush}" Geometry="{StaticResource SaveAsFileIconGeometry1}">
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveAsFileIconColor2Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-        <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry2}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="359.48474,499.37524" EndPoint="360.0079,486.50861" MappingMode="Absolute" Opacity="1">
-              <LinearGradientBrush.Transform>
-                <TransformGroup>
-                  <TransformGroup>
-                    <ScaleTransform ScaleX="40.087017027533179" ScaleY="40.087017027533179" />
-                    <TranslateTransform X="-14061.908350793727" Y="-19783.414231908126" />
-                  </TransformGroup>
-                  <RotateTransform Angle="45" CenterX="0.5" CenterY="0.5" />
-                </TransformGroup>
-              </LinearGradientBrush.Transform>
-              <GradientStop Color="#FFBECED6" Offset="0" />
-              <GradientStop Color="#FFF7F9FA" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-        </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor3Brush}" Geometry="{StaticResource SaveAsFileIconGeometry3}" />
-        <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry4}">
-          <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" Opacity="1" Transform="1.2356011,0,0,1.2849671,-112.82805,-72.316063">
-              <GradientStop Color="#FF989898" Offset="0" />
-              <GradientStop Color="#FFC6C3CB" Offset="1" />
-            </LinearGradientBrush>
-          </GeometryDrawing.Brush>
-        </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor4Brush}" Geometry="{StaticResource SaveAsFileIconGeometry5}" />
-        <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor5Brush}" Geometry="{StaticResource SaveAsFileIconGeometry6}">
-          <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveAsFileIconColor6Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-          </GeometryDrawing.Pen>
-        </GeometryDrawing>
-      </DrawingGroup>
-      <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor7Brush}" Geometry="{StaticResource SaveAsFileIconGeometry7}">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <GeometryDrawing Brush="#FF717272" Geometry="{StaticResource SaveAsFileIconGeometry1}">
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource SaveAsFileIconColor8Brush}" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          <Pen Brush="#FF5B5A5B" Thickness="2.1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry2}">
+        <GeometryDrawing.Brush>
+          <LinearGradientBrush StartPoint="359.48474,499.37524" EndPoint="360.0079,486.50861" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1,0,0,1,-0.248505,0.00397">
+            <GradientStop Color="#FFBECED6" Offset="0" />
+            <GradientStop Color="#FFF7F9FA" Offset="1" />
+          </LinearGradientBrush>
+        </GeometryDrawing.Brush>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF5B5A5B" Geometry="{StaticResource SaveAsFileIconGeometry3}" />
+      <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry4}">
+        <GeometryDrawing.Brush>
+          <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.2356011,0,0,1.2849671,-113.07656,-72.312093">
+            <GradientStop Color="#FF989898" Offset="0" />
+            <GradientStop Color="#FFC6C3CB" Offset="1" />
+          </LinearGradientBrush>
+        </GeometryDrawing.Brush>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF464647" Geometry="{StaticResource SaveAsFileIconGeometry5}" />
+      <GeometryDrawing Brush="#FFB5B3B5" Geometry="{StaticResource SaveAsFileIconGeometry6}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FFB8C7C9" Thickness="2.1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF83FC83" Geometry="{StaticResource SaveAsFileIconGeometry7}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF04AE04" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="SaveAsFileIconDrawingImage" Drawing="{StaticResource SaveAsFileIconDrawingGroup}" />
-  <Geometry x:Key="AppIconGeometry1">F1 M32,32z M0,0z M8.5979462,931.74042C8.5979388,933.2248 8.7639543,934.70918 9.095993,936.19354 9.4280161,937.67792 9.9130417,939.10045 10.551071,940.46112 11.189082,941.8218 11.976842,943.1076 12.914352,944.31854 13.85184,945.52948 14.919547,946.60369 16.117477,947.5412L13.637009,950.02167C12.243769,948.92791 11.006791,947.68768 9.9260712,946.30096 8.8453344,944.91424 7.9403874,943.43313 7.2112274,941.8576 6.4820555,940.28209 5.9221603,938.64146 5.5315399,936.93573 5.140911,935.23001 4.9455987,933.49824 4.9456024,931.74042 4.9455987,929.98262 5.140911,928.24759 5.5315399,926.53534 5.9221603,924.82312 6.4820555,923.18249 7.2112274,921.61346 7.9403874,920.04448 8.8453344,918.56661 9.9260712,917.17987 11.006791,915.79318 12.243769,914.55295 13.637009,913.45917L16.117477,915.93964C14.919547,916.86414 13.85184,917.9351 12.914352,919.15253 11.976842,920.37 11.189082,921.65906 10.551071,923.01971 9.9130417,924.38041 9.4280161,925.79968 9.095993,927.27753 8.7639543,928.75541 8.5979388,930.24303 8.5979462,931.74042z</Geometry>
-  <Geometry x:Key="AppIconGeometry2">F1 M32,32z M0,0z M55.980759,931.77948C55.980748,930.2821 55.814732,928.79447 55.482712,927.31659 55.15067,925.83874 54.665645,924.41947 54.027634,923.05878 53.389604,921.69812 52.601845,920.40906 51.664352,919.19159 50.726847,917.97417 49.659139,916.9032 48.461227,915.9787L50.941696,913.49823C52.334918,914.59201 53.56213,915.83224 54.623337,917.21893 55.684524,918.60568 56.589471,920.08354 57.338181,921.65253 58.086865,923.22156 58.656526,924.86218 59.047165,926.5744 59.437776,928.28666 59.633088,930.02168 59.633102,931.77948 59.633088,933.5373 59.437776,935.26907 59.047165,936.97479 58.656526,938.68053 58.086865,940.32115 57.338181,941.89667 56.589471,943.47219 55.684524,944.95331 54.623337,946.34003 53.56213,947.72674 52.334918,948.96697 50.941696,950.06073L48.461227,947.58026C49.659139,946.64276 50.726847,945.56854 51.664352,944.3576 52.601845,943.14667 53.389604,941.86086 54.027634,940.50018 54.665645,939.13951 55.15067,937.71699 55.482712,936.2326 55.814732,934.74824 55.980748,933.26386 55.980759,931.77948z</Geometry>
-  <Geometry x:Key="AppIconGeometry3">F1 M32,32z M0,0z M24.62835,957.29663L42.50404,931.75993 34.84303,931.75993 39.95037,906.22323 22.07468,931.75993 29.73569,931.75993z</Geometry>
-  <SolidColorBrush x:Key="AppIconColor1Brush" Color="{Binding Color, Source={StaticResource Color20Brush}}" />
-  <SolidColorBrush x:Key="AppIconColor2Brush" Color="{Binding Color, Source={StaticResource Color20Brush}}" />
-  <SolidColorBrush x:Key="AppIconColor3Brush" Color="{Binding Color, Source={StaticResource Color21Brush}}" />
-  <SolidColorBrush x:Key="AppIconColor4Brush" Color="{Binding Color, Source={StaticResource Color20Brush}}" />
-  <DrawingGroup x:Key="AppIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,0,-1020.3622">
-      <DrawingGroup Transform="0.57531266,0,0,0.57531266,-2.5764731,500.30892">
-        <DrawingGroup>
-          <GeometryDrawing Brush="{DynamicResource AppIconColor1Brush}" Geometry="{StaticResource AppIconGeometry1}" />
-          <GeometryDrawing Brush="{DynamicResource AppIconColor2Brush}" Geometry="{StaticResource AppIconGeometry2}" />
-        </DrawingGroup>
-        <GeometryDrawing Brush="{DynamicResource AppIconColor3Brush}" Geometry="{StaticResource AppIconGeometry3}">
+  <Geometry x:Key="AppIconGeometry1">F0 M67.718801,67.747998z M0,0z M-211.46325,129.28093L-206.59699,129.28793C-205.82038,129.28893,-205.32833,129.91099,-205.32833,130.64393L-205.32833,135.49389C-205.32833,136.12506,-205.84876,136.65474,-206.56232,136.65454L-211.46294,136.65354z</Geometry>
+  <Geometry x:Key="AppIconGeometry2">F1 M67.718801,67.747998z M0,0z M-211.66666,124.49167C-209.81458,124.49167,-209.81458,126.34375,-209.81458,126.34375L-209.81458,132.95833C-209.81458,132.95833 -209.81458,134.54583 -211.66666,134.54583 -213.51875,134.54583 -213.51875,132.95833 -213.51875,132.95833L-213.51875,126.34375C-213.51875,124.49167,-211.66666,124.49167,-211.66666,124.49167z</Geometry>
+  <Geometry x:Key="AppIconGeometry3">F1 M67.718801,67.747998z M0,0z M-209.54432,131.93383L-207.95777,131.93383</Geometry>
+  <Geometry x:Key="AppIconGeometry4">F1 M67.718801,67.747998z M0,0z M-209.54432,130.3858L-206.58301,130.3858</Geometry>
+  <Geometry x:Key="AppIconGeometry5">F1 M67.718801,67.747998z M0,0z M-207.30693,131.93383L-206.04589,131.93383</Geometry>
+  <Geometry x:Key="AppIconGeometry6">F1 M67.718801,67.747998z M0,0z M-209.54432,133.5545L-207.37874,133.5545</Geometry>
+  <Geometry x:Key="AppIconGeometry7">F1 M67.718801,67.747998z M0,0z M-208.54222,135.9511L-207.25015,135.9511</Geometry>
+  <Geometry x:Key="AppIconGeometry8">F1 M67.718801,67.747998z M0,0z M-209.44562,134.69334L-208.86697,135.27199 -209.41002,135.87737</Geometry>
+  <DrawingGroup x:Key="AppIconDrawingGroup" ClipGeometry="M0,0 V67.747998 H67.718801 V0 H0 Z">
+    <DrawingGroup.Transform>
+      <TranslateTransform X="213.51875305175781" Y="0" />
+    </DrawingGroup.Transform>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,250.36842,-73.874806">
+      <DrawingGroup Opacity="1" Transform="8.7977909,0,0,8.9482041,1622.9327,-1082.0881">
+        <GeometryDrawing Brush="#FF999999" Geometry="{StaticResource AppIconGeometry1}">
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource AppIconColor4Brush}" Thickness="2.74213123" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF000000" Thickness="0.1940037" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <DrawingGroup Opacity="1" Transform="0.73324236,0,0,-0.73324236,-56.270585,227.94048">
+          <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource AppIconGeometry2}">
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF000000" Thickness="0.26458332" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+          <GeometryDrawing Brush="#FF2AFF2A">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="1.3229" RadiusY="1.3229" Center="-211.6667,126.3438" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+          <GeometryDrawing Brush="#FFFFCC00">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="1.3229" RadiusY="1.3229" Center="-211.6667,129.5188" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+          <GeometryDrawing Brush="#FFFF5555">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="1.3229" RadiusY="1.3229" Center="-211.6667,132.6938" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry3}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFAFE9DD" Thickness="0.44645822" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry4}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFAFE9DD" Thickness="0.44645822" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry5}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFAFE9DD" Thickness="0.44645822" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry6}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFAFE9DD" Thickness="0.44645822" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry7}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFFFFFFF" Thickness="0.29465035" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <GeometryDrawing Geometry="{StaticResource AppIconGeometry8}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFFFFFFF" Thickness="0.34368894" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
@@ -449,116 +278,140 @@
   <Geometry x:Key="SaveFileIconGeometry4">F1 M32,32z M0,0z M352.76334,515.63284L352.76334,504.3829 363.93912,504.3829 363.93912,515.63284z</Geometry>
   <Geometry x:Key="SaveFileIconGeometry5">F1 M32,32z M0,0z M354.48269,506.11348L354.48269,513.3063 358.00735,513.3063 358.00735,506.01628z</Geometry>
   <Geometry x:Key="SaveFileIconGeometry6">F1 M32,32z M0,0z M369.73447,486.13364L348.75595,486.13364</Geometry>
-  <SolidColorBrush x:Key="SaveFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color16Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color17Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color17Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color18Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color14Brush}}" />
-  <SolidColorBrush x:Key="SaveFileIconColor6Brush" Color="{Binding Color, Source={StaticResource Color19Brush}}" />
   <DrawingGroup x:Key="SaveFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <DrawingGroup Transform="1,0,0,1,-0.248505,0.00397">
-        <GeometryDrawing Brush="{DynamicResource SaveFileIconColor1Brush}" Geometry="{StaticResource SaveFileIconGeometry1}">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Opacity="1" Transform="1,0,0,1,-0.17191787,0.00397">
+        <GeometryDrawing Brush="#FF717272" Geometry="{StaticResource SaveFileIconGeometry1}">
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveFileIconColor2Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF5B5A5B" Thickness="2.1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
         <GeometryDrawing Geometry="{StaticResource SaveFileIconGeometry2}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="359.48474,499.37524" EndPoint="360.0079,486.50861" MappingMode="Absolute" Opacity="1">
-              <LinearGradientBrush.Transform>
-                <TransformGroup>
-                  <TransformGroup>
-                    <ScaleTransform ScaleX="40.087017027533179" ScaleY="40.087017027533179" />
-                    <TranslateTransform X="-14061.908350793727" Y="-19783.414231908126" />
-                  </TransformGroup>
-                  <RotateTransform Angle="45" CenterX="0.5" CenterY="0.5" />
-                </TransformGroup>
-              </LinearGradientBrush.Transform>
+            <LinearGradientBrush StartPoint="359.48474,499.37524" EndPoint="360.0079,486.50861" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1">
               <GradientStop Color="#FFBECED6" Offset="0" />
               <GradientStop Color="#FFF7F9FA" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
         </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveFileIconColor3Brush}" Geometry="{StaticResource SaveFileIconGeometry3}" />
+        <GeometryDrawing Brush="#FF5B5A5B" Geometry="{StaticResource SaveFileIconGeometry3}" />
         <GeometryDrawing Geometry="{StaticResource SaveFileIconGeometry4}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" Opacity="1" Transform="1.2356011,0,0,1.2849671,-112.82805,-72.316063">
+            <LinearGradientBrush StartPoint="376.81367,453.18197" EndPoint="385.85848,453.18197" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.2356011,0,0,1.2849671,-112.82805,-72.316063">
               <GradientStop Color="#FF989898" Offset="0" />
               <GradientStop Color="#FFC6C3CB" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
         </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource SaveFileIconColor4Brush}" Geometry="{StaticResource SaveFileIconGeometry5}" />
-        <GeometryDrawing Brush="{DynamicResource SaveFileIconColor5Brush}" Geometry="{StaticResource SaveFileIconGeometry6}">
+        <GeometryDrawing Brush="#FF464647" Geometry="{StaticResource SaveFileIconGeometry5}" />
+        <GeometryDrawing Brush="#FFB5B3B5" Geometry="{StaticResource SaveFileIconGeometry6}">
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource SaveFileIconColor6Brush}" Thickness="2.0999999" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+            <Pen Brush="#FFB8C7C9" Thickness="2.1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="SaveFileIconDrawingImage" Drawing="{StaticResource SaveFileIconDrawingGroup}" />
-  <Geometry x:Key="GenerateCodeIconGeometry1">F1 M32,32z M0,0z M2.0618204,1033.7215L2.0618204,1039.1207 23.658722,1039.1207 23.658722,1044.5199 31.217638,1035.8812 23.658722,1028.3223 23.658722,1033.7215z</Geometry>
-  <Geometry x:Key="GenerateCodeIconGeometry2">F1 M32,32z M0,0z M24.62835,957.29663L42.50404,931.75993 34.84303,931.75993 39.95037,906.22323 22.07468,931.75993 29.73569,931.75993z</Geometry>
-  <SolidColorBrush x:Key="GenerateCodeIconColor1Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
-  <SolidColorBrush x:Key="GenerateCodeIconColor2Brush" Color="{Binding Color, Source={StaticResource Color20Brush}}" />
-  <SolidColorBrush x:Key="GenerateCodeIconColor3Brush" Color="{Binding Color, Source={StaticResource Color21Brush}}" />
-  <SolidColorBrush x:Key="GenerateCodeIconColor4Brush" Color="{Binding Color, Source={StaticResource Color20Brush}}" />
-  <DrawingGroup x:Key="GenerateCodeIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,0,-1020.3622">
-      <GeometryDrawing Brush="{DynamicResource GenerateCodeIconColor1Brush}" Geometry="{StaticResource GenerateCodeIconGeometry1}">
-        <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource GenerateCodeIconColor2Brush}" Thickness="1.08" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
-        </GeometryDrawing.Pen>
-      </GeometryDrawing>
-      <DrawingGroup Transform="0.57531266,0,0,0.57531266,-2.5764731,500.30892">
-        <GeometryDrawing Brush="{DynamicResource GenerateCodeIconColor3Brush}" Geometry="{StaticResource GenerateCodeIconGeometry2}">
+  <Geometry x:Key="OpenFileIconGeometry1">F1 M32,32z M0,0z M346.34191,485.75887L367.73171,485.75887 367.73171,510.42613 356.69182,510.42613 346.16942,510.42613z</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry2">F0 M32,32z M0,0z M368.36652,514.93099L368.36652,494.51781 360.20124,486.35254 347.95334,486.35254 347.95334,514.93099z</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry3">F0 M32,32z M0,0z M368.36652,514.93099L368.36652,494.51781 360.20124,486.35254 347.95334,486.35254 347.95334,514.93099z</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry4">F0 M32,32z M0,0z M360.20124,486.35254L360.20124,494.51231 368.36652,494.51731z</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry5">F1 M32,32z M0,0z M346.34191,485.75887L346.16942,510.42613 355.59301,514.96555 355.59301,489.89882z</Geometry>
+  <DrawingGroup x:Key="OpenFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Opacity="1" Transform="1,0,0,1,-0.05221503,0.05221503">
+        <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry1}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="373.0206,451.85254" EndPoint="373.09534,471.68121" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="0.88734371,0,0,0.88734371,19.452948,93.635034">
+              <GradientStop Color="#FFFBE8A2" Offset="0" />
+              <GradientStop Color="#FFECCD83" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource GenerateCodeIconColor4Brush}" Thickness="2.74213123" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FFD2B26B" Thickness="1.86300004" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+        <DrawingGroup Opacity="1" Transform="0.79575883,0,0,0.79575883,77.935413,104.21845">
+          <GeometryDrawing Brush="#FFFFFFFF" Geometry="{StaticResource OpenFileIconGeometry2}">
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF3C543C" Thickness="2.6247561" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+          <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry3}">
+            <GeometryDrawing.Brush>
+              <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+                <GradientStop Color="#FF84FF63" Offset="0" />
+                <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
+                <GradientStop Color="#00FFFFFF" Offset="1" />
+              </LinearGradientBrush>
+            </GeometryDrawing.Brush>
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF3C543C" Thickness="2.6247561" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+          <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry4}">
+            <GeometryDrawing.Brush>
+              <LinearGradientBrush StartPoint="368.44913,489.65439" EndPoint="364.71014,493.38834" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-38.028153,-44.221683">
+                <GradientStop Color="#FFB4FFA0" Offset="0" />
+                <GradientStop Color="#FFD9FFCF" Offset="0.71428573" />
+                <GradientStop Color="#FFFFFFFF" Offset="1" />
+                <GradientStop Color="#FFFFFFFF" Offset="1" />
+              </LinearGradientBrush>
+            </GeometryDrawing.Brush>
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF3C543C" Thickness="2.1838131" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            </GeometryDrawing.Pen>
+          </GeometryDrawing>
+        </DrawingGroup>
+        <GeometryDrawing Geometry="{StaticResource OpenFileIconGeometry5}">
+          <GeometryDrawing.Brush>
+            <LinearGradientBrush StartPoint="373.0206,451.85254" EndPoint="373.09534,471.68121" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="0.88734371,0,0,0.88734371,19.452948,93.635034">
+              <GradientStop Color="#FFFBE8A2" Offset="0" />
+              <GradientStop Color="#FFECCD83" Offset="1" />
+            </LinearGradientBrush>
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FFD7B671" Thickness="1.86300004" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
-  <DrawingImage x:Key="GenerateCodeIconDrawingImage" Drawing="{StaticResource GenerateCodeIconDrawingGroup}" />
+  <DrawingImage x:Key="OpenFileIconDrawingImage" Drawing="{StaticResource OpenFileIconDrawingGroup}" />
   <Geometry x:Key="NewFileIconGeometry1">F0 M32,32z M0,0z M369.33752,514.93099L369.33752,494.51781 361.17224,486.35254 348.92434,486.35254 348.92434,514.93099z</Geometry>
   <Geometry x:Key="NewFileIconGeometry2">F0 M32,32z M0,0z M361.17224,486.35254L361.17224,494.51231 369.33752,494.51731z</Geometry>
-  <Geometry x:Key="NewFileIconGeometry3">F1 M32,32z M0,0z M365.6204,504.51417L365.6204,508.28407 361.8505,508.28407 361.8505,510.85774 365.6204,510.85774 365.6204,514.62764 368.19407,514.62764 368.19407,510.85774 371.96398,510.85774 371.96398,508.28407 368.19407,508.28407 368.19407,504.51417 365.6204,504.51417z</Geometry>
-  <SolidColorBrush x:Key="NewFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="NewFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="NewFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color6Brush}}" />
-  <SolidColorBrush x:Key="NewFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color7Brush}}" />
+  <Geometry x:Key="NewFileIconGeometry3">F1 M32,32z M0,0z M365.6204,504.51417L365.6204,508.28407 361.8505,508.28407 361.8505,510.85774 365.6204,510.85774 365.6204,514.62764 368.19407,514.62764 368.19407,510.85774 371.96398,510.85774 371.96398,508.28407 368.19407,508.28407 368.19407,504.51417z</Geometry>
   <DrawingGroup x:Key="NewFileIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <DrawingGroup Transform="1,0,0,1,0,-0.16157598">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Opacity="1" Transform="1,0,0,1,-0.02856287,-0.13301311">
         <GeometryDrawing Geometry="{StaticResource NewFileIconGeometry1}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource NewFileIconColor1Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
         <GeometryDrawing Geometry="{StaticResource NewFileIconGeometry2}">
           <GeometryDrawing.Brush>
-            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
+            <LinearGradientBrush StartPoint="362.84064,484.51328" EndPoint="362.84064,499.00189" MappingMode="Absolute" SpreadMethod="Pad" Opacity="1" Transform="1.0919066,0,0,1.0919066,-37.057151,-44.221683">
               <GradientStop Color="#FF84FF63" Offset="0" />
               <GradientStop Color="#7FC1FFB1" Offset="0.72727275" />
               <GradientStop Color="#00FFFFFF" Offset="1" />
             </LinearGradientBrush>
           </GeometryDrawing.Brush>
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource NewFileIconColor2Brush}" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF3C543C" Thickness="2.08867288" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
-        <GeometryDrawing Brush="{DynamicResource NewFileIconColor3Brush}" Geometry="{StaticResource NewFileIconGeometry3}">
+        <GeometryDrawing Brush="#FF83FC83" Geometry="{StaticResource NewFileIconGeometry3}">
           <GeometryDrawing.Pen>
-            <Pen Brush="{DynamicResource NewFileIconColor4Brush}" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+            <Pen Brush="#FF04AE04" Thickness="0.92819434" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>

@@ -27,12 +27,12 @@
         </Grid.RowDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#80AA80" Offset="0" />
+                <GradientStop Color="#40AA80" Offset="0" />
                 <GradientStop Color="White" Offset="1" />
                 <GradientStop Color="White" Offset="0.72" />
             </LinearGradientBrush>
         </Grid.Background>
-        <TextBlock Text="TLCGen" FontFamily="Consolas" FontSize="50" TextAlignment="Center" >
+        <TextBlock Text="TLCGen" FontFamily="Consolas" FontSize="50" TextAlignment="Center" Foreground="White" >
             <TextBlock.Effect>
                 <DropShadowEffect BlurRadius="7" Color="#FFFFFF" Direction="245"
                                   Opacity="0.68" ShadowDepth="1" />

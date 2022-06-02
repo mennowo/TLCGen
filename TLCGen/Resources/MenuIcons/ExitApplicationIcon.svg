@@ -15,8 +15,8 @@
    viewBox="0 0 32 32"
    id="svg4153"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
-   sodipodi:docname="CloseFileIcon.svg">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="ExitApplicationIcon.svg">
   <defs
      id="defs4155">
     <linearGradient
@@ -156,7 +156,8 @@
        fx="-25.852156"
        fy="-24.228441"
        r="18.817694"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.81734076,0,0,0.81734076,379.99566,520.1651)" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient6745"
@@ -176,9 +177,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="9.3036624"
-     inkscape:cx="34.341269"
-     inkscape:cy="14.250458"
+     inkscape:zoom="37.21465"
+     inkscape:cx="31.715543"
+     inkscape:cy="29.863726"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -187,10 +188,10 @@
      inkscape:bbox-paths="true"
      inkscape:bbox-nodes="true"
      inkscape:snap-bbox-edge-midpoints="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1125"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-width="3840"
+     inkscape:window-height="1984"
+     inkscape:window-x="-16"
+     inkscape:window-y="-16"
      inkscape:window-maximized="1"
      inkscape:snap-bbox-midpoints="true"
      inkscape:object-paths="true"
@@ -218,7 +219,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -227,16 +228,12 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-343,-484.36221)">
-    <path
-       sodipodi:type="arc"
-       style="color:#000000;fill:url(#radialGradient6743);fill-opacity:1;fill-rule:evenodd;stroke:#800000;stroke-width:2.56930781;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+    <circle
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient6743);fill-opacity:1;fill-rule:evenodd;stroke:#800000;stroke-width:2.0999999;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
        id="path6227"
-       sodipodi:cx="-25.852156"
-       sodipodi:cy="-24.228441"
-       sodipodi:rx="17.773357"
-       sodipodi:ry="17.773357"
-       d="m -8.0787983,-24.228441 a 17.773357,17.773357 0 1 1 -35.5467147,0 17.773357,17.773357 0 1 1 35.5467147,0 z"
-       transform="matrix(0.81734076,0,0,0.81734076,380.13002,520.1651)" />
+       cx="358.86563"
+       cy="500.36221"
+       r="14.52689" />
     <path
        style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:url(#radialGradient6751);fill-opacity:1;stroke:#800000;stroke-width:0.91561526000000004;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
        d="M 363.95156,492.03025 359,496.98182 l -4.95158,-4.95156 -3.38036,3.38039 4.95156,4.95155 -4.95156,4.95157 3.38036,3.38037 4.95158,-4.95155 4.95158,4.95158 3.38036,-3.38039 -4.95156,-4.95158 4.95156,-4.95155 -3.38038,-3.38039 z"

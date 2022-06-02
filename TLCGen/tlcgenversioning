@@ -1,5 +1,9 @@
-TLCGen=0.10.7.0
+TLCGen=0.11.0.0
 RN==TLCGen
+TLCGen versie: 0.11.0.0
+- RIS prio voor fietsers
+- Uitgestelde A bij det.storing ook voor enkele lussen
+- Diverse kleine en grotere verbeteringen
 TLCGen versie: 0.10.7.0
 - Verbeteringen VA ontruiming icm. synchronisaties
 - Ondersteuning voor heading bij RIS

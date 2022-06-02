@@ -14,7 +14,7 @@
    height="32"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="ImportNewIcon.svg">
   <defs
      id="defs4">
@@ -76,16 +76,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.3409416"
-     inkscape:cx="18.311653"
-     inkscape:cy="15.464612"
+     inkscape:zoom="30.212928"
+     inkscape:cx="19.731549"
+     inkscape:cy="23.421889"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1005"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:window-width="3840"
+     inkscape:window-height="1984"
+     inkscape:window-x="-16"
+     inkscape:window-y="-16"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -134,8 +134,8 @@
          style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#83fc83;fill-opacity:1;stroke:#04ae04;stroke-width:0.92819434;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
     </g>
     <path
-       style="color:#000000;fill:#ffcc00;fill-opacity:1;fill-rule:nonzero;stroke:#3c543c;stroke-width:1.12472248;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 15.88678,1021.0133 -5.083435,0 0,20.334 -5.0834351,0 8.1334771,7.1167 7.11683,-7.1167 -5.083437,0 z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#ffcc00;fill-opacity:1;fill-rule:nonzero;stroke:#3c543c;stroke-width:1.12472248;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="m 15.721288,1021.0795 h -5.083435 v 20.334 H 5.5544178 l 8.1334772,7.1167 7.11683,-7.1167 h -5.083437 z"
        id="path6813"
        inkscape:connector-curvature="0" />
   </g>
