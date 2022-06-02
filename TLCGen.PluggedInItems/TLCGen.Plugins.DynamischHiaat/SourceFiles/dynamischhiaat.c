@@ -15,9 +15,12 @@
    * 2.6.0    21-10-2021   ddo         Fix voor 'nietToepassen' (else toegevoegd)
    * 3.0.0    23-10-2021   ddo         Toevoegen en gebruiken TDHA / TDHDYN ter voorkoming van stortvloed aan wijzigingen op
    *                                      de CVN-C interface, alsmede verwijderen van de wijzigingen onder 2.3.0 en 2.6.0
-   * 3.0.1    27-10-2021   ddo         Fix bij niettoepassen waar een accolade verkeerd stond
-   * 3.1.0    08-11-2021   ddo         TDHA_max wijzigingen verwijderd zodat het functioneel goed werkt en er niet onterecht 
-   *                                      op de CVN-C interface wordt geschreven bij wijzigingen van de dynamische hiaattijd.  
+   * 3.0.1    27-10-2021   ddo         Fix bij niettoepassen (accolade verkeerd)
+   * 3.1.0    08-11-2021   ddo         TDHA_max wijzigingen verwijderd; TDH_max berekenen via eigen timers (TDHDYN) zodat niet
+   *                                      continue  op de CVN-C interface wordt geschreven maar maar toch de oorspronkelijke 
+   *                                      (statische) TDH_max behouden blijft (deze wordt gebruikt in geval van detectiestoring).  
+   * 3.2.0    05-02-2022   ddo         Bijwerken tdhdyn ook tijdens RV[fc] (resetten timers en TDHDYN[dp]); toevoegen 
+   *                                      #define DYN_HIAAT ivm toepassing van custom VLOG berichten. 
    *
    ***********************************************************************************************************
 
