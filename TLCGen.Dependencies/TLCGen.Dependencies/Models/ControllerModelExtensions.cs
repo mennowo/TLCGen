@@ -155,6 +155,13 @@ namespace TLCGen.Models
                    c.PrioData.PrioIngrepen.Any(x => x.HasOVIngreepVecom());
         }
 
+        public static bool HasDeelConflict(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Gelijkstarten.Any() ||
+                   c.InterSignaalGroep.Voorstarten.Any() ||
+                   c.InterSignaalGroep.LateReleases.Any();
+        }
+        
         public static bool HasVecomIO(this ControllerModel c)
         {
             return c.GetAllDetectors(x => x.Type == DetectorTypeEnum.VecomDetector).Any() &&

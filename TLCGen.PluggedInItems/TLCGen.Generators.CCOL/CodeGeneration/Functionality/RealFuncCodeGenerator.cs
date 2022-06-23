@@ -724,9 +724,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Uitvoeren synchronisaties */");
                     if (c.HalfstarData.IsHalfstar)
+                    {
                         sb.AppendLine($"{ts}Synchroniseer_SP(IH[{_hpf}{_hplact}]); /* synchronisatie intrekken tbv SP */");
+                    }
                     sb.AppendLine($"{ts}Synchroniseer_SG(); /* synchronisatie obv realtijd (startgroenmomenten) */");
-                    sb.AppendLine($"{ts}Synchroniseer_FO(); /* synchronisatie obv fictieve ontruiming */");
+                    if (c.HasDeelConflict())
+                    {
+                        sb.AppendLine($"{ts}Synchroniseer_FO(); /* synchronisatie obv fictieve ontruiming */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
