@@ -1030,6 +1030,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   ---------------------------------------------------------------- */");
             sb.AppendLine("void InUitMelden(void)");
             sb.AppendLine("{");
+            
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#if defined PRACTICE_TEST && defined CCOL_IS_SPECIAL");
+                sb.AppendLine($"{ts}is_special_signals();");
+                sb.AppendLine("#endif");
+            }
+
             if (c.PrioData.PrioIngrepen.Count > 0)
             {
                 AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInUitMelden, true, false, false, true);
@@ -1074,7 +1082,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
-                sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
+                sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0 && CIF_DSI[CIF_DSI_LUS] == 0;");
                 sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
                 sb.AppendLine($"{ts}if (!startkarog) startkarog = TRUE;");
             }
