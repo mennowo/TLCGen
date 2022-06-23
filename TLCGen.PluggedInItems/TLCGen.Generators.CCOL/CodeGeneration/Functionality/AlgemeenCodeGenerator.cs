@@ -196,11 +196,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define TESTOMGEVING");
                     sb.AppendLine($"#endif");
-                    if (!c.Data.PracticeOmgeving) return sb.ToString();
-                    sb.AppendLine($"/* T.b.v. practice */");
-                    sb.AppendLine($"#ifdef PRACTICE_TEST");
-                    sb.AppendLine($"{ts}#define XTND_DIC");
-                    sb.AppendLine($"#endif");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:

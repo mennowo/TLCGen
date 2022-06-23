@@ -21,6 +21,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
 
             sb.AppendLine("#define CCOL_IS_SPECIAL");
+            sb.AppendLine("#define XTND_DIC");
             sb.AppendLine();
 
             if (controller.ModuleMolen.LangstWachtendeAlternatief)
