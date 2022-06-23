@@ -737,7 +737,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
                     if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0
                         && c.InterSignaalGroep?.Voorstarten?.Count == 0
-                        && c.InterSignaalGroep?.LateReleases?.Count == 0) return null;
+                        && c.InterSignaalGroep?.LateReleases?.Count == 0
+                        && c.InterSignaalGroep?.Nalopen?.Count == 0) return null;
                     
                     sb.AppendLine($"{ts}Synchroniseer_PG(); /* synchronisatie PG's */");
                     return sb.ToString();
