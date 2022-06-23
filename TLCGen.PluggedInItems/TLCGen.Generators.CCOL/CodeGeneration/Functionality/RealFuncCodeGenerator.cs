@@ -468,9 +468,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
 
-                    if (startDuringRed && _sortedSyncs.twoWayPedestrians.Any(x => !x.gelijkstart))
+                    if (startDuringRed && 
+                        _sortedSyncs.twoWayPedestrians.Any(x => !x.gelijkstart) ||
+                        _sortedSyncs.oneWay.Any(x => x.Richting == 1))
                     {
-                        sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd */");
+                        sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd/inrijtijd */");
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
                             if (gelijkstart) continue;
@@ -478,6 +480,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync}] = SG[{_fcpf}{grsync:van}] && H[{_hpf}{_hinl}{grsync:van}]; AT[{_tpf}{_tinl}{grsync}] = G[{_fcpf}{grsync:naar}];");
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}] && H[{_hpf}{_hinl}{grsync:naar}]; AT[{_tpf}{_tinl}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
                         }
+
+                        foreach (var grsync in _sortedSyncs.oneWay)
+                        {
+                            sb.AppendLine($"{ts}RT[{_tpf}{_treallr}{grsync}] = SG[{_fcpf}{grsync:van}]; AT[{_tpf}{_treallr}{grsync}] = G[{_fcpf}{grsync:naar}];");
+                        }
+                        
                         sb.AppendLine();
                     }
 

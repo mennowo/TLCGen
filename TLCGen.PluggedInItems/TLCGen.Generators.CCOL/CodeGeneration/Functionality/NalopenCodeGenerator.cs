@@ -28,6 +28,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmxnl;
 #pragma warning restore 0649
 	    private string _homschtegenh;
+	    private string _tinl;
+	    private string _treallr;
 
         #endregion // Fields
 
@@ -283,7 +285,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
                                 sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                             {
-                                sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
+                                if (nl.MaximaleVoorstart.HasValue)
+                                {
+                                    sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
+                                              $"((T[{_tpf}{_tinl}{nl.FaseNaar}{nl.FaseVan}] || RT[{_tpf}{_tinl}{nl.FaseNaar}{nl.FaseVan}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && (");
+                                }
+                                else
+                                {
+                                    sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
+                                }
+
                                 var i = 0;
                                 foreach (var d in nl.Detectoren)
                                 {
@@ -295,7 +306,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                if (nl.MaximaleVoorstart.HasValue)
+                                {
+                                    var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
+                                        ? _tinl
+                                        : _treallr;
+                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
+                                                  $"((T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] || RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}]));");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                }
                             }
                         }
                     }
@@ -322,6 +344,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings) 
         { 
             _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
+            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
+            _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
             return base.SetSettings(settings);
 	    }
     }
