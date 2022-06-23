@@ -356,7 +356,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     #region Eventuele correctie op berekende wachttijd door gebruiker
                     sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
-                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
+                    sb.AppendLine($"{ts}WachttijdvoorspellersWachttijd_Add();");
                     sb.AppendLine();
                     #endregion
 

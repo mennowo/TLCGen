@@ -537,7 +537,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var addlines = File.ReadAllLines(filename);
 
-                    var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
+                    var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachttijdvoorspellersWachttijd_Add"));
+                    // check of regel met spelfout erin zit
+                    var wtvAddOld = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.Any(x => x.Contains("WachtijdvoorspellersWachttijd_Add"));
                     var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
                     var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
                     var corrrealAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
@@ -547,9 +549,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     foreach (var l in addlines)
                     {
-                        if (wtvAdd && l.Contains("pre_system_application"))
+                        if (wtvAddOld && l.Contains("WachtijdvoorspellersWachttijd_Add"))
                         {
-                            sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
+                            var l2 = l.Replace("WachtijdvoorspellersWachttijd_Add", "WachttijdvoorspellersWachttijd_Add");
+                            sb.AppendLine(l2);
+                            continue;
+                        }
+                        if (wtvAdd && !wtvAddOld && l.Contains("pre_system_application"))
+                        {
+                            sb.AppendLine("void WachttijdvoorspellersWachttijd_Add()");
                             sb.AppendLine("{");
                             sb.AppendLine($"{ts}");
                             sb.AppendLine("}");

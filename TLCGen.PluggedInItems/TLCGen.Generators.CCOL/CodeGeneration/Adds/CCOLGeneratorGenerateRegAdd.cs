@@ -140,7 +140,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             if (c.Fasen.Any(x => x.WachttijdVoorspeller))
             {
-                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add(void)");
+                sb.AppendLine("void WachttijdvoorspellersWachttijd_Add(void)");
                 sb.AppendLine("{");
                 sb.AppendLine("");
                 sb.AppendLine("}");
