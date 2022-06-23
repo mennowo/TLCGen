@@ -459,7 +459,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
 
-                sb.AppendLine(!controller.Data.TVGAMaxAlsDefaultGroentijdSet 
+                sb.AppendLine(controller.Data.TVGAMaxAlsDefaultGroentijdSet 
                     ? $"TVGA_max[{fcm.GetDefine()}] = {tvg};" 
                     : $"TVG_max[{fcm.GetDefine()}] = {tvg};");
             }
