@@ -117,7 +117,9 @@ namespace TLCGen.Plugins.Additor
                     foreach (var f in files)
                     {
                         if (Path.GetFileName(f).StartsWith(_plugin.Controller.Data.Naam) &&
-                            (Path.GetExtension(f).ToLower() == ".add" || Path.GetExtension(f).ToLower() == ".c"))
+                            (Path.GetExtension(f).ToLower() == ".add" || 
+                             Path.GetExtension(f).ToLower() == ".h" ||
+                             Path.GetExtension(f).ToLower() == ".c"))
                         {
                             var add = new AddFileViewModel {FileName = Path.GetFileName(f), FullFileName = f};
                             AddFiles.Add(add);
