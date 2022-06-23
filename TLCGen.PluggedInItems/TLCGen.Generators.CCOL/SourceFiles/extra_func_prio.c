@@ -506,7 +506,6 @@ bool fietsprio_inmelding(
 
      /* prio actief indien: voldoende voertuigen OF voldoende wachttijd */
      return
-           R[fc] && !TRG[fc] &&
            /* voldoende voertuigen massadetectie */
            (dvw != NG && C_counter[c_priocount] >= PRM[prm_priocount] ||
            /* voldoende voertuigen massadetectie */
