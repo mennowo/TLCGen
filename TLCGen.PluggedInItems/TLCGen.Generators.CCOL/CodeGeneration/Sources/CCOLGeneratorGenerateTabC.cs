@@ -458,7 +458,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         tvg = fcgs.Waarde == null ? "NG" : (fcgs.Waarde.Value - tfg < 0 ? 0 : fcgs.Waarde.Value - tfg).ToString();
                     }
                 }
-                sb.AppendLine($"TVGA_max[{fcm.GetDefine()}] = {tvg};");
+
+                sb.AppendLine(!controller.Data.TVGAMaxAlsDefaultGroentijdSet 
+                    ? $"TVGA_max[{fcm.GetDefine()}] = {tvg};" 
+                    : $"TVG_max[{fcm.GetDefine()}] = {tvg};");
             }
 
             // In geval van Practice, apart opnemen TMGL_max
