@@ -255,7 +255,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}else /* geen goede verbinding - reset inkomende koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}    for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i)");
+                sb.AppendLine($"{ts}{ts}{ts}{{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}if (PRM[{_prmpf}{k.TeKoppelenKruispunt}{prmptpiks}01 + i] == 1)");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = TRUE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}else");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{hptpiks}01 + i] = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* aanroep ptp-functies */");
