@@ -62,7 +62,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _myElements.Where(x => x.Type == type);
+            return _myElements?.Where(x => x.Type == type);
         }
 
         public virtual bool HasDetectors()

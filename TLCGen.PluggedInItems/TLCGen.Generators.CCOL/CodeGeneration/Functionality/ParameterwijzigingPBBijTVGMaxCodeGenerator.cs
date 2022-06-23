@@ -70,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}#define aanttvgmaxprm {i} /* aantal {_fcpf} met max. verlenggroenparameters ({_prmpf}{tg}#_$$, ..)  */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCTop:
-                    sb.AppendLine("int itvgmaxprm[aanttvgmaxprm]; /* fasecycli met max. verlenggroen parameter */");
+                    sb.AppendLine("mulv itvgmaxprm[aanttvgmaxprm]; /* fasecycli met max. verlenggroen parameter */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
                 case CCOLCodeTypeEnum.RegCVerlenggroenNaAdd:

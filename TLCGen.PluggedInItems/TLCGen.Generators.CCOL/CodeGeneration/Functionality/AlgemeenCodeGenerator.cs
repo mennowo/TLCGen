@@ -337,20 +337,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    sb.AppendLine($"{ts}#ifdef AUTOMAAT");
-                    sb.AppendLine($"{ts}{ts}/* verklikken of applicatie daadwerkelijk de TLC aanstuurt */");
-                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usincontrol}] = (CIF_WPS[CIF_PROG_CONTROL] == CIF_CONTROL_INCONTROL) ? TRUE : FALSE;");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* verklikken of applicatie niet in staat is te regelen */");
-                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usnocontrol}] = (CIF_GPS[CIF_PROG_CONTROL] != CIF_CONTROL_ONGEDEF) ? TRUE : FALSE;");
-                    if (c.Data.GeenControlGeenFileBasedVLOG)
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
                     {
+                        sb.AppendLine($"{ts}#ifdef AUTOMAAT");
+                        sb.AppendLine($"{ts}{ts}/* verklikken of applicatie daadwerkelijk de TLC aanstuurt */");
+                        sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usincontrol}] = (CIF_WPS[CIF_PROG_CONTROL] == CIF_CONTROL_INCONTROL) ? TRUE : FALSE;");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}/* uitschakelen vlog indien applicatie niet in control is */");
-                        sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] &= ~(BIT5);");
-                        sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] |= CIF_GUS[{_uspf}{_usincontrol}] ? 0 : BIT5;");
+                        sb.AppendLine($"{ts}{ts}/* verklikken of applicatie niet in staat is te regelen */");
+                        sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usnocontrol}] = (CIF_GPS[CIF_PROG_CONTROL] != CIF_CONTROL_ONGEDEF) ? TRUE : FALSE;");
+                        if (c.Data.GeenControlGeenFileBasedVLOG)
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}{ts}/* uitschakelen vlog indien applicatie niet in control is */");
+                            sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] &= ~(BIT5);");
+                            sb.AppendLine($"{ts}{ts}LOGPRM[LOGPRM_VLOGMODE] |= CIF_GUS[{_uspf}{_usincontrol}] ? 0 : BIT5;");
+                        }
+
+                        sb.AppendLine($"{ts}#endif");
                     }
-                    sb.AppendLine($"{ts}#endif");
+
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:

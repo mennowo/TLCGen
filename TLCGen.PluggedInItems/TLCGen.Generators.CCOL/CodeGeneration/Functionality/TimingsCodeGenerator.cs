@@ -38,6 +38,12 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
         public override void CollectCCOLElements(ControllerModel c)
         {
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL110 || !c.TimingsData.TimingsToepassen)
+            {
+                _myElements = new List<CCOLElement>();
+                return;
+            }
+            
             _myElements = new List<CCOLElement>
             {
                 CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmttxconfidence15}", 30, CCOLElementTimeTypeEnum.None, _prmttxconfidence15),

@@ -69,7 +69,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                 }
-                if(nl.MaximaleVoorstart.HasValue)
+                if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc && nl.MaximaleVoorstart.HasValue)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(

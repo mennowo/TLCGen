@@ -100,7 +100,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var pgen in pgens)
             {
                 if (!pgen.HasCCOLElements()) continue;
-                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
+                var elems = pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang);
+                if (elems == null) continue;
+                foreach (var i in elems)
                 {
                     i.IOElementData.ElementType = IOElementTypeEnum.Output;
                     data.Elements.Add(i);

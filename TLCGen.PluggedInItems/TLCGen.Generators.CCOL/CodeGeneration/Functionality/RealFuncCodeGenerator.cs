@@ -159,19 +159,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             $"{_mrealtijd}{fc}",
                             _mrealtijd, fc.Naam));
                 }
-                foreach (var fc in c.Fasen)
+
+                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_mrealtijdmin}{fc}",
-                            _mrealtijdmin, fc.Naam));
-                }
-                foreach (var fc in c.Fasen)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_mrealtijdmax}{fc}",
-                            _mrealtijdmax, fc.Naam));
+                    foreach (var fc in c.Fasen)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_mrealtijdmin}{fc}",
+                                _mrealtijdmin, fc.Naam));
+                    }
+
+                    foreach (var fc in c.Fasen)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_mrealtijdmax}{fc}",
+                                _mrealtijdmax, fc.Naam));
+                    }
                 }
             }
             
@@ -643,8 +648,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
                         {
                             sb.AppendLine($"{ts}Realisatietijd_MM({_fcpf}{fc.Naam}, {_mpf}{_mrealtijd}{fc.Naam});");
-                            sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmin}{fc.Naam}] = REALTIJD_min[{_fcpf}{fc.Naam}];");
-                            sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmax}{fc.Naam}] = REALTIJD_max[{_fcpf}{fc.Naam}];");
+                            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                            {
+                                sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmin}{fc.Naam}] = REALTIJD_min[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}MM[{_mpf}{_mrealtijdmax}{fc.Naam}] = REALTIJD_max[{_fcpf}{fc.Naam}];");
+                            }
                         }
                     }
                     else
@@ -652,8 +660,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}Realisatietijd_MM({_fcpf}{firstFcName} + i, {_mpf}{_mrealtijd}{firstFcName} + i);");
-                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmin}{firstFcName} + i] = REALTIJD_min[{_fcpf}{firstFcName} + i];");
-                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                        {
+                            sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmin}{firstFcName} + i] = REALTIJD_min[{_fcpf}{firstFcName} + i];");
+                            sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mrealtijdmax}{firstFcName} + i] = REALTIJD_max[{_fcpf}{firstFcName} + i];");
+                        }
+
                         sb.AppendLine($"{ts}}}");
                     }
 
@@ -669,8 +681,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var fc in c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex))
                         {
                             sb.AppendLine($"{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[{_fcpf}{fc.Naam}], MM[{_mpf}{_mrealtijd}{fc.Naam}]);");
-                            sb.AppendLine($"{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{fc.Naam}]);");
-                            sb.AppendLine($"{ts}{ts}xyprintf(108, 7 + i++, \"%4d\",                 MM[{_mpf}{_mrealtijdmax}{fc.Naam}]);");
+                            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                            {
+                                sb.AppendLine($"{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{fc.Naam}]);");
+                                sb.AppendLine($"{ts}{ts}xyprintf(108, 7 + i++, \"%4d\",                 MM[{_mpf}{_mrealtijdmax}{fc.Naam}]);");
+                            }
                         }
                     }
                     else
@@ -678,8 +693,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}for (i = 0; i < FC_MAX; ++i)");
                         sb.AppendLine($"{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}{ts}xyprintf( 92, 7 + i, \"fc%3s %4d\", FC_code[i], MM[{_mpf}{_mrealtijd}{firstFcName} + i]);");
-                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
-                        sb.AppendLine($"{ts}{ts}{ts}xyprintf(108, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}xyprintf(103, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmin}{firstFcName} + i]);");
+                            sb.AppendLine($"{ts}{ts}{ts}xyprintf(108, 7 + i, \"%4d\",                   MM[{_mpf}{_mrealtijdmax}{firstFcName} + i]);");
+                        }
+
                         sb.AppendLine($"{ts}{ts}}}");
                     }
                     sb.AppendLine($"{ts}}}");
