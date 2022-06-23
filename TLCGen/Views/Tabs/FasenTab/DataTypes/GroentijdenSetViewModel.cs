@@ -35,7 +35,6 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
                     }
                 }
-                _GroentijdenSet.Naam = value;
                 RaisePropertyChanged();
             }
         }
