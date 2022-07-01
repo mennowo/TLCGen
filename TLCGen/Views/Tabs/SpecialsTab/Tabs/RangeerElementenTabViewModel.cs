@@ -104,7 +104,7 @@ namespace TLCGen.ViewModels
             get => _outputs;
             set
             {
-                _outputs= value; 
+                _outputs = value; 
                 RaisePropertyChanged();
             }
         }
@@ -155,6 +155,8 @@ namespace TLCGen.ViewModels
                 base.Controller = value;
                 if (base.Controller != null)
                 {
+                    UpdateModel(value);
+                    UpdateRangeerIndices(value);
                 }
                 RaisePropertyChanged("");
             }
@@ -162,9 +164,63 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen TabItem overrides
 
+        private void UpdateModel(ControllerModel controller)
+        {
+            // check and correct rangeren
+            if (controller.Data.RangeerData != null)
+            {
+                var rd = controller.Data.RangeerData;
+                var rangeerLists = new List<List<IOElementRangeerDataModel>>
+                {
+                    rd.RangeerFasen, rd.RangeerDetectoren, rd.RangeerSelectieveDetectoren,
+                    rd.RangeerIngangen, rd.RangeerUitgangen
+                };
+                var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(controller);
+                var modelLists = new List<List<IOElementModel>>
+                {
+                    elements.Where(x => x.ElementType == IOElementTypeEnum.FaseCyclus).ToList(),
+                    elements.Where(x => x.ElementType == IOElementTypeEnum.Detector).ToList(),
+                    elements.Where(x => x.ElementType == IOElementTypeEnum.SelectiveDetector).ToList(),
+                    elements.Where(x => x.ElementType == IOElementTypeEnum.Input).ToList(),
+                    elements.Where(x => x.ElementType == IOElementTypeEnum.Output).ToList(),
+                };
+                var rem = new List<IOElementRangeerDataModel>();
+                
+                // check and fix potential doubles
+                foreach (var list in rangeerLists)
+                {
+                    rem.Clear();
+                    foreach (var model in list)
+                    {
+                        if (list.Any(x => !ReferenceEquals(model, x) && x.Naam == model.Naam) && rem.All(x => x.Naam != model.Naam))
+                        {
+                            rem.Add(model);
+                        }
+                    }
+
+                    foreach (var r in rem) list.Remove(r);
+                }
+
+                // remove orphaned items
+                for (var i = 0; i < rangeerLists.Count; i++)
+                {
+                    var modelList = modelLists[i];
+                    rem.Clear();
+                    foreach (var model in rangeerLists[i])
+                    {
+                        if (modelList.All(x => x.Naam != model.Naam))
+                        {
+                            rem.Add(model);
+                        }
+                    }
+                    foreach (var r in rem) rangeerLists[i].Remove(r);
+                }
+            }
+        }
+        
         private void UpdateRangeerIndices(ControllerModel c)
         {
-            if (!RangerenFasen && !RangerenDetectoren && !RangerenIngangen && !RangerenIngangen) return;
+            if (!RangerenFasen && !RangerenDetectoren && !RangerenSelectieveDetectoren && !RangerenUitgangen && !RangerenIngangen) return;
 
             var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(c);
             if (elements == null) return;
@@ -190,11 +246,12 @@ namespace TLCGen.ViewModels
             {
                 if (models[i] == null) continue;
 
-                // clear and rebuild viewmodel list
+                // build viewmodel list
                 foreach (var e in elements.Where(x => x != null && x.ElementType == vms[i].type))
                 {
                     vms[i].items.Add(new IOElementViewModel(e));
                 }
+                
                 // for regular detectors, also add selective detectors with non-dummy coupled regular detector
                 if (i == 1 && models[4] != null)
                 {
@@ -243,14 +300,14 @@ namespace TLCGen.ViewModels
                 // clean up saved model items that are no longer present
                 var remModels = models[i].Where(x => vms[i].items.All(x2 => x2.Element != null && x2.Element.Naam != x.Naam)).ToList();
                 foreach (var r in remModels) models[i].Remove(r);
-
-                // update
-                Fasen = new ObservableCollection<IOElementViewModel>(vms[0].items.OrderBy(x => x.RangeerIndex));
-                Detectoren = new ObservableCollection<IOElementViewModel>(vms[1].items.OrderBy(x => x.RangeerIndex));
-                Ingangen = new ObservableCollection<IOElementViewModel>(vms[2].items.OrderBy(x => x.RangeerIndex));
-                Uitgangen = new ObservableCollection<IOElementViewModel>(vms[3].items.OrderBy(x => x.RangeerIndex));
-                SelectieveDetectoren = new ObservableCollection<IOElementViewModel>(vms[4].items.OrderBy(x => x.RangeerIndex));
             }
+            
+            // update
+            Fasen = new ObservableCollection<IOElementViewModel>(vms[0].items.OrderBy(x => x.RangeerIndex));
+            Detectoren = new ObservableCollection<IOElementViewModel>(vms[1].items.OrderBy(x => x.RangeerIndex));
+            Ingangen = new ObservableCollection<IOElementViewModel>(vms[2].items.OrderBy(x => x.RangeerIndex));
+            Uitgangen = new ObservableCollection<IOElementViewModel>(vms[3].items.OrderBy(x => x.RangeerIndex));
+            SelectieveDetectoren = new ObservableCollection<IOElementViewModel>(vms[4].items.OrderBy(x => x.RangeerIndex));
         }
 
         private void OnPrepareForGenerationRequestReceived(PrepareForGenerationRequest obj)

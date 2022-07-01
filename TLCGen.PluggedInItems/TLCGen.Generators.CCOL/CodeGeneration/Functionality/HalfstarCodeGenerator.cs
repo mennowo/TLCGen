@@ -30,6 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hnla;
         private string _hprioin;
         private string _hpriouit;
+        private string _treallr;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -175,7 +176,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl, pl.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(pl.ToString(_uspl), _uspl, pl, pl.Naam));
 
                     foreach(var fcpl in pl.Fasen)
                     {
@@ -920,10 +921,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 dt = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
                             }
-                            var xnl = "NG";
+                            var vsTijdNl = "NG";
                             if (nl.MaximaleVoorstart.HasValue)
                             {
-                                xnl = $"{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}";
+	                            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
+	                            {
+		                            vsTijdNl = $"PRM[{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}]";
+	                            }
+	                            else
+	                            {
+		                            vsTijdNl = $"T_max[{_tpf}{_treallr}{nl.FaseNaar}{nl.FaseVan}]";
+	                            }
                             }
 
                             var nlv = "NG";
@@ -931,7 +939,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
 	                            nlv = $"{_tpf}{t}{nl.FaseVan}{nl.FaseNaar}";
                             }
-							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {nlv});");
+							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {vsTijdNl}, {dt}, {nlv});");
 						}
 
                         if(nl.Type == NaloopTypeEnum.StartGroen)
@@ -1486,7 +1494,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach(var pl in c.HalfstarData.SignaalPlannen)
                     {
-					    sb.AppendLine($"{ts}GUS[{_uspf}{_uspl}{pl.Naam}] = PL == {pl.Naam};");
+	                    sb.AppendLine($"{ts}GUS[{_uspf}{pl.ToString(_uspl)}] = PL == {pl.Naam};");
                     }
 					sb.AppendLine($"{ts}GUS[{_uspf}{_ustxtimer}] = IH[{_hpf}{_hplact}] ? (s_int16)(TX_timer): 0;");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usklok}] = MM[{_mpf}{_mklok}];");
@@ -1651,6 +1659,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
+            
+            _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
 
             return base.SetSettings(settings);
 		}

@@ -237,7 +237,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"&& RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                                    sb.AppendLine($"&& RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"&& (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}])));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
                                     sb.AppendLine(!ma.Uitgesteld

@@ -26,6 +26,29 @@ namespace TLCGen.ViewModels
             }
         }
         
+        public string ManualNaam
+        {
+            get => Element.ManualNaam;
+            set
+            {
+                Element.ManualNaam = value;
+                if (SavedData != null)
+                {
+                    SavedData.ManualNaam = value;
+                }
+            }
+        }
+
+        public bool HasManualName
+        {
+            get => SavedData.HasManualNaam;
+            set
+            {
+                SavedData.HasManualNaam = value;
+                RaisePropertyChanged();
+            }
+        }
+        
         public bool UseSecondaryIndex { get; set; }
 
         public IOElementModel Element { get; }

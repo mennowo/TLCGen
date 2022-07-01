@@ -214,7 +214,7 @@ void mgcor_halfstar_deelc(count fc1, count fc2)
 }
 
 /**********************************************************************************/
-void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count tnldet, count tnl)
+void naloopEG_CV_halfstar(bool period, count fc1, count fc2, mulv tvs, count tnldet, count tnl)
 {
     /* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
     if (GL[fc2])
@@ -270,16 +270,16 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
     /* meerealisatie nalooprichting */
     set_special_MR(fc2, fc1, (bool)(period && ((A[fc1] && R[fc1]) || CV[fc1])));
 
-    if (prmxnl != NG)
+    if (tvs > NG)
     {
         /* aanvoerende richting niet te snel realiseren */
-        if (period && x_aanvoer(fc2, PRM[prmxnl]) && (TX_timer != TXB[PL][fc1]))
+        if (period && x_aanvoer(fc2, tvs) && (TX_timer != TXB[PL][fc1]))
             X[fc1] |= X_VOOR_HALFSTAR;
 
         /* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
         if (period && (GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
         {
-            if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > PRM[prmxnl])
+            if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > tvs)
                 X[fc1] |= X_VOOR_HALFSTAR;
         }
     }

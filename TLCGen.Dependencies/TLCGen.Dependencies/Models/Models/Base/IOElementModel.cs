@@ -24,6 +24,10 @@ namespace TLCGen.Models
 
         [XmlIgnore]
         [HasDefault(false)]
+        public string ManualNaam { get; set; }
+        
+        [XmlIgnore]
+        [HasDefault(false)]
         public int RangeerIndex { get; set; }
         
         [XmlIgnore]
@@ -43,6 +47,12 @@ namespace TLCGen.Models
         public override string ToString()
         {
             return Naam;
+        }
+        
+        public string ToString(object nameSetting)
+        {
+            if (Naam.ToLower().StartsWith(nameSetting.ToString().ToLower())) return Naam;
+            return $"{nameSetting}{Naam}";
         }
 
         public IOElementModel()

@@ -163,47 +163,34 @@ namespace TLCGen.Generators.CCOL
 
             if (!_noView)
             {
-
-                if (_alwaysOverwriteSourcesMenuItem == null)
+                _alwaysOverwriteSourcesMenuItem ??= new MenuItem
                 {
-                    _alwaysOverwriteSourcesMenuItem = new MenuItem
-                    {
-                        Header = "Altijd overschrijven bronbestanden"
-                    };
-                }
+                    Header = "Altijd overschrijven bronbestanden"
+                };
 
                 _alwaysOverwriteSourcesMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
 
-                if (_alterAddHeadersWhileGeneratingMenuItem == null)
+                _alterAddHeadersWhileGeneratingMenuItem ??= new MenuItem
                 {
-                    _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
-                    {
-                        Header = "Bijwerken add headers tijdens genereren"
-                    };
-                }
+                    Header = "Bijwerken add headers tijdens genereren"
+                };
 
                 _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
 
-                if (_alterAddFunctionsWhileGeneratingMenuItem == null)
+                _alterAddFunctionsWhileGeneratingMenuItem ??= new MenuItem
                 {
-                    _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
-                    {
-                        Header = "Bijwerken functies in add files tijdens genereren"
-                    };
-                }
+                    Header = "Bijwerken functies in add files tijdens genereren"
+                };
 
                 _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
 
-                if (_replaceRepeatingCommentsTextWithPeriodsMenuItem == null)
+                _replaceRepeatingCommentsTextWithPeriodsMenuItem ??= new MenuItem
                 {
-                    _replaceRepeatingCommentsTextWithPeriodsMenuItem = new MenuItem
-                    {
-                        Header = "Herhalend commentaar vervangen door ..."
-                    };
-                }
+                    Header = "Herhalend commentaar vervangen door ..."
+                };
 
                 _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;

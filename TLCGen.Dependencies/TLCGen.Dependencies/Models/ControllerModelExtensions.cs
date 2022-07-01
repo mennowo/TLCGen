@@ -11,9 +11,11 @@ namespace TLCGen.Models
     {
         #region Detectors
 
-        public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c)
+        public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, bool noDummies = false)
         {
-            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren);
+            return noDummies 
+                ? c.Fasen.SelectMany(x => x.Detectoren.Where(x2 => !x2.Dummy)).Concat(c.Detectoren.Where(x => !x.Dummy)).Concat(c.SelectieveDetectoren.Where(x => !x.Dummy))
+                : c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren);
         }
         
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, Func<DetectorModel, bool> predicate)

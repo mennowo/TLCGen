@@ -972,7 +972,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad6 = data.CommentsMaxWidth;
             var pad7 = data.TTypeMaxWidth + 4; // 4: ' = ;'
 
-            foreach (var elem in data.Elements)
+            foreach (var elem in data.Elements.OrderBy(x => x.IOElementData is SelectieveDetectorModel ? x.IOElementData.RangeerIndex : x.IOElementData.RangeerIndex2))
             {
                 if (elem.Dummy)
                     continue;
@@ -1016,8 +1016,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
                 foreach (var delem in data.Elements)
                 {
-                    if (!delem.Dummy)
-                        continue;
+                    if (!delem.Dummy) continue;
+                    
                     sb.Append($"{ts}{data.CCOLCode}[{delem.Define}]".PadRight(pad1));
                     var name = c.Data.CCOLCodeCase switch
                     {
@@ -1025,6 +1025,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CCOLCodeCaseEnum.UpperCase => delem.Naam.ToUpper(),
                         _ => delem.Naam
                     };
+                    if (!string.IsNullOrWhiteSpace(delem.IOElementData?.ManualNaam))
+                    {
+                        name = c.Data.CCOLCodeCase switch
+                        {
+                            CCOLCodeCaseEnum.LowerCase => delem.IOElementData.ManualNaam.ToLower(),
+                            CCOLCodeCaseEnum.UpperCase => delem.IOElementData.ManualNaam.ToUpper(),
+                            _ => delem.Naam
+                        };  
+                    }
                     sb.Append($" = \"{name}\";".PadRight(pad2));
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && delem.Instelling.HasValue)
                     {

@@ -8,6 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:RangeerElementenTabViewModel}">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         <Style TargetType="ListViewItem" x:Key="RangeerItemStyle">
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
@@ -23,6 +24,24 @@
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
+        <DataTemplate x:Key="RangeerElementTemplate" DataType="viewModels:IOElementViewModel">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                <CheckBox Grid.Row="0" Grid.Column="1" Margin="1,5"
+                          IsChecked="{Binding Path=HasManualName,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="2"
+                         Visibility="{Binding Path=HasManualName,Converter={StaticResource VisibilityConverter}}"
+                         Text="{Binding Path=ManualNaam,UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -54,7 +73,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            <ContentPresenter ContentTemplate="{StaticResource RangeerElementTemplate}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -75,7 +94,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            <ContentPresenter ContentTemplate="{StaticResource RangeerElementTemplate}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -96,7 +115,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            <ContentPresenter ContentTemplate="{StaticResource RangeerElementTemplate}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -117,7 +136,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            <ContentPresenter ContentTemplate="{StaticResource RangeerElementTemplate}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -138,7 +157,7 @@
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
+                            <ContentPresenter ContentTemplate="{StaticResource RangeerElementTemplate}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

@@ -175,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* verklikken actief star programma en wisseling*/");
                     foreach (var pr in c.StarData.Programmas)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstar}{pr.Naam}] = MM[{_mpf}{_mstarprog}] == {iPr++};");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{pr.ToString(_usstar)}] = MM[{_mpf}{_mstarprog}] == {iPr++};");
                     }
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usstarprogwissel}] = MM[{_mpf}{_mstarprogwissel}] != 0 || MM[{_mpf}{_mstarprog}] != 0 && MM[{_mpf}{_mstarprogwens}] != MM[{_mpf}{_mstarprog}];");
 

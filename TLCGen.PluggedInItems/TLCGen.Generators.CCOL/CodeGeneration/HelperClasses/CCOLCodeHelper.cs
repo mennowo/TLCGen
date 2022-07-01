@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -9,6 +10,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
+        public static string GetNameFromCombinedNameAndElementName(CCOLGeneratorCodeStringSettingModel element, string name)
+        {
+            if (element.ToString() != "" &&
+                element.ToString().Length < name.Length &&
+                name
+                    .Substring(element.ToString().Length, name.Length - element.ToString().Length)
+                    .ToLower()
+                    .StartsWith(element.ToString().ToLower()))
+            {
+                name = name.Substring(element.ToString().Length, name.Length - element.ToString().Length);
+            }
+            return name;
+        }
+        
+        public static string GetNameFromNameAndElementName(CCOLGeneratorCodeStringSettingModel setting, string name)
+        {
+            if (name.ToLower().StartsWith(setting.ToString().ToLower())) return name;
+            return $"{setting}{name}";
+        }
+        
         public static List<List<string>> GetSyncGroupsForController(ControllerModel c)
         {
             var syncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);

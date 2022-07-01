@@ -121,8 +121,10 @@ namespace TLCGen.Generators.CCOL.Settings
         public CCOLElement CreateElement(string name, CCOLGeneratorCodeStringSettingModel element, IOElementModel ioElementData, params string[] elementnames)
         {
             var t = TranslateType(element.Type);
+            // skim element setting from name if it already starts with that string
+            name = CCOLCodeHelper.GetNameFromCombinedNameAndElementName(element, name);
             // synch names
-            ioElementData.Naam ??= name;
+            ioElementData.Naam = name;
             return new CCOLElement(name, t, GetElementDescription(element.Description, t, elementnames), ioElementData);
         }
 

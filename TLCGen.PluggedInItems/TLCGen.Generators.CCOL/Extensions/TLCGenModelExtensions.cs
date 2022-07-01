@@ -45,7 +45,7 @@ namespace TLCGen.Generators.CCOL.Extensions
 
         public static string GetBitmapCoordinaatInputDefine(this IOElementModel i)
         {
-            return CCOLGeneratorSettingsProvider.Default.GetPrefix("us") + i.Naam;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("is") + i.Naam;
         }
     }
 }

@@ -173,7 +173,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (m != null) u.RangeerIndex = m.RangeerIndex;
                     else
                     {
-                        int i = -0;
+                        var i = -0;
                         ++i;
                     }
                 }

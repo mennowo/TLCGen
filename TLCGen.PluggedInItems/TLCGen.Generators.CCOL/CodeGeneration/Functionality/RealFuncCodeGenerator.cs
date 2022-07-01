@@ -483,7 +483,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
-                            sb.AppendLine($"{ts}RT[{_tpf}{_treallr}{grsync}] = SG[{_fcpf}{grsync:van}]; AT[{_tpf}{_treallr}{grsync}] = G[{_fcpf}{grsync:naar}];");
+                            if (grsync.Richting == 1)
+                            {
+                                sb.AppendLine($"{ts}RT[{_tpf}{_treallr}{grsync}] = SG[{_fcpf}{grsync:naar}]; AT[{_tpf}{_treallr}{grsync}] = G[{_fcpf}{grsync:van}];");
+                            }
                         }
                         
                         sb.AppendLine();

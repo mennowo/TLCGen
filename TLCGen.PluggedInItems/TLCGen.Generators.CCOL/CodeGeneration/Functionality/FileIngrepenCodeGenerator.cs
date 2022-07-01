@@ -41,9 +41,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var fm in c.FileIngrepen)
             {
+                var name = CCOLCodeHelper.GetNameFromNameAndElementName(_usfile, fm.Naam);
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_usfile}{fm.Naam}",
+                        name,
                         _usfile, fm.BitmapData, fm.Naam));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -908,7 +909,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ---------------- */");
                     foreach (var f in c.FileIngrepen)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usfile}{f.Naam}] = IH[{_hpf}{_hfile}{f.Naam}];");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{f.BitmapData.ToString(_usfile)}] = IH[{_hpf}{_hfile}{f.Naam}];");
                     }
                     return sb.ToString();
 

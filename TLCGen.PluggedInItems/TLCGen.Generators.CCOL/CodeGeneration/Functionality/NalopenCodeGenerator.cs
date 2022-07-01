@@ -287,22 +287,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (nl.MaximaleVoorstart.HasValue)
                                 {
-                                    sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
-                                              $"((T[{_tpf}{_tinl}{nl.FaseNaar}{nl.FaseVan}] || RT[{_tpf}{_tinl}{nl.FaseNaar}{nl.FaseVan}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && (");
+                                    sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
+                                              $"((T[{_tpf}{_tinl}{nl.FaseVan}{nl.FaseNaar}] || RT[{_tpf}{_tinl}{nl.FaseVan}{nl.FaseNaar}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
                                 }
                                 else
                                 {
-                                    sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
+                                    sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
+                                                  $"(SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
                                 }
-
-                                var i = 0;
-                                foreach (var d in nl.Detectoren)
-                                {
-                                    if (i > 0) sb.Append(" || ");
-                                    ++i;
-                                    sb.Append($"IH[{_hpf}{_hnla}{d.Detector}]");
-                                }
-                                sb.AppendLine($") && !kcv({_fcpf}{nl.FaseNaar})));");
                             }
                             else
                             {
