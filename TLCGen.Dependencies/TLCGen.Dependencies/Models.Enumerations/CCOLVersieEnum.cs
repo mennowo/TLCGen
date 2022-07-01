@@ -15,6 +15,8 @@ namespace TLCGen.Models.Enumerations
         [Description("10.0")]
         CCOL100,
         [Description("11.0")]
-        CCOL110
+        CCOL110,
+        [Description("12.0")]
+        CCOL120
     }
 }

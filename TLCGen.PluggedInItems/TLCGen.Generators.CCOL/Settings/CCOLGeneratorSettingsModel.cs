@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.Settings
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL95 { get; set; }
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100 { get; set; }
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL110 { get; set; }
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL120 { get; set; }
 
         [XmlIgnore]
         public CCOLGeneratorVisualSettingsModel[] AllVisualSettings 
@@ -27,7 +28,8 @@ namespace TLCGen.Generators.CCOL.Settings
                     VisualSettingsCCOL9,
                     VisualSettingsCCOL95,
                     VisualSettingsCCOL100,
-                    VisualSettingsCCOL110
+                    VisualSettingsCCOL110,
+                    VisualSettingsCCOL120
                 };
             }
         }
@@ -63,6 +65,7 @@ namespace TLCGen.Generators.CCOL.Settings
             VisualSettingsCCOL95 = new CCOLGeneratorVisualSettingsModel();
             VisualSettingsCCOL100 = new CCOLGeneratorVisualSettingsModel();
             VisualSettingsCCOL110 = new CCOLGeneratorVisualSettingsModel();
+            VisualSettingsCCOL120 = new CCOLGeneratorVisualSettingsModel();
             Prefixes = new List<CCOLGeneratorCodeStringSettingModel>();
             CodePieceGeneratorSettings = new List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>>();
         }

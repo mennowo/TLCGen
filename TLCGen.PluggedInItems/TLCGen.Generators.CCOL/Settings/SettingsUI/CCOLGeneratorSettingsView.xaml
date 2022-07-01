@@ -63,6 +63,20 @@
                             </xctk:PropertyGrid.PropertyDefinitions>
                         </xctk:PropertyGrid>
                     </TabItem>
+                    <TabItem Header="CCOL 12.0">
+                        <xctk:PropertyGrid Margin="2" 
+                                           ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
+                                           SelectedObject="{Binding Path=VisualSettingsCCOL120}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
+                            <xctk:PropertyGrid.PropertyDefinitions>
+                                <xctk:PropertyDefinition TargetProperties="CCOLIncludesPaden" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibs" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPath" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPathNoTig" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLPreprocessorDefinitions" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLResPath" />
+                            </xctk:PropertyGrid.PropertyDefinitions>
+                        </xctk:PropertyGrid>
+                    </TabItem>
                 </TabControl>
             </TabItem>
             <TabItem Header="Element prefixes">

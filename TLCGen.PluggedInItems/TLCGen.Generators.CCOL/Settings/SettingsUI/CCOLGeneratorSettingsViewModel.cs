@@ -27,6 +27,8 @@ namespace TLCGen.Generators.CCOL
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100 => _Settings?.VisualSettingsCCOL100;
 
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL110 => _Settings?.VisualSettingsCCOL110;
+        
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL120 => _Settings?.VisualSettingsCCOL120;
 
         public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings => _Settings?.CodePieceGeneratorSettings;
 

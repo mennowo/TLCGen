@@ -27,6 +27,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 CCOLVersieEnum.CCOL95 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95,
                 CCOLVersieEnum.CCOL100 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100,
                 CCOLVersieEnum.CCOL110 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL110,
+                CCOLVersieEnum.CCOL120 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL120,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -154,14 +155,9 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 {
                     case CCOLVersieEnum.CCOL8:
                         break;
-                    case CCOLVersieEnum.CCOL9:
-                    case CCOLVersieEnum.CCOL95:
-                    case CCOLVersieEnum.CCOL100:
-                    case CCOLVersieEnum.CCOL110:
+                    default:
                         neededlibs.Add("htmlhelp.lib");
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
             if (c.Data.VLOGType != VLOGTypeEnum.Geen)

@@ -962,6 +962,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GetAllElementsTabCLines(ControllerModel c, CCOLElemListData data)
         {
+            if (data.Elements.Count == 0) return "";
+
             var sb = new StringBuilder();
 
             var pad1 = ts.Length + data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
@@ -972,43 +974,58 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad6 = data.CommentsMaxWidth;
             var pad7 = data.TTypeMaxWidth + 4; // 4: ' = ;'
 
-            foreach (var elem in data.Elements.OrderBy(x => x.IOElementData is SelectieveDetectorModel ? x.IOElementData.RangeerIndex : x.IOElementData.RangeerIndex2))
+            var loopElements =
+                c.Data.RangeerData.RangerenIngangen && data.Elements[0].Type == CCOLElementTypeEnum.Ingang ||
+                c.Data.RangeerData.RangerenUitgangen && data.Elements[0].Type == CCOLElementTypeEnum.Uitgang
+                ? data.Elements
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Naam))
+                    .OrderBy(x => x.IOElementData.RangeerIndex)
+                : data.Elements
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Naam));
+
+            foreach (var elem in loopElements)
             {
                 if (elem.Dummy)
                     continue;
 
-                if (!string.IsNullOrWhiteSpace(elem.Naam))
+                sb.Append($"{ts}{data.CCOLCode}[{elem.Define}]".PadRight(pad1));
+                var name = c.Data.CCOLCodeCase switch
                 {
-                    sb.Append($"{ts}{data.CCOLCode}[{elem.Define}]".PadRight(pad1));
-                    var name = c.Data.CCOLCodeCase switch
+                    CCOLCodeCaseEnum.LowerCase => elem.Naam.ToLower(),
+                    CCOLCodeCaseEnum.UpperCase => elem.Naam.ToUpper(),
+                    _ => elem.Naam
+                };
+                if (!string.IsNullOrWhiteSpace(elem.IOElementData?.ManualNaam))
+                {
+                    name = c.Data.CCOLCodeCase switch
                     {
-                        CCOLCodeCaseEnum.LowerCase => elem.Naam.ToLower(),
-                        CCOLCodeCaseEnum.UpperCase => elem.Naam.ToUpper(),
-                        _ => elem.Naam
+                        CCOLCodeCaseEnum.LowerCase => elem.IOElementData.ManualNaam.ToLower(),
+                        CCOLCodeCaseEnum.UpperCase => elem.IOElementData.ManualNaam.ToUpper(),
+                        _ => elem.IOElementData.ManualNaam
                     };
-                    sb.Append($" = \"{name}\";".PadRight(pad2));
-                    if (!string.IsNullOrEmpty(data.CCOLSetting) && elem.Instelling.HasValue)
-                    {
-                        sb.Append($" {data.CCOLSetting}[{elem.Define}]".PadRight(pad3));
-                        sb.Append($" = {elem.Instelling};".PadRight(pad4));
-                    }
-                    if (!string.IsNullOrEmpty(data.CCOLTType) && elem.TType != CCOLElementTimeTypeEnum.None)
-                    {
-                        sb.Append($" {data.CCOLTType}[{elem.Define}]".PadRight(pad5));
-                        sb.Append($" = {elem.TType};");
-                    }
-                    else
-                    {
-                        sb.Append("".PadRight(pad5 + pad7));
-                    }
-					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
-					{
-                        sb.Append(" /* ");
-                        sb.Append($"{ elem.Commentaar}".PadRight(pad6));
-                        sb.Append(" */");
-					}
-                    sb.AppendLine();
                 }
+                sb.Append($" = \"{name}\";".PadRight(pad2));
+                if (!string.IsNullOrEmpty(data.CCOLSetting) && elem.Instelling.HasValue)
+                {
+                    sb.Append($" {data.CCOLSetting}[{elem.Define}]".PadRight(pad3));
+                    sb.Append($" = {elem.Instelling};".PadRight(pad4));
+                }
+                if (!string.IsNullOrEmpty(data.CCOLTType) && elem.TType != CCOLElementTimeTypeEnum.None)
+                {
+                    sb.Append($" {data.CCOLTType}[{elem.Define}]".PadRight(pad5));
+                    sb.Append($" = {elem.TType};");
+                }
+                else
+                {
+                    sb.Append("".PadRight(pad5 + pad7));
+                }
+                if (!string.IsNullOrWhiteSpace(elem.Commentaar))
+                {
+                    sb.Append(" /* ");
+                    sb.Append($"{elem.Commentaar}".PadRight(pad6));
+                    sb.Append(" */");
+                }
+                sb.AppendLine();
             }
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
@@ -1031,7 +1048,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             CCOLCodeCaseEnum.LowerCase => delem.IOElementData.ManualNaam.ToLower(),
                             CCOLCodeCaseEnum.UpperCase => delem.IOElementData.ManualNaam.ToUpper(),
-                            _ => delem.Naam
+                            _ => delem.IOElementData.ManualNaam
                         };  
                     }
                     sb.Append($" = \"{name}\";".PadRight(pad2));

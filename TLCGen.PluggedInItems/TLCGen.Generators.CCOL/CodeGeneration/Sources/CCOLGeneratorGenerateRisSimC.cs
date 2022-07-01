@@ -143,6 +143,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 $"RIF_STATIONTYPE_{s.Type}, " +
                                 $"0, " +
                                 $"{(s.Prioriteit ? "1" : "0")}, " +
+                                (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120 
+                                    ? "NG, "
+                                    : "") +
                                 $"{s.Snelheid}, " +
                                 $"{s.Afstand}, " +
                                 $"1);");
@@ -162,6 +165,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     $"RIF_STATIONTYPE_{s.Type}, " +
                                     $"0, " +
                                     $"{(s.Prioriteit ? "1" : "0")}, " +
+                                    (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
+                                        ? "NG, "
+                                        : "") +
                                     $"{s.Snelheid}, " +
                                     $"{s.Afstand}, " +
                                     $"1);");
@@ -187,6 +193,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                           $"RIF_STATIONTYPE_{s.Type}, " +
                                           $"{lijn}, " +
                                           $"{(s.Prioriteit ? "1" : "0")}, " +
+                                          (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
+                                              ? "NG, "
+                                              : "") +
                                           $"{s.Snelheid}, " +
                                           $"{s.Afstand}, " +
                                           $"1," +
@@ -212,6 +221,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     $"RIF_STATIONTYPE_{s.Type}, " +
                                     $"0, " +
                                     $"{(s.Prioriteit ? "1" : "0")}, " +
+                                    (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
+                                        ? "NG, "
+                                        : "") +
                                     $"{s.Snelheid}, " +
                                     $"{s.Afstand}, " +
                                     $"1);");
@@ -226,6 +238,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                           $"RIF_STATIONTYPE_{s.Type}, " +
                                           $"-1, " +
                                           $"{(s.Prioriteit ? "1" : "0")}, " +
+                                          (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
+                                              ? "NG, "
+                                              : "") +
                                           $"{s.Snelheid}, " +
                                           $"{s.Afstand}, " +
                                           $"1," +

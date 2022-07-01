@@ -428,7 +428,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* --------- */");
 
             var gs = controller.GroentijdenSets.FirstOrDefault();
-            foreach (var fcm in controller.Fasen)
+            var loopFasen = controller.Data.RangeerData.RangerenFasen
+                ? controller.Fasen.OrderBy(x => x.RangeerIndex).ToList()
+                : controller.Fasen;
+            foreach (var fcm in loopFasen)
             {
                 var name = controller.Data.CCOLCodeCase switch
                 {
@@ -436,6 +439,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CCOLCodeCaseEnum.UpperCase => fcm.Naam.ToUpper(),
                     _ => fcm.Naam
                 };
+                if (!string.IsNullOrWhiteSpace(fcm.ManualNaam))
+                {
+                    name = controller.Data.CCOLCodeCase switch
+                    {
+                        CCOLCodeCaseEnum.LowerCase => fcm.ManualNaam.ToLower(),
+                        CCOLCodeCaseEnum.UpperCase => fcm.ManualNaam.ToUpper(),
+                        _ => fcm.ManualNaam
+                    };
+                }
                 var s = $"   FC_code[{fcm.GetDefine()}] = \"{name}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
                 sb.Append(s);
                 sb.Append($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min}; ");
@@ -845,12 +857,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var pad6 = pad1 + pad2;
             var pad7 = "TFL_max[] = ;".Length + defmax + tflmax;
 
-            foreach (var dm in alldets)
+            var loopDets = c.Data.RangeerData.RangerenDetectoren
+                ? alldets
+                    .Where(x => !x.Dummy)
+                    .OrderBy(x => x.RangeerIndex).ToList()
+                : alldets.Where(x => !x.Dummy);
+            foreach (var dm in loopDets)
             {
-                if (!dm.Dummy)
-                {
-                    AppendDetectorTabString(c, sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
-                }
+                AppendDetectorTabString(c, sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
             }
 
             if (detectorModels.Any(x => x.TFL != null || x.CFL != null))
@@ -922,6 +936,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 CCOLCodeCaseEnum.UpperCase => dm.Naam.ToUpper(),
                 _ => dm.Naam
             };
+            if (!string.IsNullOrWhiteSpace(dm.ManualNaam))
+            {
+                name = c.Data.CCOLCodeCase switch
+                {
+                    CCOLCodeCaseEnum.LowerCase => dm.ManualNaam.ToLower(),
+                    CCOLCodeCaseEnum.UpperCase => dm.ManualNaam.ToUpper(),
+                    _ => dm.ManualNaam
+                };
+            }
             sb.Append($"= \"{name}\"; ".PadRight(pad2));
             if (dm.TDB != null)
             {
@@ -1130,9 +1153,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 // dummy lus voor KAR
                 sb.AppendLine($"{ts}DS_code[dsdummy] = \"{dummyname}\";");
                 // selectieve lussen
-                foreach (var sd in controller.SelectieveDetectoren)
+                var loopDets = controller.Data.RangeerData.RangerenSelectieveDetectoren
+                    ? controller.SelectieveDetectoren.OrderBy(x => x.RangeerIndex2).ToList()
+                    : controller.SelectieveDetectoren;
+                foreach (var sd in loopDets)
                 {
-                    sb.AppendLine($"{ts}DS_code[{(_dpf + sd.Naam).ToUpper()}]  = \"{sd.Naam.ToUpper()}\";");
+                    var name = !string.IsNullOrEmpty(sd.ManualNaam)
+                        ? sd.ManualNaam
+                        : sd.Naam;
+                    sb.AppendLine($"{ts}DS_code[{(_dpf + sd.Naam).ToUpper()}]  = \"{name.ToUpper()}\";");
                 }
             }
 
