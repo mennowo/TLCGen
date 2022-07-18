@@ -35,11 +35,12 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Path=Element}" Margin="5" Background="Transparent" />
-                <CheckBox Grid.Row="0" Grid.Column="1" Margin="1,5"
-                          IsChecked="{Binding Path=HasManualName,UpdateSourceTrigger=PropertyChanged}" />
-                <TextBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="2"
-                         Visibility="{Binding Path=HasManualName,Converter={StaticResource VisibilityConverter}}"
-                         Text="{Binding Path=ManualNaam,UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox Margin="5" HorizontalAlignment="Right"
+                          ToolTip="Eigen naam in CCOL code"
+                        IsChecked="{Binding Path=HasManualName,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="1" Margin="2" HorizontalAlignment="Stretch" DockPanel.Dock="Right"
+                        Visibility="{Binding Path=HasManualName,Converter={StaticResource VisibilityConverter}}"
+                        Text="{Binding Path=ManualNaam,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -64,7 +65,7 @@
                     dd:DragDrop.UseDefaultDragAdorner="True"
                     dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    ItemContainerStyle="{StaticResource RangeerItemStyle}"
+                    ItemContainerStyle="{StaticResource RangeerItemStyle}" HorizontalContentAlignment="Stretch"
                     ItemsSource="{Binding Path=Fasen}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -85,6 +86,7 @@
                     dd:DragDrop.UseDefaultDragAdorner="True"
                     dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    HorizontalContentAlignment="Stretch"
                     ItemContainerStyle="{StaticResource RangeerItemStyle}"
                     ItemsSource="{Binding Path=Detectoren}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>
@@ -106,6 +108,7 @@
                     dd:DragDrop.UseDefaultDragAdorner="True"
                     dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    HorizontalContentAlignment="Stretch"
                     ItemContainerStyle="{StaticResource RangeerItemStyle}"
                     ItemsSource="{Binding Path=Ingangen}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>
@@ -127,6 +130,7 @@
                     dd:DragDrop.UseDefaultDragAdorner="True"
                     dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    HorizontalContentAlignment="Stretch"
                     ItemContainerStyle="{StaticResource RangeerItemStyle}"
                     ItemsSource="{Binding Path=Uitgangen}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>
@@ -148,6 +152,7 @@
                     dd:DragDrop.UseDefaultDragAdorner="True"
                     dd:DragDrop.DropHandler="{Binding Path=DropTarget}"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    HorizontalContentAlignment="Stretch"
                     ItemContainerStyle="{StaticResource RangeerItemStyle}"
                     ItemsSource="{Binding Path=SelectieveDetectoren}" Margin="2" AlternationCount="2">
                     <ListView.ItemsPanel>

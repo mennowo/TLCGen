@@ -1141,7 +1141,7 @@
         <Flow>0</Flow>
         <Snelheid>50</Snelheid>
         <Afstand>300</Afstand>
-        <Importance>15</Importance>
+        <Importance>14</Importance>
       </Data>
     </Default>
   </Defaults>

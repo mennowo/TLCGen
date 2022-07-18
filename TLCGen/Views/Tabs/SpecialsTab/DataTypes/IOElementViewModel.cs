@@ -36,6 +36,7 @@ namespace TLCGen.ViewModels
                 {
                     SavedData.ManualNaam = value;
                 }
+                RaisePropertyChanged();
             }
         }
 
@@ -45,6 +46,10 @@ namespace TLCGen.ViewModels
             set
             {
                 SavedData.HasManualNaam = value;
+                if (value && string.IsNullOrWhiteSpace(SavedData.ManualNaam))
+                {
+                    ManualNaam = SavedData.Naam;
+                }
                 RaisePropertyChanged();
             }
         }
