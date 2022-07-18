@@ -187,9 +187,10 @@
             Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" 
             CellStyle="{StaticResource DetectorWithErrorStyle}"
             Visibility="{Binding Path=ShowTijden,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}" />
-        <DataGridCheckBoxColumn 
-            x:Key="AanvraagDirectColumn"
-            Binding="{Binding Path=AanvraagDirect}" Header="Direct" 
+        <DataGridComboBoxColumn 
+            x:Key="AanvraagDirectColumn" Header="Direct" 
+            SelectedItemBinding="{Binding Path=AanvraagDirect,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
             CellStyle="{StaticResource DetectorWithRequestDirectStyle}"
             Visibility="{Binding Path=ShowFuncties,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}" />
         <DataGridCheckBoxColumn 

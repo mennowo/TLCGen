@@ -152,7 +152,7 @@ namespace TLCGen.UnitTests
 			    vm.Detectoren[1],
 			    vm.Detectoren[2]
 		    };
-		    vm.Detectoren[2].AanvraagDirect = true;
+		    vm.Detectoren[2].AanvraagDirect = NooitAltijdAanUitEnum.SchAan;
 
 		    Assert.AreEqual(true, vm.Detectoren[0].AanvraagDirect);
 		    Assert.AreEqual(true, vm.Detectoren[1].AanvraagDirect);

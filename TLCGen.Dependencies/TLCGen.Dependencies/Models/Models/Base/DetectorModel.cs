@@ -37,7 +37,7 @@ namespace TLCGen.Models
         public int? CFL { get; set; }
         public bool ResetAanvraag { get; set; }
         public int ResetAanvraagTijdsduur { get; set; }
-        public bool AanvraagDirect { get; set; }
+        public NooitAltijdAanUitEnum AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
         [HasDefault(false)]
         public int? Rijstrook { get; set; }

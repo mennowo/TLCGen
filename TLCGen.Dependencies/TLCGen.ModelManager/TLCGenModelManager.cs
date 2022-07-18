@@ -366,14 +366,14 @@ namespace TLCGen.ModelManagement
 
             // get version
             var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
-            
+
             if (vi == null || string.IsNullOrWhiteSpace(vi.InnerText)) return;
 
             var v = Version.Parse(vi.InnerText);
 
             // In version 0.2.2.0, the OVIngreepModel object was changed
             var checkVer = Version.Parse("0.2.2.0");
-            if(v < checkVer)
+            if (v < checkVer)
             {
                 var shownKarVecomMsg = false;
                 foreach (XmlNode node in doc.FirstChild.ChildNodes)
@@ -400,7 +400,7 @@ namespace TLCGen.ModelManagement
                         }
                     }
                 }
-                
+
                 // Check detector type VecomIngang and rename to VecomDetector
                 foreach (XmlNode node in doc.FirstChild.ChildNodes)
                 {
@@ -529,7 +529,7 @@ namespace TLCGen.ModelManagement
                         // Move dummy KAR dets to appropriate melding instead of ingreep
                         var ingrepen = node.SelectNodes("OVIngrepen/OVIngreep");
                         if (ingrepen == null) continue;
-                        foreach(XmlNode ingreep in ingrepen)
+                        foreach (XmlNode ingreep in ingrepen)
                         {
                             var dummyIn = ingreep.SelectSingleNode("DummyKARInmelding");
                             var dummyUit = ingreep.SelectSingleNode("DummyKARUitmelding");
@@ -537,7 +537,7 @@ namespace TLCGen.ModelManagement
                             {
                                 ingreep.RemoveChild(dummyIn);
                                 var inmeldingen = ingreep.SelectNodes("MeldingenData/Inmeldingen/Inmelding");
-                                foreach(XmlNode inmelding in inmeldingen)
+                                foreach (XmlNode inmelding in inmeldingen)
                                 {
                                     if (inmelding.SelectSingleNode("Type").InnerText == "KARMelding")
                                     {
@@ -588,6 +588,15 @@ namespace TLCGen.ModelManagement
                         break;
                     }
                 }
+            }
+            checkVer = Version.Parse("0.12.0.0");
+            if (v < checkVer)
+            {
+                // V0.12.0.0: aanvraag direct bool >> NooitAltijdAanUit
+                var docT = doc.InnerXml.ToString()
+                    .Replace("<AanvraagDirect>true</AanvraagDirect>", "<AanvraagDirect>SchAan</AanvraagDirect>")
+                    .Replace("<AanvraagDirect>false</AanvraagDirect>", "<AanvraagDirect>Nooit</AanvraagDirect>");
+                doc.LoadXml(docT);
             }
         }
 

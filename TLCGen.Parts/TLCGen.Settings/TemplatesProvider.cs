@@ -119,7 +119,17 @@ namespace TLCGen.Settings
                     {
                         try
                         {
-                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(SettingsProvider.Default.Settings.TemplatesLocation);
+                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(
+                                SettingsProvider.Default.Settings.TemplatesLocation, 
+                                x =>
+                                {
+                                    // here, we correct the template models manually for changes in the models
+                                    // ---
+                                    // V0.12.0.0: aanvraag direct bool >> NooitAltijdAanUit
+                                    // ---
+                                    return x.Replace("<AanvraagDirect>true</AanvraagDirect>", "<AanvraagDirect>SchAan</AanvraagDirect>")
+                                            .Replace("<AanvraagDirect>false</AanvraagDirect>", "<AanvraagDirect>Nooit</AanvraagDirect>");
+                                });
                             var twl = new TLCGenTemplatesModelWithLocation
                             {
                                 Location = Path.GetFileNameWithoutExtension(SettingsProvider.Default.Settings.TemplatesLocation),

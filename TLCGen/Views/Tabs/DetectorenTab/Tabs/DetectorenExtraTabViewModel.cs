@@ -162,7 +162,7 @@ namespace TLCGen.ViewModels
             }
             dm.Naam = newname;
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
-            dm.AanvraagDirect = false; // Not possible / allowed on loose detector
+            dm.AanvraagDirect = NooitAltijdAanUitEnum.Nooit; // Not possible / allowed on loose detector
             var dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));

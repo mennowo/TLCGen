@@ -241,7 +241,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool AanvraagDirect
+        public NooitAltijdAanUitEnum AanvraagDirect
         {
             get => _detector.AanvraagDirect;
 	        set

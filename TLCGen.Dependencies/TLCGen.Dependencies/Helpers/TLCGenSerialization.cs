@@ -62,7 +62,7 @@ namespace TLCGen.Helpers
             return result;
         }
 
-        public static T DeSerialize<T>(string fileName)
+        public static T DeSerialize<T>(string fileName, Func<string, string> preProcessor = null)
         {
             if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
                 return default(T);
@@ -74,7 +74,26 @@ namespace TLCGen.Helpers
                 using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 {
                     var serializer = new XmlSerializer(typeof(T));
-                    t = (T)serializer.Deserialize(fs);
+                    if (preProcessor != null)
+                    {
+                        string fileContents;
+                        using (StreamReader reader = new StreamReader(fs))
+                        {
+                            fileContents = reader.ReadToEnd();
+
+                            var preProcessed = preProcessor(fileContents);
+
+                            var byteArray = Encoding.ASCII.GetBytes(preProcessed);
+
+                            var memStream = new MemoryStream(byteArray);
+
+                            t = (T)serializer.Deserialize(memStream);
+                        }
+                    }
+                    else
+                    {
+                        t = (T)serializer.Deserialize(fs);
+                    }
                     fs.Close();
                 }
             }
