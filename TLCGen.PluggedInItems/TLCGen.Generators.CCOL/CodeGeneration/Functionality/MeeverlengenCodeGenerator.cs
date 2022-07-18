@@ -46,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schmv}{fcm.Naam}", 
-                                (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
+                                fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, 
                                 CCOLElementTimeTypeEnum.SCH_type, 
                                 _schmv, fcm.Naam));
                     }
@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _myElements.Add(
                                 CCOLGeneratorSettingsProvider.Default.CreateElement(
                                     $"{_schhardmv}{fcm.Naam}{mvfc.FaseCyclus}", 
-                                    1, 
+                                    mvfc.AanUit ? 1 : 0, 
                                     CCOLElementTimeTypeEnum.SCH_type, 
                                     _schhardmv, fcm.Naam, mvfc.FaseCyclus));    
                         }
@@ -74,6 +74,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCMeeverlengen => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.PrioCAfkappen => c.Fasen.Any(x => x.HardMeeverlengenFaseCycli.Any()) 
+                    ? new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")}
+                    : base.GetFunctionLocalVariables(c, type),
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -83,6 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCMeeverlengen => new []{10},
+                CCOLCodeTypeEnum.PrioCAfkappen => new []{60},
                 _ => null
             };
         }
@@ -263,6 +267,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.PrioCAfkappen:
+                    if (!c.Fasen.Any(x => x.HardMeeverlengenFaseCycli.Any())) return null;
+
+                    sb.AppendLine($"{ts}/* Niet afkappen hard meeverlengen */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}if (YM[fc] & BIT1)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~PRIO_Z_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+                    return sb.ToString();
+
                 default:
                     return null;
             }

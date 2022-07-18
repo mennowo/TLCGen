@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tuitgestma;
 #pragma warning restore 0649
         private string _hmad;
+        private string _cvchd;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -105,6 +106,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
+                        string condition = null;
+                        string andcondition = null;
+                        var sync = c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseVan == ma.FaseVan && x.FaseNaar == ma.FaseNaar ||
+                                                                              x.FaseNaar == ma.FaseVan && x.FaseVan == ma.FaseNaar) ||
+                                   c.InterSignaalGroep.Voorstarten.Any(x => x.FaseVan == ma.FaseNaar && x.FaseNaar == ma.FaseVan);
+                        var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ma.FaseVan);
+                        if (sync && c.PrioData.BlokkeerNietConflictenBijHDIngreep && hd != null)
+                        {
+                            condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                            andcondition = $" && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                        }
+                        
                         var tts = ts;
                         if (ma.AanUit != AltijdAanUitEnum.Altijd)
                         {
@@ -142,16 +155,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{tts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]{andcondition ?? ""}));");
                                     sb.AppendLine($"{tts}}}");
                                     sb.AppendLine($"{tts}else");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(TRUE));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})({condition ?? "TRUE"}));");
                                     sb.AppendLine($"{tts}}}");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(TRUE));");
+                                    sb.AppendLine($"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})({condition ?? "TRUE"}));");
                                 }
                             }
                             else
@@ -160,14 +173,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{tts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
                                     sb.AppendLine($"{tts}{{");
-                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()})(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]{andcondition ?? ""}));");
                                     sb.AppendLine($"{tts}}}");
                                     sb.AppendLine($"{tts}else");
                                     sb.AppendLine($"{tts}{{");
                                 }
 
                                 var uts = ma.Uitgesteld ? ts + tts : tts;
-                                sb.Append($"{uts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})(");
+                                sb.Append($"{uts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, ({c.GetBoolV()})((");
                                 var i = 0;
                                 foreach (var dm in ma.Detectoren)
                                 {
@@ -178,7 +191,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     ++i;
                                     sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
                                 }
-                                sb.AppendLine("));");
+                                sb.AppendLine($"){andcondition ?? ""}));");
                                 
                                 if (ma.Uitgesteld)
                                 {
@@ -191,18 +204,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch(ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (R[{_fcpf}{ma.FaseVan}] && !TRG[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (R[{_fcpf}{ma.FaseVan}] && !TRG[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]{andcondition ?? ""}));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}]{andcondition ?? ""}));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) ((RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}]){andcondition ?? ""}));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
                                     sb.AppendLine(!ma.Uitgesteld
-                                        ? $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (SG[{_fcpf}{ma.FaseVan}]));"
-                                        : $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                        ? $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (SG[{_fcpf}{ma.FaseVan}]{andcondition ?? ""}));"
+                                        : $"{tts}mee_aanvraag({_fcpf}{ma.FaseNaar}, ({c.GetBoolV()}) (ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]{andcondition ?? ""}));");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
@@ -231,22 +244,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch (ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($"&& !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
+                                    sb.Append($"&& !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($"&& RA[{_fcpf}{ma.FaseVan}]));");
+                                    sb.Append($"&& RA[{_fcpf}{ma.FaseVan}]");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                                    sb.AppendLine($"&& (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}])));");
+                                    sb.Append($"&& (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}] || SG[{_fcpf}{ma.FaseVan}])");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
-                                    sb.AppendLine(!ma.Uitgesteld
-                                        ? $"&& SG[{_fcpf}{ma.FaseVan}]));"
-                                        : $"ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.Append(!ma.Uitgesteld
+                                        ? $"&& SG[{_fcpf}{ma.FaseVan}]"
+                                        : $"ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
+
+                            sb.AppendLine($"{andcondition ?? ""}));");
                         }
                         if (ma.AanUit != AltijdAanUitEnum.Altijd)
                         {
@@ -262,6 +277,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+            _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
 
             return base.SetSettings(settings);
         }

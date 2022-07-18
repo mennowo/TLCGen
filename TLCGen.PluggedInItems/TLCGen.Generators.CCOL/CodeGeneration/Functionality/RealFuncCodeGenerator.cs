@@ -31,6 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0649
         private string _hmad;
         private string _hplact;
+        private string _cvchd;
         private GroenSyncDataModel _groenSyncData;
         private List<string> _fasenMetSync;
         private (List<GroenSyncModel> oneWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWay,
@@ -511,7 +512,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // voorstart
                             if (grsync.Richting == -1)
                             {
-                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
+                                var condition = "TRUE";
+                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep && hd != null)
+                                {
+                                    condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                }
+                                sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
                             }
                             // late release of inlopen
                             else
@@ -546,7 +553,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else sb.Append($"{ts}{ts}");
 
-                            sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, TRUE);");
+                            var condition = "TRUE";
+                            var hd1 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseVan);
+                            if (hd1 != null) condition = $"!C[{_ctpf}{_cvchd}{hd1.FaseCyclus}]";
+                            var hd2 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseNaar);
+                            if (hd2 != null) condition = condition == "TRUE" 
+                                ? $"!C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]"
+                                : condition + $" && !C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]";
+                            
+                            sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, {condition});");
                         }
                         sb.AppendLine();
                     }
@@ -802,6 +817,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
 		    
             return base.SetSettings(settings);
         }

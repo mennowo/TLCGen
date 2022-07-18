@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.Settings
     public class CCOLGeneratorSettingsProvider
     {
         private static CCOLGeneratorSettingsProvider _default;
-        public static CCOLGeneratorSettingsProvider Default => _default ?? (_default = new CCOLGeneratorSettingsProvider());
+        public static CCOLGeneratorSettingsProvider Default => _default ??= new CCOLGeneratorSettingsProvider();
 
         private Dictionary<CCOLElementTypeEnum, string> _lastItemDescription;
 
