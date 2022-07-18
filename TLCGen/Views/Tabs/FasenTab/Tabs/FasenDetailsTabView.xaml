@@ -22,7 +22,7 @@
                 Grid.Row="1" Margin="2" 
                 ItemsSource="{Binding Path=Fasen}" 
                 DisplayMemberPath="Naam"
-                SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
+                SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                 SelectionMode="Single" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

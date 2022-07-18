@@ -42,10 +42,24 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            if (SelectedFaseCyclus == null)
+            {
+                SelectedFaseCyclus = Fasen.FirstOrDefault();
+            }
+        }
+
+        public override ControllerModel Controller
+        {
+            get => base.Controller; 
+            set
+            {
+                base.Controller = value;
+                SelectedFaseCyclus = null;
+            }
         }
 
         #endregion // TabItem Overrides
-        
+
         #region Constructor
 
         public FasenDetailsTabViewModel() : base()

@@ -551,7 +551,7 @@ namespace TLCGen.ViewModels
             _hardMeeverlengenFasenManager ??= new ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string>(
                 HardMeeverlengenFaseCycli,
                 ControllerAccessProvider.Default.AllSignalGroupStrings,
-                e => new HardMeeverlengenFaseCyclusViewModel(new HardMeeverlengenFaseCyclusModel() { FaseCyclus = e }),
+                e => new HardMeeverlengenFaseCyclusViewModel(new HardMeeverlengenFaseCyclusModel() { FaseCyclus = e, AanUit = true }),
                 e => e != Naam &&
                      !TLCGenControllerChecker.IsFasenConflicting(TLCGenControllerDataProvider.Default.Controller, Naam, e) &&
                      HardMeeverlengenFaseCycli.All(x => x.FaseCyclus != e),

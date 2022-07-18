@@ -140,9 +140,11 @@
                                 </DataTemplate>
                             </DataGrid.RowHeaderTemplate>
                             <DataGrid.Columns>
-                                <DataGridComboBoxColumn
+                                <DataGridComboBoxColumn Header="Type"
                                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:HardMeevelengenTypeEnum}}}"
                                     SelectedValueBinding="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}" />
+                                <DataGridCheckBoxColumn Header="Aan/uit"
+                                    Binding="{Binding Path=AanUit,UpdateSourceTrigger=PropertyChanged}" />
                             </DataGrid.Columns>
                         </ct:SpecialDataGrid>
                         <local:ItemsManagerView DataContext="{Binding Path=HardMeeverlengenFasenManager}" />

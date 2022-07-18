@@ -10,5 +10,6 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public HardMeevelengenTypeEnum Type { get; set; }
+        public bool AanUit { get; set; }
     }
 }

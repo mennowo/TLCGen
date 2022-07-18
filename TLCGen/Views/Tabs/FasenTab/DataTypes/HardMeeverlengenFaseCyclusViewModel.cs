@@ -27,6 +27,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AanUit
+        {
+            get => HardMeeverlengenFaseCyclus.AanUit;
+            set
+            {
+                HardMeeverlengenFaseCyclus.AanUit = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region IViewModelWithItem
