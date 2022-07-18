@@ -52,6 +52,7 @@ namespace TLCGen.Models
         public bool AfkappenConflictenPrio { get; set; }
         public bool VasthoudenGroen { get; set; }
         public bool TussendoorRealiseren { get; set; }
+        public int PrioriteitsNiveau { get; set; }
         public bool CheckLijnNummer { get; set; }
         public bool CheckWagenNummer { get; set; }
         public bool CheckRitCategorie { get; set; }

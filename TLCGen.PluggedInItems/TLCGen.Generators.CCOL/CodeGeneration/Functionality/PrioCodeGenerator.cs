@@ -287,6 +287,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (prio.TussendoorRealiseren) opties += 3;
             if (prio.VasthoudenGroen) opties += 20;
             var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+            if (prio.PrioriteitsNiveau > 0)
+            {
+                sopties = prio.PrioriteitsNiveau.ToString() +
+                    (sopties.Length == 1 
+                        ? "00" 
+                        : sopties.Length == 2 
+                            ? "0" 
+                            : "") + sopties;
+
+            }
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{CCOLCodeHelper.GetPriorityName(c, prio)}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, prio.FaseCyclus, prio.Type.GetDescription()));
 
             if (prio.CheckLijnNummer)

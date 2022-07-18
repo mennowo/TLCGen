@@ -42,7 +42,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <ag:AutoGrid Columns="Auto,*" RowCount="38">
+                    <ag:AutoGrid Columns="Auto,*" RowCount="39">
                         <!-- Algemeen -->
                         <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
                         <StackPanel Orientation="Horizontal">
@@ -97,17 +97,31 @@
                         <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
                         <Label Content="Afkappen conflicten" />
                         <CheckBox
-                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
+                            Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
                         <Label Content="Afkappen conflicterend OV" />
                         <CheckBox
-                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflictenPrio}" />
+                            Margin="5" IsChecked="{Binding Path=AfkappenConflictenPrio}" />
                         <Label Content="Vasthouden groen" />
                         <CheckBox
-                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
+                            Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
                         <Label Content="Tussendoor realiseren" />
                         <CheckBox
-                            Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
-                        
+                            Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
+                        <Label Content="Prioriteitsniveau" />
+                        <ComboBox SelectedValue="{Binding Path=PrioriteitsNiveau,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="Content">
+                            <ComboBoxItem>0</ComboBoxItem>
+                            <ComboBoxItem>1</ComboBoxItem>
+                            <ComboBoxItem>2</ComboBoxItem>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                            <ComboBoxItem>5</ComboBoxItem>
+                            <ComboBoxItem>6</ComboBoxItem>
+                            <ComboBoxItem>7</ComboBoxItem>
+                            <ComboBoxItem>8</ComboBoxItem>
+                            <ComboBoxItem>9</ComboBoxItem>
+                        </ComboBox>
+
                         <TextBlock Text="Inmelden/aanvragen koplus" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
                         <Label Content="Koplus" />
                         <ComboBox Margin="2"

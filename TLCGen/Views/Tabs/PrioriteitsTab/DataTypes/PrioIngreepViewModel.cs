@@ -315,6 +315,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Prioriteitsniveau")]
+        public string PrioriteitsNiveau
+        {
+            get => PrioIngreep.PrioriteitsNiveau.ToString();
+            set
+            {
+                PrioIngreep.PrioriteitsNiveau = int.Parse(value);
+                RaisePropertyChanged<object>(nameof(PrioriteitsNiveau), broadcast: true);
+            }
+        }
+
         [Browsable(false)]
         public NooitAltijdAanUitEnum GeconditioneerdePrioriteit
         {
