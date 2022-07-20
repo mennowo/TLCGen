@@ -247,7 +247,7 @@
         <TBG>20</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>SchAan</AanvraagDirect>
+        <AanvraagDirect>true</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -274,7 +274,7 @@
         <TBG>60</TBG>
         <TFL>60</TFL>
         <CFL>30</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -301,7 +301,7 @@
         <TBG>60</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -328,7 +328,7 @@
         <TBG>20</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -353,7 +353,7 @@
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>SchAan</AanvraagDirect>
+        <AanvraagDirect>true</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -378,7 +378,7 @@
         <TBG>60</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -403,7 +403,7 @@
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -428,7 +428,7 @@
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -453,7 +453,7 @@
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -477,7 +477,7 @@
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -501,7 +501,7 @@
         <TBG xsi:nil="true"/>
         <TFL xsi:nil="true"/>
         <CFL xsi:nil="true"/>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -525,7 +525,7 @@
         <TBG xsi:nil="true"/>
         <TFL xsi:nil="true"/>
         <CFL xsi:nil="true"/>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
@@ -549,7 +549,7 @@
         <TBG xsi:nil="true"/>
         <TFL xsi:nil="true"/>
         <CFL xsi:nil="true"/>
-        <AanvraagDirect>Nooit</AanvraagDirect>
+        <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />

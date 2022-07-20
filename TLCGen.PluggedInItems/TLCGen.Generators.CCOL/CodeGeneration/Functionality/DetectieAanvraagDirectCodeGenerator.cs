@@ -20,9 +20,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var fc in c.Fasen)
             {
-                foreach (var d in fc.Detectoren.Where(x => x.AanvraagDirect != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+                foreach (var d in fc.Detectoren.Where(x => x.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
                 {
-                    if (d.AanvraagDirect != Models.Enumerations.NooitAltijdAanUitEnum.Altijd && 
+                    if (d.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Altijd && 
                         d.Aanvraag != Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
                     {
                         _myElements.Add(
@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var i = 0;
                     foreach(var fc in c.Fasen)
                     {
-                        foreach (var d in fc.Detectoren.Where(x => x.AanvraagDirect != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+                        foreach (var d in fc.Detectoren.Where(x => x.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
                         {
                                 if (i == 0)
                                 {
@@ -71,14 +71,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (d.AanvraagHardOpStraat)
                                     {
-                                        if (d.AanvraagDirect == Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                                        if (d.AanvraagDirectSch == Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                                             sb.AppendLine($"{ts}AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
                                         else
                                             sb.AppendLine($"{ts}if (SCH[{_schpf}{_schsnel}{_dpf}{d.Naam}]) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
                                     }
                                     else
                                     {
-                                    if (d.AanvraagDirect == Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                                    if (d.AanvraagDirectSch == Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                                         sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmda}{d.Naam}] != 0) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");
                                     else
                                         sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmda}{d.Naam}] != 0 && SCH[{_schpf}{_schsnel}{_dpf}{d.Naam}]) AanvraagSnelV2({_fcpf}{fc.Naam}, {_dpf}{d.Naam});");

@@ -343,7 +343,17 @@ namespace TLCGen.ModelManagement
                 // de uitgang perbeldim heeft nu eigen bitmap data  
                 if (controller.Signalen.BellenDimmenBitmapData.Naam == "perbeldim") controller.Signalen.BellenDimmenBitmapData.Naam = "beldim";
             }
-
+            
+            checkVer = Version.Parse("0.12.0.0");
+            if (v < checkVer)
+            {
+                foreach (var d in controller.Fasen.SelectMany(x => x.Detectoren))
+                {
+                    d.AanvraagDirectSch = d.AanvraagDirect
+                        ? NooitAltijdAanUitEnum.SchAan
+                        : NooitAltijdAanUitEnum.Nooit;
+                }
+            }
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)
@@ -588,15 +598,6 @@ namespace TLCGen.ModelManagement
                         break;
                     }
                 }
-            }
-            checkVer = Version.Parse("0.12.0.0");
-            if (v < checkVer)
-            {
-                // V0.12.0.0: aanvraag direct bool >> NooitAltijdAanUit
-                var docT = doc.InnerXml.ToString()
-                    .Replace("<AanvraagDirect>true</AanvraagDirect>", "<AanvraagDirect>SchAan</AanvraagDirect>")
-                    .Replace("<AanvraagDirect>false</AanvraagDirect>", "<AanvraagDirect>Nooit</AanvraagDirect>");
-                doc.LoadXml(docT);
             }
         }
 

@@ -34,7 +34,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -57,7 +57,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -108,7 +108,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -131,7 +131,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -154,7 +154,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -206,7 +206,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -229,7 +229,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -252,7 +252,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -275,7 +275,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -327,7 +327,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -350,7 +350,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -373,7 +373,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>SchAan</AanvraagDirect>
+              <AanvraagDirect>true</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -396,7 +396,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -419,7 +419,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -442,7 +442,7 @@
               <TBG>60</TBG>
               <TFL>60</TFL>
               <CFL>30</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -465,7 +465,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -488,7 +488,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -511,7 +511,7 @@
               <TBG>20</TBG>
               <TFL>60</TFL>
               <CFL>45</CFL>
-              <AanvraagDirect>Nooit</AanvraagDirect>
+              <AanvraagDirect>false</AanvraagDirect>
               <Wachtlicht>false</Wachtlicht>
               <Simulatie>
                 <Q1>0</Q1>
@@ -544,7 +544,7 @@
           <TBG>20</TBG>
           <TFL>60</TFL>
           <CFL>45</CFL>
-          <AanvraagDirect>SchAan</AanvraagDirect>
+          <AanvraagDirect>true</AanvraagDirect>
           <Wachtlicht>false</Wachtlicht>
           <Simulatie>
             <Q1>0</Q1>
@@ -573,7 +573,7 @@
           <TBG>10</TBG>
           <TFL>60</TFL>
           <CFL>45</CFL>
-          <AanvraagDirect>SchAan</AanvraagDirect>
+          <AanvraagDirect>true</AanvraagDirect>
           <Wachtlicht>false</Wachtlicht>
           <Simulatie>
             <Q1>0</Q1>
@@ -602,7 +602,7 @@
           <TBG>360</TBG>
           <TFL>60</TFL>
           <CFL>45</CFL>
-          <AanvraagDirect>SchAan</AanvraagDirect>
+          <AanvraagDirect>true</AanvraagDirect>
           <Wachtlicht>false</Wachtlicht>
           <Simulatie>
             <Q1>0</Q1>

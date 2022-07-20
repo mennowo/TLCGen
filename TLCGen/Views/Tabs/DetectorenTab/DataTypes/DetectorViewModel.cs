@@ -243,10 +243,10 @@ namespace TLCGen.ViewModels
 
         public NooitAltijdAanUitEnum AanvraagDirect
         {
-            get => _detector.AanvraagDirect;
+            get => _detector.AanvraagDirectSch;
 	        set
             {
-                _detector.AanvraagDirect = value;
+                _detector.AanvraagDirectSch = value;
                 RaisePropertyChanged<object>(nameof(AanvraagDirect), broadcast: true);
             }
         }
