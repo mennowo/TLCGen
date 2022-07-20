@@ -193,6 +193,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCInitApplication => new []{110},
                 CCOLCodeTypeEnum.RegCAanvragen => new []{110},
                 CCOLCodeTypeEnum.RegCMeetkriterium => new []{110},
+                CCOLCodeTypeEnum.RegCSystemApplication2 => new []{110},
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{110},
                 CCOLCodeTypeEnum.SysHBeforeUserDefines => new []{110},
                 CCOLCodeTypeEnum.PrioCTop => new []{60},
@@ -437,6 +438,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}");
                     sb.AppendLine($"{ts}");
                     return sb.ToString();
+                case CCOLCodeTypeEnum.RegCSystemApplication2:
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                    {
+                        sb.AppendLine($"{ts}#ifdef AUTOMAAT");
+                        sb.AppendLine($"{ts}{ts}/* Weggeschreven SSM (ACTIVEPRIO)-berichten ‘laten negeren’ voor de Applicatiecontainer */");
+                        sb.AppendLine($"{ts}{ts}if (CIF_WPS[CIF_PROG_CONTROL] != CIF_CONTROL_INCONTROL)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}/* zijn er SSM (ACTIVEPRIO)-berichten weggeschreven? */");
+                        sb.AppendLine($"{ts}{ts}{ts}if (RIF_ACTIVEPRIO_AP_WRITE != RIF_ACTIVEPRIO_AP_READ)");
+                        sb.AppendLine($"{ts}{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}/* zet de schrijfpointer terug */");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}RIF_ACTIVEPRIO_AP_WRITE = RIF_ACTIVEPRIO_AP_READ;");
+                        sb.AppendLine($"{ts}{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}#endif");
+                    }
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
