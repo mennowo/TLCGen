@@ -32,6 +32,7 @@ namespace TLCGen.Models
             RangeerDetectoren = new List<IOElementRangeerDataModel>();
             RangeerIngangen = new List<IOElementRangeerDataModel>();
             RangeerUitgangen = new List<IOElementRangeerDataModel>();
+            RangeerSelectieveDetectoren = new List<IOElementRangeerDataModel>();
         }
     }
 }
