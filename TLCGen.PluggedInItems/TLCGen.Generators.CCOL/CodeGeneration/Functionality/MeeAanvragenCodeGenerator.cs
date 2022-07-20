@@ -108,16 +108,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         string condition = null;
                         string andcondition = null;
-                        var sync = c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseVan == ma.FaseVan && x.FaseNaar == ma.FaseNaar ||
-                                                                              x.FaseNaar == ma.FaseVan && x.FaseVan == ma.FaseNaar) ||
-                                   c.InterSignaalGroep.Voorstarten.Any(x => x.FaseVan == ma.FaseNaar && x.FaseNaar == ma.FaseVan);
-                        var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ma.FaseVan);
-                        if (sync && c.PrioData.BlokkeerNietConflictenBijHDIngreep && hd != null)
+                        if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                         {
-                            condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
-                            andcondition = $" && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                            var gs = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseVan == ma.FaseVan && x.FaseNaar == ma.FaseNaar ||
+                                                                                           x.FaseNaar == ma.FaseVan && x.FaseVan == ma.FaseNaar);
+                            var vs = c.InterSignaalGroep.Voorstarten.FirstOrDefault(x => x.FaseVan == ma.FaseNaar && x.FaseNaar == ma.FaseVan);
+                            var lr = c.InterSignaalGroep.LateReleases.FirstOrDefault(x => x.FaseVan == ma.FaseNaar && x.FaseNaar == ma.FaseVan);
+
+                            var fc1 = c.Fasen.FirstOrDefault(x => ma.FaseVan == x.Naam);
+                            var fc2 = c.Fasen.FirstOrDefault(x => ma.FaseNaar == x.Naam);
+
+                            if ((gs != null || vs != null || lr != null) &&
+                                (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
+                                 fc1.Type == FaseTypeEnum.Fiets ||
+                                 fc1.Type == FaseTypeEnum.Voetganger ||
+                                 fc2.Type == FaseTypeEnum.Fiets ||
+                                 fc2.Type == FaseTypeEnum.Voetganger))
+                            {
+                                var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ma.FaseVan);
+                                
+                                if (hd != null)
+                                {
+                                    condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                    andcondition = $" && !C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                }
+                            }
                         }
-                        
+
                         var tts = ts;
                         if (ma.AanUit != AltijdAanUitEnum.Altijd)
                         {

@@ -508,13 +508,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
+                            var fc1 = c.Fasen.FirstOrDefault(x => grsync.FaseVan == x.Naam);
+                            var fc2 = c.Fasen.FirstOrDefault(x => grsync.FaseNaar == x.Naam);
                             var max = grsync.Richting == -1 ? _trealvs : _treallr;
                             // voorstart
                             if (grsync.Richting == -1)
                             {
                                 var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
                                 var condition = "TRUE";
-                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep && hd != null)
+                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
+                                    (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
+                                     fc1.Type == FaseTypeEnum.Fiets ||
+                                     fc1.Type == FaseTypeEnum.Voetganger ||
+                                     fc2.Type == FaseTypeEnum.Fiets ||
+                                     fc2.Type == FaseTypeEnum.Voetganger) && 
+                                    hd != null)
                                 {
                                     condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
                                 }
@@ -523,16 +531,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // late release of inlopen
                             else
                             {
-                                var fc1 = c.Fasen.FirstOrDefault(x => grsync.FaseVan == x.Naam);
-                                var fc2 = c.Fasen.FirstOrDefault(x => grsync.FaseNaar == x.Naam);
                                 if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
                                 {
                                     max = _trealil;
                                 }
-                                var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == NaloopTypeEnum.EindeGroen && x.FaseVan == grsync.FaseNaar);
+                                
+                                var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
+                                var condition = "TRUE";
+                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
+                                    (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
+                                     fc1.Type == FaseTypeEnum.Fiets ||
+                                     fc1.Type == FaseTypeEnum.Voetganger ||
+                                     fc2.Type == FaseTypeEnum.Fiets ||
+                                     fc2.Type == FaseTypeEnum.Voetganger) && 
+                                    hd != null)
+                                {
+                                    condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                }
+
+                                var nl = c.InterSignaalGroep.Nalopen
+                                    .FirstOrDefault(x => 
+                                        x.Type == NaloopTypeEnum.EindeGroen && 
+                                        x.FaseVan == grsync.FaseNaar &&
+                                        x.FaseNaar == grsync.FaseVan);
                                 if (nl == null)
                                 {
-                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], TRUE);");
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
                                 }
                                 else
                                 {
@@ -553,14 +577,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else sb.Append($"{ts}{ts}");
 
+                            var fc1 = c.Fasen.FirstOrDefault(x => grsync1.FaseVan == x.Naam);
+                            var fc2 = c.Fasen.FirstOrDefault(x => grsync1.FaseNaar == x.Naam);
+
                             var condition = "TRUE";
-                            var hd1 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseVan);
-                            if (hd1 != null) condition = $"!C[{_ctpf}{_cvchd}{hd1.FaseCyclus}]";
-                            var hd2 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseNaar);
-                            if (hd2 != null) condition = condition == "TRUE" 
-                                ? $"!C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]"
-                                : condition + $" && !C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]";
-                            
+                            if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
+                                (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
+                                 fc1.Type == FaseTypeEnum.Fiets ||
+                                 fc1.Type == FaseTypeEnum.Voetganger ||
+                                 fc2.Type == FaseTypeEnum.Fiets ||
+                                 fc2.Type == FaseTypeEnum.Voetganger))
+                            {
+                                var hd1 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseVan);
+                                if (hd1 != null) condition = $"!C[{_ctpf}{_cvchd}{hd1.FaseCyclus}]";
+                                var hd2 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseNaar);
+                                if (hd2 != null)
+                                    condition = condition == "TRUE"
+                                        ? $"!C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]"
+                                        : condition + $" && !C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]";
+                            }
+
                             sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, {condition});");
                         }
                         sb.AppendLine();
