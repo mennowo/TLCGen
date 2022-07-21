@@ -1,5 +1,18 @@
-TLCGen=0.11.1.0
+TLCGen=0.12.0.0
 RN==TLCGen
+TLCGen versie: 0.12.0.0
+- Inkomende PTP signalen test ook tijdens PTP storing
+- Inmelding prio fietsers tijdens groen
+- Rangeren ook in tab.c
+- Diverse verbeteringen rangeren
+- Mogelijkheid opgeven eigen IS/US/etc_code in rangeren UI
+- Hard meeverlengen schakelbaar via UI, fix voor combi met prio
+- Aanvraag direct Nooit/Altijd/Aan/Uit ipv waar/onwaar
+- Verbeterde omgang met combinatie HD ingrepen + synchronisaties
+- Prioriteitsniveau voor prio ingrepen instelbaar via UI
+- Toevoegen mogelijkheid openen .h in 'additor' plugin
+- Geen SRM uitsturen tijdens no-control
+- Veelheid aan kleine fixes en verbeteringen
 TLCGen versie: 0.11.1.0
 - Hotfix code detectie storing
 TLCGen versie: 0.11.0.0
