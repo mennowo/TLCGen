@@ -148,6 +148,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool IsCCOL12OrHigher => Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL120;
+
         public bool HasMultipleSystemITF
         {
             get => _risModel?.HasMultipleSystemITF == true;

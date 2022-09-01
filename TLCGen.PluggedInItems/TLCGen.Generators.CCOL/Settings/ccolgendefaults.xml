@@ -2016,25 +2016,49 @@
             <Default>risastart</Default>
             <Setting>risastart</Setting>
             <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot start aanvraag gebied RIS fase _E1_</Description>
+            <Description>Afstand van stopstreep tot start aanvraag gebied RIS CAM fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>risaend</Default>
             <Setting>risaend</Setting>
             <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS fase _E1_</Description>
+            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS CAM fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>risvstart</Default>
             <Setting>risvstart</Setting>
             <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot start verleng gebied RIS fase _E1_</Description>
+            <Description>Afstand van stopstreep tot start verleng gebied RIS CAM fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>risvend</Default>
             <Setting>risvend</Setting>
             <Type>Parameter</Type>
-            <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
+            <Description>Afstand van stopstreep tot einde verleng gebied RIS CAM fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risastartsrm0</Default>
+            <Setting>risastartsrm0</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start aanvraag gebied RIS SRM0 fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risaendsrm0</Default>
+            <Setting>risaendsrm0</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS SRM0 fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvstartsrm0</Default>
+            <Setting>risvstartsrm0</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start verleng gebied RIS SRM0 fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvendsrm0</Default>
+            <Setting>risvendsrm0</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde verleng gebied RIS SRM0 fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rispstart</Default>

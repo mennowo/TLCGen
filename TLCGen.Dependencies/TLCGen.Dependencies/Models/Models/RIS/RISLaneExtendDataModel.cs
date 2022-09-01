@@ -13,6 +13,8 @@ namespace TLCGen.Models
         public bool RISVerlengen { get; set; }
         public int VerlengenStart { get; set; }
         public int VerlengenEnd { get; set; }
+        public int VerlengenStartSrm0 { get; set; }
+        public int VerlengenEndSrm0 { get; set; }
         public RISStationTypeEnum Type { get; set; }
 
         public RISLaneExtendDataModel()

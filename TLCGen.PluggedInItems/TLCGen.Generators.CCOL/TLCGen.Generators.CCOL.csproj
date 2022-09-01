@@ -99,7 +99,6 @@
       <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\CCOLGeneratorSettingTypeEnum.cs" />
-    <Compile Include="Settings\CCOLGeneratorStringSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorFolderSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorVisualSettingsModel.cs" />
     <Compile Include="Settings\SettingsUI\CCOLGeneratorSettingsView.xaml.cs">

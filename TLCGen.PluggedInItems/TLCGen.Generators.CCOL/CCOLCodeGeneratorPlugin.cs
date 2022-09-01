@@ -148,6 +148,8 @@ namespace TLCGen.Generators.CCOL
                                         if (set.Type == set2.Type && set.Default == set2.Default)
                                         {
                                             set2.Setting = set.Setting;
+                                            set2.Categorie = set.Categorie;
+                                            set2.SubCategorie = set.SubCategorie;
                                             break;
                                         }
                                     }
@@ -232,7 +234,7 @@ namespace TLCGen.Generators.CCOL
             // save prefixes where needed
             foreach(var pf in CCOLGeneratorSettingsProvider.Default.Settings.Prefixes)
             {
-                if(pf.Setting != pf.Default)
+                if (pf.Setting != pf.Default)
                 {
                     settings.Prefixes.Add(new CCOLGeneratorCodeStringSettingModel
                     {
@@ -250,25 +252,32 @@ namespace TLCGen.Generators.CCOL
                 var ncpg = new CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>
                 {
                     Item1 = cpg.Item1,
-                    Item2 = new CCOLGeneratorClassWithSettingsModel()
+                    Item2 = new CCOLGeneratorClassWithSettingsModel
+                    {
+                        ClassName = cpg.Item2.ClassName,
+                        Description = cpg.Item2.Description,
+                        Settings = new List<CCOLGeneratorCodeStringSettingModel>()
+                    }
                 };
-                ncpg.Item2.ClassName = cpg.Item2.ClassName;
-                ncpg.Item2.Description = cpg.Item2.Description;
-                ncpg.Item2.Settings = new List<CCOLGeneratorCodeStringSettingModel>();
 
-                foreach(var s in cpg.Item2.Settings)
+                foreach (var s in cpg.Item2.Settings)
                 {
-                    if(s.Setting != s.Default)
+                    if (s.Setting != s.Default ||
+                        !string.IsNullOrWhiteSpace(s.Categorie) ||
+                        !string.IsNullOrWhiteSpace(s.SubCategorie))
                     {
                         ncpg.Item2.Settings.Add(new CCOLGeneratorCodeStringSettingModel
                         {
                             Type = s.Type,
                             Default = s.Default,
                             Description = s.Description,
-                            Setting = s.Setting
+                            Setting = s.Setting,
+                            Categorie = s.Categorie,
+                            SubCategorie = s.SubCategorie
                         });
                     }
                 }
+                
                 if (ncpg.Item2.Settings.Any())
                 {
                     settings.CodePieceGeneratorSettings.Add(ncpg);

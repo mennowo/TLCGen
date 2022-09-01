@@ -41,6 +41,26 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
+        
+        public int AanvraagStartSrm0
+        {
+            get => _laneData.AanvraagStartSrm0;
+            set
+            {
+                _laneData.AanvraagStartSrm0 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int AanvraagEndSrm0
+        {
+            get => _laneData.AanvraagEndSrm0;
+            set
+            {
+                _laneData.AanvraagEndSrm0 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         public string SignalGroupName
         {

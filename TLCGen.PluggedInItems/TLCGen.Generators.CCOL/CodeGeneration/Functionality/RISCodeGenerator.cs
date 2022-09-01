@@ -16,8 +16,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _prmrisastart;
         private CCOLGeneratorCodeStringSettingModel _prmrisaend;
+        private CCOLGeneratorCodeStringSettingModel _prmrisastartsrm0;
+        private CCOLGeneratorCodeStringSettingModel _prmrisaendsrm0;
         private CCOLGeneratorCodeStringSettingModel _prmrisvstart;
         private CCOLGeneratorCodeStringSettingModel _prmrisvend;
+        private CCOLGeneratorCodeStringSettingModel _prmrisvstartsrm0;
+        private CCOLGeneratorCodeStringSettingModel _prmrisvendsrm0;
         private CCOLGeneratorCodeStringSettingModel _prmrispstart;
         private CCOLGeneratorCodeStringSettingModel _prmrispend;
         private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
@@ -99,6 +103,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         l.AanvraagStart,
                         CCOLElementTimeTypeEnum.None,
                         _prmrisastart, l.SignalGroupName));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.AanvraagStartSrm0,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrisastartsrm0, l.SignalGroupName));
                 }
                 foreach (var l in risModel.RISRequestLanes.Where(l => l.RISAanvraag))
                 {
@@ -107,6 +116,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         l.AanvraagEnd,
                         CCOLElementTimeTypeEnum.None,
                         _prmrisaend, l.SignalGroupName));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.AanvraagEndSrm0,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrisaendsrm0, l.SignalGroupName));
                 }
                 foreach (var l in risModel.RISExtendLanes.Where(l => l.RISVerlengen))
                 {
@@ -115,6 +129,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         l.VerlengenStart,
                         CCOLElementTimeTypeEnum.None,
                         _prmrisvstart, l.SignalGroupName));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.VerlengenStartSrm0,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrisvstartsrm0, l.SignalGroupName));
                 }
                 foreach (var l in risModel.RISExtendLanes.Where(l => l.RISVerlengen))
                 {
@@ -123,6 +142,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         l.VerlengenEnd,
                         CCOLElementTimeTypeEnum.None,
                         _prmrisvend, l.SignalGroupName));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
+                        l.VerlengenEndSrm0,
+                        CCOLElementTimeTypeEnum.None,
+                        _prmrisvendsrm0, l.SignalGroupName));
                 }
                 foreach (var l in risModel.RISPelotonLanes.Where(l => l.RISPelotonBepaling))
                 {
@@ -219,7 +243,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCTop:
-                    //sb.AppendLine("extern mulv granted_verstrekt[FCMAX];");
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
+                    {
+                        sb.AppendLine("/* Definitie ProductInformatie ITSinfo */");
+                        sb.AppendLine("/* ----------------------------------- */");
+                        sb.AppendLine("const struct Rif_ProductInformation RIF_ITSINFO_AP = {");
+                        sb.AppendLine("\"gemeente Rotterdam\",     /* manufacturerName   */");
+                        sb.AppendLine($"  \"TLCGen\",                /* certifiedName      */");
+                        sb.AppendLine($"  \"12.0.0\",                /* certifiedVersion   */");
+                        sb.AppendLine($"  \"12.0.0\"                 /* version            */");
+                        sb.AppendLine("};");
+                    }
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
@@ -335,10 +369,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
                         }
                         else
                         {
                             sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
                         }
                     }
 
@@ -347,7 +385,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}A[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}{ts}{ts}A[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
 
@@ -392,7 +430,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}}}");
                     foreach (var l in risModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
@@ -417,10 +455,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                            sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
                         }
                         else
                         {
                             sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT11;");
                         }
                     }
                     sb.AppendLine($"{ts}#endif");
@@ -430,7 +472,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}");

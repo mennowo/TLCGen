@@ -42,6 +42,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int VerlengenStartSrm0
+        {
+            get => _laneData.VerlengenStartSrm0;
+            set
+            {
+                _laneData.VerlengenStartSrm0 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int VerlengenEndSrm0
+        {
+            get => _laneData.VerlengenEndSrm0;
+            set
+            {
+                _laneData.VerlengenEndSrm0 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+        
         public string SignalGroupName
         {
             get => _laneData.SignalGroupName;

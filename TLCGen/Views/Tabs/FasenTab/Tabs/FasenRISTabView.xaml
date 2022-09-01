@@ -172,6 +172,12 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
+                            <DataGridTextColumn x:Key="AanvraagStartSrm0Column"
+                                Visibility="{Binding Path=DataContext.IsCCOL12OrHigher,Mode=OneWay,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}"
+                                Binding="{Binding Path=AanvraagStartSrm0,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start SRM0" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
+                            <DataGridTextColumn x:Key="AanvraagEndSrm0Column"
+                                                Visibility="{Binding Path=DataContext.IsCCOL12OrHigher,Mode=OneWay,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}"
+                                                Binding="{Binding Path=AanvraagEndSrm0,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. eind SRM0" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Signaalgroep" Width="Auto" >
@@ -211,8 +217,10 @@
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
                             <!--<DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />-->
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start CAM" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde CAM" CellStyle="{StaticResource FaseNoRisRequestStyle}" />
+                            <StaticResource ResourceKey="AanvraagStartSrm0Column" />
+                            <StaticResource ResourceKey="AanvraagEndSrm0Column" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                     <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
@@ -248,6 +256,12 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
+                            <DataGridTextColumn x:Key="VerlengenStartSrm0Column"
+                                                Visibility="{Binding Path=DataContext.IsCCOL12OrHigher,Mode=OneWay,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}"
+                                                Binding="{Binding Path=VerlengenStartSrm0,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start SRM0" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
+                            <DataGridTextColumn x:Key="VerlengenEndSrm0Column"
+                                                Visibility="{Binding Path=DataContext.IsCCOL12OrHigher,Mode=OneWay,Source={x:Reference Root},Converter={StaticResource Bool2VisConv}}"
+                                                Binding="{Binding Path=VerlengenEndSrm0,UpdateSourceTrigger=PropertyChanged}" Header="Verl. eind SRM0" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Signaalgroep" Width="Auto" >
@@ -287,8 +301,10 @@
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
                             <!--<DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISVerlengen,UpdateSourceTrigger=PropertyChanged}" />-->
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start CAM" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde CAM" CellStyle="{StaticResource FaseNoRisExtendStyle}" />
+                            <StaticResource ResourceKey="VerlengenStartSrm0Column" />
+                            <StaticResource ResourceKey="VerlengenEndSrm0Column" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                     <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
