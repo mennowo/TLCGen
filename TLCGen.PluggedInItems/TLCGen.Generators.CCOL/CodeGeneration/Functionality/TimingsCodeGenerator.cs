@@ -91,8 +91,12 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
-                    if(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen)
-                        return new List<CCOLLocalVariable> { new("int", "i", defineCondition: "(!defined NO_TIMETOX)") };
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen)
+                        return new List<CCOLLocalVariable> 
+                        {
+                            new("int", "i", defineCondition: "(!defined NO_TIMETOX)"),
+                            new("int", "fc", defineCondition: "(!defined NO_TIMETOX)")
+                        };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -122,7 +126,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
 
-                    if (!c.TimingsData.TimingsUsePredictions) return null;
+                    if (!c.TimingsData.TimingsToepassen || !c.TimingsData.TimingsUsePredictions) return null;
 
                     var fcf = c.Fasen.First().Naam;
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
@@ -174,33 +178,6 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
                     sb.AppendLine();
 
-                    // var syncGroups = CCOLCodeHelper.GetSyncGroupsForController(c);
-                    // foreach (var g in syncGroups)
-                    // {
-                    //     sb.Append($"{ts}{ts}if(!(");
-                    //     var first1 = true;
-                    //     foreach (var fc in g)
-                    //     {
-                    //         if (!first1)
-                    //         {
-                    //             sb.AppendLine(" && ");
-                    //             sb.Append($"{ts}{ts}     ");
-                    //         }
-                    //         first1 = false;
-                    //         sb.Append($"(P[{_fcpf}{fc}] || G[{_fcpf}{fc}])");
-                    //     }
-                    //     sb.AppendLine($"))");
-                    //     sb.AppendLine($"{ts}{ts}{{");
-                    //     foreach (var fc in g)
-                    //     {
-                    //         sb.AppendLine($"{ts}{ts}{ts}P[{_fcpf}{fc}] &= ~BIT11;");
-                    //     }
-                    //     sb.AppendLine($"{ts}{ts}}}");
-                    //     sb.AppendLine($"{ts}{ts}");
-                    //     sb.AppendLine($"{ts}{ts}");
-                    //     sb.AppendLine($"{ts}{ts}");
-                    // }
-                    
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
                     {
                         sb.AppendLine($"        /* Voedende richting {_fcpf}{nl:van} alleen P als naloop een P heeft of al groen is */");
@@ -233,6 +210,32 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine("#endif");
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    var tigto = c.Data.Intergroen ? "TIG" : "TO";
+                    foreach (var prio in c.PrioData.PrioIngrepen)
+                    {
+                        var reden = prio.Type switch
+                        {
+                            PrioIngreepVoertuigTypeEnum.Tram => "CIF_FC_RWT_OV_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.Bus => "CIF_FC_RWT_OV_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.Fiets => "CIF_FC_RWT_FIETS_PELOTON_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.Vrachtwagen => "CIF_FC_RWT_VRACHTVERKEER_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.Auto => "CIF_FC_RWT_VOERTUIG_PELOTON_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.NG => "CIF_FC_RWT_ONBEKEND",
+                            _ => throw new NotImplementedException(),
+                        };
+                        sb.AppendLine($"{ts}{ts}if (C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && R[fc] && {tigto}[{_fcpf}{prio.FaseCyclus}][fc])  CIF_FC_RWT[fc] |= {reden};");
+                    }
+                    foreach (var hd in c.PrioData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}{ts}if (C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && R[fc] && {tigto}[{_fcpf}{hd.FaseCyclus}][fc]) CIF_FC_RWT[fc] |= CIF_FC_RWT_HULPDIENST_INGREEP;");
+                    }
+                    sb.AppendLine($"{ts}{ts}if (SG[fc]) CIF_FC_RWT[fc] = 0;");
+                    sb.AppendLine($"{ts}}}");
+
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.TabCIncludes:
