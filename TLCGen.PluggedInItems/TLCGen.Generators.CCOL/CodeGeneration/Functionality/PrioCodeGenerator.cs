@@ -1208,7 +1208,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine(" &&");
                                 sb.Append($"{ts}    ");
                             }
-                            sb.Append($"(G[{_fcpf}{conflict:naar}] || !(YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT))");
+
+                            var prios = c.GetPrioIngrepen(conflict.FaseNaar).ToArray();
+                            
+                            var confYv = $"(G[{_fcpf}{conflict:naar}] || !(YV[{_fcpf}{conflict:naar}] & PRIO_YV_BIT) ";
+                            var padding = confYv.Length + ts.Length + 7;
+                            sb.Append(confYv);
+                            if (prios.Any())
+                            {
+                                var first1 = true;
+                                foreach (var prio in prios)
+                                {
+                                    if (!first1)
+                                    {
+                                        sb.AppendLine(" &&");
+                                        sb.Append("".PadLeft(padding));
+                                    }
+                                    else
+                                    {
+                                        sb.Append("|| ");
+                                    }
+
+                                    sb.Append($"!(iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] & poBijzonderRealiseren)");
+                                    first1 = false;;
+                                }
+                            }
+                            sb.Append(")");
                             first = false;
                         }
                         sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT10;");

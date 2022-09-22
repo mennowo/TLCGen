@@ -193,6 +193,11 @@ namespace TLCGen.Models
                                                     x.MeldingenData.Uitmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
         }
 
+        public static IEnumerable<PrioIngreepModel> GetPrioIngrepen(this ControllerModel c, string faseCyclus)
+        {
+            return c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == faseCyclus);
+        }
+
         public static bool HasHDKAR(this ControllerModel c)
         {
             return c.PrioData.HDIngrepen.Any(x => x.KAR);

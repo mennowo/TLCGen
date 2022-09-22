@@ -1350,7 +1350,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var programma in controller.StarData.Programmas)
             {
                 sb.AppendLine($"{ts}/* {programma.Naam} */");
-                sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = PRM[{_prmpf}{prmstarcyclustijd}{programma.Naam}];");
+                sb.Append($"{ts}STAR_ctijd[STAR{pr}] = ");
+                sb.AppendLine(controller.StarData.ProgrammaTijdenInParameters 
+                    ? $"PRM[{_prmpf}{prmstarcyclustijd}{programma.Naam}];" 
+                    : $"{programma.Cyclustijd};");
                 foreach (var sg in programma.Fasen)
                 {
                     if (controller.StarData.ProgrammaTijdenInParameters)
