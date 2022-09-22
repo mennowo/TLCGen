@@ -840,7 +840,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             first = false;
                         }
 
-                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
+                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}] || G[{_fcpf}{sync.FaseVan}];");
                     }
 
                     if (first == false) sb.AppendLine();
