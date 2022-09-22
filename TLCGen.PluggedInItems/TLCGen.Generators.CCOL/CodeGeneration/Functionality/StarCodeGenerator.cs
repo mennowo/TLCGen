@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var pr in c.StarData.Programmas)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarcyclustijd}", pr.Cyclustijd, CCOLElementTimeTypeEnum.TS_type, _prmstarcyclustijd, pr.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarcyclustijd}{pr.Naam}", pr.Cyclustijd, CCOLElementTimeTypeEnum.TS_type, _prmstarcyclustijd, pr.Naam));
                     foreach (var f in pr.Fasen)
                     {
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstarstart}1{pr.Naam}{f.FaseCyclus}", f.Start1, CCOLElementTimeTypeEnum.None, _prmstarstart, "1", f.FaseCyclus, pr.Naam));

@@ -1338,7 +1338,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var prmstarstart = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstarstart");
             var prmstareind = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstareind");
-
+            var prmstarcyclustijd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmstarcyclustijd");
+            
             sb.AppendLine("void star_instellingen(void)");
             sb.AppendLine("{");
 
@@ -1349,7 +1350,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var programma in controller.StarData.Programmas)
             {
                 sb.AppendLine($"{ts}/* {programma.Naam} */");
-                sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = {programma.Cyclustijd};");
+                sb.AppendLine($"{ts}STAR_ctijd[STAR{pr}] = PRM[{_prmpf}{prmstarcyclustijd}{programma.Naam}];");
                 foreach (var sg in programma.Fasen)
                 {
                     if (controller.StarData.ProgrammaTijdenInParameters)
