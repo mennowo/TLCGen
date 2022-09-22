@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL
 
         public List<IOElementModel> GetAllIOElements(ControllerModel c)
         {
-            return _generator.CollectAllIO(c, true);
+            return _generator?.CollectAllIO(c, true);
         }
 
         #endregion // ITLCGenGenerator

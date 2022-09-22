@@ -11,6 +11,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public CCOLElementTimeTypeEnum TType { get; set; }
         public int? Instelling { get; set; }
         public string Commentaar { get; set; }
+        public string Categorie { get; set; }
+        public string SubCategorie { get; set; }
         public CCOLElementTypeEnum Type { get; set; }
         public bool Dummy { get; set; }
         public int RangeerIndex { get; set; }
@@ -22,7 +24,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             Dummy = false;
         }
 
-        public CCOLElement(string naam, CCOLElementTypeEnum type, string description = null, IOElementModel ioElementData = null)
+        public CCOLElement(string naam, string cat, string subcat, CCOLElementTypeEnum type, string description = null, IOElementModel ioElementData = null)
         {
             Dummy = false;
             Naam = naam;
@@ -35,6 +37,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _ => CCOLElementTimeTypeEnum.None
             };
             IOElementData = ioElementData;
+            Categorie = cat;
+            SubCategorie = subcat;
             
             // check
             if ((type == CCOLElementTypeEnum.Uitgang || type == CCOLElementTypeEnum.Ingang) && ioElementData == null)
@@ -52,7 +56,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type, string description = null)
+        public CCOLElement(string naam, string cat, string subcat, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type, string description = null)
         {
             Dummy = false;
             Naam = naam;
@@ -61,6 +65,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             TType = ttype;
             Type = type;
 			Commentaar = description;
+            Categorie = cat;
+            SubCategorie = subcat;
         }
     }
 }

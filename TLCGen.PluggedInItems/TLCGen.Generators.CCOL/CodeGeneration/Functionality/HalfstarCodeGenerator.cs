@@ -190,10 +190,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (i == 5) realisation = 2;
                                 _myElements.Add(new CCOLElement(
                                     $"{_prmtx}{moments[i]}{realisation}{pl.Naam}_{fcpl.FaseCyclus}",
+                                    PrioCodeGeneratorHelper.CAT_Signaalplan,
+                                    PrioCodeGeneratorHelper.SUBCAT_Plantijden,
                                     times[i] ?? 0,
                                     CCOLElementTimeTypeEnum.None,
                                     CCOLElementTypeEnum.Parameter,
-                                    CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmtx.Description, CCOLElementTypeEnum.Parameter, realisation == 1 ? "Eerste" : "Tweede", pl.Naam, fcpl.FaseCyclus, moments[i])));
+                                    CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmtx.Description, CCOLElementTypeEnum.Parameter, realisation == 1 ? "Eerste" : "Tweede", pl.Naam, fcpl.FaseCyclus, moments[i]))
+                                {
+	                                Categorie = PrioCodeGeneratorHelper.CAT_Signaalplan,
+	                                SubCategorie = PrioCodeGeneratorHelper.SUBCAT_Plantijden
+                                });
                             }
                         }
                     }

@@ -960,6 +960,58 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GetAllElementsTabCCategories(ControllerModel c, CCOLElemListData data)
+        {
+            if (data.Elements.Count == 0) return "";
+            var sb = new StringBuilder();
+            
+            var pad3 = data.CCOLCatWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
+            var pad4 = data.CatMaxWidth + 4;  // 4: space = space ;
+            var pad5 = data.CCOLSubCatWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
+            
+            foreach (var elem in data.Elements)
+            {
+                if (elem.Dummy)
+                    continue;
+
+                if (!string.IsNullOrEmpty(elem.Categorie))
+                {
+                    sb.Append($"{ts}{data.CCOLCat}[{elem.Define}]".PadRight(pad3));
+                    sb.Append($" = {elem.Categorie};".PadRight(pad4));
+                }
+                if (!string.IsNullOrEmpty(elem.SubCategorie))
+                {
+                    sb.Append($" {data.CCOLSubCat}[{elem.Define}]".PadRight(pad5));
+                    sb.Append($" = {elem.SubCategorie};");
+                    sb.AppendLine();
+                }
+            }
+
+            if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                foreach (var delem in data.Elements)
+                {
+                    if (!delem.Dummy) continue;
+                    
+                    if (!string.IsNullOrEmpty(delem.Categorie))
+                    {
+                        sb.Append($"{ts}{data.CCOLCat}[{delem.Define}]".PadRight(pad3));
+                        sb.Append($" = {delem.Categorie};".PadRight(pad4));
+                    }
+                    if (!string.IsNullOrEmpty(delem.SubCategorie))
+                    {
+                        sb.Append($" {data.CCOLSubCat}[{delem.Define}]".PadRight(pad5));
+                        sb.Append($" = {delem.SubCategorie};");
+                        sb.AppendLine();
+                    }
+                }
+                sb.AppendLine("#endif");
+            }
+            
+            return sb.ToString();
+        }
+        
         private string GetAllElementsTabCLines(ControllerModel c, CCOLElemListData data)
         {
             if (data.Elements.Count == 0) return "";

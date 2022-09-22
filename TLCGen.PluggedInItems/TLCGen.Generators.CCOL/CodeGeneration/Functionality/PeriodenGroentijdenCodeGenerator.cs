@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.CodeGeneration.Functionality;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -131,16 +132,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{per.Naam}", _hperiod, per.Naam));
                 }
             }
-            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, _prmperrt.Description));
-            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement, _prmperrta.Description));
-            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, _prmperrtdim.Description));
-            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, _prmperbel.Description));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, _prmperbeldim.Description));
-            if (iperrt > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerAltijdBitmapData, _prmperrt.Description));
-            if (iperrta > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerActiefBitmapData, _prmperrta.Description));
-            if (iperrtdim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerDimmenBitmapData, _prmperrtdim.Description));
-            if (iperbel > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenActiefBitmapData, _prmperbel.Description));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, c.Signalen.PeriodeBellenDimmenBitmapData, _prmperbeldim.Description));
+            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, _prmperrt.Description, null, null));
+            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement, _prmperrta.Description, null, null));
+            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, _prmperrtdim.Description, null, null));
+            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, _prmperbel.Description, null, null));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, _prmperbeldim.Description, null, null));
+            if (iperrt > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerAltijdBitmapData, _prmperrt.Description, null, null));
+            if (iperrta > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerActiefBitmapData, _prmperrta.Description, null, null));
+            if (iperrtdim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, c.Signalen.RatelTikkerDimmenBitmapData, _prmperrtdim.Description, null, null));
+            if (iperbel > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, c.Signalen.BellenActiefBitmapData, _prmperbel.Description, null, null));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, c.Signalen.PeriodeBellenDimmenBitmapData, _prmperbeldim.Description, null, null));
 
             // groentijden
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";
@@ -163,7 +164,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         mgm.Waarde.Value,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Parameter,
-                        $"{mg} {mgset.Naam} {thisfcm.Naam}"));
+                        $"{mg} {mgset.Naam} {thisfcm.Naam}",
+                        PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_MaximumGroentijden));
                 }
             }
         }

@@ -887,6 +887,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        null, null,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang,
                         elem.Commentaar, elem.GebruikersOptieWithIO){ Dummy = elem.Dummy });
             }
@@ -895,6 +896,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        null, null,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang,
                         elem.Commentaar, elem.GebruikersOptieWithIO){ Dummy = elem.Dummy });
             }
@@ -903,6 +905,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        null, null,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement,
                         elem.Commentaar){ Dummy = elem.Dummy });
             }
@@ -911,6 +914,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        "", "",
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer,
@@ -921,6 +925,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        "", "",
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter,
@@ -931,6 +936,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        "", "",
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.SCH_type,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar,
@@ -941,6 +947,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        null, null,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement,
                         elem.Commentaar){ Dummy = elem.Dummy });
             }
@@ -949,6 +956,7 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
+                        "", "",
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter,

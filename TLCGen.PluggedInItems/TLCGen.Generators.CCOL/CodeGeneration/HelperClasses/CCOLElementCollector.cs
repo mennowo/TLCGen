@@ -178,7 +178,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 CCOLCode = "T_code",
                 CCOLSetting = "T_max",
-                CCOLTType = "T_type"
+                CCOLTType = "T_type",
+                CCOLCat = "T_cat",
+                CCOLSubCat = "T_subcat"
             };
 
             foreach (var pgen in pgens)
@@ -206,7 +208,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var data = new CCOLElemListData
             {
                 CCOLCode = "SCH_code",
-                CCOLSetting = "SCH"
+                CCOLSetting = "SCH",
+                CCOLCat = "SCH_cat",
+                CCOLSubCat = "SCH_subcat"
             };
 
             foreach (var pgen in pgens)
@@ -229,7 +233,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 CCOLCode = "C_code",
                 CCOLSetting = "C_max",
-                CCOLTType = "C_type"
+                CCOLTType = "C_type",
+                CCOLCat = "C_cat",
+                CCOLSubCat = "C_subcat"
             };
 
             // Collect everything
@@ -259,7 +265,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 CCOLCode = "PRM_code",
                 CCOLSetting = "PRM",
-                CCOLTType = "PRM_type"
+                CCOLTType = "PRM_type",
+                CCOLCat = "PRM_cat",
+                CCOLSubCat = "PRM_subcat"
             };
 
             // Collect everything

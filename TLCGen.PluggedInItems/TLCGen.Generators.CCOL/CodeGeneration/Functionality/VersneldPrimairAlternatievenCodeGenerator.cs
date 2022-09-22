@@ -73,7 +73,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{hnl}{nl.FaseVan}{nl.FaseNaar}", 0, CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.HulpElement, ""));
+                            CCOLElementTypeEnum.HulpElement, "",
+                            null, null));
                 }
             }
 

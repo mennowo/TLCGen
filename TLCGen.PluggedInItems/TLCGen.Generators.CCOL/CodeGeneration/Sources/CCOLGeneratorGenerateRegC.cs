@@ -812,7 +812,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}int i = 0;");
             sb.AppendLine($"{ts}for (i = 0; i < DPMAX; ++i)");
             sb.AppendLine($"{ts}{{");
-            sb.AppendLine($"{ts}{ts}TDH_old[i] = TDH[i];");
+            if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL120)
+            {
+                sb.AppendLine($"{ts}{ts}TDH_old[i] = TDH[i];");
+            }
             sb.AppendLine($"{ts}{ts}DB_old[i] = DB[i];");
             sb.AppendLine($"{ts}}}");
             sb.AppendLine();

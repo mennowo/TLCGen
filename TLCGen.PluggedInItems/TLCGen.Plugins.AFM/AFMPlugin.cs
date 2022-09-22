@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Generators.CCOL.CodeGeneration.Functionality;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -165,38 +166,37 @@ namespace TLCGen.Plugins.AFM
             {
                 foreach (var fc in _afmModel.AFMFasen)
                 {
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_FC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMin", fc.MinimaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMax", fc.MaximaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxAct", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxGem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxAFM", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Sturing", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Qlength", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_AbsBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_RelBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_RelBufferVulling", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_FC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxMin", fc.MinimaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxMax", fc.MaximaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxAct", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxGem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_GmaxAFM", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_Sturing", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_Qlength", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_AbsBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_RelBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"AFM{fc.FaseCyclus}_RelBufferVulling", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
                 }
-                _myElements.Add(new CCOLElement("AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Versie", 7, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Test", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Beinvloedbaar", 1, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_Versie", 7, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_Test", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_Beinvloedbaar", 1, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
 
                 // This happens via ITLCGenElementProvider below
                 // -- _myElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang, ioElementData: _afmModel.AFMLevenBitmapCoordinaten));
 
-                _myElements.Add(new CCOLElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement("AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-
-                _myElements.Add(new CCOLElement("AFMCIFParmWijz", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-                _myElements.Add(new CCOLElement("AFM_overbrugging", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFMCIFParmWijz", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement("AFM_overbrugging", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, "", PrioCodeGeneratorHelper.CAT_Optimaliseren, ""));
             }
         }
 
@@ -456,6 +456,7 @@ namespace TLCGen.Plugins.AFM
             {
                 new CCOLElement(
                     "AFMLeven",
+                    PrioCodeGeneratorHelper.CAT_Optimaliseren, "",
                     CCOLElementTypeEnum.Uitgang,
                     "", _afmModel.AFMLevenBitmapCoordinaten)
             };

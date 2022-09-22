@@ -99,22 +99,22 @@ namespace TLCGen.Generators.CCOL.Settings
             return descr;	
 		}
 
-        internal CCOLElement CreateElement(string v, int dimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum none, object prmnivndim, string faseCyclus)
-        {
-            throw new NotImplementedException();
-        }
+        //internal CCOLElement CreateElement(string v, int dimmingNiveauPeriodeNietDimmen, CCOLElementTimeTypeEnum none, object prmnivndim, string faseCyclus)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLGeneratorCodeStringSettingModel element, params string [] elementnames)
         {
             var t = TranslateType(element.Type);
-            return new CCOLElement(name, setting, timeType, t,
+            return new CCOLElement(name, element.Categorie, element.SubCategorie, setting, timeType, t,
                     GetElementDescription(element.Description, t, elementnames));
         }
 
         public CCOLElement CreateElement(string name, CCOLGeneratorCodeStringSettingModel element, params string[] elementnames)
         {
             var t = TranslateType(element.Type);
-            return new CCOLElement(name, t,
+            return new CCOLElement(name, element.Categorie, element.SubCategorie, t,
                     GetElementDescription(element.Description, t, elementnames));
         }
 
@@ -125,22 +125,22 @@ namespace TLCGen.Generators.CCOL.Settings
             name = CCOLCodeHelper.GetNameFromCombinedNameAndElementName(element, name);
             // synch names
             ioElementData.Naam = name;
-            return new CCOLElement(name, t, GetElementDescription(element.Description, t, elementnames), ioElementData);
+            return new CCOLElement(name, element.Categorie, element.SubCategorie, t, GetElementDescription(element.Description, t, elementnames), ioElementData);
         }
 
-        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, string description)
+        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, string description, string cat, string subcat)
         {
-            return new CCOLElement(name, type, GetElementDescription(description, type));
+            return new CCOLElement(name, cat, subcat, type, GetElementDescription(description, type));
         }
 
-        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, IOElementModel ioElementData, string description)
+        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, IOElementModel ioElementData, string description, string cat, string subcat)
         {
-            return new CCOLElement(name, type, GetElementDescription(description, type), ioElementData);
+            return new CCOLElement(name, cat, subcat, type, GetElementDescription(description, type), ioElementData);
         }
         
-        public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLElementTypeEnum type, string description)
+        public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLElementTypeEnum type, string description, string cat, string subcat)
         {
-            return new CCOLElement(name, setting, timeType, type, GetElementDescription(description, type));
+            return new CCOLElement(name, cat, subcat, setting, timeType, type, GetElementDescription(description, type));
         }
 
         public string GetElementName(string defaultwithprefix)

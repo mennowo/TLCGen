@@ -39,7 +39,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            _myElements.Add(new CCOLElement(_mperiod, CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
+            _myElements.Add(new CCOLElement(_mperiod, null, null, CCOLElementTypeEnum.GeheugenElement, "Onthouden actieve periode"));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmfb}", c.Data.Fasebewaking, CCOLElementTimeTypeEnum.TS_type, _prmfb));
 
             // Onthouden drukknop meldingen
@@ -103,7 +103,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Inputs
             foreach (var i in c.Ingangen)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(i.Naam, CCOLElementTypeEnum.Ingang, i, i.Omschrijving));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(i.Naam, CCOLElementTypeEnum.Ingang, i, i.Omschrijving, null, null));
             }
 
             // Versie beheer
@@ -116,19 +116,40 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
                 {
-                    _myElements.Add(new CCOLElement($"ovmextragroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"ovmmindergroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"ovmextragroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter, "",
+                            PrioCodeGeneratorHelper.CAT_Optimaliseren, PrioCodeGeneratorHelper.SUBCAT_OpenbaarVervoer));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"ovmmindergroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter, "",
+                            PrioCodeGeneratorHelper.CAT_Optimaliseren, PrioCodeGeneratorHelper.SUBCAT_OpenbaarVervoer));
                 }
             }
 
             // Logging TFB max
             if (c.Data.PrmLoggingTfbMax)
             {
-                _myElements.Add(new CCOLElement("tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        "tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                        PrioCodeGeneratorHelper.CAT_TestenLoggen, PrioCodeGeneratorHelper.SUBCAT_Fasebewaking));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        "tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                        PrioCodeGeneratorHelper.CAT_TestenLoggen, PrioCodeGeneratorHelper.SUBCAT_Fasebewaking));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        "tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                        PrioCodeGeneratorHelper.CAT_TestenLoggen, PrioCodeGeneratorHelper.SUBCAT_Fasebewaking));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        "tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                        PrioCodeGeneratorHelper.CAT_TestenLoggen, PrioCodeGeneratorHelper.SUBCAT_Fasebewaking));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        "tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                        PrioCodeGeneratorHelper.CAT_TestenLoggen, PrioCodeGeneratorHelper.SUBCAT_Fasebewaking));
             }
 
             // Cyclustijdmeting

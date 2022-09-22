@@ -119,6 +119,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#include \"plevar.h\"");
                 sb.AppendLine($"{ts}#include \"halfstar.h\"");
             }
+
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
+            {
+                sb.AppendLine($"{ts}#include \"category_definition.c\"");
+            }
             if (c.Data.PracticeOmgeving)
             {
                 sb.AppendLine("#endif /* PRACTICE_TEST */");
@@ -208,6 +213,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateTabCControlParametersSchakelaars(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
+            sb.AppendLine();
+            sb.Append(GenerateTabCControlParametersCategories(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
             sb.AppendLine();
@@ -1088,8 +1095,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             return sb.ToString();
         }
-
-
+        
         private string GenerateTabCControlParametersParameters(ControllerModel c)
         {
             var sb = new StringBuilder();
@@ -1102,6 +1108,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateTabCControlParametersCategories(ControllerModel c)
+        {
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL120) return "";
+            
+            var sb = new StringBuilder();
+
+            sb.AppendLine("/* instellingen categorieën */");
+            sb.AppendLine("/* ------------------------ */");
+
+            sb.Append(GetAllElementsTabCCategories(c, _counters));
+            sb.Append(GetAllElementsTabCCategories(c, _schakelaars));
+            sb.Append(GetAllElementsTabCCategories(c, _timers));
+            sb.Append(GetAllElementsTabCCategories(c, _parameters));
+
+            return sb.ToString();
+        }
+        
         private string GenerateTabCControlParametersExtraData(ControllerModel controller)
         {
             var sb = new StringBuilder();

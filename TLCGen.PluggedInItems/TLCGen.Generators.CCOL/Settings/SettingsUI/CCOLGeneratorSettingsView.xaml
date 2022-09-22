@@ -109,8 +109,8 @@
                             <DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" Foreground="Gray" />
                             <DataGridTextColumn Header="Default" Binding="{Binding Default}" IsReadOnly="True" Foreground="Gray" />
                             <DataGridTextColumn Header="Instelling" Binding="{Binding Setting}" />
-                            <DataGridTextColumn Header="Categorie" Binding="{Binding Categorie}" />
-                            <DataGridTextColumn Header="Subcategorie" Binding="{Binding SubCategorie}" />
+                            <DataGridTextColumn Header="Categorie" Binding="{Binding Categorie}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Subcategorie" Binding="{Binding SubCategorie}" IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

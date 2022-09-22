@@ -169,7 +169,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var s in lanesSim.SelectMany(x => x.SimulatedStations))
             {
                 s.StationBitmapData.Naam = s.Naam;
-                var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, s.StationBitmapData, "");
+                var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, s.StationBitmapData, "", null, null);
                 e.Dummy = true;
                 _myElements.Add(e);
             }

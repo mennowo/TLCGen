@@ -139,7 +139,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
             sb.AppendLine("extern mulv DB_old[];");
-            sb.AppendLine("extern mulv TDH_old[];");
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL120)
+            {
+                sb.AppendLine("extern mulv TDH_old[];");
+            }
+
             sb.AppendLine();
             if (c.Data.PracticeOmgeving)
             {

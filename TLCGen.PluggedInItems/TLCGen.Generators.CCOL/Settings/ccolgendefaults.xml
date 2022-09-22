@@ -120,6 +120,8 @@
             <Setting>fb</Setting>
             <Type>Parameter</Type>
             <Description>Instelling fasebewaking</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Fasebewaking</SubCategorie>
           </Setting>
           <Setting>
             <Default>segm</Default>
@@ -138,42 +140,56 @@
             <Setting>toon7s</Setting>
             <Type>Schakelaar</Type>
             <Description>Actueel houden 7 segemten display</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Testen</SubCategorie>
           </Setting>
           <Setting>
             <Default>xx</Default>
             <Setting>xx</Setting>
             <Type>Parameter</Type>
             <Description>Versiebeheer xx</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>yy</Default>
             <Setting>yy</Setting>
             <Type>Parameter</Type>
             <Description>Versiebeheer yy</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>zz</Default>
             <Setting>zz</Setting>
             <Type>Parameter</Type>
             <Description>Versiebeheer zz</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>cycl</Default>
             <Setting>cycl</Setting>
             <Type>Timer</Type>
             <Description>Bijhouden actuele cyclustijd</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>cycl</Default>
             <Setting>cycl</Setting>
             <Type>Schakelaar</Type>
             <Description>Bijhouden actuele cyclustijd aan of uit</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>cycl_reset</Default>
             <Setting>cycl_reset</Setting>
             <Type>Schakelaar</Type>
             <Description>Reset meting cyclustijd</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>lcycl</Default>
@@ -195,6 +211,8 @@
             <Setting>altb</Setting>
             <Type>Parameter</Type>
             <Description>Alternatief per blok voor fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_AlternatieveRealisaties</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -210,6 +228,8 @@
             <Setting>snel</Setting>
             <Type>Schakelaar</Type>
             <Description>Aanvraag snel voor detector _E1_ aan of uit</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -225,18 +245,24 @@
             <Setting>da</Setting>
             <Type>Parameter</Type>
             <Description>Aanvraag functie voor detector _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>mk</Default>
             <Setting>mk</Setting>
             <Type>Parameter</Type>
             <Description>Meetkriterium type voor detector _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>km</Default>
             <Setting>km</Setting>
             <Type>Timer</Type>
             <Description>Kop maximum voor detector _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>mk</Default>
@@ -249,6 +275,8 @@
             <Setting>av</Setting>
             <Type>Timer</Type>
             <Description>Tijd na afvallen detector _E1_ tbv verwijderen aanvraag</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -264,32 +292,41 @@
             <Setting>dvak</Setting>
             <Type>Schakelaar</Type>
             <Description>Aanvraag fase _E1_ bij storing op detector _E2_</Description>
+            <Categorie>CAT_Detectie</Categorie>
+            <SubCategorie>SUBCAT_VervangendeMaatregelen</SubCategorie>
           </Setting>
           <Setting>
             <Default>hdv</Default>
             <Setting>hdv</Setting>
             <Type>Timer</Type>
             <Description>Vervangend hiaat koplus fase _E1_ bij defect lange lus _E2_</Description>
+            <Categorie>CAT_Detectie</Categorie>
+            <SubCategorie>SUBCAT_VervangendeMaatregelen</SubCategorie>
           </Setting>
           <Setting>
             <Default>perc</Default>
             <Setting>perc</Setting>
             <Type>Parameter</Type>
             <Description>Percentage groentijd fase _E1_ bij defect kop en lange lus</Description>
+            <Categorie>CAT_Detectie</Categorie>
+            <SubCategorie>SUBCAT_VervangendeMaatregelen</SubCategorie>
           </Setting>
           <Setting>
             <Default>dstvert</Default>
             <Setting>dstvert</Setting>
             <Type>Timer</Type>
             <Description>Vertraging vaste aanvraag bij storing op alle detectie voor fase _E1_</Description>
+            <Categorie>CAT_Detectie</Categorie>
+            <SubCategorie>SUBCAT_VervangendeMaatregelen</SubCategorie>
           </Setting>
           <Setting>
             <Default>dstvertd</Default>
             <Setting>dstvertd</Setting>
             <Type>Timer</Type>
             <Description>Vertraging vaste aanvraag bij storing op detector _E1_</Description>
+            <Categorie>CAT_Detectie</Categorie>
+            <SubCategorie>SUBCAT_VervangendeMaatregelen</SubCategorie>
           </Setting>
-          dstvert
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
@@ -316,72 +353,96 @@
             <Setting>file</Setting>
             <Type>Schakelaar</Type>
             <Description>File ingreep _E1_ toepassen</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>bz</Default>
             <Setting>bz</Setting>
             <Type>Timer</Type>
             <Description>Bezettijd file detector _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>rij</Default>
             <Setting>rij</Setting>
             <Type>Timer</Type>
             <Description>Rijtijd file detector _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>afv</Default>
             <Setting>afv</Setting>
             <Type>Timer</Type>
             <Description>Afval vertraging file _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>afv</Default>
             <Setting>afv</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen afval vertraging file ingreep _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>filedoseren</Default>
             <Setting>filedoseren</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen doseerpercentages voor fileingreep _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>filealtgset</Default>
             <Setting>filealtgset</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen alternatieve groentijdenset voor fileingreep _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>eerlijkdoseren</Default>
             <Setting>eerlijkdoseren</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen eerlijk doseren _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>fperc</Default>
             <Setting>fperc</Setting>
             <Type>Parameter</Type>
             <Description>Doseerpercentage _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>parlus</Default>
             <Setting>parlus</Setting>
             <Type>Schakelaar</Type>
             <Description>Parallele file meldingen per lus file ingreep _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>parstrook</Default>
             <Setting>parstrook</Setting>
             <Type>Schakelaar</Type>
             <Description>Parallele file meldingen per strook file ingreep _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>afkmingroen</Default>
             <Setting>afkmingroen</Setting>
             <Type>Timer</Type>
             <Description>Minimale groentijd fase _E1_ vooraf aan afkappen bij start file ingreep _E2_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>afk</Default>
@@ -394,12 +455,16 @@
             <Setting>minrood</Setting>
             <Type>Timer</Type>
             <Description>Minimale roodtijd bij fase _E1_ voor file ingreep _E2_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>maxgroen</Default>
             <Setting>maxgroen</Setting>
             <Type>Timer</Type>
             <Description>Maximale groentijd bij fase _E1_ voor file ingreep _E2_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -415,12 +480,16 @@
             <Setting>fix</Setting>
             <Type>Ingang</Type>
             <Description>Fixatie regeling</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Fixatie</SubCategorie>
           </Setting>
           <Setting>
             <Default>bmfix</Default>
             <Setting>bmfix</Setting>
             <Type>Schakelaar</Type>
             <Description>Bijkomen tijdens fixatie mogelijk</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Fixatie</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -436,24 +505,32 @@
             <Setting>vs</Setting>
             <Type>Timer</Type>
             <Description>Voorstart van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>vsot</Default>
             <Setting>vsot</Setting>
             <Type>Timer</Type>
             <Description>Fictief ontruimen voorstart van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>gs</Default>
             <Setting>gs</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelbare gelijkstart van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>gsot</Default>
             <Setting>gsot</Setting>
             <Type>Timer</Type>
             <Description>Fictief ontruimen gelijkstart van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -601,18 +678,24 @@
             <Setting>var</Setting>
             <Type>Schakelaar</Type>
             <Description>VA regelen aan of uit</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>arh</Default>
             <Setting>arh</Setting>
             <Type>Schakelaar</Type>
             <Description>Toestaan alternatieven voor hoofdrichtingen</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>pervar</Default>
             <Setting>pervar</Setting>
             <Type>Schakelaar</Type>
             <Description>VA regelen periode _E1_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>pervar</Default>
@@ -625,6 +708,8 @@
             <Setting>perarh</Setting>
             <Type>Schakelaar</Type>
             <Description>Alternatieven voor hoofdrichtingen periode _E1_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>perarh</Default>
@@ -637,12 +722,16 @@
             <Setting>varstreng</Setting>
             <Type>Schakelaar</Type>
             <Description>VA regelen aan of uit voor gehele streng</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>vaml</Default>
             <Setting>vaml</Setting>
             <Type>Schakelaar</Type>
             <Description>Indien VA regelen, ML-bedrijf (1) of versneld PL-bedrijf (0)</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>plhd</Default>
@@ -655,12 +744,16 @@
             <Setting>ovpriople</Setting>
             <Type>Schakelaar</Type>
             <Description>Wel of niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>plxper</Default>
             <Setting>plxper</Setting>
             <Type>Parameter</Type>
             <Description>Plan voor periode _E1_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>xpl</Default>
@@ -673,18 +766,24 @@
             <Setting>slavebep</Setting>
             <Type>Schakelaar</Type>
             <Description>Slave bepaald PL aansturing</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>inst</Default>
             <Setting>inst</Setting>
             <Type>Schakelaar</Type>
             <Description>Eenmalig instellen signaalplannen na wijziging</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>instprm</Default>
             <Setting>instprm</Setting>
             <Type>Schakelaar</Type>
             <Description>Eenmalig kopieren signaalplan parameters naar signaalplannen</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>omschtegenh</Default>
@@ -697,12 +796,16 @@
             <Setting>rstotxa</Setting>
             <Type>Parameter</Type>
             <Description>Tijd tot xa dat RS opgezet wordt (anti-flitsgroen)</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>leven</Default>
             <Setting>leven</Setting>
             <Type>Timer</Type>
             <Description>Frequentie verstuurd levenssignaal</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>leven</Default>
@@ -721,18 +824,24 @@
             <Setting>volgmasterpl</Setting>
             <Type>Parameter</Type>
             <Description>Per plan (bitwise) instellen wel of niet volgen master</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>offset</Default>
             <Setting>offset</Setting>
             <Type>Timer</Type>
             <Description>Offset in slave</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>xmarge</Default>
             <Setting>xmarge</Setting>
             <Type>Timer</Type>
             <Description>Toegestane marge by sync halfstar</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>pl</Default>
@@ -745,60 +854,80 @@
             <Setting>tx</Setting>
             <Type>Parameter</Type>
             <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>vchst</Default>
             <Setting>vchst</Setting>
             <Type>Counter</Type>
             <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>natxdhst</Default>
             <Setting>natxdhst</Setting>
             <Type>Timer</Type>
             <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>priohst</Default>
             <Setting>priohst</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteit fase _E1_ tijdens halfstar regelen _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>altphst</Default>
             <Setting>altphst</Setting>
             <Type>Parameter</Type>
             <Description>Alternatieve ruimte _E1_ _E2_ tijdens halfstar regelen</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>altghst</Default>
             <Setting>altghst</Setting>
             <Type>Schakelaar</Type>
             <Description>Alternatief realiseren _E1_ _E2_ toestaan tijdens halfstar regelen</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>tegenov</Default>
             <Setting>tegenov</Setting>
             <Type>Schakelaar</Type>
             <Description>Tegenhouden hoofdrichting _E1_ bij OV ingreep</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>afkwgov</Default>
             <Setting>afkwgov</Setting>
             <Type>Schakelaar</Type>
             <Description>Afkappen WG hoofdrichting _E1_ bij OV ingreep</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>afkvgov</Default>
             <Setting>afkvgov</Setting>
             <Type>Schakelaar</Type>
             <Description>Afkappen VG hoofdrichting _E1_ bij OV ingreep</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>natxdhst</Default>
             <Setting>natxdhst</Setting>
             <Type>Parameter</Type>
             <Description>Maximale tijd na TXD tbv. verlengen voor OV ingreep bij fase _E1_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -814,18 +943,24 @@
             <Setting>ma</Setting>
             <Type>Schakelaar</Type>
             <Description>Meeaanvraag van _E1_ naar _E2_ actief</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeaanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>typema</Default>
             <Setting>typema</Setting>
             <Type>Parameter</Type>
             <Description>Type meeaanvraag van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeaanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>uitgestma</Default>
             <Setting>uitgestma</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur uitgestelde meeaanvraag op startgroen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeaanvraag</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -841,18 +976,24 @@
             <Setting>mv</Setting>
             <Type>Schakelaar</Type>
             <Description>Meeverlengen fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeverlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>hardmv</Default>
             <Setting>hardmv</Setting>
             <Type>Schakelaar</Type>
             <Description>Hard meeverlengen fase _E1_ met fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeverlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>mv</Default>
             <Setting>mv</Setting>
             <Type>Parameter</Type>
             <Description>Type meeverlengen fase _E1_ (0=uit,1=ymmaxV1,2=ymmaxtoV1,3=ymmaxV1|MK&amp;ymmaxtoV1,4=ymmaxvtg,5=ymmax,6=ymmaxto,7=ymmax|MK&amp;ymmaxto)</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeverlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -868,12 +1009,16 @@
             <Setting>mlprm</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen parametriseerbare modulestructuur</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>prml</Default>
             <Setting>prml</Setting>
             <Type>Parameter</Type>
             <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 tot en met BIT14; gebruik BIT15 indien niet toegewezen)</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -895,54 +1040,72 @@
             <Setting>nlsg</Setting>
             <Type>Timer</Type>
             <Description>Naloop op start groen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlsgd</Default>
             <Setting>nlsgd</Setting>
             <Type>Timer</Type>
             <Description>Detectieafhankelijke naloop op start groen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlfg</Default>
             <Setting>nlfg</Setting>
             <Type>Timer</Type>
             <Description>Naloop tijdens vastgroen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlfgd</Default>
             <Setting>nlfgd</Setting>
             <Type>Timer</Type>
             <Description>Detectieafhankelijke naloop tijdens vastgroen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nleg</Default>
             <Setting>nleg</Setting>
             <Type>Timer</Type>
             <Description>Naloop op einde groen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlegd</Default>
             <Setting>nlegd</Setting>
             <Type>Timer</Type>
             <Description>Detectieafhankelijke naloop op einde groen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlcv</Default>
             <Setting>nlcv</Setting>
             <Type>Timer</Type>
             <Description>Naloop tijdens cyclisch verlenggroen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>nlcvd</Default>
             <Setting>nlcvd</Setting>
             <Type>Timer</Type>
             <Description>Detectieafhankelijke naloop tijdens cyclisch verlenggroen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>xnl</Default>
             <Setting>xnl</Setting>
             <Type>Parameter</Type>
             <Description>Tijd tegenhouden voedende richting naloop van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -958,18 +1121,24 @@
             <Setting>tdbl</Setting>
             <Type>Parameter</Type>
             <Description>Bezettijd laag nevenmelding koplus _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>tdbh</Default>
             <Setting>tdbh</Setting>
             <Type>Parameter</Type>
             <Description>Bezettijd hoog nevenmelding koplus _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtn</Default>
             <Setting>rtn</Setting>
             <Type>Parameter</Type>
             <Description>Rijtijd nevenmelding _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovss</Default>
@@ -1009,36 +1178,48 @@
             <Setting>ovstipt</Setting>
             <Type>Schakelaar</Type>
             <Description>Geconditioneerde prioteit voor OV bij _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovstipttevroeg</Default>
             <Setting>ovstipttevroeg</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteitsnveau OV te vroeg bij _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovstiptoptijd</Default>
             <Setting>ovstiptoptijd</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteitsnveau OV op tijd bij _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovstipttelaat</Default>
             <Setting>ovstipttelaat</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteitsnveau OV te laat bij _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>OVtstpgrenslaat</Default>
             <Setting>OVtstpgrenslaat</Setting>
             <Type>Parameter</Type>
             <Description>Grens waarboven een OV voertuig als te laat wordt aangemerkt</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>OVtstpgrensvroeg</Default>
             <Setting>OVtstpgrensvroeg</Setting>
             <Type>Parameter</Type>
             <Description>Grens waarboven een OV voertuig als te vroeg wordt aangemerkt</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovtevroeg</Default>
@@ -1072,12 +1253,16 @@
             <Setting>wijzpb</Setting>
             <Type>GeheugenElement</Type>
             <Description>Wijziging aan PB doorgeven</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Fasebewaking</SubCategorie>
           </Setting>
           <Setting>
             <Default>aantalvgtwijzpb</Default>
             <Setting>aantalvgtwijzpb</Setting>
             <Type>GeheugenElement</Type>
             <Description>Aantal doorgegeven wijzigingen aan PB bijhouden</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Fasebewaking</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1105,18 +1290,24 @@
             <Setting>pelmeet</Setting>
             <Type>Timer</Type>
             <Description>Meetperiode peloton koppeling _E1_ fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelmaxhiaat</Default>
             <Setting>pelmaxhiaat</Setting>
             <Type>Timer</Type>
             <Description>Maximaal hiaat tbv meting peloton koppeling _E1_ fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelgrens</Default>
             <Setting>pelgrens</Setting>
             <Type>Parameter</Type>
             <Description>Minimaal aantal voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelvtg</Default>
@@ -1141,60 +1332,80 @@
             <Setting>pelrw</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur toepassen RW na meting peloton bij _E1_ voor fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelnl</Default>
             <Setting>pelnl</Setting>
             <Type>Timer</Type>
             <Description>Naloop tijd tbv peloton bij _E1_ voor fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelverschuif</Default>
             <Setting>pelverschuif</Setting>
             <Type>Parameter</Type>
             <Description>Aantal seconden verschuiven peloton koppeling _E1_ naar fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelrwmax</Default>
             <Setting>pelrwmax</Setting>
             <Type>Timer</Type>
             <Description>Maximale tijdsduur toepassen RW vanaf SG voor peloton koppeling bij _E1_ voor fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelstartrw</Default>
             <Setting>pelstartrw</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur vanaf meting peloton tot toepassen RW voor _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelrw</Default>
             <Setting>pelrw</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen retour wachtgroen na meting peloton bij voor _E1_ fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pelmk</Default>
             <Setting>pelmk</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen vasthouden MK na meting peloton voor _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pela</Default>
             <Setting>pela</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur tot aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pela</Default>
             <Setting>pela</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen aanvraag na meting peloton voor _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pku</Default>
             <Setting>pku</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen uitgaande koppeling vanaf fase _E2_ voor koppeling _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
           <Setting>
             <Default>pku</Default>
@@ -1270,42 +1481,56 @@
             <Setting>rt</Setting>
             <Type>Parameter</Type>
             <Description>Periode rateltikkers altijd</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>perrta</Default>
             <Setting>rta</Setting>
             <Type>Parameter</Type>
             <Description>Periode rateltikkers op aanvraag</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>perrtdim</Default>
             <Setting>rtdim</Setting>
             <Type>Parameter</Type>
             <Description>Periode rateltikkers dimmen</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>perbel</Default>
             <Setting>bel</Setting>
             <Type>Parameter</Type>
             <Description>Periode bellen actief</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>perbeldim</Default>
             <Setting>beldim</Setting>
             <Type>Parameter</Type>
             <Description>Periode bellen dimmen</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>pertwl</Default>
             <Setting>twl</Setting>
             <Type>Parameter</Type>
             <Description>Periode TWLs actief</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
           <Setting>
             <Default>pero</Default>
             <Setting>o</Setting>
             <Type>Parameter</Type>
             <Description>Periode overig</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1321,84 +1546,112 @@
             <Setting>vc</Setting>
             <Type>Counter</Type>
             <Description>Bijhouden prio inmeldingen fase _E1_ type _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>vchd</Default>
             <Setting>vchd</Setting>
             <Type>Counter</Type>
             <Description>Bijhouden prio inmeldingen fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rt</Default>
             <Setting>rt</Setting>
             <Type>Timer</Type>
             <Description>Actuele rijtijd prio fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rthd</Default>
             <Setting>rthd</Setting>
             <Type>Timer</Type>
             <Description>Actuele rijtijd HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>gb</Default>
             <Setting>gb</Setting>
             <Type>Timer</Type>
             <Description>Groenbewaking prioriteit fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>gbhd</Default>
             <Setting>gbhd</Setting>
             <Type>Timer</Type>
             <Description>Groenbewaking HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rto</Default>
             <Setting>rto</Setting>
             <Type>Parameter</Type>
             <Description>Ongehinderde rijtijd prioriteit fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtbg</Default>
             <Setting>rtbg</Setting>
             <Type>Parameter</Type>
             <Description>Beperkt gehinderde rijtijd prioriteit fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtg</Default>
             <Setting>rtg</Setting>
             <Type>Parameter</Type>
             <Description>Gehinderde rijtijd prioriteit fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtohd</Default>
             <Setting>rtohd</Setting>
             <Type>Parameter</Type>
             <Description>Ongehinderde rijtijd HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtbghd</Default>
             <Setting>rtbghd</Setting>
             <Type>Parameter</Type>
             <Description>Beperkt gehinderde rijtijd HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rtghd</Default>
             <Setting>rtghd</Setting>
             <Type>Parameter</Type>
             <Description>Gehinderde rijtijd HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>blk</Default>
             <Setting>blk</Setting>
             <Type>Timer</Type>
             <Description>Blokkeertijd na prioriteitsingreep fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>btovg</Default>
             <Setting>btovg</Setting>
             <Type>Timer</Type>
             <Description>Timer bezettijd prioriteit gehinderde rijtijd fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>prio</Default>
@@ -1441,156 +1694,208 @@
             <Setting>laatcrit</Setting>
             <Type>Parameter</Type>
             <Description>Criterium OV aanmerken als te laat</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>allelijnen</Default>
             <Setting>allelijnen</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteit geven aan alle lijnen fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>lijn</Default>
             <Setting>lijn</Setting>
             <Type>Parameter</Type>
             <Description>Lijnnummer _E1_ tbv prioriteit OV fase _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ritcat</Default>
             <Setting>ritcat</Setting>
             <Type>Parameter</Type>
             <Description>Ritcategorie bij lijnnummer _E1_ tbv prioriteit OV fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>cprio</Default>
             <Setting>cprio</Setting>
             <Type>Schakelaar</Type>
             <Description>Toepassen geconditioneerde priorieit fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>upinagb</Default>
             <Setting>upinagb</Setting>
             <Type>Schakelaar</Type>
             <Description>Selectieve detectie onbetrouwbaar na groenbewaking OV fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>upinagbhd</Default>
             <Setting>upinagbhd</Setting>
             <Type>Schakelaar</Type>
             <Description>Selectieve detectie onbetrouwbaar na groenbewaking HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>vi</Default>
             <Setting>vi</Setting>
             <Type>Schakelaar</Type>
             <Description>Versnelde inmelding fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>checkdstype</Default>
             <Setting>checkdstype</Setting>
             <Type>Schakelaar</Type>
             <Description>Check type DSI bericht bij VECOM</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>testdsivert</Default>
             <Setting>testdsivert</Setting>
             <Type>Parameter</Type>
             <Description>Testen vertraging in DSI bericht in testomgeving</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>testdsilyn</Default>
             <Setting>testdsilyn</Setting>
             <Type>Parameter</Type>
             <Description>Testen lijnnummer DSI bericht in testomgeving</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>testdsicat</Default>
             <Setting>testdsicat</Setting>
             <Type>Parameter</Type>
             <Description>Testen ritcategorie DSI bericht in testomgeving</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>prio</Default>
             <Setting>prio</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteitsinstelling OV fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>priohd</Default>
             <Setting>priohd</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteitsinstelling HD fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>omx</Default>
             <Setting>omx</Setting>
             <Type>Parameter</Type>
             <Description>Ondermaximum OV fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>mwta</Default>
             <Setting>mwta</Setting>
             <Type>Parameter</Type>
             <Description>Maximale wachttijd autoverkeer</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>mwtfts</Default>
             <Setting>mwtfts</Setting>
             <Type>Parameter</Type>
             <Description>Maximale wachttijd fiets</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>mwtvtg</Default>
             <Setting>mwtvtg</Setting>
             <Type>Parameter</Type>
             <Description>Maximale wachttijd voetgangers</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>pmgt</Default>
             <Setting>pmgt</Setting>
             <Type>Parameter</Type>
             <Description>Minimaal percentage groentijd primair tbv. terugkomen fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ognt</Default>
             <Setting>ognt</Setting>
             <Type>Parameter</Type>
             <Description>Minimale groentijd bij terugkomen fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ohpmg</Default>
             <Setting>ohpmg</Setting>
             <Type>Parameter</Type>
             <Description>Percentage ophogen groentijd na afkappen fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>nofm</Default>
             <Setting>nofm</Setting>
             <Type>Parameter</Type>
             <Description>Aantal malen niet afkappen na OV ingreep fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>mgcov</Default>
             <Setting>mgcov</Setting>
             <Type>Parameter</Type>
             <Description>Minimum groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>pmgcov</Default>
             <Setting>pmgcov</Setting>
             <Type>Parameter</Type>
             <Description>Minimum percentage groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>karsg</Default>
             <Setting>karsg</Setting>
             <Type>Parameter</Type>
             <Description>Signaalgroep nummer voor fase _E1_ bij inmelding via DSI</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>karsghd</Default>
             <Setting>karsghd</Setting>
             <Type>Parameter</Type>
             <Description>Signaalgroep nummer voor fase _E1_ bij inmelding HD via DSI</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovinm</Default>
@@ -1627,48 +1932,64 @@
             <Setting>karmelding</Setting>
             <Type>Timer</Type>
             <Description>Duur verklikking ontvangst melding KAR</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>karog</Default>
             <Setting>karog</Setting>
             <Type>Timer</Type>
             <Description>Ondergedrag KAR</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ovminrood</Default>
             <Setting>ovminrood</Setting>
             <Type>Timer</Type>
             <Description>Minimale roodtijd vooraf aan inmelden mogelijk bij _E1_ (indien ingesteld per inmelding)</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>prioin</Default>
             <Setting>prioin</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd inmelden _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>prioin</Default>
             <Setting>prioin</Setting>
             <Type>Schakelaar</Type>
             <Description>Inmelden _E1_ via _E2_ toestaan</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>priouit</Default>
             <Setting>priouit</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd uitmelden _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>priouit</Default>
             <Setting>priouit</Setting>
             <Type>Schakelaar</Type>
             <Description>Uitmelden _E1_ via _E2_ toestaan</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>geenwissel</Default>
             <Setting>geenwissel</Setting>
             <Type>Schakelaar</Type>
             <Description>Wisselstand van _E1_ negeren</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>wissel</Default>
@@ -1681,132 +2002,174 @@
             <Setting>hdin</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd inmelden HD _E1_ _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>hdin</Default>
             <Setting>hdin</Setting>
             <Type>Schakelaar</Type>
             <Description>Inmelden _E1_ via _E2_ HD toestaan</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>hduit</Default>
             <Setting>hduit</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd uitmelden HD _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>hduit</Default>
             <Setting>hduit</Setting>
             <Type>Schakelaar</Type>
             <Description>Uitmelden _E1_ via _E2_ HD toestaan</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>hdinuit</Default>
             <Setting>hdinuit</Setting>
             <Type>Schakelaar</Type>
             <Description>In- en uitmelden _E1_ via _E2_ HD toestaan</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>checksirene</Default>
             <Setting>checksirene</Setting>
             <Type>Schakelaar</Type>
             <Description>Bij HD meldingen bij _E1_ via DSI controleren op CIF_SIR</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>wisselpol</Default>
             <Setting>wisselpol</Setting>
             <Type>Schakelaar</Type>
             <Description>Polariteit van wissel ingang _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>covuber</Default>
             <Setting>covuber</Setting>
             <Type>Schakelaar</Type>
             <Description>Weergeven wijzigingen PRIO_teller via CIF_UBER</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>risprio</Default>
             <Setting>risprio</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>risprio</Default>
             <Setting>risprio</Setting>
             <Type>HulpElement</Type>
-            <Description></Description>
+            <Description />
           </Setting>
           <Setting>
             <Default>risstart</Default>
             <Setting>risstart</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>risend</Default>
             <Setting>risend</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>riseta</Default>
             <Setting>riseta</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>risrole</Default>
             <Setting>risrole</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rissubrole</Default>
             <Setting>rissubrole</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>risstationtype</Default>
             <Setting>risstationtype</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>rismatchsg</Default>
             <Setting>rismatchsg</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ris</Default>
             <Setting>ris</Setting>
             <Type>Timer</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftsblok</Default>
             <Setting>ftsblok</Setting>
             <Type>Parameter</Type>
             <Description>Blokken waarin fiets peloton prio actief mag zijn voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftsmaxpercyc</Default>
             <Setting>ftsmaxpercyc</Setting>
             <Type>Parameter</Type>
             <Description>Maximaal aantal keer fiets peloton prio per cyclus voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftsminvtg</Default>
             <Setting>ftsminvtg</Setting>
             <Type>Parameter</Type>
             <Description>Minimaal aantal gemeten fietsers tbv peloton prio voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftsminwt</Default>
             <Setting>ftsminwt</Setting>
             <Type>Parameter</Type>
             <Description>Minimale wachttijd tbv peloton prio voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftscyc</Default>
@@ -1825,6 +2188,8 @@
             <Setting>vtgcat</Setting>
             <Type>Parameter</Type>
             <Description>Voertuigcategorie DSI voor prio ingreep _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
             <Default>ftstelris</Default>
@@ -1837,6 +2202,8 @@
             <Setting>ftsminvtgris</Setting>
             <Type>Parameter</Type>
             <Description>Minimaal aantal gemeten fietsers via RIS tbv peloton prio voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1858,6 +2225,8 @@
             <Setting>ptp</Setting>
             <Type>Parameter</Type>
             <Description>Parameter prefix</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>ptp</Default>
@@ -1912,84 +2281,112 @@
             <Setting>iks</Setting>
             <Type>Parameter</Type>
             <Description>Instelling inkomende signalen van _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>uks</Default>
             <Setting>uks</Setting>
             <Type>Parameter</Type>
             <Description>Instelling uitgaande signalen naar _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>oke</Default>
             <Setting>oke</Setting>
             <Type>Parameter</Type>
             <Description>PTP oke _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>err</Default>
             <Setting>err</Setting>
             <Type>Parameter</Type>
             <Description>PTP error _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>err0</Default>
             <Setting>err0</Setting>
             <Type>Parameter</Type>
             <Description>PTP error 0 _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>err1</Default>
             <Setting>err1</Setting>
             <Type>Parameter</Type>
             <Description>PTP error 1 _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>err2</Default>
             <Setting>err2</Setting>
             <Type>Parameter</Type>
             <Description>PTP error 2 _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>portnr</Default>
             <Setting>portnr</Setting>
             <Type>Parameter</Type>
             <Description>Poortnummer in het regeltoestel PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>src</Default>
             <Setting>src</Setting>
             <Type>Parameter</Type>
             <Description>Nummer van source PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>dest</Default>
             <Setting>dest</Setting>
             <Type>Parameter</Type>
             <Description>Nummer van destination PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>tmsgw</Default>
             <Setting>tmsgw</Setting>
             <Type>Parameter</Type>
             <Description>Wait timeout PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>tmsgs</Default>
             <Setting>tmsgs</Setting>
             <Type>Parameter</Type>
             <Description>Send timeout PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>tmsga</Default>
             <Setting>tmsga</Setting>
             <Type>Parameter</Type>
             <Description>Alive timeout PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>cmsg</Default>
             <Setting>cmsg</Setting>
             <Type>Parameter</Type>
             <Description>Max. berichtenteller tbv. herhaling PTP _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>oke</Default>
@@ -2017,108 +2414,144 @@
             <Setting>risastart</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot start aanvraag gebied RIS CAM fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risaend</Default>
             <Setting>risaend</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde aanvraag gebied RIS CAM fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risvstart</Default>
             <Setting>risvstart</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot start verleng gebied RIS CAM fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>risvend</Default>
             <Setting>risvend</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde verleng gebied RIS CAM fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>risastartsrm0</Default>
             <Setting>risastartsrm0</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot start aanvraag gebied RIS SRM0 fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risaendsrm0</Default>
             <Setting>risaendsrm0</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde aanvraag gebied RIS SRM0 fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risvstartsrm0</Default>
             <Setting>risvstartsrm0</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot start verleng gebied RIS SRM0 fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>risvendsrm0</Default>
             <Setting>risvendsrm0</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde verleng gebied RIS SRM0 fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>rispstart</Default>
             <Setting>rispstart</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot start peloton bepaal gebied RIS fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_CAM_PelotonFiets</SubCategorie>
           </Setting>
           <Setting>
             <Default>rispend</Default>
             <Setting>rispend</Setting>
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde peloton bepaal gebied RIS fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_CAM_PelotonFiets</SubCategorie>
           </Setting>
           <Setting>
             <Default>rissim</Default>
             <Setting>rissim</Setting>
             <Type>Schakelaar</Type>
             <Description>Inschakelen automatische simulatie RIS</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Testen</SubCategorie>
           </Setting>
           <Setting>
             <Default>rislaneid</Default>
             <Setting>rislaneid</Setting>
             <Type>Parameter</Type>
             <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>rislaneheading</Default>
             <Setting>rislaneheading</Setting>
             <Type>Parameter</Type>
             <Description>Lane heading voor lane met index _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>rislaneheadingmarge</Default>
             <Setting>rislaneheadingmarge</Setting>
             <Type>Parameter</Type>
             <Description>Lane heading marge voor lane met index _E1_ bij fase _E2_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risapproachid</Default>
             <Setting>risapproachid</Setting>
             <Type>Parameter</Type>
             <Description>Approach id voor fase _E1_</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risgeencheckopsg</Default>
             <Setting>risgeencheckopsg</Setting>
             <Type>Schakelaar</Type>
             <Description>Niet checken op signaalgroep bij RIS aanvragen en verlengen</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risaanvraag</Default>
             <Setting>risaanvraag</Setting>
             <Type>Schakelaar</Type>
             <Description>Globaal in of uitschakelen aanvragen via RIS</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>risverlengen</Default>
             <Setting>risverlengen</Setting>
             <Type>Schakelaar</Type>
             <Description>Globaal in of uitschakelen verlengen via RIS</Description>
+            <Categorie>CAT_Optimaliseren</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2158,18 +2591,24 @@
             <Setting>nlrt</Setting>
             <Type>Timer</Type>
             <Description>Nalooptijd rateltikker fase _E1_</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>nivongedimd</Default>
             <Setting>nivongedimd</Setting>
             <Type>Parameter</Type>
             <Description>Dimming niveau rateltikker periode ongedimd fase _E1_</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
           <Setting>
             <Default>nivgedimd</Default>
             <Setting>nivgedimd</Setting>
             <Type>Parameter</Type>
             <Description>Dimming niveau rateltikker periode gedimd fase _E1_</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2185,12 +2624,16 @@
             <Setting>los</Setting>
             <Type>Schakelaar</Type>
             <Description>Toestaan los realiseren fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>realgs</Default>
             <Setting>gs</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelbare gelijkstart tussen fase _E1_ en _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>los</Default>
@@ -2209,30 +2652,40 @@
             <Setting>inl</Setting>
             <Type>Timer</Type>
             <Description>Inloop tijd fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>fo</Default>
             <Setting>fo</Setting>
             <Type>Timer</Type>
             <Description>Fictieve ontruimingstijd van _E1_ naar fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>realvs</Default>
             <Setting>vs</Setting>
             <Type>Timer</Type>
             <Description>Voorstarttijd fase _E1_ op fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>reallr</Default>
             <Setting>lr</Setting>
             <Type>Timer</Type>
             <Description>Late release tijd fase _E1_ naar fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>realil</Default>
             <Setting>il</Setting>
             <Type>Timer</Type>
             <Description>Inloop tijd fase _E1_ naar fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
           <Setting>
             <Default>ar</Default>
@@ -2272,30 +2725,40 @@
             <Setting>rga</Setting>
             <Type>Timer</Type>
             <Description>Richtinggevoelige aanvraag rijtijd fase _E1_ van _E2_ naar _E3_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgav</Default>
             <Setting>rgav</Setting>
             <Type>Timer</Type>
             <Description>Timer reset richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgad</Default>
             <Setting>rgad</Setting>
             <Type>Schakelaar</Type>
             <Description>Type richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgr</Default>
             <Setting>rgr</Setting>
             <Type>Timer</Type>
             <Description>Richtinggevoelig verlengen rijtijd fase _E1_ van _E2_ naar _E3_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Timer</Type>
             <Description>Richtinggevoelig verlengen hiaattijd fase _E1_ van _E2_ naar _E3_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgv</Default>
@@ -2308,6 +2771,8 @@
             <Setting>mkrg</Setting>
             <Type>Parameter</Type>
             <Description>Type verlengen tbv richtinggevoelig verlengen fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2323,54 +2788,72 @@
             <Setting>rgv</Setting>
             <Type>Parameter</Type>
             <Description>Type RoBuGrover</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>min_tcyclus</Default>
             <Setting>min_tcyclus</Setting>
             <Type>Parameter</Type>
             <Description>Minimale cyclustijd</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
-              <Default>max_tcyclus</Default>
-              <Setting>max_tcyclus</Setting>
-              <Type>Parameter</Type>
-              <Description>Maximale cyclustijd</Description>
+            <Default>max_tcyclus</Default>
+            <Setting>max_tcyclus</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximale cyclustijd</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
-              <Default>mintvg</Default>
-              <Setting>mintvg</Setting>
-              <Type>Parameter</Type>
-              <Description>Minimale verlenggroentijd fase _E1_</Description>
+            <Default>mintvg</Default>
+            <Setting>mintvg</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimale verlenggroentijd fase _E1_</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
-              <Default>maxtvg</Default>
-              <Setting>maxtvg</Setting>
-              <Type>Parameter</Type>
-              <Description>Maximale verlenggroentijd fase _E1_</Description>
+            <Default>maxtvg</Default>
+            <Setting>maxtvg</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximale verlenggroentijd fase _E1_</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>tvg_omhoog</Default>
             <Setting>tvg_omhoog</Setting>
             <Type>Parameter</Type>
             <Description>Hoeveelheid ophogen TVG</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>tvg_omlaag</Default>
             <Setting>tvg_omlaag</Setting>
             <Type>Parameter</Type>
             <Description>Hoeveelheid verlagen TVG</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>tvg_verschil</Default>
             <Setting>tvg_verschil</Setting>
             <Type>Parameter</Type>
             <Description>Parameter verschil</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>tvg_npr_omlaag</Default>
             <Setting>tvg_npr_omlaag</Setting>
             <Type>Parameter</Type>
             <Description>Hoeveelheid verlagen TVG bij niet primair</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgvact</Default>
@@ -2383,24 +2866,32 @@
             <Setting>rgv</Setting>
             <Type>Schakelaar</Type>
             <Description>RoBuGrover aan of uit</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgv_snel</Default>
             <Setting>rgv_snel</Setting>
             <Type>Schakelaar</Type>
             <Description>RoBuGrover versneld ophogen of verlagen</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>fd</Default>
             <Setting>f</Setting>
             <Type>Timer</Type>
             <Description>File meting RoBuGrover fase _E1_ detector _E2_</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>hd</Default>
             <Setting>h</Setting>
             <Type>Timer</Type>
             <Description>RoBuGrover hiaat meting fase _E1_ detector _E2_</Description>
+            <Categorie>CAT_Signaalgroep</Categorie>
+            <SubCategorie>SUBCAT_MaximumGroentijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>rgv</Default>
@@ -2428,6 +2919,8 @@
             <Setting>dbsi</Setting>
             <Type>Timer</Type>
             <Description>Bezettijd detector _E1_ t.b.v. schoolingreep</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>schoolingreep</Default>
@@ -2440,12 +2933,16 @@
             <Setting>schoolingreep</Setting>
             <Type>Schakelaar</Type>
             <Description>Schoolingreep aan of uit voor fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>schoolingreepmaxg</Default>
             <Setting>schoolingreepmaxg</Setting>
             <Type>Timer</Type>
             <Description>Maximale duur groen vanaf startgroen bij schoolingreep op fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2461,6 +2958,8 @@
             <Setting>dbsiexgr</Setting>
             <Type>Timer</Type>
             <Description>Bezettijd detector _E1_ t.b.v. Senioreningreep</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>siexgr</Default>
@@ -2473,18 +2972,24 @@
             <Setting>si</Setting>
             <Type>Schakelaar</Type>
             <Description>Senioreningreep aan of uit voor fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>siexgr</Default>
             <Setting>siexgr</Setting>
             <Type>Timer</Type>
             <Description>Meten duur extra groen bij senioreningreep op fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>siexgrperc</Default>
             <Setting>siexgrperc</Setting>
             <Type>Parameter</Type>
             <Description>Extra groen percentage tov. TFG voor senioreningreep op fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2512,6 +3017,8 @@
             <Setting>star</Setting>
             <Type>Schakelaar</Type>
             <Description>Inschakelen star programma</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>starprog</Default>
@@ -2548,30 +3055,40 @@
             <Setting>starprogdef</Setting>
             <Type>Parameter</Type>
             <Description>Default star programma</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>starcyclustijd</Default>
             <Setting>ctijd</Setting>
             <Type>Parameter</Type>
             <Description>Cyclustijd star programma _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>starprog</Default>
             <Setting>starprog</Setting>
             <Type>Parameter</Type>
             <Description>Noodprogramma bij periode _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>starstart</Default>
             <Setting>start</Setting>
             <Type>Parameter</Type>
             <Description>Start realisatie _E1_ fase _E2_ star programma _E3_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>stareind</Default>
             <Setting>eind</Setting>
             <Type>Parameter</Type>
             <Description>Einde realisatie _E1_ fase _E2_ star programma _E3_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2586,67 +3103,89 @@
             <Default>ttxconfidence15</Default>
             <Setting>ttxconfidence15</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>confidence15fix</Default>
             <Setting>confidence15fix</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>txconfidence15ar</Default>
             <Setting>txconfidence15ar</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence1</Default>
             <Setting>spatconfidence1</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence3</Default>
             <Setting>spatconfidence3</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence6</Default>
             <Setting>spatconfidence6</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence9</Default>
             <Setting>spatconfidence9</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence12</Default>
             <Setting>spatconfidence12</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>spatconfidence15</Default>
             <Setting>spatconfidence15</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>timings</Default>
             <Setting>timings</Setting>
             <Type>Schakelaar</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
           <Setting>
             <Default>latencyminendsg</Default>
             <Setting>latencyminendsg</Setting>
             <Type>Parameter</Type>
-            <Description></Description>
+            <Description />
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Afteller</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2662,12 +3201,16 @@
             <Setting>va</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur VA ontruimen van _E1_ naar _E2_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
           <Setting>
             <Default>vamax</Default>
             <Setting>vamax</Setting>
             <Type>Timer</Type>
             <Description>Maximale tijd VA ontruimen na einde geel fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2683,12 +3226,16 @@
             <Setting>maxtvgvlog</Setting>
             <Type>Parameter</Type>
             <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
           <Setting>
             <Default>maxtfbvlog</Default>
             <Setting>maxtfbvlog</Setting>
             <Type>Parameter</Type>
             <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
+            <Categorie>CAT_TestenLoggen</Categorie>
+            <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2704,12 +3251,16 @@
             <Setting>ca</Setting>
             <Type>Schakelaar</Type>
             <Description>Cyclische aanvraag fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
           <Setting>
             <Default>uitgestca</Default>
             <Setting>uitgestca</Setting>
             <Type>Timer</Type>
             <Description>Uitgestelde cyclische aanvraag fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2725,24 +3276,32 @@
             <Setting>vg</Setting>
             <Type>Schakelaar</Type>
             <Description>Veiligheidsgroen detector _E1_ fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>vgmax</Default>
             <Setting>vgmax</Setting>
             <Type>Timer</Type>
             <Description>Maximale tijdsduur veiligheidsgroen voor fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>vgvolg</Default>
             <Setting>vgvolg</Setting>
             <Type>Timer</Type>
             <Description>Volgtijd meting opeenvolgende voertuigen tbv veiligheidsgroen detector _E1_ van fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
           <Setting>
             <Default>vghiaat</Default>
             <Setting>vghiaat</Setting>
             <Type>Timer</Type>
             <Description>Hiaattijd bij actief zijn veiligheidsgroen detector _E1_ van fase _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2758,24 +3317,32 @@
             <Setting>mlfpr</Setting>
             <Type>Parameter</Type>
             <Description>Maximaal aantal modules vooruit fase _E1_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>altg</Default>
             <Setting>altg</Setting>
             <Type>Schakelaar</Type>
             <Description>Alternatieve realisatie toestaan _E1_ _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>altg</Default>
             <Setting>altg</Setting>
             <Type>Parameter</Type>
             <Description>Minimale groentijd bij alternatieve realisatie fase _E1_ _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
           <Setting>
             <Default>altp</Default>
             <Setting>altp</Setting>
             <Type>Parameter</Type>
             <Description>Minimale ruimte tbv alternatieve realisatie _E1_ _E2_</Description>
+            <Categorie>CAT_Module</Categorie>
+            <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2809,6 +3376,8 @@
             <Setting>belcontdim</Setting>
             <Type>Schakelaar</Type>
             <Description>Continu dimmen bellen</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Rateltikker</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2824,6 +3393,8 @@
             <Setting>wg</Setting>
             <Type>Schakelaar</Type>
             <Description>Wachtstand groen fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Wachtgroen</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2839,12 +3410,16 @@
             <Setting>wtvnhaltmax</Setting>
             <Type>Parameter</Type>
             <Description>Niet halteren wachttijdvoorspellers indien meer dan of zoveel leds branden</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
           <Setting>
             <Default>wtvnhaltmin</Default>
             <Setting>wtvnhaltmin</Setting>
             <Type>Parameter</Type>
             <Description>Niet halteren wachttijdvoorspellers indien minder dan of zoveel leds branden</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
           <Setting>
             <Default>wtv</Default>
@@ -2863,6 +3438,8 @@
             <Setting>wtv</Setting>
             <Type>Schakelaar</Type>
             <Description>Aansturing wachttijdvoorspeller fase _E1_ aan of uit</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
           <Setting>
             <Default>wtv</Default>
@@ -2875,6 +3452,8 @@
             <Setting>wtv</Setting>
             <Type>Timer</Type>
             <Description>T.b.v. aansturing wachttijdvoorspeller fase _E1_</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
           <Setting>
             <Default>wtv</Default>
@@ -2893,6 +3472,8 @@
             <Setting>minwtv</Setting>
             <Type>Parameter</Type>
             <Description>Minimale tijd die een LED moet branden tijdens aftellen</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -2908,6 +3489,8 @@
             <Setting>wt</Setting>
             <Type>Uitgang</Type>
             <Description>Aansturing waitsignaal detector _E1_</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>
         </Settings>
       </CodePieceData>
