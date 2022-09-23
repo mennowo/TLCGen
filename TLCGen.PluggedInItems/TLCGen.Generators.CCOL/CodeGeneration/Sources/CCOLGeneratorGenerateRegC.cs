@@ -220,7 +220,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("mulv TDH_old[DPMAX];");
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL120)
+            {
+                sb.AppendLine("mulv TDH_old[DPMAX];");
+            }
             sb.AppendLine("mulv DB_old[DPMAX];");
             sb.AppendLine("mulv DVG[DPMAX]; /* T.b.v. veiligheidsgroen */");
             sb.AppendLine();

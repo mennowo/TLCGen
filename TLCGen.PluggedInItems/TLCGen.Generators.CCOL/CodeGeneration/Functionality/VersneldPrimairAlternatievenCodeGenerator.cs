@@ -840,12 +840,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             first = false;
                         }
 
-                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}] || G[{_fcpf}{sync.FaseVan}];");
+                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseVan}] = PAR[{_fcpf}{sync.FaseVan}] || G[{_fcpf}{sync.FaseNaar}];");
+                    }
+                    sb.AppendLine();
+                    foreach (var sync in sortedSyncs.oneWay)
+                    {
+                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
                     }
 
                     if (first == false) sb.AppendLine();
                 }
 
+                
                 if (c.InterSignaalGroep.Gelijkstarten.Any())
                 {
                     first = true;
