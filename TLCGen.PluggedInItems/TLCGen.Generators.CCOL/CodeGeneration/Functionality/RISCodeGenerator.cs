@@ -246,6 +246,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.RISData.RISToepassen && c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
                     {
                         sb.AppendLine();
+                        sb.AppendLine("#ifndef NO_RIS");
                         sb.AppendLine($"{ts}/* Definitie ProductInformatie ITSinfo */");
                         sb.AppendLine($"{ts}/* ----------------------------------- */");
                         sb.AppendLine($"{ts}const struct Rif_ProductInformation RIF_ITSINFO_AP = {{");
@@ -254,20 +255,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}  \"12.0.0\",                /* certifiedVersion   */");
                         sb.AppendLine($"{ts}  \"12.0.0\"                 /* version            */");
                         sb.AppendLine($"{ts}}};");
+                        sb.AppendLine("#endif /* NO_RIS */");
                     }
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInitPrio:
                     if (!c.HasPrioRis()) return "";
                     
-                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                    sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}/* initialisatie variabelen granted_verstrekt */");
                     sb.AppendLine($"{ts}/* ------------------------------------------ */");
                     sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}granted_verstrekt[i] = 0;");
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
+                    sb.AppendLine($"{ts}#endif /* NO_RIS */");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
@@ -297,7 +299,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
                     if (!c.HasPrioRis()) return "";
 
-                    sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
+                    sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}/* nooit einde groen als granted verstrekt */");
                     sb.AppendLine($"{ts}/* --------------------------------------- */");
                     sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i)");
@@ -309,7 +311,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}Z[i] = FALSE;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine($"{ts}#endif /* NO_TIMETOX */");
+                    sb.AppendLine($"{ts}#endif /* NO_RIS */");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
