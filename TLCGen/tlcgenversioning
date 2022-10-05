@@ -1,5 +1,11 @@
-TLCGen=0.12.0.0
+TLCGen=0.12.1.0
 RN==TLCGen
+TLCGen versie: 0.12.1.0
+- Support voor SRM0
+- Reden voor wachttijd RIF
+- Categorieën en subcategorieën voor CCOL parameters
+- Fix eenmalig afkappen start file
+- Fix compileren NO_RIS
 TLCGen versie: 0.12.0.0
 - Inkomende PTP signalen test ook tijdens PTP storing
 - Inmelding prio fietsers tijdens groen
