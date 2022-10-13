@@ -3,7 +3,7 @@ RN==TLCGen
 TLCGen versie: 0.12.1.0
 - Support voor SRM0
 - Reden voor wachttijd RIF
-- Categorieën en subcategorieën voor CCOL parameters
+- Categorieen en subcategorieen voor CCOL parameters
 - Fix eenmalig afkappen start file
 - Fix compileren NO_RIS
 TLCGen versie: 0.12.0.0
