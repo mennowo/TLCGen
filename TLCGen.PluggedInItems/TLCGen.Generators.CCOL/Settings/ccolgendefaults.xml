@@ -3190,6 +3190,23 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="TraffickCompatibleCodeGenerator">
+      <CodePieceData>
+        <ClassName>TraffickCompatibleCodeGenerator</ClassName>
+        <Description>Traffick compatabiliteit</Description>
+        <ElementGenerationOrder>380</ElementGenerationOrder>
+        <Settings>
+          <Setting>
+            <Default>traffick2tlcgen</Default>
+            <Setting>traffick2tlcgen</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Activeren Traffick functies</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Testen</SubCategorie>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="VAOntruimenCodeGenerator">
       <CodePieceData>
         <ClassName>VAOntruimenCodeGenerator</ClassName>
@@ -3472,6 +3489,14 @@
             <Setting>minwtv</Setting>
             <Type>Parameter</Type>
             <Description>Minimale tijd die een LED moet branden tijdens aftellen</Description>
+            <Categorie>CAT_Informeren</Categorie>
+            <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
+          </Setting>
+          <Setting>
+            <Default>wtvbusbijhd</Default>
+            <Setting>wtvbusbijhd</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Aansturing wachttijdvoorspeller BUS licht bij HD ingreep</Description>
             <Categorie>CAT_Informeren</Categorie>
             <SubCategorie>SUBCAT_Wachttijdvoorspeller</SubCategorie>
           </Setting>

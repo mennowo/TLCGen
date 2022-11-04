@@ -144,6 +144,8 @@ namespace TLCGen.Models
         [Browsable(false)]
         public bool HasInNoControlOutputs => CCOLVersie >= CCOLVersieEnum.CCOL110;
 
+        public bool TraffickCompatible { get; set; }
+
         #endregion // Properties
 
         #region Public Methods

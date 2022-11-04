@@ -65,6 +65,13 @@ namespace TLCGen.Models
                 .Concat(c.InterSignaalGroep.Nalopen);
         }
 
+        public static IEnumerable<NaloopModel> GetVoetgangersNalopen(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Nalopen.Where(x =>
+                c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
+                c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger));
+        }
+        
         public static IEnumerable<GelijkstartModel> GetGelijkstarten(this ControllerModel c, string fc)
         {
             return c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc || x.FaseNaar == fc);

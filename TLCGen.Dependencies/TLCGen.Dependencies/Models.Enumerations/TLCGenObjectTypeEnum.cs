@@ -22,6 +22,7 @@
         SelectieveDetector,
         PelotonKoppeling,
         PrioriteitsIngreep,
-        StarProgramma
+        StarProgramma,
+        KruispuntArm
     }
 }

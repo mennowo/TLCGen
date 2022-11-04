@@ -111,6 +111,12 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmenTabView.xaml.cs">
+      <DependentUpon>KruispuntArmenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmenTabViewModel.cs">
+      <DependentUpon>KruispuntArmenTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\FasenTab\DataTypes\TimingsFaseCyclusDataViewModel.cs" />
     <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISLanePelotonDataViewModel.cs" />
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabView.xaml.cs">
@@ -683,6 +689,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmenTabView.xaml" />
     <Page Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

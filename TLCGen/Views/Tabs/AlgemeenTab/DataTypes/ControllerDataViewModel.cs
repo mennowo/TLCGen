@@ -611,6 +611,17 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(CCOLCodeCase), broadcast: true);
             }
         }
+        
+        [Description("Traffick compatabiliteit")]
+        public bool TraffickCompatible
+        {
+            get => _Controller?.Data?.TraffickCompatible ?? false;
+            set
+            {
+                _Controller.Data.TraffickCompatible = value;
+                RaisePropertyChanged<object>(nameof(TraffickCompatible), broadcast: true);
+            }
+        }
 
         [Category("Opties ontwikkel omgeving")]
         [Description("VLOG in testomgeving")]

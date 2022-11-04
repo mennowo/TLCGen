@@ -23,6 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _mwtv;
         private CCOLGeneratorCodeStringSettingModel _mwtvm;
         private CCOLGeneratorCodeStringSettingModel _prmminwtv;
+        private CCOLGeneratorCodeStringSettingModel _schwtvbusbijhd;
 #pragma warning restore 0649
         private string _isfix;
         private string _tnlsg;
@@ -57,16 +58,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtvbus}{fc.Naam}", _uswtvbus, fc.WachttijdVoorspellerBusBitmapData, fc.Naam));
                 }
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.WachttijdVoorspellerBitmapData0, fc.Naam));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.WachttijdVoorspellerBitmapData1, fc.Naam));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.WachttijdVoorspellerBitmapData2, fc.Naam));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtv, fc.WachttijdVoorspellerBitmapData3, fc.Naam));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtv, fc.WachttijdVoorspellerBitmapData4, fc.Naam));
+
+                if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL110)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.WachttijdVoorspellerBitmapData0, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.WachttijdVoorspellerBitmapData1, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.WachttijdVoorspellerBitmapData2, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtv, fc.WachttijdVoorspellerBitmapData3, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtv, fc.WachttijdVoorspellerBitmapData4, fc.Naam));
+                }
+
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwtv}{fc.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwtv}{fc.Naam}", _hwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwtv}{fc.Naam}", _mwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwtvm}{fc.Naam}", _mwtvm, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_twtv}{fc.Naam}", 999, CCOLElementTimeTypeEnum.TE_type, _twtv, fc.Naam));
+            }
+            
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwtvbusbijhd}", c.Data.WachttijdvoorspellerAansturenBusHD ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schwtvbusbijhd));
             }
         }
 
@@ -404,23 +415,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var reeks = GetFaseReeks(c, fc.Naam);
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
-                        if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
                         {
-                            if (!c.Data.WachttijdvoorspellerAansturenBusHD)
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hwtv}{fc.Naam}] && G[{_fcpf}{fc.Naam}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] = MM[{_mpf}{_mwtvm}{fc.Naam}];");
+                            sb.AppendLine($"{ts}}}");
+                            if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & PRIO_RTFB_BIT);");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] &= ~BIT8;");
+                                sb.AppendLine(
+                                    $"{ts}if (CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && " +
+                                    $"rr_twacht[{_fcpf}{fc.Naam}] && IH[{_hpf}{_hwtv}{fc.Naam}] && " +
+                                    $"(SCH[{_schpf}{_schwtvbusbijhd}] || !(RTFB & PRIO_RTFB_BIT)))");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] |= BIT8;");
+                                sb.AppendLine($"{ts}}}");
                             }
                         }
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}1]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT1) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}2]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT2) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}3]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT3) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}4]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT4) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        else
+                        {
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] = MM[{_mpf}{_mwtvm}{fc.Naam}];");
+                            if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+                            {
+                                if (!c.Data.WachttijdvoorspellerAansturenBusHD)
+                                {
+                                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & PRIO_RTFB_BIT);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
+                                }
+                            }
+
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}1] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT1) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}2] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT2) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}3] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT3) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}4] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT4) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        }
+
                         sb.AppendLine();
                     }
 

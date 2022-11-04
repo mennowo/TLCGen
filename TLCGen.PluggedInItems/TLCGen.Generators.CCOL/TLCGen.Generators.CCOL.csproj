@@ -72,6 +72,7 @@
     <Compile Include="CodeGeneration\Functionality\OVGeconditioneerdePrioGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\StarCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\TimingsCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\TraffickCompatibleCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VISSIMCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VeiligheidsGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\NalopenCodeGenerator.cs" />

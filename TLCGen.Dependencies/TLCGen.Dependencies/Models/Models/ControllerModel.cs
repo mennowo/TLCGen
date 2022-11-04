@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -44,7 +45,7 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "VAOntruimenFase")]
         public List<VAOntruimenFaseModel> VAOntruimenFasen { get; set; }
-
+        
         public PelotonKoppelingenDataModel PelotonKoppelingenData { get; set; }
 
         public AlternatievenPerBlokModel AlternatievenPerBlokData { get; set; }
@@ -73,6 +74,8 @@ namespace TLCGen.Models
         public TimingsDataModel TimingsData { get; set; }
         
 		public CustomDataModel CustomData { get; set; }
+
+        public KruispuntLayout Kruispunt { get; set; }
 
         #endregion // Properties
 
@@ -105,6 +108,7 @@ namespace TLCGen.Models
             AlternatievenPerBlokData = new AlternatievenPerBlokModel();
             StarData = new StarDataModel();
             TimingsData = new TimingsDataModel();
+            Kruispunt = new KruispuntLayout();
         }
 
         #endregion // Constructor

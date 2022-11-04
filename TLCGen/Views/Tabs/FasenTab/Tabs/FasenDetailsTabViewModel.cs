@@ -42,10 +42,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            if (SelectedFaseCyclus == null)
-            {
-                SelectedFaseCyclus = Fasen.FirstOrDefault();
-            }
+            SelectedFaseCyclus ??= Fasen.FirstOrDefault();
         }
 
         public override ControllerModel Controller

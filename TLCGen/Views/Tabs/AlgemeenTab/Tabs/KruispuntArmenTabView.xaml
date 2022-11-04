@@ -1,0 +1,75 @@
+<UserControl x:Class="TLCGen.Views.KruispuntArmenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" Name="root"
+             d:DataContext="{d:DesignInstance viewModels:KruispuntArmenTabViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition MaxHeight="200" Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Content="Kruispunt armen" />
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=KruispuntArmen}"
+                  SelectedItem="{Binding Path=SelectedKruispuntArm}"
+                  Margin="2" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam}" />
+                <DataGridTextColumn Header="Omschrijving" Binding="{Binding Path=Omschrijving}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Margin="2" Command="{Binding Path=AddKruispuntArmCommand}" Content="Toevoegen" />
+            <Button Margin="2" Command="{Binding Path=RemoveKruispuntArmCommand}" Content="Verwijderen" />
+        </StackPanel>
+        <Label Grid.Row="3" Content="Toedeling signaalgroepen" />
+        <DataGrid Grid.Row="4" ItemsSource="{Binding Path=FasenMetKruispuntArmen}"
+                  Margin="2" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.FaseCyclus}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Kruispunt arm">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=KruispuntArm}" Margin="2" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=KruispuntArm,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Volg arm">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=KruispuntArmVolg}" Margin="2" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=KruispuntArmVolg,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
