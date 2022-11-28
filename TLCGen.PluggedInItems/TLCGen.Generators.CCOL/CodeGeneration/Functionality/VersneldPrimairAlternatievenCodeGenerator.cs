@@ -743,6 +743,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
+                        
+
+                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
+                        {
+                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts, order));
+                            sb.AppendLine();
+                        }
+                        
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         if (c.HalfstarData.IsHalfstar)
                         {

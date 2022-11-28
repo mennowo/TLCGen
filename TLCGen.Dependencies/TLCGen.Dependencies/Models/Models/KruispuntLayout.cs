@@ -42,5 +42,8 @@ namespace TLCGen.Models
         [RefersTo(TLCGenObjectTypeEnum.KruispuntArm)]
         [HasDefault(false)]
         public string KruispuntArmVolg { get; set; }
+        
+        public bool HasKruispuntArmVolgTijd { get; set; }
+        public int KruispuntArmVolgTijd { get; set; }
     }
 }

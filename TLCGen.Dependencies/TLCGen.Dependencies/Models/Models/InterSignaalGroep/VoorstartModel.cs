@@ -25,6 +25,7 @@ namespace TLCGen.Models
         {
             switch (format)
             {
+                case "vannaar": return FaseVan + FaseNaar;
                 case "naarvan": return FaseNaar + FaseVan;
                 case "van": return FaseVan;
                 case "naar": return FaseNaar;

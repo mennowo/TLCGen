@@ -15,8 +15,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _schwg;
         private string _schaltg; 
         private string _prmaltp;
+        private string _prmaltb;
         private string _prmaltg;
         private string _cvchd;
+        private string _tnlfg;
+        private string _tnlfgd;
+        private string _tnleg;
+        private string _tnlegd;
+        private string _tnlsgd;
+        private string _tinl;
+        private string _hlos;
+        private string _hnla;
+        private string _tvs;
+        private string _tfo;
+        private string _schma;
+        private string _schhardmv;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schtraffick2tlcgen;
 #pragma warning restore 0649
@@ -38,31 +51,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
+                CCOLCodeTypeEnum.RegCTop => new []{130},
                 CCOLCodeTypeEnum.RegCIncludes => new []{130},
                 CCOLCodeTypeEnum.RegCPreApplication => new []{130},
+                CCOLCodeTypeEnum.RegCAanvragen => new []{130},
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{20},
                 CCOLCodeTypeEnum.RegCVerlenggroen => new []{80},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{80},
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{40},
-                CCOLCodeTypeEnum.RegCMeetkriterium => new []{130},
                 CCOLCodeTypeEnum.RegCMeeverlengen => new []{30},
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{40},
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => new []{20},
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules => new []{10},
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{130},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules => new []{130},
                 CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new []{130},
                 CCOLCodeTypeEnum.RegCInitApplication => new []{130},
                 CCOLCodeTypeEnum.RegCPostApplication => new []{130},
+                CCOLCodeTypeEnum.RegCPostSystemApplication => new []{130},
                 CCOLCodeTypeEnum.RegCDumpApplication => new []{10},
                 
+                CCOLCodeTypeEnum.PrioCTop => new []{20},
                 CCOLCodeTypeEnum.PrioCIncludes => new []{20},
                 CCOLCodeTypeEnum.PrioCInUitMelden => new []{120},
-                CCOLCodeTypeEnum.PrioCAfkapGroen => new []{5},
-                CCOLCodeTypeEnum.PrioCStartGroenMomenten => new []{5, 120},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{120},
-                CCOLCodeTypeEnum.PrioCPrioriteitsToekenning => new []{5},
-                CCOLCodeTypeEnum.PrioCTegenhoudenConflicten => new []{10},
-                CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{120},
-                CCOLCodeTypeEnum.PrioCPARCorrecties => new []{120},
                 
                 CCOLCodeTypeEnum.SysHDefines => new []{130},
                 _ => null
@@ -73,10 +83,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    return c.Data.TraffickCompatible
-                        ? new List<CCOLLocalVariable> { new("count", "i", "0") }
-                        : base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -114,6 +120,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[schtraffick2tlcgen])");
                     sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}/* bijwerken kruispunt variabelen */");
+                    sb.AppendLine($"{ts}{ts}/* ------------------------------ */");
+                    sb.AppendLine($"{ts}{ts}traffick2tlcgen_kruispunt();");
+                    sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* bijwerken detectie variabelen */");
                     sb.AppendLine($"{ts}{ts}/* ----------------------------- */");
                     sb.AppendLine($"{ts}{ts}traffick2tlcgen_detectie();");
@@ -140,10 +150,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}traffick2tlcgen_instel(" +
                                       $"{_fcpf}{fc.Naam}, " +
                                       $"SCH[{_schpf}{_schwg}{fc.Naam}], " +
-                                      $"TRUE," +
+                                      $"TRUE, " +
                                       $"SCH[{_schpf}{_schmv}{fc.Naam}], " +
                                       $"FALSE, " +
                                       $"SCH[{_schpf}{_schaltg}{namealtg}], " +
+                                      $"PRM[{_prmpf}{_prmaltb}{fc.Naam}], " +
                                       $"PRM[{_prmpf}{_prmaltp}{namealtp}], " +
                                       $"PRM[{_prmpf}{_prmaltg}{fc.Naam}], " +
                                       (kar != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, kar)}, " : "NG, ") +
@@ -156,6 +167,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();    
+                
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
+                    sb.AppendLine($"{ts}if (SCH[schtraffick2tlcgen]) fiets_voorrang_aanvraag();");
+
+                    return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
@@ -172,14 +189,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}if (display)");
                     sb.AppendLine($"{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}count fc;");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(92, 6, \"      T2SG T2EG AltR  TFB  MTG\");");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(92, 6, \"      T2SG T2EG AltR  TFB Aled\");");
                     sb.AppendLine($"{ts}{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(97, 7 + fc, \"%5d\", REALtraffick[fc]);");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(102, 7 + fc, \"%5d\", TEG[fc]);");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(107, 7 + fc, \"%5d\", AltRuimte[fc]);");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(112, 7 + fc, \"%5d\", TFB_timer[fc]);");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(117, 7 + fc, \"%5d\", MTG[fc]);");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(117, 7 + fc, \"%5d\", Aled[fc]);");
                     sb.AppendLine($"{ts}{ts}{ts}}}");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
@@ -191,11 +208,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_WGR();");
                     return sb.ToString();
                 
-                case CCOLCodeTypeEnum.RegCMeetkriterium:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_MVG();");
-                    return sb.ToString();
-                    
                 case CCOLCodeTypeEnum.RegCMeeverlengen:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_MVG();");
@@ -205,17 +217,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}])");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}Traffick2TLCgen_uitstel();");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}for (i = 0; i < aantal_hki_kop; ++i)");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}count fc1 = hki_kop[i].fc1;      /* voedende richting */");
-                    sb.AppendLine($"{ts}{ts}count fc2 = hki_kop[i].fc2;      /* volg     richting */");
-                    sb.AppendLine($"{ts}{ts}{ts}if (PRML[ML][fc1] != PRIMAIR) REAL_SYN[fc1][fc2] = REAL_SYN[fc2][fc1] = FALSE;");
-                    sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();    
                 
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}])");
                     sb.AppendLine($"{ts}{{");
@@ -237,24 +242,59 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}init_traffick2tlcgen();");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
-                    {
-                        sb.AppendLine($"{ts}definitie_harde_koppeling(fc02, fc62, tlr6202, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, TRUE, TRUE, TVG_max[fc62]);");
-                    }
                     
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                    {
+                        var volg = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                        var tnlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                        var tnleg = nl.DetectieAfhankelijk ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
+                        var tnlfgd = nl.VasteNaloop ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                        var tnlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
+                        sb.AppendLine($"{ts}definitie_harde_koppeling(" +
+                                      $"{_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}lr{nl:naarvan}, " +
+                                      $"{tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, " +
+                                      $"{(nl.Type == NaloopTypeEnum.EindeGroen ? "TRUE" : "FALSE")}, " +
+                                      $"{(volg?.Type == FaseTypeEnum.Auto || volg?.Type == FaseTypeEnum.OV ? "TRUE" : "FALSE")}, " +
+                                      $"TVG_max[{_fcpf}{nl:naar}]);");
+                    }
+
+                    var doneVrgs = new List<string>();
                     foreach (var nl in c.GetVoetgangersNalopen())
                     {
-                        sb.AppendLine($"{ts}definitie_vtg_gescheiden(fc31, fc32, tinl3132, tinl3231, tnlsgd3132, tnlsgd3231, hnlak31a, hnlak32a, hlos31, hlos32);");
+                        if (doneVrgs.Contains(nl.FaseVan)) continue;
+                        doneVrgs.Add(nl.FaseVan);
+                        doneVrgs.Add(nl.FaseNaar);
+                        var other = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == nl.FaseNaar);
+                        if (other == null ||
+                            !(nl.Type == NaloopTypeEnum.StartGroen && other.Type == NaloopTypeEnum.StartGroen)) continue;
+
+                        var d1 = nl.Detectoren.FirstOrDefault();
+                        var d2 = other.Detectoren.FirstOrDefault();
+                        
+                        sb.AppendLine($"{ts}definitie_vtg_gescheiden(" +
+                                      $"{_fcpf}{nl:van}, {_fcpf}{nl:naar}, " +
+                                      $"{_tpf}{_tinl}{nl:van}{nl:naar}, {_tpf}{_tinl}{nl:naar}{nl:van}, " +
+                                      $"{_tpf}{_tnlsgd}{nl:van}{nl:naar}, {_tpf}{_tnlsgd}{nl:naar}{nl:van}, " +
+                                      $"{(d1 != null ? $"{_hpf}{_hnla}{d1.Detector}" : "NG")}, " +
+                                      $"{(d2 != null ? $"{_hpf}{_hnla}{d2.Detector}" : "NG")}, " +
+                                      $"{_hpf}{_hlos}{nl:van}, {_hpf}{_hlos}{nl:naar});");
                     }
 
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}definitie_gelijkstart_lvk(fc22, fc32, NG, NG);");
+                        sb.AppendLine($"{ts}definitie_gelijkstart_lvk({_fcpf}{gs:van}, {_fcpf}{gs:naar}, NG, NG);");
                     }
                     
-                    foreach (var gs in c.InterSignaalGroep.Voorstarten)
+                    foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}definitie_voorstart_dcf(fc05, fc22, tvs2205, tfo0522, schma0522, schhardmv2205);");
+                        var ma = c.InterSignaalGroep.Meeaanvragen.FirstOrDefault(x => x.FaseVan == vs.FaseNaar);
+                        var fcVan = c.Fasen.FirstOrDefault(x => x.Naam == vs.FaseVan);
+                        sb.AppendLine($"{ts}definitie_voorstart_dcf(" +
+                                      $"{_fcpf}{vs:naar}, {_fcpf}{vs:van}, " +
+                                      $"{_tpf}{_tvs}{vs:vannaar}, " +
+                                      $"{_tpf}{_tfo}{vs:naarvan}, " +
+                                      $"{(ma != null ? $"{_schpf}{_schma}{vs:naarvan}": "NG")}, " +
+                                      $"{(fcVan?.HardMeeverlengenFaseCycli.Any(x => x.FaseCyclus == vs.FaseNaar) == true ? $"{_schpf}{_schhardmv}{vs:vannaar}" : "NG")});");
                     }
 
                     if (c.Kruispunt.KruispuntArmen.Any() && c.Kruispunt.FasenMetKruispuntArmen.Any(x => x.KruispuntArm != "NG"))
@@ -272,7 +312,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();    
                 
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    
 //#if (!defined (AUTOMAAT) && !defined AUTOMAAT_TEST || defined (VISSIM)) && defined NO_PRINT_REALTIJD
 //    /* Traffick2TLCGen */
 //    if (display)
@@ -287,80 +326,64 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 //    }
 //#endif
 //
-//#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST
-//    /* Traffick2TLCGen */
-//    if (SCH[schtraffick2tlcgen])
-//    {
-//       FlightTraffick();
-//    }
-//#endif
+                    sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
+                    sb.AppendLine($"{ts}if (SCH[schtraffick2tlcgen])");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}FlightTraffick();");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
+                    sb.AppendLine($"{ts}if (SCH[schtraffick2tlcgen]) verklik_fiets_voorrang();");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.RegCDumpApplication:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
+                    sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) DumpTraffick();");
+                    sb.AppendLine($"#endif");
                     return sb.ToString();    
+                
+                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.PrioCTop:
+                    sb.AppendLine("#define TRAFFICK");
+                    return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCIncludes:
                     sb.AppendLine("/* Traffick2TLCGen */");
                     sb.AppendLine("#include \"traffick2tlcgen.h\"");
                     return sb.ToString();
+                
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) fiets_voorrang_module();");
                     return sb.ToString();
-                case CCOLCodeTypeEnum.PrioCAfkapGroen:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_PRIO_TOE();");
-                    return sb.ToString();
-                case CCOLCodeTypeEnum.PrioCStartGroenMomenten:
-                    if (order == 5)
-                    {
-                        sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCpas_TVG_aan();");
-                    }
-                    if (order == 120)
-                    {
-                        sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCzet_TVG_terug();");
-                    }
-                    return sb.ToString();
+                
                 case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}])");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}Traffick2TLCgen_HLPD();");
+                    sb.AppendLine($"{ts}{ts}Traffick2TLCgen_PRIO_OPTIES();");
                     if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen))
                     {
                         sb.AppendLine();
                         foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
                         {
-                            sb.AppendLine($"{ts}{ts}Traffick2TLCgen_HLPD_nal({_fcpf}{nl:van}, {_fcpf}{nl:naar}, 100);");
+                            var arm = c.Kruispunt.FasenMetKruispuntArmen.FirstOrDefault(x => x.FaseCyclus == nl.FaseVan);
+                            var tijd = "NG";
+                            if (arm is { HasKruispuntArmVolgTijd: true })
+                            {
+                                tijd = arm.KruispuntArmVolgTijd.ToString();
+                            }
+                            sb.AppendLine($"{ts}{ts}Traffick2TLCgen_HLPD_nal({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tijd});");
                         }
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}Traffick2TLCgen_HLPD();");
                     sb.AppendLine($"{ts}}}");
-                    return sb.ToString();
-                
-                case CCOLCodeTypeEnum.PrioCPrioriteitsToekenning:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) corrigeer_blokkeringstijd_OV();");
-                    return sb.ToString();
-                
-                case CCOLCodeTypeEnum.PrioCTegenhoudenConflicten:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_PRIO_RR();");
-                    return sb.ToString();
-                
-                case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_PRIO();");
-                    return sb.ToString();
-                
-                case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) Traffick2TLCgen_PRIO_PAR();");
                     return sb.ToString();
             }
 
@@ -374,9 +397,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _schmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schmv");
             _schwg = CCOLGeneratorSettingsProvider.Default.GetElementName("schwg");
             _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
+            _prmaltb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltb");
             _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
             _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+            _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
+            _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
+            _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+            _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
+            _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
+            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
+            _tvs = CCOLGeneratorSettingsProvider.Default.GetElementName("tvs");
+            _tfo = CCOLGeneratorSettingsProvider.Default.GetElementName("tfo");
+            _schma = CCOLGeneratorSettingsProvider.Default.GetElementName("schma");
+            _schhardmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schhardmv");
 
             return base.SetSettings(settings);
         }

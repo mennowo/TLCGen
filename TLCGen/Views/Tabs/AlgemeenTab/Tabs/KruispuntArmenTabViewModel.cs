@@ -111,8 +111,34 @@ public class KruispuntArmFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
         {
             Model.KruispuntArmVolg = value;
             RaisePropertyChanged<object>(broadcast: true);
+            RaisePropertyChanged(nameof(HasVolgArm));
+            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
         }
     }
+
+    public bool HasKruispuntArmVolgTijd
+    {
+        get => Model.HasKruispuntArmVolgTijd;
+        set
+        {
+            Model.HasKruispuntArmVolgTijd = value;
+            RaisePropertyChanged<object>(broadcast: true);
+            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+        }
+    }
+    
+    public int KruispuntArmVolgTijd
+    {
+        get => Model.KruispuntArmVolgTijd;
+        set
+        {
+            Model.KruispuntArmVolgTijd = value;
+            RaisePropertyChanged<object>(broadcast: true);
+        }
+    }
+
+    public bool HasVolgArm => KruispuntArmVolg != null && KruispuntArmVolg != "NG";
+    public bool HasVolgArmAndUseTime => HasVolgArm && HasKruispuntArmVolgTijd;
 
     #endregion // Properties
 

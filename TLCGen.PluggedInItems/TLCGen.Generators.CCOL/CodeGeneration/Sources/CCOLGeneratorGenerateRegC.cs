@@ -915,6 +915,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("void dump_application(void)");
             sb.AppendLine("{");
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDumpApplication, true, true, false, true);
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_dump_application();");
 	        if (controller.HalfstarData.IsHalfstar)

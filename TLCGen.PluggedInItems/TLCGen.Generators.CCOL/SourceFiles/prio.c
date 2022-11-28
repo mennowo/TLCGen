@@ -1919,7 +1919,10 @@ void PrioAlternatieven(void)
     }
 	PrioPARCorrecties();
 #ifdef PRIO_ADDFILE
-	PrioAlternatieven_Add();
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCgen_PRIO_PAR();
+#endif
+    PrioAlternatieven_Add();
 #endif
 
     for (fc = 0; fc < FCMAX; ++fc)
@@ -2265,6 +2268,9 @@ void AfhandelingPrio(void)
 
     WachtTijdBewaking();
 #ifdef PRIO_ADDFILE
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) corrigeer_maximum_wachttijd_OV();
+#endif
     WachtTijdBewaking_Add();
 #endif
 
@@ -2276,23 +2282,35 @@ void AfhandelingPrio(void)
 
     BlokkeringsTijd();
 #ifdef PRIO_ADDFILE
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) corrigeer_blokkeringstijd_OV();
+#endif
     BlokkeringsTijd_Add();
 #endif
 
     PrioriteitsToekenning();
 #ifdef PRIO_ADDFILE
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCgen_PRIO_TOE();
+#endif
     PrioriteitsToekenning_Add();
 #endif
 
 	AfkapGroen();
 	AfkapGroenExtra();
 #ifdef PRIO_ADDFILE
+#if (defined (TRAFFICK) && defined (NALOPEN))
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCpas_TVG_aan();
+#endif
     AfkapGroen_Add();
 #endif
 
 	StartGroenMomenten();
 	StartGroenMomentenExtra();
 #ifdef PRIO_ADDFILE
+#if (defined (TRAFFICK) && defined (NALOPEN))
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCzet_TVG_terug();
+#endif
     StartGroenMomenten_Add();
 #endif
 
@@ -2310,7 +2328,10 @@ void AfhandelingPrio(void)
        ------------------------------------------------ */
 	PrioTegenhouden();
 #ifdef PRIO_ADDFILE
-	PrioTegenhouden_Add();
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCgen_PRIO_RR();
+#endif
+    PrioTegenhouden_Add();
 #endif
 
     /* -------------------------------------------
@@ -2361,7 +2382,10 @@ void AfhandelingPrio(void)
 
     PostAfhandelingPrio();
 #ifdef PRIO_ADDFILE
-	PostAfhandelingPrio_Add();
+#ifdef TRAFFICK
+    if (SCH[schtraffick2tlcgen]) Traffick2TLCgen_PRIO();
+#endif
+    PostAfhandelingPrio_Add();
 #endif
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined(VISSIM)

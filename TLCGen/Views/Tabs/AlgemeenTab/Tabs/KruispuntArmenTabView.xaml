@@ -48,9 +48,9 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox 
-                                            ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
-                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                            SelectedValue="{Binding Path=KruispuntArm,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                                ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
+                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                SelectedValue="{Binding Path=KruispuntArm,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -63,12 +63,40 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox 
-                                            ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
-                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                            SelectedValue="{Binding Path=KruispuntArmVolg,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                                ItemsSource="{Binding Path=DataContext.SelectableKruispuntArmen,ElementName=root}" 
+                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                SelectedValue="{Binding Path=KruispuntArmVolg,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
+                <DataGridCheckBoxColumn 
+                    Binding="{Binding Path=HasKruispuntArmVolgTijd,UpdateSourceTrigger=PropertyChanged}" Header="Gebruik volg tijd">
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasVolgArm}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn 
+                    Binding="{Binding Path=KruispuntArmVolgTijd,UpdateSourceTrigger=PropertyChanged}" Header="Volg tijd">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasKruispuntArmVolgTijd}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
