@@ -361,6 +361,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CopySourceIfNeeded(c, "starvar.h", sourcefilepath);
                     }
 
+                    if (c.Data.TraffickCompatible)
+                    {
+                        CopySourceIfNeeded(c, "traffick2tlcgen.c", sourcefilepath);
+                        CopySourceIfNeeded(c, "traffick2tlcgen.h", sourcefilepath);
+                    }
+
                     foreach (var pl in PieceGenerators)
                     {
                         var fs = pl.GetSourcesToCopy();

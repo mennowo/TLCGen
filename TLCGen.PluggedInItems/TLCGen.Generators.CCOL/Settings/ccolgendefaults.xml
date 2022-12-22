@@ -3204,6 +3204,14 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Testen</SubCategorie>
           </Setting>
+          <Setting>
+            <Default>armvt</Default>
+            <Setting>armvt</Setting>
+            <Type>Timer</Type>
+            <Description>Volgtijd van arm naar volgarm voor fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Testen</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

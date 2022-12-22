@@ -1,5 +1,8 @@
-TLCGen=0.12.1.0
+TLCGen=0.12.2.0
 RN==TLCGen
+TLCGen versie: 0.12.2.0
+- Intregratie met 'traffick' stijl ccol
+- Diverse kleine fixes
 TLCGen versie: 0.12.1.0
 - Support voor SRM0
 - Reden voor wachttijd RIF

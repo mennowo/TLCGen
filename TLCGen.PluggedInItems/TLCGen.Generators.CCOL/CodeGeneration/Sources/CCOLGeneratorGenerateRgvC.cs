@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}#if (CCOL_V >= 95) && !defined NO_TIGMAX");
                         foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
                         {
-                            sb.AppendLine($"{ts}{ts}TIG_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TIG[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                            sb.AppendLine($"{ts}{ts}TIG_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TIG_max[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
                         }
                         sb.AppendLine($"{ts}#else");
                         foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))

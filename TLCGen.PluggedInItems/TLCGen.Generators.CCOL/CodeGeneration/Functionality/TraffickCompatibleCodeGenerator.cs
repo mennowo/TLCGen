@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _schhardmv;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schtraffick2tlcgen;
+        private CCOLGeneratorCodeStringSettingModel _tarmvt;
 #pragma warning restore 0649
         
         public override void CollectCCOLElements(ControllerModel c)
@@ -43,6 +44,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(
                 CCOLGeneratorSettingsProvider.Default.CreateElement(
                     $"{_schtraffick2tlcgen}", 1, CCOLElementTimeTypeEnum.None, _schtraffick2tlcgen));
+            
+            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
+            {
+                var arm = c.Kruispunt.FasenMetKruispuntArmen.FirstOrDefault(x => x.FaseCyclus == nl.FaseVan);
+                if (arm is { HasKruispuntArmVolgTijd: true })
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tarmvt}{arm.FaseCyclus}", arm.KruispuntArmVolgTijd, CCOLElementTimeTypeEnum.TE_type, _tarmvt, arm.FaseCyclus));
+                }
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -69,7 +81,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{130},
                 CCOLCodeTypeEnum.RegCDumpApplication => new []{10},
                 
-                CCOLCodeTypeEnum.PrioCTop => new []{20},
                 CCOLCodeTypeEnum.PrioCIncludes => new []{20},
                 CCOLCodeTypeEnum.PrioCInUitMelden => new []{120},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{120},
@@ -280,9 +291,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                       $"{_hpf}{_hlos}{nl:van}, {_hpf}{_hlos}{nl:naar});");
                     }
 
+                    List<GelijkstartModel> otherGs = new();
+                    List<GelijkstartModel> yetOtherGs = new();
+                    List<GelijkstartModel> finalOtherGs = new();
+                    List<string> doneGsFcs = new();
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}definitie_gelijkstart_lvk({_fcpf}{gs:van}, {_fcpf}{gs:naar}, NG, NG);");
+                        if (doneGsFcs.Contains(gs.FaseVan)) continue;
+                        otherGs = c.InterSignaalGroep.Gelijkstarten
+                            .Where(x => 
+                                !ReferenceEquals(x, gs) && 
+                                (x.FaseVan == gs.FaseNaar || x.FaseNaar == gs.FaseNaar || x.FaseVan == gs.FaseVan || x.FaseNaar == gs.FaseVan)).ToList();
+                        if (otherGs.Count > 0)
+                        {
+                            foreach (var oGs in otherGs)
+                            {
+                                yetOtherGs = c.InterSignaalGroep.Gelijkstarten.Where(x => !ReferenceEquals(x, gs) && otherGs.All(x2 => !ReferenceEquals(x, x2)) && (x.FaseVan == oGs.FaseNaar || x.FaseNaar == oGs.FaseNaar || x.FaseVan == oGs.FaseVan|| x.FaseNaar == oGs.FaseVan)).ToList();
+                                if (yetOtherGs.Count > 0)
+                                {
+                                    foreach (var foGs in otherGs)
+                                    {
+                                        finalOtherGs = c.InterSignaalGroep.Gelijkstarten.Where(x => 
+                                            !ReferenceEquals(x, gs) && 
+                                            otherGs.All(x2 => !ReferenceEquals(x, x2)) && 
+                                            yetOtherGs.All(x2 => !ReferenceEquals(x, x2)) && 
+                                            (x.FaseVan == foGs.FaseNaar || x.FaseNaar == foGs.FaseNaar || x.FaseVan == foGs.FaseVan|| x.FaseNaar == foGs.FaseVan)).ToList();
+                                    }
+                                }
+                            }
+                        }
+                        var gsFcs = new List<GelijkstartModel> { gs }
+                            .Concat(otherGs)
+                            .Concat(yetOtherGs)
+                            .Concat(finalOtherGs)
+                            .SelectMany(x => new[] {x.FaseVan, x.FaseNaar })
+                            .Distinct()
+                            .Take(4)
+                            .ToList();
+                        sb.Append($"{ts}definitie_gelijkstart_lvk(");
+                        for (int fc = 0; fc < 4; fc++)
+                        {
+                            if (fc > 0) sb.Append(", ");
+                            if (fc < gsFcs.Count)
+                            {
+                                sb.Append($"{_fcpf}{gsFcs[fc]}");
+                                doneGsFcs.Add(gsFcs[fc]);
+                            }
+                            else sb.Append($"NG");
+                        }
+                        sb.AppendLine(");");
                     }
                     
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
@@ -348,12 +405,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();    
                 
                 case CCOLCodeTypeEnum.RegCTop:
-                case CCOLCodeTypeEnum.PrioCTop:
                     sb.AppendLine("#define TRAFFICK");
                     return sb.ToString();
                 
                 case CCOLCodeTypeEnum.PrioCIncludes:
                     sb.AppendLine("/* Traffick2TLCGen */");
+                    sb.AppendLine("#define TRAFFICK");
                     sb.AppendLine("#include \"traffick2tlcgen.h\"");
                     return sb.ToString();
                 
@@ -376,7 +433,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var tijd = "NG";
                             if (arm is { HasKruispuntArmVolgTijd: true })
                             {
-                                tijd = arm.KruispuntArmVolgTijd.ToString();
+                                tijd = $"T_max[{_tpf}{_tarmvt}{arm.FaseCyclus}]";
                             }
                             sb.AppendLine($"{ts}{ts}Traffick2TLCgen_HLPD_nal({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tijd});");
                         }
