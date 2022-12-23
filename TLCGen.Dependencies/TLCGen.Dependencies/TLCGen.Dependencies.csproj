@@ -233,7 +233,9 @@
     <Compile Include="Models\Models\InterSignaalGroep\RealFunc\GroenSyncDataModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\RealFunc\GroenSyncModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\VoorstartModel.cs" />
-    <Compile Include="Models\Models\KruispuntLayout.cs" />
+    <Compile Include="Models\Models\Layout\KruispuntArmFaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Layout\KruispuntArmModel.cs" />
+    <Compile Include="Models\Models\Layout\KruispuntLayout.cs" />
     <Compile Include="Models\Models\Modules\AlternatievenPerBlokModel.cs" />
     <Compile Include="Models\Models\Modules\FaseCyclusAlternatiefPerBlokModel.cs" />
     <Compile Include="Models\Models\NonController\IOCollector.cs" />

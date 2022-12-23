@@ -245,6 +245,8 @@
         <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\dynamischhiaat.c" />
         <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.h" />
         <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.lib" />
+        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.c" />
+        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.h" />
       </Component>
     </ComponentGroup>
 
