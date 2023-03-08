@@ -1016,7 +1016,7 @@
             <Default>prml</Default>
             <Setting>prml</Setting>
             <Type>Parameter</Type>
-            <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 tot en met BIT14; gebruik BIT15 indien niet toegewezen)</Description>
+            <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 tot en met BIT14; gebruik BIT10 indien niet toegewezen)</Description>
             <Categorie>CAT_Module</Categorie>
             <SubCategorie>SUBCAT_Plantijden</SubCategorie>
           </Setting>

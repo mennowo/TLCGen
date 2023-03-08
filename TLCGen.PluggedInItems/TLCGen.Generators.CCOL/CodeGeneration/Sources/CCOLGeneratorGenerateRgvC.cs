@@ -205,47 +205,61 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 var s = $"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = ";
                 var l = new string(' ', s.Length);
-                sb.AppendLine(s);
-                sb.Append(l);
+                sb.Append(s);
+                var first = true;
                 foreach(var d in fc.FileDetectoren)
                 {
-                    sb.Append($"(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING) || ");
+                    if (!first) sb.Append(" || ");
+                    first = false;
+                    sb.Append($"(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING)");
                 }
-                sb.AppendLine();
-                sb.Append(l);
+                if (!first)
+                {
+                    sb.AppendLine();
+                    sb.Append(l);
+                }
                 foreach (var d in fc.HiaatDetectoren)
                 {
-                    sb.Append($"(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING) || ");
+                    if (!first) sb.Append(" || ");
+                    first = false;
+                    sb.Append($"(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING)");
                 }
-                sb.AppendLine();
-                if(c.FileIngrepen.Count > 0)
+                var any = false;
+                if (c.FileIngrepen.Count > 0)
                 {
-                    var any = false;
-                    foreach(var fi in c.FileIngrepen)
+                    foreach (var fi in c.FileIngrepen)
                     {
-                        if(fi.TeDoserenSignaalGroepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
+                        if (fi.TeDoserenSignaalGroepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                         {
+                            if (!any) sb.AppendLine();
                             any = true;
-                            sb.Append($"{l}(IH[{_hpf}{_hfile}{fi.Naam}]) ||");
+                            if (!first) sb.Append($"{l} || ");
+                            first = false;
+                            sb.Append($"(IH[{_hpf}{_hfile}{fi.Naam}])");
                         }
                     }
-                    if(any)
-                    {
-                        sb.AppendLine();
-                    }
                 }
-                sb.Append($"{l}(");
-                var i = 0;
-                foreach (var d in fc.FileDetectoren)
+                if (fc.FileDetectoren.Count > 0)
                 {
-                    if(i > 0)
+                    sb.AppendLine();
+                    
+                    if (!first)
                     {
-                        sb.Append(" && ");
+                        sb.Append($"{l} || (");
                     }
-                    ++i;
-                    sb.Append($"!T[{_tpf}{_tfd}{_dpf}{d.Detector}]"); 
+                    var i = 0;
+                    foreach (var d in fc.FileDetectoren)
+                    {
+                        if (i > 0)
+                        {
+                            sb.Append(" && ");
+                        }
+                        ++i;
+                        sb.Append($"!T[{_tpf}{_tfd}{_dpf}{d.Detector}]");
+                    }
+                    sb.Append(")");
                 }
-                sb.AppendLine(");");
+                sb.AppendLine(";");
             }
             sb.AppendLine($"{ts}#else");
             foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
