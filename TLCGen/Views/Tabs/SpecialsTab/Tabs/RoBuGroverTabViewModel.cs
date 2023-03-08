@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -46,6 +47,8 @@ namespace TLCGen.ViewModels
             {
                 RoBuGrover.ToestaanNietConflictenInConflictGroepen = value;
                 Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
+                OnConflictsChanged(new ConflictsChangedMessage());
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

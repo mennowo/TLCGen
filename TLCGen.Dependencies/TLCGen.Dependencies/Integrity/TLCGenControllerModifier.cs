@@ -256,7 +256,7 @@ namespace TLCGen.Integrity
                                 if (fase1.FaseCyclus == fase2.FaseCyclus)
                                     continue;
 
-                                if (!TLCGenControllerChecker.IsFasenConflicting(c, fase1.FaseCyclus, fase2.FaseCyclus))
+                                if (!c.RoBuGrover.ToestaanNietConflictenInConflictGroepen && !TLCGenControllerChecker.IsFasenConflicting(c, fase1.FaseCyclus, fase2.FaseCyclus))
                                 {
                                     remfcs.Add(fase1);
                                 }
