@@ -22,13 +22,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var d in fc.Detectoren.Where(x => x.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
                 {
-                    if (d.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Altijd && 
+                    if (d.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Altijd &&
+                        d.AanvraagDirectSch != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                         d.Aanvraag != Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schsnel}{_dpf}{d.Naam}",
-                                1,
+                                d.AanvraagDirectSch == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
                                 _schsnel, d.Naam));
                     }
