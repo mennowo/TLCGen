@@ -620,6 +620,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.TraffickCompatible = value;
                 RaisePropertyChanged<object>(nameof(TraffickCompatible), broadcast: true);
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 

@@ -2,164 +2,15 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
-using TLCGen.ViewModels;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels;
-
-public class KruispuntArmViewModel : ViewModelBase, IViewModelWithItem
-{
-    #region Fields
-
-    
-
-    #endregion // Fields
-
-    #region Properties
-
-    public KruispuntArmModel Model { get; }
-    
-    public string Naam
-    {
-        get => Model.Naam;
-        set
-        {
-            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
-            {
-                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.KruispuntArm, value))
-                {
-                    var oldname = Model.Naam;
-                    Model.Naam = value;
-
-                    // Notify the messenger
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
-                }
-            }
-            RaisePropertyChanged<object>(broadcast: true);
-        }
-    }
-
-    public string Omschrijving
-    {
-        get => Model.Omschrijving;
-        set
-        {
-            Model.Omschrijving = value;
-            RaisePropertyChanged<object>(broadcast: true);
-        }
-    }
-
-    #endregion // Properties
-
-    #region IViewModelWithItem
-    
-    public object GetItem()
-    {
-        return Model;
-    }
-
-    #endregion // IViewModelWithItem
-
-    #region Constructor
-
-    public KruispuntArmViewModel(KruispuntArmModel model)
-    {
-        Model = model;
-    }
-
-    #endregion // Constructor
-}
-
-public class KruispuntArmFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
-{
-    #region Properties
-
-    public KruispuntArmFaseCyclusModel Model { get; }
-
-    public string FaseCyclus
-    {
-        get => Model.FaseCyclus;
-        set
-        {
-            Model.FaseCyclus = value;
-            RaisePropertyChanged<object>(broadcast: true);
-        }
-    }
-
-    public string KruispuntArm
-    {
-        get => Model.KruispuntArm;
-        set
-        {
-            Model.KruispuntArm = value;
-            RaisePropertyChanged<object>(broadcast: true);
-        }
-    }
-
-    public string KruispuntArmVolg
-    {
-        get => Model.KruispuntArmVolg;
-        set
-        {
-            Model.KruispuntArmVolg = value;
-            RaisePropertyChanged<object>(broadcast: true);
-            RaisePropertyChanged(nameof(HasVolgArm));
-            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
-        }
-    }
-
-    public bool HasKruispuntArmVolgTijd
-    {
-        get => Model.HasKruispuntArmVolgTijd;
-        set
-        {
-            Model.HasKruispuntArmVolgTijd = value;
-            RaisePropertyChanged<object>(broadcast: true);
-            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
-        }
-    }
-    
-    public int KruispuntArmVolgTijd
-    {
-        get => Model.KruispuntArmVolgTijd;
-        set
-        {
-            Model.KruispuntArmVolgTijd = value;
-            RaisePropertyChanged<object>(broadcast: true);
-        }
-    }
-
-    public bool HasVolgArm => KruispuntArmVolg != null && KruispuntArmVolg != "NG";
-    public bool HasVolgArmAndUseTime => HasVolgArm && HasKruispuntArmVolgTijd;
-
-    #endregion // Properties
-
-    #region IViewModelWithItem
-
-    public object GetItem()
-    {
-        return Model;
-    }
-
-    #endregion // IViewModelWithItem
-
-    #region Constructor
-
-    public KruispuntArmFaseCyclusViewModel(KruispuntArmFaseCyclusModel model)
-    {
-        Model = model;
-    }
-
-    #endregion // Constructor
-}
 
 [TLCGenTabItem(index: 6, type: TabItemTypeEnum.AlgemeenTab)]
 public class KruispuntArmenTabViewModel : TLCGenTabItemViewModel
@@ -275,6 +126,11 @@ public class KruispuntArmenTabViewModel : TLCGenTabItemViewModel
             }
         }
         RaisePropertyChanged(nameof(SelectableKruispuntArmen));
+    }
+
+    public override bool CanBeEnabled()
+    {
+        return _Controller?.Data.TraffickCompatible == true;
     }
 
     #endregion // TabItem Overrides
