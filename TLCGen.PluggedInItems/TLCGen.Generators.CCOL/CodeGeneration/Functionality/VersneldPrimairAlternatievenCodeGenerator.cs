@@ -839,29 +839,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     sb.AppendLine($"{ts}{ts}/* PAR-correcties nalopen voetgagners stap 2: beide PAR of los OK */");
                     foreach (var s in pars[2]) sb.AppendLine(ts + s);
-                    sb.AppendLine();
-                    foreach (var sync in sortedSyncs.oneWay)
+                    if (sortedSyncs.oneWay.Count > 0)
                     {
-                        if (first)
+                        sb.AppendLine();
+                        foreach (var sync in sortedSyncs.oneWay)
                         {
-                            sb.AppendLine($"{ts}{ts}/* PAR correcties eenzijdige synchronisaties */");
-                            first = false;
+                            sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
                         }
-
-                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseVan}] = PAR[{_fcpf}{sync.FaseVan}] || G[{_fcpf}{sync.FaseNaar}];");
-                    }
-                    sb.AppendLine();
-                    foreach (var sync in sortedSyncs.oneWay)
-                    {
-                        sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
                     }
 
-                    if (first == false) sb.AppendLine();
                 }
 
                 
                 if (c.InterSignaalGroep.Gelijkstarten.Any())
                 {
+                    if (pars[2].Count > 0) sb.AppendLine();
                     first = true;
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
@@ -878,6 +870,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
 
                 sb.AppendLine($"{ts}}}");
+
+                if (sortedSyncs.oneWay.Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* PAR correcties eenzijdige synchronisaties */");
+                    foreach (var sync in sortedSyncs.oneWay)
+                    {
+                        sb.AppendLine($"{ts}PAR[{_fcpf}{sync.FaseVan}] = PAR[{_fcpf}{sync.FaseVan}] || G[{_fcpf}{sync.FaseNaar}];");
+                    }
+                }
             }
 
             return sb.ToString();
