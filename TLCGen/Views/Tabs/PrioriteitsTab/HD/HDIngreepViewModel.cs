@@ -10,6 +10,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using System;
 
 namespace TLCGen.ViewModels
 {
@@ -80,6 +81,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public bool RIS
         {
             get => _HDIngreep.RIS;
@@ -90,6 +92,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         [Description("RIS start (dichtbij ss)")]
         [BrowsableCondition(nameof(RIS))]
         public int RisStart
@@ -102,6 +105,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         [Description("RIS end (verweg ss)")]
         [BrowsableCondition(nameof(RIS))]
         public int RisEnd
@@ -114,6 +118,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         [Description("RIS eta")]
         [BrowsableCondition(nameof(RIS))]
         public int? RisEta
@@ -325,6 +330,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ObservableCollection<RISVehicleImportanceViewModel> AvailableImportances { get; } = new();
+
         #endregion // Properties
 
         #region Commands
@@ -410,7 +417,17 @@ namespace TLCGen.ViewModels
         #endregion // Command functionality
 
         #region Private Methods
-        
+
+        private void IvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            HDIngreep.RisImportance = 0;
+            foreach (var impt in AvailableImportances)
+            {
+                if (impt.IsSelected) HDIngreep.RisImportance |= impt.Importance;
+            }
+            RaisePropertyChanged<object>(broadcast: true);
+        }
+
         private void BuildFasenList()
         {
             Fasen.Clear();
@@ -493,6 +510,17 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
+
+            foreach (RISVehicleImportance importance in Enum.GetValues(typeof(RISVehicleImportance)))
+            {
+                var ivm = new RISVehicleImportanceViewModel
+                {
+                    Importance = importance,
+                    IsSelected = HDIngreep.RisImportance.HasFlag(importance)
+                };
+                ivm.PropertyChanged += IvmOnPropertyChanged;
+                AvailableImportances.Add(ivm);
+            }
         }
 
         #endregion // Constructor

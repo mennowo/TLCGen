@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
+using TLCGen.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -52,6 +53,8 @@ namespace TLCGen.ViewModels
         
         public ObservableCollection<RISVehicleSubroleViewModel> AvailableSubroles { get; } = new();
 
+        public ObservableCollection<RISVehicleImportanceViewModel> AvailableImportances { get; } = new();
+
         #endregion // Properties
 
         #region Public Methods
@@ -69,6 +72,12 @@ namespace TLCGen.ViewModels
                 role.PropertyChanged -= SrvmOnPropertyChanged;
                 role.IsSelected = Parent.PrioIngreepInUitMelding.RisSubrole.HasFlag(role.Subrole);
                 role.PropertyChanged += SrvmOnPropertyChanged;
+            }
+            foreach (var role in AvailableImportances)
+            {
+                role.PropertyChanged -= IvmOnPropertyChanged;
+                role.IsSelected = Parent.PrioIngreepInUitMelding.RisSubrole.HasFlag(role.Importance);
+                role.PropertyChanged += IvmOnPropertyChanged;
             }
         }
 
@@ -101,6 +110,17 @@ namespace TLCGen.ViewModels
                 srvm.PropertyChanged += SrvmOnPropertyChanged;
                 AvailableSubroles.Add(srvm);
             }
+
+            foreach (RISVehicleImportance importance in Enum.GetValues(typeof(RISVehicleImportance)))
+            {
+                var ivm = new RISVehicleImportanceViewModel
+                {
+                    Importance = importance,
+                    IsSelected = Parent.PrioIngreepInUitMelding.RisImportance.HasFlag(importance)
+                };
+                ivm.PropertyChanged += IvmOnPropertyChanged;
+                AvailableImportances.Add(ivm);
+            }
         }
 
         private void SrvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -119,6 +139,16 @@ namespace TLCGen.ViewModels
             foreach (var role in AvailableRoles)
             {
                 if (role.IsSelected) Parent.PrioIngreepInUitMelding.RisRole |= role.Role;
+            }
+            RaisePropertyChanged<object>(broadcast: true);
+        }
+
+        private void IvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Parent.PrioIngreepInUitMelding.RisImportance = 0;
+            foreach (var impt in AvailableImportances)
+            {
+                if (impt.IsSelected) Parent.PrioIngreepInUitMelding.RisImportance |= impt.Importance;
             }
             RaisePropertyChanged<object>(broadcast: true);
         }
@@ -155,6 +185,36 @@ namespace TLCGen.ViewModels
             set
             {
                 _isSelected = value; 
+                RaisePropertyChanged();
+            }
+        }
+    }
+
+    public class RISVehicleImportanceViewModel : ViewModelBase
+    {
+        private bool _isSelected;
+        private RISVehicleImportance importance;
+
+        public RISVehicleImportance Importance
+        {
+            get => importance; 
+            set
+            {
+                importance = value;
+                ImportanceDescription = importance.GetDescription();
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ImportanceDescription));
+            }
+        }
+
+        public string ImportanceDescription { get; set; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
                 RaisePropertyChanged();
             }
         }

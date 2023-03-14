@@ -1,10 +1,10 @@
 /* EXTRA_FUNC_RIS.C */
 /* ================ */
 
-/* CCOL :  versie 11.0        */
 /* FILE :  extra_func_ris.c   */
-/* DATUM:  24-11-2020         */
+/* DATUM:  09-03-2023         */
 
+/* DATUM:  09-03-2032 - ris_inmelding_selectief */
 /* DATUM:  24-11-2020 - correctie in de functie ris_ris_verstuur_ssm() */
 /* DATUM:  17-11-2020 - ondersteuning van indexering SRM/CAM wordt gebruikt in de functie ris_inmelding_selectief() */
 /* DATUM:  11-11-2020 - correctie in de functie ris_srm_put_signalgroup() */
@@ -30,12 +30,12 @@
    #define snprintf sprintf_s
 #endif
 
-/* RIS INMELDING SELECTIEF */ 
+/* RIS INMELDING SELECTIEF */
 /* ======================= */
-/* ris_inmelding_selectief() is gebaseerd op de functie ris_detectie_selectief() uit de Toolkit CCOL. 
+/* ris_inmelding_selectief() is gebaseerd op de functie ris_detectie_selectief() uit de Toolkit CCOL.
  * hieraan is toegevoegd:
  * - controle op approach
- * - controle op de juiste role en subrole.
+ * - controle op de juiste role, subrole en importance
  * - controle op de juiste eta
  * - controle of er al een inmelding heeft plaatsgevonden voor het betreffende voertuig (inmelding staat in RIS_PRIOREQUEST_EX_AP[r].prioControlState).
  * - het eenmalig zetten van een inmelding in RIS_PRIOREQUEST_EX_AP[r].prioControlState=priotypefc_id.
@@ -46,80 +46,91 @@
  * de juiste stationtype. bij een selectieve inmelding geeft ris_inmelding_selectief() de return-waarde waar (TRUE) en wordt de identificatie van het prioriteitstype
  * van de fasecyclus (priotypefc_id) in RIS_PRIOREQUEST_EX_AP[r].prioControlState geplaatst; RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id.
  * bij geen inmelding geeft ris_inmelding_selectief() de return-waarde niet waar (FALSE).
- * length_start ligt dichter bij de stopstreep dan length_end. 
- * bij aanroep van de functie dienen de fasecyclusindex (fc), approach_id, intersection, lane_id, stationtype (stationtype_bits), length_start, length_end, 
- * role (role_bits), subrole (subrole_bits), eta_prm, en priotypefc_id als argument te worden meegegeven. stationtype, role en subrole worden bitgewijs gebruikt
+ * length_start ligt dichter bij de stopstreep dan length_end.
+ * bij aanroep van de functie dienen de fasecyclusindex (fc), approach_id, intersection, lane_id, stationtype (stationtype_bits), length_start, length_end,
+ * role (role_bits), subrole (subrole_bits), importance (importance_bits), eta_prm, en priotypefc_id als argument te worden meegegeven. stationtype, role en subrole worden bitgewijs gebruikt
  * (definitie in risappl.h). indien de waarde van statiotype_bits role_bits, subrole_bits of lane_id kleiner gelijk of gelijk is aan nul (0) wordt de controle
  * op de betreffende variabele buiten beschouwing gelaten.
  * ris_inmelding_selectief() kan worden aangeroepen vanuit de functie application().
  *
  * voorbeelden
  * -----------
- * IH[hinov421] = ris_inmelding_selectief (fc42,  NG,         "", ris_lane421, RIS_BUS | RIS_TRAM, 20, 100, RIS_ROLE_PUBLICTRANSPORT, NG, PRM[prmeta42ov], prio_ov42ris);  // geen test op intersection en subrole
- * IH[hinov481] = ris_inmelding_selectief (fc48,  NG, SYSTEM_ITF, ris_lane481, RIS_BUS | RIS_TRAM, 20, 100, RIS_ROLE_PUBLICTRANSPORT, NG,              NG, prio_ov48ris);  // geen test op eta en subrole
+ * IH[hinov421] = ris_inmelding_selectief (fc42,  NG,         "", ris_lane421, RIS_BUS | RIS_TRAM, 20, 100, RIS_ROLE_PUBLICTRANSPORT, NG, NG, PRM[prmeta42ov], prio_ov42ris);  // geen test op intersection, subrole en importance
+ * IH[hinov481] = ris_inmelding_selectief (fc48,  NG, SYSTEM_ITF, ris_lane481, RIS_BUS | RIS_TRAM, 20, 100, RIS_ROLE_PUBLICTRANSPORT, NG, NG,              NG, prio_ov48ris);  // geen test op subrole, importance en eta
  *
- * IH[hinhd421] = ris_inmelding_selectief (NG, ris_approachid42 SYSTEM_ITF           NG, RIS_HULPDIENST, 20, 300, RIS_ROLE_EMERGENCY, RIS_SUBROLE_EMERGENCY, NG, prio_hd42ris);  // geen test op fc, lane en eta
- * IH[hinhd481] = ris_inmelding_selectief (NG, ris_approachid48,SYSTEM_ITF, ris_lane481, RIS_HULPDIENST, 20, 300, RIS_ROLE_EMERGENCY, RIS_SUBROLE_EMERGENCY, NG, prio_hdv48ris); // geen test op fc en eta
- * 
+ * IH[hinhd421] = ris_inmelding_selectief (NG, ris_approachid42 SYSTEM_ITF           NG, RIS_HULPDIENST, 20, 300, RIS_ROLE_EMERGENCY, RIS_SUBROLE_EMERGENCY, NG, NG, prio_hd42ris);  // geen test op fc, lane, importance en eta
+ * IH[hinhd481] = ris_inmelding_selectief (NG, ris_approachid48,SYSTEM_ITF, ris_lane481, RIS_HULPDIENST, 20, 300, RIS_ROLE_EMERGENCY, RIS_SUBROLE_EMERGENCY, NG, NG, prio_hdv48ris); // geen test op fc, importance en eta
+ *
  */
-rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_int role_bits, rif_int subrole_bits, rif_int eta_prm, rif_int priotypefc_id)
-{  
+rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string intersection, rif_int lane_id, rif_int stationtype_bits, rif_float length_start, rif_float length_end, rif_int role_bits, rif_int subrole_bits, rif_int importance_bits, rif_int eta_prm, rif_int priotypefc_id)
+{
    register rif_int i, j, r = 0;
    rif_bool correct;
 
 
    while (r < RIS_PRIOREQUEST_AP_NUMBER) {   /* doorloop alle PrioRequest objecten */
 
-      if ( (RIS_PRIOREQUEST_AP[r].requestType == RIF_PRIORITYREQUESTTYPE_REQUEST) || (RIS_PRIOREQUEST_AP[r].requestType == RIF_PRIORITYREQUESTTYPE_UPDATE) ) {
+      if (((RIS_PRIOREQUEST_AP[r].requestType == RIF_PRIORITYREQUESTTYPE_REQUEST) || (RIS_PRIOREQUEST_AP[r].requestType == RIF_PRIORITYREQUESTTYPE_UPDATE)) &&
+         (RIS_PRIOREQUEST_EX_AP[r].prioState >= RIF_PRIORITIZATIONSTATE_REQUESTED) && (RIS_PRIOREQUEST_EX_AP[r].prioState <= RIF_PRIORITIZATIONSTATE_GRANTED)) {
 
          /* zet correct op FALSE */
          /* -------------------- */
-         correct= FALSE; 
+         correct = FALSE;
 
-         /* test op juiste signalgroup en approach */
-         /* -------------------------------------- */
-         if ( !strlen(intersection) || (strcmp(RIS_PRIOREQUEST_AP[r].intersection, intersection) == 0) ) {                /* test op juiste intersection */
-            if ( ( (fc >= 0 ) && ( fc < FC_MAX ) ) && (strcmp(RIS_PRIOREQUEST_AP[r].signalGroup, FC_code[fc]) == 0) ) {   /* test op juiste signalgroup - voor openbaar vervoer */
-               correct= TRUE;    /* signalGroup is correct  */
+         /* test op juiste intersection en signalgroup of approach */
+         /* ------------------------------------------------------ */
+         if (!strlen(intersection) || (strcmp(RIS_PRIOREQUEST_AP[r].intersection, intersection) == 0)) {                 /* test op juiste intersection */
+            if (((fc >= 0) && (fc < FC_MAX)) && (strcmp(RIS_PRIOREQUEST_AP[r].signalGroup, FC_code[fc]) == 0)) {   /* test op juiste signalgroup - voor openbaar vervoer */
+               correct = TRUE;    /* signalGroup is correct  */
             }
-            else if  (RIS_PRIOREQUEST_AP[r].approach == approach_id) {           /* test op juiste approach - voor hulpdiensten */
-               correct= TRUE;    /* approach is correct */
+            else if (RIS_PRIOREQUEST_AP[r].approach == approach_id) {           /* test op juiste approach - voor hulpdiensten */
+               correct = TRUE;    /* approach is correct */
             }
             else {
-                /*  correct= FALSE; */ /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
+               /*  correct= FALSE; */ /* incorrecte signalGroup en incorrecte  approach -> volgende PrioRequest */
             }
          }
 
          /* test op inmelding */
          /* ----------------- */
-         if ( correct && (RIS_PRIOREQUEST_EX_AP[r].prioControlState == NG )    /* nog geen inmelding aanwezig  */
-            && ( (role_bits & (1 << (RIS_PRIOREQUEST_AP[r].role & 0xf)) ) || (role_bits <= 0) )               /* test op juiste role - bit    */
-            && ( (subrole_bits & (1 << (RIS_PRIOREQUEST_AP[r].subrole & 0xf)) ) || (subrole_bits <= 0) ) ) {  /* test op juiste subrole - bit */
+         if (correct && (RIS_PRIOREQUEST_EX_AP[r].prioControlState == NG)    /* nog geen inmelding aanwezig  */
+            && ((role_bits & (1 << (RIS_PRIOREQUEST_AP[r].role & 0xf))) || (role_bits <= 0))                         /* test op juiste role - bit        */
+            && ((subrole_bits & (1 << (RIS_PRIOREQUEST_AP[r].subrole & 0xf))) || (subrole_bits <= 0))                /* test op juiste subrole - bit     */
+            && ((importance_bits & (1 << (RIS_PRIOREQUEST_AP[r].importance & 0xf))) || (importance_bits <= 0))) {   /* test op juiste importance - bit  */
 
             /* test selectieve inmelding op basis van eta */
             /* ------------------------------------------ */
-            if ( eta_prm > 0 ) {                                                                      /* test op ingestelde eta_prm. (eta_prm <= 0) is uitgeschakeld */
-               if ( (RIS_PRIOREQUEST_AP[r].eta > RIF_UTC_TIME_PB)                                     /* test of eta in de toekomst ligt */
-                  && ( (RIS_PRIOREQUEST_AP[r].eta - RIF_UTC_TIME_PB) < (eta_prm * 1000) ) ) {         /* test op juiste eta_prm */
+            if (eta_prm > 0) {                                                                      /* test op ingestelde eta_prm. (eta_prm <= 0) is uitgeschakeld */
+               if ((RIS_PRIOREQUEST_AP[r].eta > RIF_UTC_TIME_PB)                                     /* test of eta in de toekomst ligt */
+                  && ((RIS_PRIOREQUEST_AP[r].eta - RIF_UTC_TIME_PB) < (eta_prm * 1000))) {         /* test op juiste eta_prm */
+
+                  /*  test stationType */
+                  /*  ---------------- */
+                  if (stationtype_bits <= 0) {                                                        /* inmelden zonder CAM-informatie - stationType */
+                     RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id;
+                     return ((rif_bool)TRUE);
+                  }
+                  else {                                                                              /* inmelden met CAM-informatie - stationType */
 #ifdef RIS_GEEN_INDEXERING
-                  i = 0;
-                  while (i < RIS_ITSSTATION_AP_NUMBER) {                                              /* doorloop alle ItsStation objecten */
+                     i = 0;
+                     while (i < RIS_ITSSTATION_AP_NUMBER) {                                           /* doorloop alle ItsStation objecten */
 #else
-                  i = RIS_PRIOREQUEST_EX_AP[r].ItsStationIndex;
-                  if ( (i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
+                     i = RIS_PRIOREQUEST_EX_AP[r].ItsStationIndex;
+                     if ((i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
 #endif /* RIS_GEEN_INDEXERING */
-                     if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0 ) {   /* test op zelfde ItsStation ID */
-                        if ( (stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf)) ) || (stationtype_bits <= 0) ) {  /* test stationType - bit */
-                           RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id;
-                           return ( (rif_bool) TRUE);
-                        }
+                        if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0) {   /* test op zelfde ItsStation ID */
+                           if ((stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf))) /* || (stationtype_bits <= 0) */) {  /* test stationType - bit */
+                              RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id;
+                              return ((rif_bool)TRUE);
+                     }
                      }
 #ifdef RIS_GEEN_INDEXERING
-                     i++;
+                        i++;
 #endif /* RIS_GEEN_INDEXERING */
                   }
                }
             }
+         }
 
             /* test selectieve inmelding op basis van map (locatie) */
             /* ---------------------------------------------------- */
@@ -128,19 +139,19 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
             while (i < RIS_ITSSTATION_AP_NUMBER) {                                                 /* doorloop alle ItsStation objecten */
 #else
             i = RIS_PRIOREQUEST_EX_AP[r].ItsStationIndex;
-            if ( (i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
+            if ((i >= 0) && (i < RIS_ITSSTATION_AP_NUMBER)) {
 #endif /* RIS_GEEN_INDEXERING */
-               if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0 ) {      /* test op zelfde ItsStation ID */
-                  if ( (stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf) ) ) || (stationtype_bits <= 0) ) {  /* test stationType - bit */
-                     for (j = 0; j < RIF_MAXLANES; j++) {                                          /* doorloop alle gematchte lanes */     
+               if (strcmp(RIS_PRIOREQUEST_AP[r].itsStation, RIS_ITSSTATION_AP[i].id) == 0) {      /* test op zelfde ItsStation ID */
+                  if ((stationtype_bits & (1 << (RIS_ITSSTATION_AP[i].stationType & 0xf))) || (stationtype_bits <= 0)) {  /* test stationType - bit */
+                     for (j = 0; j < RIF_MAXLANES; j++) {                                          /* doorloop alle gematchte lanes */
                         if (!strlen(RIS_ITSSTATION_AP[i].matches[j].intersection) || (strlen(intersection) && (strcmp(RIS_ITSSTATION_AP[i].matches[j].intersection, intersection) != 0))) {  /* test intersection ID */
                            break;
                         }
                         if ((lane_id == RIS_ITSSTATION_AP[i].matches[j].lane)                      /* test op juiste lane id  */
-                           || (lane_id <= 0) /* && (RIS_PRIOREQUEST_AP[r].approach==approach_id) */ ) {  /* test op alle lanes van de approach */
+                           || (lane_id <= 0) /* && (RIS_PRIOREQUEST_AP[r].approach==approach_id) */) {  /* test op alle lanes van de approach */
                            if ((RIS_ITSSTATION_EX_AP[i].matches[j].distance > length_start) && (RIS_ITSSTATION_EX_AP[i].matches[j].distance <= length_end)) {  /* test distance */
                               RIS_PRIOREQUEST_EX_AP[r].prioControlState = priotypefc_id;
-                              return ( (rif_bool) TRUE);
+                              return ((rif_bool)TRUE);
                            }
                         }
                      }
@@ -150,11 +161,11 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
                i++;
 #endif /* RIS_GEEN_INDEXERING */
             }
-         }
+            }
       }
       r++;
    }
-   return ( (rif_bool) FALSE);
+   return ((rif_bool)FALSE);
 }
 
 
@@ -333,7 +344,7 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
  * of MaxPresence). de statuswijzigingen zijn gebaseerd op de UC3-Prioriteren specificatie. ris_verstuur_ssm() gebruikt de functie
  * ris_put_activeprio() voor het verzenden van SSM-berichten.
  * ris_verstuur_ssm() verzorgt/corrigeert ook de instelling van de prioriteitsoptie(s) voor de Prioriteitsmodule op basis van de ontvangen
- * �importance� (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
+ * ?importance? (gewicht van het prioriteitsverzoek). de prioriteitsinstelling van de PrioriteitsModule is hierbij maatgevend.
  * bij de aanroep van de functie dient de identificatie van het prioriteitstype van de fasecyclus (priotypefc_id ), die wordt gedefinieerd
  * bij de PrioriteitsModule-applicatie, als argument te worden opgegeven.
  * ris_verstuur_srm() geeft als return-waarde het aantal verzonden SSM-berichten (number).

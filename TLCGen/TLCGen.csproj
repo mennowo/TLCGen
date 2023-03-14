@@ -117,6 +117,8 @@
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmenTabViewModel.cs">
       <DependentUpon>KruispuntArmenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\KruispuntArmViewModel.cs" />
     <Compile Include="Views\Tabs\FasenTab\DataTypes\TimingsFaseCyclusDataViewModel.cs" />
     <Compile Include="Views\Tabs\FasenTab\RISViewModels\RISLanePelotonDataViewModel.cs" />
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenTimingsTabView.xaml.cs">

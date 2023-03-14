@@ -158,6 +158,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmriseta;
         private CCOLGeneratorCodeStringSettingModel _prmrisrole;
         private CCOLGeneratorCodeStringSettingModel _prmrissubrole;
+        private CCOLGeneratorCodeStringSettingModel _prmrisimportance;
         private CCOLGeneratorCodeStringSettingModel _prmrisstationtype;
         private CCOLGeneratorCodeStringSettingModel _tris;
         private CCOLGeneratorCodeStringSettingModel _prmftsblok;
@@ -246,6 +247,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{hd.FaseCyclus}hd", 64, CCOLElementTimeTypeEnum.None, _prmrisrole, hd.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{hd.FaseCyclus}hd", 32, CCOLElementTimeTypeEnum.None, _prmrissubrole, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{hd.FaseCyclus}hd", (int)hd.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, hd.FaseCyclus));
                    
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0x0400, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
                     _myElements.Add(
@@ -414,6 +416,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmriseta}{CCOLCodeHelper.GetPriorityName(c, prio)}", inR.RisEta.Value, CCOLElementTimeTypeEnum.None, _prmriseta, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisRole, CCOLElementTimeTypeEnum.None, _prmrisrole, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisSubrole, CCOLElementTimeTypeEnum.None, _prmrissubrole, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, prio.FaseCyclus));
 
                     var stationtype = prio.Type
                         switch
@@ -1072,6 +1075,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                               $"PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
                                               $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
                                               $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
+                                              $"PRM[{_prmpf}{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
                                               $"{(melding.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{CCOLCodeHelper.GetPriorityName(c, prio)}]" : "NG")}, " +
                                               $"prioFC{CCOLCodeHelper.GetPriorityName(c, prio)})");
                                     first = false;
@@ -1551,6 +1555,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                               $"PRM[{_prmpf}{_prmrisend}{hd.FaseCyclus}hd], " +
                                               $"PRM[{_prmpf}{_prmrisrole}{risFc.FaseCyclus}hd], " +
                                               $"PRM[{_prmpf}{_prmrissubrole}{risFc.FaseCyclus}hd], " +
+                                              $"PRM[{_prmpf}{_prmrisimportance}{risFc.FaseCyclus}hd], " +
                                               $"{(hd.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{risFc.FaseCyclus}hd]" : "NG")}, " +
                                               $"hdFC{hd.FaseCyclus})");
                                     first = false;

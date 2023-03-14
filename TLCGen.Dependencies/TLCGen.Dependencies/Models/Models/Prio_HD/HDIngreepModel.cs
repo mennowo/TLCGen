@@ -24,7 +24,8 @@ namespace TLCGen.Models
         public int RisStart { get; set; }
         public int RisEnd { get; set; }
         public int? RisEta { get; set; }
-        
+        public RISVehicleImportance RisImportance { get; set; }
+
         #endregion
 
         public bool Opticom { get; set; }

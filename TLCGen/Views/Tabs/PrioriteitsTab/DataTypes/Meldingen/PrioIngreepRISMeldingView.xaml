@@ -81,9 +81,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Label Content="RIS vehicle role" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
                 <Label Grid.Row="0" Grid.Column="1" Content="RIS vehicle subrole" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+                <Label Grid.Row="0" Grid.Column="2" Content="RIS vehicle importance" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
                 <ListView
                     Grid.Row="1" Grid.Column="0" SelectionMode="Multiple" Margin="2"
                     ItemsSource="{Binding Path=AvailableRoles}" 
@@ -115,6 +117,23 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=Subrole}" Margin="2" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView
+                    Grid.Row="1" Grid.Column="2" SelectionMode="Multiple" Margin="2"
+                    ItemsSource="{Binding Path=AvailableImportances}" 
+                    Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListBoxItemStyle}">
+                            <Style.Setters>
+                                <Setter Property="IsSelected" Value="{Binding Path=IsSelected}" />
+                            </Style.Setters>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=ImportanceDescription}" Margin="2" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

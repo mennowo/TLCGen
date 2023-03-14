@@ -2116,6 +2116,14 @@
             <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
           <Setting>
+            <Default>risimportance</Default>
+            <Setting>risimportance</Setting>
+            <Type>Parameter</Type>
+            <Description />
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
+          </Setting>
+          <Setting>
             <Default>risstationtype</Default>
             <Setting>risstationtype</Setting>
             <Type>Parameter</Type>

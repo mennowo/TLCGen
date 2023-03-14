@@ -78,6 +78,7 @@ namespace TLCGen.Models
         public int? RisEta { get; set; }
         public RISVehicleRole RisRole { get; set; }
         public RISVehicleSubrole RisSubrole { get; set; }
+        public RISVehicleImportance RisImportance { get; set; }
         public bool RisPeloton { get; set; }
         public int RisPelotonGrenswaarde { get; set; }
 

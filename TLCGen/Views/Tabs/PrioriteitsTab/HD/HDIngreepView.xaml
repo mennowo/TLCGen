@@ -7,8 +7,54 @@
              mc:Ignorable="d" 
              x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
+        <Style TargetType="{x:Type ListBoxItem}" x:Key="ListBoxItemStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="False" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{x:Static SystemColors.HighlightBrush}" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="True" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{x:Static SystemColors.HighlightBrush}" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -38,6 +84,64 @@
             </ct:SimplePropertyEditor.Style>
         </ct:SimplePropertyEditor>
         <StackPanel Orientation="Vertical" Grid.Row="2" >
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <TextBlock Text="RIS" Margin="5" Padding="0" TextDecorations="Underline" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="RIS" IsEnabled="{Binding Path=OpticomAvailable}" />
+                <CheckBox IsChecked="{Binding Path=RIS}" Grid.Column="1" Margin="5" VerticalAlignment="Center" />
+                <Label Content="RIS start (dichtbij ss)" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <TextBox Text="{Binding Path=RisStart}" Grid.Row="1" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <Label Content="RIS end (verweg ss)" Grid.Row="2" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <TextBox Text="{Binding Path=RisEnd}" Grid.Row="2" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <Label Content="RIS eta" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <TextBox Text="{Binding Path=RisEta}" Grid.Row="3" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <Label Content="RIS importance" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="0" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <ListView
+                    Grid.Row="5" Grid.Column="0" SelectionMode="Multiple" Margin="2"
+                    Grid.ColumnSpan="2" 
+                    Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" 
+                    ItemsSource="{Binding Path=AvailableImportances}" IsEnabled="{Binding Path=RIS}" >
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListBoxItemStyle}">
+                            <Style.Setters>
+                                <Setter Property="IsSelected" Value="{Binding Path=IsSelected}" />
+                            </Style.Setters>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="2" Text="{Binding Path=ImportanceDescription}" Margin="2" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="3" >
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
