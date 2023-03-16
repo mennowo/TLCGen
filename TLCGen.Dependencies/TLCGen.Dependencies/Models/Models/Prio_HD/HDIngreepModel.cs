@@ -23,7 +23,7 @@ namespace TLCGen.Models
         public bool RIS { get; set; }
         public int RisStart { get; set; }
         public int RisEnd { get; set; }
-        public int? RisEta { get; set; }
+        public int? RisEta { get; set; } = 0;
         public RISVehicleImportance RisImportance { get; set; }
 
         #endregion

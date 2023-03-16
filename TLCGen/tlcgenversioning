@@ -1,5 +1,9 @@
-TLCGen=0.12.2.0
+TLCGen=12.4.0.0
 RN==TLCGen
+TLCGen versie: 12.4.0.0
+- Versienummer passend bij 'consolidatie' versie
+- Inmelden op importance bij RIS
+- Diverse kleine fixes
 TLCGen versie: 0.12.2.0
 - Intregratie met 'traffick' stijl ccol
 - Diverse kleine fixes

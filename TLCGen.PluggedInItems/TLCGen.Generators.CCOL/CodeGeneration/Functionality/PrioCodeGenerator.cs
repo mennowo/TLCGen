@@ -426,7 +426,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             PrioIngreepVoertuigTypeEnum.Fiets => 0x0004,
                             PrioIngreepVoertuigTypeEnum.Vrachtwagen => 0x0080 | 0x0100 | 0x0200,
                             PrioIngreepVoertuigTypeEnum.Auto => 0x0020,
-                            PrioIngreepVoertuigTypeEnum.NG => 0x0001,
+                            PrioIngreepVoertuigTypeEnum.NG => 0x0000,
                             _ => 0x0001
                         };
 

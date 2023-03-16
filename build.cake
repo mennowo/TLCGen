@@ -22,9 +22,10 @@ var setupDir = Directory("./TLCGen.Setup");
 var outputDir = Directory("./published") + Directory(configuration);
 var outputDirBase = Directory("./published");
 // varia
-var prev_version = "0_12_1_0";
+var prev_version = "0_12_2_0";
 var backupOld = false;
-var deployDev = false;
+var deployDev = true;
+var deploy = true;
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
@@ -162,6 +163,8 @@ Task("PackPortable")
 Task("Deploy")
     .IsDependentOn("PackPortable")
     .Does(() => {
+        if (!deploy) return;
+
         Information("Starting FTP upload...");
         // Setup session options
         var sessionOptions = new SessionOptions {
@@ -231,6 +234,8 @@ Task("Deploy")
 Task("DeployDev")
     .IsDependentOn("PackPortable")
     .Does(() => {
+        if (!deploy) return;
+
         Information("Starting FTP upload...");
         // Setup session options
         var sessionOptions = new SessionOptions {

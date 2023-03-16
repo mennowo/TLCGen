@@ -135,7 +135,7 @@
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Margin="2" Text="{Binding Path=ImportanceDescription}" Margin="2" />
+                            <TextBlock Margin="2" Text="{Binding Path=ImportanceDescription}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

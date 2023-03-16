@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
             foreach (var role in AvailableImportances)
             {
                 role.PropertyChanged -= IvmOnPropertyChanged;
-                role.IsSelected = Parent.PrioIngreepInUitMelding.RisSubrole.HasFlag(role.Importance);
+                role.IsSelected = Parent.PrioIngreepInUitMelding.RisImportance.HasFlag(role.Importance);
                 role.PropertyChanged += IvmOnPropertyChanged;
             }
         }

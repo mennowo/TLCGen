@@ -61,32 +61,32 @@ namespace TLCGen.Models
     public enum RISVehicleImportance
     {
         [Description("1")]
-        I01 = 0x0001,
+        I01 = 0x0002,
         [Description("2")]
-        I02 = 0x0002,
+        I02 = 0x0004,
         [Description("3")]
-        I03 = 0x0004,
+        I03 = 0x0008,
         [Description("4")]
-        I04 = 0x0008,
+        I04 = 0x0010,
         [Description("5")]
-        I05 = 0x0010,
+        I05 = 0x0020,
         [Description("6")]
-        I06 = 0x0020,
+        I06 = 0x0040,
         [Description("7")]
-        I07 = 0x0040,
+        I07 = 0x0080,
         [Description("8")]
-        I08 = 0x0080,
+        I08 = 0x0100,
         [Description("9")]
-        I09 = 0x0100,
+        I09 = 0x0200,
         [Description("10")]
-        I10 = 0x0200,
+        I10 = 0x0400,
         [Description("11")]
-        I11 = 0x0400,
+        I11 = 0x0800,
         [Description("12")]
-        I12 = 0x0800,
+        I12 = 0x1000,
         [Description("13")]
-        I13 = 0x1000,
+        I13 = 0x2000,
         [Description("14")]
-        I14 = 0x2000
+        I14 = 0x4000
     }
 }

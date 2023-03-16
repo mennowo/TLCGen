@@ -75,7 +75,7 @@ namespace TLCGen.Models
 
         public int RisStart { get; set; }
         public int RisEnd { get; set; }
-        public int? RisEta { get; set; }
+        public int? RisEta { get; set; } = 0;
         public RISVehicleRole RisRole { get; set; }
         public RISVehicleSubrole RisSubrole { get; set; }
         public RISVehicleImportance RisImportance { get; set; }

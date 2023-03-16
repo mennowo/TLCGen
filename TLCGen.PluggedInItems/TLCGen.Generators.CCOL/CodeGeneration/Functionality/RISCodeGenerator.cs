@@ -252,8 +252,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}const struct Rif_ProductInformation RIF_ITSINFO_AP = {{");
                         sb.AppendLine($"{ts}  \"Gemeente Rotterdam\",    /* manufacturerName   */");
                         sb.AppendLine($"{ts}  \"TLCGen\",                /* certifiedName      */");
-                        sb.AppendLine($"{ts}  \"12.3.0\",                /* certifiedVersion   */");
-                        sb.AppendLine($"{ts}  \"12.3.0\"                 /* version            */");
+                        sb.AppendLine($"{ts}  \"12.4.0\",                /* certifiedVersion   */");
+                        sb.AppendLine($"{ts}  \"12.4.0\"                 /* version            */");
                         sb.AppendLine($"{ts}}};");
                         sb.AppendLine("#endif /* NO_RIS */");
                     }
