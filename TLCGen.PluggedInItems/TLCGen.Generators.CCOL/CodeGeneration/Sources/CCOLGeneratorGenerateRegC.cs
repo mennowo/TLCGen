@@ -40,6 +40,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GenerateRegCKwcApplication(controller));
             }
             sb.Append(GenerateRegCPreApplication(controller));
+            sb.Append(GenerateRegCDetectieStoring(controller));
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.Append(GenerateRegCAanvragen(controller));
             if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
@@ -53,7 +54,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCSynchronisaties(controller));
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
             sb.Append(GenerateRegCFileVerwerking(controller));
-            sb.Append(GenerateRegCDetectieStoring(controller));
             sb.Append(GenerateRegCInitApplication(controller));
             sb.Append(GenerateRegCPostApplication(controller));
             sb.Append(GenerateRegCApplication(controller));
@@ -329,6 +329,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCAanvragen, true, true, false, true);
 
+            sb.AppendLine($"{ts}DetectieStoring_Aanvraag();");
             sb.AppendLine($"{ts}Aanvragen_Add();");
 			
 	        if (controller.HalfstarData.IsHalfstar)
@@ -381,6 +382,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true, vars);
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, false, false, true, vars);
                     
+                    sb.AppendLine($"{ts}{(controller.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden ? "DetectieStoring_VerlengGroen" : "DetectieStoring_MaxGroen")}();");
+                    sb.AppendLine();
+
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
 
@@ -438,6 +442,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeetkriterium, true, true, false, true);
 
+            sb.AppendLine($"{ts}DetectieStoring_Meetkriterium();");
             sb.AppendLine($"{ts}Meetkriterium_Add();");
 
             sb.AppendLine("}");
@@ -591,14 +596,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("void DetectieStoring(void)");
+            sb.AppendLine("void DetectieStoring_Aanvraag(void)");
+            sb.AppendLine("{");
+            
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringAanvraag, true, true, false, true);
+
+            sb.AppendLine($"{ts}DetectieStoring_Aanvraag_Add();");
+	        sb.AppendLine("}");
+
+            sb.AppendLine();
+
+            sb.AppendLine("void DetectieStoring_Meetkriterium(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoring, true, true, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium, true, true, false, true);
 
-            sb.AppendLine($"{ts}DetectieStoring_Add();");
-	        sb.AppendLine("}");
+            sb.AppendLine($"{ts}DetectieStoring_Meetkriterium_Add();");
+            sb.AppendLine("}");
+
             sb.AppendLine();
+
+            if (controller.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden)
+            {
+                sb.AppendLine("void DetectieStoring_VerlengGroen(void)");
+                sb.AppendLine("{");
+
+                AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringVerlengGroen, true, true, false, true);
+
+                sb.AppendLine($"{ts}DetectieStoring_VerlengGroen_Add();");
+                sb.AppendLine("}");
+            }
+            else
+            {
+                sb.AppendLine("void DetectieStoring_MaxGroen(void)");
+                sb.AppendLine("{");
+
+                AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringMaxGroen, true, true, false, true);
+
+                sb.AppendLine($"{ts}DetectieStoring_MaxGroen_Add();");
+                sb.AppendLine("}");
+            }
 
             return sb.ToString();
         }

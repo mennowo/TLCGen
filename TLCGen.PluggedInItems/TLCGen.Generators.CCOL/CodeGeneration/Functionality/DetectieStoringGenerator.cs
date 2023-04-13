@@ -78,7 +78,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCDetectieStoring => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoringAanvraag => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoringMaxGroen => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoringVerlengGroen => new []{10},
                 _ => null
             };
         }
@@ -418,7 +421,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCDetectieStoring => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
+                CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium => new List<CCOLLocalVariable>{new CCOLLocalVariable("int", "fc")},
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -429,16 +432,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCDetectieStoring:
+                case CCOLCodeTypeEnum.RegCDetectieStoringAanvraag:
+                    AanvraagAlleDetectoren(sb, c, ts);
+
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium:
 
                     sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
                     sb.AppendLine();
 
-                    AanvraagAlleDetectoren(sb, c, ts);
-
                     VervangendHiaatKoplus(sb, c, ts);
+
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCDetectieStoringVerlengGroen:
+                case CCOLCodeTypeEnum.RegCDetectieStoringMaxGroen:
 
                     if (c.HalfstarData.IsHalfstar)
                     {
