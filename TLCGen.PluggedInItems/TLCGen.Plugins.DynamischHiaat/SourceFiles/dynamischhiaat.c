@@ -21,13 +21,17 @@
    *                                      (statische) TDH_max behouden blijft (deze wordt gebruikt in geval van detectiestoring).  
    * 3.2.0    05-02-2022   ddo         Bijwerken tdhdyn ook tijdens RV[fc] (resetten timers en TDHDYN[dp]); toevoegen 
    *                                      #define DYN_HIAAT ivm toepassing van custom VLOG berichten. 
+   * 4.0.0    11-08-2022   ddo         Maatregel bij slechts 2 mvt op StartGroen, n.a.v. functionele analyse Rotterdam / Sweco (Peter Zondag).
+   *                                      Het tweede voertuig staat dan nog voor de 1e verlenglus waardoor groen soms te snel beeindigd 
+   *                                      wordt; in dat geval wordt de SG nu enige tijd vastgehouden in VOORSTART groen.
+   * 4.1.0    03-04-2023   ddo         Aflopen detectoren die tot maxgroen moeten verlengen halteren tijdens wachtgroen (Rotterdam / Peter Snijders)
    *
    ***********************************************************************************************************
 
    Zowel bij de IVER detectieconfiguratie uit 2018 (IVER'18) als bij Groen Op Maat (GOM) wordt gebruik gemaakt
    van dynamische hiaattijden. Met onderstaande code kunnen beide detectieconfiguraties worden bediend.
    
-   Dynamische hiaattijden zijn bedoeld om op efficiënte wijze groen te verlengen, waarbij aan de 'voorkant'
+   Dynamische hiaattijden zijn bedoeld om op effici?nte wijze groen te verlengen, waarbij aan de 'voorkant'
    minder vastgroen en geen koplusmaximum* nodig zijn, en aan de 'achterkant' gebruik gemaakt kan worden
    van een deel van de geeltijd. Daarbij wordt gebruik gemaakt van een specifieke detectie configuratie. 
 
@@ -58,7 +62,7 @@
    
    De code is vermoedelijk nog voor verbetering vatbaar; feedback wordt gewaardeerd op d.denouden@ll-t.nl 
 
-   Eén van de verbeteringen is dat sinds versie 3.0.0 geen wijzigingen in TDH_max[] worden aangebracht; het
+   Een van de verbeteringen is dat sinds versie 3.0.0 geen wijzigingen in TDH_max[] worden aangebracht; het
    grote aantal wijzigingen veroorzaakte een veelheid aan parameterwijzigingen op de CVN-C interface.
    Om dit te bereiken wordt gebruik gemaakt van een (voor dit doel toegevoegde) TDHDYN[], TDHDYN_max[] en 
    TDHDYN_timer[] voor CCOL versies onder de 11, en TDHA voor CCOL versies vanaf 11.
@@ -104,7 +108,7 @@
       de verlengfunctie UITschakelen)
    -- extra verlengvoorwaarde (bij TRUE altijd verlengen op deze lus; bijvoorbeeld bij permanente aanwezigheid
       deelconflict (G[fc11] && G[fc36]) )
-   -- aftelvoorwaarde (tijdens groen, als er wél hiaatmeting is op deze lus maar niet op de stroomafwaartse 
+   -- aftelvoorwaarde (tijdens groen, als er w?l hiaatmeting is op deze lus maar niet op de stroomafwaartse 
       lussen, meteen TDH_max[] gaan aftellen) 
    -- spring-tijdens-groen voorwaarde (wanneer tijdens G[] het hiaat valt, wordt de volgende detector 
       stroomopwaarts de aktieve verlenglus)
@@ -119,7 +123,7 @@
 
    In de parameter 'detectorvoorwaarden' worden de springvoorwaarde, verlengvoorwaarde, extra 
    verlengvoorwaarde, aftelvoorwaarde en spring-tijdens-groen voorwaarde bitsgewijs opgeslagen in 
-   één parameter; de instellingen zijn daardoor ook op straat te wijzigen:
+   ??n parameter; de instellingen zijn daardoor ook op straat te wijzigen:
    BIT    dec.   betekenis                          optie in TLCGen 
    BIT0 =  1  -  springvoorwaarde                 - 'SpringStart' 
    BIT1 =  2  -  verlengvoorwaarde                - 'VerlengNiet'
@@ -127,12 +131,12 @@
    BIT3 =  8  -- aftelvoorwaarde                  - 'DirectAftel'  
    BIT4 = 16  -- spring-tijdens-groen voorwaarde  - 'SpringGroen'  
 
-   De waardes kunnen worden opgeteld, bijvoorbeeld verlengvoorwaarde én aftelvoorwaarde voor dezelfde detector
+   De waardes kunnen worden opgeteld, bijvoorbeeld verlengvoorwaarde ?n aftelvoorwaarde voor dezelfde detector
    maakt waarde 10.
    Het aktief worden extra verlengvoorwaarde kan tevens worden aangestuurd vanuit het regelprogramma 
    via een hulpelement (IH[] = G[fc1] && G[fc2]).
    
-   Er wordt verlengd op de aktieve lus én op de lussen stroomopwaarts van de aktieve lus.
+   Er wordt verlengd op de aktieve lus ?n op de lussen stroomopwaarts van de aktieve lus.
    
    De functie hiaattijden_verlenging wordt niet doorlopen (en dus de hiaattijden niet aangepast) wanneer een 
    detectiestoring is geconstateerd. In dat geval wordt de statische hiaattijd gebruikt en dient de gebruiker 
@@ -157,6 +161,14 @@
    ======================================================================================================== */
 
 #define DYN_HIAAT
+
+mulv TUSSEND_TELLER[FCMAX] = { 0 };
+mulv TDBEZET_KOPLUS[FCMAX] = { 0 };
+mulv GROEN_TIJD[FCMAX]     = { 0 };
+mulv mindynhgroen          = 60;      /* toepassen 'maatregel bij slechts 2 mvt op StartGroen' wanneer TFG lager is ingesteld dan deze waarde */
+mulv mindynhkopbezet       = 15;      /* minimale bezettijd koplus voor toepassen 'maatregel bij slechts 2 mvt op StartGroen'                 */
+
+#define DYNH_RS_BIT  BIT2  /* gebruikt BIT om de SG in VOORSTARTgroen vast te houden bij toepassen 'maatregel bij slechts 2 mvt op StartGroen' */
 
 #if (CCOL_V >= 110 /* && !defined TDHAMAX */) || (CCOL_V < 110)
 
@@ -244,6 +256,51 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
   }
   
   if (TRG[fc])  detstor[fc] = FALSE;              /* reset aanwezigheid detectiestoring voor deze fc bij TRG[] */ /*-*/
+
+  /* maatregel bij slechts 2 mvt op StartGroen */
+  RS[fc] &= ~DYNH_RS_BIT;
+  if (FG[fc] && TS) {
+      TUSSEND_TELLER[fc] = 0;
+      TDBEZET_KOPLUS[fc] = 0;
+      GROEN_TIJD[fc] = 0;
+  }
+  
+  /* maatregel bij slechts 2 mvt op StartGroen */
+  if (!G[fc] && TE && !detstor[fc]) {
+    va_start(argpt, fc);                          /* start var. argumentenlijst                                */
+    do {
+      rijstrook = va_arg(argpt, va_count);        /* lees rijstrooknummer                                      */
+      if (rijstrook>=0) {																	            
+        dpnr       = va_arg(argpt, va_count);     /* lees array-nummer detectie                                */
+        t1         = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        t2         = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        tdh1       = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        tdh2       = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        tmax       = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        prmdetvw   = va_arg(argpt, va_count);     /* ongebruikt                                                */
+        hevlvw     = va_arg(argpt, va_count);     /* ongebruikt                                                */
+    
+        max_rijstrook = rijstrook;                    /* onthoud hoogste rijstrooknummer                                  */
+        if (rijstrook != rijstrook_old) {
+            eavl[fc][rijstrook] = 0;
+            dp_teller = 0;
+        }
+        dp_teller++;
+        rijstrook_old = rijstrook;
+    
+        if (dp_teller == 1) {
+            if (!D[dpnr])            TDBEZET_KOPLUS[fc] = 0;
+            if (!G[fc] && D[dpnr]) ++TDBEZET_KOPLUS[fc];
+        }
+    
+        if (dp_teller == 2) {
+            if ((TDBEZET_KOPLUS[fc] > mindynhkopbezet) && ED[dpnr]) ++TUSSEND_TELLER[fc];  /* TUSSEND_TELLER is dus 1 wanneer er 2 voertuigen staan! */
+        }                                                                                  /* (die andere staat dan nl al op de koplus)          */
+      }
+    } while (rijstrook >= 0);
+    va_end(argpt);                     /* maak var. arg-lijst leeg */
+  }
+
   
   /* vaststellen detectiestoring, alleen tijdens RV[], eens per seconde ivm beperken rekentijd */ /*-*/
   if (RV[fc] && TS) {
@@ -313,7 +370,15 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
         }
         dp_teller++;
         rijstrook_old = rijstrook;
+
+        /* maatregel bij slechts 2 mvt op StartGroen */
+        if ((dp_teller == 1) && TE)  {
+        //RS[fc] &= ~DYNH_RS_BIT;
+          RS[fc] |= (G[fc] && (TUSSEND_TELLER[fc] == 1) && (TFG_max[fc] < mindynhgroen) && D[dpnr] && (GROEN_TIJD[fc] < (mindynhgroen - TFG_max[fc]))) ? DYNH_RS_BIT : 0;
+          if (RS[fc]&DYNH_RS_BIT)  ++GROEN_TIJD[fc];
+        }
         
+
         if (T_max[tmax]==0)       T_max[tmax] = (TFG_max[fc]+TVG_max[fc]);          /*-*/ /* overnemen max groentijd      */ 
         
         /* actuele hiaattijd bepalen */
@@ -327,11 +392,11 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
           if (G[fc] && ET[t2])  TDHDYN_max[dpnr] = T_max[tdh2];
           if (G[fc] && !RT[t1] && !T[t1] && T[t2]) {
             /* hiaattijd wijzigt tussen t1 en t2 lineair, van tdh1 naar tdh2 */
-            /* -------y------- = -------------x----------- * -----------------richtingscoëfficiënt=a-------------- + ----b------ */
+            /* -------y------- = -------------x----------- * -----------------richtingsco?ffici?nt=a-------------- + ----b------ */
             TDHDYN_max[dpnr] = (T_timer[t2] - T_max[t1]) * (T_max[tdh2] - T_max[tdh1]) / (T_max[t2] - T_max[t1]) + T_max[tdh1];
           }
 
-          /* bepalen of er stroomafwaarts van een lus hiaattijden lopen */  /*-*/ /* locatie aangepast (vóór bepaling of meteen naar 2e hiaattijd gesprongen wordt) */
+          /* bepalen of er stroomafwaarts van een lus hiaattijden lopen */  /*-*/ /* locatie aangepast (v??r bepaling of meteen naar 2e hiaattijd gesprongen wordt) */
           if (TDHDYN[dpnr]) {
              tdh_saw[rijstrook] = TRUE;
           }
@@ -370,7 +435,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
             RT[tmax] = FALSE;
             AT[tmax] = TRUE;
           }
-
+	  	 
           /* Tijdens groen, als deze lus is de aktieve verlenglus, en stroomafwaarts lopen geen hiaattijden, en de t1 timer */ /*-*/
           /* loopt nog, dan meteen hiaattijd laten aftellen door timers t1 en t2 gelijk te maken aan T_max[t1]              */
           /* Aftellen gebeurt via eerdere formule y = x * a + b                                                             */
@@ -378,6 +443,9 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
              T_timer[t1] = T_max[t1];
              T_timer[t2] = T_max[t1];
           }
+
+          /* Correctie bij wachtgroen */
+          HT[tmax] = T[tmax] && WG[fc] && (T_max[tmax] == (TFG_max[fc] + TVG_max[fc])) && (T_timer[t2] == T_max[t2]);    /*--*/
 
           /* Correctie MM[mmk] bij opdrempelen toegestaan; andere aanroep van meetkriterium2 niet nodig */   /*-*/
           if (opdr /* && !nietToepassen*/) {

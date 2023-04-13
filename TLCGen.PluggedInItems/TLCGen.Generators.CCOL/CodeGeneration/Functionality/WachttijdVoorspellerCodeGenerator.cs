@@ -417,10 +417,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
                         if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
                         {
-                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hwtv}{fc.Naam}] && G[{_fcpf}{fc.Naam}])");
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hwtv}{fc.Naam}] && R[{_fcpf}{fc.Naam}])");
                             sb.AppendLine($"{ts}{{");
                             sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] = MM[{_mpf}{_mwtvm}{fc.Naam}];");
                             sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] = 0;");
+                            sb.AppendLine($"{ts}}}");
+
                             if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                             {
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] &= ~BIT8;");
