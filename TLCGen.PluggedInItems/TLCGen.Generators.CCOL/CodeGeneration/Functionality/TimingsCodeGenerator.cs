@@ -212,6 +212,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#endif");
 
                     sb.AppendLine();
+                    sb.AppendLine("#if !(defined NO_TIMETOX)");
+                    sb.AppendLine("#if !(defined NO_RIS)");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
                     var tigto = c.Data.Intergroen ? "TIG" : "TO";
@@ -235,6 +237,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     }
                     sb.AppendLine($"{ts}{ts}if (SG[fc]) CIF_FC_RWT[fc] = 0;");
                     sb.AppendLine($"{ts}}}");
+                    sb.AppendLine("#endif /* NO_TIMETOX */");
+                    sb.AppendLine("#endif /* NO_RIS */");
 
                     return sb.ToString();
 

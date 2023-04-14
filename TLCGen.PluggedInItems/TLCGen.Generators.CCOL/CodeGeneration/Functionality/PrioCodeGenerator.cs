@@ -249,7 +249,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{hd.FaseCyclus}hd", 32, CCOLElementTimeTypeEnum.None, _prmrissubrole, hd.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{hd.FaseCyclus}hd", (int)hd.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, hd.FaseCyclus));
                    
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0x0400, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmrisapproachid}{hd.FaseCyclus}hd", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
@@ -418,19 +418,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisSubrole, CCOLElementTimeTypeEnum.None, _prmrissubrole, prio.FaseCyclus));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, prio.FaseCyclus));
 
-                    var stationtype = prio.Type
-                        switch
-                        {
-                            PrioIngreepVoertuigTypeEnum.Bus => 0x0040,
-                            PrioIngreepVoertuigTypeEnum.Tram => 0x0800,
-                            PrioIngreepVoertuigTypeEnum.Fiets => 0x0004,
-                            PrioIngreepVoertuigTypeEnum.Vrachtwagen => 0x0080 | 0x0100 | 0x0200,
-                            PrioIngreepVoertuigTypeEnum.Auto => 0x0020,
-                            PrioIngreepVoertuigTypeEnum.NG => 0x0000,
-                            _ => 0x0001
-                        };
-
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}", stationtype, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
                     
                     // we only need these elements if they differ from the elements already created for signalgroups
                     if (fcRis != null && CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
