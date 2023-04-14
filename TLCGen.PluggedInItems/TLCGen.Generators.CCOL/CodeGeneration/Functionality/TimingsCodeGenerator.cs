@@ -230,7 +230,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                             PrioIngreepVoertuigTypeEnum.NG => "CIF_FC_RWT_ONBEKEND",
                             _ => throw new NotImplementedException(),
                         };
-                        sb.AppendLine($"{ts}{ts}if (C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && R[fc] && {tigto}[{_fcpf}{prio.FaseCyclus}][fc])  CIF_FC_RWT[fc] |= {reden};");
+                        sb.AppendLine($"{ts}{ts}if (C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && R[fc] && {tigto}[{_fcpf}{prio.FaseCyclus}][fc]) CIF_FC_RWT[fc] |= {reden};");
                     }
                     foreach (var hd in c.PrioData.HDIngrepen)
                     {
