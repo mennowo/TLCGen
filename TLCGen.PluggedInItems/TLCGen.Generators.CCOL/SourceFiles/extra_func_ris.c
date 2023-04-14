@@ -12,7 +12,9 @@
 
 /* Deze ris prioriteit applicatiefuncties worden gebruikt in de programmagenerator TLCGEN in combinatie met de PrioModule van TLCGen */
 
-
+#if (CCOL_V <= 110)
+  #define GEEN_CONSOLIDATIE
+#endif
 
 /* include files */
 /* ============= */
