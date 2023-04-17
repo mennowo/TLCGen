@@ -1,5 +1,8 @@
-TLCGen=12.4.0.0
+TLCGen=12.4.0.1
 RN==TLCGen
+TLCGen versie: 12.4.0.1
+- Verbetering code dynamische hiaat
+- Diverse kleine fixes
 TLCGen versie: 12.4.0.0
 - Versienummer passend bij 'consolidatie' versie
 - Inmelden op importance bij RIS
