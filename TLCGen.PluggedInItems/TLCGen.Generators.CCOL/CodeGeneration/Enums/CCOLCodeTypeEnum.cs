@@ -22,6 +22,7 @@
         RegCMeeverlengen,
         RegCRealisatieAfhandelingVoorModules,
         RegCRealisatieAfhandelingModules,
+        RegCRealisatieAfhandelingVersneldPrimair,
         RegCRealisatieAfhandelingNaModules,
         RegCRealisatieAfhandeling,
         RegCAlternatieven,

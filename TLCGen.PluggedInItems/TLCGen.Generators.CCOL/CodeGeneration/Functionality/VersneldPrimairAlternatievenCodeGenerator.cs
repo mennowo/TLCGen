@@ -267,6 +267,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     sb.AppendLine("");
+
+                    foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCRealisatieAfhandelingVersneldPrimair])
+                    {
+                        sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCRealisatieAfhandelingVersneldPrimair, ts, order));
+                        sb.AppendLine();
+                    }
+
                     sb.AppendLine($"{ts}VersneldPrimair_Add();");
                     sb.AppendLine("");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");

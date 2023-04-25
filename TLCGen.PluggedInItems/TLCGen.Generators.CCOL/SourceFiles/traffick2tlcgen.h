@@ -14,128 +14,175 @@
 #define MAX_VTG_KOP  FCMAX            /* maximum aantal voetgangerskoppelingen - type gescheiden oversteek  */
 #define MAX_LVK_GST  FCMAX            /* maximum aantal gelijk starten langzaam verkeer                     */
 #define MAX_DCF_VST  FCMAX            /* maximum aantal deelconflicten voorstart                            */
+#define MAX_DCF_GST  FCMAX            /* maximum aantal deelconflicten gelijkstart                          */
+#define MAX_MEE_REA     40            /* maximum aantal meerealisaties                                      */
 #define MAX_PEL_KOP     10            /* maximum aantal peloton koppelingen                                 */
 #define MAX_FTS_PRI     20            /* maximum aantal definities fiets voorrang module                    */
+#define MAX_DVM_PRG     10            /* maximum aantal DVM netwerkprogramma's                              */
+#define MAX_FILE_PRG    10            /* maximum aantal FILE programma's stroomopwaarts                     */
 #define MAXDUMPSTAP    600            /* aantal seconden flight buffer in testomgeving                      */
 
 struct hki_koppeling {
-  count fc1;                          /* FC    voedende richting                                            */
-  count fc2;                          /* FC    volg     richting                                            */
-  count tlr21;                        /* TM    late release fc2 (= inrijtijd)                               */
-  count tnlfg12;                      /* TM    vaste   nalooptijd vanaf einde vastgroen      fc1            */
-  count tnlfgd12;                     /* TM    det.afh.nalooptijd vanaf einde vastgroen      fc1            */
-  count tnleg12;                      /* TM    vaste   nalooptijd vanaf einde (verleng)groen fc1            */
-  count tnlegd12;                     /* TM    det.afh.nalooptijd vanaf einde (verleng)groen fc1            */
-  boolv kop_eg;                       /* boolv koppeling vanaf einde groen (als FALSE dan vanaf EV)         */
-  boolv los_fc2;                      /* boolv fc2 mag bij aanvraag fc1 los realiseren                      */
-  mulv  kop_max;                      /* mulv  maximum verlenggroen na harde koppeling                      */
-  mulv  status;                       /* mulv  status koppeling                                             */
+    count fc1;                          /* FC    voedende richting                                            */
+    count fc2;                          /* FC    volg     richting                                            */
+    count tlr21;                        /* TM    late release fc2 (= inrijtijd)                               */
+    count tnlfg12;                      /* TM    vaste   nalooptijd vanaf einde vastgroen      fc1            */
+    count tnlfgd12;                     /* TM    det.afh.nalooptijd vanaf einde vastgroen      fc1            */
+    count tnleg12;                      /* TM    vaste   nalooptijd vanaf einde (verleng)groen fc1            */
+    count tnlegd12;                     /* TM    det.afh.nalooptijd vanaf einde (verleng)groen fc1            */
+    boolv kop_eg;                       /* boolv koppeling vanaf einde groen (als FALSE dan vanaf EV)         */
+    boolv los_fc2;                      /* boolv fc2 mag bij aanvraag fc1 los realiseren                      */
+    mulv  kop_max;                      /* mulv  maximum verlenggroen na harde koppeling                      */
+    mulv  status;                       /* mulv  status koppeling                                             */
 };
 
 struct vtg_koppeling {
-  count fc1;                          /* FC   richting 1                                                    */
-  count fc2;                          /* FC   richting 2                                                    */
-  count tinl12;                       /* TM   inlooptijd fc1                                                */
-  count tinl21;                       /* TM   inlooptijd fc2                                                */
-  count tnlsgd12;                     /* TM   nalooptijd fc2 vanaf startgroen fc1                           */
-  count tnlsgd21;                     /* TM   nalooptijd fc1 vanaf startgroen fc2                           */
-  count hnla12;                       /* HE   drukknop melding koppeling vanaf fc1 aanwezig                 */
-  count hnla21;                       /* HE   drukknop melding koppeling vanaf fc2 aanwezig                 */
-  count hlos1;                        /* HE   los realiseren fc1 toegestaan                                 */
-  count hlos2;                        /* HE   los realiseren fc2 toegestaan                                 */
-  mulv  status12;                     /* mulv status koppeling fc1 -> fc2                                   */
-  mulv  status21;                     /* mulv status koppeling fc2 -> fc1                                   */
+    count fc1;                          /* FC   richting 1                                                    */
+    count fc2;                          /* FC   richting 2                                                    */
+    count tinl12;                       /* TM   inlooptijd fc1                                                */
+    count tinl21;                       /* TM   inlooptijd fc2                                                */
+    count tnlsgd12;                     /* TM   nalooptijd fc2 vanaf startgroen fc1                           */
+    count tnlsgd21;                     /* TM   nalooptijd fc1 vanaf startgroen fc2                           */
+    count hnla12;                       /* HE   drukknop melding koppeling vanaf fc1 aanwezig                 */
+    count hnla21;                       /* HE   drukknop melding koppeling vanaf fc2 aanwezig                 */
+    count hlos1;                        /* HE   los realiseren fc1 toegestaan                                 */
+    count hlos2;                        /* HE   los realiseren fc2 toegestaan                                 */
+    mulv  status12;                     /* mulv status koppeling fc1 -> fc2                                   */
+    mulv  status21;                     /* mulv status koppeling fc2 -> fc1                                   */
 };
 
 struct lvk_gelijkstr {
-  count fc1;                          /* FC   richting 1                                                    */
-  count fc2;                          /* FC   richting 2                                                    */
-  count fc3;                          /* FC   richting 1                                                    */
-  count fc4;                          /* FC   richting 2                                                    */
+    count fc1;                          /* FC   richting 1                                                    */
+    count fc2;                          /* FC   richting 2                                                    */
+    count fc3;                          /* FC   richting 1                                                    */
+    count fc4;                          /* FC   richting 2                                                    */
 };
 
 struct dcf_voorstart {
-  count fc1;                          /* FC  richting die voorstart geeft                                   */
-  count fc2;                          /* FC  richting die voorstart krijgt                                  */
-  count tvs21;                        /* TM  voorstart fc2                                                  */
-  count to12;                         /* TM  ontruimingstijd van fc1 naar fc2                               */
-  count ma21;                         /* SCH meerealisatie van fc2 met fc1                                  */
-  count mv21;                         /* SCH meeverlengen  van fc2 met fc1                                  */
+    count fc1;                          /* FC  richting die voorstart geeft                                   */
+    count fc2;                          /* FC  richting die voorstart krijgt                                  */
+    count tvs21;                        /* TM  voorstart fc2                                                  */
+    count to12;                         /* TM  ontruimingstijd van fc1 naar fc2                               */
+    count ma21;                         /* SCH meerealisatie van fc2 met fc1                                  */
+    count mv21;                         /* SCH meeverlengen  van fc2 met fc1                                  */
+};
+
+struct dcf_gelijkstr {
+    count fc1;                          /* FC  richting 1                                                     */
+    count fc2;                          /* FC  richting 2                                                     */
+    count to12;                         /* TM  ontruimingstijd van fc1 naar fc2                               */
+    count to21;                         /* TM  ontruimingstijd van fc2 naar fc1                               */
+    count ma12;                         /* SCH meerealisatie van fc1 met fc2                                  */
+    count ma21;                         /* SCH meerealisatie van fc2 met fc1                                  */
+};
+
+struct meerealisatie {
+    count fc1;                          /* FC    richting die meerealisatie geeft                             */
+    count fc2;                          /* FC    richting die meerealisatie krijgt                            */
+    count ma21;                         /* SCH   meerealisatie van fc2 met fc1                                */
+    count mv21;                         /* SCH   meeverlengen  van fc2 met fc1                                */
+    boolv mr2v;                         /* boolv meerealisatie aan fc2 verstrekt                              */
 };
 
 struct pel_koppeling {
-  count kop_fc;                       /* FC    koppelrichting                                               */
-  count kop_toe;                      /* ME    toestemming peloton ingreep (bij NG altijd toestemming)      */
-  count kop_sig;                      /* HE    koppelsignaal                                                */
-  count kop_bew;                      /* TM    bewaak koppelsignaal (bij NG wordt een puls veronderstelt)   */
-  count aanv_vert;                    /* TM    aanvraag vertraging  (bij NG wordt geen aanvraag opgzet)    */
-  count vast_vert;                    /* TM    vasthoud vertraging  (start op binnenkomst koppelsignaal)    */
-  count duur_vast;                    /* TM    duur vasthouden (bij duursign. na afvallen koppelsignaal)    */
-  count duur_verl;                    /* TM    duur verlengen na ingreep (bij NG geldt TVG_max[])           */
-  boolv kop_oud;                      /* boolv status koppelsignaal vorige machine slag                     */
-  mulv  aanw_kop1;                    /* mulv  aanwezigheidsduur koppelsignaal 1 vanaf start puls           */
-  mulv  duur_kop1;                    /* mulv  tijdsduur HOOG    koppelsignaal 1 igv duur signaal           */
-  mulv  aanw_kop2;                    /* mulv  aanwezigheidsduur koppelsignaal 2 vanaf start puls           */
-  mulv  duur_kop2;                    /* mulv  tijdsduur HOOG    koppelsignaal 2 igv duur signaal           */
-  mulv  aanw_kop3;                    /* mulv  aanwezigheidsduur koppelsignaal 3 vanaf start puls           */
-  mulv  duur_kop3;                    /* mulv  tijdsduur HOOG    koppelsignaal 3 igv duur signaal           */
-  mulv  pk_status;                    /* mulv  status peloton ingreep                                       */
-  boolv buffervol;                    /* boolv buffers voor peloton ingreep vol                             */
+    count kop_fc;                       /* FC    koppelrichting                                               */
+    count kop_toe;                      /* ME    toestemming peloton ingreep (bij NG altijd toestemming)      */
+    count kop_sig;                      /* HE    koppelsignaal                                                */
+    count kop_bew;                      /* TM    bewaak koppelsignaal (bij NG wordt een puls veronderstelt)   */
+    count aanv_vert;                    /* TM    aanvraag vertraging  (bij NG wordt geen aanvraag opgzet)     */
+    count vast_vert;                    /* TM    vasthoud vertraging  (start op binnenkomst koppelsignaal)    */
+    count duur_vast;                    /* TM    duur vasthouden (bij duursign. na afvallen koppelsignaal)    */
+    count duur_verl;                    /* TM    duur verlengen na ingreep (bij NG geldt TVG_max[])           */
+    count hnaloop_1;                    /* HE    voorwaarde herstart extra nalooptijd 1 (nalooplus 1)         */
+    count tnaloop_1;                    /* TM    nalooptijd 1                                                 */
+    count hnaloop_2;                    /* HE    voorwaarde herstart extra nalooptijd 2 (nalooplus 2)         */
+    count tnaloop_2;                    /* TM    nalooptijd 2                                                 */
+    count verklik;                      /* US    verklik peloton ingreep                                      */
+    boolv kop_oud;                      /* boolv status koppelsignaal vorige machine slag                     */
+    mulv  aanw_kop1;                    /* mulv  aanwezigheidsduur koppelsignaal 1 vanaf start puls           */
+    mulv  duur_kop1;                    /* mulv  tijdsduur HOOG    koppelsignaal 1 igv duur signaal           */
+    mulv  aanw_kop2;                    /* mulv  aanwezigheidsduur koppelsignaal 2 vanaf start puls           */
+    mulv  duur_kop2;                    /* mulv  tijdsduur HOOG    koppelsignaal 2 igv duur signaal           */
+    mulv  aanw_kop3;                    /* mulv  aanwezigheidsduur koppelsignaal 3 vanaf start puls           */
+    mulv  duur_kop3;                    /* mulv  tijdsduur HOOG    koppelsignaal 3 igv duur signaal           */
+    mulv  pk_status;                    /* mulv  status peloton ingreep                                       */
+    boolv pk_afronden;                  /* boolv afronden lopende peloton ingreep                             */
+    boolv buffervol;                    /* boolv buffers voor peloton ingreep vol                             */
 };
 
 struct fietsvoorrang {
-  count fc;                           /* FC    fietsrichting                                                */
-  count drk1;                         /* DE    drukknop 1 voor aanvraag prioriteit                          */
-  count drk2;                         /* DE    drukknop 2 voor aanvraag prioriteit                          */
-  count de1;                          /* DE    koplus   1 voor aanvraag prioriteit                          */
-  count de2;                          /* DE    koplus   2 voor aanvraag prioriteit                          */
-  count inmeld;                       /* HE    hulp element voor prioriteitsmodule (in.melding prioriteit)  */
-  count uitmeld;                      /* HE    hulp element voor prioriteitsmodule (uitmelding prioriteit)  */
-  count ogwt_fts;                     /* TM    ondergrens wachttijd voor prioriteit                         */
-  count prio_fts;                     /* PRM   prioriteitscode                                              */
-  count ogwt_reg;                     /* TM    ondergrens wachttijd voor prioriteit (indien REGEN == TRUE)  */
-  count prio_reg;                     /* PRM   prioriteitscode                      (indien REGEN == TRUE)  */
-  count verklik;                      /* US    verklik fiets prioriteit                                     */
-  boolv aanvraag;                     /* boolv fietser is op juiste wijze aangevraagd                       */
-  boolv prio_vw;                      /* boolv fietser voldoet aan prioriteitsvoorwaarden                   */
-  boolv prio_av;                      /* boolv fietser is met prioriteit aangevraagd                        */
+    count fc;                           /* FC    fietsrichting                                                */
+    count drk1;                         /* DE    drukknop 1 voor aanvraag prioriteit                          */
+    count drk2;                         /* DE    drukknop 2 voor aanvraag prioriteit                          */
+    count de1;                          /* DE    koplus   1 voor aanvraag prioriteit                          */
+    count de2;                          /* DE    koplus   2 voor aanvraag prioriteit                          */
+    count inmeld;                       /* HE    hulp element voor prioriteitsmodule (in.melding prioriteit)  */
+    count uitmeld;                      /* HE    hulp element voor prioriteitsmodule (uitmelding prioriteit)  */
+    count ogwt_fts;                     /* TM    ondergrens wachttijd voor prioriteit                         */
+    count prio_fts;                     /* PRM   prioriteitscode                                              */
+    count ogwt_reg;                     /* TM    ondergrens wachttijd voor prioriteit (indien REGEN == TRUE)  */
+    count prio_reg;                     /* PRM   prioriteitscode                      (indien REGEN == TRUE)  */
+    count verklik;                      /* US    verklik fiets prioriteit                                     */
+    boolv aanvraag;                     /* boolv fietser is op juiste wijze aangevraagd                       */
+    boolv prio_vw;                      /* boolv fietser voldoet aan prioriteitsvoorwaarden                   */
+    boolv prio_av;                      /* boolv fietser is met prioriteit aangevraagd                        */
 };
 
 struct prioriteit_id {
-  count HD;                           /* count hulpdienst ingreep                                           */
-  count OV_kar;                       /* count OV ingreep - KAR                                             */
-  count OV_srm;                       /* count OV ingreep - SRM                                             */
-  count OV_verlos;                    /* count OV ingreep - verlos                                          */
-  count VRW;                          /* count VRW ingreep                                                  */
-  count FTS;                          /* count fiets voorrang module                                        */
+    mulv  KAR_id_OV;                    /* mulv  KAR id openbaar vervoer                                      */
+    mulv  KAR_id_HD;                    /* mulv  KAR id nood- en hulpdiensten                                 */
+    count HD;                           /* count hulpdienst ingreep                                           */
+    count OV_kar;                       /* count OV ingreep - KAR                                             */
+    count OV_srm;                       /* count OV ingreep - SRM                                             */
+    count OV_verlos;                    /* count OV ingreep - verlos                                          */
+    count VRW;                          /* count VRW ingreep                                                  */
+    count FTS;                          /* count fiets voorrang module                                        */
+    count usHD;                         /* US    verklik HD ingreep                                           */
+    count usOV_kar;                     /* US    verklik OV ingreep - KAR                                     */
+    count usOV_srm;                     /* US    verklik OV ingreep - SRM                                     */
+    count usVRW;                        /* US    verklik VRW ingreep                                          */
 };
 
 struct afteller {
-  count fc;                           /* FC    richting met afteller                                        */
-  count de1;                          /* DE    koplus 1                                                     */
-  count de2;                          /* DE    koplus 2                                                     */
-  count de3;                          /* DE    koplus 3                                                     */
-  count toest;                        /* SCH   toestemming aansturing afteller                              */
-  count min_duur;                     /* PRM   minimale duur tot start groen waarbij afteller mag starten   */
-  count tel_duur;                     /* PRM   duur van een tel in tienden van seconden                     */
-  count us_getal;                     /* US    tbv verklikking op bedienpaneel                              */
-  count us_bit0;                      /* US    aansturing afteller BIT0                                     */
-  count us_bit1;                      /* US    aansturing afteller BIT1                                     */
-  boolv aftel_ok;                     /* boolv alle aftellers van een rijrichting zijn OK                   */
-  mulv  act_duur;                     /* mulv  tijd in tienden van seconden dat TEL wordt aangestuurd       */
+    count fc;                           /* FC    richting met afteller                                        */
+    count de1;                          /* DE    koplus 1                                                     */
+    count de2;                          /* DE    koplus 2                                                     */
+    count de3;                          /* DE    koplus 3                                                     */
+    count toest;                        /* SCH   toestemming aansturing afteller                              */
+    count min_duur;                     /* PRM   minimale duur tot start groen waarbij afteller mag starten   */
+    count tel_duur;                     /* PRM   duur van een tel in tienden van seconden                     */
+    count us_getal;                     /* US    tbv verklikking op bedienpaneel                              */
+    count us_bit0;                      /* US    aansturing afteller BIT0                                     */
+    count us_bit1;                      /* US    aansturing afteller BIT1                                     */
+    boolv aftel_ok;                     /* boolv alle aftellers van een rijrichting zijn OK                   */
+    mulv  act_duur;                     /* mulv  tijd in tienden van seconden dat TEL wordt aangestuurd       */
 };
 
-#ifndef __TRAFFICK2TLCGEN_VAR
+struct max_groen_DVM {
+    count fc;                           /* FC  fasecyclus                                                     */
+    count dvm_set[MAX_DVM_PRG];         /* PRM maximum(verleng)groen tijdens DVM netwerk programma's          */
+};
+
+struct max_groen_FILE {
+    count fc;                           /* FC  fasecyclus                                                     */
+    count file_set[MAX_FILE_PRG];       /* PRM maximum(verleng)groen tijdens FILE programma's stroomopwaarts  */
+};
+
 extern mulv  aantal_hki_kop;          /* aantal harde koppelingen                                           */
 extern mulv  aantal_vtg_tgo;          /* aantal voetgangerskoppelingen - type gescheiden oversteek          */
 extern mulv  aantal_lvk_gst;          /* aantal gelijk starten langzaam verkeer                             */
 extern mulv  aantal_dcf_vst;          /* aantal deelconflicten voorstart                                    */
+extern mulv  aantal_dcf_gst;          /* aantal deelconflicten gelijkstart                                  */
+extern mulv  aantal_mee_rea;          /* aantal meerealisaties                                              */
 extern mulv  aantal_pel_kop;          /* aantal peloton koppelingen                                         */
 extern mulv  aantal_aft_123;          /* aantal definities aftellers                                        */
+extern mulv  aantal_dvm_prg;          /* aantal DVM netwerk programma's                                     */
+extern mulv  aantal_file_prg;         /* aantal FILE programma's (stroomopwaarts)                           */
 
 extern mulv  REALtraffick[FCMAX];     /* REALTIJD voor richtingen die als eerstvolgende aan de beurt zijn   */
-extern mulv  PARtraffick[FCMAX];      /* buffer PAR[] zoals bepaald door Traffick                           */
+extern boolv PARtraffick[FCMAX];      /* buffer PAR[] zoals bepaald door Traffick                           */
 extern boolv AAPRprio[FCMAX];         /* AAPR[] voor prioriteitsrealisaties                                 */
+extern mulv  PFPRtraffick[FCMAX];     /* aantal modulen dat vooruit gerealiseerd mag worden                 */
 extern mulv  AltRuimte[FCMAX];        /* realisatie ruimte voor alternatieve realisatie                     */
 extern boolv ART[FCMAX];              /* alternatieve realisatie toegestaan algemene schakelaar             */
 extern mulv  ARB[FCMAX];              /* alternatieve realisatie toegestaan verfijning per blok             */
@@ -143,7 +190,13 @@ extern boolv MGR[FCMAX];              /* meeverleng groen                       
 extern boolv MMK[FCMAX];              /* meeverleng groen alleen als MK[] waar is                           */
 extern boolv BMC[FCMAX];              /* beeindig meeverleng groen conflicten                               */
 extern boolv WGR[FCMAX];              /* wachtstand groen                                                   */
-extern boolv FC_DVM[FCMAX];           /* richting krijgt hogere hiaattijden toebedeeld                      */
+extern boolv NAL[FCMAX];              /* naloop als gevolg van harde koppeling actief                       */
+extern boolv FC_DVM[FCMAX];           /* richting wordt bevoordeeld als gevolg van DVM                      */
+extern boolv FC_FILE[FCMAX];          /* richting wordt bevoordeeld als gevolg van FILE stroomopwaarts      */
+extern boolv HerstartOntruim[FCMAX];  /* richting met LHORVA functie R herstart ontruiming vanaf conflicten */
+extern mulv  ExtraOntruim[FCMAX];     /* extra ontruiming als gevolg van LHORVA functie R                   */
+extern boolv HOT[FCMAX];              /* startpuls roodlichtrijder ten behoeve van LHORVA functie R         */
+extern boolv VG_mag[FCMAX];           /* veiligheidsgroen mag worden aangehouden (er is een hiaat gemeten)  */
 extern mulv  AR_max[FCMAX];           /* alternatief maximum                                                */
 extern mulv  GWT[FCMAX];              /* gewogen wachttijd tbv toekennen alternatieve realisatie            */
 extern mulv  TEG[FCMAX];              /* tijd tot einde groen                                               */
@@ -153,8 +206,11 @@ extern mulv  MK_old[FCMAX];           /* buffer MK[]                            
 extern mulv  TMPc[FCMAX][FCMAX];      /* tijdelijke conflict matrix                                         */
 extern mulv  TMPi[FCMAX][FCMAX];      /* restant fictieve ontruimingstijd                                   */
 
-extern boolv DOSEER[FCMAX];           /* doseren aktief               (zelf te besturen in REG[]ADD)        */
+extern boolv DOSEER[FCMAX];           /* doseren aktief                                                     */
+extern mulv  DOSMAX[FCMAX];           /* doseer maximum                                                     */
+extern mulv  DOS_RD[FCMAX];           /* minimale tijd tot startgroen als gevolg van doseren                */
 extern mulv  MINTSG[FCMAX];           /* minimale tijd tot startgroen (zelf te besturen in REG[]ADD)        */
+extern mulv  MINTEG[FCMAX];           /* minimale tijd tot eindegroen (zelf te besturen in REG[]ADD)        */
 extern mulv  PELTEG[FCMAX];           /* tijd tot einde groen als peloton ingreep maximaal duurt            */
 
 extern mulv  TVG_instelling[FCMAX];   /* buffer ingestelde waarde TVG_max[]                                 */
@@ -173,14 +229,18 @@ extern boolv HLPD[FCMAX];             /* HLPD prioriteit toegekend aan richting 
 extern mulv  NAL_HLPD[FCMAX];         /* nalooptijd hulpdienst ingreep op richting(en) in volgarm           */
 extern mulv  verlos_busbaan[FCMAX];   /* buffer voor verlosmelding met prioriteit                           */
 extern boolv iPRIO[FCMAX];            /* prioriteit toegekend aan richting                                  */
+extern boolv A_DST[FCMAX];            /* vaste aanvraag gewenst als gevolg van detectie storingen           */
+extern boolv MK_DST[FCMAX];           /* star verlengen gewenst als gevolg van detectie storingen           */
 
 extern mulv  PEL_UIT_VTG[FCMAX];      /* buffer aantal voertuig voor uitgaande peloton koppeling            */
 extern mulv  PEL_UIT_RES[FCMAX];      /* restant minimale duur uitsturing koppelsignaal peloton koppeling   */
 
 extern mulv  verklik_srm;             /* restant duur verklikking SRM bericht                               */
 extern mulv  duur_geen_srm;           /* aantal minuten dat geen SRM bericht is ontvangen (maximum = 32000) */
+extern mulv  tkarog_old;              /* buffer oude waarde tijdelement tkarog                              */
 
 extern boolv RAT[FCMAX];              /* aansturing rateltikker                                             */
+extern boolv RAT_test[FCMAX];         /* aansturing rateltikker in testomgeving (specifiek voor Accross)    */
 extern boolv KNIP;                    /* hulpwaarde voor knipper signaal                                    */
 extern boolv REGEN;                   /* regensensor aktief (zelf te besturen in REG[]ADD)                  */
 extern boolv WT_TE_HOOG;              /* wachttijd te hoog voor toekennen prioriteit                        */
@@ -188,19 +248,46 @@ extern boolv GEEN_OV_PRIO;            /* geen prioriteit OV   (zelf te besturen 
 extern boolv GEEN_VW_PRIO;            /* geen prioriteit VW   (zelf te besturen in REG[]ADD)                */
 extern boolv GEEN_FIETS_PRIO;         /* geen fietsprioriteit (zelf te besturen in REG[]ADD)                */
 
+extern mulv  OV_stipt[FCMAX];         /* buffer stiptheid ingemelde bussen obv KAR                          */
+extern mulv  US_OV_old[FCMAX];        /* buffer US[] uitsturing geconditioneerde prioriteit                 */
+
 extern boolv DF[DPMAX];               /* detectie fout aanwezig                                             */
 extern mulv  D_bez[DPMAX];            /* tijdsduur detector bezet                                           */
 extern mulv  D_onb[DPMAX];            /* tijdsduur detector onbezet                                         */
-extern boolv TDH_DVM[DPMAX];          /* status TDH tijdens DVM                                             */
+extern mulv  sec_teller;              /* actuele duur intensiteitsmeting                                    */
+extern mulv  kwartier[DPMAX];         /* kwartier intensiteit                                               */
+extern mulv  Iactueel[DPMAX];         /* actuele stand meting                                               */
 
-extern struct hki_koppeling hki_kop[MAX_HKI_KOP];
-extern struct vtg_koppeling vtg_tgo[MAX_VTG_KOP];
-extern struct lvk_gelijkstr lvk_gst[MAX_LVK_GST];
-extern struct dcf_voorstart dcf_vst[MAX_DCF_VST];
-extern struct pel_koppeling pel_kop[MAX_PEL_KOP];
-extern struct fietsvoorrang fts_pri[MAX_FTS_PRI];
-extern struct prioriteit_id prio_index[FCMAX];
-extern struct afteller      aft_123[FCMAX];
+extern count ML_REG_MAX;              /* maximum aantal modulen zonder DVM maatregelen                      */
+extern count ML_DVM_MAX;              /* maximum aantal modulen bij inzet DVM maatregelen                   */
+extern count ML_ACT_MAX;              /* actueel aantal modulen                                             */
+extern count PRML_REG[MLMAX][FCMAX];  /* module indeling zonder DVM maatregelen                             */
+extern count PRML_DVM[MLMAX][FCMAX];  /* module indeling bij inzet DVM maatregelen                          */
+extern boolv DVM_structuur_gewenst;   /* module indeling bij inzet DVM maatregelen gewenst                  */
+extern boolv DVM_structuur_actief;    /* module indeling bij inzet DVM maatregelen actief                   */
+
+extern mulv  DVM_klok;                /* DVM programma - klok wens                                          */
+extern mulv  DVM_parm;                /* DVM programma - parameter instelling                               */
+extern mulv  DVM_prog;                /* DVM programma - actief                                             */
+extern mulv  DVM_prog_duur;           /* DVM programma - actuele duur instelling PRM[dvmpr] in uren         */
+extern boolv DVM_structuur;           /* DVM module structuur gewenst (zelf te besturen in REG[]ADD)        */
+extern boolv DVM_structuur_act;       /* DVM module structuur actief                                        */
+extern boolv max_verleng_groen;       /* keuze maximumgroen of maximum verlenggroentijden                   */
+
+extern mulv  FILE_set;                /* set maximum(verleng)groentijden gewenst a.g.v. FILE stroomopwaarts */
+extern boolv FILE_nass;               /* FILE stroomafwaarts (= na stopstreep) aanwezig                     */
+
+extern struct hki_koppeling  hki_kop[MAX_HKI_KOP];
+extern struct vtg_koppeling  vtg_tgo[MAX_VTG_KOP];
+extern struct lvk_gelijkstr  lvk_gst[MAX_LVK_GST];
+extern struct dcf_voorstart  dcf_vst[MAX_DCF_VST];
+extern struct dcf_gelijkstr  dcf_gst[MAX_DCF_GST];
+extern struct pel_koppeling  pel_kop[MAX_PEL_KOP];
+extern struct fietsvoorrang  fts_pri[MAX_FTS_PRI];
+extern struct prioriteit_id  prio_index[FCMAX];
+extern struct afteller       aft_123[FCMAX];
+extern struct max_groen_DVM  DVM_max[FCMAX];
+extern struct max_groen_FILE FILE_max[FCMAX];
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST
 extern char  _UUR[MAXDUMPSTAP];        /* bijhouden UUR tbv flight buffer                                    */
@@ -233,16 +320,16 @@ void init_traffick2tlcgen(void);      /* Fik230101                              
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_harde_koppeling(       /* Fik230101                                                          */
-count fc1,                            /* FC    voedende richting                                            */
-count fc2,                            /* FC    volg     richting                                            */
-count tlr21,                          /* TM    late release fc2 (= inrijtijd fc1)                           */
-count tnlfg12,                        /* TM    vaste   nalooptijd vanaf einde vastgroen      fc1            */
-count tnlfgd12,                       /* TM    det.afh.nalooptijd vanaf einde vastgroen      fc1            */
-count tnleg12,                        /* TM    vaste   nalooptijd vanaf einde (verleng)groen fc1            */
-count tnlegd12,                       /* TM    det.afh.nalooptijd vanaf einde (verleng)groen fc1            */
-boolv kop_eg,                         /* boolv koppeling vanaf einde groen (als FALSE dan vanaf EV)         */
-boolv los_fc2,                        /* boolv fc2 mag bij aanvraag fc1 los realiseren                      */
-mulv  kop_max);                       /* mulv  maximum verlenggroen na harde koppeling                      */
+    count fc1,                            /* FC    voedende richting                                            */
+    count fc2,                            /* FC    volg     richting                                            */
+    count tlr21,                          /* TM    late release fc2 (= inrijtijd fc1)                           */
+    count tnlfg12,                        /* TM    vaste   nalooptijd vanaf einde vastgroen      fc1            */
+    count tnlfgd12,                       /* TM    det.afh.nalooptijd vanaf einde vastgroen      fc1            */
+    count tnleg12,                        /* TM    vaste   nalooptijd vanaf einde (verleng)groen fc1            */
+    count tnlegd12,                       /* TM    det.afh.nalooptijd vanaf einde (verleng)groen fc1            */
+    boolv kop_eg,                         /* boolv koppeling vanaf einde groen (als FALSE dan vanaf EV)         */
+    boolv los_fc2,                        /* boolv fc2 mag bij aanvraag fc1 los realiseren                      */
+    mulv  kop_max);                       /* mulv  maximum verlenggroen na harde koppeling                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -253,16 +340,16 @@ mulv  kop_max);                       /* mulv  maximum verlenggroen na harde kop
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_vtg_gescheiden(        /* Fik230101                                                          */
-count fc1,                            /* FC richting 1                                                      */
-count fc2,                            /* FC richting 2                                                      */
-count tinl12,                         /* TM inlooptijd fc1                                                  */
-count tinl21,                         /* TM inlooptijd fc2                                                  */
-count tnlsgd12,                       /* TM nalooptijd fc2 vanaf startgroen fc1                             */
-count tnlsgd21,                       /* TM nalooptijd fc1 vanaf startgroen fc2                             */
-count hnla12,                         /* HE drukknop melding koppeling vanaf fc1 aanwezig                   */
-count hnla21,                         /* HE drukknop melding koppeling vanaf fc2 aanwezig                   */
-count hlos1,                          /* HE los realiseren fc1 toegestaan                                   */
-count hlos2);                         /* HE los realiseren fc2 toegestaan                                   */
+    count fc1,                            /* FC richting 1                                                      */
+    count fc2,                            /* FC richting 2                                                      */
+    count tinl12,                         /* TM inlooptijd fc1                                                  */
+    count tinl21,                         /* TM inlooptijd fc2                                                  */
+    count tnlsgd12,                       /* TM nalooptijd fc2 vanaf startgroen fc1                             */
+    count tnlsgd21,                       /* TM nalooptijd fc1 vanaf startgroen fc2                             */
+    count hnla12,                         /* HE drukknop melding koppeling vanaf fc1 aanwezig                   */
+    count hnla21,                         /* HE drukknop melding koppeling vanaf fc2 aanwezig                   */
+    count hlos1,                          /* HE los realiseren fc1 toegestaan                                   */
+    count hlos2);                         /* HE los realiseren fc2 toegestaan                                   */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -274,26 +361,56 @@ count hlos2);                         /* HE los realiseren fc2 toegestaan       
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_gelijkstart_lvk(       /* Fik230101                                                          */
-count fc1,                            /* FC richting 1                                                      */
-count fc2,                            /* FC richting 2                                                      */
-count fc3,                            /* FC richting 3                                                      */
-count fc4);                           /* FC richting 4                                                      */
+    count fc1,                            /* FC richting 1                                                      */
+    count fc2,                            /* FC richting 2                                                      */
+    count fc3,                            /* FC richting 3                                                      */
+    count fc4);                           /* FC richting 4                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie definieer deelconflict voorstart                                                                 */
 /* -------------------------------------------------------------------------------------------------------- */
-/* Met behulp van deze functie worden de gegevens van deelconflicten (voorstart) in een struct geplaatst    */
+/* Met behulp van deze functie worden de gegevens van deelconflicten (voorstart) in een struct geplaatst.   */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_voorstart_dcf(         /* Fik230101                                                          */
-count fc1,                            /* FC  richting die voorstart geeft                                   */
-count fc2,                            /* FC  richting die voorstart krijgt                                  */
-count tvs21,                          /* TM  voorstart fc2                                                  */
-count to12,                           /* TM  ontruimingstijd van fc1 naar fc2                               */
-count ma21,                           /* SCH meerealisatie van fc2 met fc1                                  */
-count mv21);                          /* SCH meeverlengen  van fc2 met fc1                                  */
+    count fc1,                            /* FC  richting die voorstart geeft                                   */
+    count fc2,                            /* FC  richting die voorstart krijgt                                  */
+    count tvs21,                          /* TM  voorstart fc2                                                  */
+    count to12,                           /* TM  ontruimingstijd van fc1 naar fc2                               */
+    count ma21,                           /* SCH meerealisatie van fc2 met fc1                                  */
+    count mv21);                          /* SCH meeverlengen  van fc2 met fc1                                  */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie definieer deelconflict gelijkstart                                                               */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Met behulp van deze functie worden de gegevens van deelconflicten (gelijkstart) in een struct geplaatst. */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_init_application().                                                */
+/*                                                                                                          */
+void definitie_gelijkstart_dcf(       /* Fik230101                                                          */
+    count fc1,                            /* FC  richting 1                                                     */
+    count fc2,                            /* FC  richting 2                                                     */
+    count to12,                           /* TM  ontruimingstijd van fc1 naar fc2                               */
+    count to21,                           /* TM  ontruimingstijd van fc2 naar fc1                               */
+    count ma12,                           /* SCH meerealisatie van fc1 met fc2                                  */
+    count ma21);                          /* SCH meerealisatie van fc2 met fc1                                  */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie definieer meerealisatie                                                                          */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Met behulp van deze functie worden de gegevens van meerealisaties in een struct geplaatst.               */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_init_application().                                                */
+/*                                                                                                          */
+void definitie_meerealisatie(         /* Fik230101                                                          */
+    count fc1,                            /* FC  richting die meerealisatie geeft                               */
+    count fc2,                            /* FC  richting die meerealisatie krijgt                              */
+    count ma21,                           /* SCH meerealisatie van fc2 met fc1                                  */
+    count mv21);                          /* SCH meeverlengen  van fc2 met fc1                                  */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -304,14 +421,19 @@ count mv21);                          /* SCH meeverlengen  van fc2 met fc1      
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_peloton_koppeling(     /* Fik230101                                                          */
-count kop_fc,                         /* FC  koppelrichting                                                 */
-count kop_toe,                        /* ME  toestemming peloton ingreep (bij NG altijd toestemming)        */
-count kop_sig,                        /* HE    koppelsignaal                                                */
-count kop_bew,                        /* TM  bewaak koppelsignaal (bij NG wordt een puls veronderstelt)     */
-count aanv_vert,                      /* TM  aanvraag vertraging  (start op binnenkomst koppelsignaal)      */
-count vast_vert,                      /* TM  vasthoud vertraging  (start op binnenkomst koppelsignaal)      */
-count duur_vast,                      /* TM  duur vasthouden (bij duursign. na afvallen koppelsignaal)      */
-count duur_verl);                     /* TM  duur verlengen na ingreep (bij NG geldt TVG_max[])             */
+    count kop_fc,                         /* FC koppelrichting                                                  */
+    count kop_toe,                        /* ME toestemming peloton ingreep (bij NG altijd toestemming)         */
+    count kop_sig,                        /* HE koppelsignaal                                                   */
+    count kop_bew,                        /* TM bewaak koppelsignaal (bij NG wordt een puls veronderstelt)      */
+    count aanv_vert,                      /* TM aanvraag vertraging  (bij NG wordt geen aanvraag opgzet)        */
+    count vast_vert,                      /* TM vasthoud vertraging  (start op binnenkomst koppelsignaal)       */
+    count duur_vast,                      /* TM duur vasthouden (bij duursign. na afvallen koppelsignaal)       */
+    count duur_verl,                      /* TM duur verlengen na ingreep (bij NG geldt TVG_max[])              */
+    count hnaloop_1,                      /* HE voorwaarde herstart extra nalooptijd 1 (nalooplus 1)            */
+    count tnaloop_1,                      /* TM nalooptijd 1                                                    */
+    count hnaloop_2,                      /* HE voorwaarde herstart extra nalooptijd 2 (nalooplus 2)            */
+    count tnaloop_2,                      /* TM nalooptijd 2                                                    */
+    count verklik);                       /* US verklik peloton ingreep                                         */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -322,18 +444,18 @@ count duur_verl);                     /* TM  duur verlengen na ingreep (bij NG g
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_fiets_voorrang(        /* Fik230101                                                          */
-count fc,                             /* FC    fietsrichting                                                */
-count drk1,                           /* DE    drukknop 1 voor aanvraag prioriteit                          */
-count drk2,                           /* DE    drukknop 2 voor aanvraag prioriteit                          */
-count de1,                            /* DE    koplus   1 voor aanvraag prioriteit                          */
-count de2,                            /* DE    koplus   2 voor aanvraag prioriteit                          */
-count inmeld,                         /* HE    hulp element voor prioriteitsmodule (in.melding prioriteit)  */
-count uitmeld,                        /* HE    hulp element voor prioriteitsmodule (uitmelding prioriteit)  */
-count ogwt,                           /* TM    ondergrens wachttijd voor prioriteit                         */
-count prio,                           /* PRM   prioriteitscode                                              */
-count ogwt_reg,                       /* TM    ondergrens wachttijd voor prioriteit (indien REGEN == TRUE)  */
-count prio_reg,                       /* PRM   prioriteitscode                      (indien REGEN == TRUE)  */
-count verklik);                       /* US                                        */
+    count fc,                             /* FC    fietsrichting                                                */
+    count drk1,                           /* DE    drukknop 1 voor aanvraag prioriteit                          */
+    count drk2,                           /* DE    drukknop 2 voor aanvraag prioriteit                          */
+    count de1,                            /* DE    koplus   1 voor aanvraag prioriteit                          */
+    count de2,                            /* DE    koplus   2 voor aanvraag prioriteit                          */
+    count inmeld,                         /* HE    hulp element voor prioriteitsmodule (in.melding prioriteit)  */
+    count uitmeld,                        /* HE    hulp element voor prioriteitsmodule (uitmelding prioriteit)  */
+    count ogwt,                           /* TM    ondergrens wachttijd voor prioriteit                         */
+    count prio,                           /* PRM   prioriteitscode                                              */
+    count ogwt_reg,                       /* TM    ondergrens wachttijd voor prioriteit (indien REGEN == TRUE)  */
+    count prio_reg,                       /* PRM   prioriteitscode                      (indien REGEN == TRUE)  */
+    count verklik);                       /* US                                        */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -344,16 +466,38 @@ count verklik);                       /* US                                     
 /* Functie wordt aangeroepen vanuit post_init_application().                                                */
 /*                                                                                                          */
 void definitie_afteller(              /* Fik230101                                                          */
-count fc,                             /* FC    richting met afteller                                        */
-count de1,                            /* DE    koplus 1                                                     */
-count de2,                            /* DE    koplus 2                                                     */
-count de3,                            /* DE    koplus 3                                                     */
-count toest,                          /* SCH   toestemming aansturing afteller                              */
-count min_duur,                       /* PRM   minimale duur tot start groen waarbij afteller mag starten   */
-count tel_duur,                       /* PRM   duur van een tel in tienden van seconden                     */
-count us_getal,                       /* US    tbv verklikking op bedienpaneel                              */
-count us_bit0,                        /* US    aansturing afteller BIT0                                     */
-count us_bit1);                       /* US    aansturing afteller BIT1                                     */
+    count fc,                             /* FC    richting met afteller                                        */
+    count de1,                            /* DE    koplus 1                                                     */
+    count de2,                            /* DE    koplus 2                                                     */
+    count de3,                            /* DE    koplus 3                                                     */
+    count toest,                          /* SCH   toestemming aansturing afteller                              */
+    count min_duur,                       /* PRM   minimale duur tot start groen waarbij afteller mag starten   */
+    count tel_duur,                       /* PRM   duur van een tel in tienden van seconden                     */
+    count us_getal,                       /* US    tbv verklikking op bedienpaneel                              */
+    count us_bit0,                        /* US    aansturing afteller BIT0                                     */
+    count us_bit1);                       /* US    aansturing afteller BIT1                                     */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie definieer maximum(verleng)groen sets voor DVM netwerk programma's                                */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Met behulp van deze functie worden de DVM groentijden sets in een struct geplaatst.                      */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit definitie_groentijden_traffick().                                       */
+/*                                                                                                          */
+void definitie_max_groen_dvm_va_arg(  /* Fik230101                                                          */
+    count fc, ...);                       /* FC fasecyclus                                                      */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie definieer maximum(verleng)groen sets voor FILE programma's stroomopwaarts                        */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Met behulp van deze functie worden de FILE stroomopwaarts groentijden sets in een struct geplaatst.      */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit definitie_groentijden_traffick().                                       */
+/*                                                                                                          */
+void definitie_max_groen_file_va_arg( /* Fik230101                                                          */
+    count fc, ...);                       /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -369,13 +513,24 @@ void traffick2tlcgen_kruispunt(void); /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
+/* Functie detector afhandeling Traffick2TLCGen                                                             */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de detectie afhandeling van de Traffick2TLCGen functionaliteiten.                  */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit traffick2tlcgen_detectie().                                             */
+/*                                                                                                          */
+void detector_afhandeling_va_arg(     /* Fik230101                                                          */
+    count fc,                             /* FC   fasecyclus                                                    */
+    count km, ...);                       /* TM   koplus maximum                                                */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
 /* Functie bijwerken detectie variabelen Traffick2TLCGen                                                    */
 /* -------------------------------------------------------------------------------------------------------- */
 /* In deze functie worden de detectie variabelen bijgewerkt, te weten:                                      */
 /* DF[]     : detectie fout geconstateerd                                                                   */
 /* Dbez[]   : tijdsduur detector bezet                                                                      */
 /* Donb[]   : tijdsduur detector onbezet                                                                    */
-/* TDH_DVM[]: logische waarde TDH[] bij actief DVM programma                                                */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit PreApplication_Add().                                                   */
 /*                                                                                                          */
@@ -404,7 +559,7 @@ void traffick2tlcgen_detectie(void);  /* Fik230101                              
 /* xxxx x111 xxxx xxxx   111          voertuig   : ongeldig voertuig                                        */
 /*                                                                                                          */
 mulv bepaal_start_puls_snelheid(      /* Fik230101                                                          */
-count is);                            /* IS ingang signaal waarop snelheid wordt afgebeeld                  */
+    count is);                            /* IS ingang signaal waarop snelheid wordt afgebeeld                  */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -416,22 +571,85 @@ count is);                            /* IS ingang signaal waarop snelheid wordt
 /* Functie wordt aangeroepen vanuit PreApplication_Add().                                                   */
 /*                                                                                                          */
 void traffick2tlcgen_instel(          /* Fik230101                                                          */
-count fc,                             /* FC    fasecyclus                                                   */
-mulv  wg,                             /* mulv  wachtstand groen                                             */
-mulv  wg_aanvraag,                    /* boolv wachtstand groen aanvraag                                    */
-mulv  mg,                             /* mulv  meeverleng groen                                             */
-mulv  mgmk,                           /* mulv  meeverleng groen alleen als MK[] waar is                     */
-mulv  ar,                             /* mulv  alternatieve realisatie toegestaan - algemene schakelaar     */
-mulv  arb,                            /* mulv  alternatieve realisatie toegestaan - verfijning per blok     */
-mulv  alt_ruimte,                     /* mulv  alternatieve ruimte voor toestemming alternatieve realisatie */
-mulv  alt_max,                        /* mulv  alternatief maximum                                          */
-mulv  prioOV_index_kar,               /* mulv  OVFCfc - prioriteitsindex OV ingreep - KAR                   */
-mulv  prioOV_index_srm,               /* mulv  OVFCfc - prioriteitsindex OV ingreep - SRM                   */
-mulv  prioOV_index_verlos,            /* mulv  OVFCfc - prioriteitsindex OV ingreep - verlos                */
-mulv  prioHD_index,                   /* mulv  hdFCfc - prioriteitsindex hulpdienst ingreep                 */
-boolv HD_counter,                     /* boolv HD_counter (TRUE = hulpdienst aanwezig)                      */
-mulv  prioVRW_index,                  /* mulv  VRWFCfc - prioriteitsindex fiets vrachtwagen ingreep         */
-mulv  prioFTS_index);                 /* mulv  ftsFCfc - prioriteitsindex fiets voorrang module             */
+    count fc,                             /* FC    fasecyclus                                                   */
+    mulv  wg,                             /* mulv  wachtstand groen                                             */
+    mulv  wg_aanvraag,                    /* boolv wachtstand groen aanvraag                                    */
+    mulv  mgmk,                           /* mulv  meeverleng groen ook als MK[] niet waar is                   */
+    mulv  mg,                             /* mulv  meeverleng groen is nooit toegestaan                         */
+    mulv  ar,                             /* mulv  alternatieve realisatie toegestaan - algemene schakelaar     */
+    mulv  arb,                            /* mulv  alternatieve realisatie toegestaan - verfijning per blok     */
+    mulv  alt_ruimte,                     /* mulv  alternatieve ruimte voor toestemming alternatieve realisatie */
+    mulv  alt_max,                        /* mulv  alternatief maximum                                          */
+    count prioOV_index_kar,               /* count OVFCfc - prioriteitsindex OV ingreep - KAR                   */
+    count prioOV_index_srm,               /* count OVFCfc - prioriteitsindex OV ingreep - SRM                   */
+    count prioOV_index_verlos,            /* count OVFCfc - prioriteitsindex OV ingreep - verlos                */
+    count prioHD_index,                   /* count hdFCfc - prioriteitsindex hulpdienst ingreep                 */
+    boolv HD_counter,                     /* boolv HD_counter (TRUE = hulpdienst aanwezig)                      */
+    count prioVRW_index,                  /* count VRWFCfc - prioriteitsindex fiets vrachtwagen ingreep         */
+    count prioFTS_index);                 /* count ftsFCfc - prioriteitsindex fiets voorrang module             */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie fasecyclus instellingen Traffick2TLCGen - deel 2                                                 */
+/* -------------------------------------------------------------------------------------------------------- */
+/* In deze functie worden fasecyclus instellingen naar arrays gekopieerd, zodat deze instellingen eenvoudig */
+/* benaderbaar zijn voor andere functies.                                                                   */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit PreApplication_Add().                                                   */
+/*                                                                                                          */
+void traffick2tlcgen_instel_2(        /* Fik230101                                                          */
+    count fc,                             /* FC   fasecyclus                                                    */
+    mulv  KAR_id_OV,                      /* mulv KAR id openbaar vervoer                                       */
+    mulv  KAR_id_HD,                      /* mulv KAR id nood- en hulpdiensten                                  */
+    count usHD,                           /* US   verklik HD ingreep                                            */
+    count usOV_kar,                       /* US   verklik OV ingreep - KAR                                      */
+    count usOV_srm,                       /* US   verklik OV ingreep - SRM                                      */
+    count usVRW,                          /* US   verklik VRW ingreep                                           */
+    count vooruit);                       /* mulv aantal modulen dat vooruit gerealiseerd mag worden            */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal actief DVM netwerk programma                                                              */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie bepaalt het actieve DVM programma op basis van de klok of de DVM parameter. De instelling   */
+/* van de DVM parameter wordt bewaakt op een maximale duur instelbaar in uren.                              */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit KlokPerioden_Add().                                                     */
+/*                                                                                                          */
+void bepaal_DVM_programma(void);      /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie reset wachtstand aanvraag indien niet gewenst                                                    */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Binnen TLCGen bestaat voor wachtstand groen richtingen niet de mogelijkheid om enkel de wachtstand groen */
+/* aanvraag uit te schakelen. Deze functie reset alle wachtstand groen aanvragen.                           */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
+/*                                                                                                          */
+void reset_wachtstand_aanvraag(void); /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie corrigeer wachtstand aanvraag bij harde koppelingen                                              */
+/* -------------------------------------------------------------------------------------------------------- */
+/* TLCGen zet de wachtstand aanvraag zodra alle ontruimingstijden vanaf conflictrichtingen zijn verstreken. */
+/* Voor gekoppelde richtingen geldt echter dat ook alle ontruimingstijden naar de volgrichting moeten zijn  */
+/* verstreken. Deze functie corrigeert de wachtstand aanvraag van gekoppelde richtingen.                    */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
+/*                                                                                                          */
+void hki_wachtstand_aanvraag(void);   /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal aanvragen harde koppeling                                                                 */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt bij harde koppelingen het opzetten van de meeaanvraag van de volgrichtingen.       */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
+/*                                                                                                          */
+void koppel_aanvragen(void);          /* Fik230101                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -442,6 +660,35 @@ mulv  prioFTS_index);                 /* mulv  ftsFCfc - prioriteitsindex fiets 
 /* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
 /*                                                                                                          */
 void fiets_voorrang_aanvraag(void);   /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Bijwerken peloton ingreep                                                                                */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verwerkt de koppelsignalen en bepaalt de status van de peloton koppeling.                   */
+/*                                                                                                          */
+/* NG: uitgeschakeld                                                                                        */
+/*  0: niet aktief                                                                                          */
+/*  1: peloton in aantocht                                                                                  */
+/*  2: peloton in aantocht koppelrichting is aangevraagd                                                    */
+/*  3: peloton in aantocht groen wordt vastgehouden door 1e nalooptijd                                      */
+/*  4: peloton in aantocht groen wordt vastgehouden door 2e nalooptijd (= van 1e nalooplus)                 */
+/*  5: peloton in aantocht groen wordt vastgehouden door 3e nalooptijd (= van 2e nalooplus)                 */
+/*  6: koppelrichting verlengt na afloop van peloton ingreep                                                */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit peloton_ingreep_aanvraag().                                             */
+/*                                                                                                          */
+void bijwerken_peloton_ingreep(void);  /* Fik230101                                                         */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Peloton ingreep - aanvragen                                                                              */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie zet de aanvraag tbv de peloton ingreep.                                                     */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
+/*                                                                                                          */
+void peloton_ingreep_aanvraag(void);   /* Fik230101                                                         */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -469,7 +716,7 @@ void TempConflictMatrix(void);        /* Fik230101                              
 /* Hulpfunctie met als RETURN de resterende maximale ontruimingstijd veroorzaakt door deelconflicten.       */
 /*                                                                                                          */
 mulv TMP_ontruim(                     /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -503,7 +750,7 @@ void StatusHKI(void);                 /* Fik230101                              
 /* Functie wordt aangeroepen vanuit BepaalTEG().                                                            */
 /*                                                                                                          */
 void BepaalTEG_pri(                   /* Fik230101                                                          */
-count volgnr);                        /* index prioriteit                                                   */
+    count volgnr);                        /* index prioriteit                                                   */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -518,7 +765,7 @@ count volgnr);                        /* index prioriteit                       
 /* Functie wordt aangeroepen vanuit BepaalTEG().                                                            */
 /*                                                                                                          */
 void BepaalTEG_hki(                   /* Fik230101                                                          */
-count volgnr);                        /* index harde koppeling                                              */
+    count volgnr);                        /* index harde koppeling                                              */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -533,7 +780,7 @@ count volgnr);                        /* index harde koppeling                  
 /* Functie wordt aangeroepen vanuit BepaalTEG().                                                            */
 /*                                                                                                          */
 void BepaalTEG_vtg(                   /* Fik230101                                                          */
-count volgnr);                        /* index harde koppeling                                              */
+    count volgnr);                        /* index harde koppeling                                              */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -594,6 +841,18 @@ void RealTraffickPrioriteit(void);    /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal maximum(verleng)groentijden tijdens DVM en/of FILE stroomopwaarts.                        */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Tijdens DVM en/of FILE stroomopwaartw worden vooraf gedefinieerde maximum(verleng)groentijden sets van   */
+/* kracht. Deze functie zorgt voor de juiste instelling van TVG_max[] en bepaalt of een richting wordt      */
+/* bevoordeeld door de ingezette maatregel.                                                                 */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Maxgroen_Add().                                                         */
+/*                                                                                                          */
+void bepaal_maximum_groen_traffick(void); /* Fik230101                                                      */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaal realisatie ruimte voor alternatieve realisaties                                           */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaalt de alternatieve realisatie ruimte bepaalt voor alle richtingen.                          */
@@ -613,7 +872,7 @@ void BepaalAltRuimte(void);           /* Fik230101                              
 /* Functie wordt aangeroepen vanuit Traffick2TLCgen_WGR().                                                  */
 /*                                                                                                          */
 boolv REALconflict(                   /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -633,6 +892,16 @@ void Traffick2TLCgen_WGR(void);       /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
+/* Peloton ingreep - groen vasthouden                                                                       */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie zorgt voor het aanhouden van het wachtgroen bij een peloton ingreep.                        */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Wachtgroen_Add().                                                       */
+/*                                                                                                          */
+void peloton_ingreep_wachtgroen(void);/* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
 /* Functie verwerk extra meetkriterium detector - geen gescheiden hiaatmeting per rijstrook                 */
 /* -------------------------------------------------------------------------------------------------------- */
 /* In TLCgen kan een detector geen twee meetkriteria aanhouden. Deze functie maakt dit wel mogelijk.        */
@@ -642,7 +911,7 @@ void Traffick2TLCgen_WGR(void);       /* Fik230101                              
 /* Functie wordt aangeroepen vanuit Meetkriterium_Add().                                                    */
 /*                                                                                                          */
 void corrigeer_meetkriterium_va_arg(count fc, count tkopmaxnr, ...);                 /* TvG                 */
-                                                                                     /* wijziging Fik230101 */
+/* wijziging Fik230101 */
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie verwerk extra meetkriterium detector - gescheiden hiaatmeting per rijstrook                      */
@@ -654,7 +923,17 @@ void corrigeer_meetkriterium_va_arg(count fc, count tkopmaxnr, ...);            
 /* Functie wordt aangeroepen vanuit Meetkriterium_Add().                                                    */
 /*                                                                                                          */
 void corrigeer_meetkriterium2_det_va_arg(count fc, count tkopmaxnr, count mmk, ...); /* TvG                 */
-                                                                                     /* wijziging Fik230101 */
+/* wijziging Fik230101 */
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Peloton ingreep - groen verlengen                                                                        */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie zorgt voor het verlengen na afloop van een peloton ingreep.                                 */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit Meetkriterium_Add().                                                    */
+/*                                                                                                          */
+void peloton_ingreep_verlengen(void); /* Fik230101                                                          */
+
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaal maximaal meeverlengen                                                                     */
@@ -676,6 +955,17 @@ void Traffick2TLCgen_MVG(void);       /* Fik230101                              
 /* Functie wordt aangeroepen vanuit Synchronisaties_Add().                                                  */
 /*                                                                                                          */
 void Traffick2TLCgen_uitstel(void);   /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal periode vooruit realiseren                                                                */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie corrigeert de periode waarin vooruit realiseren is toegestaan. Dit is nodig als MLMAX hoger */
+/* is dan het actueel aantal modulen. De functie overschrijft PFPR[] zoals bepaald door TLCGen.             */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit VersneldPrimair_Add().                                                  */
+/*                                                                                                          */
+void Traffick2TLCgen_PFPR(void);      /* Fik230101                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -736,6 +1026,97 @@ void Traffick2TLCgen_REA(void);       /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
+/* Functie reset doseer bits ten behoeve van file stroomafwaarts                                            */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie reset de doseer bits omdat deze door verschillende file ingrepen kunnen worden opgezet.     */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit FileVerwerking_Add().                                                   */
+/*                                                                                                          */
+void traffick_file_nass_reset(void);  /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie maatregelen bij file stroomafwaarts                                                              */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de standaard maatregelen bij file stroomafwaarts. Voor de maximum groentijd gelden */
+/* verschillende criteria namelijk een percentage van de maximum(verleng)groenduur of een absoluut maximum. */
+/* De laagste waarde wordt automatisch maatgevend. Indien file stroomafwaarts ontstaat tijdens de groenfase */
+/* geldt een aparte ondergrens als minimum voor de maximum groenduur. (= specifiek voor die 1e groenfase)   */
+void traffick_file_nass(              /* Fik230101                                                          */
+    count fc,                             /* FC  fasecyclus                                                     */
+    count h_file,                         /* HE  file stroomafwaarts aanwezig                                   */
+    count h_afkap_start,                  /* HE  file stroomafwaarts is tijdens groen ontstaan                  */
+    count sch_ingreep,                    /* SCH file ingreep toegestaan                                        */
+    count sch_perc_gr,                    /* SCH percentage maximum(verleng)groen toepassen                     */
+    count prm_perc_gr,                    /* PRM percentage maximum(verleng)groen                               */
+    count t_afk_sfile,                    /* T   ondergrens voor afbreken als file tijdens groen ontstaat       */
+    count t_max_groen,                    /* T   maximum groenduur tijdens file stroomafwaarts                  */
+    count t_min_rood);                    /* T   minimum roodduur  tijdens file stroomafwaarts                  */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie maatregelen bij detectie storing                                                                 */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de standaard maatregelen bij detectie storing.                                     */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit DetectieStoring_Add().                                                  */
+/*                                                                                                          */
+void traffick_detectie_storing(       /* Fik230101                                                          */
+    count fc,                             /* FC  fasecyclus                                                     */
+    count tvertraag,                      /* TM  tijdvertraging aanvraag                                        */
+    count pstar);                         /* PRM percentage star uitverlengen                                   */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie uitgaande pelotonkoppeling obv getelde voertuigen ter hoogte van de stopstreep                   */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de uitsturing van een uitgaand peloton signaal obv getelde voertuigen nabij de     */
+/* stopstreep. Indien het koppelsignaal als puls is gedefinieerd wordt het bijbehorende koppelsignaal       */
+/* gedurende 2,0 sec. uitgestuurd waarna de meting herstart. Bij een duursignaal wordt het koppelsignaal    */
+/* uitgestuurd zolang het meetkriterium MK[] waar is tijdens de groenfase, na het afvallen van MK[] wordt   */
+/* de meting herstart.                                                                                      */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_application().                                                     */
+/*                                                                                                          */
+void peloton_meting_uit_stopstreep(   /* Fik230101                                                          */
+    count fc,                             /* FC    fasecyclus                                                   */
+    count de1,                            /* DE    koplus 1                                                     */
+    count de2,                            /* DE    koplus 2                                                     */
+    count de3,                            /* DE    koplus 3                                                     */
+    count tpelmeet,                       /* TM    meetperiode peloton koppeling                                */
+    count tpeltdh,                        /* TM    grenshiaat  peloton meting                                   */
+    count pgrenswaarde,                   /* PRM   grenswaarde aantal voertuigen                                */
+    boolv duur_signaal,                   /* boolv FALSE = puls                                                 */
+    count us_ks);                         /* US    uitgaand koppelsignaal                                       */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie corrigeer aansturing verklikking stiptheid openbaar vervoer op basis van KAR                     */
+/* -------------------------------------------------------------------------------------------------------- */
+/* In de TLCGen aansturing kan de verklikking wegvallen voordat alle bussen zijn uitgemeld. Deze functie    */
+/* corrigeert de aansturing van de verklikking.                                                             */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_application().                                                     */
+/*                                                                                                          */
+void US_OV_stiptheid_KAR(             /* Fik230101                                                          */
+    count fc,                             /* FC fasecylus                                                       */
+    count ov_counter,                     /* CT aantal aanwezige bussen in het traject                          */
+    count us_tevroeg,                     /* US 1e bus is te vroeg                                              */
+    count us_optijd,                      /* US 1e bus is op tijd                                               */
+    count us_telaat);                     /* US 1e bus is te laat                                               */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie test uitgangssignalen                                                                            */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie zet een uitgangssignaal op ten behoeve van test doeleinden.                                 */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_application().                                                     */
+/*                                                                                                          */
+void test_us_signalen(void);          /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
 /* Hulpfunctie bepaal aanwezigheid conflicterende OV ingreep tbv wachttijd voorspeller                      */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Deze functie geeft de aanwezigheid terug van een conflicterende busingreep tbv de wachttijd voorspeller. */
@@ -743,7 +1124,7 @@ void Traffick2TLCgen_REA(void);       /* Fik230101                              
 /* Functie wordt aangeroepen vanuit aansturing_wt_voorspeller().                                            */
 /*                                                                                                          */
 boolv conflict_OV(                    /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -756,7 +1137,7 @@ count fc);                            /* FC fasecyclus                          
 /* Functie wordt aangeroepen vanuit aansturing_wt_voorspeller().                                            */
 /*                                                                                                          */
 mulv REALconflictTTG(                 /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -769,13 +1150,18 @@ count fc);                            /* FC fasecyclus                          
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
 void aansturing_wt_voorspeller(       /* Fik230101                                                          */
-count fc,                             /* FC fasecyclus                                                      */
-count us0,                            /* US wachttijd voorspeller - BIT0                                    */
-count us1,                            /* US wachttijd voorspeller - BIT1                                    */
-count us2,                            /* US wachttijd voorspeller - BIT2                                    */
-count us3,                            /* US wachttijd voorspeller - BIT3                                    */
-count us4,                            /* US wachttijd voorspeller - BIT4                                    */
-count usbus);                         /* US aansturing bus sjabloon                                         */
+    count fc,                             /* FC  fasecyclus                                                     */
+    count us0,                            /* US  wachttijd voorspeller - BIT0                                   */
+    count us1,                            /* US  wachttijd voorspeller - BIT1                                   */
+    count us2,                            /* US  wachttijd voorspeller - BIT2                                   */
+    count us3,                            /* US  wachttijd voorspeller - BIT3                                   */
+    count us4,                            /* US  wachttijd voorspeller - BIT4                                   */
+    count usbus,                          /* US  aansturing bus sjabloon                                        */
+    count schwtv,                         /* SCH aansturing WTV toegestaan - instelling                         */
+    count hewtv,                          /* HE  aansturing WTV toegestaan - actueel                            */
+    count mealed,                         /* ME  aantal leds volgens berekening                                 */
+    count usaled_uit,                     /* US  aantal leds dat uitgestuurd wordt                              */
+    count mealed_uit);                    /* ME  aantal leds dat uitgestuurd wordt                              */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -804,13 +1190,13 @@ void aansturing_aftellers(void);      /* Fik230101                              
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
 void rateltikker_applicatie(          /* Fik230101                                                          */
-count fc,                             /* FC    fasecyclus                                                   */
-count hedrk1,                         /* HE    drukknop 1                                                   */
-count hedrk2,                         /* HE    drukknop 2                                                   */
-count usrat,                          /* US    rateltikker                                                  */
-count natik,                          /* TM    natikken vanaf start rood                                    */
-boolv ratel_periode,                  /* boolv werkingsperiode  rateltikkers                                */
-mulv  ratel_werking);                 /* mulv  werkingsparmeter rateltikkers                                */
+    count fc,                             /* FC    fasecyclus                                                   */
+    count hedrk1,                         /* HE    drukknop 1                                                   */
+    count hedrk2,                         /* HE    drukknop 2                                                   */
+    count usrat,                          /* US    rateltikker                                                  */
+    count natik,                          /* TM    natikken vanaf start rood                                    */
+    boolv ratel_periode,                  /* boolv werkingsperiode  rateltikkers                                */
+    mulv  ratel_werking);                 /* mulv  werkingsparmeter rateltikkers                                */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -823,31 +1209,66 @@ mulv  ratel_werking);                 /* mulv  werkingsparmeter rateltikkers    
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
 void corrigeer_wachtlicht_fiets(      /* Fik230101                                                          */
-count fc,                             /* FC fasecyclus                                                      */
-count uswacht);                       /* US wachtlicht uitsturing                                           */
+    count fc,                             /* FC fasecyclus                                                      */
+    count uswacht);                       /* US wachtlicht uitsturing                                           */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
-/* Functie uitgaande pelotonkoppeling obv getelde voertuigen ter hoogte van de stopstreep                   */
+/* Functie verklik peloton prioriteit                                                                       */
 /* -------------------------------------------------------------------------------------------------------- */
-/* Deze functie verzorgt de uitsturing van een uitgaand peloton signaal obv getelde voertuigen nabij de     */
-/* stopstreep. Indien het koppelsignaal als puls is gedefinieerd wordt het bijbehorende koppelsignaal       */
-/* gedurende 2,0 sec. uitgestuurd waarna de meting herstart. Bij een duursignaal wordt het koppelsignaal    */
-/* uitgestuurd zolang het meetkriterium MK[] waar is tijdens de groenfase, na het afvallen van MK[] wordt   */
-/* de meting herstart.                                                                                      */
+/* Deze functie verzorgt de verklikking van de peloton prioriteit. Het led knippert als er een voertuig in  */
+/* het traject aanwezig is en brandt vast tijdens het groen als er prioriteit verstrekt is.                 */
 /*                                                                                                          */
-/* Functie wordt aangeroepen vanuit post_application().                                                     */
+/* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void peloton_meting_uit_stopstreep(   /* Fik230101                                                          */
-count fc,                             /* FC    fasecyclus                                                   */
-count de1,                            /* DE    koplus 1                                                     */
-count de2,                            /* DE    koplus 2                                                     */
-count de3,                            /* DE    koplus 3                                                     */
-count tpelmeet,                       /* TM    meetperiode peloton koppeling                                */
-count tpeltdh,                        /* TM    grenshiaat  peloton meting                                   */
-count pgrenswaarde,                   /* PRM   grenswaarde aantal voertuigen                                */
-boolv duur_signaal,                   /* boolv FALSE = puls                                                 */
-count us_ks);                         /* US    uitgaand koppelsignaal                                       */
+void verklik_peloton_ingreep(void);   /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie verklik prioriteit op basis van KAR en SRM                                                       */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de verklikking van prioriteit op basis van KAR en SRM. Het led knippert als er een */
+/* voertuig met een prioriteitsaanvraag aanwezig is en brandt vast tijdens het groen als er prioriteit      */
+/* verstrekt is.                                                                                            */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_system_application().                                              */
+/*                                                                                                          */
+void verklik_prio_KAR_SRM(void);      /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie verklik SRM bericht ontvangen en SRM ondergedrag                                                 */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verklikt de binnenkomst van SRM berichten en bewaakt SRM op ondergedrag.                    */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_system_application().                                              */
+/*                                                                                                          */
+void verklik_bewaak_SRM(              /* Fik230101                                                          */
+    count us_srm,                         /* US   verklik SRM bericht ontvangen                                 */
+    mulv  duur_verklik_srm,               /* mulv duur verklik SRM bericht ontvangen in tienden van seconden    */
+    count us_srm_og,                      /* US   verklik SRM ondergedrag                                       */
+    mulv  srm_og);                        /* mulv duur ondergedrag SRM in minuten                               */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie verklik fiets voorrang module                                                                    */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie verzorgt de verklikking van de fiets voorrang module. Het led knippert tijdens rood indien  */
+/* een prioriteitsaanvraag aanwezig is en brandt vervolgens vast tot einde vastgroen van de fietsrichting.  */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit post_system_application().                                              */
+/*                                                                                                          */
+void verklik_fiets_voorrang(void);    /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie buffer stiptheid ingemelde bussen op basis van KAR                                               */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie buffert de stiptheid van ingemelde bussen op basis van KAR.                                 */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit InUitMelden_Add().                                                      */
+/*                                                                                                          */
+void buffer_stiptheid_info(void);     /* Fik230101                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -862,17 +1283,6 @@ void fiets_voorrang_module(void);     /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
-/* Functie verklik fiets voorrang module                                                                    */
-/* -------------------------------------------------------------------------------------------------------- */
-/* Deze functie verzorgt de verklikking van de fiets voorrang module. Het led knippert tijdens rood indien  */
-/* een prioriteitsaavraag aanwezig is en brandt vervolgens vast tot einde vastgroen van de fietsrichting.   */
-/*                                                                                                          */
-/* Functie wordt aangeroepen vanuit post_system_application().                                              */
-/*                                                                                                          */
-void verklik_fiets_voorrang(void);    /* Fik230101                                                          */
-
-
-/* -------------------------------------------------------------------------------------------------------- */
 /* Functie verlosmelding busbaan met prioriteit                                                             */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Door in TLCgen een BUS prioriteit te definieren zonder in- en uitmelding kan met behulp van de detectie  */
@@ -883,12 +1293,24 @@ void verklik_fiets_voorrang(void);    /* Fik230101                              
 /* Functie wordt aangeroepen vanuit InUitMelden_Add().                                                      */
 /*                                                                                                          */
 void verlos_melding_busbaan(          /* Fik230101                                                          */
-count fc,                             /* FC   fasecyclus                                                    */
-count de1,                            /* DE   koplus nabij de stopstreep                                    */
-count de2,                            /* DE   koplus tbv lengte gevoeligheid (optioneel)                    */
-count hinm,                           /* HE   puls tbv in.melding (wordt door TLCgen gegenereerd)           */
-count huitm,                          /* HE   puls tbv uitmelding (wordt door TLCgen gegenereerd)           */
-mulv  min_rood);                      /* mulv minimale roodtijd (TE) voor prioriteit aanvraag               */
+    count fc,                             /* FC   fasecyclus                                                    */
+    count de1,                            /* DE   koplus nabij de stopstreep                                    */
+    count de2,                            /* DE   koplus tbv lengte gevoeligheid (optioneel)                    */
+    count hinm,                           /* HE   puls tbv in.melding (wordt door TLCgen gegenereerd)           */
+    count huitm,                          /* HE   puls tbv uitmelding (wordt door TLCgen gegenereerd)           */
+    mulv  min_rood);                      /* mulv minimale roodtijd (TE) voor prioriteit aanvraag               */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie corrigeer terugkomen na afbreken                                                                 */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Tijdens DVM en FILE stroomopwaarts worden alleen aan nood- en hulpdiensten en aan het OV op vrijliggende */
+/* busbanen prioriteitsrealisaties toegekend. Richtingen die door DVM of FILE bevorderd worden mogen altijd */
+/* terugkomen na afbreken.                                                                                  */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit PrioInstellingen_Add().                                                 */
+/*                                                                                                          */
+void corrigeer_terugkomen_traffick(void); /* Fik230101                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -934,16 +1356,14 @@ void Traffick2TLCgen_HLPD(void);      /* Fik230101                              
 /* Functie bepaal naloop hulpdienst ingreep op volgarm                                                      */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Deze functie verzorgt de nalooptijden van een hulpdienst ingreep op alle richtingen van de gedefinieerde */
-/* volgarm. De functie controleert of de volgrichting ook gedefinieerd is als volg_ARM[]. Als dit het geval */
-/* is wordt de nalooptijd doorgezet op alle richtingen van de volg_ARM.                                     */
+/* volgarm. De functie controleert of richting met de hulpdienst een volg_ARM heeft. Als dit het geval is   */
+/* wordt de nalooptijd doorgezet op alle richtingen van de volg_ARM.                                        */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit PrioriteitsOpties_Add() na aanroep Traffick2TLCgen_PRIO_OPTIES().       */
 /*                                                                                                          */
 void Traffick2TLCgen_HLPD_nal(        /* Fik230101                                                          */
-count fc1,                            /* FC   fasecyclus voedende richting                                  */
-count fc2,                            /* FC   fasecyclus volg     richting                                  */
-mulv  naloop);                        /* mulv nalooptijd                                                    */
-
+    count fc,                             /* FC   fasecyclus voedende richting                                  */
+    mulv  naloop);                        /* mulv nalooptijd                                                    */
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaal peloton ingreep                                                                           */
@@ -959,12 +1379,26 @@ void Traffick2TLCgen_PELOTON(void);   /* Fik230101                              
 /* Functie bepaal prioriteitsopties fiets voorrang module                                                   */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Deze functie zet de prioriteitsopties voor de fiets voorrang module conform de instellingen afhankelijk  */
-/* van de status van de regensensor. De functie corrigeert de opties zodra een conflicterende prioriteit    */
-/* is aangevraagd met als optie bijzondere realisatie. De fietsprioriteit is hieraan altijd ondergeschikt.  */
+/* van de status van de regensensor.                                                                        */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Traffick2TLCgen_PRIO_OPTIES().                                          */
 /*                                                                                                          */
 void Traffick2TLCgen_FIETS(void);     /* Fik230101                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal prioriteitsopties bij geconditioneerde prioriteit                                         */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Deze functie corrigeert de prioriteitsopties voor het openbaar vervoer afhankelijk van de stipheid.      */
+/* Deze functionaliteit is alleen beschikbaar voor openbaar vervoer ingrepen op basis van KAR.              */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit PrioriteitsOpties_Add().                                                */
+/*                                                                                                          */
+void prioriteit_opties_stiptheid(     /* Fik230101                                                          */
+    count fc,                             /* FC  fasecyclus                                                     */
+    count prmtevroeg,                     /* PRM prioriteitsopties voor bus te vroeg                            */
+    count prmoptijd,                      /* PRM prioriteitsopties voor bus op tijd                             */
+    count prmtelaat);                     /* PRM prioriteitsopties voor bus te laat                             */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1066,8 +1500,8 @@ void Traffick2TLCgen_PRIO(void);        /* Fik230101                            
 /* Hulpfunctie met als return waarde de intergroentijd van een conflict.                                    */
 /*                                                                                                          */
 mulv TI_max(                          /* Fik230101                                                          */
-count fc1,                            /* FC fasecyclus 1                                                    */
-count fc2);                           /* FC fasecyclus 2                                                    */
+    count fc1,                            /* FC fasecyclus 1                                                    */
+    count fc2);                           /* FC fasecyclus 2                                                    */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1076,8 +1510,8 @@ count fc2);                           /* FC fasecyclus 2                        
 /* Hulpfunctie met als return waarde het aflopen van de intergroentijd.                                     */
 /*                                                                                                          */
 boolv TI(                             /* Fik230101                                                          */
-count fc1,
-count fc2);
+    count fc1,
+    count fc2);
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1086,7 +1520,7 @@ count fc2);
 /* Hulpfunctie met als return waarde de intergroen timer van een fasecyclus.                                */
 /*                                                                                                          */
 mulv TI_timer(                        /* Fik230101                                                          */
-count fc);
+    count fc);
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1096,8 +1530,8 @@ count fc);
 /* zijn. Indien de richtingen niet conflicterend zijn is de return waarde NG.                               */
 /*                                                                                                          */
 mulv GK_conflict(                     /* Fik230101                                                          */
-count fc1,                            /* FC fasecyclus 1                                                    */
-count fc2);                           /* FC fasecyclus 2                                                    */
+    count fc1,                            /* FC fasecyclus 1                                                    */
+    count fc2);                           /* FC fasecyclus 2                                                    */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1106,8 +1540,8 @@ count fc2);                           /* FC fasecyclus 2                        
 /* Hulpfunctie met als return waarde TRUE als twee richtingen (tijdelijk) (fictief)conflicterend zijn.      */
 /*                                                                                                          */
 boolv FK_conflict(                    /* Fik230101                                                          */
-count fc1,                            /* FC fasecyclus 1                                                    */
-count fc2);                           /* FC fasecyclus 2                                                    */
+    count fc1,                            /* FC fasecyclus 1                                                    */
+    count fc2);                           /* FC fasecyclus 2                                                    */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1117,7 +1551,7 @@ count fc2);                           /* FC fasecyclus 2                        
 /* Het verschil met de CCOLfunctie ka() is dat ook tijdelijke conflicten worden getest op een aanvraag.     */
 /*                                                                                                          */
 boolv tka(                            /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1126,7 +1560,16 @@ count fc);                            /* FC fasecyclus                          
 /* Hulpfunctie met als return waarde de aanwezigheid van een (fictief)conflicterende richting in RA[].      */
 /*                                                                                                          */
 boolv fkra(                           /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Hulpfunctie bepaal aanwezigheid conflicterende richting in RA[] met P[]                                  */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Hulpfunctie met als return waarde de aanwezigheid van een conflicterende richting in RA[] met P[].       */
+/*                                                                                                          */
+boolv krap(                           /* Fik230101                                                          */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1135,7 +1578,7 @@ count fc);                            /* FC fasecyclus                          
 /* Hulpfunctie met als return waarde de aanwezigheid van een (fictief)conflicterende ri. in RA[] met P[].   */
 /*                                                                                                          */
 boolv fkrap(                          /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1145,7 +1588,7 @@ count fc);                            /* FC fasecyclus                          
 /* kan realiseren. (geen AAPR[] BIT5)                                                                       */
 /*                                                                                                          */
 boolv kaapr(                          /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1155,7 +1598,7 @@ count fc);                            /* FC fasecyclus                          
 /* Het verschil met de CCOLfunctie fkaa() is dat ook tijdelijke (fictieve)conflicten worden getest op AA[]. */
 /*                                                                                                          */
 boolv tfkaa(                          /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1165,7 +1608,7 @@ count fc);                            /* FC fasecyclus                          
 /* met de CCOLfunctie kcv() is dat ook tijdelijke conflicten worden getest op CV[].                         */
 /*                                                                                                          */
 boolv tkcv(                           /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1175,7 +1618,15 @@ count fc);                            /* FC fasecyclus                          
 /* niet is gerealiseerd. (nog niet groen is)                                                                */
 /*                                                                                                          */
 boolv conflict_prio_real(             /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Hulpfunctie bepaal aanwezigheid hulpdienst ingreep                                                       */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Hulpfunctie met als return waarde de aanwezigheid van een hulpdienst ingreep.                            */
+/*                                                                                                          */
+boolv hlpd_aanwezig(void);            /* Fik230101                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1184,7 +1635,7 @@ count fc);                            /* FC fasecyclus                          
 /* Hulpfunctie met als return waarde de aanwezigheid van een conflicterende hulpdienst ingreep.             */
 /*                                                                                                          */
 boolv khlpd(                          /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1193,7 +1644,7 @@ count fc);                            /* FC fasecyclus                          
 /* Hulpfunctie met als RETURN of een richting een volgrichting is binnen een gedefinieerde harde koppeling. */
 /*                                                                                                          */
 boolv volgrichting_hki(               /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1202,7 +1653,7 @@ count fc);                            /* FC fasecyclus                          
 /* Hulpfunctie met als RETURN of een richting een voorstart moet geven aan een andere richting.             */
 /*                                                                                                          */
 boolv voorstart_gever(                /* Fik230101                                                          */
-count fc);                            /* FC fasecyclus                                                      */
+    count fc);                            /* FC fasecyclus                                                      */
 
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST
@@ -1216,9 +1667,9 @@ count fc);                            /* FC fasecyclus                          
 /* Functie wordt aangeroepen vanuit PreApplication_Add().                                                   */
 /*                                                                                                          */
 void test_stiptheid(                  /* Fik230101                                                          */
-count ov_tevroeg,                     /* PRM ingestelde grens voor te vroeg in seconden                     */
-count ov_telaat,                      /* PRM ingestelde grens voor te laat  in seconden                     */
-count tst_stiptheid);                 /* PRM waarde stiptheid voor DSI berichten in de testomgeving         */
+    count ov_tevroeg,                     /* PRM ingestelde grens voor te vroeg in seconden                     */
+    count ov_telaat,                      /* PRM ingestelde grens voor te laat  in seconden                     */
+    count tst_stiptheid);                 /* PRM waarde stiptheid voor DSI berichten in de testomgeving         */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1242,18 +1693,12 @@ void FlightTraffick(void);            /* Fik230101                              
 
 #endif
 
-
-/* -------------------------------------------------------------------------------------------------------- */
-/* Functie toggle FK conflicten                                                                             */
-/* -------------------------------------------------------------------------------------------------------- */
-/* Deze functie schakelt FK conflicten, bijvoorbeeld voor het schakelbaar maken van voetgangerskoppelingen. */
-/*                                                                                                          */
-/* Functie wordt aangeroepen vanuit PostApplication_Add().                                                  */
-/* (na het schakelen van FK conflicten geen andere programma code opnemen)                                  */
-/*                                                                                                          */
-void Toggle_FK_Conflict(              /* Fik230101                                                          */
-count fc1,                            /* FC    fasecyclus 1                                                 */
-count fc2,                            /* FC    fasecyclus 2                                                 */
-boolv period);                        /* boolv FK conflict gewenst                                          */
-
-#endif
+void pre_msg_fctiming(void);                 /* Fik230101                                                   */
+void definitie_groentijden_traffick(void);   /* Fik230101                                                   */
+void detectie_veld_afhandeling(void);        /* Fik230101                                                   */
+void maatregelen_bij_detectie_storing(void); /* Fik230101                                                   */
+void traffick_file_afhandeling(void);        /* Fik230101                                                   */
+void traffick_corrigeer_wtv(void);           /* Fik230101                                                   */
+void corrigeer_verklikking_stiptheid(void);  /* Fik230101                                                   */
+void busbaan_verlos_prioriteit(void);        /* Fik230101                                                   */
+void corrigeer_opties_stiptheid(void);       /* Fik230101                                                   */
