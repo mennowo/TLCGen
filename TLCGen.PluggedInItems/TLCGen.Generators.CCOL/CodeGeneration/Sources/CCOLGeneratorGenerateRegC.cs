@@ -398,7 +398,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true, vars);
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, false, false, true, vars);
                     
-                    sb.AppendLine($"{ts}{(controller.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden ? "DetectieStoring_VerlengGroen" : "DetectieStoring_MaxGroen")}();");
+                    sb.AppendLine($"{ts}DetectieStoring_MaxGroen();");
                     sb.AppendLine();
 
                     // Add file
@@ -417,6 +417,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var vars2 = new List<CCOLLocalVariable>();
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroen, true, true, false, true, vars2);
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroenNaAdd, true, false, false, true, vars2);
+
+                    sb.AppendLine($"{ts}DetectieStoring_VerlengGroen();");
+                    sb.AppendLine();
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");

@@ -7,6 +7,8 @@ namespace TLCGen.Models.Enumerations
     public enum SynchronisatiesTypeEnum
     {
         [Description("Realfunc")]
-        RealFunc
+        RealFunc,
+        [Description("Interfunc")]
+        InterFunc
     }
 }
