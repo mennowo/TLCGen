@@ -7,6 +7,16 @@ namespace TLCGen.ViewModels
 {
     public class IOElementModelListDropTarget : IDropTarget
     {
+        public void DragEnter(IDropInfo dropInfo)
+        {
+
+        }
+
+        public void DragLeave(IDropInfo dropInfo)
+        {
+
+        }
+
         public void DragOver(IDropInfo dropInfo)
         {
             // Call default DragOver method, cause most stuff should work by default

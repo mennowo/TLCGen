@@ -913,6 +913,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public void DragEnter(IDropInfo dropInfo)
+        {
+
+        }
+
+        public void DragLeave(IDropInfo dropInfo)
+        {
+
+        }
+
         #endregion // IDropTarget
     }
 

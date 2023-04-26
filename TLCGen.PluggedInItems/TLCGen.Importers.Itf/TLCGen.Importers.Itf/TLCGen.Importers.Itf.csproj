@@ -60,10 +60,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
       <ItemGroup>
         <Reference Include="CodingConnected.Topology">
-          <HintPath>..\..\..\packages\CodingConnected.Topology\lib\net461\CodingConnected.Topology.dll</HintPath>
+          <HintPath>..\..\..\packages\CodingConnected.Topology\lib\netstandard2.0\CodingConnected.Topology.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
