@@ -259,7 +259,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCDetectieStoring:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) traffick_file_afhandeling();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) maatregelen_bij_detectie_storing();");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
@@ -339,16 +339,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
 
                     List<GelijkstartModel> otherGs = new();
-                    List<GelijkstartModel> yetOtherGs = new();
-                    List<GelijkstartModel> finalOtherGs = new();
                     List<string> doneGsFcs = new();
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        if (doneGsFcs.Contains(gs.FaseVan)) continue;
+                        if (doneGsFcs.Contains(gs.FaseVan) || gs.DeelConflict) continue;
                         otherGs = c.InterSignaalGroep.Gelijkstarten
                             .Where(x => 
                                 !ReferenceEquals(x, gs) && 
                                 (x.FaseVan == gs.FaseNaar || x.FaseNaar == gs.FaseNaar || x.FaseVan == gs.FaseVan || x.FaseNaar == gs.FaseVan)).ToList();
+                        List<GelijkstartModel> yetOtherGs = new();
+                        List<GelijkstartModel> finalOtherGs = new();
                         if (otherGs.Count > 0)
                         {
                             foreach (var oGs in otherGs)
@@ -416,7 +416,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) definitie_groentijden_traffick();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) extra_definities_traffick();");
 
                     return sb.ToString();    
                 
