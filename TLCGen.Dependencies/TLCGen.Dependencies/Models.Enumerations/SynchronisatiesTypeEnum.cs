@@ -9,6 +9,8 @@ namespace TLCGen.Models.Enumerations
         [Description("Syncfunc")]
         SyncFunc,
         [Description("Realfunc")]
-        RealFunc
+        RealFunc,
+        [Description("Interfunc")]
+        InterFunc
     }
 }

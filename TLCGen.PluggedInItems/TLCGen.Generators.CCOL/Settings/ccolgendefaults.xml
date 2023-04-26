@@ -466,6 +466,14 @@
             <Categorie>CAT_SpecialeIngrepen</Categorie>
             <SubCategorie>SUBCAT_File</SubCategorie>
           </Setting>
+          <Setting>
+            <Default>filemem</Default>
+            <Setting>filemem</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden file melding tijdens niet meeverlenggroen voor te doseren fase _E1_</Description>
+            <Categorie>CAT_SpecialeIngrepen</Categorie>
+            <SubCategorie>SUBCAT_File</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

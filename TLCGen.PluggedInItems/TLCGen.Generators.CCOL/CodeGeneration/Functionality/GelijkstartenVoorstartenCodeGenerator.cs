@@ -26,6 +26,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc) return;
+
+            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+            {
+                if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schgs}{gs.FaseVan}{gs.FaseNaar}",
+                            gs.Schakelbaar == AltijdAanUitEnum.SchAan ? 1 : 0,
+                            CCOLElementTimeTypeEnum.SCH_type,
+                            _schgs, gs.FaseNaar, gs.FaseVan));
+                }
+            }
+
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return;
 
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
@@ -44,16 +59,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             gs.GelijkstartOntruimingstijdFaseNaar,
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseNaar, gs.FaseVan));
-                }
-
-                if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schgs}{gs.FaseVan}{gs.FaseNaar}",
-                            gs.Schakelbaar == AltijdAanUitEnum.SchAan ? 1 : 0,
-                            CCOLElementTimeTypeEnum.SCH_type,
-                            _schgs, gs.FaseNaar, gs.FaseVan));
                 }
             }
 

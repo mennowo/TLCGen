@@ -28,6 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tafkmingroen;
         private CCOLGeneratorCodeStringSettingModel _tminrood;
         private CCOLGeneratorCodeStringSettingModel _tmaxgroen;
+        private CCOLGeneratorCodeStringSettingModel _mfilemem;
 #pragma warning restore 0649
 
         // read from other objects
@@ -211,6 +212,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type,
                             _tmaxgroen, ff.FaseCyclus));
                 }
+
+                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                {
+                    foreach (var dosfc in fm.TeDoserenSignaalGroepen)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mfilemem}{dosfc.FaseCyclus}", _mfilemem, dosfc.FaseCyclus));
+                    }
+                }
             }
         }
 
@@ -252,6 +261,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             var sb = new StringBuilder();
             var first = true;
+            var tts = ts;
 
             switch (type)
             {
@@ -322,6 +332,205 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                             }
                             sb.AppendLine($"{ts}}}");
+                        }
+                    }
+
+                    foreach (var fm in c.FileIngrepen)
+                    {
+                        if (!first) sb.AppendLine();
+
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            sb.AppendLine($"{ts}/* percentage MG bij filemelding < 100% */");
+                            foreach (var dos in fm.TeDoserenSignaalGroepen)
+                            {
+                                sb.AppendLine($"if (G[{_fcpf}{dos.FaseCyclus}] && !MG[{_fcpf}{dos.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}] && (PRM[{_prmpf}{_prmfperc}{fm.Naam}{dos.FaseCyclus}] < 100)) MM[{_mpf}{_mfilemem}{dos.FaseCyclus}] = TRUE;");
+                            }
+                            sb.AppendLine();
+                        }
+
+                        tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            tts += ts;
+                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                        }
+                        if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit)
+                        {
+                            sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
+                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
+                            }
+                            sb.AppendLine(")");
+                            sb.AppendLine($"{tts}{{");
+                            foreach (var ff in fm.TeDoserenSignaalGroepen)
+                            {
+                                var otts = tts;
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    sb.AppendLine($"{tts}if (MM[{_mpf}{_mfilemem}{ff.FaseCyclus}] && G[{_fcpf}{ff.FaseCyclus}] && !MG[{_fcpf}{ff.FaseCyclus}])");
+                                    sb.AppendLine($"{tts}{{");
+                                    tts += ts;
+                                }
+
+                                var grfunc = c.Data.TypeGroentijden switch
+                                {
+                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
+                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
+                                    _ => ""
+                                };
+                                sb.AppendLine(fm.EerlijkDoseren
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
+                                sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
+                                var rest = "";
+                                var irest = 1;
+                                if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
+                                {
+                                    rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}]";
+                                }
+                                else
+                                {
+                                    rest += $", TVGA_max[{_fcpf}{ff.FaseCyclus}]";
+                                }
+
+                                foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                                {
+                                    var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == per.GroentijdenSet);
+
+                                    if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
+                                    {
+                                        ++irest;
+                                        rest += $", PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}]";
+                                    }
+                                }
+
+                                sb.AppendLine($"{irest}{rest});");
+
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    tts = otts;
+                                    sb.AppendLine($"{tts}}}");
+                                }
+                            }
+                            sb.AppendLine($"{tts}}}");
+                        }
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{tts}/* percentage MG bij filemelding tijdens halfstar */");
+                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
+                            }
+                            sb.AppendLine(")");
+                            sb.AppendLine($"{tts}{{");
+                            foreach (var ff in fm.TeDoserenSignaalGroepen)
+                            {
+                                var grfunc = c.Data.TypeGroentijden switch
+                                {
+                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
+                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
+                                    _ => ""
+                                };
+                                sb.AppendLine(fm.EerlijkDoseren
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");
+                            }
+                            sb.AppendLine($"{tts}}}");
+                            sb.AppendLine($"{ts}}}");
+                        }
+
+                        sb.AppendLine();
+
+                        if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile || x.MaximaleGroentijd))
+                        {
+                            sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
+                            foreach (var tdfc in fm.TeDoserenSignaalGroepen)
+                            {
+                                if (tdfc.AfkappenOpStartFile)
+                                {
+                                    sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
+                                                  $"ER[{_fcpf}{tdfc.FaseCyclus}] && " +
+                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
+                                    sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
+                                }
+
+                                if (tdfc.MaximaleGroentijd)
+                                {
+                                    sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                }
+
+                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
+                                {
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                    {
+                                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mfilemem}{tdfc.FaseCyclus}])");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                    }
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.Append($"{ts}{ts}if (");
+                                }
+
+                                var padding = $"{ts}{ts}if (".Length;
+                                if (tdfc.AfkappenOpStartFile)
+                                {
+                                    sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
+                                    sb.Append("".PadLeft(padding) +
+                                        $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                  $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
+                                }
+
+                                if (tdfc.MaximaleGroentijd)
+                                {
+                                    if (tdfc.AfkappenOpStartFile)
+                                    {
+                                        sb.AppendLine(" || ");
+                                        sb.Append("".PadLeft(padding));
+                                    }
+                                    sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
+                                }
+
+                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
+                                {
+                                    sb.AppendLine($")");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}{ts}TVG_max[{_fcpf}{tdfc.FaseCyclus}] = 0;");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                    }
+                                    sb.AppendLine($"{ts}{ts}}}");
+
+                                    sb.AppendLine($"{ts}}}");
+                                }
+                            }
+                            sb.AppendLine();
+                            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                            {
+                                foreach (var tdfc in fm.TeDoserenSignaalGroepen)
+                                {
+                                    sb.AppendLine($"{ts}if (EVG[{_fcpf}{tdfc.FaseCyclus}]) MM[{_mpf}{_mfilemem}{tdfc.FaseCyclus}] = FALSE;");
+                                }
+                            }
                         }
                     }
                     return sb.ToString();
@@ -407,7 +616,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCWachtgroen:
                     if (!c.FileIngrepen.Any()) return "";
                     sb.AppendLine($"{ts}/* Niet in wachtgroen vasthouden tijdens file */");
-                    var tts = ts;
+                    tts = ts;
                     if (c.HalfstarData.IsHalfstar)
                     {
                         tts += ts;
@@ -680,155 +889,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         
                         sb.AppendLine();
-                        tts = ts;
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            tts += ts;
-                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
-                            sb.AppendLine($"{ts}{{");
-                        }
-
-                        if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit)
-                        {
-                            sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
-                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
-                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
-                            {
-                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
-                            }
-                            sb.AppendLine(")");
-                            sb.AppendLine($"{tts}{{");
-                            foreach (var ff in fm.TeDoserenSignaalGroepen)
-                            {
-                                var grfunc = c.Data.TypeGroentijden switch
-                                {
-                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
-                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
-                                    _ => ""
-                                };
-                                sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
-                                sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
-                                var rest = "";
-                                var irest = 1;
-                                if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
-                                {
-                                    rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}]";
-                                }
-                                else
-                                {
-                                    rest += $", TVGA_max[{_fcpf}{ff.FaseCyclus}]";
-                                }
-
-                                foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
-                                {
-                                    var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == per.GroentijdenSet);
-
-                                    if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
-                                    {
-                                        ++irest;
-                                        rest += $", PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}]";
-                                    }
-                                }
-
-                                sb.AppendLine($"{irest}{rest});");
-                            }
-                            sb.AppendLine($"{tts}}}");
-                        }
-
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            sb.AppendLine($"{ts}}}");
-                            sb.AppendLine($"{ts}else");
-                            sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{tts}/* percentage MG bij filemelding tijdens halfstar */");
-                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
-                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
-                            {
-                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
-                            }
-                            sb.AppendLine(")");
-                            sb.AppendLine($"{tts}{{");
-                            foreach (var ff in fm.TeDoserenSignaalGroepen)
-                            {
-                                var grfunc = c.Data.TypeGroentijden switch
-                                {
-                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
-                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
-                                    _ => ""
-                                };
-                                sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");
-                            }
-                            sb.AppendLine($"{tts}}}");
-                            sb.AppendLine($"{ts}}}");
-                        }
-
-                        sb.AppendLine();
-
-                        if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile || x.MaximaleGroentijd))
-                        {
-                            sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen)
-                            {
-                                if (tdfc.AfkappenOpStartFile)
-                                {
-                                    sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
-                                                  $"ER[{_fcpf}{tdfc.FaseCyclus}] && " +
-                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                    sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                    sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
-                                }
-                                
-                                if (tdfc.MaximaleGroentijd)
-                                {
-                                    sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                }
-
-                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
-                                {
-                                    sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
-                                    sb.AppendLine($"{ts}{{");
-                                    sb.Append($"{ts}{ts}if (");
-                                }
-
-                                var padding = $"{ts}{ts}if (".Length;
-                                if (tdfc.AfkappenOpStartFile)
-                                {
-                                    sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
-                                    sb.Append("".PadLeft(padding) +
-                                        $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
-                                }
-
-                                if (tdfc.MaximaleGroentijd)
-                                {
-                                    if (tdfc.AfkappenOpStartFile)
-                                    {
-                                        sb.AppendLine(" || ");
-                                        sb.Append("".PadLeft(padding));
-                                    }
-                                    sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
-                                }
-
-                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
-                                {
-                                    sb.AppendLine($")");
-                                    sb.AppendLine($"{ts}{ts}{{");
-                                    sb.AppendLine($"{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
-                                    sb.AppendLine($"{ts}{ts}}}");
-
-                                    sb.AppendLine($"{ts}}}");
-                                }
-                            }
-                            sb.AppendLine();
-                        }
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
                         {

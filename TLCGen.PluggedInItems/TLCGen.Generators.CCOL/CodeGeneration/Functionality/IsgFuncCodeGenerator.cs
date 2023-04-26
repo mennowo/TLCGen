@@ -15,10 +15,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         #region Fields
 
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _htest;
+        //private CCOLGeneratorCodeStringSettingModel _mtest;
 #pragma warning restore 0649
         private string _prmaltg;
-        
+        private string _hfile;
+        private string _prmfperc;
+
         #endregion // Fields
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -47,8 +49,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
+                CCOLCodeTypeEnum.RegCIncludes => new[] { 140 },
+                CCOLCodeTypeEnum.RegCTop=> new[] { 140 },
                 CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 90 },
                 CCOLCodeTypeEnum.RegCMaxgroen => new[] { 90 },
+                CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 _ => null
             };
         }
@@ -59,6 +64,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCIncludes:
+                    sb.AppendLine("#ifndef NO_ISG");
+                    sb.AppendLine($"{ts}#include \"isgfunc.c\" /* Interstartgroenfuncties */");
+                    sb.AppendLine("#endif /* NO_ISG */");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCTop:
+                    sb.AppendLine("#ifndef NO_ISG");
+                    sb.AppendLine($"{ts}{c.GetBoolV()} init_tvg;");
+                    sb.AppendLine("#endif /* NO_ISG */");
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     sb.AppendLine($"#ifndef NO_ISG");
@@ -76,9 +91,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}TVG_AR[{_fcpf}{fc.Naam}] = ((PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}]) >= 0) ? PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}] : NG;");
                     }
-                    sb.AppendLine($"#endif // NO_ISG");
+                    sb.AppendLine($"#endif /* NO_ISG */");
                     return sb.ToString();
-
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    sb.AppendLine($"#ifndef NO_ISG");
+                    sb.AppendLine($"{ts}init_tvg = FALSE;");
+                    sb.AppendLine($"#endif /* NO_ISG */");
+                    return sb.ToString();
                 default:
                     return null;
             }
@@ -87,6 +106,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
+            _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+            _prmfperc = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfperc");
 
             return base.SetSettings(settings);
         }
