@@ -23,6 +23,7 @@ using TLCGen.Dialogs;
 using Point = System.Drawing.Point;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
+using TLCGen.DataAccess;
 
 namespace TLCGen.ViewModels
 {
@@ -374,7 +375,7 @@ namespace TLCGen.ViewModels
 
             // Object as IOElement
             var bivm = GetIOElementFromObject(obj);
-            if(bivm != null)
+            if (bivm != null)
             {
                 l.Add(bivm);
             }
@@ -427,22 +428,22 @@ namespace TLCGen.ViewModels
                         break;
                 }
             }
-
-            foreach(var i in GetAllIOElements(_Controller))
+            
+            foreach(var i in TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(_Controller))
             {
-                switch(i.IOType)
+                switch(i.ElementType)
                 {
-                    case BitmappedItemTypeEnum.Fase:
-                        Fasen.Add(i);
+                    case IOElementTypeEnum.FaseCyclus:
+                        Fasen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Fase));
                         break;
-                    case BitmappedItemTypeEnum.Detector:
-                        Detectoren.Add(i);
+                    case IOElementTypeEnum.Detector:
+                        Detectoren.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Detector));
                         break;
-                    case BitmappedItemTypeEnum.Uitgang:
-                        OverigeUitgangen.Add(i);
+                    case IOElementTypeEnum.Output:
+                        OverigeUitgangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Uitgang));
                         break;
-                    case BitmappedItemTypeEnum.Ingang:
-                        OverigeIngangen.Add(i);
+                    case IOElementTypeEnum.Input:
+                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
                         break;
                 }
             }

@@ -195,7 +195,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}rgv.c");
                     }
-                    if (c.PTPData.PTPKoppelingen?.Count > 0)
+                    if ((c.PTPData.PTPKoppelingen?.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}ptp.c");
@@ -830,7 +830,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 fc.ElementType = IOElementTypeEnum.FaseCyclus;
                 rest.Add(fc);
             }
-            foreach (var d in c.GetAllRegularDetectors())
+            foreach (var d in c.GetAllRegularDetectors().Concat(c.PrioData.GetAllDummyDetectors()))
             {
                 d.ElementType = IOElementTypeEnum.Detector;
                 rest.Add(d);

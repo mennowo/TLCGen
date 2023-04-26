@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -40,6 +42,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmtmsgs;
         private CCOLGeneratorCodeStringSettingModel _prmtmsga;
         private CCOLGeneratorCodeStringSettingModel _prmcmsg;
+
+        private CCOLGeneratorCodeStringSettingModel _isiks;
+        private CCOLGeneratorCodeStringSettingModel _usuks;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -54,18 +59,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                 }
-                for (var i = 1; i <= k.AantalsignalenIn; ++i)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"), 2, CCOLElementTimeTypeEnum.None, _prmiks, k.TeKoppelenKruispunt));
-                }
                 for (var i = 1; i <= k.AantalsignalenUit; ++i)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
-                            _huks, k.TeKoppelenKruispunt));
+                            $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"), _huks, k.TeKoppelenKruispunt));
+                }
+            }
+
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
+            {
+                for (var i = 1; i <= k.AantalsignalenIn; ++i)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"), 
+                            2, 
+                            CCOLElementTimeTypeEnum.None, 
+                            _prmiks, k.TeKoppelenKruispunt));
                 }
                 for (var i = 1; i <= k.AantalsignalenUit; ++i)
                 {
@@ -184,6 +195,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _prmcmsg, k.TeKoppelenKruispunt));
                 }
             }
+
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+            {
+                int i = 1;
+                foreach (var ptpio in k.PtpIoIngangen)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{k.TeKoppelenKruispunt}{_isiks}" + i.ToString("00"), _isiks, ptpio.PtpIoIsBitmapData, k.TeKoppelenKruispunt));
+                    ++i;
+                }
+                i = 1;
+                foreach (var ptpio in k.PtpIoUitgangen)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{k.TeKoppelenKruispunt}{_usuks}" + i.ToString("00"), _usuks, ptpio.PtpIoIsBitmapData, k.TeKoppelenKruispunt));
+                    ++i;
+                }
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -193,7 +222,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCIncludes => new []{20},
-                CCOLCodeTypeEnum.RegCPreSystemApplication => new []{10},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{10},
+                CCOLCodeTypeEnum.RegCPostApplication => new[] { 180 },
+                CCOLCodeTypeEnum.RegCPreSystemApplication => new[] { 10 },
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{10},
                 _ => null
             };
@@ -206,20 +237,48 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
                     {
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
                     }
                     return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    {
+                        sb.AppendLine($"{ts}/* overbrengen ingangen naar hulpelementen tbv koppeling */");
+                    }
+                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    {
+                        for (var i = 1; i <= k.AantalsignalenIn; ++i)
+                        {
+                            sb.Append($"{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00") + "]");
+                            sb.AppendLine($" = IS[{_ispf}{k.TeKoppelenKruispunt}{_isiks}" + i.ToString("00") + "];");
+                        }
+                        sb.AppendLine();
+                    }
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => (x.Dummy == true) && (x.MaakIO == true)))
+                        sb.AppendLine($"{ts}/* overbrengen hulpelementen naar uitgangen tbv koppeling */");
+                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    {
+                        for (var i = 1; i <= k.AantalsignalenUit; ++i)
+                        {
+                            sb.Append($"{ts}CIF_GUS[{_uspf}{k.TeKoppelenKruispunt}{_usuks}" + i.ToString("00") + "]");
+                            sb.AppendLine($" = IH[{_hpf}{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00") + "];");
+                        }
+                        sb.AppendLine();
+                    }
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreSystemApplication:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_post_system_app();");
