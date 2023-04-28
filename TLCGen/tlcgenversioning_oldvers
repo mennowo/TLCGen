@@ -1,6 +1,46 @@
-Voor versie informatie vanaf 0.9.0.0, zie tlcgenversioning
+Voor versie informatie vanaf 0.10.0.0, zie tlcgenversioning
 Oudere informatie staat hier om de grootte van het versie bestand te beperken
 ===
+TLCGen versie: 0.9.10.0
+- Veelheid aan kleine fixes
+TLCGen versie: 0.9.9.0
+- Diverse fixes rond timings
+- Fix prio voor fietsers
+- Fix multivalente IO in ptp.c
+TLCGen versie: 0.9.8.0
+- Optie niet gebruiken prio ingreep naam in code
+- Fixes voor rangering
+- Diverse kleine fixes
+TLCGen versie: 0.9.7.0
+- Fix realfunc corr_fot
+TLCGen versie: 0.9.6.0
+- Diverse fixes omtrent synchronisaties
+TLCGen versie: 0.9.5.0
+- Timings predicties toegevoegd
+- Defaults voor RIS simulatie
+- Templates en combi-templates voor OV ingrepen
+- Nieuwe versie realfunc
+- Veelheid aan kleine fixes
+TLCGen versie: 0.9.4.0
+- Fix import ontruimingstijden in bestaande regeling
+- Heel veel kleine verbeteringen
+TLCGen versie: 0.9.3.0
+- fix bus uitgang wachttijdvoorspeller
+- ITF import in .msi versie (setup)
+- update RIS sources
+TLCGen versie: 0.9.2.0
+- rangeren van selectieve detectie
+- optie lower/upper case voor namen in tab.c
+- diverse kleine fixes
+TLCGen versie: 0.9.1.0
+- Rangeren items voor alle typen IO
+- Prio ingreep alleen tijdens periode actief
+- Verdere ondersteuning CCOL11
+- Veel kleine en grotere fixes
+TLCGen versie: 0.9.0.0
+- RIS update, ondersteuning CCOL11
+- ITF import
+- Diverse kleine fixes
 TLCGen versie: 0.8.2.0
 - Ondersteuning voor bewaakte rateltikkers
 - TLCGen versie header voor meegeleverde files
