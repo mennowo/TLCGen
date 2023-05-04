@@ -718,13 +718,18 @@ void PrioHalfstarGroenVasthouden(void)
 		for (prio = 0;
 			prio < prioFCMAX;
 			prio++) {
-
 			fc = iFC_PRIOix[prio];
-			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
-			// Reset PRIO_YV_BIT, will determine YV according to signalplan structure
+
 			YV[fc] &= ~PRIO_YV_BIT;
 			YM[fc] &= ~PRIO_YM_BIT;
+		}
 
+		for (prio = 0;
+			prio < prioFCMAX;
+			prio++) {
+			fc = iFC_PRIOix[prio];
+
+			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
 			if (iPrioriteit[prio] &&
 				(iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) {
 
