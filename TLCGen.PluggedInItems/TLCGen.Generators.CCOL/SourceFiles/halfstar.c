@@ -477,16 +477,12 @@ void set_ym_pl_halfstar(count fc, bool condition)
 
 void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until)
 {
-#if !defined NO_TIGMAX
-    if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijden      */
+#if (CCOL_V >= 95)
+    if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+        ym_max_trig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
 #else
     if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
-#endif
-
-#if (CCOL_V >= 95)
-        ym_max_trig(fc, NG) &&  /* meeverlengen kan volgens intergroentijdentabel */
-#else
-        ym_max_tig(fc, NG) &&  /* meeverlengen kan volgens intergroentijdentabel  */
+        ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
 #endif
         ym_max_halfstar(fc, 10) &&   /* meeverlengen kan volgens signaalplan            */
         hf_wsg_fcfc(fc_from, fc_until) &&   /* minimaal 1 richting actief                      */
