@@ -18,9 +18,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
-                        <!--
-                        <RowDefinition Height="Auto" />
-                        -->
                     </Grid.RowDefinitions>
                     <FrameworkElement x:Name="ProxyElement" DataContext="{Binding}" />
                     <DataGrid Grid.Row="0" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
@@ -46,33 +43,6 @@
                             <DataGridCheckBoxColumn Header="MaakIO" Binding="{Binding Path=MaakIO,UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <!--
-                    <DockPanel Grid.Row="1">
-                        <Label Content=" Uitleg Dummy" Height="30" />
-                        <controls:InfoElement Margin="5,0">
-                            <controls:InfoElement.InfoPopup>
-                                <TextBlock>
-                                Maak alleen de hulpelementen hxxxiksyy en hxxxuksyy aan <LineBreak/>
-                                die doorgaans horen bij een ptp koppeling.<LineBreak/>
-                                Code in ###ptp.c wordt niet gegenereerd voor <LineBreak/>
-                                koppelingen waarbij 'Dummy' is geselecteerd.
-                                </TextBlock>
-                            </controls:InfoElement.InfoPopup>
-                        </controls:InfoElement>
-                        <Label Content=" en MaakIO" Height="30" />
-                        <controls:InfoElement Margin="5,0">
-                            <controls:InfoElement.InfoPopup>
-                                <TextBlock>
-                                Maak evenveel in- en uitgangen aan als er <LineBreak/>
-                                onder <Span FontWeight="Bold" Background="White"># In</Span> resp. <Span FontWeight="Bold" Background="White"># Uit</Span> zijn opgegeven.<LineBreak/>
-                                Deze worden in de regelapplicatie gekoppeld:<LineBreak/>
-                                CIF_GUS[usXP99uks01] = IH[hXP99uks01] etc.
-                                </TextBlock>
-                            </controls:InfoElement.InfoPopup>
-                        </controls:InfoElement>
-                        <Label Content=" " Height="30" />
-                    </DockPanel>
-                    -->
                     <DockPanel Grid.Row="1">
                         <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
                         <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />

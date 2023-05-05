@@ -365,45 +365,6 @@ namespace TLCGen.ViewModels
             return bivm;
         }
 
-        private List<BitmappedItemViewModel> GetAllIOElements(object obj)
-        {
-
-            var l = new List<BitmappedItemViewModel>();
-            if (obj == null) return l;
-
-            var objType = obj.GetType();
-
-            // Object as IOElement
-            var bivm = GetIOElementFromObject(obj);
-            if (bivm != null)
-            {
-                l.Add(bivm);
-            }
-
-            var properties = objType.GetProperties();
-            foreach (var property in properties)
-            {
-                var ignore = (TLCGenIgnoreAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttribute));
-                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) || ignore != null) continue;
-                var propValue = property.GetValue(obj);
-                if (propValue is IList elems)
-                {
-                    l.AddRange(from object item in elems from i in GetAllIOElements(item) select i);
-                }
-                else
-                {
-                    // Property as IOElement
-                    bivm = GetIOElementFromObject(obj, property);
-                    if (bivm != null)
-                    {
-                        l.Add(bivm);
-                    }
-                    l.AddRange(GetAllIOElements(propValue));
-                }
-            }
-            return l;
-        }
-
         private void CollectAllIO()
         {
             Fasen.Clear();

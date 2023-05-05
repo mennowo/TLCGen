@@ -505,7 +505,7 @@ namespace TLCGen.ViewModels
             {
                 while (_PTPKoppeling.AantalsignalenIn > PTPKoppeling.PtpIoIngangen.Count)
                 {
-                    PTPKoppeling.PtpIoIngangen.Add(new PtpIoDataModel());
+                    PTPKoppeling.PtpIoIngangen.Add(new PTPKoppelingIoDataModel());
                 }
                 while (_PTPKoppeling.AantalsignalenIn < PTPKoppeling.PtpIoIngangen.Count && PTPKoppeling.PtpIoIngangen.Count > 0)
                 {
@@ -514,7 +514,7 @@ namespace TLCGen.ViewModels
 
                 while (_PTPKoppeling.AantalsignalenUit > PTPKoppeling.PtpIoUitgangen.Count)
                 {
-                    PTPKoppeling.PtpIoUitgangen.Add(new PtpIoDataModel());
+                    PTPKoppeling.PtpIoUitgangen.Add(new PTPKoppelingIoDataModel());
                 }
                 while (_PTPKoppeling.AantalsignalenUit < PTPKoppeling.PtpIoUitgangen.Count && PTPKoppeling.PtpIoUitgangen.Count > 0)
                 {

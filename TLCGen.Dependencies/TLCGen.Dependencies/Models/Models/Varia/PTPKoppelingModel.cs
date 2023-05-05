@@ -32,8 +32,8 @@ namespace TLCGen.Models
             OkBitmapData = new BitmapCoordinatenDataModel();
             ErrorBitmapData = new BitmapCoordinatenDataModel();
             TeKoppelenKruispunt = "";
-            PtpIoIngangen = new List<PtpIoDataModel>();
-            PtpIoUitgangen = new List<PtpIoDataModel>();
+            PtpIoIngangen = new List<PTPKoppelingIoDataModel>();
+            PtpIoUitgangen = new List<PTPKoppelingIoDataModel>();
         }
 
 
@@ -41,24 +41,10 @@ namespace TLCGen.Models
         public bool MaakIO { get; set; } = false;
 
         [XmlArrayItem(ElementName = "PtpIoIngangen")]
-        public List<PtpIoDataModel> PtpIoIngangen { get; set; }
+        public List<PTPKoppelingIoDataModel> PtpIoIngangen { get; set; }
 
         [XmlArrayItem(ElementName = "PtpIoUitgangen")]
-        public List<PtpIoDataModel> PtpIoUitgangen { get; set; }
+        public List<PTPKoppelingIoDataModel> PtpIoUitgangen { get; set; }
 
-    }
-
-    [Serializable]
-    public class PtpIoDataModel
-    {
-        // deze krijgen een naam in PtpCodeGenerator.cs
-        [IOElement("ptpio", BitmappedItemTypeEnum.Uitgang, nameof(Name))]
-        public BitmapCoordinatenDataModel PtpIoIsBitmapData { get; set; }
-
-        public string Name { get; set; }
-        public PtpIoDataModel()
-        {
-            PtpIoIsBitmapData = new BitmapCoordinatenDataModel();
-        }
     }
 }

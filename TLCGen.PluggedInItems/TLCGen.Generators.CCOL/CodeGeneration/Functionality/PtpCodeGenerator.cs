@@ -67,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => !x.Dummy))
             {
                 for (var i = 1; i <= k.AantalsignalenIn; ++i)
                 {
@@ -196,7 +196,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy && x.MaakIO))
             {
                 int i = 1;
                 foreach (var ptpio in k.PtpIoIngangen)
@@ -237,17 +237,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => !x.Dummy))
                     {
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    if (c.PTPData.PTPKoppelingen.Any(x => x.Dummy && x.MaakIO))
                     {
                         sb.AppendLine($"{ts}/* overbrengen ingangen naar hulpelementen tbv koppeling */");
                     }
-                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy && x.MaakIO))
                     {
                         for (var i = 1; i <= k.AantalsignalenIn; ++i)
                         {
@@ -258,9 +258,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    if (c.PTPData.PTPKoppelingen.Any(x => x.Dummy && x.MaakIO))
                         sb.AppendLine($"{ts}/* overbrengen hulpelementen naar uitgangen tbv koppeling */");
-                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => (x.Dummy == true) && (x.MaakIO == true)))
+                    foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy && x.MaakIO))
                     {
                         for (var i = 1; i <= k.AantalsignalenUit; ++i)
                         {
@@ -271,14 +271,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreSystemApplication:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => !x.Dummy))
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => x.Dummy != true))
+                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => !x.Dummy))
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_post_system_app();");
