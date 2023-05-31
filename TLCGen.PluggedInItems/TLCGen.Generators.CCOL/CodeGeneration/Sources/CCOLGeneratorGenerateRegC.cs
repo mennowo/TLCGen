@@ -51,7 +51,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCDetectieStoring(controller));
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.Append(GenerateRegCAanvragen(controller));
-            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ||
+                controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.Append(GenerateRegCBepaalRealisatieTijden(controller));
             }

@@ -953,6 +953,16 @@ namespace TLCGen.GebruikersOpties
 
         #endregion // ITLCGenElementProvider
 
+        public void DragEnter(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DragLeave(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Constructor
 
         public GebruikersOptiesTabViewModel()

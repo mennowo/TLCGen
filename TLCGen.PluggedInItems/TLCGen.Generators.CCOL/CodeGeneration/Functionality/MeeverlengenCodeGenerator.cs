@@ -155,7 +155,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (nl is {Type: NaloopTypeEnum.EindeGroen})
                                 {
                                     var hfWsg = "hf_wsg_nl";
-                                    if (c.Data.MultiModuleReeksen)
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                    {
+                                        hfWsg = "hf_wsg_nlISG";
+                                    }
+                                    else if (c.Data.MultiModuleReeksen)
                                     {
                                         hfWsg = "hf_wsg_nl_fcfc";
                                     }
