@@ -259,7 +259,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{10},
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{20},
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{30},
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => new []{10},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{70},

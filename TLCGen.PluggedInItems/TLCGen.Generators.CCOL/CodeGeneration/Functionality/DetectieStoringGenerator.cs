@@ -308,6 +308,59 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine();
         }
 
+        private void SetMK(StringBuilder sb, ControllerModel c, string ts1, string ts)
+        {
+            sb.AppendLine($"{ts1}/* instellen MK bij defect alle kop/lange lussen */");
+            sb.AppendLine($"{ts1}/* ---------------------------------------------- */");
+            foreach (var fc in c.Fasen)
+            {
+                if (!fc.PercentageGroenBijDetectieStoring ||
+                    !fc.PercentageGroen.HasValue ||
+                    !c.GroentijdenSets.SelectMany(x => x.Groentijden).Any(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue) ||
+                    fc.Detectoren.Count == 0 ||
+                    fc.Detectoren.All(x => x.IsDrukKnop() || x.Verlengen == DetectorVerlengenTypeEnum.Geen))
+                {
+                    continue;
+                }
+
+                if (fc.AantalRijstroken.HasValue)
+                {
+                    var pre = "".PadLeft($"{ts1}if (".Length);
+                    sb.Append($"{ts1}if (");
+                    for (var str = 1; str <= fc.AantalRijstroken; ++str)
+                    {
+                        var dets = fc.Detectoren.Where(x => x.IsKopLang() && x.Verlengen != DetectorVerlengenTypeEnum.Geen && x.Rijstrook == str).ToList();
+                        if (dets.Count == 0) continue;
+
+                        var det = 0;
+                        if (str > 1)
+                        {
+                            sb.AppendLine(" ||");
+                        }
+                        foreach (var d in dets)
+                        {
+                            det++;
+                            if (det > 1)
+                            {
+                                sb.Append($" && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                            }
+                            else
+                            {
+                                sb.Append(str > 1
+                                    ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
+                                    : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                            }
+                        }
+                    }
+                    sb.AppendLine(")");
+                    sb.AppendLine($"{ts1}{{");
+                    sb.AppendLine($"{ts1}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
+                    sb.AppendLine($"{ts1}}}");
+                }
+            }
+            sb.AppendLine();
+        }
+
         private void PercentageGroen(StringBuilder sb, ControllerModel c, string ts1, string ts, bool halfstar)
         {
             var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "MG" : "VG";
@@ -355,7 +408,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine(")");
                     sb.AppendLine($"{ts1}{{");
-                    sb.AppendLine($"{ts1}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
                     var grfunc = "";
                     if (halfstar)
                     {
@@ -445,6 +497,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
 
                     VervangendHiaatKoplus(sb, c, ts);
+
+                    SetMK(sb, c, ts, ts);
 
                     return sb.ToString();
 

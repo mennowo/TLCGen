@@ -310,6 +310,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                                     || c.TimingsData.TimingsUsePredictions):
                             CopySourceIfNeeded(c, "realfunc.c", sourcefilepath);
                             break;
+                        case SynchronisatiesTypeEnum.InterFunc:
+                            CopySourceIfNeeded(c, "isgfunc.c", sourcefilepath);
+                            break;
                     }
 
                     if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit &&

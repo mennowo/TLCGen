@@ -67,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCIncludes => new []{130},
                 CCOLCodeTypeEnum.RegCPreApplication => new []{130},
                 CCOLCodeTypeEnum.RegCAanvragen => new []{130},
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{20},
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{30},
                 CCOLCodeTypeEnum.RegCVerlenggroen => new []{80},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{80},
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{40},
