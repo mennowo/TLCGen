@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -54,14 +55,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/*");
             sb.AppendLine($"{ts}--------------------------------------------------");
             var i = 0;
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 i = k.TeKoppelenKruispunt.Length;
             }
             sb.Append($"{ts}VRI".PadRight(i + ts.Length + 3));
             sb.AppendLine("PTP");
             sb.AppendLine($"{ts}--------------------------------------------------");
-            foreach(var k in c.PTPData.PTPKoppelingen)
+            foreach(var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.Append($"{ts}{k.TeKoppelenKruispunt}".PadRight(i + ts.Length + 3) + $"({k.NummerDestination})");
             }
@@ -69,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("/* macrodefinitie voor gebruik PTP-poorten */");
             sb.AppendLine("/* ======================================= */");
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"#define PTP_{k.TeKoppelenKruispunt}PORT /* @ define van de te koppelen VRI */");
             }
@@ -90,7 +91,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("/* definitie structuren t.b.v. PTP-koppeling(en) */");
             sb.AppendLine("/* --------------------------------------------- */");
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}struct ptpstruct   PTP_{k.TeKoppelenKruispunt};");
@@ -109,7 +110,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void ptp_control_parameters (void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}{ts}/* ptp-parameters t.b.v. koppeling met PTP_{k.TeKoppelenKruispunt} */");
@@ -182,7 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}");
             sb.AppendLine($"{ts}{ts}/* initialisatie van PTP-koppelingen */");
             sb.AppendLine($"{ts}{ts}/* --------------------------------- */");
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"{ts}{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}{ts}#ifndef PRACTICE_TEST");
@@ -205,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}CIF_GPS[AUTSTATUS] &= ~CIFA_COMF;");
                 sb.AppendLine();
             }
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"{ts}{ts}/* opzetten signalen van en naar {k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
@@ -377,7 +378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}void ptp_application_reset(struct ptpstruct *PTP, struct ptpksstruct *PTPKS); /* PTPWIN.C */");
             sb.AppendLine();
-            foreach (var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
                 sb.AppendLine($"{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}{ts}ptp_application_reset(&PTP_{k.TeKoppelenKruispunt}, &PTP_{k.TeKoppelenKruispunt}KS);");

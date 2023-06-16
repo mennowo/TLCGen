@@ -342,6 +342,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenIn = value;
+                UpdateIO();
                 RaisePropertyChanged<object>(nameof(AantalsignalenIn), broadcast: true);
                 UpdateSignalen();
 
@@ -354,6 +355,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenUit = value;
+                UpdateIO();
                 RaisePropertyChanged<object>(nameof(AantalsignalenUit), broadcast: true);
                 UpdateSignalen();
             }
@@ -472,7 +474,61 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool Dummy
+        {
+            get => _PTPKoppeling.Dummy;
+            set
+            {
+                _PTPKoppeling.Dummy = value;
+                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
+            }
+        }
+
+        public bool MaakIO
+        {
+            get => _PTPKoppeling.MaakIO;
+            set
+            {
+                _PTPKoppeling.MaakIO = value;
+                UpdateIO();
+                RaisePropertyChanged<object>(nameof(MaakIO), broadcast: true);
+            }
+        }
+
         #endregion // Properties
+
+        #region Private Methods
+
+        private void UpdateIO()
+        {
+            if (_PTPKoppeling.MaakIO)
+            {
+                while (_PTPKoppeling.AantalsignalenIn > PTPKoppeling.PtpIoIngangen.Count)
+                {
+                    PTPKoppeling.PtpIoIngangen.Add(new PTPKoppelingIoDataModel());
+                }
+                while (_PTPKoppeling.AantalsignalenIn < PTPKoppeling.PtpIoIngangen.Count && PTPKoppeling.PtpIoIngangen.Count > 0)
+                {
+                    PTPKoppeling.PtpIoIngangen.RemoveAt(PTPKoppeling.PtpIoIngangen.Count - 1);
+                }
+
+                while (_PTPKoppeling.AantalsignalenUit > PTPKoppeling.PtpIoUitgangen.Count)
+                {
+                    PTPKoppeling.PtpIoUitgangen.Add(new PTPKoppelingIoDataModel());
+                }
+                while (_PTPKoppeling.AantalsignalenUit < PTPKoppeling.PtpIoUitgangen.Count && PTPKoppeling.PtpIoUitgangen.Count > 0)
+                {
+                    PTPKoppeling.PtpIoUitgangen.RemoveAt(PTPKoppeling.PtpIoUitgangen.Count - 1);
+                }
+            }
+            else
+            {
+                _PTPKoppeling.PtpIoIngangen.Clear();
+                _PTPKoppeling.PtpIoUitgangen.Clear();
+            }
+        }
+
+        #endregion // Private Methods
 
         public int KoppelSignalenAllesId { get; set; }
 

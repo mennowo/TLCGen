@@ -294,6 +294,7 @@
     <Compile Include="Models\Models\Varia\PelotonKoppelingenDataModel.cs" />
     <Compile Include="Models.Enumerations\PelotonKoppelingTypeEnum.cs" />
     <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
+    <Compile Include="Models\Models\Varia\PTPKoppelingIoDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />
     <Compile Include="Models\Models\Varia\RichtingGevoeligeAanvraagModel.cs" />
     <Compile Include="Models\Models\Varia\RichtingGevoeligVerlengModel.cs" />
