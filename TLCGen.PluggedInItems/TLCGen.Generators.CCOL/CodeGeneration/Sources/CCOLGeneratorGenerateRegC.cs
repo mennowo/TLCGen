@@ -22,7 +22,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
             sb.AppendLine("#define REG (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG)");
-            if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
+            if(controller.InterSignaalGroep?.Nalopen?.Count > 0 && controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.AppendLine("#define NALOPEN");
             }
@@ -55,6 +55,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.Append(GenerateRegCBepaalRealisatieTijden(controller));
+            }
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.Append(GenerateRegCBepaalInterStartGroenTijden(controller));
             }
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.Append(GenerateRegCWachtgroen(controller));
@@ -153,7 +157,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if(c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
             {
+                sb.AppendLine("#ifndef NO_PRIO");
                 sb.AppendLine($"{ts}#include \"prio.h\"       /* prio-afhandeling                  */");
+                sb.AppendLine("#endif /* NO_PRIO */");
             }
             if (c.RISData.RISToepassen)
             {
@@ -186,7 +192,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}#define PRIO_CHECK_WAGENNMR /* check op wagendienstnummer          */");
                 }
+                sb.AppendLine("#ifndef NO_PRIO");
                 sb.AppendLine($"{ts}#include \"extra_func_prio.c\" /* extra standaard functies OV     */");
+                sb.AppendLine("#endif /* NO_PRIO */");
             }
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
             sb.AppendLine();
@@ -383,6 +391,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateRegCBepaalInterStartGroenTijden(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void BepaalInterStartGroenTijden(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalRealisatieTijden, true, true, false, true);
+
+            sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCMaxOfVerlenggroen(ControllerModel controller)
         {
             var sb = new StringBuilder();
@@ -529,7 +554,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach(var m in molens)
                 {
-                    sb.AppendLine($"{ts}Y{m.Reeks}[{m.Reeks}] = yml_cv_pr_nl(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
+                    sb.AppendLine($"{ts}Y{m.Reeks}[{m.Reeks}] = {(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc ? "yml_cv_pr_nl_ISG" : "yml_cv_pr_nl")}(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
                 }
             }
             else
@@ -762,8 +787,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{tsts}Alternatief_halfstar();");
                 sb.AppendLine($"{tsts}FileVerwerking();");
                 sb.AppendLine($"{tsts}FileVerwerking_halfstar();");
-                sb.AppendLine($"{tsts}DetectieStoring();");
-                sb.AppendLine($"{tsts}DetectieStoring_halfstar();");
+                if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                {
+                    sb.AppendLine($"{tsts}DetectieStoring();");
+                    sb.AppendLine($"{tsts}DetectieStoring_halfstar();");
+                }
                 sb.AppendLine($"{ts}}}");
             }
 
@@ -794,7 +822,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tsts}Synchronisaties();");
             sb.AppendLine($"{tsts}RealisatieAfhandeling();");
             sb.AppendLine($"{tsts}FileVerwerking();");
-            sb.AppendLine($"{tsts}DetectieStoring();");
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine($"{tsts}DetectieStoring();");
+            }
 
             if (c.HalfstarData.IsHalfstar || c.StarData.ToepassenStar)
             {
@@ -805,6 +836,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 (c.PrioData.PrioIngrepen.Count > 0 ||
                  c.PrioData.HDIngrepen.Count > 0))
             {
+                sb.AppendLine("#ifndef NO_PRIO");
                 if (c.HalfstarData.IsHalfstar)
                 {
                     if (!c.StarData.ToepassenStar)
@@ -840,6 +872,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}AfhandelingPrio();");
                 }
+                sb.AppendLine("#endif /* NO_PRIO */");
             }
             if (c.Data.FixatieData.FixatieMogelijk && !c.StarData.ToepassenStar)
             {

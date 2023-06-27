@@ -30,7 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine(GenerateRegAddHeader(c));
             sb.AppendLine();
-            sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
+            sb.AppendLine("#if defined CCOL_IS_SPECIAL && !defined NO_PRIO");
             sb.AppendLine("void SpecialSignals_Add(void)");
             sb.AppendLine("{");
             sb.AppendLine("");

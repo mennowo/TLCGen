@@ -491,10 +491,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
                                                   $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
-                                    sb.Append("".PadLeft(padding) +
+                                    sb.AppendLine("".PadLeft(padding) +
                                         $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
+                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !(MK[{_fcpf}{tdfc.FaseCyclus}]");
+                                    sb.AppendLine("#ifndef NO_PRIO");
+                                    sb.AppendLine("".PadLeft(padding) + $" & PRIO_MK_BIT");
+                                    sb.AppendLine("#endif /* NO_PRIO */");
+                                    sb.Append("".PadLeft(padding) + $")");
                                 }
 
                                 if (tdfc.MaximaleGroentijd)

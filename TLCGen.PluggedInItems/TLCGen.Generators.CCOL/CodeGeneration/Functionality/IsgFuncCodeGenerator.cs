@@ -16,6 +16,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning disable 0649
         //private CCOLGeneratorCodeStringSettingModel _mtest;
+        private CCOLGeneratorCodeStringSettingModel _misgar;
+        private CCOLGeneratorCodeStringSettingModel _tisgfo;
+        private CCOLGeneratorCodeStringSettingModel _tisgvs;
+        private CCOLGeneratorCodeStringSettingModel _tisglr;
+        private CCOLGeneratorCodeStringSettingModel _hisglos;
 #pragma warning restore 0649
         private string _prmaltg;
         private string _tnlfg;
@@ -24,9 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _tnlsg;
         private string _tnlsgd;
-        private string _tfo; // TODO this should maybe not be shared with REALfunc
-        private string _trealvs; // TODO this should maybe not be shared with REALfunc
-        private string _treallr; // TODO this should maybe not be shared with REALfunc
+        private string _tinl; // TODO idem
         private string _hfile;
         private string _prmfperc;
 
@@ -35,6 +38,59 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
+
+            foreach (var fc in c.Fasen)
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_misgar}{fc.Naam}", _misgar, fc.Naam));
+            }
+
+            foreach (var vs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgfo}{vs:vannaar}", vs.GelijkstartOntruimingstijdFaseVan, CCOLElementTimeTypeEnum.TE_type, _tisgfo, vs.FaseVan, vs.FaseNaar));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgfo}{vs:naarvan}", vs.GelijkstartOntruimingstijdFaseNaar, CCOLElementTimeTypeEnum.TE_type, _tisgfo, vs.FaseVan, vs.FaseNaar));
+            }
+
+            foreach (var vs in c.InterSignaalGroep.Voorstarten)
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgvs}{vs:vannaar}", vs.VoorstartTijd, CCOLElementTimeTypeEnum.TE_type, _tisgvs, vs.FaseVan, vs.FaseNaar));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgfo}{vs:vannaar}", vs.VoorstartOntruimingstijd, CCOLElementTimeTypeEnum.TE_type, _tisgfo, vs.FaseVan, vs.FaseNaar));
+            }
+
+            foreach (var lr in c.InterSignaalGroep.LateReleases)
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisglr}{lr:vannaar}", lr.LateReleaseTijd, CCOLElementTimeTypeEnum.TE_type, _tisglr, lr.FaseVan, lr.FaseNaar));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgfo}{lr:vannaar}", lr.LateReleaseOntruimingstijd, CCOLElementTimeTypeEnum.TE_type, _tisgfo, lr.FaseVan, lr.FaseNaar));
+            }
+
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (fc1 == null || fc2 == null) return;
+
+                if (fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger &&
+                    (nl.InrijdenTijdensGroen || nl.MaximaleVoorstart.HasValue))
+                {
+                    _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_hisglos}{fc1.Naam}", _hisglos, fc1.Naam));
+                }
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -72,6 +128,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => new[] { 10 },
+                CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
                 _ => null
             };
         }
@@ -82,6 +139,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.TabCIncludes:
+                    sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroenfuncties */");
                     return sb.ToString();
@@ -178,15 +238,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v ontruimende deelconflicten */");
                     foreach (var vs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tfo}{vs:naarvan});");
+                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgfo}{vs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tfo}{vs:naarvan});");
+                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgfo}{vs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tfo}{vs:vannaar});");
+                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgfo}{vs:vannaar});");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. deelconflicten/voorstarts die nog groen moeten worden */");
@@ -197,15 +257,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
                     foreach (var vs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALTIJD_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van});");
+                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALTIJD_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_trealvs}{vs:naarvan});");
+                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALTIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_treallr}{vs:vannaar});");
+                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* Inlopen voetgangers */");
@@ -214,7 +274,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
                         (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALTIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_treallr}{nl:vannaar});");
+                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tinl}{nl:vannaar});");
                     }
                     
                     sb.AppendLine();
@@ -258,11 +318,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_trealvs}{vs:naarvan});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgvs}{vs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_trealvs}{vs:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     sb.AppendLine($"{ts}{ts}wijziging |= Correctie_InterStartGroentijdTijd_Add();");
                     sb.AppendLine($"{ts}}} while (wijziging);");
@@ -284,9 +344,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
-            _tfo = CCOLGeneratorSettingsProvider.Default.GetElementName("tfo");
-            _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
-            _trealvs = CCOLGeneratorSettingsProvider.Default.GetElementName("trealvs");
+            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
 
             return base.SetSettings(settings);
         }
