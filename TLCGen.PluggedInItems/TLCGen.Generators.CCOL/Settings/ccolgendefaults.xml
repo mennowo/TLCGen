@@ -3440,6 +3440,54 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+	<CodePieceGenerator CodePiece="IsgFuncCodeGenerator">
+		<CodePieceData>
+			<ClassName>IsgFuncCodeGenerator</ClassName>
+			<Description>Intersignaalgroep tijden</Description>
+			<ElementGenerationOrder>360</ElementGenerationOrder>
+			<Settings>
+				<Setting>
+					<Default>isgfo</Default>
+					<Setting>fo</Setting>
+					<Type>Timer</Type>
+					<Description>Fictieve ontruimingstijd van _E1_ naar fase _E2_</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
+				</Setting>
+				<Setting>
+					<Default>isgvs</Default>
+					<Setting>vs</Setting>
+					<Type>Timer</Type>
+					<Description>Voorstarttijd fase _E1_ op fase _E2_</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
+				</Setting>
+				<Setting>
+					<Default>isglr</Default>
+					<Setting>lr</Setting>
+					<Type>Timer</Type>
+					<Description>Late release tijd fase _E1_ naar fase _E2_</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
+				</Setting>
+
+				<Setting>
+					<Default>isgar</Default>
+					<Setting>ar</Setting>
+					<Type>GeheugenElement</Type>
+					<Description>Alternatieve ruimte fase _E1_</Description>
+				</Setting>
+				<Setting>
+					<Default>isglos</Default>
+					<Setting>los</Setting>
+					<Type>HulpElement</Type>
+					<Description>Toestaan los realiseren fase _E1_</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
+				</Setting>
+			</Settings>
+		</CodePieceData>
+	</CodePieceGenerator>
     <CodePieceGenerator CodePiece="WachttijdVoorspellerCodeGenerator">
       <CodePieceData>
         <ClassName>WachttijdVoorspellerCodeGenerator</ClassName>

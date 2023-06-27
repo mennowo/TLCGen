@@ -51,10 +51,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            if (c.InterSignaalGroep.Nalopen.Any())
+            if (c.InterSignaalGroep.Nalopen.Any() && c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.AppendLine("#define NALOPEN");
             }
+
             sb.AppendLine("#define PRIO_ADDFILE");
             sb.AppendLine();
 
@@ -1037,7 +1038,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#if defined PRACTICE_TEST && defined CCOL_IS_SPECIAL");
+                sb.AppendLine("#if defined PRACTICE_TEST && defined CCOL_IS_SPECIAL && !defined NO_PRIO");
                 sb.AppendLine($"{ts}is_special_signals();");
                 sb.AppendLine("#endif");
             }
@@ -1132,7 +1133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             #region PRACTICE
             
-            sb.AppendLine("#if defined CCOL_IS_SPECIAL && defined PRACTICE_TEST");
+            sb.AppendLine("#if defined CCOL_IS_SPECIAL && defined PRACTICE_TEST && !defined NO_PRIO");
             sb.AppendLine($"{ts}is_special_signals();");
             sb.AppendLine("#endif");
             
@@ -1376,7 +1377,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   is_special_signals. Deze wordt in de testomgeving gebruikt voor ");
             sb.AppendLine("   het opzetten van bijzondere ingangen.");
             sb.AppendLine("   ---------------------------------------------------------------- */");
-            sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
+            sb.AppendLine("#if defined CCOL_IS_SPECIAL && !defined NO_PRIO");
             sb.AppendLine("void PrioSpecialSignals(void)");
             sb.AppendLine("{");
 

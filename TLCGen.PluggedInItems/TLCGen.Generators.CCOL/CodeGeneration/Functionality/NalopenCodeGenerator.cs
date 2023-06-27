@@ -123,7 +123,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
 				case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    if (c.InterSignaalGroep?.Nalopen?.Count > 0 &&
+                        c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");

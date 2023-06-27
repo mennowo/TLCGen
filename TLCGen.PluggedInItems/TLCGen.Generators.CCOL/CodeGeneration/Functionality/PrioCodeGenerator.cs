@@ -1200,7 +1200,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     var naloopWithPrioConflicts = GetNaloopWithPrioConflicts(c);
                     if (naloopWithPrioConflicts.Count == 0) return "";
-                    
+
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc) return "";
+
                     sb.AppendLine($"{ts}/* Tegenhouden voedende richting, bij een conflicterende prio-ingreep van de nalooprichting */");
                     sb.AppendLine($"{ts}/* Afzetten RR */");
                     foreach (var nl in naloopWithPrioConflicts)
@@ -1245,6 +1247,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($") RR[{_fcpf}{nl.naloop:van}] &= ~BIT10;");
                     }
                     sb.AppendLine();
+
                     sb.AppendLine($"{ts}/* Opzetten RR */");
                     foreach (var nl in naloopWithPrioConflicts)
                     {

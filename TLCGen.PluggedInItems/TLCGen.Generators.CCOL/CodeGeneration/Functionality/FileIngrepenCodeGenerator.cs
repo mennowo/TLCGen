@@ -490,10 +490,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
                                                   $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
-                                    sb.Append("".PadLeft(padding) +
+                                    sb.AppendLine("".PadLeft(padding) +
                                         $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
+                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !(MK[{_fcpf}{tdfc.FaseCyclus}]");
+                                    sb.AppendLine("#ifndef NO_PRIO");
+                                    sb.AppendLine("".PadLeft(padding) + $" & PRIO_MK_BIT");
+                                    sb.AppendLine("#endif /* NO_PRIO */");
+                                    sb.Append("".PadLeft(padding) + $")");
                                 }
 
                                 if (tdfc.MaximaleGroentijd)
@@ -971,8 +974,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (first)
                         {
-                            sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
+                            sb.AppendLine($"{ts}/* Als hulpdienst ingreep actief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
+                            sb.AppendLine("#ifndef NO_PRIO");
                             first = false;
                         }
                         if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
@@ -984,7 +987,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}}}");
                         }
                     }
-                    
+                    if (!first) sb.AppendLine("#endif /* NO_PRIO */");
+
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:

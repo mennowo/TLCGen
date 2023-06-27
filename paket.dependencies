@@ -16,5 +16,5 @@ nuget AvalonEdit framework: >= net45
 nuget GitVersionTask framework: >= net45
 nuget FlaUI.UIA3
 nuget Markdown.XAML
-nuget CodingConnected.Topology framework: >= net45
-nuget AvalonEdit
+nuget CodingConnected.Topology
+nuget AvalonEdit framework: >= net45
