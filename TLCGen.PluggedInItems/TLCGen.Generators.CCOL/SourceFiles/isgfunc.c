@@ -1152,7 +1152,7 @@ void Realisatietijd_NLSG(count i, count j, count tnlsg, count tnlsgd)
     for (n = 0; n < KFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n];
-        if (VS[i] && (RT[tnlsg] || T[tnlsg] || RT[tnlsgd] || RT[tnlsgd]))
+        if (VS[i] && (RT[tnlsg] || T[tnlsg] || RT[tnlsgd] || T[tnlsgd]))
         {
             if ((REALISATIETIJD[i][k] < (T_max[tnlsg] + TIG_max[j][k])) && !(tnlsg == NG))
             {
@@ -8853,7 +8853,7 @@ void BepaalIntergroenTijden(void)
     }
 }
 
-void BepaalIntersignaalgroepTijden(void)
+void InitRealisatieTijden(void)
 {
     count fc1, fc2;
 
@@ -8958,7 +8958,7 @@ void InterStartGroenTijden_VulGroenGroenConflictenIn(void)
     }
 }
 
-void CorrigeerIntersignaalgroepTijdObvGarantieTijden(void)
+void CorrigeerRealisatieTijdenObvGarantieTijden(void)
 {
     count fc1;
 
@@ -8986,87 +8986,16 @@ void InitInterStartGroenTijden()
     pointer_conflicts();
 }
 
-mulv Real_Ruimte(count fc,    /* fasecyclus                                                   */
-    count mar)   /* memory element t.b.v. inzichtelijk maken alternatieve ruimte */
+void TegenhoudenInrijdenInlopen() 
 {
-    register count n, k;
+    count fc, i, j;
 
-    mulv ruimte = 3000;  /* initieel veel ruimte voor groen */
-    mulv hulpruimte = 3000;  /* hulpwaarde    ruimte voor groen */
-
-
-    /* ------------------------------------------ */
-    /* Als conflicterend CV dan is er geen ruimte */
-    /* ------------------------------------------ */
-    if (kcv(fc))
+    for (i = 0; i < FCMAX; ++i)
     {
-        ruimte = 0;
-    }
-    else
-    {
-        /* --------------------------------------------------------------------------- */
-        /* Anders bepaal (hulp)ruimte t.o.v. conflicten die primair aan de beurt zijn: */
-        /* --------------------------------------------------------------------------- */
-        /* - REALISATIETIJD[k] : Wanneer kan conflict realiseren ?                     */
-        /*                                                                             */
-        /* - REALISATIETIJD[fc]: Wanneer kan fc       realiseren ?                     */
-        /* - Intergroen  : Wat is intergroen van fc naar k (of geel/ontruimen)         */
-        /*                                                                             */
-        /* Een positief verschil geeft ruimte aan voor fc.                             */
-        /* --------------------------------------------------------------------------- */
-        for (n = 0; n < GKFC_MAX[fc]; n++)
+        for (j = 0; j < FCMAX; ++j)
         {
-#if (CCOL_V >= 95)
-            k = KF_pointer[fc][n];
-#else
-            k = TO_pointer[fc][n];
-#endif
-
-            if (AAPR[k])
-            {
-#if (CCOL_V >= 95) && !defined NO_TIGMAX
-                hulpruimte = (REALISATIETIJD[k] - REALISATIETIJD[fc] - TIG_max[fc][k]) > 0 ?
-                    (REALISATIETIJD[k] - REALISATIETIJD[fc] - TIG_max[fc][k]) : 0;
-#else
-                hulpruimte = (REALISATIETIJD[k] - REALISATIETIJD[fc] - TGL_max[fc] - TO_max[fc][k]) > 0 ?
-                    (REALISATIETIJD[k] - REALISATIETIJD[fc] - TGL_max[fc] - TO_max[fc][k]) : 0;
-#endif
-            }
-
-            /* -------------------------------------------------------------------------- */
-            /* Kleinste ruimte is maatgevend                                              */
-            /* -------------------------------------------------------------------------- */
-            ruimte = (hulpruimte < ruimte) ? hulpruimte : ruimte;
+            if (REALISATIETIJD[i][j] > 0) X[j] |= BIT1; else X[j] &= ~BIT1; /* Als er een realisatietijd loopt van (fictief) conflict i, wordt richting j nog tegengehouden */
+            if (REALISATIETIJD[i][j] > 150) RR[j] |= BIT1;  RR[j] &= ~BIT1; /*  150 tijdelijk moet afhankleijk gemaakt wordt van de tijd de een richting eerder mag starten dan de volgrichting */
         }
     }
-
-    /* -------------------------------------------------------------------------- */
-    /* Inzichtelijk maken ruimte + returnwaarde gevven                            */
-    /* -------------------------------------------------------------------------- */
-    MM[mar] = ruimte;
-
-    return ruimte;
-
-}
-
-boolv Naloop_OK(count fc1,     /* fc1  voedende                                                      */
-    count marfc2,  /* memory element fc2, alternatieve ruimte (max_tar_to / tar_max_ple) */
-    count tnlsg)   /* nalooptijd                                                         */
-{
-    boolv result = 0;
-
-    /* ---------------------------------------------------------------- */
-    /* primair, dus nalooptijd toegestaan                               */
-    /* ---------------------------------------------------------------- */
-  /*if(AAPR[fc1] &&   !RR[fc1]       || PR[fc1])           result=TRUE;*/
-    if ((AAPR[fc1] && (AAPR[fc1] < BIT4)) || PR[fc1])           result = TRUE;    /* AAPR & BIT4 betekent RR, AAPR & BIT5 betekent PFPR nog niet waar */
-    /* ---------------------------------------------------------------- */
-    /* niet primair, bepaal of nalooptijd past bij naloop:              */
-    /* - eerst moet fc1 op groen komen, dus check REALISATIETIJD[fc1]         */
-    /* - plus de nalooptijd moet passen bij fc2                         */
-    /* ---------------------------------------------------------------- */
-    else if (MM[marfc2] >= (REALISATIETIJD[fc1] + T_max[tnlsg]))  result = TRUE;
-    /* ---------------------------------------------------------------- */
-
-    return result;
 }

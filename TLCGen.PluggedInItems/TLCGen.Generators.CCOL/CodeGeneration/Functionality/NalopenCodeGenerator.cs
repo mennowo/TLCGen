@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
 					return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc &&
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
                         c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         if (c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue))
@@ -165,6 +165,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
+                        c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        sb.AppendLine($"{ts}TegenhoudenInrijdenInlopen();");
+                    }
+
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMaxgroen:

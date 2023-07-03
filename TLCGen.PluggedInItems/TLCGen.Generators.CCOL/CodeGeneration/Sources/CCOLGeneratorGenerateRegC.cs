@@ -398,7 +398,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void BepaalInterStartGroenTijden(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalRealisatieTijden, true, true, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden, true, true, false, true);
 
             sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
 
@@ -424,7 +424,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true, vars);
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, false, false, true, vars);
                     
-                    sb.AppendLine($"{ts}DetectieStoring_MaxGroen();");
                     sb.AppendLine();
 
                     // Add file
@@ -444,7 +443,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroen, true, true, false, true, vars2);
                     AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroenNaAdd, true, false, false, true, vars2);
 
-                    sb.AppendLine($"{ts}DetectieStoring_VerlengGroen();");
                     sb.AppendLine();
 
                     // Add file

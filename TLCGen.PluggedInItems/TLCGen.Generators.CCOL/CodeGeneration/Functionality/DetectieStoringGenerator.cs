@@ -82,6 +82,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium => new []{10},
                 CCOLCodeTypeEnum.RegCDetectieStoringMaxGroen => new []{10},
                 CCOLCodeTypeEnum.RegCDetectieStoringVerlengGroen => new []{10},
+                CCOLCodeTypeEnum.RegCMaxgroen => new[] { 110 },
+                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 110 },
                 _ => null
             };
         }
@@ -521,6 +523,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         PercentageGroen(sb, c, ts, ts, false);
                     }
 
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                    sb.AppendLine($"{ts}DetectieStoring_VerlengGroen();");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                    sb.AppendLine($"{ts}DetectieStoring_MaxGroen();");
                     return sb.ToString();
 
                 default:

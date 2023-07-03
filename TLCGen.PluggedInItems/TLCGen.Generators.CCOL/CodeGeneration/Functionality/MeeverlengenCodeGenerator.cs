@@ -223,7 +223,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    sb.AppendLine($"ym_max_tig_REALISATIETIJD({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}) && {extraConditions} ? BIT4 : 0;");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                }
                             }
                         }
                     }
