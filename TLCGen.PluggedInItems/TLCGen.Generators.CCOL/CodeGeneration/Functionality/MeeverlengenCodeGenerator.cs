@@ -107,7 +107,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
 
                     // let op: ym_max_toV1 werkt ook voor intergroen!
-                    var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV1" : "ym_max_toV1";
+                    var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tigV1" : "ym_max_toV1";
                     var totigfuncCCOL = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_to";
 
                     foreach (var fcm in c.Fasen)
@@ -200,7 +200,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    sb.AppendLine($"ym_max_tig_REALISATIETIJD({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}) && {extraConditions} ? BIT4 : 0;");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                }
                             }
                         }
                     }

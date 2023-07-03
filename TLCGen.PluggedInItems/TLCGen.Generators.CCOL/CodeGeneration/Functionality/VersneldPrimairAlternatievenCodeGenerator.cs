@@ -273,7 +273,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     foreach (var r in molens)
                     {
-                        sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, ({c.GetBoolV()})PFPR[fc]);");
+                        var setFPRMLFunc = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc ? "set_FPRML" : "set_FPRML_fk_gkl";
+                        sb.AppendLine($"{ts}{ts}{setFPRMLFunc}(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, ({c.GetBoolV()})PFPR[fc]);");
                     }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
@@ -285,7 +286,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         foreach (var r in molens)
                         {
-                            sb.AppendLine($"{ts}afsluiten_aanvraaggebied_pr(PR{r.Reeks}, {r.Reeks});");
+                            var afsluitgebiedFunc = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc ? "afsluiten_aanvraaggebied_prISG" : "afsluiten_aanvraaggebied_pr";
+                            sb.AppendLine($"{ts}{afsluitgebiedFunc}(PR{r.Reeks}, {r.Reeks});");
                         }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
