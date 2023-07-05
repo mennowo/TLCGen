@@ -471,9 +471,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
             
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeetkriteriumNaDetectieStoring, true, false, false, true);
+
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeetkriterium, true, true, false, true);
 
             sb.AppendLine($"{ts}DetectieStoring_Meetkriterium();");
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeetkriteriumNaDetectieStoring, false, true, false, true);
+            
             sb.AppendLine($"{ts}Meetkriterium_Add();");
 
             sb.AppendLine("}");

@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tinl; // TODO idem
         private string _hfile;
         private string _prmfperc;
+        private string _hmad;
 
         #endregion // Fields
 
@@ -128,6 +129,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => new[] { 10 },
+                CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
                 CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
                 _ => null
             };
@@ -234,6 +236,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var nlsgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
                         sb.AppendLine($"{ts}Realisatietijd_NLSG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlsg}, {nlsgd});");
                     }
+                    foreach(var fc in c.Fasen.Where(x => x.HardMeeverlengenFaseCycli.Any()))
+                    {
+                        foreach (var hmfc in fc.HardMeeverlengenFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}Realisatietijd_MeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
+                        }
+                    }
+
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v ontruimende deelconflicten */");
                     foreach (var vs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
@@ -314,6 +324,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
+                    foreach (var fc in c.Fasen.Where(x => x.HardMeeverlengenFaseCycli.Any()))
+                    {
+                        foreach (var hmfc in fc.HardMeeverlengenFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}InterStartGroentijd_MeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
+                        }
+                    }
+
                     sb.AppendLine();
 
                     sb.AppendLine($"{ts}do");
@@ -349,6 +367,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}}} while (wijziging);");
 
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCMeeverlengen:
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
+                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+                    {
+                        var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                        if (fc1 == null) continue;
+                        var insideDp = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                        if (insideDp == null) continue;
+                        sb.AppendLine($"{ts}{ts}MeeverlengenUitDoorVoetgangerLos({_fcpf}{nl:van}, {_hpf}{_hmad}{insideDp.Naam});");
+                    }
+                    return sb.ToString();
+
                 default:
                     return null;
             }
@@ -366,6 +399,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
+            _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
 
             return base.SetSettings(settings);
         }

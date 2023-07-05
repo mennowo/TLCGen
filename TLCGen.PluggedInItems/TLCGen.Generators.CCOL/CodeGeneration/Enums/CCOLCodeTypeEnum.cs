@@ -22,6 +22,7 @@
         RegCMaxgroenNaAdd,
         RegCWachtgroen,
         RegCMeetkriterium,
+        RegCMeetkriteriumNaDetectieStoring,
         RegCFileVerwerking,
         RegCMeeverlengen,
         RegCRealisatieAfhandelingVoorModules,

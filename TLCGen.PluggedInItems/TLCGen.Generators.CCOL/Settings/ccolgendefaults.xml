@@ -1115,6 +1115,22 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
+          <Setting>
+            <Default>nlsg</Default>
+            <Setting>nlsg</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement naloop SG van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
+          </Setting>
+          <Setting>
+            <Default>vgnaloop</Default>
+            <Setting>vgnaloop</Setting>
+            <Type>Timer</Type>
+            <Description>Timer naloop EG van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
