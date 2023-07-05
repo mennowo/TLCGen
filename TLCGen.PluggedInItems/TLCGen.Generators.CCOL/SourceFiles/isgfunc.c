@@ -8986,7 +8986,7 @@ void InitInterStartGroenTijden()
     pointer_conflicts();
 }
 
-void TegenhoudenInrijdenInlopen() 
+void TegenhoudenInrijdenInlopen()
 {
     count fc, i, j;
 

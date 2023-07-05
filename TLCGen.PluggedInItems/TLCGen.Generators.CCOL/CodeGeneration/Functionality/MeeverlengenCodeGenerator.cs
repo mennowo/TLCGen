@@ -123,6 +123,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var verschil = fcm.MeeverlengenVerschil?.ToString() ?? "NG";
                             var hfWsgArgs = "";
                             var extraConditions = "hf_wsg()";
+                            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                            {
+                                extraConditions = "hf_wsg_nlISG()";
+                            }
                             if (c.Data.MultiModuleReeksen)
                             {
                                 var hfWsg = "hf_wsg_fcfc";
