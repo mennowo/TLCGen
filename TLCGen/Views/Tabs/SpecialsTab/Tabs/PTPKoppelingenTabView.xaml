@@ -88,7 +88,6 @@
                         </Label>
                         <Label Content="" Height="30" Margin="-2.0" />
                         <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                        <CheckBox Content="PTP &#x0022;dummy&#x0022; (geen ptp.c in CCOL)" Margin="5" IsChecked="{Binding Path=PTPDummy}" />
                     </DockPanel>
                 </Grid>
             </TabItem>

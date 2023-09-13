@@ -25,16 +25,6 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public bool PTPDummy
-        {
-            get => Controller?.PTPData?.PTPDummy == true;
-            set
-            {
-                Controller.PTPData.PTPDummy = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
         public bool PTPInstellingenInParameters
         {
             get => Controller?.PTPData?.PTPInstellingenInParameters == true;
