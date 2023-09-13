@@ -2416,6 +2416,18 @@
             <Type>Uitgang</Type>
             <Description>Verklikken PTP error _E1_</Description>
           </Setting>
+		  <Setting>
+		  	<Default>iks</Default>
+		  	<Setting>iks</Setting>
+		  	<Type>Ingang</Type>
+		  	<Description>Inkomend koppelsignaal van kruising _E1_ via I/O</Description>
+		  </Setting>
+		  <Setting>
+		  	<Default>uks</Default>
+		  	<Setting>uks</Setting>
+		  	<Type>Uitgang</Type>
+		  	<Description>Uitgaand koppelsignaal naar kruising _E1_ via I/O</Description>
+		  </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

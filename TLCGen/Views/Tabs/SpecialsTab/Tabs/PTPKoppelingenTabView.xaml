@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:PTPKoppelingenTabViewModel}"
              d:DesignHeight="300" d:DesignWidth="300" x:Name="Root">
     <UserControl.Resources>
@@ -34,20 +35,61 @@
                             <DataGridTextColumn
                                 Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
                                 Header="# Uit multiv." Binding="{Binding Path=AantalsignalenMultivalentUit,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}"/>
                             <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="Dummy" Binding="{Binding Path=Dummy,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="MaakIO" Binding="{Binding Path=MaakIO,UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Vertical" Grid.Row="1">
-                        <StackPanel Orientation="Horizontal" Grid.Row="1">
-                            <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
-                            <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
-                        </StackPanel>
-                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" />
+                    <DockPanel Grid.Row="1">
+                        <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
+                        <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
+                        <controls:InfoElement Margin="5,0">
+                            <controls:InfoElement.InfoPopup>
+                                <TextBlock>
+                                Maak alleen de hulpelementen hxxxiksyy en hxxxuksyy aan <LineBreak/>
+                                die doorgaans horen bij een ptp koppeling.<LineBreak/>
+                                Code in ###ptp.c wordt niet gegenereerd voor <LineBreak/>
+                                koppelingen waarbij 'Dummy' is geselecteerd.
+                                </TextBlock>
+                            </controls:InfoElement.InfoPopup>
+                        </controls:InfoElement>
+                        <Label Content="Dummy" Height="30" RenderTransformOrigin="0.5,0.5">
+                            <Label.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform Y="2" X="-7"/>
+                                </TransformGroup>
+                            </Label.RenderTransform>
+                        </Label>
+                        <controls:InfoElement Margin="-3,0" RenderTransformOrigin="0.5,0.5">
+                            <controls:InfoElement.InfoPopup>
+                                <TextBlock >
+                                Maak evenveel in- en uitgangen aan als er <LineBreak/>
+                                onder <Span FontWeight="Bold" Background="White"># In</Span> resp. <Span FontWeight="Bold" Background="White"># Uit</Span> zijn opgegeven.<LineBreak/>
+                                Deze worden in de regelapplicatie gekoppeld:<LineBreak/>
+                                CIF_GUS[usXP99uks01] = IH[hXP99uks01] etc.
+                                </TextBlock>
+                            </controls:InfoElement.InfoPopup>
+                        </controls:InfoElement>
+                        <Label Content="MaakIO" Height="30" RenderTransformOrigin="0.5,0.5" >
+                            <Label.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform Y="2" X="1"/>
+                                </TransformGroup>
+                            </Label.RenderTransform>
+                        </Label>
+                        <Label Content="" Height="30" Margin="-2.0" />
+                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
                         <CheckBox Content="PTP &#x0022;dummy&#x0022; (geen ptp.c in CCOL)" Margin="5" IsChecked="{Binding Path=PTPDummy}" />
-                    </StackPanel>
+                    </DockPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Toedeling Koppelsignalen">
