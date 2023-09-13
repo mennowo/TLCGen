@@ -195,7 +195,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}rgv.c");
                     }
-                    if (c.PTPData.PTPKoppelingen?.Count > 0)
+                    if (c.PTPData.PTPKoppelingen?.Count > 0 && !c.PTPData.PTPDummy)
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}ptp.c");

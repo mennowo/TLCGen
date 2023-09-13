@@ -206,20 +206,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if (c.PTPData.PTPKoppelingen.Count > 0 && !c.PTPData.PTPDummy)
                     {
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreSystemApplication:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if (c.PTPData.PTPKoppelingen.Count > 0 && !c.PTPData.PTPDummy)
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    if (c.PTPData.PTPKoppelingen.Count > 0 && !c.PTPData.PTPDummy)
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_post_system_app();");

@@ -87,8 +87,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var (m1, m2, gelijkstart) in _sortedSyncs.twoWayPedestrians)
             {
-                if (gelijkstart) continue;
-
                 if (!helps.Contains($"h{_hinl}{m1.FaseVan}"))
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hinl}{m1.FaseVan}", _hinl, m1.FaseVan));
@@ -445,8 +443,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Inlopen voetgangers */");
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
-                            if (gelijkstart) continue;
-
                             var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                             var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
                             if (fc1 == null || fc2 == null) continue;
@@ -476,8 +472,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd/inrijtijd */");
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
-                            if (gelijkstart) continue;
-
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync}] = SG[{_fcpf}{grsync:van}] && H[{_hpf}{_hinl}{grsync:van}]; AT[{_tpf}{_tinl}{grsync}] = G[{_fcpf}{grsync:naar}];");
                             sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}] && H[{_hpf}{_hinl}{grsync:naar}]; AT[{_tpf}{_tinl}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
                         }
@@ -514,17 +508,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // voorstart
                             if (grsync.Richting == -1)
                             {
-                                var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
                                 var condition = "TRUE";
-                                if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
-                                    (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
-                                     fc1.Type == FaseTypeEnum.Fiets ||
-                                     fc1.Type == FaseTypeEnum.Voetganger ||
-                                     fc2.Type == FaseTypeEnum.Fiets ||
-                                     fc2.Type == FaseTypeEnum.Voetganger) && 
-                                    hd != null)
+                                if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                                 {
-                                    condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                    var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
+                                    if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
+                                        (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
+                                         fc1.Type == FaseTypeEnum.Fiets ||
+                                         fc1.Type == FaseTypeEnum.Voetganger ||
+                                         fc2.Type == FaseTypeEnum.Fiets ||
+                                         fc2.Type == FaseTypeEnum.Voetganger) &&
+                                        hd != null)
+                                    {
+                                        condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                    }
                                 }
                                 sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
                             }
@@ -606,8 +603,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
-                            if (gelijkstart) continue;
-
                             if (first)
                             {
                                 sb.AppendLine($"{ts}{ts}/* Inlopen */");
@@ -809,8 +804,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     foreach (var (m1, m2, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                     {
-                        if (gelijkstart) continue;
-                        
                         if (first)
                         {
                             sb.AppendLine($"{ts}/* Bij inlopen, inlopende richting in WG houden t.b.v. eventuele aanvraag naloop in tegenrichting */");

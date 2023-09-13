@@ -1,10 +1,7 @@
-﻿/* timingsfunc.c - gegenereerd met TLCGen 0.9.1.0 */
-
-/* DEFINITIE FUNCTIE DEMO_MSG_FCTIMING */
+﻿/* DEFINITIE FUNCTIE DEMO_MSG_FCTIMING */
 /* =================================== */
 
 
-/* CCOL:  version 11.0	      */
 /* FILE:  demo_msg_fctiming.c */
 
 /* DATUM: 11-10-2020 - start regelen, inschakelen, uitschakelen en fatale fout zijn toegevoegd */
@@ -19,6 +16,8 @@
 /* .........27-02-2021  M Scherjon    Bug fix   STARTTIME op 'NG' tijdens R[] en !SR[] */
 /* .........03-03-2021  M Scherjon    verwisseling van array index 2 en 3 in CCOL_FC_TIMING[][][] en CCOL_FC_TIMING_old[][][] verholpen */
 /* .........03-03-2021  M Scherjon    define CIF_MAX_TIMING bij CCOL_FC_TIMING[][][] en CCOL_FC_TIMING_old[][][] toegevoegd i.p.v. 8 */
+/* .........07-07-2023  Cyril/Ton     uitsturen SPAT op start WUS ipv start GPS
+/* .........08-07-2023  Cyril/Ton     SPAT geeltijden aangepast
 
 
 /* include files */
@@ -33,6 +32,9 @@
 #ifndef SPAT_TIJD_ONBEKEND
    #define SPAT_TIJD_ONBEKEND           -32768   /* onbekende waarde CIF_FC_TIMING[][2] (type Time) */
 #endif
+
+s_int16 WUS_FC_old[FCMAX];
+
 
 /* DEFINITIE EVENTSTATE */
 /* ==================== */
@@ -236,7 +238,7 @@ void msg_fctiming(mulv latency_minEndSG)
 
          case CIF_STAT_REG:   /* Regelen */
             if (CIF_WPS[CIF_PROG_STATUS] != WPS_old) {   /* start regelen */
-               if (R[i]) { 
+               if ((CIF_WUS[i] == CIF_ROOD)) {
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME | CIF_TIMING_MASK_CONFIDENCE), /* mask */
@@ -251,7 +253,7 @@ void msg_fctiming(mulv latency_minEndSG)
                }
             }
             else { /* regelen */
-               if (SR[i]) {
+               if ((CIF_WUS[i] == CIF_ROOD) && (CIF_WUS[i] != WUS_FC_old[i])) {
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_STARTTIME | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME | CIF_TIMING_MASK_CONFIDENCE | CIF_TIMING_MASK_LIKELYTIME), /* mask */
@@ -264,7 +266,7 @@ void msg_fctiming(mulv latency_minEndSG)
                      (s_int16) NG);                                                          /* nextTime   */
                   reset_fctiming((mulv) i, (mulv) 1);
                }
-               else if (R[i] && /* !SR[i] && */
+               else if ((CIF_WUS[i] == CIF_ROOD) && /* !SR[i] && */
                                  /* Elke tiende behandelen */
                                  TE &&
                                  /* Confidence wijzigt */
@@ -288,26 +290,26 @@ void msg_fctiming(mulv latency_minEndSG)
                      (s_int16) NG );                                                        /* nextTime   */
                   reset_fctiming((mulv) i, (mulv)1);
                }
-               else if (SG[i]) {
+               else if ((CIF_WUS[i] == CIF_GROEN) && (CIF_WUS[i] != WUS_FC_old[i])) {
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_STARTTIME | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME), /* mask */
                      (s_int16) CCOL_FC_EVENTSTATE[i][CIF_GROEN],   /* eventState */
                      (s_int16) 0,                                  /* startTime  */
-                     (s_int16) TGG_max[i] + latency_minEndSG,      /* minEndTime */
+                     (s_int16) NG,                                 /* minEndTime */
                      (s_int16) NG,                                 /* maxEndTime */
                      (s_int16) NG,                                 /* likelyTime */
                      (s_int16) NG,                                 /* confidence */
                      (s_int16) NG);                                /* nextTime   */
                   reset_fctiming((mulv) i, (mulv)1);
                }
-               else if (SGL[i]) {
+               else if ((CIF_WUS[i] == CIF_GEEL) && (CIF_WUS[i] != WUS_FC_old[i])) {
                   set_fctiming((mulv) i, /* fc */
                      (mulv) 0,                                     /* event      */
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_STARTTIME | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME | CIF_TIMING_MASK_LIKELYTIME), /* mask */
                      (s_int16) CCOL_FC_EVENTSTATE[i][CIF_GEEL],    /* eventState */
                      (s_int16) 0,                                  /* startTime  */
-                     (s_int16) TGL_max[i],                         /* minEndTime */
+                     (s_int16) (TGL_max[i] - TGL_timer[i]),        /* minEndTime */
                      (s_int16) ((TMGL_max[i] > TGL_max[i]) ? (TMGL_max[i] + LATENCY_CORRECTION_MAX_END) : (TGL_max[i] + LATENCY_CORRECTION_MAX_END)), /* maxEndTime */
                      (s_int16) ((TMGL_max[i] > TGL_max[i]) ? TMGL_max[i] : TGL_max[i]), /* likelyTime */
                      (s_int16) NG,                                 /* confidence */
@@ -368,6 +370,7 @@ void msg_fctiming(mulv latency_minEndSG)
             break;
          }
       }
+      WUS_FC_old[i] = CIF_WUS[i];
    }
    WPS_old= CIF_WPS[CIF_PROG_STATUS];
 }

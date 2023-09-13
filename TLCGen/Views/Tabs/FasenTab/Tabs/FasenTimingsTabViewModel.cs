@@ -47,12 +47,36 @@ namespace TLCGen.ViewModels
                 if (_controller != null)
                 {
                     TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_controller.TimingsData.TimingsFasen);
+                    UpdateTimingsFasen();
                 }
                 RaisePropertyChanged();
             }
         }
 
         public ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel> TimingsFasen { get; private set; }
+
+        private void UpdateTimingsFasen()
+        {
+            var changed = false;
+            foreach (var fc in _controller.Fasen)
+            {
+                if (TimingsFasen.All(x => x.FaseCyclus != fc.Naam))
+                {
+                    var model = new TimingsFaseCyclusDataModel { FaseCyclus = fc.Naam };
+                    TimingsFasen.Add(new TimingsFaseCyclusDataViewModel(model));
+                    changed = true;
+                }
+            }
+            var remove = TimingsFasen.Where(x => _controller.Fasen.All(x2 => x2.Naam != x.FaseCyclus)).ToList();
+            if (remove.Any()) changed = true;
+            foreach (var r in remove)
+            {
+                TimingsFasen.Remove(r);
+                _controller.TimingsData.TimingsFasen.Remove(r.TimingsFase);
+            }
+                
+            if (changed) TimingsFasen.BubbleSort();
+        }
 
         public bool TimingsToepassen
         {
@@ -62,18 +86,7 @@ namespace TLCGen.ViewModels
                 _controller.TimingsData.TimingsToepassen = value;
                 if (value)
                 {
-                    var changed = false;
-                    foreach (var fc in _controller.Fasen)
-                    {
-                        if (TimingsFasen.All(x => x.FaseCyclus != fc.Naam))
-                        {
-                            var model = new TimingsFaseCyclusDataModel { FaseCyclus = fc.Naam };
-                            _controller.TimingsData.TimingsFasen.Add(model);
-                            TimingsFasen.Add(new TimingsFaseCyclusDataViewModel(model));
-                            changed = true;
-                        }
-                    }
-                    if (changed) TimingsFasen.BubbleSort();
+                    UpdateTimingsFasen();
                 }
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(TimingsToepassenOK));

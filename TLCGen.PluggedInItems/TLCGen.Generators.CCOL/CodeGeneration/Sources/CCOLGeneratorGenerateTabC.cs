@@ -844,15 +844,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
                 if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
-                if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
-                if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
+                if (!dm.IsDrukKnop() && dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
+                if (!dm.IsDrukKnop() && dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
                 if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
                 if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
                 if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
             }
             dbmax = dbmax.ToString().Length;
-            // dhmax = dhmax.ToString().Length;
-            // ogmax = ogmax.ToString().Length;
             bgmax = bgmax.ToString().Length;
             tflmax = tflmax.ToString().Length;
 
@@ -894,15 +892,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
                     if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
-                    if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
-                    if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
+                    if (!dm.IsDrukKnop() && dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
+                    if (!dm.IsDrukKnop() && dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
                     if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
                     if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
                     if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
                 }
                 dbmax = dbmax.ToString().Length;
-                // dhmax = dhmax.ToString().Length;
-                // ogmax = ogmax.ToString().Length;
                 bgmax = bgmax.ToString().Length;
                 tflmax = tflmax.ToString().Length;
                 pad1 = "D_code[] ".Length + defmax;
@@ -953,27 +949,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 };
             }
             sb.Append($"= \"{name}\"; ".PadRight(pad2));
-            if (dm.TDB != null)
+            if (!dm.IsDrukKnop() && dm.TDB != null)
             {
                 sb.Append($"TDB_max[{dm.GetDefine()}] ".PadRight(pad3));
                 sb.Append($"= {dm.TDB}; ".PadRight(pad4));
             }
-            if (dm.TDH != null)
+            if (!dm.IsDrukKnop() && dm.TDH != null)
             {
-                //if (c.Data.TDHAMaxToepassen)
-                //{
-                //    sb.Append($"TDHA_max[{dm.GetDefine()}] ".PadRight(pad5));
-                //}
-                //else
-                //{
-                    sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
-                //}
+                sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
                 sb.AppendLine($"= {dm.TDH};");
             }
 
             if (dm.TBG != null || dm.TOG != null)
             {
-                if (dm.TDB != null || dm.TDH != null)
+                if (!dm.IsDrukKnop() && (dm.TDB != null || dm.TDH != null))
                 {
                     sb.Append($"{ts}");
                     sb.Append("".PadLeft(pad6));

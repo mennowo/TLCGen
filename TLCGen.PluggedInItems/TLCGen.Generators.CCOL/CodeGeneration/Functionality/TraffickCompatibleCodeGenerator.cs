@@ -142,6 +142,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* faseyclus instellingen */");
                     sb.AppendLine($"{ts}{ts}/* ---------------------- */");
+                    var noPrio = c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen;
                     foreach (var fc in c.Fasen)
                     {
                         var gs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.Naam);
@@ -171,13 +172,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                       (c.AlternatievenPerBlokData.ToepassenAlternatievenPerBlok ? $"PRM[{_prmpf}{_prmaltb}{fc.Naam}], " : "NG, ") +
                                       $"PRM[{_prmpf}{_prmaltp}{namealtp}], " +
                                       $"PRM[{_prmpf}{_prmaltg}{fc.Naam}], " +
-                                      (kar != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, kar)}, " : "NG, ") +
-                                      (srm != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, srm)}, " : "NG, ") +
+                                      (!noPrio && kar != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, kar)}, " : "NG, ") +
+                                      (!noPrio && srm != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, srm)}, " : "NG, ") +
                                       $"NG, " +
-                                      (hd != null ? $"hdFC{hd.FaseCyclus}, " : "NG, ") +
-                                      (hd != null ? $"C[{_ctpf}{_cvchd}{hd.FaseCyclus}], " : "FALSE, ") +
-                                      (vrw != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, vrw)}, " : "NG, ") +
-                                      (fts != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, fts)});" : "NG);"));
+                                      (!noPrio && hd != null ? $"hdFC{hd.FaseCyclus}, " : "NG, ") +
+                                      (!noPrio && hd != null ? $"C[{_ctpf}{_cvchd}{hd.FaseCyclus}], " : "FALSE, ") +
+                                      (!noPrio && vrw != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, vrw)}, " : "NG, ") +
+                                      (!noPrio && fts != null ? $"prioFC{CCOLCodeHelper.GetPriorityName(c, fts)});" : "NG);"));
                     }
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();    

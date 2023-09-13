@@ -905,23 +905,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
-                    var fcWithFileIngreep = c.FileIngrepen.SelectMany(x => x.TeDoserenSignaalGroepen).Distinct();
-                    first = true;
-                    foreach (var fc in fcWithFileIngreep)
+                    if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                     {
-                        if (first)
+                        var fcWithFileIngreep = c.FileIngrepen.SelectMany(x => x.TeDoserenSignaalGroepen).Distinct();
+                        first = true;
+                        foreach (var fc in fcWithFileIngreep)
                         {
-                            sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
-                            first = false;
-                        }
-                        if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
-                        {
-                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
-                            sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
-                            sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
-                            sb.AppendLine($"{ts}}}");
+                            if (first)
+                            {
+                                sb.AppendLine();
+                                sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
+                                first = false;
+                            }
+                            if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
+                            {
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                                sb.AppendLine($"{ts}}}");
+                            }
                         }
                     }
                     
@@ -978,7 +981,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var prios = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == f.FaseCyclus);
                             foreach (var p in prios)
                             {
-                                sb.AppendLine($"{ts}{ts}iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = poGeenPrioriteit;");
+                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, p)}] = poAanvraag;");
                             }
                         }
                         sb.AppendLine($"{ts}}}");

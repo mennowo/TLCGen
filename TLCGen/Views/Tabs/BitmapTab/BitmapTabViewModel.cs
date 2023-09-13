@@ -45,6 +45,7 @@ namespace TLCGen.ViewModels
         
         RelayCommand _setCoordinatesCommand;
         RelayCommand _refreshBitmapCommand;
+        RelayCommand _resetBitmapIOCommand;
         RelayCommand _resetBitmapCommand;
         RelayCommand _importDplCCommand;
 
@@ -179,6 +180,8 @@ namespace TLCGen.ViewModels
         public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
 
         public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
+        
+        public ICommand ResetBitmapIOCommand => _resetBitmapIOCommand ??= new RelayCommand(ResetBitmapIOCommand_Executed, ResetBitmapIOCommand_CanExecute);
 
         public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
 
@@ -285,6 +288,33 @@ namespace TLCGen.ViewModels
         }
 
         private bool ResetBitmapCommand_CanExecute(object obj)
+        {
+            return true;
+        }
+
+        private void ResetBitmapIOCommand_Executed(object obj)
+        {
+            foreach (var io in Fasen)
+            {
+                io.Coordinates.RemoveAll();
+            }
+            foreach (var io in Detectoren)
+            {
+                io.Coordinates.RemoveAll();
+            }
+            foreach (var io in OverigeIngangen)
+            {
+                io.Coordinates.RemoveAll();
+            }
+            foreach (var io in OverigeUitgangen)
+            {
+                io.Coordinates.RemoveAll();
+            }
+
+            LoadBitmap();
+        }
+
+        private bool ResetBitmapIOCommand_CanExecute(object obj)
         {
             return true;
         }

@@ -29,6 +29,7 @@ namespace TLCGen.Models
         #endregion
 
         public bool Opticom { get; set; }
+        public bool KARToepassenFilterTijden { get; set; } = true;
         public int? KARInmeldingFilterTijd { get; set; }
         public int? KARUitmeldingFilterTijd { get; set; }
         public int? OpticomInmeldingFilterTijd { get; set; }

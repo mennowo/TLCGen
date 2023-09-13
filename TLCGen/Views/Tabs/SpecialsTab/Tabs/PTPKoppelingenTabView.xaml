@@ -40,11 +40,14 @@
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DockPanel Grid.Row="1">
-                        <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
-                        <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
-                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                    </DockPanel>
+                    <StackPanel Orientation="Vertical" Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                            <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
+                            <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
+                        </StackPanel>
+                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" />
+                        <CheckBox Content="PTP &#x0022;dummy&#x0022; (geen ptp.c in CCOL)" Margin="5" IsChecked="{Binding Path=PTPDummy}" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Toedeling Koppelsignalen">

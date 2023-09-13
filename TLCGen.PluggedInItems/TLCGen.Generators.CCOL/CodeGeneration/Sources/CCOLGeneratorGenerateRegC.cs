@@ -30,6 +30,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define PRIO_ADDFILE");
             }
+            if (controller.PrioData.PrioIngreepType == PrioIngreepTypeEnum.Geen)
+            {
+                sb.AppendLine("#define NO_PRIO");
+            }
             sb.AppendLine();
             sb.Append(GenerateRegCBeforeIncludes(controller));
             sb.Append(GenerateRegCIncludes(controller));
@@ -164,7 +168,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
 
-            if(c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
+            if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen &&
+                (c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0))
             {
                 if(c.PrioData.PrioIngrepen.Any(x => x.CheckWagenNummer))
                 {
@@ -738,7 +743,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}}}");
             }
 
-            if ((c.PrioData.PrioIngrepen.Count > 0 ||
+            if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen &&
+                (c.PrioData.PrioIngrepen.Count > 0 ||
                  c.PrioData.HDIngrepen.Count > 0))
             {
                 if (c.HalfstarData.IsHalfstar)
@@ -933,14 +939,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var sb = new StringBuilder();
 
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
-            sb.AppendLine("void PrioSpecialSignals();");
+            if (controller.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+            {
+                sb.AppendLine("void PrioSpecialSignals();");
+            }
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSpecialSignals, true, true, false, true);
 
-            if (controller.PrioData.PrioIngrepen.Any() ||
-				controller.PrioData.HDIngrepen.Any())
+            if (controller.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen &&
+                (controller.PrioData.PrioIngrepen.Any() ||
+				 controller.PrioData.HDIngrepen.Any()))
 		    {
 				sb.AppendLine($"{ts}PrioSpecialSignals();");
 			}

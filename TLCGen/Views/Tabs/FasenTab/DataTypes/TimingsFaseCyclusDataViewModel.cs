@@ -7,31 +7,27 @@ namespace TLCGen.ViewModels
 {
     public class TimingsFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        #region Fields
-
-        private readonly TimingsFaseCyclusDataModel _faseCyclus;
-
-        #endregion // Fields
-
         #region Properties
+        
+        public TimingsFaseCyclusDataModel TimingsFase { get; }
 
         public string FaseCyclus
         {
 
-            get => _faseCyclus.FaseCyclus;
+            get => TimingsFase.FaseCyclus;
             set
             {
-                _faseCyclus.FaseCyclus = value;
+                TimingsFase.FaseCyclus = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public TimingsFaseCyclusTypeEnum ConflictType
         {
-            get => _faseCyclus.ConflictType;
+            get => TimingsFase.ConflictType;
             set
             {
-                _faseCyclus.ConflictType = value;
+                TimingsFase.ConflictType = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -42,7 +38,7 @@ namespace TLCGen.ViewModels
 
         public object GetItem()
         {
-            return _faseCyclus;
+            return TimingsFase;
         }
 
         #endregion // IViewModelWithItem
@@ -58,9 +54,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public TimingsFaseCyclusDataViewModel(TimingsFaseCyclusDataModel faseCyclus)
+        public TimingsFaseCyclusDataViewModel(TimingsFaseCyclusDataModel timingsFase)
         {
-            _faseCyclus = faseCyclus;
+            TimingsFase = timingsFase;
         }
 
         #endregion // Constructor

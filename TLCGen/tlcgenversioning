@@ -1,5 +1,14 @@
 TLCGen=12.4.0.2
 RN==TLCGen
+TLCGen versie: 12.4.0.3
+- Anti-jutter optioneel voor HD ingrepen
+- Nooit aanmaken TDH/TDB voor drukknoppen
+- Fix dubbele timings bij import vanuit tab.c
+- Altijd genereren inloop tijden voetgangers
+- Fixes compileren zonder prioriteit
+- Bitmap IO complete reset
+- Mogelijkheid voor PTP 'dummy' (ptp zonder ptp.c)
+- Diverse kleine fixes
 TLCGen versie: 12.4.0.2
 - Verbetering 'traffick' integratie
 - Fix voor ITF import

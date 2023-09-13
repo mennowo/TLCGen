@@ -108,7 +108,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         string condition = null;
                         string andcondition = null;
-                        if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
+                        if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen &&
+                            c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                         {
                             var gs = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseVan == ma.FaseVan && x.FaseNaar == ma.FaseNaar ||
                                                                                            x.FaseNaar == ma.FaseVan && x.FaseVan == ma.FaseNaar);

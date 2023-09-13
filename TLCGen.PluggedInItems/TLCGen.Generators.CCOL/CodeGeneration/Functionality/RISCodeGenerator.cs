@@ -36,6 +36,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmlijn;
         private string _prmrisrole;
         private string _prmrissubrole;
+        private string _prmrisgrenspriotype;
 
         public override bool HasSettings()
         {
@@ -401,7 +402,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (ovRis.Any() || hdRis.Any())
                     {
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}{ts}#ifdef RIS_SSM");
+                        sb.AppendLine($"{ts}{ts}#if defined RIS_SSM && !defined NO_PRIO");
                         sb.AppendLine($"{ts}{ts}{ts}/* Ris PRIO: verstuur SSM */");
                         foreach (var ov in ovRis)
                         {
@@ -418,11 +419,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         foreach (var ov in ovRis)
                         {
-                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(prioFC{CCOLCodeHelper.GetPriorityName(c, ov)});");
+                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}, PRM[{_prmpf}{_prmrisgrenspriotype}{CCOLCodeHelper.GetPriorityName(c, ov)}]);");
                         }
                         foreach (var hd in hdRis)
                         {
-                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus});");
+                            sb.AppendLine($"{ts}{ts}{ts}ris_verstuur_ssm(hdFC{hd.FaseCyclus}, PRM[{_prmpf}{_prmrisgrenspriotype}{hd.FaseCyclus}hd]);");
                         }
                         sb.AppendLine($"{ts}{ts}#endif");
                     }
@@ -525,6 +526,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmlijn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlijn");
             _prmrisrole = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisrole");
             _prmrissubrole = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrissubrole");
+            _prmrisgrenspriotype = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisgrenspriotype");
 
             return base.SetSettings(settings);
         }

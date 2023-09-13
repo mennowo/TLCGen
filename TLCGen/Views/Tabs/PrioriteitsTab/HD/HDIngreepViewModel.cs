@@ -59,7 +59,19 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Inmelding filtertijd KAR")]
+        [Description("Toepassen anti-jutter tijden KAR")]
+        public bool KARToepassenFilterTijden
+        {
+            get => _HDIngreep.KARToepassenFilterTijden;
+            set
+            {
+                _HDIngreep.KARToepassenFilterTijden = value;
+                RaisePropertyChanged<object>(nameof(KARToepassenFilterTijden), broadcast: true);
+            }
+        }
+
+        [Description("Inmelding anti-jutter tijd KAR")]
+        [BrowsableCondition(nameof(KARToepassenFilterTijden))]
         public int? KARInmeldingFilterTijd
         {
             get => _HDIngreep.KARInmeldingFilterTijd;
@@ -70,7 +82,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Uitmelding filtertijd KAR")]
+        [Description("Uitmelding anti-jutter tijd KAR")]
+        [BrowsableCondition(nameof(KARToepassenFilterTijden))]
         public int? KARUitmeldingFilterTijd
         {
             get => _HDIngreep.KARUitmeldingFilterTijd;

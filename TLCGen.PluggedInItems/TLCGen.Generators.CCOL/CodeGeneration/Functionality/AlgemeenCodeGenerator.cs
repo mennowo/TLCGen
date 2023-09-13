@@ -262,8 +262,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F11KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}CFB_max = 0; /* maximum aantal herstarts na fasebewaking */");
-                        sb.AppendLine($"{ts}{ts}{ts}MONTYPE[MONTYPE_DATI] = 0;");
-                        sb.AppendLine($"{ts}{ts}{ts}LOGTYPE[LOGTYPE_DATI] = 0;");
+                        sb.AppendLine($"{ts}{ts}{ts}#ifndef NO_VLOG");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}MONTYPE[MONTYPE_DATI] = 0;");
+                        sb.AppendLine($"{ts}{ts}{ts}{ts}LOGTYPE[LOGTYPE_DATI] = 0;");
+                        sb.AppendLine($"{ts}{ts}{ts}#endif");
                         sb.AppendLine($"{ts}{ts}#endif");
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}#endif");

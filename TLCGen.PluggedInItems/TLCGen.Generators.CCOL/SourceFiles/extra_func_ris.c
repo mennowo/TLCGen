@@ -12,7 +12,7 @@
 
 /* Deze ris prioriteit applicatiefuncties worden gebruikt in de programmagenerator TLCGEN in combinatie met de PrioModule van TLCGen */
 
-#if (CCOL_V <= 110)
+#if (CCOL_V < 120000)
   #define GEEN_CONSOLIDATIE
 #endif
 
@@ -375,7 +375,7 @@ static rif_bool test_conflicten_fasecyclus_hulpdienst(count fc)
 
 #if defined prioFCMAX && (prioFCMAX > 0) /* alleen indien PRIO */
 
-rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
+rif_int ris_verstuur_ssm(rif_int priotypefc_id, rif_int risgrenspriotype) {
 
    register rif_int r = 0;
    rif_int number = 0, j;
@@ -397,13 +397,13 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id) {
 
                /* Correctie Prioriteitsniveau */
                /* --------------------------- */
-               if ( (RIS_PRIOREQUEST_AP[r].importance >  0) && (RIS_PRIOREQUEST_AP[r].importance <= 10) ) {       /* geconditoneerde prioriteit */
+               if ((RIS_PRIOREQUEST_AP[r].importance > 0) && (RIS_PRIOREQUEST_AP[r].importance <= risgrenspriotype)) {       /* geconditoneerde prioriteit */
                   if (iInstPrioriteitsOpties[priotypefc_id] >= 13) {
 /*                   iInstPrioriteitsOpties[priotypefc_id] = 13; */   /* 13 = poAanvraag(1)+                                poGroenVastHouden(4)+poBijzonderRealiseren(8) */
                      iInstPrioriteitsOpties[priotypefc_id] &= ~(poAfkappenKonfliktRichtingen | poAfkappenKonflikterendOV); /* afkappen verwijderen */
                   }
                } 
-               else if ((RIS_PRIOREQUEST_AP[r].importance > 10) && (RIS_PRIOREQUEST_AP[r].importance <= 14) ) {   /* absolute prioriteit */
+               else if ((RIS_PRIOREQUEST_AP[r].importance > risgrenspriotype) && (RIS_PRIOREQUEST_AP[r].importance <= 14)) {   /* absolute prioriteit */
                   if (iInstPrioriteitsOpties[priotypefc_id] >= 15) {
                      /* prioriteitsniveau niet aanpassen */
                   }
@@ -580,7 +580,7 @@ void Bepaal_Granted_Verstrekt(void)
 
 #endif /* prioFCMAX - alleen indien PRIO */
 
-/* iVRI – ISSUE TWEERICHTINGEN FIETSPADEN */
+/* iVRI ? ISSUE TWEERICHTINGEN FIETSPADEN */
 /* ===================================== */ 
 
 /* Probleemstelling
@@ -588,7 +588,7 @@ void Bepaal_Granted_Verstrekt(void)
  * Op tweerichtingen fietspaden worden CAM berichten verstuurd van fietsers die naar de stopstreep rijden en van fietsers die van de stopstreep af rijden.
  * De fietsers die van de stopstreep af rijden veroorzaken nu foutieve informatie bij aanvragen en verlengen op basis van CAM-berichten van fietsers. 
  * Het splitsen van de lanes van deze fietspaden in rijrichting zou een mogelijke oplossing zijn. In het ITF-bestand is het echter verplicht om deze
- * tweerichtingen fietspaden op te geven als ‘bidirectionele lanes’. Dit probleem kan worden opgelost door ook naar de heading (rijrichting) van de
+ * tweerichtingen fietspaden op te geven als ?bidirectionele lanes?. Dit probleem kan worden opgelost door ook naar de heading (rijrichting) van de
  * fietsers in de CAM-berichten te kijken.
  *
  * Heading
@@ -841,4 +841,3 @@ mulv ris_itsstations_heading(count fc, rif_string intersection, rif_int lane_id,
    }
    return (number);
 }
-

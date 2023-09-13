@@ -170,6 +170,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmvtgcat;
         private CCOLGeneratorCodeStringSettingModel _mftstelris;
         private CCOLGeneratorCodeStringSettingModel _prmftsminvtgris;
+        private CCOLGeneratorCodeStringSettingModel _prmrisgrenspriotype;
 
 #pragma warning restore 0649
 
@@ -222,10 +223,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myDetectors.Add(hd.DummyKARUitmelding);
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}kar", _hhdin, hd.FaseCyclus, "KAR"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thdin}{hd.FaseCyclus}kar", hd.KARInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thdin, hd.FaseCyclus, "KAR"));
+                if (hd.KARToepassenFilterTijden)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thdin}{hd.FaseCyclus}kar", hd.KARInmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thdin, hd.FaseCyclus, "KAR"));
+                }
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhdin}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schhdin, hd.FaseCyclus, "KAR"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}kar", _hhduit, hd.FaseCyclus, "KAR"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thduit}{hd.FaseCyclus}kar", hd.KARUitmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thduit, hd.FaseCyclus, "KAR"));
+                if (hd.KARToepassenFilterTijden)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thduit}{hd.FaseCyclus}kar", hd.KARUitmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _thduit, hd.FaseCyclus, "KAR"));
+                }
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schhduit}{hd.FaseCyclus}kar", 1, CCOLElementTimeTypeEnum.SCH_type, _schhduit, hd.FaseCyclus, "KAR"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schchecksirene}{hd.FaseCyclus}", hd.Sirene ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schchecksirene, hd.FaseCyclus));
             }
@@ -250,6 +257,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{hd.FaseCyclus}hd", (int)hd.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, hd.FaseCyclus));
                    
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{hd.FaseCyclus}hd", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, hd.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisgrenspriotype}{hd.FaseCyclus}hd", 9, CCOLElementTimeTypeEnum.None, _prmrisgrenspriotype, hd.FaseCyclus));
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmrisapproachid}{hd.FaseCyclus}hd", fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
@@ -419,7 +427,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, prio.FaseCyclus));
 
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
-                    
+
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisgrenspriotype}{CCOLCodeHelper.GetPriorityName(c, prio)}", 9, CCOLElementTimeTypeEnum.None, _prmrisgrenspriotype, prio.FaseCyclus));
+
                     // we only need these elements if they differ from the elements already created for signalgroups
                     if (fcRis != null && CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
                     {
@@ -1500,15 +1510,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
                                 sb.AppendLine($"{ts}" +
                                               $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
-                                              $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
-                                              $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && " +
+                                              (hd.KARToepassenFilterTijden 
+                                                  ? $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
+                                                    $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && "
+                                                  : "") +
                                               $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
                                               $"((DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]) || " +
                                               $"DSIMelding_HD_V1({actualAlsoFc}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}])));");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = !T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
+                                              (hd.KARToepassenFilterTijden 
+                                                  ? $"RT[{_tpf}{_thdin}{hd.FaseCyclus}kar] = " +
+                                                    $"!T[{_tpf}{_thdin}{hd.FaseCyclus}kar] && "
+                                                  : "") +
+                                              $"SCH[{_schpf}{_schhdin}{hd.FaseCyclus}kar] && " +
+                                              $"(DSIMelding_HD_V1({sgCheck}, CIF_DSIN, SCH[{_schpf}{_schchecksirene}{hd.FaseCyclus}]));");
                             }
 
                             inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}kar");
@@ -1594,11 +1612,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                             {
                                 var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = " +
+                                              (hd.KARToepassenFilterTijden
+                                                  ? $"RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = " +
+                                                    $"!T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && "
+                                                  : "") +
+                                              $"SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && " +
+                                              $"(DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = !T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && (DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = " +
+                                              (hd.KARToepassenFilterTijden
+                                                  ? $"RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = " +
+                                                    $"!T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && "
+                                                  : "") + 
+                                              $"SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && " +
+                                              $"(DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
                             }
 
                             uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");

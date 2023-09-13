@@ -118,10 +118,6 @@ namespace TLCGen.Importers.TabC
                                 c.Fasen.Add(newfcm);
                                 c.ModuleMolen.FasenModuleData.Add(new FaseCyclusModuleDataModel { FaseCyclus = newfcm.Naam });
                                 NewPhasesMessage = NewPhasesMessage + newfcm.Naam + "\n";
-                                if (c.TimingsData.TimingsToepassen)
-                                {
-                                    c.TimingsData.TimingsFasen.Add(new TimingsFaseCyclusDataModel { FaseCyclus = newfcm.Naam });
-                                }
                             }
                             else
                             {

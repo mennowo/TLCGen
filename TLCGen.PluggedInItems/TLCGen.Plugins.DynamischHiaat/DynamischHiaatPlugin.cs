@@ -219,14 +219,17 @@ namespace TLCGen.Plugins.DynamischHiaat
             foreach (var msg in _myModel.SignaalGroepenMetDynamischHiaat.Where(x => x.HasDynamischHiaat))
             {
                 var ofc = c.Fasen.FirstOrDefault(x => x.Naam == msg.SignalGroupName);
-                if (ofc.AantalRijstroken > 1 && !ofc.ToepassenMK2 && !warning)
+                if (ofc != null)
                 {
-                    warning = true;
-                    TLCGenDialogProvider.Default.ShowMessageBox(
-                        $"Let op!\n\n" +
-                        $"Voor fase {ofc.Naam} met {ofc.AantalRijstroken} rijstroken is toepassen van Meetkriterium2() uitgeschakeld.\n" +
-                        $"Dynamische hiaattijden zijn hier voor juist werking van afhankelijk.",
-                        "Foutieve signaalgroep instellingen", MessageBoxButton.OK);
+                    if (ofc.AantalRijstroken > 1 && !ofc.ToepassenMK2 && !warning)
+                    {
+                        warning = true;
+                        TLCGenDialogProvider.Default.ShowMessageBox(
+                            $"Let op!\n\n" +
+                            $"Voor fase {ofc.Naam} met {ofc.AantalRijstroken} rijstroken is toepassen van Meetkriterium2() uitgeschakeld.\n" +
+                            $"Dynamische hiaattijden zijn hier voor juist werking van afhankelijk.",
+                            "Foutieve signaalgroep instellingen", MessageBoxButton.OK);
+                    }
                 }
 
                 _myElements.Add(new CCOLElement($"dynhiaat{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Toepassen dynamsich hiaat bij fase {msg.SignalGroupName}"));

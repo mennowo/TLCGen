@@ -2213,6 +2213,14 @@
             <Categorie>CAT_Prioriteren</Categorie>
             <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
+          <Setting>
+            <Default>risgrenspriotype</Default>
+            <Setting>risgrenspriotype</Setting>
+            <Type>Parameter</Type>
+            <Description>Greenswaarde type prioriteit RIS voor fase _E1_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

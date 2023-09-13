@@ -194,10 +194,10 @@ Task("Deploy")
                     // Duplicate old files
                     var files = GetFiles("./TempCake/");
                     DeleteFiles(files);
-                    var old1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen_portable_latest.zip";
-                    var new1 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen_portable.zip";
-                    var old2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/TLCGen.Setup.msi";
-                    var new2 = "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Release/" + prev_version + "_TLCGen.Setup.msi";
+                    var old1 = "/var/www/html/codingconnected.eu/tlcgen/deploy/Release/TLCGen_portable_latest.zip";
+                    var new1 = "/var/www/html/codingconnected.eu/tlcgen/deploy/Release/" + prev_version + "_TLCGen_portable.zip";
+                    var old2 = "/var/www/html/codingconnected.eu/tlcgen/deploy/Release/TLCGen.Setup.msi";
+                    var new2 = "/var/www/html/codingconnected.eu/tlcgen/deploy/Release/" + prev_version + "_TLCGen.Setup.msi";
                     if (!DirectoryExists(outputDirBase.ToString() + "/TempCake/"))
                         CreateDirectory(outputDirBase.ToString() + "/TempCake/");
 
@@ -216,12 +216,12 @@ Task("Deploy")
 
                 transferResult = session.PutFiles(
                   versionFile,
-                  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/tlcgenversioning", false, transferOptions);
+                  "/var/www/html/codingconnected.eu/tlcgen/deploy/tlcgenversioning", false, transferOptions);
                 transferResult.Check();
 
                 transferResult = session.PutFiles(
                   outputDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\"), 
-                  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/", false, transferOptions);
+                  "/var/www/html/codingconnected.eu/tlcgen/deploy/", false, transferOptions);
                 transferResult.Check();
 
                 // Print results
@@ -260,7 +260,7 @@ Task("DeployDev")
 
                 transferResult = session.PutFiles(
                   outputDir.Path.MakeAbsolute(Context.Environment).ToString().Replace("/", "\\"), 
-                  "/var/www/codingconnected.eu/wordpress/tlcgen/deploy/Dev/", false, transferOptions);
+                  "/var/www/html/codingconnected.eu/tlcgen/deploy/Dev/", false, transferOptions);
                 transferResult.Check();
 
                 // Print results
