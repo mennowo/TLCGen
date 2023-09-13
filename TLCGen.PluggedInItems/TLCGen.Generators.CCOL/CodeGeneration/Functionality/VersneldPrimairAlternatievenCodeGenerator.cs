@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmaltp;
         private CCOLGeneratorCodeStringSettingModel _schaltg;
 #pragma warning restore 0649
+        private string _tvgnaloop;
         private string _tnlsg;
         private string _tnlfg;
         private string _tnlcv;
@@ -30,6 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _schgs;
 	    private string _schrealgs;
 	    private string _hlos;
+	    private string _hnla;
+	    private string _hnlsg;
 	    private string _mar;
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -231,6 +234,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new []{10},
                 CCOLCodeTypeEnum.HstCAlternatief => new []{10},
                 CCOLCodeTypeEnum.PrioCPARCorrecties => new []{10},
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{60},
                 _ => null
             };
         }
@@ -249,6 +253,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc) sb.Append(GetRealFuncPARCorrections(c, ts, false));
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc) sb.Append(GetInterFuncPARCorrecties(c, ts));
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
@@ -344,25 +349,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.Naam);
                                 if (nl != null)
                                 {
-                                    sb.Append($"{ts}if (");
-                                    var first = true;
-                                    foreach (var nlt in nl.Tijden)
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
+                                        nl.Type != NaloopTypeEnum.StartGroen)
                                     {
-                                        if (!first) sb.Append(" || ");
-                                        first = false;
-                                        var tnl = nlt.Type switch
+                                        sb.Append($"{ts}if (RT[{_tpf}{_tvgnaloop}{nl:vannaar}] || T[{_tpf}{_tvgnaloop}{nl:vannaar}]");
+                                    }
+                                    else
+                                    {
+                                        sb.Append($"{ts}if (");
+
+                                        var first = true;
+                                        foreach (var nlt in nl.Tijden)
                                         {
-                                            NaloopTijdTypeEnum.StartGroen => _tnlsg,
-                                            NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
-                                            NaloopTijdTypeEnum.VastGroen => _tnlfg,
-                                            NaloopTijdTypeEnum.VastGroenDetectie => _tnlfgd,
-                                            NaloopTijdTypeEnum.EindeGroen => _tnleg,
-                                            NaloopTijdTypeEnum.EindeGroenDetectie => _tnlegd,
-                                            NaloopTijdTypeEnum.EindeVerlengGroen => _tnlcv,
-                                            NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
-                                            _ => throw new ArgumentOutOfRangeException()
-                                        };
-                                        sb.Append($"RT[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]");
+                                            if (!first) sb.Append(" || ");
+                                            first = false;
+                                            var tnl = nlt.Type switch
+                                            {
+                                                NaloopTijdTypeEnum.StartGroen => _tnlsg,
+                                                NaloopTijdTypeEnum.StartGroenDetectie => _tnlsgd,
+                                                NaloopTijdTypeEnum.VastGroen => _tnlfg,
+                                                NaloopTijdTypeEnum.VastGroenDetectie => _tnlfgd,
+                                                NaloopTijdTypeEnum.EindeGroen => _tnleg,
+                                                NaloopTijdTypeEnum.EindeGroenDetectie => _tnlegd,
+                                                NaloopTijdTypeEnum.EindeVerlengGroen => _tnlcv,
+                                                NaloopTijdTypeEnum.EindeVerlengGroenDetectie => _tnlcvd,
+                                                _ => throw new ArgumentOutOfRangeException()
+                                            };
+                                            sb.Append($"RT[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]");
+                                        }
                                     }
                                     sb.AppendLine(")");
                                     sb.AppendLine($"{ts}{{");
@@ -390,7 +404,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                        AppendNalopenEG_RRFMCorrection(c, sb, ts);
+                        if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
+                        }
 
                         var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
                         
@@ -415,53 +432,83 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             
                             if (hasgs != null)
                             {
-                                switch (fcf.AlternatieveRuimteType)
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    case AlternatieveRuimteTypeEnum.MaxTarToTig:
-                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
-                                        break;
-                                    case AlternatieveRuimteTypeEnum.MaxTar:
-                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
-                                        break;
-                                    case AlternatieveRuimteTypeEnum.RealRuimte:
-                                        sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
-                                foreach (var ofc in hasgs.Item2)
-                                {
-                                    sb.Append(ofc);
-                                }
+                                    sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = max_par({_fcpf}{fc.FaseCyclus})");
+                                    sb.Append($" && SCH[{_schpf}{_schaltg}");
+                                    foreach (var ofc in hasgs.Item2)
+                                    {
+                                        sb.Append(ofc);
+                                    }
 
-                                sb.Append($"]) && SCH[{_schpf}{_schaltg}");
-                                foreach (var ofc in hasgs.Item2)
-                                {
-                                    sb.Append(ofc);
+                                    sb.AppendLine("];");
                                 }
+                                else
+                                {
+                                    switch (fcf.AlternatieveRuimteType)
+                                    {
+                                        case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                            sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                            break;
+                                        case AlternatieveRuimteTypeEnum.MaxTar:
+                                            sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                            break;
+                                        case AlternatieveRuimteTypeEnum.RealRuimte:
+                                            sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                            break;
+                                        default:
+                                            throw new ArgumentOutOfRangeException();
+                                    }
+                                    foreach (var ofc in hasgs.Item2)
+                                    {
+                                        sb.Append(ofc);
+                                    }
 
-                                sb.AppendLine("];");
+                                    sb.Append($"]) && SCH[{_schpf}{_schaltg}");
+                                    foreach (var ofc in hasgs.Item2)
+                                    {
+                                        sb.Append(ofc);
+                                    }
+
+                                    sb.AppendLine("];");
+                                }
                             }
                             else
                             {
                                 sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ");
-                                switch (fcf.AlternatieveRuimteType)
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    case AlternatieveRuimteTypeEnum.MaxTarToTig:
-                                        sb.Append($"({maxtartotig}({_fcpf}{fc.FaseCyclus})");
-                                        break;
-                                    case AlternatieveRuimteTypeEnum.MaxTar:
-                                        sb.Append($"(max_tar({_fcpf}{fc.FaseCyclus})");
-                                        break;              
-                                    case AlternatieveRuimteTypeEnum.RealRuimte:
-                                        sb.Append($"(Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus})");
-                                        break;                                        
+                                    sb.AppendLine($"max_par({_fcpf}{fc.FaseCyclus}) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
-                                sb.AppendLine($" >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                else
+                                {
+                                    switch (fcf.AlternatieveRuimteType)
+                                    {
+                                        case AlternatieveRuimteTypeEnum.MaxTarToTig:
+                                            sb.Append($"({maxtartotig}({_fcpf}{fc.FaseCyclus})");
+                                            break;
+                                        case AlternatieveRuimteTypeEnum.MaxTar:
+                                            sb.Append($"(max_tar({_fcpf}{fc.FaseCyclus})");
+                                            break;
+                                        case AlternatieveRuimteTypeEnum.RealRuimte:
+                                            sb.Append($"(Real_Ruimte({_fcpf}{fc.FaseCyclus}, {_mpf}{_mar}{fc.FaseCyclus})");
+                                            break;
+                                    }
+                                    sb.AppendLine($" >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                }
                             }
                         }
                         sb.AppendLine();
-                        sb.Append(GetRealFuncPARCorrections(c, ts, true));
+
+                        
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+                        {
+                            sb.Append(GetRealFuncPARCorrections(c, ts, true));
+                        }
+                        else if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            sb.Append(GetInterFuncPARCorrecties(c, ts));
+                        }
 
                         yes = false;
                         foreach (var fcm in c.Fasen)
@@ -610,7 +657,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ++mlidx;
                             }
 
-                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
+                            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                            {
+                                AppendNalopenEG_RRFMCorrection(c, sb, ts);
+                            }
                         }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
@@ -638,10 +688,113 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
-                
+
+                case CCOLCodeTypeEnum.RegCAlternatieven:
+
+                    bool yes1 = false;
+                    foreach (var fcm in c.Fasen)
+                    {
+                        foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
+                        {
+                            if (fm is { FileMetingLocatie: FileMetingLocatieEnum.NaStopstreep })
+                            {
+                                if (!yes1)
+                                {
+                                    yes1 = true;
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
+                                }
+
+                                sb.AppendLine(
+                                    $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                            }
+                        }
+                    }
+
+                    return sb.ToString();
+
                 default:
                     return null;
             }
+        }
+
+        private string GetInterFuncPARCorrecties(ControllerModel c, string ts)
+        {
+            var sb = new StringBuilder();
+
+            var first = true;
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                    sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                {
+                    if (first) sb.AppendLine($"{ts}/* Tegenrichting moet ook kunnen koppelen bij koppelaanvraag */");
+                    first = false;
+                    var d = nl.Detectoren.First();
+                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:van}] && (!IH[{_hpf}{_hnla}{d.Detector}] || PAR[{_fcpf}{nl:naar}]);");
+                }
+            }
+            if (!first) sb.AppendLine();
+            first = true;
+
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                    sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                {
+                    if (first) sb.AppendLine($"{ts}/* Bepaal naloop voetgangers wel/niet toegestaan */");
+                    first = false;
+                    var d = nl.Detectoren.First();
+                    sb.AppendLine($"{ts}IH[{_hpf}{_hnlsg}{nl:vannaar}] = (PR[{_fcpf}{nl:van}] || AR[{_fcpf}{nl:van}] && PAR[{_fcpf}{nl:naar}]) && IH[{_hpf}{_hnla}{d.Detector}];");
+                }
+            }
+            if (!first) sb.AppendLine();
+            first = true;
+
+            var doneNl = new List<NaloopModel>();
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                if (doneNl.Any(x => ReferenceEquals(x, nl))) continue;
+                doneNl.Add(nl);
+
+                var opp = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == nl.FaseVan && x.FaseVan == nl.FaseNaar);
+                if (opp == null) continue;
+                doneNl.Add(opp);
+
+                var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                    sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                {
+                    if (first) sb.AppendLine($"{ts}/* PAR-ongecoordineerd */");
+                    first = false;
+                    var d1 = nl.Detectoren.First();
+                    var d2 = opp.Detectoren.First();
+                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:van}] = PAR[{_fcpf}{nl:van}] || IH[hmadk31b] && max_par_los({_fcpf}31) && (!IH[hmadk31a] || SCH[schlos31_1]) && (!H[hmadk32a] || SCH[schlos31_2]);");
+                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}31] || IH[hmadk31b] && max_par_los({_fcpf}31) && (!IH[hmadk31a] || SCH[schlos31_1]) && (!H[hmadk32a] || SCH[schlos31_2]);");
+                }
+            }
+
+            if (!first) sb.AppendLine();
+            first = true;
+
+            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+            {
+                if (first) sb.AppendLine($"{ts}/* PAR correcties gelijkstart synchronisaties */");
+                first = false;
+
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && (PAR[{_fcpf}{gs:van}] || !A[{_fcpf}{gs:van}]);");
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && (PAR[{_fcpf}{gs:naar}] || !A[{_fcpf}{gs:naar}]);");
+            }
+
+            return sb.ToString();
         }
 
         private string GetRealFuncPARCorrections(ControllerModel c, string ts, bool generateNaloopOk)
@@ -691,17 +844,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (generateNaloopOk)
                 {
-                    pars[0].Add($"{ts}IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] = Naloop_OK({_fcpf}{nl.FaseVan}, {_mpf}{_mar}{nl.FaseNaar}, {_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar});");
+                    pars[0].Add($"{ts}IH[{_hpf}{hnl}{nl:vannaar}] = Naloop_OK({_fcpf}{nl:van}, {_mpf}{_mar}{nl:naar}, {_tpf}{tnl}{nl:vannaar});");
                 }
                 if (sync.gelijkstart)
                 {
-                    pars[1].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}];");
-                    pars[2].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && PAR[{_fcpf}{nl.FaseNaar}];");
+                    pars[1].Add($"{ts}PAR[{_fcpf}{nl:van}] = PAR[{_fcpf}{nl:van}] && IH[{_hpf}{hnl}{nl:vannaar}];");
+                    pars[2].Add($"{ts}PAR[{_fcpf}{nl:van}] = PAR[{_fcpf}{nl:van}] && PAR[{_fcpf}{nl:naar}];");
                 }
                 else
                 {
-                    pars[1].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (IH[{_hpf}{hnl}{nl.FaseVan}{nl.FaseNaar}] || IH[{_hpf}{_hlos}{nl.FaseVan}]);");
-                    pars[2].Add($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (PAR[{_fcpf}{nl.FaseNaar}] || IH[{_hpf}{_hlos}{nl.FaseVan}]);");
+                    pars[1].Add($"{ts}PAR[{_fcpf}{nl:van}] = PAR[{_fcpf}{nl:van}] && (IH[{_hpf}{hnl}{nl:vannaar}] || IH[{_hpf}{_hlos}{nl:van}]);");
+                    pars[2].Add($"{ts}PAR[{_fcpf}{nl:van}] = PAR[{_fcpf}{nl:van}] && (PAR[{_fcpf}{nl:naar}] || IH[{_hpf}{_hlos}{nl:van}]);");
                 }
             }
 
@@ -813,7 +966,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _schrealgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schrealgs");
             _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
+            _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
+            _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
             _mar = CCOLGeneratorSettingsProvider.Default.GetElementName("mar");
+            _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
 
             return base.SetSettings(settings);
         }

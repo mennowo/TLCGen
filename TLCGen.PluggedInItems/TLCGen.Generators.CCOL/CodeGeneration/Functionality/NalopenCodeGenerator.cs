@@ -64,6 +64,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type, 
                             _tnl, nl.FaseVan, nl.FaseNaar));
                 }
+                if (nl.Type == NaloopTypeEnum.StartGroen)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_hnlsg}{nl.FaseVan}{nl.FaseNaar}",
+                            _hnlsg, nl.FaseVan, nl.FaseNaar));
+                }
+                else if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvgnaloop}{nl.FaseVan}{nl.FaseNaar}",
+                            nl.MaxUitverlengenVolgrichting,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            _tvgnaloop, nl.FaseVan, nl.FaseNaar));
+                }
                 if (nl.DetectieAfhankelijk)
                 {
                     foreach (var nld in nl.Detectoren)
@@ -328,8 +344,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
                                 sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                             {
-                                
-                                if (nl.MaximaleVoorstart.HasValue)
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    var d = nl.Detectoren.First();
+                                    sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl:naar}, {_fcpf}{nl:van}, ({c.GetBoolV()})" +
+                                              $"(SG[{_fcpf}{nl:van}] && A[{_fcpf}{nl:naar}] && IH[{_hpf}{_hnla}{d.Detector}] && IH[{_hpf}{_hnlsg}{nl:vannaar}]));");
+                                }
+                                else if (nl.MaximaleVoorstart.HasValue)
                                 {
                                     sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
                                               $"((T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] || RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
@@ -342,7 +363,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                if (nl.MaximaleVoorstart.HasValue)
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()})(G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                }
+                                else if (nl.MaximaleVoorstart.HasValue)
                                 {
                                     var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
                                         ? tinl

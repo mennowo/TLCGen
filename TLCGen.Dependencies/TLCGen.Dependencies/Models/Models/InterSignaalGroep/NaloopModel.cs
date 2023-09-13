@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public bool InrijdenTijdensGroen { get; set; }
         public bool DetectieAfhankelijk { get; set; }
         public int? MaximaleVoorstart { get; set; }
+        public int MaxUitverlengenVolgrichting { get; set; }
 
         [XmlArrayItem(ElementName = "NaloopDetector")]
         public List<NaloopDetectorModel> Detectoren { get; set; }

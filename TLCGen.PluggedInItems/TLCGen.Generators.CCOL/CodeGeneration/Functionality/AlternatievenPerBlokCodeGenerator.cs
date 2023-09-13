@@ -45,7 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCAlternatieven => new []{40},
+                CCOLCodeTypeEnum.RegCAlternatieven => new []{70},
                 CCOLCodeTypeEnum.PrioCPARCorrecties => new []{30},
                 _ => null
             };
