@@ -71,7 +71,8 @@ namespace TLCGen.ViewModels
         }
 
         public bool InrijdenTijdensGroenPossible => 
-            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc;
+            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc ||
+            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc;
 
         public bool DetectieAfhankelijkPossible
         {
@@ -132,12 +133,25 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool MaximaleVoorstartAllowed => !InrijdenTijdensGroen ||
-                                                TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc;
+        public int MaxUitverlengenVolgrichting
+        {
+            get => _naloop.MaxUitverlengenVolgrichting;
+            set
+            {
+                _naloop.MaxUitverlengenVolgrichting = value;
+                RaisePropertyChanged<object>(nameof(MaxUitverlengenVolgrichting), broadcast: true);
+            }
+        }
 
-        public ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden));
+        public bool CanHaveMaxUitverlengenVolgrichting => 
+            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc;
 
-        public ObservableCollection<NaloopDetectorModel> Detectoren => _detectoren ?? (_detectoren = new ObservableCollection<NaloopDetectorModel>());
+        public bool MaximaleVoorstartAllowed => 
+            !InrijdenTijdensGroen || TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc;
+
+        public ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel> Tijden => _tijden ??= new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden);
+
+        public ObservableCollection<NaloopDetectorModel> Detectoren => _detectoren ??= new ObservableCollection<NaloopDetectorModel>();
 
         public NaloopDetectorModel SelectedDetector
         {

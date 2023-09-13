@@ -9,7 +9,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels" Background="AliceBlue"
              mc:Ignorable="d" MinWidth="200" d:DataContext="{d:DesignInstance viewModels:NaloopViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -30,6 +30,9 @@
             <xctk:WatermarkTextBox 
                         Watermark="NG" IsEnabled="{Binding Path=MaximaleVoorstartAllowed}"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
+            <Label Content="Maximale tijd uitverlengen volgrichting:" />
+            <TextBox IsEnabled="{Binding Path=CanHaveMaxUitverlengenVolgrichting}"
+                        Text="{Binding Path=MaxUitverlengenVolgrichting}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InrijdenTijdensGroenPossible,Converter={StaticResource BooleanToVisibilityConverter}}">
