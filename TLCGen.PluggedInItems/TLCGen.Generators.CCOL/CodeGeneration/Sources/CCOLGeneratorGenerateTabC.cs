@@ -699,8 +699,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (matrix[i, j] >= -1) continue;
                         var k = "FK";
-                        if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
-                        if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
+                        if (controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
+                            if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
+                        }
                         sb.AppendLine($"{ts}{totigmax}[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
                         appendEmptyLine = true;
                     }
