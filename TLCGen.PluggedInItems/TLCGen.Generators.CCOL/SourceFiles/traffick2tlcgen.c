@@ -1,11 +1,23 @@
 /* -------------------------------------------------------------------------------------------------------- */
-/* Traffick2TLCGen                                                               Versie 1.0.0 / 01 jan 2023 */
+/* Traffick2TLCGen                                                               Versie 1.0.1 / 14 sep 2023 */
 /* -------------------------------------------------------------------------------------------------------- */
 
 /* Deze include file bevat hulp functies voor verkeerskundige Traffick functionaliteiten.                   */
 /* Deze functies zijn ontwikkeld en geschreven door Marcel Fick.                                            */
-/* Versie: 1.0                                                                                              */
+/* Versie: 1.0.0                                                                                            */
 /* Datum:  1 januari 2023                                                                                   */
+
+/* Versie: 1.0.1                                                                                            */
+/* Datum:  14 september 2023                                                                                */
+/* Bugfix:                                                                                                  */
+/*         Herstarten ontruimingstijd naar langzaam verkeer bij roodlicht negatie                           */
+/*         Uitstel voetganger bij einde werkingsperiode rateltikker                                         */
+/*         Controle op NG bij uitsturen contacten WTV ivm mogelijke seriele aansturing                      */
+/*         Controle op NG bij aanhouden MVG van richting met voorstart (afhandeling deelconflict)           */
+/*                                                                                                          */
+/* Wijziging:                                                                                               */
+/*         Functie verklik_bewaak_SRM() kan onafhankelijk van het define NO_RIS worden aangeroepen          */
+/*         Display aantal LEDs wtv in US[] en ME[]                                                          */
 
 #include "traffick2tlcgen.h"
 
@@ -251,7 +263,7 @@ void init_traffick2tlcgen(void)       /* Fik230101                              
     kwartier[i]       = 0;            /* kwartier intensiteit                                               */
     Iactueel[i]       = 0;            /* actuele stand meting                                               */
   }
-        
+
   sec_teller          = 0;            /* actuele duur intensiteitsmeting                                    */
   ML_REG_MAX          = 0;            /* bepaal aantal modulen in regeling DVM maatregelen                  */
                                       /* ... en initialiseer PRML_REG[][] en PRML_DVM[][]                   */
@@ -915,7 +927,7 @@ void traffick2tlcgen_kruispunt(void)  /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit detectie_veld_afhandeling().                                            */
 /*                                                                                                          */
-void detector_afhandeling_va_arg(     /* Fik230101                                                          */
+void detector_afhandeling_va_arg(     /* Fik230726                                                          */
   count fc,                           /* FC   fasecyclus                                                    */
   count km, ...)                      /* TM   koplus maximum                                                */
 {
@@ -935,19 +947,19 @@ void detector_afhandeling_va_arg(     /* Fik230101                              
   boolv AllemaalDefect       = TRUE;  /* alle koplussen en de 1e lange lus zijn defect                      */
   boolv EenDrukknopDefect    = FALSE; /* er is tenminste een drukknop defect                                */
   boolv EersteLangeLusDefect = FALSE; /* eerste lange lus is defect                                         */
-  boolv VerwegLusDefect      = FALSE; /* er is een defecte lange lus                                        */
+  boolv VerwegLusDefect      = FALSE; /* er is een defecte verweg lus                                       */
   boolv AlleVerwegLusDefect  = TRUE;  /* alle verweg lussen (behalve de eerste) zijn defect                 */
 
   va_start(argpt, km);                /* start variabele argumenten lijst                                   */
                                       /* en maak een copy van de argumenten lijst voor MVT fasecycli        */
-  if (US_type[fc]&MVT_type) va_copy(argpt2, argpt); 
+  if (US_type[fc]&MVT_type) va_copy(argpt2, argpt);
 
   do                                  /* lees detector lijst en bepaal detectie storingen */
   {
     fc_detector = va_arg(argpt, va_mulv);
     if (fc_detector >= 0)
-    { 
-      fc_hiaat_st = va_arg(argpt, va_mulv); 
+    {
+      fc_hiaat_st = va_arg(argpt, va_mulv);
 
       if (IS_type[fc_detector] == DK_type)
       {
@@ -985,7 +997,7 @@ void detector_afhandeling_va_arg(     /* Fik230101                              
 
       if ((IS_type[fc_detector] == DVER_type) && (TDH_max[fc_detector] >= 0))
       {
-        if ((AantalVerwegLus == 0) &&  DF[fc_detector]) VerwegLusDefect     = TRUE;
+        if (                           DF[fc_detector]) VerwegLusDefect     = TRUE;
         if ((AantalVerwegLus >  0) && !DF[fc_detector]) AlleVerwegLusDefect = FALSE;
         AantalVerwegLus++;
       }
@@ -1036,15 +1048,16 @@ void detector_afhandeling_va_arg(     /* Fik230101                              
 
   if (US_type[fc]&MVT_type)           /* bepaal welke detector met hiaat voor detectie storing verlengen */
   {                                   /* ... dit geldt alleen voor MVT fasecycli */
-    boolv VerwegLusGevonden = FALSE; 
-    do 
+    boolv VerwegLusGevonden    = FALSE;
+    boolv VerwegDefectGevonden = FALSE;
+    do
     {
       fc_detector = va_arg(argpt2, va_mulv);
-      if (fc_detector >= 0) 
+      if (fc_detector >= 0)
       {
         fc_hiaat_st = va_arg(argpt2, va_mulv);
 
-        if ((IS_type[fc_detector] == DKOP_type) && (TDH_max[fc_detector] >= 0) && !DF[fc_detector]) 
+        if ((IS_type[fc_detector] == DKOP_type) && (TDH_max[fc_detector] >= 0) && !DF[fc_detector])
         {
           if (EersteLangeLusDefect && (fc_hiaat_st > NG))
           {
@@ -1052,10 +1065,10 @@ void detector_afhandeling_va_arg(     /* Fik230101                              
           }
         }
 
-        if ((IS_type[fc_detector] == DVER_type) && (TDH_max[fc_detector] >= 0)) 
+        if ((IS_type[fc_detector] == DVER_type) && (TDH_max[fc_detector] >= 0))
         {
           if ((AantalVerwegLus > 1) && (!VerwegLusGevonden && AlleVerwegLusDefect ||
-                                         VerwegLusGevonden && VerwegLusDefect))
+                                         VerwegDefectGevonden && VerwegLusDefect))
           {
             if ((fc_hiaat_st > NG) && !DF[fc_detector])
             {
@@ -1063,6 +1076,7 @@ void detector_afhandeling_va_arg(     /* Fik230101                              
             }
           }
           VerwegLusGevonden = TRUE;
+          if (DF[fc_detector]) VerwegDefectGevonden = TRUE;
         }
 
         if (FC_DVM[fc])               /* verhoogde hiaattijden tijdens bevordering door DVM */
@@ -1157,7 +1171,7 @@ void traffick2tlcgen_detectie(void)   /* Fik230101                              
       if (SD[i] && (Iactueel[i] < 10000)) Iactueel[i]++;
     }
 
-    if ((sec_teller >= 900) || (Iactueel[i] > kwartier[i])) 
+    if ((sec_teller >= 900) || (Iactueel[i] > kwartier[i]))
     {
       kwartier[i] = Iactueel[i];      /* buffer kwartier intensiteit */
     }
@@ -1480,7 +1494,7 @@ void reset_wachtstand_aanvraag(void)  /* Fik230101                              
 
   for (fc = 0; fc < FCMAX; ++fc)
   {
-    if (!G[fc]) 
+    if (!G[fc])
     {
       A[fc]  &= ~BIT2;
       WGR[fc] = FALSE;
@@ -1527,7 +1541,7 @@ void hki_wachtstand_aanvraag(void)    /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
 /*                                                                                                          */
-void koppel_aanvragen(void)           /* Fik230101                                                          */
+void koppel_aanvragen(void)           /* Fik230701                                                          */
 {
   count i;
 
@@ -1558,6 +1572,9 @@ void koppel_aanvragen(void)           /* Fik230101                              
     count status21 = vtg_tgo[i].status21; /* status koppeling fc2 -> fc1 */
 
     if (((!G[fc1] && A[fc1] || SG[fc1]) && IH[hnla12] || G[fc1] && (status12 == 1)) && R[fc2]) A[fc2] |= BIT4;
+
+    /* bugfix Fik230701 - koppelaanvraag bij gescheiden oversteek is in twee richtingen */
+    if (((!G[fc2] && A[fc2] || SG[fc2]) && IH[hnla21] || G[fc2] && (status21 == 1)) && R[fc1]) A[fc1] |= BIT4;
   }
 }
 
@@ -1675,7 +1692,7 @@ void bijwerken_peloton_ingreep(void)  /* Fik230101                              
     boolv doorschuiven = FALSE;       /* doorschuiven koppel buffers */
 
     if (TE)                           /* bijwerken duur aanwezigheid koppelsignalen */
-    { 
+    {
       if (aanw_kop1 > NG) aanw_kop1 += TE;
       if (aanw_kop2 > NG) aanw_kop2 += TE;
       if (aanw_kop3 > NG) aanw_kop3 += TE;
@@ -1761,7 +1778,7 @@ void bijwerken_peloton_ingreep(void)  /* Fik230101                              
           }
           if (aanw_kop1 > duur_kop1)
           {
-            if (duur_kop1 < T_max[vast_vert]) 
+            if (duur_kop1 < T_max[vast_vert])
             {
               max_duur = T_max[vast_vert] + T_max[duur_vast] - aanw_kop1;
             }
@@ -2434,7 +2451,7 @@ void BepaalTEG(void)                  /* Fik230101                              
     count fc2  = dcf_vst[i].fc2;      /* richting die voorstart krijgt */
     count mv21 = dcf_vst[i].mv21;     /* meeverlengen  van fc2 met fc1 */
 
-    if (G[fc1] && G[fc2] && SCH[mv21])
+    if (G[fc1] && G[fc2] && (mv21 != NG) && SCH[mv21])
     {
       if (TEG[fc2] < TEG[fc1]) TEG[fc2] = TEG[fc1];
     }
@@ -2452,9 +2469,15 @@ void BepaalTEG(void)                  /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit RealTraffick().                                                         */
 /*                                                                                                          */
-void BepaalExtraOntruim(void)         /* Fik230101                                                          */
+void BepaalExtraOntruim(void)         /* Fik230726                                                          */
 {
   count fc,i,j,k;
+
+  for (fc = 0; fc < FCMAX; ++fc)      /* bugfix herstart ontruimingstijden, Fik230726                       */
+  {
+    if (ExtraOntruim[fc] > TE) ExtraOntruim[fc] -= TE;
+    else                       ExtraOntruim[fc]  =  0;
+  }
 
   for (fc = 0; fc < FCMAX; ++fc)
   {
@@ -2590,7 +2613,7 @@ void BepaalMTG(void)                  /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit BepaalRealisatieTijden_Add().                                           */
 /*                                                                                                          */
-void RealTraffick(void)               /* Fik230101                                                          */
+void RealTraffick(void)               /* Fik230726                                                          */
 {
   count i,k;
   boolv fc_eerst[FCMAX];              /* richting is als eerstvolgende aan de beurt */
@@ -2609,8 +2632,8 @@ void RealTraffick(void)               /* Fik230101                              
   }
 
   for (i = 0; i < FCMAX; ++i)         /* bepaal welke richtingen als eerst volgende aan de beurt zijn */
-  {
-    fc_eerst[i] = R[i] && A[i] && AAPR[i] && (!(RR[i]&BIT6) && !(RR[i]&BIT10) || !conflict_prio_real(i)) || RA[i];
+  {                                   /* bugfix && !fkrap(i) toegevoegd, Fik230726                    */
+    fc_eerst[i] = R[i] && A[i] && AAPR[i] && !fkrap(i) && (!(RR[i]&BIT6) && !(RR[i]&BIT10) || !conflict_prio_real(i)) || RA[i];
   }
 
   for (i = 0; i < aantal_hki_kop; ++i)
@@ -2970,7 +2993,7 @@ void Traffick2TLCgen_NAL(void)        /* Fik230101                              
 /* Functie wordt aangeroepen vanuit BepaalAltRuimte().                                                      */
 /*                                                                                                          */
 #ifdef PRIO_ADDFILE
-void RealTraffickPrioriteit(void)     /* Fik230101                                                          */
+void RealTraffickPrioriteit(void)     /* Fik230830                                                          */
 {
   count i,j,k,prio;
 
@@ -3002,6 +3025,8 @@ void RealTraffickPrioriteit(void)     /* Fik230101                              
             if (REALtraffick[fc] == NG) AAPRprio[fc] = TRUE;
 
             REALtraffick[fc] = (mulv)iStartGroen[prio];
+            if (MTG[fc] > REALtraffick[fc]) REALtraffick[fc] = MTG[fc]; /* toegevoegd Fik230830 */
+
             for (j = 0; j < GKFC_MAX[fc]; ++j)
             {
               k = KF_pointer[fc][j];
@@ -3103,13 +3128,13 @@ void bepaal_maximum_groen_traffick(void) /* Fik230101                           
 
         if (DVM_max[fc].dvm_set[DVM_prog - 1] != NG)
         {
-          if (PRM[DVM_max[fc].dvm_set[DVM_prog - 1]] == 0) 
+          if (PRM[DVM_max[fc].dvm_set[DVM_prog - 1]] == 0)
           {
             TVG_max[fc] = TVG_klok;   /* instelling "0" betekent aanhouden TVG_max[] volgens de klok */
           }
           else
           {
-            if (max_verleng_groen)    /* instelling is voor maximum verlenggroen */     
+            if (max_verleng_groen)    /* instelling is voor maximum verlenggroen */
             {
               TVG_max[fc] = PRM[DVM_max[fc].dvm_set[DVM_prog - 1]];
             }
@@ -3143,13 +3168,13 @@ void bepaal_maximum_groen_traffick(void) /* Fik230101                           
 
           if (FILE_max[fc].file_set[FILE_set - 1] != NG)
           {
-            if (PRM[FILE_max[fc].file_set[FILE_set - 1]] == 0) 
+            if (PRM[FILE_max[fc].file_set[FILE_set - 1]] == 0)
             {
               TVG_max[fc] = TVG_klok; /* instelling "0" betekent aanhouden TVG_max[] volgens de klok */
             }
             else
             {
-              if (max_verleng_groen)  /* instelling is voor maximum verlenggroen */     
+              if (max_verleng_groen)  /* instelling is voor maximum verlenggroen */
               {
                 TVG_max[fc] = PRM[FILE_max[fc].file_set[FILE_set - 1]];
               }
@@ -3336,7 +3361,7 @@ void peloton_ingreep_wachtgroen(void) /* Fik230101                              
       }
     }
     else RW[kop_fc] &= ~BIT12;
-                                            
+
     if ((hnaloop_1 != NG) && (tnaloop_1 != NG))   /* is er een 1e naloop lus ? */
     {
       boolv naloop_lus_actief = FALSE;
@@ -3605,7 +3630,7 @@ void peloton_ingreep_verlengen(void) /* Fik230101                               
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Meeverlengen_Add().                                                     */
 /*                                                                                                          */
-void Traffick2TLCgen_MVG(void)        /* Fik230101                                                          */
+void Traffick2TLCgen_MVG(void)        /* Fik230901                                                          */
 {
   count i,k;
 
@@ -3618,7 +3643,7 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
   for (i = 0; i < FCMAX; ++i)         /* bepaal toestemming aanhouden veiligheidsgroen */
   {
     if (!G[i]) VG_mag[i] = FALSE;
-    else 
+    else
     {
       if (!MK[i]) VG_mag[i] = TRUE;   /* alleen toestemming indien tijdens de groenfase hiaat is gemeten */
     }                                 /* ... geen toestemming ? dan reset veiligheidsgroenbit (YM[]BIT2) */
@@ -3764,9 +3789,9 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
         mulv ontruim = GK_conflict(i,k);
         if (ontruim > NG)
         {
-          if (fc_eerst[k])            /* conflict gevonden die aan de beurt is */
-          {
-            if (REALtraffick[k] <= ontruim) ym_reset[i] = TRUE;
+          if (fc_eerst[k])            /* conflict gevonden die aan de beurt is       */
+          {                           /* (REALtraffick[k] > NG) toegevoegd Fik230901 */
+            if ((REALtraffick[k] > NG) && (REALtraffick[k] <= ontruim)) ym_reset[i] = TRUE;
           }
         }
       }
@@ -3794,8 +3819,8 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
           if (ontruim > NG)
           {
             if (MG[k])                /* conflict volgrichting gevonden die in MG[] staat */
-            {
-              if ((REALtraffick[fc2] <= ontruim) || BMC[fc2] && RA[fc1] && !tkcv(fc1)) ym_reset[k] = TRUE;
+            {                         /* (REALtraffick[fc2] > NG) toegevoegd Fik230901    */
+              if ((REALtraffick[fc2] > NG) && (REALtraffick[fc2] <= ontruim) || BMC[fc2] && RA[fc1] && !tkcv(fc1)) ym_reset[k] = TRUE;
             }
           }
         }
@@ -3818,8 +3843,8 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
           if (ontruim > NG)
           {
             if (fc_eerst[k])          /* conflict volgrichting gevonden die aan de beurt is */
-            {
-              if (REALtraffick[k] <= ontruim + naloop_tijd) ym_reset[fc1] = TRUE;
+            {                         /* (REALtraffick[k] > NG) toegevoegd Fik230901        */
+              if ( (REALtraffick[k] > NG) && (REALtraffick[k] <= ontruim + naloop_tijd)) ym_reset[fc1] = TRUE;
             }
           }
           if (ym_reset[fc1]) break;
@@ -3834,7 +3859,7 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
     count fc2  = dcf_vst[i].fc2;      /* richting die voorstart krijgt */
     count mv21 = dcf_vst[i].mv21;     /* meeverlengen  van fc2 met fc1 */
 
-    if (MG[fc1] && MG[fc2] && SCH[mv21] && ym_reset[fc2]) ym_reset[fc1] = TRUE;
+    if (MG[fc1] && MG[fc2] && (mv21 != NG) && SCH[mv21] && ym_reset[fc2]) ym_reset[fc1] = TRUE;
   }
 
   for (i = 0; i < FCMAX; ++i)         /* reset YM BIT4 */
@@ -3890,7 +3915,7 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
     count fc2  = dcf_vst[i].fc2;      /* richting die voorstart krijgt */
     count mv21 = dcf_vst[i].mv21;     /* meeverlengen van fc2 met fc1  */
 
-    if (RA[fc1] || G[fc1] && SCH[mv21] && !DOSEER[fc2]) YM[fc2] |= BIT4;
+    if (RA[fc1] || G[fc1] && (mv21 != NG) && SCH[mv21] && !DOSEER[fc2]) YM[fc2] |= BIT4;
   }
 
   for (i = 0; i < aantal_pel_kop; ++i)
@@ -3923,7 +3948,7 @@ void Traffick2TLCgen_MVG(void)        /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Synchronisaties_Add().                                                  */
 /*                                                                                                          */
-void Traffick2TLCgen_uitstel(void)    /* Fik230101                                                          */
+void Traffick2TLCgen_uitstel(void)    /* Fik230830                                                          */
 {
   count i;
   mulv  aantal_x3     = 0;            /* bepalen van uitstel is een iteratief proces */
@@ -3934,7 +3959,8 @@ void Traffick2TLCgen_uitstel(void)    /* Fik230101                              
     P[i]  &= ~BIT3;                   /* reset P, X en RR bit synchronisatie */
     X[i]  &= ~BIT3;
     RR[i] &= ~BIT3;
-    if (RA[i] && (Aled[i] > 0)) P[i] |= BIT3;
+    if (RA[i] && (ExtraOntruim[i] > 0)) X[i] |= BIT3; /* toegevoegd Fik230830 */
+    if (RA[i] && (Aled[i] > 0)        ) P[i] |= BIT3;
   }
 
   while (aantal_x3 > aantal_x3_old)
@@ -4157,7 +4183,7 @@ void Traffick2TLCgen_PFPR(void)       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Alternatief_Add().                                                      */
 /*                                                                                                          */
-void Traffick2TLCgen_PAR(void)        /* Fik230101                                                          */
+void Traffick2TLCgen_PAR(void)        /* Fik230701                                                          */
 {
   count i;
 
@@ -4289,6 +4315,14 @@ void Traffick2TLCgen_PAR(void)        /* Fik230101                              
 
     if (RA[fc1] && P[fc1] && IH[hnla12]) PAR[fc2] = TRUE;                            /* volgrichting moet altijd mee realiseren */
     if (RA[fc2] && P[fc2] && IH[hnla21]) PAR[fc1] = TRUE;
+
+    if (!IH[hnla12] && !IH[hnla21])   /* toevoeging Fik230701 - beide voetgangers aangevraagd dan altijd samen realiseren       */
+    {
+      if (R[fc1] && A[fc1] && R[fc2] && A[fc2])
+      {
+        if (!PAR[fc1] ||  !PAR[fc2]) PAR[fc1] = PAR[fc2] = FALSE;
+      }
+    }
   }
 
   for (i = 0; i < aantal_dcf_vst; ++i)
@@ -4721,7 +4755,7 @@ void Traffick2TLCgen_REA(void)        /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit FileVerwerking_Add().                                                   */
 /*                                                                                                          */
-void traffick_file_nass_reset(void)   /* Fik230101                                                          */
+void traffick_file_nass_reset(void)   /* Fik230701                                                          */
 {
   count fc;
 
@@ -4730,6 +4764,7 @@ void traffick_file_nass_reset(void)   /* Fik230101                              
     X[fc]     &= ~BIT5;
     Z[fc]     &= ~BIT5;
     BL[fc]    &= ~BIT5;
+    RR[fc]    &= ~BIT12;              /* RR[] toegevoegd 12-05-2023 Jol                                     */
     DOSEER[fc] = FALSE;
     DOSMAX[fc] = NG;
     DOS_RD[fc] = 0;
@@ -4744,7 +4779,8 @@ void traffick_file_nass_reset(void)   /* Fik230101                              
 /* verschillende criteria namelijk een percentage van de maximum(verleng)groenduur of een absoluut maximum. */
 /* De laagste waarde wordt automatisch maatgevend. Indien file stroomafwaarts ontstaat tijdens de groenfase */
 /* geldt een aparte ondergrens als minimum voor de maximum groenduur. (= specifiek voor die 1e groenfase)   */
-void traffick_file_nass(              /* Fik230101                                                          */
+/*                                                                                                          */
+void traffick_file_nass(              /* Fik230701                                                          */
 count fc,                             /* FC  fasecyclus                                                     */
 count h_file,                         /* HE  file stroomafwaarts aanwezig                                   */
 count h_afkap_start,                  /* HE  file stroomafwaarts is tijdens groen ontstaan                  */
@@ -4768,8 +4804,8 @@ count t_min_rood)                     /* T   minimum roodduur  tijdens file stro
     {
       doseer_maximum = T_max[t_max_groen];
     }
-    
-    if (sch_perc_gr == -2) toepassen_doseer_maximum = TRUE;
+
+    if (sch_perc_gr == -2) toepassen_doseer_maximum = TRUE; /* ALTIJD = -2 */
     else
     {
       if ((sch_perc_gr != NG) && SCH[sch_perc_gr]) toepassen_doseer_maximum = TRUE;
@@ -4808,7 +4844,7 @@ count t_min_rood)                     /* T   minimum roodduur  tijdens file stro
       }
     }
 
-    if (doseer_maximum > NG) 
+    if (doseer_maximum > NG)
     {
        if (G[fc] && (TG_timer[fc] >= doseer_maximum)) MK[fc] = FALSE;
        if ((DOSMAX[fc] == NG) || (DOSMAX[fc] >= doseer_maximum)) DOSMAX[fc] = doseer_maximum;
@@ -4817,10 +4853,14 @@ count t_min_rood)                     /* T   minimum roodduur  tijdens file stro
     if (t_min_rood > NG)
     {
       if (T_max[t_min_rood] == 999) BL[fc] |= BIT5;    /* instelling 999 betekent blokkeren                 */
-      else
+      else                                             /* bugfix bepaal DOS_RD[] en RR[] toegevoegd         */
       {
-        if (R[fc] && (TR_timer[fc] < T_max[t_min_rood])) X[fc] |= BIT5;
-        if (T_max[t_min_rood] > DOS_RD[fc]) DOS_RD[fc] = T_max[t_min_rood];
+        if (R[fc] && (TR_timer[fc] < T_max[t_min_rood]))
+        {
+          X[fc]  |= BIT5;
+          RR[fc] |= BIT12;
+          if ((T_max[t_min_rood] - TR_timer[fc]) > DOS_RD[fc]) DOS_RD[fc] = T_max[t_min_rood] - TR_timer[fc];
+        }
       }
     }
   }
@@ -4834,7 +4874,6 @@ count t_min_rood)                     /* T   minimum roodduur  tijdens file stro
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit DetectieStoring_Add().                                                  */
 /*                                                                                                          */
-#ifdef TRAFFICK_ADD
 void traffick_detectie_storing(       /* Fik230101                                                          */
 count fc,                             /* FC  fasecyclus                                                     */
 count tvertraag,                      /* TM  tijdvertraging aanvraag                                        */
@@ -4856,7 +4895,7 @@ if (SCH[schconfidence15fix] && R[fc] && (P[fc]&BIT11)) reset_a = FALSE;
 
   if (R[fc] && A_DST[fc] && (tvertraag != NG))
   {
-    if (tvertraag == ALTIJD) A[fc] |= BIT11;
+    if (tvertraag == -2) A[fc] |= BIT11; /* ALTIJD = -2 */
     else
     {
       if ((T_max[tvertraag] > 0) && (TR_timer[fc] >= T_max[tvertraag])) A[fc] |= BIT11;
@@ -4870,7 +4909,7 @@ if (SCH[schconfidence15fix] && R[fc] && (P[fc]&BIT11)) reset_a = FALSE;
 
     if (perc_groen > 100) perc_groen = 100;
 
-    if (max_verleng_groen) 
+    if (max_verleng_groen)
     {
       star_groen =     TFG_max[fc] + (((TVG_max[fc]  * 10) / 100) * perc_groen) / 10;
     }
@@ -4893,7 +4932,6 @@ if (SCH[schconfidence15fix] && R[fc] && (P[fc]&BIT11)) reset_a = FALSE;
   }
 
 }
-#endif
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -5033,7 +5071,7 @@ count us_telaat)                      /* US 1e bus is te laat                   
 void test_us_signalen(void)           /* Fik230101                                                          */
 {
 #ifdef prmtestus
-  if (PRM[prmtestus] != 0) 
+  if (PRM[prmtestus] != 0)
   {
     if ((PRM[prmtestus] >= FCMAX) &&  (PRM[prmtestus] < USMAX))
     {
@@ -5114,7 +5152,7 @@ count fc)                             /* FC fasecyclus                          
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void aansturing_wt_voorspeller(       /* Fik230101                                                          */
+void aansturing_wt_voorspeller(       /* Fik230901                                                          */
 count fc,                             /* FC  fasecyclus                                                     */
 count us0,                            /* US  wachttijd voorspeller - BIT0                                   */
 count us1,                            /* US  wachttijd voorspeller - BIT1                                   */
@@ -5234,26 +5272,27 @@ count mealed_uit)                     /* ME  aantal leds dat uitgestuurd wordt  
 
   if (knipper && (CIF_KLOK[CIF_TSEC_TELLER]%10 > 4) && (Aled[fc] > 1)) aantal_leds--;
 
-  if (mealed_uit != NG)      MM[mealed_uit] = Aled[fc];     /* memory element TLCGen correct invullen       */
-  if (usaled_uit != NG) CIF_GUS[usaled_uit] = Aled[fc];     /* display aantal leds dat uitgestuurd wordt    */
+  /* Aanpassing uitsturing aantal LEDs US[] en ME[] 12-05-2023 Jol */
+  if (mealed_uit != NG)      MM[mealed_uit] = aantal_leds;  /* memory element TLCGen correct invullen       */
+  if (usaled_uit != NG) CIF_GUS[usaled_uit] = aantal_leds;  /* display aantal leds dat uitgestuurd wordt    */
 
   if (REG)
   {
-    CIF_GUS[us4] = (boolv)((aantal_leds&BIT4) > 0);
-    CIF_GUS[us3] = (boolv)((aantal_leds&BIT3) > 0);
-    CIF_GUS[us2] = (boolv)((aantal_leds&BIT2) > 0);
-    CIF_GUS[us1] = (boolv)((aantal_leds&BIT1) > 0);
-    CIF_GUS[us0] = (boolv)((aantal_leds&BIT0) > 0);
+    if (us0   != NG) CIF_GUS[us0]   = (boolv)((aantal_leds&BIT0) > 0);
+    if (us1   != NG) CIF_GUS[us1]   = (boolv)((aantal_leds&BIT1) > 0);
+    if (us2   != NG) CIF_GUS[us2]   = (boolv)((aantal_leds&BIT2) > 0);
+    if (us3   != NG) CIF_GUS[us3]   = (boolv)((aantal_leds&BIT3) > 0);
+    if (us4   != NG) CIF_GUS[us4]   = (boolv)((aantal_leds&BIT4) > 0);
     if (usbus != NG) CIF_GUS[usbus] = (Aled[fc] > 0) && bus_sjb;
   }
   else
   {
-    CIF_GUS[us4] = FALSE;
-    CIF_GUS[us3] = FALSE;
-    CIF_GUS[us2] = FALSE;
-    CIF_GUS[us1] = FALSE;
-    CIF_GUS[us0] = FALSE;
-    if (usbus != NG) CIF_GUS[usbus]= FALSE;
+    if (us0   != NG) CIF_GUS[us0]   = FALSE;
+    if (us1   != NG) CIF_GUS[us1]   = FALSE;
+    if (us2   != NG) CIF_GUS[us2]   = FALSE;
+    if (us3   != NG) CIF_GUS[us3]   = FALSE;
+    if (us4   != NG) CIF_GUS[us4]   = FALSE;
+    if (usbus != NG) CIF_GUS[usbus] = FALSE;
   }
 }
 
@@ -5319,7 +5358,7 @@ void aansturing_aftellers(void)       /* Fik230101                              
         if ((teller_waarde == 0) && (act_duur >= PRM[tel_duur]))
         {
           X[fc] = Waft[fc] = FALSE;       /* einde uitstel - richting moet naar groen */
-          if (K[fc]) 
+          if (K[fc])
           {
             teller_waarde = Waft[fc] = 1; /* corrigeer teller_waarde als er nog een ontruimingstijd loopt */
           }
@@ -5388,7 +5427,7 @@ void aansturing_aftellers(void)       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void rateltikker_applicatie(          /* Fik230101                                                          */
+void rateltikker_applicatie(          /* Fik23914                                                          */
 count fc,                             /* FC    fasecyclus                                                   */
 count hedrk1,                         /* HE    drukknop 1                                                   */
 count hedrk2,                         /* HE    drukknop 2                                                   */
@@ -5422,8 +5461,8 @@ mulv  ratel_werking)                  /* mulv  werkingsparmeter rateltikkers    
 
   if (!accross)
   {
-    if (R[fc] && !continu && !aanvraag && CIF_GUS[usrat]   ) X[fc]  |= BIT7;
-    if (R[fc] && !continu && !T[natik] && RAT[fc] && !A[fc]) RAT[fc] = FALSE;
+    if (R[fc] && !continu && !aanvraag && (RAT[fc] || T[natik] || ET[natik])) X[fc] |= BIT7;
+    if (R[fc] && !continu && !T[natik] &&  RAT[fc] && !A[fc]) RAT[fc] = FALSE;
 
     RT[natik] = (G[fc] || GL[fc]) && RAT[fc];
     AT[natik] = R[fc] && !TRG[fc] && !continu && !aanvraag;
@@ -5472,8 +5511,11 @@ mulv  ratel_werking)                  /* mulv  werkingsparmeter rateltikkers    
       if (SG[fc2] && G[fc1] && IH[hnla21] || SG[fc1] && (status21 == 1) ||
           accross && G[fc2] && (TG_timer[fc2] <= 10) && (status21 == 2))
       {
-        RAT[fc1] = RAT_test[fc1] = TRUE;
-        if (REG) CIF_GUS[usrat]  = TRUE;
+        if (RAT_test[fc2])
+        {
+          RAT[fc1] = RAT_test[fc1] = TRUE;
+          if (REG) CIF_GUS[usrat]  = TRUE;
+        }
       }
     }
 
@@ -5482,8 +5524,11 @@ mulv  ratel_werking)                  /* mulv  werkingsparmeter rateltikkers    
       if (SG[fc1] && G[fc2] && IH[hnla12] || SG[fc2] && (status12 == 1) ||
           accross && G[fc1] && (TG_timer[fc1] <= 10) && (status12 == 2))
       {
-        RAT[fc2] = RAT_test[fc2] = TRUE;
-        if (REG) CIF_GUS[usrat]  = TRUE;
+        if (RAT_test[fc1])
+        {
+          RAT[fc2] = RAT_test[fc2] = TRUE;
+          if (REG) CIF_GUS[usrat]  = TRUE;
+        }
       }
     }
   }
@@ -5602,9 +5647,8 @@ void verklik_prio_KAR_SRM(void)       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-#ifndef NO_RIS
 #ifdef PRIO_ADDFILE
-void verklik_bewaak_SRM(              /* Fik230101                                                          */
+void verklik_bewaak_SRM(              /* Fik230830                                                          */
 count us_srm,                         /* US   verklik SRM bericht ontvangen                                 */
 mulv  duur_verklik_srm,               /* mulv duur verklik SRM bericht ontvangen in tienden van seconden    */
 count us_srm_og,                      /* US   verklik SRM ondergedrag                                       */
@@ -5613,13 +5657,18 @@ mulv  srm_og)                         /* mulv duur ondergedrag SRM in minuten   
   if (verklik_srm > 0) verklik_srm -= TE;
   if (verklik_srm < 0) verklik_srm  = 0;
 
-  if (TS && (CIF_KLOK[CIF_SECONDE] == 0) && (duur_verklik_srm < 32000)) duur_geen_srm++;
+  if (TS && (CIF_KLOK[CIF_SECONDE] == 0) && (duur_geen_srm < 32000)) duur_geen_srm++;
 
-  if (RIS_NEW_PRIOREQUEST_AP_NUMBER)  /* test of er een SRM-bericht is ontvangen */  
+#ifndef NO_RIS
+  if (RIS_NEW_PRIOREQUEST_AP_NUMBER)  /* test of er een SRM-bericht is ontvangen */
   {
     verklik_srm   = duur_verklik_srm;
     duur_geen_srm = 0;
   }
+#else                                 /* voorkom warning compiler */
+ verklik_srm = duur_verklik_srm;
+ verklik_srm = 0;
+#endif
 
   if (us_srm > NG)
   {
@@ -5632,18 +5681,17 @@ mulv  srm_og)                         /* mulv duur ondergedrag SRM in minuten   
   }
 }
 #endif
-#endif
 
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie verklik fiets voorrang module                                                                    */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Deze functie verzorgt de verklikking van de fiets voorrang module. Het led knippert tijdens rood indien  */
-/* een prioriteitsaanvraag aanwezig is en brandt vervolgens vast tot einde vastgroen van de fietsrichting.  */
+/* een prioriteitsaanvraag aanwezig is en brandt vervolgens vast zolang de fietsrichting verlengt.          */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void verklik_fiets_voorrang(void)     /* Fik230101                                                          */
+void verklik_fiets_voorrang(void)     /* Fik230901                                                          */
 {
   count i;
 
@@ -5655,7 +5703,7 @@ void verklik_fiets_voorrang(void)     /* Fik230101                              
 
     if (verklik > NG)
     {
-      CIF_GUS[verklik] = REG && (CIF_GUS[verklik] && (VS[fc] || FG[fc]) || prio_av && (R[fc] && KNIP || SG[fc]));
+      CIF_GUS[verklik] = REG && prio_av && (R[fc] && KNIP || G[fc]);
     }
   }
 }
@@ -5731,7 +5779,7 @@ void buffer_stiptheid_info(void)      /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit InUitMelden_Add().                                                      */
 /*                                                                                                          */
-void fiets_voorrang_module(void)      /* Fik230101                                                          */
+void fiets_voorrang_module(void)      /* Fik230901                                                          */
 {
   count i;
 
@@ -5753,7 +5801,7 @@ void fiets_voorrang_module(void)      /* Fik230101                              
         IH[inmeld] = TRUE;
         prio_av    = TRUE;
       }
-      if (prio_av && (G[fc] && !SG[fc] || R[fc] && !prio_vw))
+      if (prio_av && (G[fc] && !VS[fc] && !FG[fc] && (!MK[fc] || (TG_timer[fc] >= TFG_max[fc] + TVG_max[fc]) || MG[fc]) || R[fc] && !prio_vw))
       {
         IH[uitmeld] = TRUE;
         prio_av     = FALSE;
@@ -5836,10 +5884,13 @@ mulv  min_rood)                       /* mulv minimale roodtijd (TE) voor priori
 /* busbanen prioriteitsrealisaties toegekend. Richtingen die door DVM of FILE bevorderd worden mogen altijd */
 /* terugkomen na afbreken.                                                                                  */
 /*                                                                                                          */
+/* De groenbewaking van fietsers met fietsvoorrang module wordt uitgeschakeld zodat bij prioriteit de       */
+/* groenfase ook altijd kan worden verlengt. Uitmelding vindt plaats in de functie fiets_voorrang_module(). */
+/*                                                                                                          */
 /* Functie wordt aangeroepen vanuit PrioInstellingen_Add().                                                 */
 /*                                                                                                          */
 #ifdef PRIO_ADDFILE
-void corrigeer_terugkomen_traffick(void) /* Fik230101                                                       */
+void corrigeer_terugkomen_traffick(void) /* Fik230901                                                       */
 {
   count fc;
 
@@ -5857,6 +5908,17 @@ void corrigeer_terugkomen_traffick(void) /* Fik230101                           
       for (fc = 0; fc < FCMAX; ++fc)
       {
         if (FC_FILE[fc]) iInstPercMaxGroenTijdTerugKomen[fc] = 100;
+      }
+    }
+  }
+
+  for (fc = 0; fc < FCMAX; ++fc)
+  {
+    if (prio_index[fc].FTS != NG)
+    {
+      if (iGroenBewakingsTijd[prio_index[fc].FTS] == 0)
+      {
+        iGroenBewakingsTijd[prio_index[fc].FTS] = TFG_max[fc] + TVG_max[fc];
       }
     }
   }
@@ -6139,13 +6201,13 @@ void Traffick2TLCgen_FIETS(void)      /* Fik230101                              
 
     count prio_fts_index = prio_index[fc].FTS;
 
-    if (prio_av && prio_fts_index != NG)
+    if (prio_av && (prio_fts_index != NG))
     {
       if ((prio_fts != NG) && (!REGEN || (prio_reg == NG)))
       {
         iInstPrioriteitsOpties[prio_fts_index] = BepaalPrioriteitsOpties(prio_fts);
       }
-      if ((prio_reg != NG) && (REGEN || (prio_fts == NG)))
+      if ((prio_reg != NG) && ( REGEN || (prio_fts == NG)))
       {
         iInstPrioriteitsOpties[prio_fts_index] = BepaalPrioriteitsOpties(prio_reg);
       }
@@ -6182,13 +6244,13 @@ count prmtelaat)                      /* PRM prioriteitsopties voor bus te laat 
 
   if ((prio_index[fc].OV_kar > NG) && (OV_stipt[fc] > 0))
   {
-    if ((prmtevroeg > NG) && (OV_stipt[fc]&BIT0)) 
+    if ((prmtevroeg > NG) && (OV_stipt[fc]&BIT0))
     {
       if ((PRM[prmtevroeg]/1000L) > OV_prioriteitsniveau) OV_prioriteitsniveau = PRM[prmtevroeg]/1000L;
       OV_opties_tevroeg = BepaalPrioriteitsOpties(prmtevroeg);
     }
 
-    if ((prmoptijd  > NG) && (OV_stipt[fc]&BIT1)) 
+    if ((prmoptijd  > NG) && (OV_stipt[fc]&BIT1))
     {
       if ((PRM[prmoptijd]/1000L) > OV_prioriteitsniveau) OV_prioriteitsniveau = PRM[prmoptijd]/1000L;
       OV_opties_optijd = BepaalPrioriteitsOpties(prmoptijd);

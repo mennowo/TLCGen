@@ -46,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#pragma comment(lib, \"plfunc.lib\")");
                 sb.AppendLine($"{ts}{ts}#pragma comment(lib, \"plefunc.lib\")");
                 sb.AppendLine($"{ts}{ts}#pragma comment(lib, \"tx_synch.lib\")");
-                sb.AppendLine($"{ts}{ts}#pragma comment(lib, \"{(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "trigfunc.lib" : "tigfunc.lib")}\")");
+                sb.AppendLine($"{ts}{ts}#pragma comment(lib, \"{(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 ? "trigfunc.lib" : "tigfunc.lib")}\")");
             }
             if (c.RISData.RISToepassen)
             {

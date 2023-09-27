@@ -25,6 +25,7 @@
    *                                      Het tweede voertuig staat dan nog voor de 1e verlenglus waardoor groen soms te snel beeindigd 
    *                                      wordt; in dat geval wordt de SG nu enige tijd vastgehouden in VOORSTART groen.
    * 4.1.0    03-04-2023   ddo         Aflopen detectoren die tot maxgroen moeten verlengen halteren tijdens wachtgroen (Rotterdam / Peter Snijders)
+   * 4.2.0    11-08-2023   ddo         Fix voor aanpassing zoals aangegeven bij versie 4.0.0.
    *
    ***********************************************************************************************************
 
@@ -162,18 +163,20 @@
 
 #define DYN_HIAAT
 
-mulv TUSSEND_TELLER[FCMAX] = { 0 };
-mulv TDBEZET_KOPLUS[FCMAX] = { 0 };
-mulv GROEN_TIJD[FCMAX]     = { 0 };
-mulv mindynhgroen          = 60;      /* toepassen 'maatregel bij slechts 2 mvt op StartGroen' wanneer TFG lager is ingesteld dan deze waarde */
-mulv mindynhkopbezet       = 15;      /* minimale bezettijd koplus voor toepassen 'maatregel bij slechts 2 mvt op StartGroen'                 */
+#define RIJSTRMAX 5                              /* max 5 rijstroken per fc */
+
+mulv TUSSEND_TELLER[FCMAX][RIJSTRMAX] = { 0 };
+mulv TDBEZET_KOPLUS[FCMAX][RIJSTRMAX] = { 0 };
+mulv GROEN_TIJD[FCMAX]                = { 0 };
+mulv mindynhgroen                     = 60;      /* toepassen 'maatregel bij slechts 2 mvt op StartGroen' wanneer TFG lager is ingesteld dan deze waarde */
+mulv mindynhkopbezet                  = 15;      /* minimale bezettijd koplus voor toepassen 'maatregel bij slechts 2 mvt op StartGroen'                 */
 
 #define DYNH_RS_BIT  BIT2  /* gebruikt BIT om de SG in VOORSTARTgroen vast te houden bij toepassen 'maatregel bij slechts 2 mvt op StartGroen' */
 
 #if (CCOL_V >= 110 /* && !defined TDHAMAX */) || (CCOL_V < 110)
 
    /* TDHDYN variabelen */
-   bool TDHDYN[DPMAX];        /* dynamische hiaattijd - logische waarde */
+   boolv TDHDYN[DPMAX];        /* dynamische hiaattijd - logische waarde */
    mulv  TDHDYN_timer0[DPMAX]; /* dynamische hiaattijd - hulp waarde     */
    mulv  TDHDYN_timer[DPMAX];  /* dynamische hiaattijd - actuele waarde  */
    mulv  TDHDYN_max[DPMAX];    /* maximum waarde dynamische hiaattijd    */
@@ -231,10 +234,10 @@ void tdhdyn(count dp, count fc) /* verwerk TDHDYN per detector */
 #endif
 /* ======================================================================================================== */
 
-static int eavl[FCMAX][5];
+static int eavl[FCMAX][RIJSTRMAX];
 static int detstor[FCMAX];
 
-void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_wg, count mmk, bool opdr, count fc, ...)
+void hiaattijden_verlenging(boolv nietToepassen, boolv vrijkomkop, boolv extra_in_wg, count mmk, boolv opdr, count fc, ...)
 {
   va_list argpt;                                    /* variabele argumentenlijst                                 */
   count dpnr;                                       /* arraynummer detectie-element                              */
@@ -244,11 +247,11 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
   count rijstrook_old = -1;                         /* vorige rijstrooknummer                                    */
   count rijstrook;                                  /* rijstrooknummer                                           */
   count max_rijstrook = 1;                          /* hoogste rijstrooknummer                                   */
-  bool svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[5], tdh_saw[5];
+  boolv svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[RIJSTRMAX], tdh_saw[RIJSTRMAX];
   count dp_teller=0;                                /* telt aantal lussen vanaf stopstreep op bepaalde rijstrook */
 
   /* initialisatie */
-  for (rijstrook=0; rijstrook<5; rijstrook++)
+  for (rijstrook = 0; rijstrook < 5; rijstrook++)
   {
     verlengen[rijstrook] = FALSE;
     tdh_saw[rijstrook]   = FALSE;                 /* hiaattijd stroomafwaarts aktief                           */
@@ -260,9 +263,12 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
   /* maatregel bij slechts 2 mvt op StartGroen */
   RS[fc] &= ~DYNH_RS_BIT;
   if (FG[fc] && TS) {
-      TUSSEND_TELLER[fc] = 0;
-      TDBEZET_KOPLUS[fc] = 0;
-      GROEN_TIJD[fc] = 0;
+    for (rijstrook = 0; rijstrook < RIJSTRMAX; rijstrook++)
+    {
+      TUSSEND_TELLER[fc][rijstrook] = 0;
+      TDBEZET_KOPLUS[fc][rijstrook] = 0;
+    }
+    GROEN_TIJD[fc] = 0;
   }
   
   /* maatregel bij slechts 2 mvt op StartGroen */
@@ -289,13 +295,13 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
         rijstrook_old = rijstrook;
     
         if (dp_teller == 1) {
-            if (!D[dpnr])            TDBEZET_KOPLUS[fc] = 0;
-            if (!G[fc] && D[dpnr]) ++TDBEZET_KOPLUS[fc];
+            if (!D[dpnr])            TDBEZET_KOPLUS[fc][rijstrook] = 0;
+            if (!G[fc] && D[dpnr]) ++TDBEZET_KOPLUS[fc][rijstrook];
         }
     
         if (dp_teller == 2) {
-            if ((TDBEZET_KOPLUS[fc] > mindynhkopbezet) && ED[dpnr]) ++TUSSEND_TELLER[fc];  /* TUSSEND_TELLER is dus 1 wanneer er 2 voertuigen staan! */
-        }                                                                                  /* (die andere staat dan nl al op de koplus)          */
+            if ((TDBEZET_KOPLUS[fc][rijstrook] > mindynhkopbezet) && ED[dpnr]) ++TUSSEND_TELLER[fc][rijstrook];  /* TUSSEND_TELLER is dus 1 wanneer er 2 voertuigen staan! */
+        }                                                                                                        /* (die andere staat dan nl al op de koplus)          */
       }
     } while (rijstrook >= 0);
     va_end(argpt);                     /* maak var. arg-lijst leeg */
@@ -373,11 +379,8 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
 
         /* maatregel bij slechts 2 mvt op StartGroen */
         if ((dp_teller == 1) && TE)  {
-        //RS[fc] &= ~DYNH_RS_BIT;
-          RS[fc] |= (G[fc] && (TUSSEND_TELLER[fc] == 1) && (TFG_max[fc] < mindynhgroen) && D[dpnr] && (GROEN_TIJD[fc] < (mindynhgroen - TFG_max[fc]))) ? DYNH_RS_BIT : 0;
-          if (RS[fc]&DYNH_RS_BIT)  ++GROEN_TIJD[fc];
+          RS[fc] |= (G[fc] && (TUSSEND_TELLER[fc][rijstrook] == 1) && (TFG_max[fc] < mindynhgroen) && D[dpnr] && (GROEN_TIJD[fc] < (mindynhgroen - TFG_max[fc]))) ? DYNH_RS_BIT : 0;
         }
-        
 
         if (T_max[tmax]==0)       T_max[tmax] = (TFG_max[fc]+TVG_max[fc]);          /*-*/ /* overnemen max groentijd      */ 
         
@@ -431,7 +434,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
             ((dp_teller == 1) && vrijkomkop && !TDHDYN[dpnr])  /* voor koplus bij niet (meer) aanwezig zijn van hiaat                    */
             ||
             ((dp_teller != 1) && svwG && !TDHDYN[dpnr] &&      /* voor overige lussen indien spring-tijdens-groen voor deze lus waar is, */
-               (eavl[fc][rijstrook] == dp_teller))) {     /* en de lus aktief is, en het hiaat voor de eerste keer gevallen is      */
+               (eavl[fc][rijstrook] == dp_teller))) {          /* en de lus aktief is, en het hiaat voor de eerste keer gevallen is      */
             RT[tmax] = FALSE;
             AT[tmax] = TRUE;
           }
@@ -467,7 +470,9 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
         }
       }
     } while (rijstrook>=0);
-    va_end(argpt);                     /* maak var. arg-lijst leeg */
+    va_end(argpt);    /* maak var. arg-lijst leeg */
+	
+	if (RS[fc] & DYNH_RS_BIT)  ++GROEN_TIJD[fc];    /* maatregel bij slechts 2 mvt op StartGroen */
   }
 
   if (!nietToepassen) {

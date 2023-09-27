@@ -250,9 +250,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
                         sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
-                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
+                        if (c.Data.CCOLVersie == CCOLVersieEnum.CCOL110)
                         {
                             sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTCTRLF3KEY);");
+                        }
+                        else if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLALTF3KEY);");
                         }
                         else
                         {

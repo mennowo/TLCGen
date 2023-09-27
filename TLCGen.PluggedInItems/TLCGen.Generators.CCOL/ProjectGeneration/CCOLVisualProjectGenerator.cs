@@ -169,7 +169,9 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 neededlibs.Add("plfunc.lib");
                 neededlibs.Add("plefunc.lib");
                 neededlibs.Add("tx_synch.lib");
-                neededlibs.Add(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "trigfunc.lib" : "tigfunc.lib");
+                neededlibs.Add(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95
+                    ? "trigfunc.lib" 
+                    : "tigfunc.lib");
             }
             if (c.HasDSI())
             {

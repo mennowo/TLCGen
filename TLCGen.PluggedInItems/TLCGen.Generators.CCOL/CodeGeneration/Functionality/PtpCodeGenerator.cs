@@ -252,7 +252,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         for (var i = 1; i <= k.AantalsignalenIn; ++i)
                         {
                             sb.Append($"{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00") + "]");
-                            sb.AppendLine($" = IS[{_ispf}{k.TeKoppelenKruispunt}{_isiks}" + i.ToString("00") + "];");
+                            sb.AppendLine($" = IS[{_ispf}{k.TeKoppelenKruispunt}{_isiks}" + i.ToString("00") + "] & BIT0;");
                         }
                         sb.AppendLine();
                     }

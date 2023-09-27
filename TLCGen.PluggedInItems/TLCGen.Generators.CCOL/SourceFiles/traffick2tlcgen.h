@@ -1,11 +1,23 @@
 /* -------------------------------------------------------------------------------------------------------- */
-/* Traffick2TLCGen                                                               Versie 1.0.0 / 01 jan 2023 */
+/* Traffick2TLCGen                                                               Versie 1.0.1 / 14 sep 2023 */
 /* -------------------------------------------------------------------------------------------------------- */
 
 /* Deze include file bevat hulp functies voor verkeerskundige Traffick functionaliteiten.                   */
 /* Deze functies zijn ontwikkeld en geschreven door Marcel Fick.                                            */
-/* Versie: 1.0                                                                                              */
+/* Versie: 1.0.0                                                                                            */
 /* Datum:  1 januari 2023                                                                                   */
+
+/* Versie: 1.0.1                                                                                            */
+/* Datum:  14 september 2023                                                                                */
+/* Bugfix:                                                                                                  */
+/*         Herstarten ontruimingstijd naar langzaam verkeer bij roodlicht negatie                           */
+/*         Uitstel voetganger bij einde werkingsperiode rateltikker                                         */
+/*         Controle op NG bij uitsturen contacten WTV ivm mogelijke seriele aansturing                      */
+/*         Controle op NG bij aanhouden MVG van richting met voorstart (afhandeling deelconflict)           */
+/*                                                                                                          */
+/* Wijziging:                                                                                               */
+/*         Functie verklik_bewaak_SRM() kan onafhankelijk van het define NO_RIS worden aangeroepen          */
+/*         Display aantal LEDs wtv in US[] en ME[]                                                          */
 
 #ifndef __TRAFFICK2TLCGEN_H
 #define __TRAFFICK2TLCGEN_H
@@ -94,10 +106,10 @@ struct pel_koppeling {
   count duur_vast;                    /* TM    duur vasthouden (bij duursign. na afvallen koppelsignaal)    */
   count duur_verl;                    /* TM    duur verlengen na ingreep (bij NG geldt TVG_max[])           */
   count hnaloop_1;                    /* HE    voorwaarde herstart extra nalooptijd 1 (nalooplus 1)         */
-  count tnaloop_1;                    /* TM    nalooptijd 1                                                 */ 
+  count tnaloop_1;                    /* TM    nalooptijd 1                                                 */
   count hnaloop_2;                    /* HE    voorwaarde herstart extra nalooptijd 2 (nalooplus 2)         */
-  count tnaloop_2;                    /* TM    nalooptijd 2                                                 */ 
-  count verklik;                      /* US    verklik peloton ingreep                                      */ 
+  count tnaloop_2;                    /* TM    nalooptijd 2                                                 */
+  count verklik;                      /* US    verklik peloton ingreep                                      */
   boolv kop_oud;                      /* boolv status koppelsignaal vorige machine slag                     */
   mulv  aanw_kop1;                    /* mulv  aanwezigheidsduur koppelsignaal 1 vanaf start puls           */
   mulv  duur_kop1;                    /* mulv  tijdsduur HOOG    koppelsignaal 1 igv duur signaal           */
@@ -519,7 +531,7 @@ void traffick2tlcgen_kruispunt(void); /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit traffick2tlcgen_detectie().                                             */
 /*                                                                                                          */
-void detector_afhandeling_va_arg(     /* Fik230101                                                          */
+void detector_afhandeling_va_arg(     /* Fik230726                                                          */
 count fc,                             /* FC   fasecyclus                                                    */
 count km, ...);                       /* TM   koplus maximum                                                */
 
@@ -649,7 +661,7 @@ void hki_wachtstand_aanvraag(void);   /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Aanvragen_Add().                                                        */
 /*                                                                                                          */
-void koppel_aanvragen(void);          /* Fik230101                                                          */
+void koppel_aanvragen(void);          /* Fik230701                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -795,6 +807,19 @@ void BepaalTEG(void);                 /* Fik230101                              
 
 
 /* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaal extra ontruiming als gevolg van LHOVRA functie R                                          */
+/* -------------------------------------------------------------------------------------------------------- */
+/* Functie bepaalt de extra ontruiming als op een conflict richting een roodlichtrijder wordt gedetecteerd. */
+/* Roodlichtrijders nadat het licht langer dan 2,0 sec. op rood staat worden genegeerd.                     */
+/*                                                                                                          */
+/* Resultaat wordt weggeschreven in ExtraOntruim[].                                                         */
+/*                                                                                                          */
+/* Functie wordt aangeroepen vanuit RealTraffick().                                                         */
+/*                                                                                                          */
+void BepaalExtraOntruim(void);        /* Fik230726                                                          */
+
+
+/* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaal minimale tijd tot realisatie                                                              */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Functie bepaalt de minimale tijd tot groen voor alle richtingen.                                         */
@@ -813,7 +838,7 @@ void BepaalMTG(void);                 /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit BepaalRealisatieTijden_Add().                                           */
 /*                                                                                                          */
-void RealTraffick(void);              /* Fik230101                                                          */
+void RealTraffick(void);              /* Fik230726                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -837,7 +862,7 @@ void Traffick2TLCgen_NAL(void);       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit BepaalAltRuimte().                                                      */
 /*                                                                                                          */
-void RealTraffickPrioriteit(void);    /* Fik230101                                                          */
+void RealTraffickPrioriteit(void);    /* Fik230830                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -943,7 +968,7 @@ void peloton_ingreep_verlengen(void); /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Meeverlengen_Add().                                                     */
 /*                                                                                                          */
-void Traffick2TLCgen_MVG(void);       /* Fik230101                                                          */
+void Traffick2TLCgen_MVG(void);       /* Fik230901                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -954,7 +979,7 @@ void Traffick2TLCgen_MVG(void);       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Synchronisaties_Add().                                                  */
 /*                                                                                                          */
-void Traffick2TLCgen_uitstel(void);   /* Fik230101                                                          */
+void Traffick2TLCgen_uitstel(void);   /* Fik230830                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -977,7 +1002,7 @@ void Traffick2TLCgen_PFPR(void);      /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit Alternatief_Add().                                                      */
 /*                                                                                                          */
-void Traffick2TLCgen_PAR(void);       /* Fik230101                                                          */
+void Traffick2TLCgen_PAR(void);       /* Fik230701                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1032,7 +1057,7 @@ void Traffick2TLCgen_REA(void);       /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit FileVerwerking_Add().                                                   */
 /*                                                                                                          */
-void traffick_file_nass_reset(void);  /* Fik230101                                                          */
+void traffick_file_nass_reset(void);  /* Fik230701                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1042,7 +1067,8 @@ void traffick_file_nass_reset(void);  /* Fik230101                              
 /* verschillende criteria namelijk een percentage van de maximum(verleng)groenduur of een absoluut maximum. */
 /* De laagste waarde wordt automatisch maatgevend. Indien file stroomafwaarts ontstaat tijdens de groenfase */
 /* geldt een aparte ondergrens als minimum voor de maximum groenduur. (= specifiek voor die 1e groenfase)   */
-void traffick_file_nass(              /* Fik230101                                                          */
+/*                                                                                                          */
+void traffick_file_nass(              /* Fik230701                                                          */
 count fc,                             /* FC  fasecyclus                                                     */
 count h_file,                         /* HE  file stroomafwaarts aanwezig                                   */
 count h_afkap_start,                  /* HE  file stroomafwaarts is tijdens groen ontstaan                  */
@@ -1149,7 +1175,7 @@ count fc);                            /* FC fasecyclus                          
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void aansturing_wt_voorspeller(       /* Fik230101                                                          */
+void aansturing_wt_voorspeller(       /* Fik230901                                                          */
 count fc,                             /* FC  fasecyclus                                                     */
 count us0,                            /* US  wachttijd voorspeller - BIT0                                   */
 count us1,                            /* US  wachttijd voorspeller - BIT1                                   */
@@ -1189,7 +1215,7 @@ void aansturing_aftellers(void);      /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void rateltikker_applicatie(          /* Fik230101                                                          */
+void rateltikker_applicatie(          /* Fik230914                                                          */
 count fc,                             /* FC    fasecyclus                                                   */
 count hedrk1,                         /* HE    drukknop 1                                                   */
 count hedrk2,                         /* HE    drukknop 2                                                   */
@@ -1243,7 +1269,7 @@ void verklik_prio_KAR_SRM(void);      /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void verklik_bewaak_SRM(              /* Fik230101                                                          */
+void verklik_bewaak_SRM(              /* Fik230830                                                          */
 count us_srm,                         /* US   verklik SRM bericht ontvangen                                 */
 mulv  duur_verklik_srm,               /* mulv duur verklik SRM bericht ontvangen in tienden van seconden    */
 count us_srm_og,                      /* US   verklik SRM ondergedrag                                       */
@@ -1254,11 +1280,11 @@ mulv  srm_og);                        /* mulv duur ondergedrag SRM in minuten   
 /* Functie verklik fiets voorrang module                                                                    */
 /* -------------------------------------------------------------------------------------------------------- */
 /* Deze functie verzorgt de verklikking van de fiets voorrang module. Het led knippert tijdens rood indien  */
-/* een prioriteitsaanvraag aanwezig is en brandt vervolgens vast tot einde vastgroen van de fietsrichting.  */
+/* een prioriteitsaanvraag aanwezig is en brandt vervolgens vast zolang de fietsrichting verlengt.          */
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit post_system_application().                                              */
 /*                                                                                                          */
-void verklik_fiets_voorrang(void);    /* Fik230101                                                          */
+void verklik_fiets_voorrang(void);    /* Fik230901                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1279,7 +1305,7 @@ void buffer_stiptheid_info(void);     /* Fik230101                              
 /*                                                                                                          */
 /* Functie wordt aangeroepen vanuit InUitMelden_Add().                                                      */
 /*                                                                                                          */
-void fiets_voorrang_module(void);     /* Fik230101                                                          */
+void fiets_voorrang_module(void);     /* Fik230901                                                          */
 
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1309,9 +1335,12 @@ mulv  min_rood);                      /* mulv  minimale roodtijd (TE) voor prior
 /* busbanen prioriteitsrealisaties toegekend. Richtingen die door DVM of FILE bevorderd worden mogen altijd */
 /* terugkomen na afbreken.                                                                                  */
 /*                                                                                                          */
+/* De groenbewaking van fietsers met fietsvoorrang module wordt uitgeschakeld zodat bij prioriteit de       */
+/* groenfase ook altijd kan worden verlengt. Uitmelding vindt plaats in de functie fiets_voorrang_module(). */
+/*                                                                                                          */
 /* Functie wordt aangeroepen vanuit PrioInstellingen_Add().                                                 */
 /*                                                                                                          */
-void corrigeer_terugkomen_traffick(void); /* Fik230101                                                      */
+void corrigeer_terugkomen_traffick(void); /* Fik230901                                                      */
 
 
 /* -------------------------------------------------------------------------------------------------------- */

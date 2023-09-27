@@ -861,6 +861,12 @@ namespace TLCGen.ModelManagement
         {
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName, msg.ObjectType);
             MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
+
+            // Force the viewmodel to order+rebuild relevant lists
+            if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
+            {
+                MessengerInstance.Send(new FasenChangedMessage(null, null));
+            }
         }
 
         public int ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType)

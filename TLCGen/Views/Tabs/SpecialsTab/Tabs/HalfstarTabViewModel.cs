@@ -1009,7 +1009,9 @@ namespace TLCGen.ViewModels
                 }
 			}
 
-			UpdateSelectables();
+            Alternatieven.BubbleSort();
+
+            UpdateSelectables();
 		}
 
 		private void OnNameChanged(NameChangedMessage msg)
@@ -1036,6 +1038,7 @@ namespace TLCGen.ViewModels
 
 			HoofdRichtingen.BubbleSort();
             OVIngrepenHalfstar.BubbleSort();
+            Alternatieven.BubbleSort();
             UpdateSelectables();
 		}
 
