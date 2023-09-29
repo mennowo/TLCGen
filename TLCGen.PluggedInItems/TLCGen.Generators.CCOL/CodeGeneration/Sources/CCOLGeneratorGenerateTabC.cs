@@ -61,7 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             return sb.ToString();
         }
-        
+
         private string GenerateTabCIncludes(ControllerModel c)
         {
             var sb = new StringBuilder();
@@ -131,6 +131,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine($"{ts}extern mulv FK_type[FCMAX][FCMAX];");
+            }
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCIncludes, true, true, true, true);
 
@@ -498,20 +502,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersConflicten(ControllerModel controller)
+        private const int FK_NG = -1;
+        private const int FK_SG = -2;
+        private const int FK_EVG = -3;
+        private const int FK_EG = -4;
+
+        private string GenerateTabCControlParametersConflicten(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
             
-            var totigmax = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_max" : "TO_max";
-            var totigmin = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_min" : "TO_min";
+            var totigmax = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "TIG_max" : "TO_max";
+            var totigmin = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "TIG_min" : "TO_min";
 
-            if (controller.InterSignaalGroep.Conflicten?.Count > 0)
+            if (c.InterSignaalGroep.Conflicten?.Count > 0)
             {
                 var prevfasefrom = "";
-                foreach (var conflict in controller.InterSignaalGroep.Conflicten)
+                foreach (var conflict in c.InterSignaalGroep.Conflicten)
                 {
                     var ff = conflict.GetFaseFromDefine();
                     var ft = conflict.GetFaseToDefine();
@@ -531,27 +540,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if(controller.Fasen.Count > 0)
+            if(c.Fasen.Count > 0)
             { 
-                var matrix = new int[controller.Fasen.Count, controller.Fasen.Count];
-                for (var i = 0; i < controller.Fasen.Count; ++i)
+                var matrix = new int[c.Fasen.Count, c.Fasen.Count];
+                var matrixFk = new int[c.Fasen.Count, c.Fasen.Count];
+                for (var i = 0; i < c.Fasen.Count; ++i)
                 {
-                    for (var j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < c.Fasen.Count; ++j)
                     {
                         matrix[i, j] = -1;
+                        matrixFk[i, j] = FK_NG;
                     }
                 }
 
-                for (var i = 0; i < controller.Fasen.Count; ++i)
+                for (var i = 0; i < c.Fasen.Count; ++i)
                 {
-                    for (var j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < c.Fasen.Count; ++j)
                     {
-                        if (controller.InterSignaalGroep.Conflicten != null)
+                        if (c.InterSignaalGroep.Conflicten != null)
                         {
-                            foreach (var cf in controller.InterSignaalGroep.Conflicten)
+                            foreach (var cf in c.InterSignaalGroep.Conflicten)
                             {
-                                if (cf.FaseVan == controller.Fasen[i].Naam &&
-                                    cf.FaseNaar == controller.Fasen[j].Naam)
+                                if (cf.FaseVan == c.Fasen[i].Naam &&
+                                    cf.FaseNaar == c.Fasen[j].Naam)
                                 {
                                     if (cf.Waarde >= -4)
                                     {
@@ -575,14 +586,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 // Below: only overwrite non-user defined values
 
-                foreach (var gs in controller.InterSignaalGroep.Gelijkstarten)
+                foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                 {
-                    var fc = controller.Fasen.First(x => x.Naam == gs.FaseVan);
-                    var i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.First(x => x.Naam == gs.FaseNaar);
-                    var j = controller.Fasen.IndexOf(fc2);
+                    var fc = c.Fasen.First(x => x.Naam == gs.FaseVan);
+                    var i = c.Fasen.IndexOf(fc);
+                    var fc2 = c.Fasen.First(x => x.Naam == gs.FaseNaar);
+                    var j = c.Fasen.IndexOf(fc2);
 
-                    for (var k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < c.Fasen.Count; ++k)
                     {
                         if (matrix[i, k] > -1 && matrix[j, k] == -1)
                         {
@@ -591,14 +602,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
-                foreach (var vs in controller.InterSignaalGroep.Voorstarten)
+                foreach (var vs in c.InterSignaalGroep.Voorstarten)
                 {
-                    var fc = controller.Fasen.First(x => x.Naam == vs.FaseVan);
-                    var i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.First(x => x.Naam == vs.FaseNaar);
-                    var j = controller.Fasen.IndexOf(fc2);
+                    var fc = c.Fasen.First(x => x.Naam == vs.FaseVan);
+                    var i = c.Fasen.IndexOf(fc);
+                    var fc2 = c.Fasen.First(x => x.Naam == vs.FaseNaar);
+                    var j = c.Fasen.IndexOf(fc2);
 
-                    for (var k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < c.Fasen.Count; ++k)
                     {
                         if (matrix[i, k] > -1 && matrix[j, k] == -1)
                         {
@@ -607,14 +618,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
-                foreach (var vs in controller.InterSignaalGroep.LateReleases)
+                foreach (var vs in c.InterSignaalGroep.LateReleases)
                 {
-                    var fc = controller.Fasen.First(x => x.Naam == vs.FaseVan);
-                    var i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.First(x => x.Naam == vs.FaseNaar);
-                    var j = controller.Fasen.IndexOf(fc2);
+                    var fc = c.Fasen.First(x => x.Naam == vs.FaseVan);
+                    var i = c.Fasen.IndexOf(fc);
+                    var fc2 = c.Fasen.First(x => x.Naam == vs.FaseNaar);
+                    var j = c.Fasen.IndexOf(fc2);
 
-                    for (var k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < c.Fasen.Count; ++k)
                     {
                         if (matrix[i, k] > -1 && matrix[j, k] == -1)
                         {
@@ -624,26 +635,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
 
-                foreach (var nl in controller.InterSignaalGroep.Nalopen)
+                foreach (var nl in c.InterSignaalGroep.Nalopen)
                 {
-                    var fc = controller.Fasen.First(x => x.Naam == nl.FaseVan);
-                    var i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.First(x => x.Naam == nl.FaseNaar);
-                    var j = controller.Fasen.IndexOf(fc2);
+                    var fc = c.Fasen.First(x => x.Naam == nl.FaseVan);
+                    var i = c.Fasen.IndexOf(fc);
+                    var fc2 = c.Fasen.First(x => x.Naam == nl.FaseNaar);
+                    var j = c.Fasen.IndexOf(fc2);
 
-                    for (var k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < c.Fasen.Count; ++k)
                     {
                         if (matrix[j, k] > -1 && matrix[i, k] < 0 && matrix [i, k] > -20)
                         {
                             switch (nl.Type)
                             {
                                 case NaloopTypeEnum.StartGroen:
-                                    if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ||
+                                        c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                     {
                                         if (matrix[i, k] > -2) matrix[i, k] = -2;
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        matrixFk[i, k] = FK_SG;
                                     }
-                                    else if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
+                                    else if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
                                     {
                                         if (nl.InrijdenTijdensGroen)
                                         {
@@ -660,6 +673,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 case NaloopTypeEnum.CyclischVerlengGroen:
                                     if (matrix[i, k] > -2) matrix[i, k] = -2;
                                     if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                    matrixFk[i, k] = FK_EVG;
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
                                     if (nl.InrijdenTijdensGroen)
@@ -672,6 +686,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (matrix[i, k] > -4) matrix[i, k] = -4;
                                         if (matrix[k, i] > -3) matrix[k, i] = -3;
                                     }
+                                    matrixFk[i, k] = FK_EG;
                                     break;
                             }
                         }
@@ -680,24 +695,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 // corrections
                 // loop nalopen 1
-                foreach (var nl1 in controller.InterSignaalGroep.Nalopen)
+                foreach (var nl1 in c.InterSignaalGroep.Nalopen)
                 {
                     var fc1Name = nl1.FaseVan;
                     var fc2Name = nl1.FaseNaar;
-                    var fc1 = controller.Fasen.FirstOrDefault(x => x.Naam == fc1Name);
-                    var fc2 = controller.Fasen.FirstOrDefault(x => x.Naam == fc2Name);
-                    var nl1FcVan = controller.Fasen.IndexOf(fc1);
-                    var nl1FcNaar = controller.Fasen.IndexOf(fc2);
+                    var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == fc1Name);
+                    var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == fc2Name);
+                    var nl1FcVan = c.Fasen.IndexOf(fc1);
+                    var nl1FcNaar = c.Fasen.IndexOf(fc2);
                     
                     // loop nalopen 2
-                    foreach (var nl2 in controller.InterSignaalGroep.Nalopen)
+                    foreach (var nl2 in c.InterSignaalGroep.Nalopen)
                     {
                         var fc12Name = nl2.FaseVan;
                         var fc22Name = nl2.FaseNaar;
-                        var fc12 = controller.Fasen.FirstOrDefault(x => x.Naam == fc12Name);
-                        var fc22 = controller.Fasen.FirstOrDefault(x => x.Naam == fc22Name);
-                        var i12 = controller.Fasen.IndexOf(fc12);
-                        var i22 = controller.Fasen.IndexOf(fc22);
+                        var fc12 = c.Fasen.FirstOrDefault(x => x.Naam == fc12Name);
+                        var fc22 = c.Fasen.FirstOrDefault(x => x.Naam == fc22Name);
+                        var i12 = c.Fasen.IndexOf(fc12);
+                        var i22 = c.Fasen.IndexOf(fc22);
                         
                         // check conflict nalooprichting1 > nalooprichting2
                         if (matrix[nl1FcNaar, i22] > -1)
@@ -705,21 +720,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             // FK voedende-richting1 > voedenderichting2 en andersom
                             matrix[nl1FcVan, i12] = -2;
                             matrix[i12, nl1FcVan] = -2;
+                            matrixFk[nl1FcVan, i12] = nl1.Type switch
+                            {
+                                NaloopTypeEnum.StartGroen => FK_SG,
+                                NaloopTypeEnum.EindeGroen => FK_EG,
+                                NaloopTypeEnum.CyclischVerlengGroen => FK_EVG,
+                                _ => FK_NG,
+                            };
+                            matrixFk[i12, nl1FcNaar] = nl2.Type switch
+                            {
+                                NaloopTypeEnum.StartGroen => FK_SG,
+                                NaloopTypeEnum.EindeGroen => FK_EG,
+                                NaloopTypeEnum.CyclischVerlengGroen => FK_EVG,
+                                _ => FK_NG,
+                            };
                         }
                     }
                     
                     // loop de conflicten van de nalooprichting
-                    foreach (var cf in controller.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == fc2Name))
+                    foreach (var cf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == fc2Name))
                     {
                         // loop nalopen waarin zo'n conflict deelneemt
-                        foreach (var nl2 in controller.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == cf.FaseNaar || x.FaseNaar == cf.FaseNaar))
+                        foreach (var nl2 in c.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == cf.FaseNaar || x.FaseNaar == cf.FaseNaar))
                         {
                             // var fc3Name = nl2.FaseVan;
                             var fc4Name = nl2.FaseNaar;
                             // var fc3 = controller.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
-                            var fc4 = controller.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
+                            var fc4 = c.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
                             // var i3 = controller.Fasen.IndexOf(fc3);
-                            var nl2FcNaar = controller.Fasen.IndexOf(fc4);
+                            var nl2FcNaar = c.Fasen.IndexOf(fc4);
                             // indien er van de naloop richting van naloop1 een FK/GK/GKL bestaat naar de 
                             // tweede richting van naloop2, nemen we FK/GK/GKL over tussen de voedende richting
                             // van naloop1 naar die tweede richting van naloop2
@@ -731,14 +760,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         
                         // loop nalopen waarin zo'n conflict deelneemt, waarbij de nalooprichting het conflict heeft
-                        foreach (var nl2 in controller.InterSignaalGroep.Nalopen.Where(x => x.FaseNaar == cf.FaseNaar))
+                        foreach (var nl2 in c.InterSignaalGroep.Nalopen.Where(x => x.FaseNaar == cf.FaseNaar))
                         {
                             var fc3Name = nl2.FaseVan;
                             var fc4Name = nl2.FaseNaar;
-                            var fc3 = controller.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
-                            var fc4 = controller.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
-                            var nl2FcVan = controller.Fasen.IndexOf(fc3);
-                            var nl2FcNaar = controller.Fasen.IndexOf(fc4);
+                            var fc3 = c.Fasen.FirstOrDefault(x => x.Naam == fc3Name);
+                            var fc4 = c.Fasen.FirstOrDefault(x => x.Naam == fc4Name);
+                            var nl2FcVan = c.Fasen.IndexOf(fc3);
+                            var nl2FcNaar = c.Fasen.IndexOf(fc4);
                             if (nl1.Type == NaloopTypeEnum.EindeGroen && nl2.Type == NaloopTypeEnum.EindeGroen)
                             {
                                 if (matrix[nl1FcVan, nl2FcVan] <= -1) matrix[nl1FcVan, nl2FcVan] = -4;
@@ -749,29 +778,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 
                 sb.AppendLine();
-                for (var i = 0; i < controller.Fasen.Count; ++i)
+                for (var i = 0; i < c.Fasen.Count; ++i)
                 {
                     var appendEmptyLine = false;
-                    for (var j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < c.Fasen.Count; ++j)
                     {
                         if (matrix[i, j] >= -1) continue;
                         var k = "FK";
-                        if (controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
-                        {
-                            if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
-                            if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
-                        }
-                        sb.AppendLine($"{ts}{totigmax}[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
+                        string fkType = null;
+                        if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
+                        if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
+                        sb.AppendLine($"{ts}{totigmax}[{_fcpf}{c.Fasen[i].Naam}][{_fcpf}{c.Fasen[j].Naam}] = {k};");
                         appendEmptyLine = true;
                     }
                     if (appendEmptyLine) sb.AppendLine();
                 }
 
-                if (controller.Data.GarantieOntruimingsTijden)
+                if (c.Data.GarantieOntruimingsTijden)
                 {
-                    if (controller.InterSignaalGroep.Conflicten?.Count > 0)
+                    if (c.InterSignaalGroep.Conflicten?.Count > 0)
                     {
-                        if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen)
                         {
                             sb.AppendLine($"{ts}default_tig_min(0);");
                         }
@@ -782,7 +809,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
 
                         var prevfasefrom = "";
-                        foreach (var conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
+                        foreach (var conflict in c.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
                         {
                             var ff = conflict.GetFaseFromDefine();
                             var ft = conflict.GetFaseToDefine();
@@ -802,6 +829,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (conflict.GarantieWaarde != null) sb.AppendLine($"{ts}{totigmin}[{ff}][{ft}] = {conflict.GarantieWaarde.Value};");
                         }
 
+                    }
+                }
+
+                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine();
+                    for (var i = 0; i < c.Fasen.Count; ++i)
+                    {
+                        var appendEmptyLine = false;
+                        for (var j = 0; j < c.Fasen.Count; ++j)
+                        {
+                            if (matrixFk[i, j] >= FK_NG) continue;
+                            var k = "FK_SG";
+                            if (matrixFk[i, j] == FK_EVG) k = "FK_EVG";
+                            if (matrixFk[i, j] == FK_EG) k = "FK_EG";
+                            sb.AppendLine($"{ts}FK_type[{_fcpf}{c.Fasen[i].Naam}][{_fcpf}{c.Fasen[j].Naam}] = {k};");
+                            appendEmptyLine = true;
+                        }
+                        if (appendEmptyLine) sb.AppendLine();
                     }
                 }
             }
