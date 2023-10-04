@@ -64,6 +64,8 @@ namespace TLCGen.Models
 
         public List<DetectorModel> GetAllDummyDetectors()
         {
+            if (!HasPrio) return new List<DetectorModel>();
+
             var detsIn = PrioIngrepen.SelectMany(x => x.MeldingenData.Inmeldingen.Where(x2 => x2.DummyKARMelding != null).Select(x2 => x2.DummyKARMelding));
             var detsUit = PrioIngrepen.SelectMany(x => x.MeldingenData.Uitmeldingen.Where(x2 => x2.DummyKARMelding != null).Select(x2 => x2.DummyKARMelding));
             var dets = detsIn.Concat(detsUit).ToList();

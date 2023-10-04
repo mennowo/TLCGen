@@ -428,6 +428,7 @@ namespace TLCGen.ViewModels
                         Fasen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Fase));
                         break;
                     case IOElementTypeEnum.Detector:
+                    case IOElementTypeEnum.SelectiveDetector:
                         Detectoren.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Detector));
                         break;
                     case IOElementTypeEnum.Output:
@@ -436,54 +437,6 @@ namespace TLCGen.ViewModels
                     case IOElementTypeEnum.Input:
                         OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
                         break;
-                }
-            }
-
-            // IO from plugins
-            foreach (var v in TLCGenPluginManager.Default.ApplicationPlugins)
-            {
-                if((v.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
-                {
-                    var pl = v.Item2 as ITLCGenElementProvider;
-                    var initems = pl.GetInputItems();
-                    var outitems = pl.GetOutputItems();
-                    if (initems != null)
-                    {
-                        foreach (var i in initems)
-                        {
-                            OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
-                        }
-                    }
-                    if (outitems != null)
-                    {
-                        foreach (var o in outitems)
-                        {
-                            OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
-                        }
-                    }
-                }
-            }
-            foreach (var v in TLCGenPluginManager.Default.ApplicationParts)
-            {
-                if ((v.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
-                {
-                    var pl = v.Item2 as ITLCGenElementProvider;
-                    var initems = pl.GetInputItems();
-                    var outitems = pl.GetOutputItems();
-                    if (initems != null)
-                    {
-                        foreach (var i in initems)
-                        {
-                            OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
-                        }
-                    }
-                    if (outitems != null)
-                    {
-                        foreach (var o in outitems)
-                        {
-                            OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
-                        }
-                    }
                 }
             }
         }
