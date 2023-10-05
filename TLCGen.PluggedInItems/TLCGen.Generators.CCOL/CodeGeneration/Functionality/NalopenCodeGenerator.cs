@@ -189,7 +189,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
                         c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
-                        sb.AppendLine($"{ts}TegenhoudenInrijdenInlopen();");
+                        sb.AppendLine($"{ts}TegenhoudenDoorRealisatietijden();");
                     }
 
                     return sb.ToString();

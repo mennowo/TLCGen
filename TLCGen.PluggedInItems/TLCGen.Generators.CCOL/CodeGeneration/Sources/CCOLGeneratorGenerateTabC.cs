@@ -619,15 +619,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     matrixFk[i, k] = FK_EVG;
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
-                                    if (nl.InrijdenTijdensGroen)
+                                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                     {
-                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        if (matrix[i, k] > -4) matrix[i, k] = -2;
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
                                     else
                                     {
-                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        if (nl.InrijdenTijdensGroen)
+                                        {
+                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                            if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                        }
+                                        else
+                                        {
+                                            if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                            if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                        }
                                     }
                                     matrixFk[i, k] = FK_EG;
                                     break;
@@ -713,8 +721,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             var nl2FcNaar = c.Fasen.IndexOf(fc4);
                             if (nl1.Type == NaloopTypeEnum.EindeGroen && nl2.Type == NaloopTypeEnum.EindeGroen)
                             {
-                                if (matrix[nl1FcVan, nl2FcVan] <= -1) matrix[nl1FcVan, nl2FcVan] = -4;
-                                if (matrix[nl2FcVan, nl1FcVan] <= -1) matrix[nl2FcVan, nl1FcVan] = -4;
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                                {
+                                    if (matrix[nl1FcVan, nl2FcVan] <= -1) matrix[nl1FcVan, nl2FcVan] = -2;
+                                    if (matrix[nl2FcVan, nl1FcVan] <= -1) matrix[nl2FcVan, nl1FcVan] = -2;
+                                }
+                                else
+                                { 
+                                    if (matrix[nl1FcVan, nl2FcVan] <= -1) matrix[nl1FcVan, nl2FcVan] = -4;
+                                    if (matrix[nl2FcVan, nl1FcVan] <= -1) matrix[nl2FcVan, nl1FcVan] = -4;
+                                }
                             }
                         }
                     }

@@ -291,7 +291,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 switch (mvfc.Type)
                                 {
                                     case HardMeevelengenTypeEnum.Groen:
-                                        sb.Append($"G[{_fcpf}{mvfc.FaseCyclus}]");
+                                        sb.Append($"(RA[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
                                         break;
                                     case HardMeevelengenTypeEnum.CyclischVerlengGroen:
                                         sb.Append($"CV[{_fcpf}{mvfc.FaseCyclus}]");

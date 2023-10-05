@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlsgd;
         private string _hfile;
         private string _prmfperc;
+        private string _prmxnl;
         private string _hmad;
 
         #endregion // Fields
@@ -165,15 +166,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     if (order == 90)
                     {
-                        sb.AppendLine($"{ts}if (EVG[fc] && PR[fc] || init_tvg)");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}TVG_PR[fc] = TVG_max[fc];");
+                        sb.AppendLine($"{ts}{ts}if (EVG[fc] && PR[fc] || init_tvg)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_PR[fc] = TVG_max[fc];");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}else");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_max[fc] = TVG_PR[fc];");
+                        sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}else");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}TVG_max[fc] = TVG_PR[fc];");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}init_tvg = TRUE;");
+                        sb.AppendLine($"{ts}init_tvg = FALSE;");
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Bepaal de minimale maximale verlengroentijd bij alternatieve realisaties */");
                         foreach (var fc in c.Fasen)
                         {
@@ -212,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    sb.AppendLine($"{ts}init_tvg = FALSE;");
+                    sb.AppendLine($"{ts}init_tvg = TRUE;");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     sb.AppendLine($"{ts}BepaalIntergroenTijden();");
@@ -282,20 +287,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgvs}{vs:vannaar});");
+                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Voorstart({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
                         sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* Inlopen voetgangers */");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => 
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
-                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+                    sb.AppendLine($"{ts}{ts}/* Inlopen / inrijden nalopen */");
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisginl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:vannaar});");
                     }
                     
                     sb.AppendLine();
@@ -356,7 +358,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgvs}{vs:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
@@ -364,13 +366,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
 
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* Inlopen voetgangers */");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
-                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+                    sb.AppendLine($"{ts}{ts}/* Inlopen / inrijden */");
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisginl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_prmpf}{_prmxnl}{nl:vannaar});");
                     }
                     sb.AppendLine();
 
@@ -410,6 +409,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+            _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
 
             return base.SetSettings(settings);
         }
