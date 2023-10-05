@@ -439,7 +439,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                        if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                         {
                             AppendNalopenEG_RRFMCorrection(c, sb, ts);
                         }
@@ -1023,6 +1023,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AppendNalopenEG_RRFMCorrection(ControllerModel c, StringBuilder sb, string ts)
         {
+            if (c.InterSignaalGroep.Nalopen.Count > 0)
+            {
+                sb.AppendLine($"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
+                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                {
+                    var t = nl.Type == NaloopTypeEnum.StartGroen 
+                        ? nl.DetectieAfhankelijk 
+                            ? _tnlsgd 
+                            : _tnlsg 
+                        : _tvgnaloop;
+                    sb.AppendLine($"{ts}if (RT[{_tpf}{t}{nl:vannaar}] || T[{_tpf}{t}{nl:vannaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
+                }
+                sb.AppendLine();
+            }
+
             if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
             {
                 sb.AppendLine($"{ts}/* Bij nalopen op EG mag de volgrichting niet RR en FM");

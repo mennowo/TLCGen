@@ -805,6 +805,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tsts}Meetkriterium();");
             sb.AppendLine($"{tsts}Meeverlengen();");
             sb.AppendLine($"{tsts}Synchronisaties();");
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG(PRML, ML, MLMAX, twacht);");
+            }
             sb.AppendLine($"{tsts}RealisatieAfhandeling();");
             sb.AppendLine($"{tsts}FileVerwerking();");
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
