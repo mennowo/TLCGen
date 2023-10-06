@@ -851,6 +851,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                 {
                     sb.AppendLine();
+                    sb.AppendLine($"{ts}InitInterfunc();");
+                    sb.AppendLine();
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        var tp = nl.Type switch
+                        {
+                            NaloopTypeEnum.StartGroen => "TNL_SG",
+                            NaloopTypeEnum.EindeGroen => "TNL_EG",
+                            NaloopTypeEnum.CyclischVerlengGroen => "TNL_ECV",
+                            _ => "TLN_NG"
+                        };
+                        sb.AppendLine($"{ts}TNL_type[{_fcpf}{nl:van}][{_fcpf}{nl:naar}] = {tp};");
+                    }
                     sb.AppendLine();
                     for (var i = 0; i < c.Fasen.Count; ++i)
                     {

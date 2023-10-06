@@ -1037,17 +1037,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 sb.AppendLine();
             }
-
-            if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
-            {
-                sb.AppendLine($"{ts}/* Bij nalopen op EG mag de volgrichting niet RR en FM");
-                sb.AppendLine($"{ts}   gestuurd worden indien de voedende richting groen is */");
-                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
-                {
-                    sb.AppendLine($"{ts}if (!R[{_fcpf}{nl.FaseVan}] || TNL[{_fcpf}{nl.FaseNaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
-                }
-                sb.AppendLine();
-            }
         }
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
