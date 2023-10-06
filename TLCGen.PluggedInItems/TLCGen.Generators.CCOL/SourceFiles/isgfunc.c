@@ -8999,3 +8999,16 @@ void TegenhoudenInrijdenInlopen()
         }
     }
 }
+
+void InitInterfunc()
+{
+    count i, j;
+    for (i = 0; i < FCMAX; i++)  /* initialisatie TNL-type en FK_type */
+    {
+        for (j = 0; j < FCMAX; j++)
+        {
+            TNL_type[i][j] = TNL_NG;  /* defaults nalooptypen */
+            FK_type[i][j] = FK_NG; /* defaultls FK_type */
+        }
+    }
+}

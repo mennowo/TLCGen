@@ -272,7 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar}, {_tpf}{_tisgfo}{vs:vannaar});");
+                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_LateRelease({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisglr}{vs:vannaar}, {_tpf}{_tisgfo}{vs:vannaar});");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. deelconflicten/voorstarts die nog groen moeten worden */");
@@ -294,13 +294,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}/* Inlopen / inrijden nalopen */");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
-                    {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:vannaar});");
-                    }
                     
-                    sb.AppendLine();
+                    if (c.InterSignaalGroep.Nalopen.Count(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen) > 0)
+                    {
+                        sb.AppendLine($"{ts}/* Inlopen / inrijden nalopen */");
+                        foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
+                        {
+                            switch (nl.Type)
+                            {
+                                case NaloopTypeEnum.StartGroen:
+                                //    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:naarvan});");
+                                //    break;
+                                case NaloopTypeEnum.EindeGroen:
+                                case NaloopTypeEnum.CyclischVerlengGroen:
+                                    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_prmpf}{_prmxnl}{nl:vannaar});");
+                                    break;
+                            }
+                        }
+                        sb.AppendLine();
+                    }
+
                     sb.AppendLine($"{ts}{ts}wijziging |= CorrectieRealisatieTijd_Add();");
                     sb.AppendLine($"{ts}}} while (wijziging);");
                     sb.AppendLine();
