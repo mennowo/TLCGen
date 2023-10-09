@@ -51,7 +51,7 @@ void InterStartGroenTijden_VulHaldeConflictenIn(void);
 void InterStartGroenTijden_VulGroenGroenConflictenIn(void);
 void CorrigeerRealisatieTijdenObvGarantieTijden(void);
 void InitInterStartGroenTijden();
-void TegenhoudenInrijdenInlopen();
+void TegenhoudenDoorRealisatietijden();
 void InitInterfunc();
 
 extern mulv TNL_type[][FCMAX]; /* type naloop */
