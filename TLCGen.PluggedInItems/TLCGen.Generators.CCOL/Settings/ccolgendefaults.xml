@@ -3560,7 +3560,6 @@
 					<Categorie>CAT_Basisfuncties</Categorie>
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
 				</Setting>
-
 				<Setting>
 					<Default>isgar</Default>
 					<Setting>ar</Setting>
@@ -3576,10 +3575,22 @@
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
 				</Setting>
 				<Setting>
+					<Default>isgmad</Default>
+					<Setting>mad</Setting>
+					<Type>HulpElement</Type>
+					<Description>Onthouden melding binnen drukknop _E1_</Description>
+				</Setting>
+				<Setting>
 					<Default>isginl</Default>
 					<Setting>inl</Setting>
 					<Type>Timer</Type>
 					<Description>Inlooptijd fase _E1_</Description>
+				</Setting>
+				<Setting>
+					<Default>isglos</Default>
+					<Setting>los</Setting>
+					<Type>Schakelaar</Type>
+					<Description>Wel/niet toestaan losse realisatie _E1_</Description>
 				</Setting>
 			</Settings>
 		</CodePieceData>

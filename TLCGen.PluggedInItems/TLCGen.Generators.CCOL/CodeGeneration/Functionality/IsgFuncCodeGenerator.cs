@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
@@ -22,6 +23,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisglr;
         private CCOLGeneratorCodeStringSettingModel _tisginl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
+        private CCOLGeneratorCodeStringSettingModel _schisglos;
+        private CCOLGeneratorCodeStringSettingModel _hisgmad;
 #pragma warning restore 0649
         private string _prmaltg;
         private string _tnlfg;
@@ -65,7 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         $"{_tisgvs}{vs:vannaar}", vs.VoorstartTijd, CCOLElementTimeTypeEnum.TE_type, _tisgvs, vs.FaseVan, vs.FaseNaar));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tisgfo}{vs:vannaar}", vs.VoorstartOntruimingstijd, CCOLElementTimeTypeEnum.TE_type, _tisgfo, vs.FaseVan, vs.FaseNaar));
+                        $"{_tisgfo}{vs:naarvan}", vs.VoorstartOntruimingstijd, CCOLElementTimeTypeEnum.TE_type, _tisgfo, vs.FaseVan, vs.FaseNaar));
             }
 
             foreach (var lr in c.InterSignaalGroep.LateReleases)
@@ -97,6 +100,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         $"{_tisginl}{fc1.Naam}{fc2.Naam}",
                         nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
                         _tisginl, fc1.Naam));
+                }
+            }
+
+            var helps = new List<string>();
+
+            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
+                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+            {
+                var fc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                if (fc == null) continue;
+                var dBinnen = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                if (dBinnen != null)
+                {
+                    _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_hisgmad}{dBinnen.Naam}",
+                        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
+                        _hisgmad, dBinnen.Naam));
+                }
+
+                if (!helps.Contains($"s{_schisglos}{nl.FaseVan}_1"))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schisglos}{nl.FaseVan}_1", 0, CCOLElementTimeTypeEnum.SCH_type, _schisglos, nl.FaseVan));
+                    helps.Add($"s{_schisglos}{nl.FaseVan}_1");
+                }
+                if (!helps.Contains($"s{_schisglos}{nl.FaseVan}_2"))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schisglos}{nl.FaseVan}_2", 0, CCOLElementTimeTypeEnum.SCH_type, _schisglos, nl.FaseVan));
+                    helps.Add($"s{_schisglos}{nl.FaseVan}_2");
                 }
             }
         }
@@ -211,7 +245,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         sb.AppendLine($"{ts}BepaalRealisatieTijden();");
-                        sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
                         sb.AppendLine($"{ts}BepaalInterStartGroenTijden();");
                     }
 
