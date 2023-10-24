@@ -16,6 +16,7 @@
         RegCAanvragen,
         RegCBepaalRealisatieTijden,
         RegCBepaalInterStartGroenTijden,
+        RegCBepaalInterStartGroenTijdenPrio,
         RegCVerlenggroen,
         RegCVerlenggroenNaAdd,
         RegCMaxgroen,

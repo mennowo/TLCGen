@@ -56,8 +56,15 @@ namespace TLCGen.Models
 
         #region Synchronisations
 
-        public static IEnumerable<IInterSignaalGroepElement> GetAllSynchronisations(this ControllerModel c)
+        public static IEnumerable<IInterSignaalGroepElement> GetAllSynchronisations(this ControllerModel c, bool includeNalopen = true)
         {
+            if (!includeNalopen)
+            {
+                return c.InterSignaalGroep.Gelijkstarten
+                .Cast<IInterSignaalGroepElement>()
+                .Concat(c.InterSignaalGroep.Voorstarten)
+                .Concat(c.InterSignaalGroep.LateReleases);
+            }
             return c.InterSignaalGroep.Gelijkstarten
                 .Cast<IInterSignaalGroepElement>()
                 .Concat(c.InterSignaalGroep.Voorstarten)
@@ -217,8 +224,10 @@ namespace TLCGen.Models
 
         public static bool HasPTorHD(this ControllerModel c)
         {
-            return c.PrioData.PrioIngrepen.Any() ||
-                   c.PrioData.HDIngrepen.Any();
+            return 
+                c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen &&
+                (c.PrioData.PrioIngrepen.Any() ||
+                 c.PrioData.HDIngrepen.Any());
         }
 
         #endregion // Public Transport
