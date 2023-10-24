@@ -3521,10 +3521,22 @@
 					<Description>Inlooptijd fase _E1_</Description>
 				</Setting>
 				<Setting>
+					<Default>isgxnl</Default>
+					<Setting>xnl</Setting>
+					<Type>Timer</Type>
+					<Description>Tegenhouden fase _E1_ tbv naloop naar fase _E2_</Description>
+				</Setting>
+				<Setting>
 					<Default>isglos</Default>
 					<Setting>los</Setting>
 					<Type>Schakelaar</Type>
 					<Description>Wel/niet toestaan losse realisatie _E1_</Description>
+				</Setting>
+				<Setting>
+					<Default>isgtijd</Default>
+					<Setting>isgtijd</Setting>
+					<Type>Uitgang</Type>
+					<Description>Verklikken PRIO _E1_ tbv interfunc</Description>
 				</Setting>
 			</Settings>
 		</CodePieceData>

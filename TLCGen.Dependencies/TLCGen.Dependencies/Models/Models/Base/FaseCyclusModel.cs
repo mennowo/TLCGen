@@ -34,6 +34,10 @@ namespace TLCGen.Models
         [Browsable(false)]
         [HasDefault(false)]
         [NoTemplateApplicable]
+        public bool Interfunc { get; set; }
+        [Browsable(false)]
+        [HasDefault(false)]
+        [NoTemplateApplicable]
         public bool PrioIngreep { get; set; }
         [Browsable(false)]
         [HasDefault(false)]
@@ -75,6 +79,9 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
+
+        [IOElement("isgtijd", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(Interfunc))]
+        public BitmapCoordinatenDataModel IsgTijdBitmapData { get; set; }
 
         [IOElement("vc", BitmappedItemTypeEnum.Uitgang, nameof(Naam), nameof(PrioIngreep))]
         public BitmapCoordinatenDataModel PrioIngreepBitmapData { get; set; }
@@ -177,6 +184,7 @@ namespace TLCGen.Models
             WachttijdVoorspellerBitmapData2 = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData3 = new BitmapCoordinatenDataModel();
             WachttijdVoorspellerBitmapData4 = new BitmapCoordinatenDataModel();
+            IsgTijdBitmapData = new BitmapCoordinatenDataModel();
             AantalRijstroken = 1;
         }
 

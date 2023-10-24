@@ -55,6 +55,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.Append(GenerateRegCBepaalInterStartGroenTijden(controller));
+                if (controller.HasPTorHD())
+                {
+                    sb.Append(GenerateRegCBepaalInterStartGroenTijdenPrio(controller));
+                }
             }
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.Append(GenerateRegCWachtgroen(controller));
@@ -253,13 +257,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCTop, ts, gen.Key));
             }
             sb.AppendLine();
-            sb.AppendLine($"{ts}#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
-            sb.AppendLine($"{ts}{ts}extern {c.GetBoolV()} display;");
-            sb.AppendLine($"{ts}#endif");
+            sb.AppendLine($"#if !defined AUTOMAAT && !defined AUTOMAAT_TEST");
+            sb.AppendLine($"{ts}extern {c.GetBoolV()} display;");
+            sb.AppendLine($"#endif");
             sb.AppendLine();
 
            
-            sb.AppendLine($"{ts}#include \"{c.Data.Naam}reg.add\"");
+            sb.AppendLine($"#include \"{c.Data.Naam}reg.add\"");
+            if (!c.Data.LosseBrondbestanden && c.HasPTorHD()) sb.AppendLine($"#include \"{c.Data.Naam}prio.c\"");
+            if (!c.Data.LosseBrondbestanden) sb.AppendLine($"#include \"{c.Data.Naam}tab.c\"");
             sb.AppendLine();
 
             return sb.ToString();
@@ -387,6 +393,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden, true, true, false, true);
+
+            sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCBepaalInterStartGroenTijdenPrio(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void BepaalInterStartGroenTijden_PRIO(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio, true, true, false, true);
 
             sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
 

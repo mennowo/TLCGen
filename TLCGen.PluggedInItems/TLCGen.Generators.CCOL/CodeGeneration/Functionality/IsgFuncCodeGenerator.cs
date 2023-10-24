@@ -22,9 +22,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgvs;
         private CCOLGeneratorCodeStringSettingModel _tisglr;
         private CCOLGeneratorCodeStringSettingModel _tisginl;
+        private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
         private CCOLGeneratorCodeStringSettingModel _hisgmad;
+        private CCOLGeneratorCodeStringSettingModel _usisgtijd;
 #pragma warning restore 0649
         private string _prmaltg;
         private string _tnlfg;
@@ -37,6 +39,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmfperc;
         private string _prmxnl;
         private string _hmad;
+        private string _tvgnaloop;
+        private string _schgs;
 
         #endregion // Fields
 
@@ -105,6 +109,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             var helps = new List<string>();
 
+            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
+            {
+                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tisgxnl}{nl:vannaar}",
+                        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
+                        _tisgxnl, nl.FaseVan, nl.FaseNaar);
+            }
+
             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
                         c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
                         c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
@@ -133,6 +145,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     helps.Add($"s{_schisglos}{nl.FaseVan}_2");
                 }
             }
+
+            if (c.HasPTorHD())
+            {
+                foreach (var sg in c.Fasen)
+                {
+                    sg.Interfunc = true;
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usisgtijd}{sg.Naam}", _usisgtijd, sg.IsgTijdBitmapData, sg.Naam));
+                }
+            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -148,6 +169,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         new("int", "fc"),
                     };
                 case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden:
+                    return new List<CCOLLocalVariable>
+                    {
+                        new(c.GetBoolV(), "wijziging", "TRUE"),
+                    };
+                case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio:
                     return new List<CCOLLocalVariable>
                     {
                         new(c.GetBoolV(), "wijziging", "TRUE"),
@@ -170,13 +196,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 CCOLCodeTypeEnum.RegCIncludes => new[] { 140 },
                 CCOLCodeTypeEnum.RegCTop=> new[] { 140 },
-                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 90, 140 },
-                CCOLCodeTypeEnum.RegCMaxgroen => new[] { 90 },
+                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 90, 130, 140 },
+                CCOLCodeTypeEnum.RegCMaxgroen => new[] { 90, 130, 140 },
                 CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
                 CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
+                
+                CCOLCodeTypeEnum.PrioCIncludes => new[] { 140 },
+                CCOLCodeTypeEnum.RegCPreApplication => new[] { 140 },
+                CCOLCodeTypeEnum.RegCAanvragen => new[] { 140 },
+                CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => new[] { 140 },
+                CCOLCodeTypeEnum.RegCMeetkriterium => new[] { 140 },
+                CCOLCodeTypeEnum.RegCPostApplication => new[] { 140 },
+                
                 _ => null
             };
         }
@@ -187,11 +221,155 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
+                    if (!c.HasPTorHD()) return "";
+                    sb.AppendLine($"{ts}BepaalVolgrichtingen();");
+                    sb.AppendLine($"{ts}PrioMeetKriteriumISG();");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.PrioCIncludes:
+                    if (!c.HasPTorHD()) return "";
+                    sb.AppendLine("#include \"prioisg.c\" /* Interstartgroen prio functies */");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (!c.HasPTorHD()) return "";
+                    sb.AppendLine($"{ts}ResetIsgPrioVars();");
+                    sb.AppendLine($"{ts}RijTijdScenario();");
+                    sb.AppendLine($"{ts}RijTijdScenario_Add();");
+                    sb.AppendLine($"{ts}InUitMelden();");
+                    sb.AppendLine($"{ts}InUitMelden_Add();");
+                    sb.AppendLine($"{ts}PrioInstellingen();");
+                    sb.AppendLine($"{ts}PrioInstellingen_Add();");
+                    sb.AppendLine($"{ts}PrioTimers();");
+                    sb.AppendLine($"{ts}WachtTijdBewaking();");
+                    sb.AppendLine($"{ts}WachtTijdBewaking_Add();");
+                    sb.AppendLine($"{ts}OnderMaximum();");
+                    sb.AppendLine($"{ts}OnderMaximumExtra();");
+                    sb.AppendLine($"{ts}OnderMaximum_Add();");
+                    sb.AppendLine($"{ts}BlokkeringsTijd();");
+                    sb.AppendLine($"{ts}BlokkeringsTijd_Add();");
+                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG();");
+                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add();");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (!c.HasPTorHD()) return "";
+                    sb.AppendLine($"{ts}PrioAanvragen();");
+                    foreach (var sync in c.GetAllSynchronisations(false))
+                    {
+                        switch (sync)
+                        {
+                            case VoorstartModel vs:
+                                sb.AppendLine($"{ts}PrioMeerealisatieDeelconflictVoorstart({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
+                                break;
+                            case LateReleaseModel lr:
+                                sb.AppendLine($"{ts}PrioMeerealisatieDeelconflictLateRelease({_fcpf}{lr:van}, {_fcpf}{lr:naar}, {_tpf}{_tisglr}{lr:vannaar});");
+                                break;
+                            case GelijkstartModel gs:
+                                break;
+                        }
+                    }
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio:
+                    sb.AppendLine($"{ts}VulHardEnGroenConflictenInPrioVars();");
+                    if (c.InterSignaalGroep.Nalopen.Count > 0)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Pas interstartgroentijden aan a.g.v. nalopen */");
+                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        {
+                            var tnlfg = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen) ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                            var tnlfgd = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie) ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                            switch (nl.Type)
+                            {
+                                case NaloopTypeEnum.StartGroen:
+                                    var tnlsg = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroen) ? $"{_tpf}{_tnlsg}{nl:vannaar}" : "NG";
+                                    var tnlsgd = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie) ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
+                                    sb.AppendLine($"{ts}InterStartGroenTijd_NLSG_PRIO({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlsg}, {tnlsgd});");
+                                    break;
+                                case NaloopTypeEnum.EindeGroen:
+                                    var tnleg = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroen) ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
+                                    var tnlegd = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie) ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
+                                    sb.AppendLine($"{ts}InterStartGroenTijd_NLEG_PRIO({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar});");
+                                    break;
+                                case NaloopTypeEnum.CyclischVerlengGroen:
+                                    break;
+                            }
+                        }
+                    }
+
+                    foreach (var sync in c.GetAllSynchronisations(false))
+                    {
+                        switch (sync)
+                        {
+                            case VoorstartModel vs:
+                                sb.AppendLine($"{ts}InterStartGroentijd_MeeverlengenDeelconflict_PRIO({_fcpf}{vs:naar}, {_fcpf}{vs:van});");
+                                break;
+                            case LateReleaseModel lr:
+                                sb.AppendLine($"{ts}InterStartGroentijd_MeeverlengenDeelconflict_PRIO({_fcpf}{lr:naar}, {_fcpf}{lr:van});");
+                                break;
+                        }
+                    }
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}do");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
+
+                    sb.AppendLine($"{ts}{ts}/* Pas realisatietijden aan a.g.v. nalopen */");
+                    foreach (var sync in c.GetAllSynchronisations())
+                    {
+                        switch (sync)
+                        {
+                            case VoorstartModel vs:
+                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart_PRIO({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
+                                break;
+                            case LateReleaseModel lr:
+                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{lr:van}, {_fcpf}{lr:naar}, {_tpf}{_tisglr}{lr:vannaar});");
+                                break;
+                            case NaloopModel nl when nl.Type == NaloopTypeEnum.EindeGroen:
+                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                                break;
+                            case GelijkstartModel gs:
+                                sb.Append($"{ts}{ts}");
+                                if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                                {
+                                    sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                                }
+                                sb.AppendLine($"wijziging |= Correctie_TISG_Gelijkstart_PRIO({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
+                                break;
+                        }
+                    }
+
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
+                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
+                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+                    {
+                        var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                        if (fc1 == null) continue;
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisginl}{nl:vannaar});");
+                    }
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}wijziging |= Correctie_InterStartGroentijdTijd_PRIO_Add();");
+
+                    sb.AppendLine($"{ts}}} while (wijziging);");
+
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.TabCIncludes:
                     sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroenfuncties */");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    if (!c.HasPTorHD()) return "";
+
+                    sb.AppendLine($"{ts}PrioCcol();");
+                    foreach (var sg in c.Fasen)
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usisgtijd}{sg.Naam}] = ((twacht[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) >= 0) ? (twacht[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) : 0;");
+                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{c.GetBoolV()} init_tvg;");
@@ -212,12 +390,67 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine($"{ts}init_tvg = FALSE;");
+
+                        if (c.HasPTorHD())
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}ResetNietGroentijdOphogen();");
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* groentijd conflict volgrichting  mag niet opgehoogd worden tijdens inlopen */");
+                            foreach (var nl in c.InterSignaalGroep.Nalopen)
+                            {
+                                sb.AppendLine($"{ts}VerhoogGroentijdNietTijdensInrijden({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                            }
+                        }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Bepaal de minimale maximale verlengroentijd bij alternatieve realisaties */");
                         foreach (var fc in c.Fasen)
                         {
                             sb.AppendLine($"{ts}TVG_AR[{_fcpf}{fc.Naam}] = ((PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}]) >= 0) ? PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}] : NG;");
                         }
+                    }
+                    
+                    if (order == 130 && c.HasPTorHD())
+                    {
+                        sb.AppendLine($"{ts}AfkapGroen();");
+                        sb.AppendLine($"{ts}AfkapGroenExtra();");
+                        sb.AppendLine($"#ifdef PRIO_ADDFILE");
+                        sb.AppendLine($"{ts}AfkapGroen_Add();");
+                        sb.AppendLine($"#endif /* PRIO_ADDFILE */");
+                        sb.AppendLine($"");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = ((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0;");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{ts}BepaalTVG_BR(); /* Maximale verlenggroentijd bijzondere realisatie als deze nog niet groen*/");
+                        sb.AppendLine($"{ts}VerhoogTVG_maxDoorPrio(); /* Voldoende verlenggroentijd om prioriteitsrealisatie te faciliteren */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}TVG_max_voor_afkap[fc] = TVG_max[fc];");
+                        sb.AppendLine($"{ts}{ts}TVG_AR_voor_afkap[fc] = TVG_AR[fc];");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{ts}VerlaagTVG_maxDoorConfPrio(); /* Geef richtingen minder groen door conflicterende prioriteitsrealisatie */");
+                        sb.AppendLine($"{ts}/* Niet verhogen TVG_max tijdens groen Bijvoorbeeld als ov-ingreep of file ingreep wegvalt*/");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}if (SG[fc])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_old[fc] = TVG_max[fc];");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_AR_old[fc] = TVG_AR[fc];");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}if (G[fc] && !MG[fc])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}if ((TVG_max[fc] > TVG_old[fc]) && !TVG_max_opgehoogd[fc]) TVG_max[fc] = TVG_old[fc];");
+                        sb.AppendLine($"{ts}{ts}{ts}if ((TVG_AR[fc] > TVG_AR_old[fc]) && !TVG_AR_opgehoogd[fc]) TVG_AR[fc] = TVG_AR_old[fc];");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_AR_old[fc] = TVG_AR[fc];");
+                        sb.AppendLine($"{ts}{ts}{ts}TVG_old[fc] = TVG_max[fc];");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}BepaalRealisatieTijden();");
+                        sb.AppendLine($"");
+                        sb.AppendLine($"    BepaalStartGroenMomentenPrioIngrepen(); /* bepaal wanneer prioriteitsrealisatie mag komen */");
+                        sb.AppendLine($"    PasTVG_maxAanStartGroenMomentenPrioIngrepen(); /* pas de verlenggroentijden hier weer op aan*/");
                     }
 
                     if (order == 140)
@@ -246,11 +479,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         sb.AppendLine($"{ts}BepaalRealisatieTijden();");
                         sb.AppendLine($"{ts}BepaalInterStartGroenTijden();");
+
+                        if (c.HasPTorHD())
+                        {
+                            sb.AppendLine($"{ts}BepaalInterStartGroenTijden_PRIO();");
+                            sb.AppendLine($"{ts}PrioTegenhoudenISG(); /* Houdt richtingen die conflicterend zijn met priorealisatie als er niet meer genoeg ruimte voor realisatie is  */");
+                            sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeRRPrio(); /* Pas realisatietijden aan voor richtingen conflicterend met prioriteitsrealisatie*/");
+                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
+                            sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeBRLateRelease(fc26);");
+                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
+                        }
                     }
 
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}init_tvg = TRUE;");
+                    if (c.HasPTorHD())
+                    {
+                        sb.AppendLine($"{ts}PrioInit_ISG();");
+                        sb.AppendLine($"{ts}PrioInitExtra();");
+                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     sb.AppendLine($"{ts}BepaalIntergroenTijden();");
@@ -285,7 +533,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var nlsgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
                         sb.AppendLine($"{ts}Realisatietijd_NLSG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlsg}, {nlsgd});");
                     }
-                    foreach(var fc in c.Fasen.Where(x => x.HardMeeverlengenFaseCycli.Any()))
+                    foreach (var fc in c.Fasen.Where(x => x.HardMeeverlengenFaseCycli.Any()))
                     {
                         foreach (var hmfc in fc.HardMeeverlengenFaseCycli)
                         {
@@ -327,7 +575,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
-                    
+
                     if (c.InterSignaalGroep.Nalopen.Count(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen) > 0)
                     {
                         sb.AppendLine($"{ts}/* Inlopen / inrijden nalopen */");
@@ -336,11 +584,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch (nl.Type)
                             {
                                 case NaloopTypeEnum.StartGroen:
-                                //    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:naarvan});");
+                                //    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:naarvan});");
                                 //    break;
                                 case NaloopTypeEnum.EindeGroen:
                                 case NaloopTypeEnum.CyclischVerlengGroen:
-                                    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_prmpf}{_prmxnl}{nl:vannaar});");
+                                    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                                     break;
                             }
                         }
@@ -415,7 +663,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* Inlopen / inrijden */");
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_prmpf}{_prmxnl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                     }
                     sb.AppendLine();
 
@@ -425,6 +673,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeeverlengen:
+                    sb.AppendLine($"{ts}MeeverlengenUitDoorPrio();");
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
                         c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
                         c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
@@ -434,7 +683,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fc1 == null) continue;
                         var insideDp = fc1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
                         if (insideDp == null) continue;
-                        sb.AppendLine($"{ts}{ts}MeeverlengenUitDoorVoetgangerLos({_fcpf}{nl:van}, {_hpf}{_hmad}{insideDp.Naam});");
+                        sb.AppendLine($"{ts}MeeverlengenUitDoorVoetgangerLos({_fcpf}{nl:van}, {_hpf}{_hmad}{insideDp.Naam});");
                     }
                     return sb.ToString();
 
@@ -456,6 +705,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
             _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
+            _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
+            _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
 
             return base.SetSettings(settings);
         }

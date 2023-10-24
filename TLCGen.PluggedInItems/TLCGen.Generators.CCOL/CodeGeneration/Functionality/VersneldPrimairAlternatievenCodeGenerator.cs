@@ -297,6 +297,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{afsluitgebiedFunc}(PR{r.Reeks}, {r.Reeks});");
                         }
                         sb.AppendLine();
+                        if(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            foreach (var sync in c.GetAllSynchronisations(false))
+                            {
+                                switch (sync)
+                                {
+                                    case VoorstartModel vs:
+                                        sb.AppendLine($"{ts}if (EG[{_fcpf}{vs:van}] && PR[{_fcpf}{vs:van}] && !A[{_fcpf}{vs:naar}] && (PRML[ML][{_fcpf}{vs:naar}] & PRIMAIR_VERSNELD)) PG[{_fcpf}{vs:naar}] |= PRIMAIR_OVERSLAG;");
+                                        break;
+                                    case LateReleaseModel lr:
+                                        sb.AppendLine($"{ts}if (EG[{_fcpf}{lr:van}] && PR[{_fcpf}{lr:van}] && !A[{_fcpf}{lr:naar}] && (PRML[ML][{_fcpf}{lr:naar}] & PRIMAIR_VERSNELD)) PG[{_fcpf}{lr:naar}] |= PRIMAIR_OVERSLAG;");
+                                        break;
+                                }
+                            }
+                            sb.AppendLine();
+                        }
                         sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}RR[fc] &= ~BIT5;");
@@ -640,6 +656,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var r in molens)
                         {
                             sb.AppendLine($"{ts}langstwachtende_alternatief_modulen(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX);");
+                        }
+
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            sb.AppendLine($"{ts}PrioBijzonderRealiserenISG();");
                         }
                     }
                     else if (!c.Data.MultiModuleReeksen) // This is not yet supported for multi-ML
