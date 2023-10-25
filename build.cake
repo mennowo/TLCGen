@@ -23,7 +23,7 @@ var outputDir = Directory("./published") + Directory(configuration);
 var outputDirBase = Directory("./published");
 // varia
 var prev_version = "12_4_3_0";
-var backupOld = false;
+var backupOld = true;
 var deployDev = false;
 var deploy = true;
 //////////////////////////////////////////////////////////////////////

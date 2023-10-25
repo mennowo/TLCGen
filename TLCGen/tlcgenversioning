@@ -1,5 +1,7 @@
-TLCGen=12.4.0.3
+TLCGen=12.4.0.4
 RN==TLCGen
+TLCGen versie: 12.4.0.4
+- Hotfix functie declaratie in extra_func_ris.h
 TLCGen versie: 12.4.0.3
 - Anti-jutter optioneel voor HD ingrepen
 - Nooit aanmaken TDH/TDB voor drukknoppen
