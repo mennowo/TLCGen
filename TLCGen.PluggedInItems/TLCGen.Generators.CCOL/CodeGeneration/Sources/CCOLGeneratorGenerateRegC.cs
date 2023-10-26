@@ -270,6 +270,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
            
             sb.AppendLine($"#include \"{c.Data.Naam}reg.add\"");
             if (!c.Data.LosseBrondbestanden && c.HasPTorHD()) sb.AppendLine($"#include \"{c.Data.Naam}prio.c\"");
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc && c.HasPTorHD()) sb.AppendLine("#include \"isgfunc_prio.c\" /* Interstartgroen prio functies */");
             if (!c.Data.LosseBrondbestanden) sb.AppendLine($"#include \"{c.Data.Naam}tab.c\"");
             sb.AppendLine();
 

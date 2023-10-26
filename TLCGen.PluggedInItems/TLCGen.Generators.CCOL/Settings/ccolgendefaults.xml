@@ -3591,6 +3591,8 @@
 					<Setting>xnl</Setting>
 					<Type>Timer</Type>
 					<Description>Tegenhouden fase _E1_ tbv naloop naar fase _E2_</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
 				</Setting>
 				<Setting>
 					<Default>isglos</Default>

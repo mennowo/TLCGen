@@ -111,10 +111,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
             {
-                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_tisgxnl}{nl:vannaar}",
                         nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
-                        _tisgxnl, nl.FaseVan, nl.FaseNaar);
+                        _tisgxnl, nl.FaseVan, nl.FaseNaar));
             }
 
             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
@@ -151,8 +152,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var sg in c.Fasen)
                 {
                     sg.Interfunc = true;
+                    sg.IsgTijdBitmapData.Multivalent = true;
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usisgtijd}{sg.Naam}", _usisgtijd, sg.IsgTijdBitmapData, sg.Naam));
                 }
+            }
+
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
             }
         }
 
@@ -204,7 +210,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
                 CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
                 
-                CCOLCodeTypeEnum.PrioCIncludes => new[] { 140 },
                 CCOLCodeTypeEnum.RegCPreApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCAanvragen => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => new[] { 140 },
@@ -225,10 +230,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!c.HasPTorHD()) return "";
                     sb.AppendLine($"{ts}BepaalVolgrichtingen();");
                     sb.AppendLine($"{ts}PrioMeetKriteriumISG();");
-                    return sb.ToString();
-                case CCOLCodeTypeEnum.PrioCIncludes:
-                    if (!c.HasPTorHD()) return "";
-                    sb.AppendLine("#include \"prioisg.c\" /* Interstartgroen prio functies */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     if (!c.HasPTorHD()) return "";
@@ -360,7 +361,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCIncludes:
-                    sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroenfuncties */");
+                    sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroen functies */");
+                    
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     if (!c.HasPTorHD()) return "";

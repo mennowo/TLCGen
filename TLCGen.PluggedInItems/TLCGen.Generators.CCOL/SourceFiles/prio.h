@@ -205,6 +205,7 @@ extern int* iInOnderMaximumVerstreken[];
 extern int* iPrioMeeRealisatie[];
 
 extern int prioKFC_MAX[];
+extern int prioFKFC_MAX[];
 extern int* prioTO_pointer[];
 extern int iLangstWachtendeAlternatief;
 
