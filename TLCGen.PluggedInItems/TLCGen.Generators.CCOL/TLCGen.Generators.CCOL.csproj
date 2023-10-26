@@ -167,7 +167,9 @@
     <Content Include="SourceFiles\isgfunc.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SourceFiles\prioisg.c" />
+    <Content Include="SourceFiles\isgfunc_prio.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\realfunc.c">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

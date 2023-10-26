@@ -313,6 +313,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case SynchronisatiesTypeEnum.InterFunc:
                             CopySourceIfNeeded(c, "isgfunc.c", sourcefilepath);
                             CopySourceIfNeeded(c, "isgfunc.h", sourcefilepath);
+                            if (c.HasPTorHD())
+                            {
+                                CopySourceIfNeeded(c, "isgfunc_prio.c", sourcefilepath);
+                            }
                             break;
                     }
 
