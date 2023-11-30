@@ -7,6 +7,7 @@ extern mulv C_counter_old[CTMAX];
 extern mulv C_counter_old[CTMAX];
 #ifndef NO_PRIO
     extern boolv vertraag_kar_uitm[prioFCMAX];
+    extern mulv PRIOFC[FCMAX];
 #endif 
 
 bool DSIMeldingPRIO_V1(count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
@@ -32,3 +33,4 @@ bool WDNST_check_uit(count fc);
 void NevenMelding(count ov1, count ov2, count ov3, count d, count prmrtbl, count prmrtbh, count hovss1, count hovss2, count hovss3, count hneven1, count hneven2, count hneven3);
 bool fietsprio_inmelding(count fc, count dvw, count c_priocount, count c_priocyc, count prm_prioblok, count prm_priocyc, count prm_priocount, count prm_priowt, bool prioin, count ml, count me_priocount, count prm_priocountris);
 void fietsprio_update(count fc, count dvw, count c_priocount, count c_priocyc, bool prioin, count ml);  
+void BeeindigenWachtgroenPrioConflicten();

@@ -8500,8 +8500,8 @@ bool ym_max_tig_REALISATIETIJD(count i, count prmomx) /* todo fc22 moet met 5 me
         for (n = 0; n < FKFC_MAX[i]; ++n)
         {
             k = KF_pointer[i][n];
-            if ((RA[k] || AAPR[k]) && !(FK_type[i][k] == FK_SG) && !(FK_type[i][k] == FK_EVG) && (REALISATIETIJD_max[k] > 0))
-            {
+            if ((RA[k] || AAPR[k]) && !(FK_type[i][k] == FK_SG) && !(FK_type[i][k] == FK_EVG) && (REALISATIETIJD_max[k] >= 0))
+               {
                 ym = FALSE;
                 for (j = 0; j < FKFC_MAX[k]; j++)
                 {
@@ -8682,7 +8682,11 @@ bool hf_wsg_nlISG(void)
 
     for (i = 0; i < FC_MAX; i++) {
         if (G[i] && !MG[i] && !WS[i] && !(WG[i] && (RW[i] & BIT2)) && !(MK[i] & BIT12) || G[i] && (MK[i] & ~BIT12) || GL[i] || TRG[i]
-            || R[i] && A[i] && !BL[i])
+            || R[i] && A[i] && !BL[i] 
+#ifndef NO_PRIO
+           || PRIOFC[i]
+#endif
+           )
             return (TRUE);
     }
     return (FALSE);
@@ -8818,12 +8822,21 @@ void corrigeerTIGRvoorNalopen(count fc1, count fc2, mulv tnleg, mulv tnlegd, mul
 
 void MeeverlengenUitDoorVoetgangerLos(count fcvtg, count hmadk)
 {
-    count n, fc;
-    for (n = 0; n < FKFC_MAX[fcvtg]; ++n)
-    {
-        fc = KF_pointer[fcvtg][n];
-        if ((REALISATIETIJD[fc][fcvtg] > 0) && MG[fc]) YM[fc] = FALSE;
-    }
+   count n, fc;
+   if ((AAPR[fcvtg] || RA[fcvtg]) && IH[hmadk])
+
+   {
+      for (n = 0; n < KFC_MAX[fcvtg]; ++n)
+      {
+         fc = KF_pointer[fcvtg][n];
+         if ((REALISATIETIJD[fc][fcvtg] > 0) && MG[fc]) YM[fc] = FALSE;
+      }
+      for (n = KFC_MAX[fcvtg]; n < FKFC_MAX[fcvtg]; ++n)
+      {
+         fc = KF_pointer[fcvtg][n];
+         if ((REALISATIETIJD[fc][fcvtg] > 0) && MG[fc] && (FK_type[fc][fcvtg] == FK_EG)) YM[fc] = FALSE;
+      }
+   }
 }
 
 void PrioAanwezig(void)
@@ -9014,4 +9027,51 @@ void InitInterfunc()
             FK_type[i][j] = FK_NG; /* defaultls FK_type */
         }
     }
+}
+
+void IsgDebug()
+{
+#ifndef AUTOMAAT
+   count x, y;
+   xyprintf(38 + 4 * FCMAX, 0, "InterStartGroentijd");
+   xyprintf(46 + 8 * FCMAX, 0, "PAR");
+   for (y = 0; y < FCMAX; ++y)
+   {
+      xyprintf(30, y + 4, "%2s", FC_code[y]);
+      for (x = 0; x < FCMAX; ++x)
+      {
+         xyprintf(34 + 4 * x, y + 4, "%4d", REALISATIETIJD[y][x]);
+      }
+   }
+   for (x = 0; x < FCMAX; ++x)
+   {
+      xyprintf(34 + 4 * x, 3, "%4s", FC_code[x]);
+   }
+   for (x = 0; x < FCMAX; ++x)
+   {
+      xyprintf(34 + 4 * x, 4 + FCMAX, "%4d", REALISATIETIJD_max[x]);
+   }
+   for (x = 0; x < FCMAX; ++x)
+   {
+      xyprintf(42 + 4 * (x + FCMAX), 3, "%4s", FC_code[x]);
+   }
+   for (y = 0; y < FCMAX; ++y)
+   {
+      xyprintf(38 + 4 * FCMAX, y + 4, "%2s", FC_code[y]);
+      for (x = 0; x < FCMAX; ++x)
+      {
+         xyprintf(42 + 4 * (x + FCMAX), y + 4, "%4d", TISG_PR[y][x]);
+      }
+   }
+   for (x = 0; x < FCMAX; ++x)
+   {
+      xyprintf(42 + 4 * (x + FCMAX), 4 + FCMAX, "%4d", twacht[x]);
+   }
+   xyprintf(36 + 4 * FCMAX, 4 + FCMAX, "twacht");
+   for (y = 0; y < FCMAX; ++y)
+   {
+      xyprintf(46 + 8 * FCMAX, y + 4, "%2s", FC_code[y]);
+      xyprintf(50 + 8 * FCMAX, y + 4, "%4d", max_par(y));
+   }
+#endif
 }

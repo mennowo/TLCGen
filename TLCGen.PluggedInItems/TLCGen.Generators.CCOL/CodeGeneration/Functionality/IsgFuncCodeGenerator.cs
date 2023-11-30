@@ -488,7 +488,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}PrioTegenhoudenISG(); /* Houdt richtingen die conflicterend zijn met priorealisatie als er niet meer genoeg ruimte voor realisatie is  */");
                             sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeRRPrio(); /* Pas realisatietijden aan voor richtingen conflicterend met prioriteitsrealisatie*/");
                             sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
-                            sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeBRLateRelease(fc26);");
+                            foreach (var lr in c.InterSignaalGroep.LateReleases)
+                            {
+                                sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeBRLateRelease({_fcpf}{lr:van});");
+                            }
                             sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
                         }
                     }
@@ -545,9 +548,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v ontruimende deelconflicten */");
-                    foreach (var vs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
+                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgfo}{vs:naarvan});");
+                        sb.Append($"{ts}");
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                        {
+                            sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                        }
+                        sb.AppendLine($"Ontruiming_Deelconflict_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van}, {_tpf}{_tisgfo}{gs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
@@ -564,9 +572,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
-                    foreach (var vs in c.InterSignaalGroep.Gelijkstarten)
+                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Gelijkstart({_fcpf}{vs:naar}, {_fcpf}{vs:van});");
+                        sb.Append($"{ts}");
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                        {
+                            sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                        }
+                        sb.AppendLine($"wijziging |= Correctie_REALISATIETIJD_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
@@ -650,6 +663,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
+                        sb.Append($"{ts}");
+                        if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
+                        {
+                            sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                        }
                         sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)

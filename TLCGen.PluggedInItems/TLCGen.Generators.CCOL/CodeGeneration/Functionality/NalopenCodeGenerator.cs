@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
@@ -334,6 +335,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
+                    var first = true;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+
+                        var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                        var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                        if (nl.Type == NaloopTypeEnum.StartGroen &&
+                            fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                        {
+                            var dp = nl.DetectieAfhankelijk ? nl.Detectoren.FirstOrDefault() : null;
+                            if (dp != null)
+                            {
+                                if (first)
+                                {
+                                    sb.AppendLine();
+                                    first = false;
+                                }
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hnla}{dp.Detector}] = IH[{_hpf}{_hmad}{dp.Detector}];");
+                            }
+                        }
+                    }
+                    
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
