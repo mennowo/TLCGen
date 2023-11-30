@@ -1426,7 +1426,9 @@ bool ControleerNaloopEG(count voedend, count volg, count tnlfg, count tnleg, cou
       xyprintf(0, 0, "Ongewenste situatie: naloop niet gerespecteerd. Zie terminal.");
       if (halt)
       {
+#ifndef VISSIM
          stuffkey(F5KEY);
+#endif
       }
       return FALSE;
    }
@@ -1471,7 +1473,9 @@ bool ControleerInrijden(count voedend, count volg, bool tinr, bool halt)
       xyprintf(31, 2, "Ongewenste situatie: naloop niet gerespecteerd. Zie terminal.");
       if (halt)
       {
+#ifndef VISSIM
          stuffkey(F5KEY);
+#endif
       }
       return FALSE;
    }
@@ -1507,7 +1511,9 @@ bool ControleerGS(count fc1, count fc2, bool cond, bool halt)
             xyprintf(0, 0, "Ongewenste situatie: gelijstart niet gerespecteerd. Zie terminal.");
             if (halt)
             {
+#ifndef VISSIM
                stuffkey(F5KEY);
+#endif
             }
             return FALSE;
          }
@@ -1546,7 +1552,9 @@ bool ControleerVS(count fc1, count fc2, bool cond, bool halt)
             xyprintf(0, 0, "Ongewenste situatie: VS niet gerespecteerd. Zie terminal.");
             if (halt)
             {
+#ifndef VISSIM
                stuffkey(F5KEY);
+#endif
             }
             return FALSE;
          }

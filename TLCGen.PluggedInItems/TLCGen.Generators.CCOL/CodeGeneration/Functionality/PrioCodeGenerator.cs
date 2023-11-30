@@ -717,7 +717,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return new List<CCOLLocalVariable> { new("int", "ov", "0") };
             
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
+                    if (c.HasHD() && c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
                         var result2 = new List<CCOLLocalVariable> {new(c.GetBoolV(), "isHD", "FALSE")};
                         if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isWTV", "FALSE"));
@@ -1667,7 +1667,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
+                    if (c.HasHD() && c.PrioData.BlokkeerNietConflictenBijHDIngreep)
                     {
                         sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");
                         sb.Append($"{ts}isHD = ");

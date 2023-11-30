@@ -785,7 +785,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var sync = sortedSyncs.twoWayPedestrians.FirstOrDefault(x =>
                     x.m1.FaseVan == nl.FaseVan && x.m1.FaseNaar == nl.FaseNaar
                     || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
-                if (sync.m1 == null) continue;
+                if (sync.m1 == null)
+                {
+                    sync = sortedSyncs.twoWay.FirstOrDefault(x =>
+                        x.m1.FaseVan == nl.FaseVan && x.m1.FaseNaar == nl.FaseNaar
+                        || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
+                    if (sync.m1 == null)
+                    {
+                        continue;
+                    }
+                }
 
                 string tnl;
                 string hnl;
@@ -844,11 +853,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.AppendLine($"{ts}{{");
                 if (pars[2].Count > 0)
                 {
-                    sb.AppendLine($"{ts}{ts}/* PAR-correcties nalopen voetgagners stap 2: beide PAR of los OK */");
+                    sb.AppendLine($"{ts}{ts}/* PAR-correcties nalopen voetgangers stap 2: beide PAR of los OK */");
                     foreach (var s in pars[2]) sb.AppendLine(ts + s);
                     if (sortedSyncs.oneWay.Count > 0)
                     {
                         sb.AppendLine();
+                        sb.AppendLine($"/* PAR = PAR */");
                         foreach (var sync in sortedSyncs.oneWay)
                         {
                             sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");

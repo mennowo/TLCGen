@@ -30,19 +30,7 @@
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
-                <DataGridTextColumn Binding="{Binding Path=AantalRijstroken,TargetNullValue={x:Static sys:String.Empty}}" Header="Rijstroken" >
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=Type}" Value="Voetganger">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                    <Setter Property="Background" Value="LightGray" />
-                                    <Setter Property="Foreground" Value="LightGray" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=AantalRijstroken,TargetNullValue={x:Static sys:String.Empty}}" Header="Rijstroken" />
                 <DataGridComboBoxColumn Header="Vaste aanvr." 
                                         SelectedItemBinding="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
