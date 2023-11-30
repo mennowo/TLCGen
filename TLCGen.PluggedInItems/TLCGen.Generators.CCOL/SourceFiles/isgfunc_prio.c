@@ -9,7 +9,6 @@ mulv TISG_BR[FCMAX][FCMAX];
 mulv TVG_max_voor_afkap[FCMAX];
 mulv TVG_AR_voor_afkap[FCMAX];
 
-
 bool TVG_max_opgehoogd[FCMAX];
 bool TVG_AR_opgehoogd[FCMAX];
 bool RW_OV[FCMAX] = { 0 };
@@ -975,7 +974,7 @@ void VerhoogGroentijdNietTijdensInrijden(count fc1, count fc2, count txnlfc1fc2)
             fc = KF_pointer[fc2][n];
             NietGroentijdOphogen[fc] = TRUE;
          }
-         for (KFC_MAX[fc2] = 0; n < FKFC_MAX[fc2]; ++n)
+         for (n = KFC_MAX[fc2]; n < FKFC_MAX[fc2]; ++n)
          {
             fc = KF_pointer[fc2][n];
             if (FK_type[fc][fc2] != FK_SG) NietGroentijdOphogen[fc] = TRUE;

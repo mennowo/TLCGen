@@ -765,6 +765,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new []{11},
                 CCOLCodeTypeEnum.PrioCInitPrio => new []{11},
                 CCOLCodeTypeEnum.PrioCIncludes => new []{11},
+                CCOLCodeTypeEnum.RegCWachtgroen => new []{50},
                 _ => null
             };
         }
@@ -1357,6 +1358,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}PRIO_teller({_ctpf}{_cvchd}{hd.FaseCyclus}, {sch});");
                     }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCWachtgroen:
+                    sb.AppendLine($"{ts}/* Op tijd beeindingen wachtgroen (bv voor TWL's of andere wachtstand richtingen  */");
+                    sb.AppendLine($"#ifndef NO_PRIO");
+                    sb.AppendLine($"{ts}PrioAanwezig();");
+                    sb.AppendLine($"{ts}BeeindigenWachtgroenPrioConflicten();");
+                    sb.AppendLine($"#endif /* NO_PRIO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:

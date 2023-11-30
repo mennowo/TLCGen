@@ -901,7 +901,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 else
                 {
-                    sb.AppendLine($"{ts}AfhandelingPrio();");
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                    {
+                        sb.AppendLine($"{ts}PrioDebug_Add();");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}AfhandelingPrio();");
+                    }
                 }
                 sb.AppendLine("#endif /* NO_PRIO */");
             }
@@ -919,6 +926,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
+
+            if(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine($"{ts}IsgDebug();");
+            }
+
             sb.AppendLine("");
             sb.AppendLine($"{ts}PostApplication();");
             if (c.Data.KWCType != KWCTypeEnum.Geen && c.Data.KWCUitgebreid)
