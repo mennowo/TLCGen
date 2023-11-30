@@ -77,6 +77,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_GEEL_DEELCONFLICT;       /* Geel   */");
                         }
                         break;
+                    case TimingsFaseCyclusTypeEnum.Onbekend:
+                        sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_ROOD]= CIF_TIMING_ONBEKEND;       /* Rood   */");
+                        sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GROEN]= CIF_TIMING_ONBEKEND;      /* Groen  */");
+                        if (fcfc != null)
+                        {
+                            sb.AppendLine($"{ts}CCOL_FC_EVENTSTATE[{_fcpf}{fc.FaseCyclus}][CIF_GEEL]= CIF_TIMING_ONBEKEND;       /* Geel   */");
+                        }
+                        break;
                 }
                 sb.AppendLine();
             }

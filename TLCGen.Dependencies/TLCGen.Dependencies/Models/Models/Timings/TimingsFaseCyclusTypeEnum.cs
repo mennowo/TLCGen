@@ -3,6 +3,7 @@
     public enum TimingsFaseCyclusTypeEnum
     {
         Conflictvrij,
-        Deelconflict
+        Deelconflict,
+        Onbekend
     }
 }
