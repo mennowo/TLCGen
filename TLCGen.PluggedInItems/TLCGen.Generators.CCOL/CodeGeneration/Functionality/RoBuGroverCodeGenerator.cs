@@ -93,6 +93,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{ts}/* Robuuste Groenverdeler */");
                     sb.AppendLine($"{ts}#include \"{c.Data.Naam}rgv.c\"");
+                    sb.AppendLine($"{ts}{c.GetBoolV()} rgvinit = TRUE;");
                     sb.AppendLine();
                     return sb.ToString();
 
