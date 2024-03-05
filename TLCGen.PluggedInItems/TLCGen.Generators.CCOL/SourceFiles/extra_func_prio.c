@@ -1,5 +1,6 @@
 #include "extra_func_prio.h"
 #include "prio.h"
+#include <stdlib.h>
 
 bool DSIMeldingPRIO_V1(
 	count dslus,

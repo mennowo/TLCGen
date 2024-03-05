@@ -344,7 +344,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* percentage MG bij filemelding < 100% */");
                             foreach (var dos in fm.TeDoserenSignaalGroepen)
                             {
-                                sb.AppendLine($"if (G[{_fcpf}{dos.FaseCyclus}] && !MG[{_fcpf}{dos.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}] && (PRM[{_prmpf}{_prmfperc}{fm.Naam}{dos.FaseCyclus}] < 100)) MM[{_mpf}{_mfilemem}{dos.FaseCyclus}] = TRUE;");
+                                sb.AppendLine($"{ts}if (G[{_fcpf}{dos.FaseCyclus}] && !MG[{_fcpf}{dos.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}] && (PRM[{_prmpf}{_prmfperc}{fm.Naam}{dos.FaseCyclus}] < 100)) MM[{_mpf}{_mfilemem}{dos.FaseCyclus}] = TRUE;");
                             }
                             sb.AppendLine();
                         }
@@ -371,8 +371,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var otts = tts;
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"{tts}if (MM[{_mpf}{_mfilemem}{ff.FaseCyclus}] && G[{_fcpf}{ff.FaseCyclus}] && !MG[{_fcpf}{ff.FaseCyclus}])");
-                                    sb.AppendLine($"{tts}{{");
+                                    sb.AppendLine($"{tts}{ts}if (MM[{_mpf}{_mfilemem}{ff.FaseCyclus}] && G[{_fcpf}{ff.FaseCyclus}] && !MG[{_fcpf}{ff.FaseCyclus}])");
+                                    sb.AppendLine($"{tts}{ts}{{");
                                     tts += ts;
                                 }
 
@@ -383,8 +383,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     _ => ""
                                 };
                                 sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
+                                    ? $"{tts}{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
+                                    : $"{tts}{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
                                 sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
                                 var rest = "";
                                 var irest = 1;
@@ -413,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
                                     tts = otts;
-                                    sb.AppendLine($"{tts}}}");
+                                    sb.AppendLine($"{tts}{ts}}}");
                                 }
                             }
                             sb.AppendLine($"{tts}}}");

@@ -660,6 +660,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                         {
+                            sb.AppendLine($"{ts}langstwachtende_alternatief();");
                             sb.AppendLine($"{ts}PrioBijzonderRealiserenISG();");
                         }
                     }

@@ -232,8 +232,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}PrioMeetKriteriumISG();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
+                    sb.AppendLine($"{ts}ResetIsgVars();");
                     if (!c.HasPTorHD()) return "";
-                    sb.AppendLine($"{ts}ResetIsgPrioVars();");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen */");
                     sb.AppendLine($"{ts}RijTijdScenario();");
                     sb.AppendLine($"{ts}RijTijdScenario_Add();");
                     sb.AppendLine($"{ts}InUitMelden();");
@@ -248,11 +250,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}OnderMaximum_Add();");
                     sb.AppendLine($"{ts}BlokkeringsTijd();");
                     sb.AppendLine($"{ts}BlokkeringsTijd_Add();");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen ISG */");
                     sb.AppendLine($"{ts}PrioriteitsToekenning_ISG();");
                     sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (!c.HasPTorHD()) return "";
+                    sb.AppendLine($"{ts}/* openbaar vervoer aanvragen */");
                     sb.AppendLine($"{ts}PrioAanvragen();");
                     foreach (var sync in c.GetAllSynchronisations(false))
                     {
@@ -321,13 +326,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         switch (sync)
                         {
                             case VoorstartModel vs:
-                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart_PRIO({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
+                                sb.AppendLine($"{ts}{ts}wijziging |= TISG_Voorstart_PRIO_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                                 break;
                             case LateReleaseModel lr:
-                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{lr:van}, {_fcpf}{lr:naar}, {_tpf}{_tisglr}{lr:vannaar});");
+                                sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{lr:van}, {_fcpf}{lr:naar}, {_tpf}{_tisglr}{lr:vannaar});");
                                 break;
                             case NaloopModel nl when nl.Type == NaloopTypeEnum.EindeGroen:
-                                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                                sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                                 break;
                             case GelijkstartModel gs:
                                 sb.Append($"{ts}{ts}");
@@ -335,7 +340,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
                                 }
-                                sb.AppendLine($"wijziging |= Correctie_TISG_Gelijkstart_PRIO({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
+                                sb.AppendLine($"wijziging |= TISG_Gelijkstart_PRIO_Correctie({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
                                 break;
                         }
                     }
@@ -347,7 +352,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                         if (fc1 == null) continue;
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_PRIO({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisginl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisginl}{nl:vannaar});");
                     }
 
                     sb.AppendLine();
@@ -424,7 +429,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = ((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0;");
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}BepaalTVG_BR(); /* Maximale verlenggroentijd bijzondere realisatie als deze nog niet groen*/");
+                        sb.AppendLine($"{ts}BepaalTVG_BR(); /* Maximale verlenggroentijd bijzondere realisatie als deze nog niet groen is */");
                         sb.AppendLine($"{ts}VerhoogTVG_maxDoorPrio(); /* Voldoende verlenggroentijd om prioriteitsrealisatie te faciliteren */");
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
@@ -518,7 +523,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
 
                     sb.AppendLine($"{ts}InitRealisatieTijden();");
-                    sb.AppendLine($"{ts}RealisatieTijden_VulHaldeConflictenIn();");
+                    sb.AppendLine($"{ts}RealisatieTijden_VulHardeConflictenIn();");
                     sb.AppendLine($"{ts}RealisatieTijden_VulGroenGroenConflictenIn();");
                     sb.AppendLine($"{ts}CorrigeerRealisatieTijdenObvGarantieTijden();");
                     sb.AppendLine();
@@ -542,7 +547,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var hmfc in fc.HardMeeverlengenFaseCycli)
                         {
-                            sb.AppendLine($"{ts}Realisatietijd_MeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
+                            sb.AppendLine($"{ts}Realisatietijd_HardMeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
                         }
                     }
 
@@ -555,15 +560,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
                         }
-                        sb.AppendLine($"Ontruiming_Deelconflict_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van}, {_tpf}{_tisgfo}{gs:naarvan});");
+                        sb.AppendLine($"Realisatietijd_Ontruiming_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van}, {_tpf}{_tisgfo}{gs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgfo}{vs:naarvan});");
+                        sb.AppendLine($"{ts}Realisatietijd_Ontruiming_Voorstart({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisgfo}{vs:naarvan});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}Ontruiming_Deelconflict_LateRelease({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisglr}{vs:vannaar}, {_tpf}{_tisgfo}{vs:vannaar});");
+                        sb.AppendLine($"{ts}Realisatietijd_Ontruiming_LateRelease({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisglr}{vs:vannaar}, {_tpf}{_tisgfo}{vs:vannaar});");
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. deelconflicten/voorstarts die nog groen moeten worden */");
@@ -579,15 +584,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
                         }
-                        sb.AppendLine($"wijziging |= Correctie_REALISATIETIJD_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
+                        sb.AppendLine($"wijziging |= Realisatietijd_Gelijkstart_Correctie({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_Voorstart({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
+                        sb.AppendLine($"{ts}wijziging |= Realisatietijd_Voorstart_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
+                        sb.AppendLine($"{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
 
@@ -603,7 +608,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 //    break;
                                 case NaloopTypeEnum.EindeGroen:
                                 case NaloopTypeEnum.CyclischVerlengGroen:
-                                    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                                    sb.AppendLine($"{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                                     break;
                             }
                         }
@@ -618,7 +623,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden:
 
                     sb.AppendLine($"{ts}InitInterStartGroenTijden();");
-                    sb.AppendLine($"{ts}InterStartGroenTijden_VulHaldeConflictenIn();");
+                    sb.AppendLine($"{ts}InterStartGroenTijden_VulHardeConflictenIn();");
                     sb.AppendLine($"{ts}InterStartGroenTijden_VulGroenGroenConflictenIn();");
 
                     sb.AppendLine();
@@ -650,7 +655,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var hmfc in fc.HardMeeverlengenFaseCycli)
                         {
-                            sb.AppendLine($"{ts}InterStartGroentijd_MeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
+                            sb.AppendLine($"{ts}InterStartGroentijd_HardMeeverlengenDeelconflict({_fcpf}{hmfc.FaseCyclus}, {_fcpf}{fc.Naam});");
                         }
                     }
 
@@ -668,22 +673,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
                         }
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Gelijkstart({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= InterStartGroenTijd_Gelijkstart_Correctie({_fcpf}{gs:naar}, {_fcpf}{gs:van});");
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= InterStartGroenTijd_Voorstart_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisgvs}{vs:vannaar});");
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= InterStartGroenTijd_LateRelease_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
 
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}/* Inlopen / inrijden */");
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen))
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= InterStartGroenTijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                     }
                     sb.AppendLine();
 
