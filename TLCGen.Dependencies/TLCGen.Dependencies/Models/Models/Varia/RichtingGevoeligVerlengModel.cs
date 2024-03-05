@@ -20,7 +20,13 @@ namespace TLCGen.Models
         public int MaxTijdsVerschil { get; set; }
         public int VerlengTijd { get; set; }
         public RichtingGevoeligVerlengenTypeEnum TypeVerlengen { get; set; }
+        public AltijdAanUitEnum AltijdAanUit { get; set; } = AltijdAanUitEnum.SchAan;
 
         #endregion // Properties
+
+        public RichtingGevoeligVerlengModel()
+        {
+            AltijdAanUit = AltijdAanUitEnum.SchAan;
+        }
     }
 }

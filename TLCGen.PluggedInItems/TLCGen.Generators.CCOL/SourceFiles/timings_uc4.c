@@ -119,7 +119,12 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
          /* voorwaarde 3 --> 6 */
          (kcv(i) || kg(i) || RA[i] || AAPR[i])) ||
          /* prio */
-         NaarConfidence9_15prio(i))
+         NaarConfidence9_15prio(i)
+		  /* geen BL */ /*--------------------*/
+		  && !BL[i] &&
+		  /* geen overgang naar conf 9 bij AR[i] wanneer SCH schtxconfidence15ar laag is */
+		  ((AR[i] & BIT3) ? SCH[s_conf15ar] : TRUE)
+		  )
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_VOLGENDE_BEURT; /* 9 */
       }
@@ -133,7 +138,14 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
       break;
 
    case TIMING_CONFIDENCE_RD_VOLGENDE_BEURT: /* 9 */
-      if (((!kg(i) || RA[i])))
+      if ( (!kg(i) || RA[i])
+		  
+		  /* geen BL */ /*--------------------*/
+		  && !BL[i] &&
+		  /* geen overgang naar conf 12 bij AR[i] wanneer SCH schtxconfidence15ar laag is */
+		  ((AR[i] & BIT3) ? SCH[s_conf15ar] : TRUE)
+		  
+		  )
       {
          CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCERD_GROEN_KOMT; /* 12 */
       }
@@ -151,6 +163,13 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
          !kp(i) && 
          /* geen conflicterende groenfase (G) */
          !kg(i) &&
+
+		  /* geen BL */ /*--------------------*/
+		  !BL[i] &&
+		  /* geen overgang naar conf 15 bij AR[i] wanneer SCH schtxconfidence15ar laag is */
+		  ((AR[i] & BIT3) ? SCH[s_conf15ar] : TRUE) &&
+
+
          /* voorwaarde 12 --> 15 */
          (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[real] <= PRM[prmttxconfidence15]) && (MM[min] <= PRM[prmttxconfidence15]) && (MM[max] <= PRM[prmttxconfidence15])))) || (P[i] & BIT11))
       {
@@ -184,9 +203,13 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
    }
 
    /* stadia 15 --> 1 */
-   if (!R[i])
+   if (!R[i] 
+	   /* R[i] && (P[i] & BIT11) && BL[i] */
+	   || R[i] && (P[i] & BIT11) && BL[i]
+	   )
    {
-      P[i] &= ~BIT11;
+
+	   P[i] &= ~BIT11;
       CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = 1;
    }
 
@@ -199,7 +222,14 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
       CIF_FC_RWT[i] |= CIF_FC_RWT_ONBEKEND;
       uber_puts(PROMPT_code);
       uber_puts("maxend>max_endold:");
+      uber_puti((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]));
+      uber_puts(":");
+      uber_puti((CCOL_FC_TIMING_old[i][0][CIF_TIMING_MAXENDTIME]));
+      uber_puts(":");
+      uber_puti((CIF_FC_RWT[i]));
+      uber_puts(":");
       uber_puts(FC_code[i]);
+      uber_puts(":");
       uber_puts(" / ");
       datetostr(helpstr);
       uber_puts(helpstr);
@@ -208,12 +238,18 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
       uber_puts(helpstr);
       uber_puts("\n");
    }
-   if (R[i] && (CIF_FC_RWT[i]==0)                                                            && ((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]) < CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]))
+   if (R[i] && (CIF_FC_RWT[i]==0) && ((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]) < CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]))
    {
       code helpstr[30];  /* help string */
       CIF_FC_RWT[i] |= CIF_FC_RWT_ONBEKEND;
       uber_puts(PROMPT_code);
       uber_puts("maxend<minend:"); 
+      uber_puti((CCOL_FC_TIMING[i][0][CIF_TIMING_MAXENDTIME]));
+      uber_puts(":");
+      uber_puti((CCOL_FC_TIMING[i][0][CIF_TIMING_MINENDTIME]));
+      uber_puts(":");
+      uber_puti((CIF_FC_RWT[i]));
+      uber_puts(":");
       uber_puts(FC_code[i]);
       uber_puts(" / ");
       datetostr(helpstr);

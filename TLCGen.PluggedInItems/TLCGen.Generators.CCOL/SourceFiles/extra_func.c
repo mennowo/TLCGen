@@ -94,6 +94,81 @@ bool ym_maxV1(count i, mulv to_verschil)
 	return ym;
 }
 
+/* Aangepaste functie ym_maxv1 met aanpassingen tbv meeverlengen met voetgangersnalopen */
+bool ym_maxV2(count i, mulv to_verschil)
+{
+   register count n, j, k, m;
+   bool ym;
+
+   if (MG[i])
+   {   /* let op! i.v.m. snelheid alleen in MG[] behandeld */
+      ym = TRUE;
+#ifndef NO_GGCONFLICT
+      for (n = 0; n < FKFC_MAX[i]; ++n)
+#else
+      for (n = 0; n < KFC_MAX[i]; ++n)
+#endif
+      {
+#if (CCOL_V >= 95)
+	 k = KF_pointer[i][n];
+#else
+	 k = TO_pointer[i][n];
+#endif
+	 if (RA[k] || AAPR[k] || (CALW[k] >= PRI_CALW))
+	 {
+	    ym = FALSE;
+#ifndef NO_GGCONFLICT
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	    if (TIG_max[i][k] < GK)  break;
+#else
+	    if (TO_max[i][k] < GK)  break;
+#endif
+#endif
+	    for (j = 0; j < KFC_MAX[k]; ++j)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (((TIG_max[i][k] - to_verschil) <= TIG_max[m][k])
+#else
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (((TO_max[i][k] - to_verschil) <= TO_max[m][k])
+#endif
+		  || (to_verschil < 0) && (!(RW[m] & BIT2) || US_type[m] == VTG_type)))
+	       {
+		  ym = TRUE;
+		  break;
+	       }
+	    }
+#ifndef NO_GGCONFLICT
+	    for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (TIG_max[m][k] <= GK))
+#else
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (TO_max[m][k] <= GK))
+#endif
+	       {
+		  ym = TRUE;
+		  break;
+	       }
+	    }
+#endif
+	 }
+	 if (!ym) break;
+      }
+   }
+   else ym = FALSE;
+   return ym;
+}
+
 bool ym_max_prmV1(count i, count prm, mulv to_verschil)
 {
 	switch (PRM[prm]) 
@@ -126,6 +201,14 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
     case 8:
         return !Maatgevend_Groen(i);
 #endif
+    case 9:
+       return ym_maxV2(i, to_verschil);
+    case 10:
+       return ym_max_toV2(i, to_verschil);
+    case 11:
+		return ym_maxV2(i, to_verschil) || MK[i] && ym_max_toV2(i, to_verschil);
+    case 12:
+       return ym_max_vtgV2(i);
 	}
 	return FALSE;
 }
@@ -232,6 +315,112 @@ bool ym_max_toV1(count i, mulv to_verschil)
 	}
 	else  ym = CV[i];
 	return ym;
+}
+
+/* Aangepaste functie ym_max_toV1 met aanpassingen tbv meeverlengen met voetgangersnalopen */
+bool ym_max_toV2(count i, mulv to_verschil)
+{
+   register count n, j, k, m;
+   bool ym;
+
+   if (MG[i]) /* let op! i.v.m. snelheid alleen in MG[] behandeld	*/
+   {
+      ym = TRUE;
+      for (n = 0; n < FKFC_MAX[i]; ++n)
+      {
+#if (CCOL_V >= 95)
+	 k = KF_pointer[i][n];
+#else
+	 k = TO_pointer[i][n];
+#endif
+	 if (RA[k] || AAPR[k] || (CALW[k] >= PRI_CALW))
+
+	 {
+	    ym = FALSE;
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	    if (TIG_max[i][k] <= GK)  break;
+#else
+	    if (TO_max[i][k] <= GK)
+	    {
+#ifndef NO_GGCONFLICT 
+	       for (j = 0; j < FKFC_MAX[k]; ++j)
+	       {
+#if (CCOL_V >= 95)
+		  m = KF_pointer[k][j];
+#else
+		  m = TO_pointer[k][j];
+#endif
+		  if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (TO_max[m][k] <= GK || TO_max[i][k] <= GK))
+		  {
+		     //ym = TRUE;
+		     if (!RA[m] && AAPR[k]) { ym = TRUE; break; }
+		  }
+	       }
+#endif
+	       //                    break;
+	    }
+#endif
+	    for (j = 0; j < KFC_MAX[k]; ++j)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (((TIG_max[i][k] - to_verschil) <=
+		  (TIG_max[m][k])) &&
+		  ((TIG_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
+		     TVG_max[m] - TVG_timer[m] +
+		     TIG_max[m][k] - TIG_timer[m]))
+		  || (to_verschil < 0) && (!(RW[m] & BIT2) || US_type[m] == VTG_type)/*JDV 161221*/)
+		  || TIG[m][k] && (!(RW[m] & BIT2) || US_type[m] == VTG_type)/*JDV 161221*/
+		  && ((TIG_max[i][k]) < (TIG_max[m][k] - TIG_timer[m])))
+#else
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (((TGL_max[i] + TO_max[i][k] - to_verschil) <=
+		  (TGL_max[m] + TO_max[m][k])) &&
+		  ((TGL_max[i] + TO_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
+		     TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m] +
+		     TO_max[m][k] - TO_timer[m]))
+		  || (to_verschil < 0) && (!(RW[m] & BIT2) || US_type[m] == VTG_type)/*JDV 161221*/)
+		  || TO[m][k] && (!(RW[m] & BIT2) || US_type[m] == VTG_type)/*JDV 161221*/
+		  && ((TGL_max[i] + TO_max[i][k]) < (TGL_max[m] + TO_max[m][k] -
+		     TGL_timer[m] - TO_timer[m])))
+#endif
+	       {
+		  ym = TRUE;
+		  break;
+	       }
+	    }
+
+	    for (j = KFC_MAX[k]; j < FKFC_MAX[k]; j++)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (TIG_max[m][k] <= FK || TIG_max[i][k] <= GK))
+#else
+	       if (CV[m] && (!(RW[m] & BIT2) || US_type[m] == VTG_type) && (TO_max[m][k] <= FK || TO_max[i][k] <= GK))
+#endif
+	       {
+		  if (!RA[m] && AAPR[k]) 
+		  { 
+		     ym = TRUE; 
+		     break; 
+		  }
+
+	       }
+	    }
+	 }
+	 if (!ym) break;
+      }
+   }
+   else  ym = CV[i];
+   return ym;
 }
 
 
@@ -344,6 +533,102 @@ bool ym_max_vtgV1(count i)
 	else ym = FALSE;
 	return ym;
 }
+
+/* Aangepaste functie ym_max_vtgV1 met aanpassingen tbv meeverlengen met voetgangersnalopen */
+bool ym_max_vtgV2(count i)
+{
+   register count n, j, k, m;
+   bool ym;
+
+   if (MG[i]) /* let op! i.v.m. snelheid alleen in MG[] behandeld  */
+   {
+      ym = TRUE;
+      /* nalopen of nog moet worden meeverlengd */
+#ifndef NO_GGCONFLICT
+      for (n = 0; n < FKFC_MAX[i]; ++n)
+#else
+      for (n = 0; n < KKFC_MAX[i]; ++n)
+#endif
+      {
+#if (CCOL_V >= 95)
+	 k = KF_pointer[i][n];
+#else
+	 k = TO_pointer[i][n];
+#endif
+	 if (RA[k] || AAPR[k] || (CALW[k] >= PRI_CALW))
+	 {
+	    ym = FALSE;
+#ifndef NO_GGCONFLICT
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	    if (TIG_max[i][k] <= GK)  break;
+#else
+	    if (TO_max[i][k] <= GK)  break;
+#endif
+#endif
+	    for (j = 0; j < KFC_MAX[k]; ++j)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+	       if (FC_type[m] == MVT_type)
+	       {
+		  /* bereken of max groentijd is bereikt tov benodigde ontruiming */
+		  if (CV[m] && PR[m] && !(VG[m] &&
+		     ((TVG_max[m] - TVG_timer[m]) <
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+		     (TIG_max[i][k] - TIG_max[m][k]))) &&
+		     !(WG[m] && (TVG_max[m] < (TIG_max[i][k] - TIG_max[m][k]))))
+#else
+		     (TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))) &&
+		     !(WG[m] && (TVG_max[m] < (TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))))
+#endif
+		  {
+		     ym = TRUE;
+		     break;
+		  }
+	       }
+	       else
+	       {
+		  if (CV[m] && !VG[m] && !(WG[m] && (RW[m] & BIT2)))
+		  {
+		     ym = TRUE;
+		     break;
+		  }
+	       }
+	    }
+#ifndef NO_GGCONFLICT
+	    for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
+	    {
+#if (CCOL_V >= 95)
+	       m = KF_pointer[k][j];
+#else
+	       m = TO_pointer[k][j];
+#endif
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+	       if (CV[m] && (TIG_max[m][k] == GKL))
+#else
+	       if (CV[m] && (TO_max[m][k] == GKL))
+#endif
+	       {
+		  if (!RA[m] && AAPR[k]) 
+		  { 
+		     ym = TRUE; 
+		     break; 
+		  }
+	       }
+	    }
+#endif
+	 }
+	 if (!ym)
+	    break;
+      }
+   }
+   else ym = FALSE;
+   return ym;
+}
+
 
 /** ------------------------------------------------------------------------------
 AANVRAAG SNEL
@@ -1198,41 +1483,45 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
  *    gestart op het einde (wacht)groen van de voedende richting, zodat
  *    men ook gelegenheid heeft om in trager tempo de naloop over te steken.
  *
+ *    AANGEPASTE VERSIE 04032024:
+ *    - Overgang D, !D, D leverde een ontrechte ingreep op. Dit is in deze aangepaste versie opgelost.
+ *    - Nalooptijd werd tijdens de ingreep altijd herstart gedurende VS, FG en WG,
+ *      deze wordt nu beperkt tot het opgegeven extra percentage.
  **************************************************************************/
-void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2timer, 
-	                 count exgperc, count verlengen, count meergroen, ...) 
+void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2timer,
+                   count exgperc, count verlengen, count meergroen, ...)
 {
- 	va_list argpt;
+    va_list argpt;
     count tnl;
-	va_start(argpt, meergroen);
+    va_start(argpt, meergroen);
 
-	T_max[meergroen] = (TFG_max[fc] * (100 + PRM[exgperc]) / 100); 
+    T_max[meergroen] = (TFG_max[fc] * (100 + PRM[exgperc]) / 100);
 
-	if (drk1 != NG) {
-		if (drk1timer != NG) {
-			IT[drk1timer] = SD[drk1];
-			AT[drk1timer] = ED[drk1];
-			if (ET[drk1timer] && D[drk1])                 IH[verlengen] |= TRUE;
-		}
-	}
-	if (drk2 != NG) {
-		if (drk2timer != NG) {
-			IT[drk2timer] = SD[drk2];
-			AT[drk2timer] = ED[drk2];
-			if (ET[drk2timer] && D[drk2])                 IH[verlengen] |= TRUE;
-		}
-	}
-    
-	if (G[fc] && T[meergroen])                                   RW[fc] |= BIT7; 
-	if (G[fc])                                            IH[verlengen] = FALSE;
-	
+    if (drk1 != NG) {
+        if (drk1timer != NG) {
+            IT[drk1timer] = SD[drk1];
+            AT[drk1timer] = !D[drk1];
+            if (ET[drk1timer] && !IT[drk1timer] && !AT[drk1timer])  IH[verlengen] |= TRUE;
+        }
+    }
+    if (drk2 != NG) {
+        if (drk2timer != NG) {
+            IT[drk2timer] = SD[drk2];
+            AT[drk2timer] = !D[drk2];
+            if (ET[drk2timer] && !IT[drk2timer] && !AT[drk2timer])  IH[verlengen] |= TRUE;
+        }
+    }
+
+    if (G[fc] && T[meergroen])                                             RW[fc] |= BIT7;
+    if (G[fc])                                                      IH[verlengen] = FALSE;
+
     /* extra vasthouden in FG en WG */
     RT[meergroen] = IH[verlengen];
 
-    /* tegenhouden start naloop tijdens FG en WG */
+    /* herstart naloop tijdens VS, FG en WG en beperk deze tot maximaal PRM[exgperc] extra groen */
     while ((tnl = va_arg(argpt, va_count)) != END)
     {
-        RT[tnl] |= (T[meergroen] || RT[meergroen]) && (VS[fc] || FG[fc] || WG[fc]);
+        RT[tnl] |= (T[meergroen] && (T_timer[meergroen] < (T_max[tnl] * PRM[exgperc] / 100)) || RT[meergroen]) && (VS[fc] || FG[fc] || WG[fc]);
     }
     va_end(argpt);
 }

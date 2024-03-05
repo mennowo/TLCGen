@@ -1,5 +1,15 @@
-TLCGen=12.4.0.4
+TLCGen=12.4.0.5
 RN==TLCGen
+TLCGen versie: 12.4.0.5
+- Uitbreiding opties meeverlengfuncties
+- SPAT uitvoer geoptimaliseerd
+- Diverse compileerfouten opgelost
+- Bevestiging bij klik op reset IO
+- Richtinggevoelig meeaanvragen en verlengen schakelbaar
+- Bij SRM0 niet naar heading kijken
+- Synchroniseer_FO aangepast zodat gekeken wordt naar beide richtingen in hetzelfde blok
+- Fix BIT rr_twacht bij peloton koppeling
+- Fix senioneringreep
 TLCGen versie: 12.4.0.4
 - Hotfix functie declaratie in extra_func_ris.h
 TLCGen versie: 12.4.0.3

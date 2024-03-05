@@ -92,6 +92,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public AltijdAanUitEnum AltijdAanUit
+        {
+            get => _RichtingGevoeligVerleng.AltijdAanUit;
+            set
+            {
+                _RichtingGevoeligVerleng.AltijdAanUit = value;
+                RaisePropertyChanged<object>(nameof(AltijdAanUit), broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region IComparable

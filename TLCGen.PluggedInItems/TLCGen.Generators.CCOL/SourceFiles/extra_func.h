@@ -15,9 +15,12 @@
 #endif 
 
 bool ym_maxV1(count i, mulv to_verschil);
+bool ym_maxV2(count i, mulv to_verschil);
 bool ym_max_prmV1(count i, count prm, mulv to_verschil);
 bool ym_max_toV1(count i, mulv to_verschil);
+bool ym_max_toV2(count i, mulv to_verschil);
 bool ym_max_vtgV1(count i);
+bool ym_max_vtgV2(count i);
 void AanvraagSnelV2(count fc1, count dp);
 bool Rateltikkers(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */

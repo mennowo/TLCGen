@@ -52,7 +52,7 @@ void NaloopEG(count fc1, count fc2, count tnl)
    if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
    berekenTGK_max(fc1,fc2,T_max[tnl]);
    berekenTNL(fc2,tnl);
-   if (TNL_PAR[fc2] < (T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = T_max[tnl] + TVG_max[fc2]; 
+   if (TNL_PAR[fc2] < (T_max[tnl]/* + TVG_max[fc2]*/)) TNL_PAR[fc2] = T_max[tnl] /* + TVG_max[fc2]*/;
 }
 
 /**************************************************************************
@@ -80,7 +80,7 @@ void NaloopEGDet(count fc1, count fc2, count tnl, ...)
 	if (EGL[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl] + TGL_max[fc1];
 	if (R[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
-    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] + TVG_max[fc2]; 
+    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] /* + TVG_max[fc2]*/)) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] /* + TVG_max[fc2]*/;
 
 }
 
@@ -142,7 +142,7 @@ void NaloopFG(count fc1, count fc2, count tnl)
 	if (EG[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl];
 	if (!G[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
-   if (TNL_PAR[fc2] < (T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = T_max[tnl] + TVG_max[fc2]; 
+   if (TNL_PAR[fc2] < (T_max[tnl] /* + TVG_max[fc2]*/)) TNL_PAR[fc2] = T_max[tnl] /* + TVG_max[fc2]*/;
 }
 
 /**************************************************************************
@@ -171,7 +171,7 @@ void NaloopFGDet(count fc1, count fc2, count tnl, ...)
 	if (EG[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl];
 	if (!G[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
-    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] + TVG_max[fc2]; 
+    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] /* + TVG_max[fc2]*/)) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] /* + TVG_max[fc2]*/;
 }
 
 /* YMLX[] - VASTHOUDEN MODULE AFWIKKELING */
@@ -217,9 +217,9 @@ void berekenTNL(count fc2, count tnl)
 	if (T[tnl]|| ET[tnl] || VG[fc2])
 	{
 		TNL[fc2] = TRUE;
-		if ((T_max[tnl] - T_timer[tnl] + TVG_max[fc2]) > (TNL_max[fc2] - TNL_timer[fc2]))
+		if ((T_max[tnl] - T_timer[tnl] /* + TVG_max[fc2]*/) > (TNL_max[fc2] - TNL_timer[fc2]))
 		{
-			TNL_max[fc2] = T_max[tnl] + TVG_max[fc2];
+			TNL_max[fc2] = T_max[tnl] /* + TVG_max[fc2]*/;
 			TNL_timer[fc2] = T_timer[tnl] + TVG_timer[fc2];
 		}
 	}
@@ -374,26 +374,26 @@ void berekenTGK_max(count fc1, count fc2, count tnl_max)
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
 		if (TIG_max[fc1][k] == GKL &&
 			TIG_max[fc2][k] >= 0 &&
-			((tnl_max + TVG_max[fc2] + TIG_max[fc2][k]) > TGK_max[fc1][k]))
+			((tnl_max /* + TVG_max[fc2]*/ + TIG_max[fc2][k]) > TGK_max[fc1][k]))
 		{
-			TGK_max[fc1][k] = tnl_max + TVG_max[fc2] + TIG_max[fc2][k];
+			TGK_max[fc1][k] = tnl_max /* + TVG_max[fc2]*/ + TIG_max[fc2][k];
 		}
 		if (TIG_max[fc1][k] == GKL &&
 			TIG_max[fc2][k] == GK &&
-			((tnl_max + TVG_max[fc2]) > TGK_max[fc1][k]))
+			((tnl_max /* + TVG_max[fc2]*/) > TGK_max[fc1][k]))
 #else
 		if (TO_max[fc1][k] == GKL &&
 			TO_max[fc2][k] >= 0 &&
-			((tnl_max + TVG_max[fc2] + TGL_max[fc2] + TO_max[fc2][k]) > TGK_max[fc1][k]))
+			((tnl_max /* + TVG_max[fc2]*/ + TGL_max[fc2] + TO_max[fc2][k]) > TGK_max[fc1][k]))
 		{
-			TGK_max[fc1][k] = tnl_max + TVG_max[fc2] + TGL_max[fc2] + TO_max[fc2][k];
+			TGK_max[fc1][k] = tnl_max /* + TVG_max[fc2]*/  + TGL_max[fc2] + TO_max[fc2][k];
 		}
 		if (TO_max[fc1][k] == GKL &&
 			TO_max[fc2][k] == GK &&
-			((tnl_max + TVG_max[fc2]) > TGK_max[fc1][k]))
+			((tnl_max /* + TVG_max[fc2]*/) > TGK_max[fc1][k]))
 #endif
 		{
-			TGK_max[fc1][k] = tnl_max + TVG_max[fc2];
+			TGK_max[fc1][k] = tnl_max /* + TVG_max[fc2]*/;
 		}
 	}
 }

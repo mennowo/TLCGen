@@ -6,8 +6,8 @@
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
-             xmlns:local="clr-namespace:TLCGen.Views"
-             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:DetectorenRichtingGevoeligTabViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <DataGridComboBoxColumn x:Key="VerlengenColumn" Header="Type verlengen" 
@@ -53,6 +53,10 @@
                     <DataGridTextColumn Header="Van" Binding="{Binding Path=VanDetector}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Naar" Binding="{Binding Path=NaarDetector}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Maximaal tijd verschil" Binding="{Binding Path=MaxTijdsVerschil,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridComboBoxColumn 
+                        Header="Aan/uit"
+                        SelectedItemBinding="{Binding Path=AltijdAanUit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:AltijdAanUitEnum}}}" />
                     <DataGridCheckBoxColumn Header="Reset aanvr." Binding="{Binding Path=ResetAanvraag,UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridTextColumn Binding="{Binding Path=ResetAanvraagTijdsduur}" Header="Reset tijd"  >
                         <DataGridTextColumn.CellStyle>
@@ -103,6 +107,10 @@
                     <DataGridTextColumn Header="Van" Binding="{Binding Path=VanDetector}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Naar" Binding="{Binding Path=NaarDetector}" IsReadOnly="True" />
                     <StaticResource ResourceKey="VerlengenColumn" />
+                    <DataGridComboBoxColumn 
+                        Header="Aan/uit"
+                        SelectedItemBinding="{Binding Path=AltijdAanUit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:AltijdAanUitEnum}}}" />
                     <DataGridTextColumn Header="Maximaal tijd verschil" Binding="{Binding Path=MaxTijdsVerschil}" />
                     <DataGridTextColumn Header="Verleng tijd" Binding="{Binding Path=VerlengTijd}" Width="*" />
                 </DataGrid.Columns>

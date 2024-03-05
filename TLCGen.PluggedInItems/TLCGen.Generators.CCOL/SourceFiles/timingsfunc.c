@@ -18,6 +18,7 @@
 /* .........03-03-2021  M Scherjon    define CIF_MAX_TIMING bij CCOL_FC_TIMING[][][] en CCOL_FC_TIMING_old[][][] toegevoegd i.p.v. 8 */
 /* .........07-07-2023  Cyril/Ton     uitsturen SPAT op start WUS ipv start GPS
 /* .........08-07-2023  Cyril/Ton     SPAT geeltijden aangepast
+/* .........04-03-2023  Cyril         SPAT geeltijden TGL_max ipv TGL_max - TGL_timer
 
 
 /* include files */
@@ -309,7 +310,7 @@ void msg_fctiming(mulv latency_minEndSG)
                      (s_int16)(CIF_TIMING_MASK_EVENTSTATE | CIF_TIMING_MASK_STARTTIME | CIF_TIMING_MASK_MINENDTIME | CIF_TIMING_MASK_MAXENDTIME | CIF_TIMING_MASK_LIKELYTIME), /* mask */
                      (s_int16) CCOL_FC_EVENTSTATE[i][CIF_GEEL],    /* eventState */
                      (s_int16) 0,                                  /* startTime  */
-                     (s_int16) (TGL_max[i] - TGL_timer[i]),        /* minEndTime */
+                     (s_int16) (TGL_max[i]),                       /* minEndTime */
                      (s_int16) ((TMGL_max[i] > TGL_max[i]) ? (TMGL_max[i] + LATENCY_CORRECTION_MAX_END) : (TGL_max[i] + LATENCY_CORRECTION_MAX_END)), /* maxEndTime */
                      (s_int16) ((TMGL_max[i] > TGL_max[i]) ? TMGL_max[i] : TGL_max[i]), /* likelyTime */
                      (s_int16) NG,                                 /* confidence */

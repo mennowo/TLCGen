@@ -2764,6 +2764,14 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Aanvraag</SubCategorie>
           </Setting>
+		  <Setting>
+			<Default>rga</Default>
+			<Setting>rga</Setting>
+			<Type>Schakelaar</Type>
+			<Description>Richtinggevoelig aanvragen fase _E1_ aan/uit van _E2_ naar _E3_</Description>
+			<Categorie>CAT_Basisfuncties</Categorie>
+			<SubCategorie>SUBCAT_Aanvraag</SubCategorie>
+		  </Setting>
           <Setting>
             <Default>rgad</Default>
             <Setting>rgad</Setting>
@@ -2799,6 +2807,14 @@
             <Setting>mkrg</Setting>
             <Type>Parameter</Type>
             <Description>Type verlengen tbv richtinggevoelig verlengen fase _E1_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Verlengen</SubCategorie>
+          </Setting>
+          <Setting>
+            <Default>rgvl</Default>
+            <Setting>rgv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Richtinggevoelig verlengen fase _E1_ aan/uit van _E2_ naar _E3_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Verlengen</SubCategorie>
           </Setting>

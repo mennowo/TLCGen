@@ -607,6 +607,22 @@ namespace TLCGen.ViewModels
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.MaatgevendGroen;
                 }
+                else if (value == MeeVerlengenTypeEnum.Default2.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.Default2;
+                }
+                else if (value == MeeVerlengenTypeEnum.MKTo2.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.MKTo2;
+                }
+                else if (value == MeeVerlengenTypeEnum.To2.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.To2;
+                }
+                else if (value == MeeVerlengenTypeEnum.Voetganger2.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.Voetganger2;
+                }
                 else if (value != null)
                 {
                     throw new ArgumentOutOfRangeException(nameof(MeeverlengenTypeString),
@@ -773,6 +789,7 @@ namespace TLCGen.ViewModels
             if (FaseCyclus.Type == FaseTypeEnum.Voetganger)
             {
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger.GetDescription());
+                MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger2.GetDescription());
             }
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.DefaultCCOL.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.ToCCOL.GetDescription());
@@ -781,6 +798,9 @@ namespace TLCGen.ViewModels
             {
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MaatgevendGroen.GetDescription());
             }
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Default2.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.To2.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKTo2.GetDescription());
 
             _meeverlengenTypeString = MeeverlengenType.GetDescription();
             RaisePropertyChanged(nameof(MeeverlengenTypeString));

@@ -108,6 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     // let op: ym_max_toV1 werkt ook voor intergroen!
                     var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV1" : "ym_max_toV1";
+                    var totigfunc2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV2" : "ym_max_toV2";
                     var totigfuncCCOL = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_to";
 
                     foreach (var fcm in c.Fasen)
@@ -189,6 +190,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         break;
                                     case MeeVerlengenTypeEnum.MaatgevendGroen:
                                         sb.AppendLine($"!Maatgevend_Groen({fcm.GetDefine()}) && {extraConditions} ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.Default2:
+                                        sb.AppendLine($"ym_maxV2({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.To2:
+                                        sb.AppendLine($"{totigfunc2}({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.MKTo2:
+                                        sb.AppendLine($"(ym_maxV2({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {extraConditions} ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.Voetganger2:
+                                        sb.AppendLine($"ym_max_vtgV2({fcm.GetDefine()}) && {extraConditions} ? BIT4 : 0;");
                                         break;
                                     default:
                                         throw new ArgumentOutOfRangeException();

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -78,6 +79,16 @@ namespace TLCGen.ViewModels
             {
                 _RichtingGevoeligeAanvraag.ResetAanvraag = value;
                 RaisePropertyChanged<object>(nameof(ResetAanvraag), broadcast: true);
+            }
+        }
+
+        public AltijdAanUitEnum AltijdAanUit
+        {
+            get => _RichtingGevoeligeAanvraag.AltijdAanUit;
+            set
+            {
+                _RichtingGevoeligeAanvraag.AltijdAanUit = value;
+                RaisePropertyChanged<object>(nameof(AltijdAanUit), broadcast: true);
             }
         }
 

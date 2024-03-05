@@ -373,9 +373,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                          $")) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
                         }
                         else
                         {

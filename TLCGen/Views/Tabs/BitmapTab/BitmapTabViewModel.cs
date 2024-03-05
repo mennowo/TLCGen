@@ -295,6 +295,10 @@ namespace TLCGen.ViewModels
 
         private void ResetBitmapIOCommand_Executed(object obj)
         {
+            var ok = MessageBox.Show("Alle aangeklinkt IO wordt gereset. Doorgaan?", "Bevestigen reset", MessageBoxButton.YesNo);
+
+            if (ok != MessageBoxResult.Yes) return;
+
             foreach (var io in Fasen)
             {
                 io.Coordinates.RemoveAll();

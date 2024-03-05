@@ -16,6 +16,12 @@ namespace TLCGen.Models
         public string NaarDetector { get; set; }
         public int MaxTijdsVerschil { get; set; }
         public bool ResetAanvraag { get; set; }
+        public AltijdAanUitEnum AltijdAanUit { get; set; }
         public int ResetAanvraagTijdsduur { get; set; }
+
+        public RichtingGevoeligeAanvraagModel()
+        {
+            AltijdAanUit = AltijdAanUitEnum.SchAan;
+        }
     }
 }

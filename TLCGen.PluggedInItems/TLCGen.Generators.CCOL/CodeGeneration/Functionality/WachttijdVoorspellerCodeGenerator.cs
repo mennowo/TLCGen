@@ -354,10 +354,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (!com)
                                     {
-                                        sb.AppendLine($"{ts}/* halteren wachttijdvoorspellers tijdens RW BIT14 bij conflicten (peloton koppeling) */");
+                                        sb.AppendLine($"{ts}/* halteren wachttijdvoorspellers tijdens RW BIT12 bij conflicten (peloton koppeling) */");
                                         com = true;
                                     }
-                                    sb.AppendLine($"{ts}if (RW[{_fcpf}{sgpl.GekoppeldeSignaalGroep}] & BIT14) rr_twacht{GetFaseReeks(c, sg.Naam)}[{_fcpf}{sg.Naam}] = TRUE;");
+                                    sb.AppendLine($"{ts}if (RW[{_fcpf}{sgpl.GekoppeldeSignaalGroep}] & BIT12) rr_twacht{GetFaseReeks(c, sg.Naam)}[{_fcpf}{sg.Naam}] = TRUE;");
                                 }
                             }
                         }
