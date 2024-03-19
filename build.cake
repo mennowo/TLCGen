@@ -22,7 +22,7 @@ var setupDir = Directory("./TLCGen.Setup");
 var outputDir = Directory("./published") + Directory(configuration);
 var outputDirBase = Directory("./published");
 // varia
-var prev_version = "12_4_3_0";
+var prev_version = "12_4_0_4";
 var backupOld = false;
 var deployDev = true;
 var deploy = true;
@@ -59,12 +59,9 @@ Task("Sign")
 {
     // Use MSBuild
     var file = buildDir + new FilePath("TLCGen.exe");
-    Sign(file, new SignToolSignSettings {
-            TimeStampUri = certUri,
+    Sign(file.Path, new SignToolSignSettings {
             CertPath = certPath,
-            Password = signPass,
-            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
-            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
+            Description = "TLCGen"
     });
 });
 
@@ -96,11 +93,8 @@ Task("SignSetup")
 {
     var file = outputDir + new FilePath("TLCGen.Setup.msi");
     Sign(file.Path, new SignToolSignSettings {
-            TimeStampUri = certUri,
             CertPath = certPath,
-            Password = signPass,
-            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
-            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
+            Description = "TLCGen"
     });
 });
 
