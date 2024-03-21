@@ -59,13 +59,13 @@ Task("Sign")
 {
     // Use MSBuild
     var file = buildDir + new FilePath("TLCGen.exe");
-    Sign(file, new SignToolSignSettings {
-            TimeStampUri = certUri,
-            CertPath = certPath,
-            Password = signPass,
-            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
-            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
-    });
+    //Sign(file, new SignToolSignSettings {
+    //        TimeStampUri = certUri,
+    //        CertPath = certPath,
+    //        Password = signPass,
+    //        DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
+    //        TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
+    //});
 });
 
 Task("BuildSetup")
@@ -95,13 +95,13 @@ Task("SignSetup")
     .Does(() =>
 {
     var file = outputDir + new FilePath("TLCGen.Setup.msi");
-    Sign(file.Path, new SignToolSignSettings {
-            TimeStampUri = certUri,
-            CertPath = certPath,
-            Password = signPass,
-            DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
-            TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
-    });
+    //Sign(file.Path, new SignToolSignSettings {
+    //        TimeStampUri = certUri,
+    //        CertPath = certPath,
+    //        Password = signPass,
+    //        DigestAlgorithm = SignToolDigestAlgorithm.Sha256,
+    //        TimeStampDigestAlgorithm = SignToolDigestAlgorithm.Sha256
+    //});
 });
 
 Task("PackPortable")

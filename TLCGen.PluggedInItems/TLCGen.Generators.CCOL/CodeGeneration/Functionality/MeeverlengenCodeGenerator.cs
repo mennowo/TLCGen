@@ -206,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"ym_max_tig_REALISATIETIJD({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}) && {extraConditions} ? BIT4 : 0;");
+                                    sb.AppendLine($"ym_max_tig_Realisatietijd({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}) && {extraConditions} ? BIT4 : 0;");
                                 }
                                 else
                                 {

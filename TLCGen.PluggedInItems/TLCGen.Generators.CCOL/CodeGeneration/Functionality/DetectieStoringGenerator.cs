@@ -83,7 +83,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCDetectieStoringMaxGroen => new []{10},
                 CCOLCodeTypeEnum.RegCDetectieStoringVerlengGroen => new []{10},
                 CCOLCodeTypeEnum.RegCMaxgroen => new[] { 110 },
-                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 110 },
+                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 30 },
                 _ => null
             };
         }

@@ -202,7 +202,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 CCOLCodeTypeEnum.RegCIncludes => new[] { 140 },
                 CCOLCodeTypeEnum.RegCTop=> new[] { 140 },
-                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 90, 130, 140 },
+                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 25, 90, 130, 140 },
                 CCOLCodeTypeEnum.RegCMaxgroen => new[] { 90, 130, 140 },
                 CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
@@ -223,6 +223,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts, int order)
         {
             var sb = new StringBuilder();
+            var f = true;
 
             switch (type)
             {
@@ -232,7 +233,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}PrioMeetKriteriumISG();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    sb.AppendLine($"{ts}ResetIsgVars();");
+                    sb.AppendLine($"{ts}ResetIsgVars(); /* zet alle interstartgroentijden op -1 @@ niet isgfunc_prio.c maar isgfunc.c @@ @@ aanroepen net voor bepalen isg tijden en niet hier @@ */");
                     if (!c.HasPTorHD()) return "";
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen */");
@@ -252,15 +253,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}BlokkeringsTijd_Add();");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen ISG */");
-                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG();");
-                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add();");
+                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG(); /* prioGKFC_MAX *gewijzigd naar prioFKFC_MAX tov functie in prio.c */");
+                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add(); /*@@ deze functie aanroep laten staan maar de functie zelf moet in moet in de 123456prio_add file @@ */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (!c.HasPTorHD()) return "";
                     sb.AppendLine($"{ts}/* openbaar vervoer aanvragen */");
                     sb.AppendLine($"{ts}PrioAanvragen();");
+
+                    f = true;
                     foreach (var sync in c.GetAllSynchronisations(false))
                     {
+                        if (f)
+                        {
+                            sb.AppendLine($"{ts}/* ISG deelconflict aanvragen; tevens wordt de AA en BR opgezet @@ tijdelijk tot we code hebben dat de deelconflicten niet hard mee moeten komen @@ @@ aanvraag hoort hier wel maar de AA en BR op een andere plek plaatsen @@*/");
+                            f = false;
+                        }
+
                         switch (sync)
                         {
                             case VoorstartModel vs:
@@ -383,37 +392,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
+                    if (order == 25)
+                    {
+                        sb.AppendLine($"{ts}/* Bepaal de minimale maximale verlengroentijd bij alternatieve realisaties */");
+                        foreach (var fc in c.Fasen)
+                        {
+                            sb.AppendLine($"{ts}TVG_AR[{_fcpf}{fc.Naam}] = ((PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}]) >= 0) ? PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}] : NG;");
+                        }
+                    }
+
                     if (order == 90)
                     {
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}if (EVG[fc] && PR[fc] || init_tvg)");
-                        sb.AppendLine($"{ts}{ts}{{");
-                        sb.AppendLine($"{ts}{ts}{ts}TVG_PR[fc] = TVG_max[fc];");
-                        sb.AppendLine($"{ts}{ts}}}");
-                        sb.AppendLine($"{ts}{ts}else");
-                        sb.AppendLine($"{ts}{ts}{{");
-                        sb.AppendLine($"{ts}{ts}{ts}TVG_max[fc] = TVG_PR[fc];");
-                        sb.AppendLine($"{ts}{ts}}}");
-                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{ts}/* TVG_max alleen aanpassen op EVG van de primaire richting of tijdens initialisatie */");
+                        sb.AppendLine($"{ts}IsgCorrectieTvgPrTvgMax();");
                         sb.AppendLine($"{ts}init_tvg = FALSE;");
 
                         if (c.HasPTorHD())
                         {
                             sb.AppendLine();
-                            sb.AppendLine($"{ts}ResetNietGroentijdOphogen();");
+                            sb.AppendLine($"{ts}ResetNietGroentijdOphogen(); /* @@ verplaatsen naar isgfunc.c @@ */");
                             sb.AppendLine();
-                            sb.AppendLine($"{ts}/* groentijd conflict volgrichting  mag niet opgehoogd worden tijdens inlopen */");
+                            sb.AppendLine($"{ts}/* groentijd conflict volgrichting  mag niet opgehoogd worden tijdens inlopen @@ verplaatsen naar isgfunc.c @@*/");
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
                                 sb.AppendLine($"{ts}VerhoogGroentijdNietTijdensInrijden({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar});");
                             }
-                        }
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}/* Bepaal de minimale maximale verlengroentijd bij alternatieve realisaties */");
-                        foreach (var fc in c.Fasen)
-                        {
-                            sb.AppendLine($"{ts}TVG_AR[{_fcpf}{fc.Naam}] = ((PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}]) >= 0) ? PRM[{_prmpf}{_prmaltg}{fc.Naam}] - TFG_max[{_fcpf}{fc.Naam}] : NG;");
                         }
                     }
                     
@@ -427,7 +430,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"");
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = ((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0;");
+                        sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = ((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0; /* Vullen groentijd die gemaakt mag worden als er een prioriteitsingreep is */");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine($"{ts}BepaalTVG_BR(); /* Maximale verlenggroentijd bijzondere realisatie als deze nog niet groen is */");
                         sb.AppendLine($"{ts}VerhoogTVG_maxDoorPrio(); /* Voldoende verlenggroentijd om prioriteitsrealisatie te faciliteren */");
@@ -437,7 +440,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}TVG_AR_voor_afkap[fc] = TVG_AR[fc];");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine($"{ts}VerlaagTVG_maxDoorConfPrio(); /* Geef richtingen minder groen door conflicterende prioriteitsrealisatie */");
-                        sb.AppendLine($"{ts}/* Niet verhogen TVG_max tijdens groen Bijvoorbeeld als ov-ingreep of file ingreep wegvalt*/");
+                        sb.AppendLine($"{ts}/* Niet verhogen TVG_max tijdens groen. Bijvoorbeeld als prioriteitsingreep of file ingreep wegvalt @@ Peter past commentaar nog aan @@ */");
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}if (SG[fc])");
@@ -454,6 +457,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
+                        sb.AppendLine($"{ts}IsgCorrectieTvgTimerTvgMax();");
                         sb.AppendLine($"{ts}BepaalRealisatieTijden();");
                         sb.AppendLine($"");
                         sb.AppendLine($"    BepaalStartGroenMomentenPrioIngrepen(); /* bepaal wanneer prioriteitsrealisatie mag komen */");
@@ -506,26 +510,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}init_tvg = TRUE;");
                     if (c.HasPTorHD())
                     {
-                        sb.AppendLine($"{ts}PrioInit_ISG();");
-                        sb.AppendLine($"{ts}PrioInitExtra();");
+                        sb.AppendLine($"{ts}PrioInit_ISG(); /* initialisatie prioriteits instellingen @@ functienaam wijzigen / ISG weghalen @@ */");
+                        sb.AppendLine($"{ts}PrioInitExtra(); /* initialisatie variabelen vertraag_kar_uitm */");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
+                    sb.AppendLine($"{ts}/* TIGR */");
+                    sb.AppendLine($"{ts}/* Correctie tijdens omdat bv fc22 hard meeverlengt met fc05 en dus bij naloop fc22-->fc21 deze maatgevend kan worden. */");
                     sb.AppendLine($"{ts}BepaalIntergroenTijden();");
                     sb.AppendLine();
 
+                    f = true;
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
                     {
+                        if (f)
+                        {
+                            sb.AppendLine($"{ts}/* Neem EG-naloopconflicten ook mee in TIGR[][] */");
+                            f = false;
+                        }
+
                         var nleg = nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
                         var nlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
                         sb.AppendLine($"{ts}corrigeerTIGRvoorNalopen({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
                     }
                     sb.AppendLine();
 
-                    sb.AppendLine($"{ts}InitRealisatieTijden();");
+                    sb.AppendLine($"{ts}/* Realisatietijden */");
+                    sb.AppendLine($"{ts}InitRealisatieTijden(); /* initialisatie REALISATIETIJD[][] */");
                     sb.AppendLine($"{ts}RealisatieTijden_VulHardeConflictenIn();");
-                    sb.AppendLine($"{ts}RealisatieTijden_VulGroenGroenConflictenIn();");
-                    sb.AppendLine($"{ts}CorrigeerRealisatieTijdenObvGarantieTijden();");
+                    sb.AppendLine($"{ts}RealisatieTijden_VulGroenGroenConflictenIn(); /* @@ in principe zijn er geen groen groen conflicten @@*/");
+                    sb.AppendLine($"{ts}CorrigeerRealisatieTijdenObvGarantieTijden(); /* een richting mag na groen niet direct weer realiseren (eerst GL en TRG) */");
                     sb.AppendLine();
 
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. nalopen */");
@@ -618,7 +632,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}wijziging |= CorrectieRealisatieTijd_Add();");
                     sb.AppendLine($"{ts}}} while (wijziging);");
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
+                    sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting(); /* bepaal de maximale realisatietijd voor een richting */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden:
 

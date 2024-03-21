@@ -79,4 +79,18 @@ void PrioAanwezig(void);
 void InitInterfunc();
 void IsgDebug();
 
+void IsgCorrectieTvgPrTvgMax();
+void IsgCorrectieTvgTimerTvgMax();
+
+void InitInterStartGroenTijden_rgv();
+void InterStartGroenTijden_VulHaldeConflictenIn_rgv(void);
+void InterStartGroenTijden_VulGroenGroenConflictenIn_rgv(void);
+void InterStartGroenTijd_NLEG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
+void InterStartGroenTijd_NLEVG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop);
+void InterStartGroenTijd_NLSG_rgv(count i, count j, count tnlsg, count tnlsgd);
+void InterStartGroentijd_MeeverlengenDeelconflict_rgv(mulv fc1, mulv fc2);
+bool Correctie_TISG_Voorstart_rgv(count fcvs, count fcns, count tvs);
+bool Correctie_TISG_Gelijkstart_rgv(count fc1, count fc2);
+bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count prmlr);
+
 #endif /* __ISGFUNC */

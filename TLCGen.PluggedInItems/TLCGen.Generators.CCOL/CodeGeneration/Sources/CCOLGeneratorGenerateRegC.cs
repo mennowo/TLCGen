@@ -291,10 +291,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCPreApplication(ControllerModel controller)
         {
             var sb = new StringBuilder();
+            var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
-
+            
+            sb.AppendLine($"{ts}/* Instellen TFB_max */");
+            sb.AppendLine($"{ts}TFB_max = PRM[{_prmpf}{_prmfb}];");
+            sb.AppendLine();
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreApplication, true, true, false, true);
 
             sb.AppendLine($"{ts}PreApplication_Add();");
@@ -743,15 +747,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _schbmfix = CCOLGeneratorSettingsProvider.Default.GetElementName("schbmfix");
             var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
             var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
-            var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
             var _schstar = CCOLGeneratorSettingsProvider.Default.GetElementName("schstar");
             var _mstarprog = CCOLGeneratorSettingsProvider.Default.GetElementName("mstarprog");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}PreApplication();");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}TFB_max = PRM[{_prmpf}{_prmfb}];");
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
 
