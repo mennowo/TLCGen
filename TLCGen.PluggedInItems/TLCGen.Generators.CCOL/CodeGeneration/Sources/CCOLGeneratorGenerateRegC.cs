@@ -298,6 +298,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
             var sb = new StringBuilder();
+            var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");

@@ -22,6 +22,10 @@ count REALISATIETIJD[FCMAX][FCMAX];
 boolv Volgrichting[FCMAX];
 boolv AfslaandDeelconflict[FCMAX] = { 0 };
 
+extern mulv TISG_rgv[FCMAX][FCMAX];
+extern mulv TISG_basis[FCMAX][FCMAX];
+extern mulv TVG_rgv[FCMAX];
+extern mulv init_tvg;
 
 void BepaalIntergroenTijden(void)
 {
@@ -1174,4 +1178,233 @@ void IsgDebug()
       xyprintf(50 + 8 * FCMAX, y + 4, "%4d", max_par(y));
    }
 #endif
+}
+
+void IsgCorrectieTvgPrTvgMax() 
+{
+    count fc;
+
+    /* TVG_max alleen aanpassen op EVG van de primaire richting of tijdens initialisatie */
+    for (fc = 0; fc < FCMAX; ++fc)
+    {
+        if (EVG[fc] && PR[fc] || init_tvg)
+        {
+            TVG_PR[fc] = TVG_max[fc];
+        }
+        else
+        {
+            TVG_max[fc] = TVG_PR[fc];
+        }
+    }
+}
+
+void IsgCorrectieTvgTimerTvgMax()
+{
+    count fc;
+
+    /* Corrigeer TVG_timer[] i.r.t. TVG_max[] */
+    for (fc = 0; fc < FCMAX; ++fc)
+    {
+        if (MG[fc])  TVG_timer[fc] = TVG_max[fc];
+        if (TVG_timer[fc] > TVG_max[fc]) TVG_timer[fc] = TVG_max[fc];
+    }
+}
+
+void InitInterStartGroenTijden_rgv()
+{
+    count i, j;
+    for (i = 0; i < FC_MAX; i++)  /* zet alle GK en GKL conflicten om in FK */
+    {
+        for (j = 0; j < FC_MAX; j++)
+        {
+            TISG_rgv[i][j] = NG;
+            TISG_basis[i][j] = NG;
+        }
+    }
+}
+void InterStartGroenTijden_VulHaldeConflictenIn_rgv(void)
+{
+    count fc1, fc2, n;
+    for (fc1 = 0; fc1 < FCMAX; ++fc1)
+    {
+        for (n = 0; n < KFC_MAX[fc1]; ++n)
+        {
+            fc2 = KF_pointer[fc1][n];
+            TISG_rgv[fc1][fc2] = TFG_max[fc1] + TVG_rgv[fc1] + TIG_max[fc1][fc2];
+            TISG_basis[fc1][fc2] = TFG_max[fc1] + TVG_basis[fc1] + TIG_max[fc1][fc2];
+        }
+    }
+}
+
+void InterStartGroenTijden_VulGroenGroenConflictenIn_rgv(void)
+{
+    count fc1, fc2, n;
+    for (fc1 = 0; fc1 < FCMAX; ++fc1)
+    {
+        for (n = KFC_MAX[fc1]; n < GKFC_MAX[fc1]; ++n)
+        {
+            fc2 = KF_pointer[fc1][n];
+            TISG_rgv[fc1][fc2] = TFG_max[fc1] + TVG_rgv[fc1];
+            TISG_basis[fc1][fc2] = TFG_max[fc1] + TVG_basis[fc1];
+        }
+    }
+}
+void InterStartGroenTijd_NLEG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop)
+{
+    int k, n;
+    for (n = 0; n < KFC_MAX[j]; n++)
+    {
+        k = KF_pointer[j][n];
+        if (!(tnlfg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+    }
+    for (n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
+    {
+        k = KF_pointer[j][n];
+        if (!(tnlfg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop]);
+        if (!(tnlfgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop]);
+        if (!(tnlfgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+    }
+}
+
+void InterStartGroenTijd_NLEVG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop)
+{
+    int k, n;
+    for (n = 0; n < KFC_MAX[j]; n++)
+    {
+        k = KF_pointer[j][n];
+        if (!(tnlfg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnlevg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnlevgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnlevg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnlevgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+    }
+    for (n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
+    {
+        k = KF_pointer[j][n];
+        if (!(tnlfg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnlevg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], TFG_max[i] + TVG_rgv[i] + T_max[tnlevgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnlevg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlevgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], TFG_max[i] + TVG_basis[i] + T_max[tnlevgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+    }
+}
+
+void InterStartGroenTijd_NLSG_rgv(count i, count j, count tnlsg, count tnlsgd)
+{
+    int k, n;
+    for (n = 0; n < KFC_MAX[j]; n++)
+    {
+        k = KF_pointer[j][n];
+        if (!(tnlsg == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], T_max[tnlsg] + TIG_max[j][k]);
+        if (!(tnlsgd == NG)) TISG_rgv[i][k] = max(TISG_rgv[i][k], T_max[tnlsgd] + TIG_max[j][k]);
+        if (!(tnlsg == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], T_max[tnlsg] + TIG_max[j][k]);
+        if (!(tnlsgd == NG)) TISG_basis[i][k] = max(TISG_basis[i][k], T_max[tnlsgd] + TIG_max[j][k]);
+    }
+}
+
+void InterStartGroentijd_MeeverlengenDeelconflict_rgv(mulv fc1, mulv fc2)
+{
+    count fc;
+    for (fc = 0; fc < FCMAX; fc++)
+    {
+        if (TIGR[fc2][fc] >= 0)
+        {
+            TISG_rgv[fc1][fc] = max(TISG_rgv[fc1][fc], TFG_max[fc1] + TVG_rgv[fc1] + TIGR[fc2][fc]);
+            TISG_basis[fc1][fc] = max(TISG_basis[fc1][fc], TFG_max[fc1] + TVG_basis[fc1] + TIGR[fc2][fc]);
+        }
+    }
+}
+
+bool Correctie_TISG_Voorstart_rgv(count fcvs, count fcns, count tvs)
+{
+    count n;
+    bool result = FALSE;
+    for (n = 0; n < FCMAX; ++n)
+    {
+        if ((TISG_rgv[n][fcns] < TISG_rgv[n][fcvs] + T_max[tvs]) && (TISG_rgv[n][fcvs] > 0))
+        {
+            TISG_rgv[n][fcns] = TISG_rgv[n][fcvs] + T_max[tvs];
+            result = TRUE;
+        }
+        if ((TISG_basis[n][fcns] < TISG_basis[n][fcvs] + T_max[tvs]) && (TISG_basis[n][fcvs] > 0))
+        {
+            TISG_basis[n][fcns] = TISG_basis[n][fcvs] + T_max[tvs];
+            result = TRUE;
+        }
+    }
+    return result;
+}
+
+bool Correctie_TISG_Gelijkstart_rgv(count fc1, count fc2)
+{
+    count n;
+    bool result = FALSE;
+    for (n = 0; n < FCMAX; ++n)
+    {
+        if (TISG_rgv[n][fc1] < TISG_rgv[n][fc2])
+        {
+            TISG_rgv[n][fc1] = TISG_rgv[n][fc2];
+            result = TRUE;
+        }
+        else
+        {
+            if (TISG_rgv[n][fc1] != TISG_rgv[n][fc2])
+            {
+                TISG_rgv[n][fc2] = TISG_rgv[n][fc1];
+                result = TRUE;
+            }
+        }
+        if (TISG_basis[n][fc1] < TISG_basis[n][fc2])
+        {
+            TISG_basis[n][fc1] = TISG_basis[n][fc2];
+            result = TRUE;
+        }
+        else
+        {
+            if (TISG_basis[n][fc1] != TISG_basis[n][fc2])
+            {
+                TISG_basis[n][fc2] = TISG_basis[n][fc1];
+                result = TRUE;
+            }
+        }
+    }
+    return result;
+}
+
+bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count prmlr)
+{
+    count n;
+    bool result = FALSE;
+    for (n = 0; n < FCMAX; ++n)
+    {
+        if (TISG_rgv[n][fcvs] < TISG_rgv[n][fclr] - PRM[prmlr])
+        {
+            TISG_rgv[n][fcvs] = TISG_rgv[n][fclr] - PRM[prmlr];
+            result = TRUE;
+        }
+        if (TISG_basis[n][fcvs] < TISG_basis[n][fclr] - PRM[prmlr])
+        {
+            TISG_basis[n][fcvs] = TISG_basis[n][fclr] - PRM[prmlr];
+            result = TRUE;
+        }
+    }
+    return result;
 }

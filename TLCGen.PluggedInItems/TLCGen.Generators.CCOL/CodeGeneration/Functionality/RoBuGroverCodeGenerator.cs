@@ -74,7 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 CCOLCodeTypeEnum.RegCPreApplication => new []{60},
                 CCOLCodeTypeEnum.RegCTop => new []{30},
-                CCOLCodeTypeEnum.RegCVerlenggroen => new []{30},
+                CCOLCodeTypeEnum.RegCVerlenggroen => new []{35},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{30},
                 _ => null
             };
@@ -108,10 +108,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}if (IH[{_hpf}{_hrgvact}] != 0)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}int teller = 0;");
+                    if (c.Data.SynchronisatiesType == Models.Enumerations.SynchronisatiesTypeEnum.InterFunc)
+                    {
+                        sb.AppendLine($"{ts}{ts}int i;");
+                        sb.AppendLine($"{ts}{ts}if (rgvinit)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < FCMAX; ++i) TVG_rgv[i] = TVG_max[i];");
+                        sb.AppendLine($"{ts}{ts}{ts}rgvinit = 0;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}{ts}/* kopieer de basis waarden van TVG_max */");
+                        sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
+                        sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i) TVG_basis[i] = TVG_max[i] > 0 ? TVG_max[i] : 1;");
+                        sb.AppendLine($"{ts}{ts}BepaalInterStartGroenTijden_rgv();");
+                    }
                     sb.AppendLine();
                     foreach(var cg in c.RoBuGrover.ConflictGroepen)
                     {
-                        sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_va_arg(");
+                        sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_ISG_va_arg(");
                         foreach(var fc in cg.Fasen)
                         {
                             sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
