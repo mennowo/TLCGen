@@ -283,7 +283,7 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}SUMOIds[isumo] = NG;");
                     sb.AppendLine($"{ts}}}");
-                    foreach (var fc in _MyModel.FaseCycli)
+                    foreach (var fc in _MyModel.FaseCycli.Where(x => !string.IsNullOrWhiteSpace(x.SumoIds)))
                     {
                         var ids = fc.SumoIds.Replace(" ", "").Split(',');
                         foreach(var sid in ids)

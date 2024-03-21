@@ -1,12 +1,16 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -219,6 +223,7 @@ namespace TLCGen.Plugins.Sumo
 
         private GalaSoft.MvvmLight.CommandWpf.RelayCommand _stopSUMODetectorNamingCommand;
         private DetectorSumoDataViewModel _selectedDetector;
+        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _getLinkIdsFromNetworkCommand;
 
         public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ?? (_stopSUMODetectorNamingCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
             {
@@ -245,6 +250,77 @@ namespace TLCGen.Plugins.Sumo
             sim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_V);
             sim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
         }
+
+        public ICommand GetLinkIdsFromNetworkCommand => _getLinkIdsFromNetworkCommand ?? (_getLinkIdsFromNetworkCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+        {
+            foreach (var f in FaseCycli)
+            {
+                f.SumoIds = "";
+            }
+
+            var linkIds = new Dictionary<string, string>();
+            XmlDocument sumoConfig = new XmlDocument();
+            sumoConfig.Load(SumoConfigPath);
+            XmlNode node = sumoConfig.DocumentElement.SelectSingleNode("/configuration/input/net-file");
+            if (node.Attributes.Count > 0)
+            {
+                var netFile = node.Attributes["value"];
+                var sumoConfigPath = Path.GetDirectoryName(SumoConfigPath);
+                if (!string.IsNullOrEmpty(netFile.InnerText) && (File.Exists(netFile.InnerText) || File.Exists(Path.Combine(sumoConfigPath, netFile.InnerText))))
+                { 
+                    XmlDocument sumoNet = new XmlDocument();
+                    if (File.Exists(netFile.InnerText))
+                    {
+                        sumoNet.Load(netFile.InnerText);
+                    }
+                    else if (File.Exists(Path.Combine(sumoConfigPath, netFile.InnerText)))
+                    {
+                        sumoNet.Load(Path.Combine(sumoConfigPath, netFile.InnerText));
+                    }
+                    XmlNode netNode = sumoNet.DocumentElement.SelectSingleNode("/net");
+                    foreach (XmlNode n in netNode.ChildNodes)
+                    {
+                        if (n.Name == "connection")
+                        {
+                            if (n.ChildNodes.Count > 0)
+                            {
+                                foreach (XmlNode p in n.ChildNodes)
+                                {
+                                    if (p.Name == "param")
+                                    {
+                                        var key = p.Attributes["key"];
+                                        var value = p.Attributes["value"];
+                                        if (key.InnerText == "fc" 
+                                            && n.Attributes["linkIndex"] != null
+                                            && n.Attributes["tl"] != null
+                                            && n.Attributes["tl"].InnerText == SumoKruispuntNaam)
+                                        {
+                                            if (linkIds.ContainsKey(value.InnerText))
+                                            {
+                                                linkIds[value.InnerText] = linkIds[value.InnerText] + "," + n.Attributes["linkIndex"].InnerText;
+                                            }
+                                            else
+                                            {
+                                                linkIds.Add(value.InnerText, n.Attributes["linkIndex"].InnerText);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var link in linkIds)
+            {
+                var fc = FaseCycli.FirstOrDefault(x => x.Naam == link.Key);
+                if (fc != null)
+                {
+                    fc.SumoIds = link.Value;
+                }
+            }
+        }, () => !string.IsNullOrEmpty(SumoConfigPath) && File.Exists(SumoConfigPath)));
 
         #endregion // Commands
 

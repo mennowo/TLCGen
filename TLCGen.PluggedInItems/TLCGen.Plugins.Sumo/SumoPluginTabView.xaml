@@ -54,19 +54,28 @@
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" Margin="2" ItemsSource="{Binding Path=FaseCycli}" 
+            <Grid Grid.Column="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <DataGrid Margin="2" ItemsSource="{Binding Path=FaseCycli}" 
                       AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
-                <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                       AncestorType={x:Type DataGridRow}}, 
                                       Path=Item.Naam}"/>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding SumoIds,UpdateSourceTrigger=PropertyChanged}" Header="Sumo id's" />
-                </DataGrid.Columns>
-            </DataGrid>
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding SumoIds,UpdateSourceTrigger=PropertyChanged}" Header="Sumo id's" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button Content="Links ophalen uit netwerk" Command="{Binding Path=GetLinkIdsFromNetworkCommand}" Margin="2" />
+                </StackPanel>
+            </Grid>
             <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
             <Grid Grid.Column="2" >
                 <Grid.RowDefinitions>
