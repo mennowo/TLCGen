@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0649
 	    private string _homschtegenh;
 	    private string _tinl;
+	    private string _trealil;
 	    private string _treallr;
 
         #endregion // Fields
@@ -282,13 +283,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                             var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
                             if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
                                 sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                             {
+                                
                                 if (nl.MaximaleVoorstart.HasValue)
                                 {
                                     sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
-                                              $"((T[{_tpf}{_tinl}{nl.FaseVan}{nl.FaseNaar}] || RT[{_tpf}{_tinl}{nl.FaseVan}{nl.FaseNaar}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
+                                              $"((T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] || RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
                                 }
                                 else
                                 {
@@ -301,7 +304,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (nl.MaximaleVoorstart.HasValue)
                                 {
                                     var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
-                                        ? _tinl
+                                        ? tinl
                                         : _treallr;
                                     sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()}) " +
                                                   $"((T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] || RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]) && A[{_fcpf}{nl.FaseNaar}] && !G[{_fcpf}{nl.FaseNaar}]));");
@@ -338,6 +341,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
             _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
+            _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
             return base.SetSettings(settings);
 	    }
     }

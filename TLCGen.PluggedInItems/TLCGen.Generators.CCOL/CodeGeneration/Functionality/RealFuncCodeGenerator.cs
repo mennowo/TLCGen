@@ -16,7 +16,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hinl;
-        private CCOLGeneratorCodeStringSettingModel _tinl;
         private CCOLGeneratorCodeStringSettingModel _tfo;
         private CCOLGeneratorCodeStringSettingModel _treallr;
         private CCOLGeneratorCodeStringSettingModel _trealvs;
@@ -55,19 +54,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach (var grsync in _sortedSyncs.oneWay)
             {
                 var max = grsync.Richting == -1 ? _trealvs : _treallr;
+                var grsyncElemName = grsync.ToString();
                 // inlopen voetgangers (eenzijdig)
                 var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseVan);
                 var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == grsync.FaseNaar);
+                bool vtgEenz = false;
                 if (fc1?.Type == FaseTypeEnum.Voetganger && fc2?.Type == FaseTypeEnum.Voetganger)
                 {
                     max = _trealil;
+                    grsyncElemName = grsync.FaseNaar + grsync.FaseVan;
+                    vtgEenz = true;
                 }
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{max}{grsync}",
+                        $"{max}{grsyncElemName}",
                         grsync.Waarde < 0 ? grsync.Waarde * -1 : grsync.Waarde,
                         CCOLElementTimeTypeEnum.TE_type,
-                        max, grsync.FaseVan, grsync.FaseNaar));
+                        max, vtgEenz ? grsync.FaseNaar : grsync.FaseVan, vtgEenz ? grsync.FaseVan : grsync.FaseNaar));
             }
 
             var helps = new List<string>();
@@ -110,16 +113,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tinl}{m1.FaseVan}{m1.FaseNaar}",
+                        $"{_trealil}{m1.FaseVan}{m1.FaseNaar}",
                         m1.Waarde < 0 ? m1.Waarde * -1 : m1.Waarde,
                         CCOLElementTimeTypeEnum.TE_type,
-                        _tinl, m1.FaseVan, m1.FaseNaar));
+                        _trealil, m1.FaseVan, m1.FaseNaar));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tinl}{m2.FaseVan}{m2.FaseNaar}",
+                        $"{_trealil}{m2.FaseVan}{m2.FaseNaar}",
                         m2.Waarde < 0 ? m2.Waarde * -1 : m2.Waarde,
                         CCOLElementTimeTypeEnum.TE_type,
-                        _tinl, m2.FaseVan, m2.FaseNaar));
+                        _trealil, m2.FaseVan, m2.FaseNaar));
 
                 if (!helps.Contains($"s{_schlos}{m1.FaseVan}_1"))
                 {
@@ -257,7 +260,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{10},
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{30},
                 CCOLCodeTypeEnum.RegCRealisatieAfhandelingVoorModules => new []{10},
                 CCOLCodeTypeEnum.RegCMaxgroen => new []{70},
@@ -285,10 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 firstFcName = c.Data.RangeerData.RangeerFasen.OrderBy(x => x.RangeerIndex).First()?.Naam;
             }
-            if (firstFcName == null)
-            {
-                firstFcName = c.Fasen.First().Naam;
-            }
+            firstFcName ??= c.Fasen.First().Naam;
             
             var first = true;
 
@@ -472,15 +472,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Herstarten/afkappen inlooptijd/inrijtijd */");
                         foreach (var (grsync, _, gelijkstart) in _sortedSyncs.twoWayPedestrians)
                         {
-                            sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync}] = SG[{_fcpf}{grsync:van}] && H[{_hpf}{_hinl}{grsync:van}]; AT[{_tpf}{_tinl}{grsync}] = G[{_fcpf}{grsync:naar}];");
-                            sb.AppendLine($"{ts}RT[{_tpf}{_tinl}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}] && H[{_hpf}{_hinl}{grsync:naar}]; AT[{_tpf}{_tinl}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
+                            sb.AppendLine($"{ts}RT[{_tpf}{_trealil}{grsync}] = SG[{_fcpf}{grsync:van}] && H[{_hpf}{_hinl}{grsync:van}]; AT[{_tpf}{_trealil}{grsync}] = G[{_fcpf}{grsync:naar}];");
+                            sb.AppendLine($"{ts}RT[{_tpf}{_trealil}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}] && H[{_hpf}{_hinl}{grsync:naar}]; AT[{_tpf}{_trealil}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
                         }
 
                         foreach (var grsync in _sortedSyncs.oneWay)
                         {
                             if (grsync.Richting == 1)
                             {
-                                sb.AppendLine($"{ts}RT[{_tpf}{_treallr}{grsync}] = SG[{_fcpf}{grsync:naar}]; AT[{_tpf}{_treallr}{grsync}] = G[{_fcpf}{grsync:van}];");
+                                var fc1 = c.Fasen.FirstOrDefault(x => grsync.FaseVan == x.Naam);
+                                var fc2 = c.Fasen.FirstOrDefault(x => grsync.FaseNaar == x.Naam);
+                                var eenzVtg = false;
+                                if (fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
+                                {
+                                    var nl2 = c.InterSignaalGroep.Nalopen
+                                                .FirstOrDefault(x =>
+                                                    x.Type == NaloopTypeEnum.StartGroen &&
+                                                    x.FaseVan == grsync.FaseVan &&
+                                                    x.FaseNaar == grsync.FaseNaar);
+                                    eenzVtg = nl2 == null;
+                                }
+                                if (eenzVtg)
+                                {
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_trealil}{grsync:naarvan}] = SG[{_fcpf}{grsync:naar}]; AT[{_tpf}{_trealil}{grsync:naarvan}] = G[{_fcpf}{grsync:van}];");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_treallr}{grsync}] = SG[{_fcpf}{grsync:naar}]; AT[{_tpf}{_treallr}{grsync}] = G[{_fcpf}{grsync:van}];");
+                                }
                             }
                         }
                         
@@ -551,9 +570,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         x.Type == NaloopTypeEnum.EindeGroen && 
                                         x.FaseVan == grsync.FaseNaar &&
                                         x.FaseNaar == grsync.FaseVan);
+                                
                                 if (nl == null)
                                 {
-                                    sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
+                                    var nl2 = c.InterSignaalGroep.Nalopen
+                                        .FirstOrDefault(x =>
+                                            x.Type == NaloopTypeEnum.StartGroen &&
+                                            x.FaseVan == grsync.FaseVan &&
+                                            x.FaseNaar == grsync.FaseNaar);
+                                    var eenzVtg = nl2 == null;
+                                    if (eenzVtg)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync:naarvan}], {condition});");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
+                                    }
                                 }
                                 else
                                 {
@@ -609,7 +642,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
 
-                            sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_tinl}{grsync}], T_max[{_tpf}{_tinl}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, " +
+                            sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_trealil}{grsync}], T_max[{_tpf}{_trealil}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, " +
                                           $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "FALSE")});");
                         }
                         sb.AppendLine();
@@ -809,8 +842,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* Bij inlopen, inlopende richting in WG houden t.b.v. eventuele aanvraag naloop in tegenrichting */");
                             first = false;
                         }
-                        sb.AppendLine($"{ts}RW[{_fcpf}{m1.FaseVan}] |= T[{_tpf}{_tinl}{m1.FaseVan}{m1.FaseNaar}] ? BIT2 : 0;");
-                        sb.AppendLine($"{ts}RW[{_fcpf}{m2.FaseVan}] |= T[{_tpf}{_tinl}{m2.FaseVan}{m2.FaseNaar}] ? BIT2 : 0;");
+                        sb.AppendLine($"{ts}RW[{_fcpf}{m1.FaseVan}] |= T[{_tpf}{_trealil}{m1.FaseVan}{m1.FaseNaar}] ? BIT2 : 0;");
+                        sb.AppendLine($"{ts}RW[{_fcpf}{m2.FaseVan}] |= T[{_tpf}{_trealil}{m2.FaseVan}{m2.FaseNaar}] ? BIT2 : 0;");
                     }
                     return sb.ToString();
 

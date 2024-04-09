@@ -23,7 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnleg;
         private string _tnlegd;
         private string _tnlsgd;
-        private string _tinl;
+        private string _trealil;
         private string _hlos;
         private string _hnla;
         private string _tvs;
@@ -332,7 +332,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         
                         sb.AppendLine($"{ts}definitie_vtg_gescheiden(" +
                                       $"{_fcpf}{nl:van}, {_fcpf}{nl:naar}, " +
-                                      $"{_tpf}{_tinl}{nl:van}{nl:naar}, {_tpf}{_tinl}{nl:naar}{nl:van}, " +
+                                      $"{_tpf}{_trealil}{nl:van}{nl:naar}, {_tpf}{_trealil}{nl:naar}{nl:van}, " +
                                       $"{_tpf}{_tnlsgd}{nl:van}{nl:naar}, {_tpf}{_tnlsgd}{nl:naar}{nl:van}, " +
                                       $"{(d1 != null ? $"{_hpf}{_hnla}{d1.Detector}" : "NG")}, " +
                                       $"{(d2 != null ? $"{_hpf}{_hnla}{d2.Detector}" : "NG")}, " +
@@ -509,7 +509,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _hlos = CCOLGeneratorSettingsProvider.Default.GetElementName("hlos");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
-            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
+            _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
             _tvs = CCOLGeneratorSettingsProvider.Default.GetElementName("tvs");
             _tfo = CCOLGeneratorSettingsProvider.Default.GetElementName("tfo");
             _schma = CCOLGeneratorSettingsProvider.Default.GetElementName("schma");
