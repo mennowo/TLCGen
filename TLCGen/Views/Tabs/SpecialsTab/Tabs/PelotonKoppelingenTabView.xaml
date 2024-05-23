@@ -21,7 +21,18 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Content="Peloton Koppelingen" FontWeight="Bold" />
+            <DockPanel>
+                <ct:InfoElement DockPanel.Dock="Right" Margin="5">
+                    <ct:InfoElement.InfoPopup>
+                        <TextBlock Margin="2">
+        Typen peloton koppelingen:<LineBreak />
+        - Type 1: geschikt voor korte afstanden tussen volgrichtingen<LineBreak />
+        - Type 2: geschikt voor langere afstanden tussen gekoppelde richtingen
+                        </TextBlock>
+                    </ct:InfoElement.InfoPopup>
+                </ct:InfoElement>
+                <Label Content="Peloton Koppelingen" FontWeight="Bold" />
+            </DockPanel>
             <DataGrid Grid.Row="1" ItemsSource="{Binding Path=PelotonKoppelingen}" Margin="2"
                       SelectedItem="{Binding Path=SelectedPelotonKoppeling,UpdateSourceTrigger=PropertyChanged}"
                       CanUserAddRows="False"
