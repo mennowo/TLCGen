@@ -880,6 +880,10 @@ namespace TLCGen.ModelManagement
         private void OnNameChanging(NameChangingMessage msg)
         {
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName, msg.ObjectType);
+            if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
+            {
+                Controller.Fasen.Sort();
+            }
             MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
 
             // Force the viewmodel to order+rebuild relevant lists
@@ -1119,6 +1123,6 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChangedMessage));
         }
 
-    #endregion // Constructor
+        #endregion // Constructor
     }
 }

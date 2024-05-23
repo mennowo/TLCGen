@@ -94,6 +94,12 @@ namespace TLCGen.ViewModels
             Fasen.Rebuild();
         }
 
+        private void OnNameChanged(NameChangedMessage message)
+        {
+            _Controller.ModuleMolen.FasenModuleData.BubbleSort();
+            Fasen.Rebuild();
+        }
+
         #endregion // TLCGen Message Handling
 
         #region Collection Changed
@@ -106,6 +112,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(x => RaisePropertyChanged(string.Empty)));
         }
 
