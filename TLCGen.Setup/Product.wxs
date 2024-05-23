@@ -225,6 +225,8 @@
         <File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />
         <File Id="fil0B33645B3DCD9F2524A99FF42B3775C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.c" />
         <File Id="fil0B33645B3DCD9F2524A99FF42B3775C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.h" />
+		<File Id="fil0B33645B3DCD9F2524A99FF42B3775C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.c" />
+		<File Id="fil0B33645B3DCD9F2524A99FF42B3775C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.h" />
         <File Id="fil0B33645B3DCD9F2524A99FF42B3775C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncfunc.c" />
         <File Id="fil6574194A3387BCCF8502B7EDD51FBF30" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.c" />
         <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
