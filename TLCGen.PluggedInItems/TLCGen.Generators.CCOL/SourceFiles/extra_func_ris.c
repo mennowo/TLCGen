@@ -104,7 +104,7 @@ rif_bool ris_inmelding_selectief(count fc, rif_int approach_id, rif_string inter
             /* ------------------------------------------ */
             if (eta_prm > 0) {                                                                      /* test op ingestelde eta_prm. (eta_prm <= 0) is uitgeschakeld */
                if ((RIS_PRIOREQUEST_AP[r].eta > RIF_UTC_TIME_PB)                                     /* test of eta in de toekomst ligt */
-                  && ((RIS_PRIOREQUEST_AP[r].eta - RIF_UTC_TIME_PB) < (eta_prm * 1000))) {         /* test op juiste eta_prm */
+                  && ((RIS_PRIOREQUEST_AP[r].eta - RIF_UTC_TIME_PB) < (eta_prm * 100))) {         /* test op juiste eta_prm */
 
                   /*  test stationType */
                   /*  ---------------- */

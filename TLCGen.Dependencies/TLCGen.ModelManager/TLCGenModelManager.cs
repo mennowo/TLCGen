@@ -354,6 +354,26 @@ namespace TLCGen.ModelManagement
                         : NooitAltijdAanUitEnum.Nooit;
                 }
             }
+
+            checkVer = Version.Parse("12.4.0.6");
+            if (v < checkVer)
+            {
+                foreach (var prio in controller.PrioData.PrioIngrepen)
+                {
+                    foreach (var melding in prio.MeldingenData.Inmeldingen)
+                    {
+                        if (melding.RisEta.HasValue) melding.RisEta *= 10;
+                    }
+                    foreach (var melding in prio.MeldingenData.Uitmeldingen)
+                    {
+                        if (melding.RisEta.HasValue) melding.RisEta *= 10;
+                    }
+                }
+                foreach (var hd in controller.PrioData.HDIngrepen)
+                {
+                    if (hd.RisEta.HasValue) hd.RisEta *= 10;
+                }
+            }
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)

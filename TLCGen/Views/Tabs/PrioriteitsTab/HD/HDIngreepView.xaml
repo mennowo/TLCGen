@@ -113,7 +113,7 @@
                 <TextBox Text="{Binding Path=RisStart}" Grid.Row="1" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
                 <Label Content="RIS end (verweg ss)" Grid.Row="2" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
                 <TextBox Text="{Binding Path=RisEnd}" Grid.Row="2" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
-                <Label Content="RIS eta" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
+                <Label Content="RIS eta (tienden sec.)" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding Path=RIS}" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
                 <TextBox Text="{Binding Path=RisEta}" Grid.Row="3" Grid.Column="1" Margin="2" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
                 <Label Content="RIS importance" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="0" Visibility="{Binding Path=RIS,Converter={StaticResource BoolToVisConv}}" />
                 <ListView

@@ -1,5 +1,7 @@
-TLCGen=12.4.0.5
+TLCGen=12.4.0.6
 RN==TLCGen
+TLCGen versie: 12.4.0.6
+- Ris ETA in tienden seconden
 TLCGen versie: 12.4.0.5
 - Uitbreiding opties meeverlengfuncties
 - SPAT uitvoer geoptimaliseerd

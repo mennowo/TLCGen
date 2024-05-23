@@ -69,7 +69,7 @@
             <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <Label Content="Eind (ver van ss)" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <TextBox Text="{Binding RisEnd,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
-            <Label Content="E.t.a." Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
+            <Label Content="E.t.a. (tienden sec.)" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <xctk:WatermarkTextBox
                 Watermark="NG" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                 Text="{Binding Path=RisEta,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
