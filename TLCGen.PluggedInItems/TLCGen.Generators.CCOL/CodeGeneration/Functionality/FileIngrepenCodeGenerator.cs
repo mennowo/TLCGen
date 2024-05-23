@@ -53,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_schfile}{fm.Naam}",
-                        1, 
+                        fm.AanUit ? 1 : 0, 
                         CCOLElementTimeTypeEnum.SCH_type,
                         _schfile, fm.Naam));
                 _myElements.Add(

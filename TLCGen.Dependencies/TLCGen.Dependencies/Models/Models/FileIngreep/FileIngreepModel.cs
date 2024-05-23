@@ -17,6 +17,8 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]
+        public bool AanUit {get;set; } = true;
+        [HasDefault(false)]
         public bool MetingPerLus { get; set; }
         [HasDefault(false)]
         public bool MetingPerStrook { get; set; }

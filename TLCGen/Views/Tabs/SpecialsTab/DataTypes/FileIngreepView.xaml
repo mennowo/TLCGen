@@ -20,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ag:AutoGrid Columns="Auto,*" RowCount="15">
+    <ag:AutoGrid Columns="Auto,*" RowCount="16">
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
@@ -32,6 +32,8 @@
         </Grid.Style>
         <Label Content="Naam file ingreep" />
         <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        <Label Content="In/uitschakelen ingreep" />
+        <CheckBox IsChecked="{Binding Path=AanUit}" Margin="5"/>
         <Label Content="Toepassen alternatieve groentijdenset" />
         <ComboBox 
                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FileMetingLocatieEnum}}}"

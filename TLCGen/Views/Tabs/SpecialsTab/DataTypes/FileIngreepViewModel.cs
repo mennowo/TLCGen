@@ -109,6 +109,16 @@ namespace TLCGen.ViewModels
 				}
             }
         }
+        
+        public bool AanUit
+        {
+            get => _FileIngreep.AanUit;
+            set
+            {
+                _FileIngreep.AanUit = value;
+                RaisePropertyChanged("AanUit");
+            }
+        }
 
         public bool MetingPerLus
         {
