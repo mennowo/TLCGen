@@ -410,7 +410,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _uitgangen.Elements.Any(x => x.IOMultivalent))
             {
                 sb.AppendLine();
-                sb.AppendLine($"{ts}/* Multivalente ingangen */");
+                sb.AppendLine($"{ts}/* Multivalente uitgangen */");
                 sb.AppendLine("#if !defined NO_VLOG_300");
                 foreach (var i in _uitgangen.Elements.Where(x => x.IOMultivalent && !x.Dummy))
                 {
