@@ -53,7 +53,7 @@ namespace TLCGen.Helpers
                 if (ignore != null) continue;
 
                 var propValue = property.GetValue(obj);
-                if (property.PropertyType == typeof(string))
+                if (property.CanWrite && property.PropertyType == typeof(string))
                 {
                     var propString = (string)propValue;
                     if (propString != null && propString.Contains(oldstring))
@@ -61,7 +61,7 @@ namespace TLCGen.Helpers
                         property.SetValue(obj, propString.Replace(oldstring, newstring));
                     }
                 }
-                else if (!property.PropertyType.IsValueType)
+                else if (property.CanWrite && !property.PropertyType.IsValueType)
                 {
                     if (propValue is IList elems)
                     {

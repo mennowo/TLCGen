@@ -20,11 +20,7 @@ namespace TLCGen.Models
         [RefersTo(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
         [ModelName(TLCGenObjectTypeEnum.PrioriteitsIngreep)]
         [Browsable(false)]
-        public string DisplayName
-        {
-            get => FaseCyclus + Naam;
-            set => Naam = Regex.Replace(value, $"^{FaseCyclus}", "");
-        }
+        public string DisplayName => FaseCyclus + Naam;
 
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
