@@ -1370,6 +1370,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsivert");
             var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsilyn");
             var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsicat");
+            var _prmkarsg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsg");
+            var _prmkarsghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsghd");
 
             sb.AppendLine("/* ----------------------------------------------------------------");
             sb.AppendLine("   PrioSpecialSignals wordt aangeroepen vanuit de functie ");
@@ -1400,7 +1402,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (int.TryParse(prio.FaseCyclus, out var ifc))
                     {
-                        var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+                        var actualIfc = c.PrioData.KARSignaalGroepNummersInParameters
+                            ? $"PRM[{_prmpf}{_prmkarsg}{prio.FaseCyclus}]"
+                            : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
+                                ? (ifc - 200).ToString() 
+                                : ifc.ToString();
                         var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
@@ -1452,7 +1458,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	                const string type = "CIF_POL";
 	                if (int.TryParse(hd.FaseCyclus, out var ifc))
                     {
-                        var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+                        var actualIfc = c.PrioData.KARSignaalGroepNummersInParameters 
+                            ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]" 
+                            : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
+                                ? (ifc - 200).ToString() 
+                                : ifc.ToString();
 
                         sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message(0, {type}, {actualIfc}, CIF_DSIN, 1, 0, 0, 0, CIF_SIR);");
                         sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message(0, {type}, {actualIfc}, CIF_DSUIT, 1, 0, 0, 0, CIF_SIR);");

@@ -587,7 +587,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.PrioData.PrioIngrepen.Any())
             {
                 /* Variables independent of signal groups */
-
                 if (c.HasDSI())
                 {
                     var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 120, CCOLElementTimeTypeEnum.TS_type, _prmtestdsivert);
@@ -1507,7 +1506,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                             {
-                                var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
+                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.InmeldingOokDoorFase}]"
+                                    : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
+                                        ? (hd.InmeldingOokDoorFase - 200).ToString() 
+                                        : hd.InmeldingOokDoorFase.ToString();
                                 sb.AppendLine($"{ts}" +
                                               $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
                                               (hd.KARToepassenFilterTijden 
@@ -1602,7 +1605,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             ifc = ifc2;
                         }
 
-                        var actualIfc = ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (ifc - 200).ToString() : ifc.ToString();
+                        var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
+                            ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
+                            : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
+                                ? (ifc - 200).ToString()
+                                : ifc.ToString();
                         var uitmHelems = new List<string>();
                         if (!first) sb.AppendLine();
                         first = false;
@@ -1611,14 +1618,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                             {
-                                var actualAlsoFc = hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (hd.InmeldingOokDoorFase - 200).ToString() : hd.InmeldingOokDoorFase.ToString();
+                                var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
+                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.InmeldingOokDoorFase}]"
+                                    : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
+                                        ? (hd.InmeldingOokDoorFase - 200).ToString() 
+                                        : hd.InmeldingOokDoorFase.ToString();
                                 sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = " +
                                               (hd.KARToepassenFilterTijden
                                                   ? $"RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = " +
                                                     $"!T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && "
                                                   : "") +
                                               $"SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && " +
-                                              $"(DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
+                                              $"(DSIMelding_HD_V1({sgCheck}, CIF_DSUIT, FALSE) || DSIMelding_HD_V1({actualAlsoFc}, CIF_DSUIT, FALSE));");
                             }
                             else
                             {
@@ -1628,7 +1639,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     $"!T[{_tpf}{_thduit}{hd.FaseCyclus}kar] && "
                                                   : "") + 
                                               $"SCH[{_schpf}{_schhduit}{hd.FaseCyclus}kar] && " +
-                                              $"(DSIMelding_HD_V1({actualIfc}, CIF_DSUIT, FALSE));");
+                                              $"(DSIMelding_HD_V1({sgCheck}, CIF_DSUIT, FALSE));");
                             }
 
                             uitmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}kar");
