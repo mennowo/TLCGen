@@ -629,14 +629,24 @@ bool ym_max_vtgV2(count i)
    return ym;
 }
 
+void AanvraagSnelV2(count fc1, count dp)
+{
+	/* richting mag gelijk realiseren indien er geen conflicten lopen */
+	if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
+		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
+	{
+		A[fc1] |= BIT5;
+	}
+}
 
 /** ------------------------------------------------------------------------------
 AANVRAAG SNEL
 ------------------------------------------------------------------------------
 Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
 ------  ----------  ---     ----------                      -----------------
-1.0   12-03-2012  dze     basis                            06-12-2011
-2.0   23-04-2012  psn     aangepaste syntax                23-10-2012
+1.0   12-03-2012    dze     basis                            06-12-2011
+2.0   23-04-2012    psn     aangepaste syntax                23-10-2012
+3.0   24-05-2024    nvw     alleen opzetten A                -
 ------------------------------------------------------------------------------
 Functie voor het direct opzetten van een aanvraag.
 Voertuig hoeft bezettijd niet af te wachten indien er geen conflicten lopen.
@@ -647,11 +657,14 @@ hierbij:
 
 Resultaat:   zet BIT4 op van A[fc]
 ------------------------------------------------------------------------------ */
-void AanvraagSnelV2(count fc1, count dp)
+void AanvraagSnelV3(count fc1, count dp)
 {
 	/* richting mag gelijk realiseren indien er geen conflicten lopen */
-	mee_aanvraag_spec(fc1, (bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
-		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)));
+	if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
+		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
+	{
+		A[fc1] |= BIT5;
+	}
 }
 
 /** ------------------------------------------------------------------------------
