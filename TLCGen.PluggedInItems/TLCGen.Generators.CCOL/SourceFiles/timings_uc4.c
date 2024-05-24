@@ -171,7 +171,7 @@ static void timings_uc4(count fc, count mrealtijd, count mrealtijdmin, count mre
 
 
          /* voorwaarde 12 --> 15 */
-         (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[real] <= PRM[prmttxconfidence15]) && (MM[min] <= PRM[prmttxconfidence15]) && (MM[max] <= PRM[prmttxconfidence15])))) || (P[i] & BIT11))
+         (((NaarConfidence9_15prio(i) || RA[i]) && ((MM[real] <= PRM[prm_ttxconfidence15]) && (MM[min] <= PRM[prm_ttxconfidence15]) && (MM[max] <= PRM[prm_ttxconfidence15])))) || (P[i] & BIT11))
       {
          if (P[i] & BIT11) CCOL_FC_TIMING[i][0][CIF_TIMING_CONFIDENCE] = TIMING_CONFIDENCE_RD_GROEN_DEFINITIEF; /* 15 */ /* 1 machineslag vertragen ivm acties door P bij gelijk- en voorstart */
          P[i] |= BIT11;
