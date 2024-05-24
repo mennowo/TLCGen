@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using TLCGen.Dependencies.Models.Enumerations;
@@ -166,7 +167,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TFG_defmax = NG;");
             sb.AppendLine($"{ts}TVG_defmax = NG;");
             sb.AppendLine();
-            sb.AppendLine($"{ts}TGG_type    |= RO_type; /* Garantiegroentijden read-only */");
+            sb.AppendLine($"{ts}TGG_type     |= RO_type | TE_type; /* Garantiegroentijden read-only */");
+            sb.AppendLine($"{ts}TGG_min_type |= RO_type | TE_type; /* Minimale garantiegroentijden read-only */");
+            sb.AppendLine($"{ts}TGL_min_type |= RO_type | TE_type; /* Minimale garantiegeeltijden read-only */");
+            sb.AppendLine($"{ts}TRG_min_type |= RO_type | TE_type; /* Minimale garantieroodtijden read-only */");
             
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, false, true, true, false);
             
