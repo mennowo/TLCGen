@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" Name="Root"
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:StarTabViewModel}">
     <Grid>
@@ -16,7 +17,17 @@
         <TabControl Grid.Row="1">
             <TabItem Header="Instellingen star regelen">
                 <StackPanel>
-                    <CheckBox Margin="5" Content="Toepassen star regelen" IsChecked="{Binding Path=ToepassenStar,UpdateSourceTrigger=PropertyChanged}" />
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5" Content="Toepassen star regelen" IsChecked="{Binding Path=ToepassenStar,UpdateSourceTrigger=PropertyChanged}" />
+                        <ct:InfoElement DockPanel.Dock="Right" Margin="5">
+                            <ct:InfoElement.InfoPopup>
+                                <TextBlock Margin="2">
+                                <Span FontWeight="Bold">Let op:</Span><LineBreak />
+                                Bij toepassen van star regelen werkt fixatie niet
+                                </TextBlock>
+                            </ct:InfoElement.InfoPopup>
+                        </ct:InfoElement>
+                    </StackPanel>
                     <CheckBox Margin="5" Content="Programma tijden in parameters" IsChecked="{Binding Path=ProgrammaTijdenInParameters,UpdateSourceTrigger=PropertyChanged}" 
                               IsEnabled="{Binding Path=ToepassenStar}" />
                     <Label Content="Programmasturing:" IsEnabled="{Binding Path=ToepassenStar}" />
