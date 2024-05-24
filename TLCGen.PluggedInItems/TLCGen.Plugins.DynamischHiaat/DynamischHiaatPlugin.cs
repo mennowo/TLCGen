@@ -232,7 +232,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     }
                 }
 
-                _myElements.Add(new CCOLElement($"dynhiaat{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Toepassen dynamsich hiaat bij fase {msg.SignalGroupName}"));
+                _myElements.Add(new CCOLElement($"dynhiaat{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Toepassen dynamisch hiaat bij fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"opdrempelen{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, CCOLElementTypeEnum.HulpElement, $"Opdrempelen toepassen voor fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"opdrempelen{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, msg.Opdrempelen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Opdrempelen toepassen voor fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"geendynhiaat{msg.SignalGroupName}", PrioCodeGeneratorHelper.CAT_Basisfuncties, PrioCodeGeneratorHelper.SUBCAT_Verlengen, CCOLElementTypeEnum.HulpElement, "Tegenhouden toepassen dynamische hiaattijden voor fase " + msg.SignalGroupName));
