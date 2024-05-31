@@ -133,6 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
+
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
@@ -140,11 +141,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}gk_ResetGK();");
                         sb.AppendLine($"{ts}gk_ResetNL();");
                     }
-                    // TODO: should only generate if any nalopen are there?
+                    
                     if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
                         sb.AppendLine();
-						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
+                        sb.AppendLine($"{ts}/* Tegenhouden inschakelen naar PL als een naloop nog actief is of als inrijden/inlopen actief is */");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
 						var k = 0;
 						foreach (var t in _myElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
 						{
@@ -155,6 +157,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.Append($"{ts}{ts}T[{_tpf}{t.Naam}]");
 							++k;
 						}
+                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        {
+                            if (k != 0)
+                            {
+                                sb.AppendLine(" ||");
+                            }
+
+                            var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                            var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                            if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                                sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                            {
+
+                                if (nl.MaximaleVoorstart.HasValue)
+                                {
+                                    sb.Append($"{ts}{ts}T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] || RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] ");
+                                }
+                            }
+                            else
+                            {
+                                if (nl.MaximaleVoorstart.HasValue)
+                                {
+                                    var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
+                                        ? tinl
+                                        : _treallr;
+                                    sb.Append($"{ts}{ts}T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] || RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]");
+                                }
+                            }
+                            ++k;
+                        }
 						sb.AppendLine(";");
 					}
 					return sb.ToString();

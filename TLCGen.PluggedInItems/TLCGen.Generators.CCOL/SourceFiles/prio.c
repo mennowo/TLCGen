@@ -422,6 +422,28 @@ void WachtTijdBewaking(void)
             iMaximumWachtTijdOverschreden[prio] |= A[i] && TFB_timer[i] >= iMaximumWachtTijd[i] && !iSCH_ALTG[i];
         }
     }
+
+#if (defined prmmwtbrmvt && defined prmmwtbrfts && defined prmmwtbrvtg)
+    /* Onderstaande code wordt gebruikt in de gemeente Utrecht (Jonathan de Vries) en hier opgenomen en op termijn in de TLCGen toegevoegd */
+    for (prio = 0; prio < prioFCMAX; ++prio)/* toegevoegd tbv bijzonder realiseren JDV */
+    {
+        iMaximumWachtTijdOverschreden_BR[prio] = 0; 
+        fc = iFC_PRIOix[prio];
+        for (i = 0; i < GKFC_MAX[fc] && !iMaximumWachtTijdOverschreden_BR[prio]; ++i)
+        {
+#if (CCOL_V >= 95)
+            k = KF_pointer[fc][i];
+#else
+            k = TO_pointer[fc][i];
+#endif
+            iMaximumWachtTijdOverschreden_BR[prio] |= A[k] && TFB_timer[k] >= iMaximumWachtTijd_BR[k];
+        }
+        for (i = 0; i < FCMAX && !iMaximumWachtTijdOverschreden_BR[prio]; ++i)
+        {
+            iMaximumWachtTijdOverschreden_BR[prio] |= A[i] && TFB_timer[i] >= iMaximumWachtTijd_BR[i] && !iSCH_ALTG[i];
+        }
+    }
+#endif
 }
 
 void mag_eerst(void)
@@ -518,6 +540,8 @@ void BlokkeringsTijd(void)
                     iWachtOpKonflikt[prio] = 0;
                 }
             }
+            /* Blokkeringstimer resetten op SG omdat deze nog actief kan zijn van een vorige inmelding */
+            iBlokkeringsTimer[prio] = SG[fc] ? iBlokkeringsTijd[prio] : iBlokkeringsTimer[prio];
         }
     }
 }
@@ -1154,10 +1178,30 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                     }
                 }
 #ifdef NALOPEN
+
+               if (iPrioriteitsOptiesFC & poAfkappenKonfliktRichtingen &&
+                        !iNietAfkappen[k])
+               {
+              		if (TNL[k] && iRestGroen < TNL_max[k] - TNL_timer[k])
+              		{
+                  	if ((TNL_max[k] - TNL_timer[k] - TVG_max[k]) >=0)
+                  	{
+                  		iRestGroen = TNL_max[k] - TNL_timer[k] - TVG_max[k];
+									 /* Corrigeren voor TVG_max[k] ;
+										 - te hoge iRestgroen op nalooprichting geeft te hoge waarde voor iStartGroenFC prioriteitsrichting
+										 - gevolg is dat de voedende richting NIET meer wordt afgekapt										 			 */
+							}
+							else iRestGroen=0;
+               	}
+					}
+					else /* oorspronkelijke code TLCgen */
+					{
                 if (TNL[k] && iRestGroen < TNL_max[k] - TNL_timer[k])
                 {
                     iRestGroen = TNL_max[k] - TNL_timer[k];
                 }
+					}
+
 #endif
             }
             else
@@ -1181,7 +1225,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
             iRestTO = TO_max[k][fc] >= 0 ? TO_max[k][fc] - TO_timer[k] :
 #endif
 #ifdef NALOPEN
-                TGK[k][fc] ? TGK_max[k][fc] - TGK_timer[k] :
+               TGK[k][fc] ? TGK_max[k][fc] - TGK_timer[k] - ( (iPrioriteitsOptiesFC & poAfkappenKonfliktRichtingen && !iNietAfkappen[k])? TVG_max[k] : 0):
 #endif
                 0;
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
@@ -1350,12 +1394,15 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
             }
             else
             {
-                iRealisatieTijd[fc][k] = iKonfliktTijd[k] + iGroenTijd +
+                iRealisatieTijd[fc][k] = iKonfliktTijd[k] + iGroenTijd + (TGL_max[k] > 0 ? TGL_max[k] : 1) +
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
                 TIG_max[k][fc];
 #else
-                (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc];
+#ifdef NALOPEN
+						TGK_max[k][fc] +
 #endif
+						(TO_max[k][fc]>=0 ? TO_max[k][fc] : 0);	
+#endif	  
             }
         }
         else
@@ -1368,7 +1415,7 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
 void TegenHoudenStartGroen(int fc, int iStartGroenFC)
 {
     int i, k;
-    for (i = 0; i < GKFC_MAX[fc]; ++i)
+    for (i = 0; i < FKFC_MAX[fc]; ++i)
     {
 #if (CCOL_V >= 95)
         k = KF_pointer[fc][i];
@@ -1443,17 +1490,25 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
 #else
-            (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
+            (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= (iStartGr -5) ||
 #endif
 #if (CCOL_V >= 95) && !defined NO_TIGMAX
              TIG_max[k][fc] == GK && iStartGr <= 0 ||
              TIG_max[k][fc] == GKL 
 #else
              TO_max[k][fc] == GK && iStartGr <= 0 ||
-             TO_max[k][fc] == GKL 
+            (TO_max[k][fc] == GKL || TO_max[k][fc] == GK)
 #endif
 #ifdef NALOPEN
-				&& TGK_max[k][fc] >= iStartGr
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+               && TGK_max[k][fc] >= (iStartGr - 5)
+               || (TIG_max[k][fc] >= 0) && (TGK_max[k][fc] >= (iStartGr - 5)) /* nalopen als voedende richting ook hard conflict is */
+               && !TNL[k] /* indien voedende richting tevens naloop is niet voortijdig afkappen */
+#else
+               && TGK_max[k][fc] >= (iStartGr - 5)
+               || (TO_max[k][fc] >= 0) && (TGK_max[k][fc] >= (iStartGr - 5)) /* nalopen als voedende richting ook hard conflict is */
+               && !TNL[k] /* indien voedende richting tevens naloop is niet voortijdig afkappen */
+#endif
 #endif
             ))
         {

@@ -593,7 +593,7 @@ void PrioHalfstarOnderMaximum(void)
 			iMaxResterendeGroenTijd = 0;
 			if (G[fc])
 			{
-				int iLatestTXD = ((TXD_PL[fc] + iExtraGroenNaTXD[prio]) % TX_PL_max);
+				int iLatestTXD = ((TXD_PL[fc] + (iExtraGroenNaTXD[prio]/10)) % TX_PL_max);
 				if ((TOTXB_PL[fc] == 0) && (TOTXD_PL[fc] > 0))
 				{
 					/* primair gebied */          iMaxResterendeGroenTijd = TOTXD_PL[fc];
@@ -603,7 +603,7 @@ void PrioHalfstarOnderMaximum(void)
 				else if (TX_between(TX_PL_timer, TXD_PL[fc], iLatestTXD, TX_PL_max) && (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD))
 				{
 					/* ExtraGroenNaTXD gebied */
-					iMaxResterendeGroenTijd = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
+					iMaxResterendeGroenTijd = 10 * ((iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max);
 				}
 				/* TODO herzien
 				else
@@ -616,8 +616,8 @@ void PrioHalfstarOnderMaximum(void)
 			{
 				iMaxResterendeGroenTijd = iGroenBewakingsTijd[prio];
 			}
-
-			iOnderMaximumVerstreken[prio] = iOnderMaximum[prio] >= iMaxResterendeGroenTijd;
+			/* alleen prioriteit als de bus het nog haalt met 10 TE marge */
+			iOnderMaximumVerstreken[prio] = (iRijTijd[prio] + 10) >= iMaxResterendeGroenTijd;
 		}
 	}
 }
@@ -715,24 +715,24 @@ void PrioHalfstarGroenVasthouden(void)
 	{
 		int prio, fc;
 		bool magUitstellen;
-		for (prio = 0;
-			prio < prioFCMAX;
-			prio++) {
-
+		for (prio = 0; prio < prioFCMAX; prio++) {
 			fc = iFC_PRIOix[prio];
-			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
-			// Reset PRIO_YV_BIT, will determine YV according to signalplan structure
+
 			YV[fc] &= ~PRIO_YV_BIT;
 			YM[fc] &= ~PRIO_YM_BIT;
+		}
 
-			if (iPrioriteit[prio] &&
-				(iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) {
+		for (prio = 0; prio < prioFCMAX; prio++) {
+			fc = iFC_PRIOix[prio];
 
+			magUitstellen = StartGroenConflictenUitstellen(prio, fc, iPrioriteitsOpties[prio]);
+			// Reset PRIO_YV_BIT, will determine YV according to signalplan structure
+			if (iPrioriteit[prio] && (iPrioriteitsOpties[prio] & poGroenVastHouden) || (iPrioriteitsOpties[prio] & poPLGroenVastHoudenNaTXD)) {
 				if (G[fc] && (iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]) && magUitstellen) {
 					YV[fc] |= PRIO_YV_BIT;
 				}
-				if (!magUitstellen)
-					iWachtOpKonflikt[prio] = TRUE;
+				if (!magUitstellen)	
+				   iWachtOpKonflikt[prio] = TRUE;
 			}
 		}
 	}

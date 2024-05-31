@@ -31,6 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hprioin;
         private string _hpriouit;
         private string _treallr;
+        private string _tinl;
+        private string _trealil;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -362,6 +364,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.HalfstarData.IsHalfstar) return base.GetFunctionLocalVariables(c, type);
             return type switch
             {
+                CCOLCodeTypeEnum.RegCPreApplication => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.HstCAanvragen => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.HstCVerlenggroen => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.HstCMaxgroen => new List<CCOLLocalVariable>{new("int", "fc")},
@@ -385,7 +388,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => new []{20},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{20, 31},
                 CCOLCodeTypeEnum.HstCPreApplication => new []{10},
                 CCOLCodeTypeEnum.HstCKlokPerioden => new []{10},
                 CCOLCodeTypeEnum.HstCAanvragen => new []{10},
@@ -437,8 +440,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 #region reg.c
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
-					sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
+					if (order == 20)
+					{ 
+						sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
+						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
+					}
+					if (order == 31)
+					{
+						sb.AppendLine($"{ts}");
+                        sb.AppendLine($"{ts}/* Wenselijk is dat pas wordt omgeschakeld naar PL wanneer nalopen zijn afgemaakt; echter andere (voedende)");
+                        sb.AppendLine($"{ts} * richtingen moeten in deze tijd niet groen kunnen worden, anders bestaat het risico dat er permanent");
+                        sb.AppendLine($"{ts} * wordt gewacht op nieuwe nalopen.");
+                        sb.AppendLine($"{ts} */");
+                        sb.AppendLine($"{ts}/* reset */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_INSCH_HALFSTAR;");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{ts}/* set voor alle richtingen waar een richting al inloopt of inrijdt */");
+                        sb.AppendLine($"{ts}if (IH[homschtegenh]) /* tegenhouden inschakelen naar PL */");
+                        sb.AppendLine($"{ts}{{");
+						foreach (var nl in c.InterSignaalGroep.Nalopen)
+						{
+                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:van}] |= RR_INSCH_HALFSTAR;");
+						}
+                        sb.AppendLine($"{ts}}}");
+                    }
 					return sb.ToString();
 
                 #endregion // reg.c
@@ -960,7 +987,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 					}
-					sb.AppendLine();
+                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.StartGroen && x.MaximaleVoorstart.HasValue))
+                    {
+                        var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                        var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+						if (sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+						{ 
+							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl}{nl:vannaar});");
+						}
+					}
+
+                    sb.AppendLine();
 
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && 
 						c.InterSignaalGroep.Gelijkstarten.Any())
@@ -1667,6 +1705,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
+            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
+            _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
 
             return base.SetSettings(settings);
 		}

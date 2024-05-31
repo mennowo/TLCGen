@@ -867,6 +867,12 @@ void Synchroniseer_FO(void)
 #if MLBMAX
          && PRMLB[MLB][fc1] & PRIMAIR_VERSNELD && PRMLB[MLB][fc2] & PRIMAIR_VERSNELD
 #endif
+#if MLCMAX
+         && PRMLC[MLC][fc1] & PRIMAIR_VERSNELD && PRMLC[MLC][fc2] & PRIMAIR_VERSNELD
+#endif
+#if MLDMAX
+         && PRMLD[MLD][fc1] & PRIMAIR_VERSNELD && PRMLD[MLD][fc2] & PRIMAIR_VERSNELD
+#endif
          && (REALTIJD[fc1] <= (TGL_max[fc2] + TRG_max[fc2])))
       {
          RW[fc2] |= BIT1;

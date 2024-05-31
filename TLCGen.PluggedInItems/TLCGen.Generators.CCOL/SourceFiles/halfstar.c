@@ -477,17 +477,16 @@ void set_ym_pl_halfstar(count fc, bool condition)
 
 void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until)
 {
-#if (CCOL_V >= 95)
-    if (
 #if !defined NO_TIGMAX
-        ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+	if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijden      */
 #else
-        ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+	if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
 #endif
-        ym_max_trig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+
+#if (CCOL_V >= 95)
+	ym_max_trig(fc, NG) &&  /* meeverlengen kan volgens intergroentijdentabel */
 #else
-    if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
-        ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+	ym_max_tig(fc, NG) &&  /* meeverlengen kan volgens intergroentijdentabel  */
 #endif
         ym_max_halfstar(fc, 10) &&   /* meeverlengen kan volgens signaalplan            */
         hf_wsg_fcfc(fc_from, fc_until) &&   /* minimaal 1 richting actief                      */
@@ -1587,3 +1586,33 @@ bool TX_between(int tx_value, int tx_first, int tx_second, int tx_max)
     }
     return fReturn;
 }
+
+/* synchronisaties tijdens halfstar
+ *
+ * inlopen van voetgangers wordt niet behandeld in PL bedrijf.
+ *
+ * aanroep: inloopSG_halfstar(fc33, fc34, dk331, hnlak331, tinl3334);
+ */
+
+void inloopSG_halfstar(count fc1,        /* fc1                                  */
+	               count fc2,        /* fc2                                  */
+	               count dk_bui_fc1, /* buitendrukknopaanvraag fc1           */
+	               count hd_bui_fc1, /* onthouden buitendrukknopaanvraag fc1 */
+	               count tinlfc1fc2) /* inloop (SG) fc1 -> fc2               */
+{
+	if (tinlfc1fc2 > NG)
+	{
+		/* aanvoerende richting niet te snel realiseren */
+		if (x_aanvoer(fc2, T_max[tinlfc1fc2]) && (TX_timer != TXB[PL][fc1]))
+			X[fc1] |= X_VOOR_HALFSTAR;
+
+		/* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
+		if ((GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
+		{
+			if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > T_max[tinlfc1fc2])
+				X[fc1] |= X_VOOR_HALFSTAR;
+		}
+	}
+
+}
+

@@ -19,8 +19,9 @@
 #define RTFB_PLVA_HALFSTAR  BIT1  /* RTFB tbv omschakelen VA <-> PL             */
 #define A_WS_HALFSTAR       BIT9  /* wachtstand                                 */
 #define RW_VGNAMG_HALFSTAR  BIT11 /* RW tbv. terug naar verlengen tijdens MG    */ 
-#define YW_WS_HALFSTAR      BIT10  /* tbv wachtstand tijdens PL                 */
+#define YW_WS_HALFSTAR      BIT10 /* tbv wachtstand tijdens PL                  */
 #define A_MR_HALFSTAR       BIT8  /* meerealisatie                              */
+#define RR_INSCH_HALFSTAR   BIT11 /* uitstelling inschakelmoment bij lopende koppelingen */
 
 #define TIMER_ACTIVE(t)    ((bool)(T[t] || RT[t] || IT[t]))
 #define BIT_ACTIVE(v,t,m)  (v = ((t) ? ((v) |= (m)) : ((v) &= ~(m))))
@@ -82,6 +83,8 @@ void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, coun
 
 void SignalplanPrmsToTx(count pl, count txa1);
 bool CheckSignalplanPrms(count pl, mulv txmax, count txa1);
+void inloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1, count hd_bui_fc1, count tinlfc1fc2);
+
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
   bool txboverslag(count fc, bool  condition);
