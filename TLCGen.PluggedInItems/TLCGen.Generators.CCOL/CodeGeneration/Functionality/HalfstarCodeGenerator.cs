@@ -1234,7 +1234,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}{{");
 					sb.AppendLine($"{ts}{ts}{ts}PG[fc] = FALSE;");
 					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}}}");
+
+					if (c.HalfstarData.Hoofdrichtingen.Count > 0)
+					{
+						sb.AppendLine();
+                        sb.AppendLine($"{ts}/* vooruitrealiseren tijdens PL");
+						sb.AppendLine($"{ts} *");
+						sb.AppendLine($"{ts} * Wanneer hoofdrichtingen in PL bedrijf vooruit realiseren bestaat de modelijkheid");
+						sb.AppendLine($"{ts} * - dat ze kort voor het TxB moment uit groen gaan (en niet tijdig meer groen kunnen worden)");
+						sb.AppendLine($"{ts} * - dat ze sowieso niet meer komen tussen TxB en TxD omdat ze al primair gerealiseerd zijn.");
+						sb.AppendLine($"{ts} * Beide zijn conflicterend met het idee van een groene golf.");
+						sb.AppendLine($"{ts} * Daarom hoofdrichtingen die kort voor TxB al groen wijn, sowieso vasthouden tot TxB en");
+						sb.AppendLine($"{ts} * hoofdrichtingen altijd mogelijk maken primair te komen op TxB (maw PG afzetten).");
+						sb.AppendLine($"{ts} */");
+                        sb.AppendLine();
+						sb.AppendLine($"{ts}/* vasthouden groen hoofdrichtingen gedurende periode voorafgaand aan TxB moment (indien eerder groen gestuurd) */");
+						foreach (var hr in c.HalfstarData.Hoofdrichtingen)
+						{
+							sb.AppendLine($"{ts}RW[{_fcpf}{hr.FaseCyclus}] |= (G[{_fcpf}{hr.FaseCyclus}] && TOTXB_PL[{_fcpf}{hr.FaseCyclus}] && (TOTXB_PL[{_fcpf}{hr.FaseCyclus}] < 100)) ? RW_WG_HALFSTAR : 0; /* ivm vooruitrealiseren */");
+                            sb.AppendLine($"{ts}YW[{_fcpf}{hr.FaseCyclus}] |= (G[{_fcpf}{hr.FaseCyclus}] && TOTXB_PL[{_fcpf}{hr.FaseCyclus}] && (TOTXB_PL[{_fcpf}{hr.FaseCyclus}] < 100)) ? YW_PL_HALFSTAR : 0; /* ivm vooruitrealiseren */");
+                        }
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* intrekken PG[] (primair en versneld primair) gedurende periode voorafgaand aan TxB moment (indien al eerder gerealiseerd) */");
+                        foreach (var hr in c.HalfstarData.Hoofdrichtingen)
+                        {
+                            sb.AppendLine($"{ts}if (R[{_fcpf}{hr.FaseCyclus}] && TOTXB_PL[{_fcpf}{hr.FaseCyclus}] && (TOTXB_PL[{_fcpf}{hr.FaseCyclus}] < TFG_max[{_fcpf}{hr.FaseCyclus}])) PG[{_fcpf}{hr.FaseCyclus}] &= ~(PRIMAIR_VERSNELD);");
+						}
+                    }
 
                     return sb.ToString();
 				
