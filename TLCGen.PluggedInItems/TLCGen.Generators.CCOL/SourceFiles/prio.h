@@ -115,7 +115,6 @@ void AfkappenStartGroen(int fc, int iStartGr);
 void VLOG_mon5_buffer(void);
 
 #ifdef PRIO_ADDFILE
-extern int iStartGroenFC[];
 
 void RijTijdScenario_Add(void);
 void InUitMelden_Add(void);
@@ -197,16 +196,16 @@ extern int iSelDetFout[];
 extern int iAantalInmeldingen[];
 extern int iXPrio[];
 
-extern int *iRealisatieTijd[];
-extern int *iInPrioriteitsNiveau[];
-extern int *iInPrioriteitsOpties[];
-extern int *iInRijTimer[];
-extern int *iInGroenBewakingsTimer[];
-extern int *iInOnderMaximumVerstreken[];
-extern int *iPrioMeeRealisatie[];
+extern int* iRealisatieTijd[];
+extern int* iInPrioriteitsNiveau[];
+extern int* iInPrioriteitsOpties[];
+extern int* iInRijTimer[];
+extern int* iInGroenBewakingsTimer[];
+extern int* iInOnderMaximumVerstreken[];
+extern int* iPrioMeeRealisatie[];
 
 extern int prioKFC_MAX[];
-extern int *prioTO_pointer[];
+extern int* prioTO_pointer[];
 extern int iLangstWachtendeAlternatief;
 
 #endif // __PRIOH

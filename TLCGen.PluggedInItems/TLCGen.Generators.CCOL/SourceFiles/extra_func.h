@@ -91,8 +91,8 @@ bool kp(count i);
 
 extern mulv FC_type[];
 extern mulv DVG[];
-extern int Knipper_1Hz;
-extern int Knipper_2Hz;
+extern mulv Knipper_1Hz;
+extern mulv Knipper_2Hz;
 
 #if !defined (AUTOMAAT) 
 #if CCOL_V >= 110

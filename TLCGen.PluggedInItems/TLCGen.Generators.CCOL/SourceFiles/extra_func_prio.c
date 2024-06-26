@@ -23,49 +23,49 @@ bool DSIMeldingPRIO_V1(
 }
 
 bool DSIMeldingPRIO_V2(           /* Fik220201 */
-   count fc,                       /* fasecyclus */
-   count prio_fc,                  /* index prioriteit */
-   count dslus,                    /* lusnummer in Kar bericht */
-   count vtgtype,                  /* voertuigtype */
-   bool checkfcnmr,               /* controleer fasecyclus nummer in Kar bericht */
-   count fcnmr,                    /* ... -> ... fasecyclus nummer in Kar bericht */
-   bool checktype,                /* controleer meldingstype in Kar bericht */
-   count meldingtype,              /* ... -> ... meldingstype in Kar bericht */
-   bool extra)                    /* */
+	count fc,                       /* fasecyclus */
+	count prio_fc,                  /* index prioriteit */
+	count dslus,                    /* lusnummer in Kar bericht */
+	count vtgtype,                  /* voertuigtype */
+	bool checkfcnmr,               /* controleer fasecyclus nummer in Kar bericht */
+	count fcnmr,                    /* ... -> ... fasecyclus nummer in Kar bericht */
+	bool checktype,                /* controleer meldingstype in Kar bericht */
+	count meldingtype,              /* ... -> ... meldingstype in Kar bericht */
+	bool extra)                    /* */
 {
-   bool melding = TRUE;
+	bool melding = TRUE;
 
-   /* Correctie uitmelding van eerste bus fc tijdens rood */
-   if (vertraag_kar_uitm[prio_fc]) PrioUitmelden(prio_fc, SG[fc]); /* vertraagde uitmelding op start groen */
-   if (SG[fc]) vertraag_kar_uitm[prio_fc] = FALSE;
+	/* Correctie uitmelding van eerste bus fc tijdens rood */
+	if (vertraag_kar_uitm[prio_fc]) PrioUitmelden(prio_fc, SG[fc]); /* vertraagde uitmelding op start groen */
+	if (SG[fc]) vertraag_kar_uitm[prio_fc] = FALSE;
 
-#if DSMAX
-   if (!DS_MSG || !extra) melding = FALSE;
+#if !defined (VISSIM) && DSMAX
+	if (!DS_MSG || !extra) melding = FALSE;
 #endif
 
-   if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) melding = FALSE;
-   if (vtgtype > 0 && vtgtype != CIF_DSI[CIF_DSI_VTG]) melding = FALSE;
-   if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) melding = FALSE;
-   if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) melding = FALSE;
+	if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) melding = FALSE;
+	if (vtgtype > 0 && vtgtype != CIF_DSI[CIF_DSI_VTG]) melding = FALSE;
+	if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) melding = FALSE;
+	if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) melding = FALSE;
 
-   /* uitmelding eerste bus tijdens rood, tijdens 1e seconde rood gaan we ervan uit dat de bus toch doorgereden is */
+	/* uitmelding eerste bus tijdens rood, tijdens 1e seconde rood gaan we ervan uit dat de bus toch doorgereden is */
 #if (CCOL_V >= 110)
-   if (R[fc] && TR_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
+	if (R[fc] && TR_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
 #else
-   if (R[fc] && TFB_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
+	if (R[fc] && TFB_timer[fc] > 10 && (!vertraag_kar_uitm[prio_fc] || iAantalInmeldingen[prio_fc] == 1))
 #endif
-   {
-      if (iAantalInmeldingen[prio_fc] > 0 && dslus == 0 && CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT)
-      {
-        if (melding)
-        {
-          vertraag_kar_uitm[prio_fc] = TRUE;    /* correctie, uitmelding vertragen tot start groen */
-          melding = FALSE;   /* intrekken eerste uitmelding tijdens rood */
-        }
-      }
-   }
+	{
+		if (iAantalInmeldingen[prio_fc] > 0 && dslus == 0 && CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT)
+		{
+			if (melding)
+			{
+				vertraag_kar_uitm[prio_fc] = TRUE;    /* correctie, uitmelding vertragen tot start groen */
+				melding = FALSE;   /* intrekken eerste uitmelding tijdens rood */
+			}
+		}
+	}
 
-   return melding;
+	return melding;
 }
 
 bool DSIMeldingPRIO_LijnNummer_V1(count lijnparm, count lijnmax)
@@ -95,12 +95,12 @@ bool DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 }
 
 bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201, 202, 203)  */
-	                  count meldingtype, /* 2. Type melding: in of uit */
-	                  bool check_sirene) /* 3. Check SIRENE */
+	count meldingtype, /* 2. Type melding: in of uit */
+	bool check_sirene) /* 3. Check SIRENE */
 {
-	if ((CIF_DSI[CIF_DSI_VTG] == CIF_POL || 
-		 CIF_DSI[CIF_DSI_VTG] == CIF_BRA || 
-		 CIF_DSI[CIF_DSI_VTG] == CIF_AMB) &&  /* juiste voertuigtype? */
+	if ((CIF_DSI[CIF_DSI_VTG] == CIF_POL ||
+		CIF_DSI[CIF_DSI_VTG] == CIF_BRA ||
+		CIF_DSI[CIF_DSI_VTG] == CIF_AMB) &&  /* juiste voertuigtype? */
 		(!check_sirene || (CIF_DSI[CIF_DSI_PRI] == CIF_SIR)) &&
 		(CIF_DSI[CIF_DSI_DIR] == dir) &&  /* geldt deze melding voor deze richting? */
 		(CIF_DSI[CIF_DSI_TYPE] == meldingtype)      /* is dit een in of een uitmelding? */
@@ -113,7 +113,7 @@ bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201,
 }
 
 /* Bijhouden stiptheid inkomende KAR berichten */
-void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count hov, int grensvroeg, int grenslaat)
+void TrackStiptObvTSTP(count hin, count huit, int* iAantInm, int iKARInSTP[], count hov, int grensvroeg, int grenslaat)
 {
 	/* reset alles */
 	if (EH[hov])
@@ -217,7 +217,7 @@ void reset_DSI_message(void)
 -  geeft alle variabelen de juiste waarde en zet de wijzigvlag CIF_DSIWIJZ op.
 -  dient in de testomgeving te worden aangeroepen vanuit de is_special_signals().
 */
-void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio)
+void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, s_int16 type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio)
 {
 	CIF_DSI[CIF_DSI_LUS] = (s_int16)(ds < 0 ? 0 : ds);
 	CIF_DSI[CIF_DSI_VTG] = (vtg < 0 ? 0 : vtg);
@@ -400,116 +400,116 @@ bool WDNST_check_uit(count fc)
 #endif // PRIO_CHECK_WAGENNMR
 
 void NevenMelding(count ov1,      /* OV fasecyclus 1                */
-                  count ov2,      /* OV fasecyclus 2                */
-                  count ov3,      /* OV fasecyclus 3                */
-                  count d,        /* koplus                         */
-                  count prmrtbl,  /* Bezettijd laag tbv normaal     */
-                  count prmrtbh,  /* Bezettijd hoog tbv OV aanwezig */
-                  count hovss1,   /* hulpelement ov bij SS     fc1  */
-                  count hovss2,   /* hulpelement ov bij SS     fc2  */
-                  count hovss3,   /* hulpelement ov bij SS     fc3  */
-                  count hneven1,  /* hulpelement nevenmelding  fc1  */
-                  count hneven2,  /* hulpelement nevenmelding  fc2  */
-                  count hneven3  /* hulpelement nevenmelding  fc3  */
-                  )
+	count ov2,      /* OV fasecyclus 2                */
+	count ov3,      /* OV fasecyclus 3                */
+	count d,        /* koplus                         */
+	count prmrtbl,  /* Bezettijd laag tbv normaal     */
+	count prmrtbh,  /* Bezettijd hoog tbv OV aanwezig */
+	count hovss1,   /* hulpelement ov bij SS     fc1  */
+	count hovss2,   /* hulpelement ov bij SS     fc2  */
+	count hovss3,   /* hulpelement ov bij SS     fc3  */
+	count hneven1,  /* hulpelement nevenmelding  fc1  */
+	count hneven2,  /* hulpelement nevenmelding  fc2  */
+	count hneven3  /* hulpelement nevenmelding  fc3  */
+)
 {
-  /* ------------------------------------------------------------ */
-  /* FC-indices bepalen behorende bij OV-fc's                     */
-  /* ------------------------------------------------------------ */
-  count fc1;
-  count fc2;
-  count fc3;
+	/* ------------------------------------------------------------ */
+	/* FC-indices bepalen behorende bij OV-fc's                     */
+	/* ------------------------------------------------------------ */
+	count fc1;
+	count fc2;
+	count fc3;
 
-  fc1 =                    iFC_PRIOix[ov1];
-  fc2 =                    iFC_PRIOix[ov2];
-  fc3 = (ov3 == NG) ? NG : iFC_PRIOix[ov3];
+	fc1 = iFC_PRIOix[ov1];
+	fc2 = iFC_PRIOix[ov2];
+	fc3 = (ov3 == NG) ? NG : iFC_PRIOix[ov3];
 
-  /* ------------------------------------------------------------ */
-  /* Als koplus bezet, nevenmelding als geldt:                    */
-  /* - rood en niet garantierood                                  */
-  /* - en geen OV-voertuig aanwezig                               */
-  /* - en op andere richting wel OV-voertuig aanwezig             */
-  /* - en dit voertuig heeft stopstreep nog niet kunnen bereiken  */
-  /* ------------------------------------------------------------ */
-    IH[hneven1] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc2 */
-    IH[hneven2] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc1 */
+	/* ------------------------------------------------------------ */
+	/* Als koplus bezet, nevenmelding als geldt:                    */
+	/* - rood en niet garantierood                                  */
+	/* - en geen OV-voertuig aanwezig                               */
+	/* - en op andere richting wel OV-voertuig aanwezig             */
+	/* - en dit voertuig heeft stopstreep nog niet kunnen bereiken  */
+	/* ------------------------------------------------------------ */
+	IH[hneven1] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc2 */
+	IH[hneven2] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc1 */
 
-  if(fc3 != NG)
-  {
-    IH[hneven1] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc3 */
-    IH[hneven2] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc3 */
-    IH[hneven3] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc1 */
-    IH[hneven3] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc2 */
-  }
+	if (fc3 != NG)
+	{
+		IH[hneven1] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc1] && !TRG[fc1] && !iAantalInmeldingen[ov1];  /* nevenmelding fc1 van fc3 */
+		IH[hneven2] |= DB[d] && iAantalInmeldingen[ov3] && !IH[hovss3] && R[fc2] && !TRG[fc2] && !iAantalInmeldingen[ov2];  /* nevenmelding fc2 van fc3 */
+		IH[hneven3] |= DB[d] && iAantalInmeldingen[ov1] && !IH[hovss1] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc1 */
+		IH[hneven3] |= DB[d] && iAantalInmeldingen[ov2] && !IH[hovss2] && R[fc3] && !TRG[fc3] && !iAantalInmeldingen[ov3];  /* nevenmelding fc3 van fc2 */
+	}
 
-  /* ------------------------------------------------------------ */
-  /* nevenmelding onthouden:                                      */
-  /* - zolang hiaattijd van koplus loopt                          */
-  /* - maar nooit langer onthouden dan t/m vastgroentijd          */
-  /* ------------------------------------------------------------ */
-    IH[hneven1] = IH[hneven1] && TDH[d] && (R[fc1] || VS[fc1] || FG[fc1]);
-    IH[hneven2] = IH[hneven2] && TDH[d] && (R[fc2] || VS[fc2] || FG[fc2]);
+	/* ------------------------------------------------------------ */
+	/* nevenmelding onthouden:                                      */
+	/* - zolang hiaattijd van koplus loopt                          */
+	/* - maar nooit langer onthouden dan t/m vastgroentijd          */
+	/* ------------------------------------------------------------ */
+	IH[hneven1] = IH[hneven1] && TDH[d] && (R[fc1] || VS[fc1] || FG[fc1]);
+	IH[hneven2] = IH[hneven2] && TDH[d] && (R[fc2] || VS[fc2] || FG[fc2]);
 
-  if(fc3 != NG)
-    IH[hneven3] = IH[hneven3] && TDH[d] && (R[fc3] || VS[fc3] || FG[fc3]);
+	if (fc3 != NG)
+		IH[hneven3] = IH[hneven3] && TDH[d] && (R[fc3] || VS[fc3] || FG[fc3]);
 
-  /* ------------------------------------------------------------ */
-  /* Bezettijd instellen (tbv voorkomen valse aanvraag):          */
-  /* - Hoge waarde bij OV aanwezig bij stopstreep                 */
-  /* - Anders lage/normale waarde bij geen OV aanwezig            */
-  /* ------------------------------------------------------------ */
-  TDB_max[d] =                IH[hovss1] ||
-                              IH[hovss2] ||
-               (fc3 != NG) && IH[hovss3] ? PRM[prmrtbh] : PRM[prmrtbl];
+	/* ------------------------------------------------------------ */
+	/* Bezettijd instellen (tbv voorkomen valse aanvraag):          */
+	/* - Hoge waarde bij OV aanwezig bij stopstreep                 */
+	/* - Anders lage/normale waarde bij geen OV aanwezig            */
+	/* ------------------------------------------------------------ */
+	TDB_max[d] = IH[hovss1] ||
+		IH[hovss2] ||
+		(fc3 != NG) && IH[hovss3] ? PRM[prmrtbh] : PRM[prmrtbl];
 }
 
 void fietsprio_update(
-     count fc,          /* Fasecyclus */
-     count dvw,         /* Verweg detector */
-     count c_priocount, /* Counter tellen voertuigen */
-     count c_priocyc,   /* Counter aantal keer prio per cyclus */
-     bool prioin,      /* Hulpelement inmelding prio */
-     count ml)          /* Actieve module */
+	count fc,          /* Fasecyclus */
+	count dvw,         /* Verweg detector */
+	count c_priocount, /* Counter tellen voertuigen */
+	count c_priocyc,   /* Counter aantal keer prio per cyclus */
+	bool prioin,      /* Hulpelement inmelding prio */
+	count ml)          /* Actieve module */
 {
-    /* fietsprioriteit */
-    /* eenmaal per cyclus */
-    RC[c_priocyc] = SML && (ml==ML1);
-    INC[c_priocyc] = prioin;
-    /* aantal fietsers tellen */
-    if (dvw != NG)
-    {
-        RC[c_priocount] = !R[fc];
-        INC[c_priocount] = R[fc] && SD[dvw];
-    }
+	/* fietsprioriteit */
+	/* eenmaal per cyclus */
+	RC[c_priocyc] = SML && (ml == ML1);
+	INC[c_priocyc] = prioin;
+	/* aantal fietsers tellen */
+	if (dvw != NG)
+	{
+		RC[c_priocount] = !R[fc];
+		INC[c_priocount] = R[fc] && SD[dvw];
+	}
 }
 
 bool fietsprio_inmelding(
-     count fc,               /* Fasecyclus */
-     count dvw,              /* Verweg detector */
-     count c_priocount,      /* Counter tellen voertuigen */
-     count c_priocyc,        /* Counter aantal keer prio per cyclus */
-     count prm_prioblok,     /* Bitwise bepalen toegestane blokken */
-     count prm_priocyc,      /* Maximum aantal keer prio per cyclus */
-     count prm_priocount,    /* Minimum aantal voertuigen voor prio */
-     count prm_priowt,       /* Minimum wachttijd voor prio */
-     bool prioin,            /* Hulpelement inmelding prio */
-     count ml,               /* Actieve module */
-     count me_priocount,     /* Memory-element tellen voertuigen RIS */
-     count prm_priocountris) /* Minimum aantal voertuigen voor prio RIS */
+	count fc,               /* Fasecyclus */
+	count dvw,              /* Verweg detector */
+	count c_priocount,      /* Counter tellen voertuigen */
+	count c_priocyc,        /* Counter aantal keer prio per cyclus */
+	count prm_prioblok,     /* Bitwise bepalen toegestane blokken */
+	count prm_priocyc,      /* Maximum aantal keer prio per cyclus */
+	count prm_priocount,    /* Minimum aantal voertuigen voor prio */
+	count prm_priowt,       /* Minimum wachttijd voor prio */
+	bool prioin,            /* Hulpelement inmelding prio */    //@@ warning C4100: 'prioin' : unreferenced formal parameter
+	count ml,               /* Actieve module */
+	count me_priocount,     /* Memory-element tellen voertuigen RIS */
+	count prm_priocountris) /* Minimum aantal voertuigen voor prio RIS */
 {
-     /* Check juiste blok */
-     if (!(PRM[prm_prioblok] & (1 << ml))) return FALSE;
+	/* Check juiste blok */
+	if (!(PRM[prm_prioblok] & (1 << ml))) return FALSE;
 
-     /* Check aantal keer prio per cyclus niet overschreden */
-     if (C[c_priocyc] && (C_counter[c_priocyc] >= PRM[prm_priocyc]))
-         return FALSE;
+	/* Check aantal keer prio per cyclus niet overschreden */
+	if (C[c_priocyc] && (C_counter[c_priocyc] >= PRM[prm_priocyc]))
+		return FALSE;
 
-     /* prio actief indien: voldoende voertuigen OF voldoende wachttijd */
-     return
-           /* voldoende voertuigen massadetectie */
-           (dvw != NG && C_counter[c_priocount] >= PRM[prm_priocount] ||
-           /* voldoende voertuigen massadetectie */
-           A[fc] && TFB_timer[fc] >= PRM[prm_priowt] ||
-          /* voldoende voertuigen RIS */
-          me_priocount > NG && prm_priocountris > NG && (MM[me_priocount] >= PRM[prm_priocountris]));
+	/* prio actief indien: voldoende voertuigen OF voldoende wachttijd */
+	return
+		/* voldoende voertuigen massadetectie */
+		(dvw != NG && C_counter[c_priocount] >= PRM[prm_priocount] ||
+			/* voldoende voertuigen massadetectie */
+			A[fc] && TFB_timer[fc] >= PRM[prm_priowt] ||
+			/* voldoende voertuigen RIS */
+			me_priocount > NG && prm_priocountris > NG && (MM[me_priocount] >= PRM[prm_priocountris]));
 }

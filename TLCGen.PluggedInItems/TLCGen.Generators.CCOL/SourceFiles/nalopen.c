@@ -1,7 +1,7 @@
 #include "nalopen.h"
 #include "gkvar.h"
 #include "nlvar.h"
-count TNL_TGK[TMMAX];
+mulv TNL_TGK[TMMAX];
 
 /**************************************************************************
  *  Functie  : NaloopVtg
@@ -361,7 +361,7 @@ void gk_ControlGK(void)
 	}
 }
 
-void berekenTGK_max(count fc1, count fc2, count tnl_max)
+void berekenTGK_max(count fc1, count fc2, mulv tnl_max)
 {
 	int i, k;
 	for (i = KFC_MAX[fc1]; i < GKFC_MAX[fc1]; ++i)

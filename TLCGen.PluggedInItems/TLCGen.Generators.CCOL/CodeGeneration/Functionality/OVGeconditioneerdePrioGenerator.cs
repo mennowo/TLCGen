@@ -118,7 +118,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] = iAantInm{CCOLCodeHelper.GetPriorityName(c, ov)} > 0 ? iKARInSTP{CCOLCodeHelper.GetPriorityName(c, ov)}[0] : 0;");
+                        sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] = (mulv) (iAantInm{CCOLCodeHelper.GetPriorityName(c, ov)} > 0 ? iKARInSTP{CCOLCodeHelper.GetPriorityName(c, ov)}[0] : 0);");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:

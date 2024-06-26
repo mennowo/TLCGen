@@ -141,7 +141,7 @@ s_int16 reset_fctiming(mulv i, mulv eventnr)
  * 
  * latency_minEndSG_fc1 - hiermee wordt de latency correctie op startgroen ingesteld
  */
-void msg_fctiming(mulv latency_minEndSG)
+void msg_fctiming(mulv latency_minEndSG)  //@@ warning C4100: 'latency_minEndSG' : unreferenced formal parameter
 {
    register count i;
    static s_int16 WPS_old= 0;       /* oude programmastatus		*/

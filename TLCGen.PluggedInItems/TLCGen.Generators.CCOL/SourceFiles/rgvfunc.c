@@ -245,7 +245,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
 /* mulv TVG_rgv[FCMAX];   */     /* rgv (actuele) waarde van de verlenggroentijd       */
    mulv TVG_absoluut[FCMAX];     /* abolute verschil verlenggroentijd actueel en basis */
    mulv TVG_procentueel[FCMAX];  /* procentueel verlenggroentijd actueel en basis      */
-   mulv fcnr_temp;               /* tijdelijke fcnr t.b.v. swap fcnr's                 */
+   count fcnr_temp;              /* tijdelijke fcnr t.b.v. swap fcnr's                 */
   
 
    /* lees de arraynummers van de fasecycli en plaats ze in de array fcnr[] */

@@ -2,6 +2,9 @@ TLCGen=12.4.0.6
 RN==TLCGen
 TLCGen versie: 12.4.0.6
 - Ris ETA in tienden seconden
+- Fixes voor warnings bij compileren met lvl 4
+- Verbeteringen halfstar regelen
+- Diverse kleine fixes
 TLCGen versie: 12.4.0.5
 - Uitbreiding opties meeverlengfuncties
 - SPAT uitvoer geoptimaliseerd
@@ -58,37 +61,5 @@ TLCGen versie: 0.12.0.0
 - Toevoegen mogelijkheid openen .h in 'additor' plugin
 - Geen SRM uitsturen tijdens no-control
 - Veelheid aan kleine fixes en verbeteringen
-TLCGen versie: 0.11.1.0
-- Hotfix code detectie storing
-TLCGen versie: 0.11.0.0
-- RIS prio voor fietsers
-- Uitgestelde A bij det.storing ook voor enkele lussen
-- Diverse kleine en grotere verbeteringen
-TLCGen versie: 0.10.7.0
-- Verbeteringen VA ontruiming icm. synchronisaties
-- Ondersteuning voor heading bij RIS
-TLCGen versie: 0.10.6.0
-- Fix voor timings bij toevoegen van fasen
-- Diverse kleine verbeteringen
-TLCGen versie: 0.10.5.0
-- Diverse kleine verbeteringen
-- Hotfix: juiste aanroep percentageverlenggroentijden en percentagemaxgroentijden
-- Fix omtrent weergeven EULA voor portable versie
-TLCGen versie: 0.10.4.0
-- Optie multivalente IO in gebruikersopties
-- Verbeteringen implementatie RIS
-TLCGen versie: 0.10.3.0
-- Verbeterde omgang met synchronisaties bij realfunc
-- Optie parameterwijziging PB bij TVG_max
-- Fix omschakelen star naar ML
-- Aangepaste code file ingrepen
-- Aangepaste code dynamische hiaattijden
-TLCGen versie: 0.10.2.0
-- Hotfix meeaanvragen
-TLCGen versie: 0.10.1.0
-- Verbetering realfunc functionaliteit
-- Verbeterde implementatie UC4
-- Verbetering weergave info in CCOL F11 scherm
-- Diverse kleine fixes 
-Voor informatie over releases van voor 0.10.0.0: zie data in de TLCGen repository op Github
+Voor informatie over releases van voor 0.12.0.0: zie data in de TLCGen repository op Github
 RN==TLCGen

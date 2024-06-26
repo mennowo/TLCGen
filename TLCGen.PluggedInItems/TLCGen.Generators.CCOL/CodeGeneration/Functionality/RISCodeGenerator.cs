@@ -458,9 +458,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
                                           $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                          $")) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
                         }
                         else
                         {
@@ -478,10 +477,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)

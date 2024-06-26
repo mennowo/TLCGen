@@ -48,7 +48,7 @@ void PercentageMaxGroenTijden(count fc, count periode, mulv percentage, count n,
     /* eerst overbodige parameters inlezen */
     /* ----------------------------------- */
     for (i = 0; i <= MM[periode] && i < n; i++)
-        mgnr = va_arg(argp, va_mulv);
+        mgnr = (mulv) va_arg(argp, va_mulv);
 
     /* nu staat in mgnr de parameter index waarin je geinteresseerd bent */
     /* ----------------------------------------------------------------- */
@@ -80,7 +80,7 @@ void PercentageVerlengGroenTijden(count fc, count periode, mulv percentage, coun
     /* eerst overbodige parameters inlezen */
     /* ----------------------------------- */
     for (i = 0; i <= MM[periode] && i < n; i++)
-        mgnr = va_arg(argp, va_mulv);
+        mgnr = (mulv) va_arg(argp, va_mulv);
 
     /* nu staat in mgnr de parameter index waarin je geinteresseerd bent */
     /* ----------------------------------------------------------------- */
@@ -202,8 +202,8 @@ bool RichtingVerlengen(count fc,   /* de richting die verlengd wordt            
 void MeetKriteriumRGprm(count fc, count tkopmaxnr, ...)
 {
     va_list argpt;         /* variabele argumentenlijst             */
-    bool    iRgFunc;       /* bool uit richtinggevoelige functie    */
-    mulv    prm;           /* waarde verlengparameter               */
+    bool   iRgFunc;        /* bool uit richtinggevoelige functie   */
+    mulv    prm = 0;       /* waarde verlengparameter               */
     count   hmk4_6, hmk7;  /* hulpwaarden meetkriterium             */
 
     va_start(argpt,tkopmaxnr);        /* start var. parameterlijst  */

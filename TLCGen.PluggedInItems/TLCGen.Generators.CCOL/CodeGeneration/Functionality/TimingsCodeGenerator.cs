@@ -331,8 +331,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
 
                         sb.AppendLine($"{ts}{ts}if ({sch}RA[{_fcpf}{gs:van}] && (P[{_fcpf}{gs:van}] & BIT11) && !kaa({_fcpf}{gs:naar}) && A[{_fcpf}{gs:naar}] && !RR[{_fcpf}{gs:naar}]) AA[{_fcpf}{gs:naar}] |= BIT11;");
                         sb.AppendLine($"{ts}{ts}if ({sch}RA[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11) && !kaa({_fcpf}{gs:van}) && A[{_fcpf}{gs:van}] && !RR[{_fcpf}{gs:van}]) AA[{_fcpf}{gs:van}] |= BIT11;");
-                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:van}] && !PG[{_fcpf}{gs:van}] && R[{_fcpf}{gs:naar}] && PG[{_fcpf}{gs:naar}]) PG[{_fcpf}{gs:van}] = 0;");
-                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && !PG[{_fcpf}{gs:naar}] && R[{_fcpf}{gs:van}] && PG[{_fcpf}{gs:van}]) PG[{_fcpf}{gs:naar}] = 0;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:van}] && !PG[{_fcpf}{gs:van}] && R[{_fcpf}{gs:naar}] && PG[{_fcpf}{gs:naar}]) PG[{_fcpf}{gs:naar}] = 0;");
+                        sb.AppendLine($"{ts}{ts}if ({sch}R[{_fcpf}{gs:naar}] && !PG[{_fcpf}{gs:naar}] && R[{_fcpf}{gs:van}] && PG[{_fcpf}{gs:van}]) PG[{_fcpf}{gs:van}] = 0;");
                         if (!gs.DeelConflict)
                         {
                             sb.AppendLine($"{ts}{ts}if ({sch}G[{_fcpf}{gs:van}] && R[{_fcpf}{gs:naar}] && (P[{_fcpf}{gs:naar}] & BIT11)) YM[{_fcpf}{gs:van}] |= BIT11;");

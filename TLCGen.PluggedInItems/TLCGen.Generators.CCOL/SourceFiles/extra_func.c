@@ -1,7 +1,7 @@
 #include "extra_func.h"
 
-int Knipper_1Hz = 0;
-int Knipper_2Hz = 0;
+mulv Knipper_1Hz = 0;
+mulv Knipper_2Hz = 0;
 
 /** ------------------------------------------------------------------------------
     MAXIMAAL MEEVERLENGEN
@@ -631,12 +631,12 @@ bool ym_max_vtgV2(count i)
 
 void AanvraagSnelV2(count fc1, count dp)
 {
-	/* richting mag gelijk realiseren indien er geen conflicten lopen */
-	if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
-		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
-	{
-		A[fc1] |= BIT5;
-	}
+   /* richting mag gelijk realiseren indien er geen conflicten lopen */
+   if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
+      D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
+   {
+      A[fc1] |= BIT5;
+   }
 }
 
 /** ------------------------------------------------------------------------------
@@ -659,12 +659,12 @@ Resultaat:   zet BIT4 op van A[fc]
 ------------------------------------------------------------------------------ */
 void AanvraagSnelV3(count fc1, count dp)
 {
-	/* richting mag gelijk realiseren indien er geen conflicten lopen */
-	if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
-		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
-	{
-		A[fc1] |= BIT5;
-	}
+   /* richting mag gelijk realiseren indien er geen conflicten lopen */
+   if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
+      D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
+   {
+      A[fc1] |= BIT5;
+   }
 }
 
 /** ------------------------------------------------------------------------------
@@ -819,7 +819,7 @@ bool Rateltikkers_Accross(count fc,       /* fase */
    of
    GUS[usrtdim32] = RateltikkerDimming(fc32, hperiodrtdim, NG, NG) -> volume ingesteld in tikker unit.
 */
-bool Rateltikkers_HoeflakeDimming(count fc,        /* fase                                           */
+bool Rateltikkers_HoeflakeDimming(count fc,        /* fase  */                                          //@@ warning C4100: 'fc' : unreferenced formal parameter
                          count hperasdim, /* hulpelement klokperiode gedimde uitsturing     */
                          count prmasndim, /* dimnivo periode niet dimmen (0-10, 10 = tikker uit) of NG  */ 
                          count prmasdim)  /* dimnivo periode dimmen (0-10, 10 = tikker uit) of NG  */
@@ -1059,7 +1059,7 @@ bool hf_wsg_nl_fcfc(count fc1, count fc2)
 	return (FALSE);
 }
 
-void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix)
+void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix) //@@ warning C4100: 'fc' : unreferenced formal parameter
 {
 	/* fc    - fasecyclusnummer                            */
 	/* mmwtv - berekende  aantal leds wachttijdlantaarn    */
@@ -1335,7 +1335,7 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 
 	if (edpel > 0 && (RT[tmeet] || T[tmeet]))
 	{
-		MM[mvtg] += edpel;
+		MM[mvtg] += (mulv) edpel;
 		RT[tmaxth] = TRUE;
 	}
 
@@ -1608,7 +1608,7 @@ void CyclustijdMeting(count tcyclus, count scyclus, count cond, count sreset, co
                 MM[mlcyclus] = T_timer[tcyclus];
     		    
                 /* Bereken de gemiddelde cyclustijd */
-                cyclGem = (totc + T_timer[tcyclus]) / (k + 1);
+                cyclGem = ((mulv) totc + T_timer[tcyclus]) / (mulv) (k + 1);
     		    
                 uber_puts(PROMPT_code);
                 uber_puts("T_cyclus=");
@@ -1656,8 +1656,8 @@ void maximumgroentijden_va_arg(count fc, ...)
    va_start(argpt, fc);			/* start var. argumentenlijst	*/
    do
    {
-      prmmg= va_arg(argpt, va_mulv);	/* lees max. verlenggroentijd	*/
-      hklok= va_arg(argpt, va_mulv);	/* lees klokperiode		*/
+      prmmg= (mulv) va_arg(argpt, va_mulv);	/* lees max. verlenggroentijd	*/
+      hklok= (mulv) va_arg(argpt, va_mulv);	/* lees klokperiode		*/
    }
    while (hklok == 0);
 
@@ -1896,10 +1896,10 @@ bool set_MRLW_nl(count i, count j, bool period)
    return (FALSE);
 }
 
-void set_parm1wijzap(mulv *parm)
+void set_parm1wijzap(s_int16 *parm)
 {
    if (CIF_PARM1WIJZAP == CIF_GEEN_PARMWIJZ) {
-   CIF_PARM1WIJZAP= parm - CIF_PARM1;
+   CIF_PARM1WIJZAP= (s_int16) (parm - CIF_PARM1);
    }
    else {
    CIF_PARM1WIJZAP= CIF_MEER_PARMWIJZ;

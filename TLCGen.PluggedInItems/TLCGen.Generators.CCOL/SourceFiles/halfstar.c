@@ -150,8 +150,8 @@ void getrapte_fietser_halfstar(count fc1, /* fc1 */
     bool  a_bui_fc2, /* buitendrukknopaanvraag fc2 */
     count tkopfc1fc2, /* naloop (SG) fc1 -> fc2 */
     count tkopfc2fc1, /* naloop (SG) fc2 -> fc1 */
-    count voorstartfc1fc2, /* maximale voorstart fc1 -> fc2 (mag NG) */
-    count voorstartfc2fc1) /* maximale voorstart fc2 -> fc1 (mag NG) */
+    count voorstartfc1fc2, /* maximale voorstart fc1 -> fc2 (mag NG) */ //@@ warning 'voorstartfc1fc2': unreferenced formal parameter
+    count voorstartfc2fc1) /* maximale voorstart fc2 -> fc1 (mag NG) */ //@@ warning 'voorstartfc2fc1': unreferenced formal parameter
 {
     /* nalopen */
     RT[tkopfc1fc2] = (bool)((RA[fc1] || TFG[fc1]) && a_bui_fc1);
@@ -572,7 +572,9 @@ void sync_pg(void)
     register count fc;
     bool **prml = NULL;
     count ml = -1;
+#ifndef MLMAX
     count mlx = -1;
+#endif
     count mlmax = 0;
 
     for (fc = 0; fc<FCMAX; fc++)
@@ -872,7 +874,7 @@ void tvga_timer_halfstar(void)
 void tweederealisatie_halfstar(count fc_1,  /* fasecyclus 1e realisatie */
     count fc_2)  /* fasecyclus 2e realisatie */
 {
-    register count tot_txb1,
+    register mulv tot_txb1,
         tot_txb2,
         txa1,
         txb1,
@@ -1071,7 +1073,7 @@ void var_txc(count fc, bool condition)
 
 /**********************************************************************************/
 /* Voorstartgroen tijdens voorstart t.o.v. sg-plan */
-void vs_ple(count fc, count prmtotxa, bool condition)
+void vs_ple(count fc, count prmtotxa, bool condition) //@@ warning C4100: 'prmtotxa': unreferenced formal parameter
 {
     /*RS[fc] |= YS_PL[fc] && PR[fc] ||
     ((TOTXA_PL[fc]>0) && (TOTXA_PL[fc]<PRM[prmtotxa])) ? RS_HALFSTAR : 0;*/
@@ -1304,9 +1306,9 @@ void SignalplanPrmsToTx(count pl, count txa1)
 bool CheckSignalplanPrms(count pl, mulv txmax, count txa1)
 {
     char temp[1024];
-    short i, cfc, fc, real, tg_min;
+    short i, cfc, fc, real, tg_min=0;
     short txa, txb, txc, txd, txe;
-    short txb_fc, txb_cfc, txd_fc, txd_cfc;
+    short txb_fc, txb_cfc=0, txd_fc=0, txd_cfc=0;
     short tx[5];
     char txS[5][1] = { 'A', 'B', 'C', 'D', 'E' };
 
@@ -1596,8 +1598,8 @@ bool TX_between(int tx_value, int tx_first, int tx_second, int tx_max)
 
 void inloopSG_halfstar(count fc1,        /* fc1                                  */
 	               count fc2,        /* fc2                                  */
-	               count dk_bui_fc1, /* buitendrukknopaanvraag fc1           */
-	               count hd_bui_fc1, /* onthouden buitendrukknopaanvraag fc1 */
+	               count dk_bui_fc1, /* buitendrukknopaanvraag fc1           */ //@@  warning C4100: 'dk_bui_fc1': unreferenced formal parameter
+	               count hd_bui_fc1, /* onthouden buitendrukknopaanvraag fc1 */ //@@  warning C4100: 'hd_bui_fc1': unreferenced formal parameter
 	               count tinlfc1fc2) /* inloop (SG) fc1 -> fc2               */
 {
 	if (tinlfc1fc2 > NG)

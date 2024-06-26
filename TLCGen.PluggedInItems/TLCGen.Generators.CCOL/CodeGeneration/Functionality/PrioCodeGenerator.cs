@@ -716,13 +716,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return new List<CCOLLocalVariable> { new("int", "ov", "0") };
             
                 case CCOLCodeTypeEnum.PrioCPostAfhandelingPrio:
-                    if (c.HasHD() && c.PrioData.BlokkeerNietConflictenBijHDIngreep)
-                    {
-                        var result2 = new List<CCOLLocalVariable> {new(c.GetBoolV(), "isHD", "FALSE")};
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isWTV", "FALSE"));
+                    var result2 = new List<CCOLLocalVariable>();
+                    if (c.HasHD() && c.PrioData.BlokkeerNietConflictenBijHDIngreep) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isHD", "FALSE"));
+                    if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new CCOLLocalVariable(c.GetBoolV(), "isWTV", "FALSE"));
+                    if (c.Data.FixatieData.FixatieMogelijk || c.Fasen.Any(x => x.HardMeeverlengenFaseCycli.Count > 0)) result2.Add(new CCOLLocalVariable("int", "fc"));
+                    if (result2.Count > 0)
                         return result2;
-                    }
-                    else return base.GetFunctionLocalVariables(c, type);
+                    else
+                        return base.GetFunctionLocalVariables(c, type);
 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:
                     if (c.PrioData.PrioIngrepen.Any(x => x.MeldingenData.Inmeldingen.Any(x2 => x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
@@ -1081,7 +1082,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             break;
                         case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                            sb.AppendLine($"ris_uitmelding_selectief(prioFC{CCOLCodeHelper.GetPriorityName(c, prio)});");
+                            sb.AppendLine($"({c.GetBoolV()})ris_uitmelding_selectief(prioFC{CCOLCodeHelper.GetPriorityName(c, prio)});");
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -1689,7 +1690,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append(" || ");
                             }
-                            sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
+                            sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && !BL[{_fcpf}{hd.FaseCyclus}]");
                             first = false;
                         }
                         sb.AppendLine(";");
@@ -1741,11 +1742,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+
+                    if (c.Data.FixatieData.FixatieMogelijk)
+                    { 
+                        sb.AppendLine($"{ts}/* Niet afkappen tijdens fixeren */");
+                        sb.AppendLine($"{ts}if (IS[isfix])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~PRIO_Z_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+                    if (c.Fasen.Any(x => x.HardMeeverlengenFaseCycli.Count > 0))
+                    {
+                        sb.AppendLine($"{ts}/* Niet afkappen hard meeverlengen */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}if (YM[fc] & BIT1)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~PRIO_Z_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
                     }
 
                     if (c.InterSignaalGroep.Nalopen.Any())
                     {
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer een naloop tijd nog loopt */");
                         foreach (var fc in c.Fasen)
                         {

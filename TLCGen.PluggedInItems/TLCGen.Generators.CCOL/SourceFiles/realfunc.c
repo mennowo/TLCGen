@@ -45,7 +45,7 @@ mulv TIME_FOT[FCMAX][FCMAX];   /* Timer tbv fictieve ontruiming, FOT loopt, rest
 /* ========================================================================================================================================================================================================== */
 /* REALISATIETIJD ALGEMEEN                                                                                                                                                                                    */
 /* ========================================================================================================================================================================================================== */
-void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)
+void Realisatietijd(count fc, count hsignaalplan, mulv correctie_sp)    //@@ warning C4100: 'correctie_sp' : unreferenced formal parameter
 {
   register count n, k;
 
@@ -198,7 +198,7 @@ eigentijd_uncorrected =
 /* ========================================================================================================================================================================================================== */
 /* REALISATIETIJD ALGEMEEN                                                                                                                                                                                    */
 /* ========================================================================================================================================================================================================== */
-void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)
+void Realisatietijd_min(count fc, count hsignaalplan, mulv correctie_sp)      //@@ warning C4100: 'correctie_sp' : unreferenced formal parameter
 {
    register count n, k;
 
@@ -867,12 +867,6 @@ void Synchroniseer_FO(void)
 #if MLBMAX
          && PRMLB[MLB][fc1] & PRIMAIR_VERSNELD && PRMLB[MLB][fc2] & PRIMAIR_VERSNELD
 #endif
-#if MLCMAX
-         && PRMLC[MLC][fc1] & PRIMAIR_VERSNELD && PRMLC[MLC][fc2] & PRIMAIR_VERSNELD
-#endif
-#if MLDMAX
-         && PRMLD[MLD][fc1] & PRIMAIR_VERSNELD && PRMLD[MLD][fc2] & PRIMAIR_VERSNELD
-#endif
          && (REALTIJD[fc1] <= (TGL_max[fc2] + TRG_max[fc2])))
       {
          RW[fc2] |= BIT1;
@@ -933,7 +927,7 @@ void Synchroniseer_FO1_2(count fc1, count fc2)   /* Gelijk aan bovenstaande alle
 void Synchroniseer_PG(void)
 {
 #ifdef MLNLTEST
-  register count  mlfc1, mlfc2, ml_1, ml_2;
+  register count  mlfc1, mlfc2, ml_1=0, ml_2=0;
 #endif
   register count fc1, fc2;
 

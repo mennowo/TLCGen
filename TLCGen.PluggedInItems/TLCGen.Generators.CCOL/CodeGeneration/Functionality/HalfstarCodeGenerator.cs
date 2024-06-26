@@ -376,10 +376,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.PrioCPostAfhandelingPrio => new List<CCOLLocalVariable>{new("int", "fc")},
                 CCOLCodeTypeEnum.HstCAlternatief => new List<CCOLLocalVariable>{new("int", "fc")},
-                CCOLCodeTypeEnum.HstCKlokPerioden => new List<CCOLLocalVariable>
-                {
-                    new("char", "volgMaster", "TRUE")
-                },
+                CCOLCodeTypeEnum.HstCKlokPerioden => c.HalfstarData.Type != HalfstarTypeEnum.Master
+				? new List<CCOLLocalVariable>
+                  {
+                      new("char", "volgMaster", "TRUE")
+                  }
+				: base.GetFunctionLocalVariables(c, type),
                 _ => base.GetFunctionLocalVariables(c, type)
             };
         }
@@ -850,13 +852,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}/* afzetten BITJES van ML-bedrijf */");
-                    sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
+					if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+					{
+						sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~PRIO_Z_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~PRIO_RW_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~PRIO_RR_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~PRIO_YV_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~PRIO_MK_BIT;");
+						sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~PRIO_PP_BIT;");
+					}
+					else
+					{
+                        sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT11; /* Hier geen BIT6 wegens conflict met MeetKriteriumRGprm */");
+                        sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
+                    }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
@@ -1230,10 +1245,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}/* anders kan PG op blijven staan, waardoor richting eenmaal wordt overgeslagen en de regeling kan vastlopen */");
 					sb.AppendLine($"{ts}if (SH[{_hpf}{_hmlact}] || SH[{_hpf}{_hplact}] || SPL)");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}{{");
 					sb.AppendLine($"{ts}{ts}{ts}PG[fc] = FALSE;");
 					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine($"{ts}}}");
 
 					if (c.HalfstarData.Hoofdrichtingen.Count > 0)
 					{
@@ -1293,7 +1309,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* -------------------------------------------------- */");
                         sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinstprm}])");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}short pl = 0;");
                         sb.AppendLine($"{ts}{ts}short error = FALSE;");
                         for (var pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
                         {

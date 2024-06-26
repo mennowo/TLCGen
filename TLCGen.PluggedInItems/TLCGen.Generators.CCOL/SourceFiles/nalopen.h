@@ -102,7 +102,7 @@ void gk_NaloopTGK(count fc1, count fc2, count tnl, bool per_herstart, count tgl_
 
 void gk_NaloopTNL(count fc1, count fc2, count tnl, bool per_herstart);
 
-void berekenTGK_max(count fc1, count fc2, count tnl_max);
+void berekenTGK_max(count fc1, count fc2, mulv tnl_max);
 void berekenTNL(count fc2, count tnl);
 
 #endif /* #define __NALOPENFUNC__ */

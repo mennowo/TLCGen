@@ -1,6 +1,38 @@
-Voor versie informatie vanaf 0.10.0.0, zie tlcgenversioning
+Voor versie informatie vanaf 0.12.0.0, zie tlcgenversioning
 Oudere informatie staat hier om de grootte van het versie bestand te beperken
 ===
+TLCGen versie: 0.11.1.0
+- Hotfix code detectie storing
+TLCGen versie: 0.11.0.0
+- RIS prio voor fietsers
+- Uitgestelde A bij det.storing ook voor enkele lussen
+- Diverse kleine en grotere verbeteringen
+TLCGen versie: 0.10.7.0
+- Verbeteringen VA ontruiming icm. synchronisaties
+- Ondersteuning voor heading bij RIS
+TLCGen versie: 0.10.6.0
+- Fix voor timings bij toevoegen van fasen
+- Diverse kleine verbeteringen
+TLCGen versie: 0.10.5.0
+- Diverse kleine verbeteringen
+- Hotfix: juiste aanroep percentageverlenggroentijden en percentagemaxgroentijden
+- Fix omtrent weergeven EULA voor portable versie
+TLCGen versie: 0.10.4.0
+- Optie multivalente IO in gebruikersopties
+- Verbeteringen implementatie RIS
+TLCGen versie: 0.10.3.0
+- Verbeterde omgang met synchronisaties bij realfunc
+- Optie parameterwijziging PB bij TVG_max
+- Fix omschakelen star naar ML
+- Aangepaste code file ingrepen
+- Aangepaste code dynamische hiaattijden
+TLCGen versie: 0.10.2.0
+- Hotfix meeaanvragen
+TLCGen versie: 0.10.1.0
+- Verbetering realfunc functionaliteit
+- Verbeterde implementatie UC4
+- Verbetering weergave info in CCOL F11 scherm
+- Diverse kleine fixes 
 TLCGen versie: 0.9.10.0
 - Veelheid aan kleine fixes
 TLCGen versie: 0.9.9.0
