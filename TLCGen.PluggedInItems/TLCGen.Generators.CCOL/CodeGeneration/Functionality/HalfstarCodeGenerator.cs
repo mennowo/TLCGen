@@ -18,6 +18,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _schmv;
 		private string _schwg;
 		private string _schca;
+        private string _tnlfg;
+        private string _tnlfgd;
         private string _tnlsg;
 		private string _tnlsgd;
 		private string _tnlcv;
@@ -390,7 +392,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCPreApplication => new []{20, 31},
+                CCOLCodeTypeEnum.RegCPreApplication => new []{31},
                 CCOLCodeTypeEnum.HstCPreApplication => new []{10},
                 CCOLCodeTypeEnum.HstCKlokPerioden => new []{10},
                 CCOLCodeTypeEnum.HstCAanvragen => new []{10},
@@ -442,33 +444,157 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 #region reg.c
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-					if (order == 20)
-					{ 
-						sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
-						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
-					}
-					if (order == 31)
+					sb.AppendLine($"{ts}/* Bepalen of regeling mag omschakelen */");
+					sb.AppendLine($"{ts}/* Tegenhouden inschakelen naar PL als een naloop nog actief is of als inrijden/inlopen actief is */");
+                    sb.AppendLine($"{ts}/* Opzetten IH[homschtegenh] */");
+					sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !SCH[{_schpf}{_schvarstreng}] && !IH[{_hpf}{_hplhd}])");
+					sb.AppendLine($"{ts}{{");
+					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_homschtegenh}] = TRUE;");
+                    sb.AppendLine($"{ts}}}");
+					sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Wenselijk is dat pas wordt omgeschakeld naar PL wanneer nalopen zijn afgemaakt; echter andere (voedende)");
+                    sb.AppendLine($"{ts} * richtingen moeten in deze tijd niet groen kunnen worden, anders bestaat het risico dat er permanent");
+                    sb.AppendLine($"{ts} * wordt gewacht op nieuwe nalopen.");
+                    sb.AppendLine($"{ts} */");
+                    sb.AppendLine($"{ts}/* reset */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_INSCH_HALFSTAR;");
+                    sb.AppendLine($"{ts}{ts}Z[fc] &= ~Z_INSCH_HALFSTAR;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}/* set voor alle richtingen waar een richting al inloopt of inrijdt */");
+                    sb.AppendLine($"{ts}if (IH[homschtegenh]) /* tegenhouden inschakelen naar PL */");
+                    sb.AppendLine($"{ts}{{");
+                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
 					{
-						sb.AppendLine($"{ts}");
-                        sb.AppendLine($"{ts}/* Wenselijk is dat pas wordt omgeschakeld naar PL wanneer nalopen zijn afgemaakt; echter andere (voedende)");
-                        sb.AppendLine($"{ts} * richtingen moeten in deze tijd niet groen kunnen worden, anders bestaat het risico dat er permanent");
-                        sb.AppendLine($"{ts} * wordt gewacht op nieuwe nalopen.");
-                        sb.AppendLine($"{ts} */");
-                        sb.AppendLine($"{ts}/* reset */");
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_INSCH_HALFSTAR;");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}/* set voor alle richtingen waar een richting al inloopt of inrijdt */");
-                        sb.AppendLine($"{ts}if (IH[homschtegenh]) /* tegenhouden inschakelen naar PL */");
-                        sb.AppendLine($"{ts}{{");
-						foreach (var nl in c.InterSignaalGroep.Nalopen)
+						if (nl.Type == NaloopTypeEnum.StartGroen && nl.MaximaleVoorstart.HasValue)
+                            sb.AppendLine($"{ts}{ts}if (!(T[{_tpf}{tinl}{nl:vannaar}] || RT[{_tpf}{tinl}{nl:vannaar}])) RR[{_fcpf}{nl:naar}] |= RR_INSCH_HALFSTAR;");
+						else
+							sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:van}] |= RR_INSCH_HALFSTAR;");
+					}
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        if (nl.Type == NaloopTypeEnum.StartGroen && nl.MaximaleVoorstart.HasValue)
 						{
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nl:van}] |= RR_INSCH_HALFSTAR;");
+							var tnl = nl.DetectieAfhankelijk && nl.Detectoren.Count > 0 ? _tnlsgd : _tnlsg;
+                            sb.AppendLine($"{ts}{ts}if (!(VS[{_fcpf}{nl:naar}] || FG[{_fcpf}{nl:naar}] || T[{_tpf}{tnl}{nl:vannaar}])) Z[{_fcpf}{nl:naar}] |= Z_INSCH_HALFSTAR;");
 						}
-                        sb.AppendLine($"{ts}}}");
+                        else
+                            sb.AppendLine($"{ts}{ts}if (!(VS[{_fcpf}{nl:van}] || FG[{_fcpf}{nl:van}])) Z[{_fcpf}{nl:van}] |= Z_INSCH_HALFSTAR;");
                     }
-					return sb.ToString();
+                    sb.AppendLine($"{ts}}}");
+
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Afzetten IH[homschtegenh] */");
+                    sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !SCH[{_schpf}{_schvarstreng}] && !IH[{_hpf}{_hplhd}])");
+                    sb.AppendLine($"{ts}{{");
+                    sb.Append($"{ts}{ts}if (");
+                    var k = 0;
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        if (k != 0)
+                        {
+                            sb.AppendLine(" &&");
+							sb.Append($"{ts}{ts}    ");
+                        }
+						var tnlf = nl.Type switch
+                        {
+                            NaloopTypeEnum.StartGroen => null,
+                            NaloopTypeEnum.EindeGroen => _tnlfg,
+                            NaloopTypeEnum.CyclischVerlengGroen => _tnlfg,
+                            _ => throw new NotImplementedException(),
+                        };
+                        var tnlfd = nl.Type switch
+                        {
+                            NaloopTypeEnum.StartGroen => null,
+                            NaloopTypeEnum.EindeGroen => _tnlfgd,
+                            NaloopTypeEnum.CyclischVerlengGroen => _tnlfgd,
+                            _ => throw new NotImplementedException(),
+                        };
+                        var tnl = nl.Type switch
+                        {
+                            NaloopTypeEnum.StartGroen => _tnlsg,
+                            NaloopTypeEnum.EindeGroen => _tnleg,
+                            NaloopTypeEnum.CyclischVerlengGroen => _tnlcv,
+                            _ => throw new NotImplementedException(),
+                        };
+                        var tnld = nl.Type switch
+                        {
+                            NaloopTypeEnum.StartGroen => _tnlsgd,
+                            NaloopTypeEnum.EindeGroen => _tnlegd,
+                            NaloopTypeEnum.CyclischVerlengGroen => _tnlcvd,
+                            _ => throw new NotImplementedException(),
+                        };
+						if (!nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen)) 
+						{
+							tnlf = null;
+                            tnlfd = null;
+						}
+						if (!nl.DetectieAfhankelijk || nl.Detectoren.Count == 0)
+						{ 
+							tnld = null;
+                            tnlfd = null;
+						}
+						if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+						{
+                            sb.Append($"!T[{_tpf}{tnlf}{nl:vannaar}] && !RT[{_tpf}{tnlf}{nl:vannaar}] && ");
+						}
+						if (nl.VasteNaloop)
+						{ 
+							sb.Append($"!T[{_tpf}{tnl}{nl:vannaar}] && !RT[{_tpf}{tnl}{nl:vannaar}]");
+						}
+						if (nl.VasteNaloop && nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
+						{
+							sb.Append(" && ");
+						}
+						if (nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
+						{
+							sb.Append($"!T[{_tpf}{tnld}{nl:vannaar}] && !RT[{_tpf}{tnld}{nl:vannaar}]");
+                            if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+                            {
+                                sb.Append($" && !T[{_tpf}{tnlfd}{nl:vannaar}] && !RT[{_tpf}{tnlfd}{nl:vannaar}]");
+                            }
+                        }
+                        ++k;
+                    }
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        if (k != 0)
+                        {
+                            sb.AppendLine(" &&");
+							sb.Append($"{ts}{ts}    ");
+                        }
+
+                        var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                        var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                        if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                            sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                        {
+
+                            if (nl.MaximaleVoorstart.HasValue)
+                            {
+                                sb.Append($"!T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] && !RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] ");
+                            }
+                        }
+                        else
+                        {
+                            if (nl.MaximaleVoorstart.HasValue)
+                            {
+                                var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
+                                    ? tinl
+                                    : _treallr;
+                                sb.Append($"!T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] && !RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]");
+                            }
+                        }
+                        ++k;
+                    }
+                    sb.AppendLine($"{ts}{ts})");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+                    return sb.ToString();
 
                 #endregion // reg.c
 
@@ -651,24 +777,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					#region Klok bepaling VA bedrijf
 
 					sb.AppendLine($"{mts}/* Klokbepaling voor VA-bedrijf */");
-					sb.AppendLine($"{mts}if (!IH[{_hpf}{_homschtegenh}])");
-					sb.AppendLine($"{mts}{{");
-					sb.Append($"{mts}{ts}if ((SCH[{_schpf}{_schpervar}def] && (MM[{_mpf}{_mperiod}] == 0)");
+					sb.Append($"{mts}if ((SCH[{_schpf}{_schpervar}def] && (MM[{_mpf}{_mperiod}] == 0)");
 					iper = 1;
 					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
 					{
 						sb.AppendLine(") ||");
-						sb.Append($"{mts}{ts}    (SCH[{_schpf}{_schpervar}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}] && (MM[{_mpf}{_mperiod}] == {iper})");
+						sb.Append($"{mts}{ts}(SCH[{_schpf}{_schpervar}{(c.PeriodenData.GebruikPeriodenNamen ? per.Periode : iper.ToString())}] && (MM[{_mpf}{_mperiod}] == {iper})");
 						++iper;
 					}
 					sb.AppendLine("))");
-					sb.AppendLine($"{mts}{ts}{{");
-					sb.AppendLine($"{mts}{ts}{ts}IH[{_hpf}{_hpervar}] = TRUE;");
-					sb.AppendLine($"{mts}{ts}}}");
-					sb.AppendLine($"{mts}{ts}else");
-					sb.AppendLine($"{mts}{ts}{{");
-					sb.AppendLine($"{mts}{ts}{ts}IH[{_hpf}{_hpervar}] = FALSE;");
-					sb.AppendLine($"{mts}{ts}}}");
+					sb.AppendLine($"{mts}{{");
+					sb.AppendLine($"{mts}{ts}IH[{_hpf}{_hpervar}] = TRUE;");
+					sb.AppendLine($"{mts}}}");
+					sb.AppendLine($"{mts}else");
+					sb.AppendLine($"{mts}{{");
+					sb.AppendLine($"{mts}{ts}IH[{_hpf}{_hpervar}] = FALSE;");
 					sb.AppendLine($"{mts}}}");
 					sb.AppendLine();
 
@@ -748,13 +871,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					switch (c.HalfstarData.Type)
 					{
 						case HalfstarTypeEnum.Master:
-							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}] || IH[{_hpf}{_homschtegenh}])");
 							break;
 						case HalfstarTypeEnum.FallbackMaster:
-							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}] || IH[{_hpf}{_homschtegenh}])");
 							break;
 						case HalfstarTypeEnum.Slave:
-							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}])");
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || IH[{_hpf}{_homschtegenh}])");
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -1002,14 +1125,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 					}
-                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                    var tinl2 = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.StartGroen && x.MaximaleVoorstart.HasValue))
                     {
                         var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                         var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 						if (sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
 						{ 
-							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl}{nl:vannaar});");
+							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl2}{nl:vannaar});");
 						}
 					}
 
@@ -1579,7 +1702,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach(var pl in c.HalfstarData.SignaalPlannen)
                     {
-	                    sb.AppendLine($"{ts}GUS[{_uspf}{pl.ToString(_uspl)}] = PL == {pl.Naam};");
+	                    sb.AppendLine($"{ts}GUS[{_uspf}{pl.ToString(_uspl)}] = IH[{_hpf}{_hplact}] && (PL == {pl.Naam});");
                     }
 					sb.AppendLine($"{ts}GUS[{_uspf}{_ustxtimer}] = IH[{_hpf}{_hplact}] ? (s_int16)(TX_timer): 0;");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usklok}] = MM[{_mpf}{_mklok}];");
@@ -1731,8 +1854,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			_schmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schmv");
 			_schwg = CCOLGeneratorSettingsProvider.Default.GetElementName("schwg");
 			_schca = CCOLGeneratorSettingsProvider.Default.GetElementName("schca");
+            _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
+            _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
-			_tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
 			_tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
 			_tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
 			_tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");

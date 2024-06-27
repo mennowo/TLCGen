@@ -818,7 +818,9 @@ namespace TLCGen.ViewModels
 
 		private void UpdatePeriodenData()
 		{
-			foreach (var per in Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+			var groentijdPerioden = Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden).ToList();
+
+            foreach (var per in groentijdPerioden)
 			{
 				if (HalfstarPeriodenData.All(x => x.Periode != per.Naam))
 				{
@@ -832,7 +834,7 @@ namespace TLCGen.ViewModels
 			var rems2 = new List<HalfstarPeriodeDataViewModel>();
 			foreach (var hstper in HalfstarPeriodenData)
 			{
-				if (Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden).All(x => x.Naam != hstper.Periode))
+				if (groentijdPerioden.All(x => x.Naam != hstper.Periode))
 				{
 					rems2.Add(hstper);
 				}
@@ -842,6 +844,15 @@ namespace TLCGen.ViewModels
 			{
 				HalfstarPeriodenData.Remove(fc);
 			}
+
+			var pers = new Dictionary<string, int>();
+			for (var i = 0; i < groentijdPerioden.Count; ++i)
+			{
+				pers.Add(groentijdPerioden[i].Naam, i);
+			}
+
+            HalfstarPeriodenData.BubbleSort<HalfstarPeriodeDataViewModel>((x, y) => pers[x.Periode].CompareTo(pers[y.Periode]));
+			HalfstarPeriodenData.RebuildList();
 		}
 
 		#endregion // Private methods
@@ -870,6 +881,7 @@ namespace TLCGen.ViewModels
 					HalfstarData = Controller.HalfstarData;
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
+					UpdatePeriodenData();
                     if (GekoppeldeKruisingen != null)
                     {
                         foreach (var k in GekoppeldeKruisingen)

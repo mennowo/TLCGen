@@ -22,6 +22,7 @@
 #define YW_WS_HALFSTAR      BIT10 /* tbv wachtstand tijdens PL                  */
 #define A_MR_HALFSTAR       BIT8  /* meerealisatie                              */
 #define RR_INSCH_HALFSTAR   BIT11 /* uitstelling inschakelmoment bij lopende koppelingen */
+#define Z_INSCH_HALFSTAR    BIT11 /* uitstelling inschakelmoment bij lopende koppelingen */
 
 #define TIMER_ACTIVE(t)    ((bool)(T[t] || RT[t] || IT[t]))
 #define BIT_ACTIVE(v,t,m)  (v = ((t) ? ((v) |= (m)) : ((v) &= ~(m))))
