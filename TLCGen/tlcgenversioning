@@ -1,5 +1,7 @@
-TLCGen=12.4.0.6
+TLCGen=12.4.0.7
 RN==TLCGen
+TLCGen versie: 12.4.0.7
+- Verdere verbeteringen halfstar regelen
 TLCGen versie: 12.4.0.6
 - Ris ETA in tienden seconden
 - Fixes voor warnings bij compileren met lvl 4
