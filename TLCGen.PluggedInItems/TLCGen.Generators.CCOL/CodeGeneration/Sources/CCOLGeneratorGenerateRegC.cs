@@ -282,10 +282,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
 
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreApplication, true, false, false, true);
+
             sb.AppendLine($"{ts}TFB_max = PRM[{_prmpf}{_prmfb}];");
             sb.AppendLine();
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreApplication, true, true, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreApplication, false, true, false, true);
 
             sb.AppendLine($"{ts}PreApplication_Add();");
 
