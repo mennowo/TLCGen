@@ -833,6 +833,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG(PRML, ML, MLMAX, twacht);");
+                sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG_Add();");
             }
             sb.AppendLine($"{tsts}RealisatieAfhandeling();");
             sb.AppendLine($"{tsts}FileVerwerking();");
