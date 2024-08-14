@@ -166,12 +166,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                         {
-                            sb.AppendLine($"mulv t_wacht_{r.Reeks}[FCMAX]; /* berekende wachttijd {r.Reeks} */");
+                            sb.AppendLine($"mulv t_wacht_{r.Reeks}[FCMAX] = {{ 0 }}; /* berekende wachttijd {r.Reeks} */");
+                            sb.AppendLine($"mulv t_wacht_old_{r.Reeks}[FCMAX] = {{ 0 }}; /* vorige berekende wachttijd {r.Reeks} */");
+                            sb.AppendLine($"mulv t_wacht_halt_{r.Reeks}[FCMAX] = {{ 0 }}; /* berekende wachttijd {r.Reeks} */");
                         }
                     }
                     else
                     {
-                        sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
+                        sb.AppendLine("mulv t_wacht[FCMAX] = { 0 }; /* berekende wachttijd */");
+                        sb.AppendLine("mulv t_wacht_old[FCMAX] = { 0 }; /* vorige berekende wachttijd */");
+                        sb.AppendLine("mulv t_wacht_halt[FCMAX] = { 0 }; /* gehalteerde berekende wachttijd */");
                     }
                     if (c.Data.MultiModuleReeksen)
                     {
@@ -222,9 +226,99 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Wachttijdvoorspellers */");
                         sb.AppendLine();
 
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                    { 
+
+                        #region t_wacht_old
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}t_wacht_old[{_fcpf}{sgWt.Naam}] = t_wacht[{_fcpf}{sgWt.Naam}];");
+                        }
+                        #endregion
+
+                        #region t_wacht_AR
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}t_wacht[{_fcpf}{sgWt.Naam}] = (AR[{_fcpf}{sgWt.Naam}] && (twacht_AR[{_fcpf}{sgWt.Naam}] < twacht[{_fcpf}{sgWt.Naam}])) ? twacht_AR[{_fcpf}{sgWt.Naam}] : twacht[{_fcpf}{sgWt.Naam}];");
+                        }
+                        #endregion
+
+                        #region
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}if ((t_wacht_old[{_fcpf}{sgWt.Naam}] < t_wacht[{_fcpf}{sgWt.Naam}]) && CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] && (t_wacht_old[{_fcpf}{sgWt.Naam}] > 0))");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}t_wacht_halt[{_fcpf}{sgWt.Naam}] = t_wacht_old[{_fcpf}{sgWt.Naam}];");
+                            sb.AppendLine($"{ts}{ts}rr_twacht[{_fcpf}{sgWt.Naam}] = TRUE;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}if (t_wacht[{_fcpf}{sgWt.Naam}] <= t_wacht_halt[{_fcpf}{sgWt.Naam}])");
+                            sb.AppendLine($"{ts}{ts}{{");
+                            sb.AppendLine($"{ts}{ts}{ts}rr_twacht[{_fcpf}{sgWt.Naam}] = FALSE;");
+                            sb.AppendLine($"{ts}{ts}}}");
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        #endregion
+
+                        #region
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}if (rr_twacht[{_fcpf}{sgWt.Naam}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}wachttijd_leds_mm({_fcpf}{sgWt.Naam}, {_mpf}{_mwtv}{sgWt.Naam}, {_tpf}{_twtv}{sgWt.Naam}, t_wacht_halt[{_fcpf}{sgWt.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                            sb.AppendLine($"{ts}{ts}RT[{_tpf}{_twtv}{sgWt.Naam}] = TRUE;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}wachttijd_leds_mm({_fcpf}{sgWt.Naam}, {_mpf}{_mwtv}{sgWt.Naam}, {_tpf}{_twtv}{sgWt.Naam}, t_wacht[{_fcpf}{sgWt.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        #endregion
+
+                        #region
+                        sb.AppendLine($"{ts}/* laatste ledje laten knipperen bij ov/hd-ingreep of fixatie */");
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}wachttijd_leds_knip({_fcpf}{sgWt.Naam}, {_mpf}{_mwtv}{sgWt.Naam}, {_mpf}{_mwtvm}{sgWt.Naam}, rr_twacht[{_fcpf}{sgWt.Naam}], {_ispf}{_isfix});");
+                        }
+                        #endregion
+
+                        #region
+                        sb.AppendLine($"{ts}/* beveiliging op afzetten tijdens bedrijf */");
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}if (G[{_fcpf}{sgWt.Naam}]) IH[{_hpf}{_hwtv}{sgWt.Naam}] = SCH[{_schpf}{_schwtv}{sgWt.Naam}];");
+                        }
+                        #endregion
+
+                        #region
+                        foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {_fcpf}{sgWt.Naam} */");
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hwtv}{sgWt.Naam}] && R[{_fcpf}{sgWt.Naam}])");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] = MM[{_mpf}{_mwtvm}{sgWt.Naam}];");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] = 0;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] &= ~BIT8;");
+                            sb.AppendLine($"{ts}if (CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] && rr_twacht[{_fcpf}{sgWt.Naam}] && IH[{_hpf}{_hwtv}{sgWt.Naam}] && (SCH[{_schpf}{_schwtvbusbijhd}] || !(RTFB & PRIO_RTFB_BIT)))");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{sgWt.Naam}] |= BIT8;");
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        #endregion
+                    }
+
+                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
+                    { 
+
                         #region verlenggroentijd gekoppelde richtingen
                         sb.AppendLine($"{ts}/* verlenggroentijd gekoppelde richtingen */");
-                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        foreach(var nl in c.InterSignaalGroep.Nalopen)
                         {
                             #region Get naloop type timer
                             var tnl = "";
@@ -495,13 +589,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}])");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~PRIO_RR_BIT;");
                         foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == fc.Naam))
                         {
                             var nlfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
                             if (nlfc != null)
                             {
-                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nlfc.Naam}] &= ~BIT6;");
+                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nlfc.Naam}] &= ~PRIO_RR_BIT;");
                             }
                         }
                         foreach (var nl in c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam))
@@ -509,7 +603,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var gsfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
                             if (gsfc != null)
                             {
-                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsfc.Naam}] &= ~BIT6;");
+                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsfc.Naam}] &= ~PRIO_RR_BIT;");
                             }
                         }
                         sb.AppendLine($"{ts}}}");

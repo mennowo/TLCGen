@@ -266,6 +266,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (f)
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* ISG deelconflict aanvragen; tevens wordt de AA en BR opgezet @@ tijdelijk tot we code hebben dat de deelconflicten niet hard mee moeten komen @@ @@ aanvraag hoort hier wel maar de AA en BR op een andere plek plaatsen @@*/");
                             f = false;
                         }
@@ -517,7 +518,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     sb.AppendLine($"{ts}/* TIGR */");
                     sb.AppendLine($"{ts}/* Correctie tijdens omdat bv fc22 hard meeverlengt met fc05 en dus bij naloop fc22-->fc21 deze maatgevend kan worden. */");
-                    sb.AppendLine($"{ts}BepaalIntergroenTijden();");
+                    sb.AppendLine($"{ts}BepaalIntergroenTijden(); /* initialisatie TIGR[][] */");
                     sb.AppendLine();
 
                     f = true;
