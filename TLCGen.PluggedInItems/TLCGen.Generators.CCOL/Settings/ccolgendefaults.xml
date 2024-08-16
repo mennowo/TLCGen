@@ -2703,7 +2703,7 @@
             <Default>reallr</Default>
             <Setting>lr</Setting>
             <Type>Timer</Type>
-            <Description>Late release tijd fase _E1_ naar fase _E2_</Description>
+            <Description>Late release tijd fase _E1_ na fase _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>

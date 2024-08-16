@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
 		}
 
         public string Comment1 =>
-            $"Voorstart tijd van {_voorstart.FaseVan} naar {_voorstart.FaseNaar}";
+            $"Voorstart tijd van {_voorstart.FaseVan} op {_voorstart.FaseNaar}";
 
         public string Comment2 =>
             $"Voorstart {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} van {_voorstart.FaseNaar} naar {_voorstart.FaseVan}";

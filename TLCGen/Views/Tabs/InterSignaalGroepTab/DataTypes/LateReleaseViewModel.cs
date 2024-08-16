@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
         }
 
         public string Comment1 =>
-            $"Late release tijd van {_lateRelease.FaseVan} naar {_lateRelease.FaseNaar}";
+            $"Late release tijd van {_lateRelease.FaseVan} na {_lateRelease.FaseNaar}";
 
         public string Comment2 =>
             $"Late release {(TLCGenControllerDataProvider.Default.Controller.Data.Intergroen ? "intergroentijd" : "ontruimingstijd")} " +
