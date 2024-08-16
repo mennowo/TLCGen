@@ -578,7 +578,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             x.Type == NaloopTypeEnum.StartGroen &&
                                             x.FaseVan == grsync.FaseVan &&
                                             x.FaseNaar == grsync.FaseNaar);
-                                    var eenzVtg = nl2 == null;
+                                    var eenzVtg = nl?.Type == NaloopTypeEnum.StartGroen && nl2 == null;
                                     if (eenzVtg)
                                     {
                                         sb.AppendLine($"{ts}{ts}wijziging |= Corr_Min({_fcpf}{grsync:naar}, {_fcpf}{grsync:van}, T_max[{_tpf}{max}{grsync:naarvan}], {condition});");
