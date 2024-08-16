@@ -93,7 +93,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCTop:
-                    sb.AppendLine("extern int itvgmaxprm[]; /* fasecycli met max. verlenggroen parameter (gedeclareerd in reg.c) */");
+                    if (c.Data.PracticeOmgeving)
+                    {
+                        sb.AppendLine("#ifndef PRACTICE_TEST");
+                        sb.AppendLine($"{ts}extern mulv itvgmaxprm[]; /* fasecycli met max. verlenggroen parameter (gedeclareerd in reg.c) */");
+                        sb.AppendLine("#endif");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"extern mulv itvgmaxprm[]; /* fasecycli met max. verlenggroen parameter (gedeclareerd in reg.c) */");
+                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     foreach (var sg in c.Fasen)
