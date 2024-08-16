@@ -114,15 +114,18 @@ namespace TLCGen.Plugins.Additor
                 {
                     var files = Directory.GetFiles(path);
                     AddFiles.Clear();
-                    foreach (var f in files)
-                    {
-                        if (Path.GetFileName(f).StartsWith(_plugin.Controller.Data.Naam) &&
-                            (Path.GetExtension(f).ToLower() == ".add" || 
-                             Path.GetExtension(f).ToLower() == ".h" ||
-                             Path.GetExtension(f).ToLower() == ".c"))
+                    if (!string.IsNullOrWhiteSpace(_plugin.Controller.Data.Naam))
+                    { 
+                        foreach (var f in files)
                         {
-                            var add = new AddFileViewModel {FileName = Path.GetFileName(f), FullFileName = f};
-                            AddFiles.Add(add);
+                            if (Path.GetFileName(f).StartsWith(_plugin.Controller.Data.Naam) &&
+                                (Path.GetExtension(f).ToLower() == ".add" || 
+                                 Path.GetExtension(f).ToLower() == ".h" ||
+                                 Path.GetExtension(f).ToLower() == ".c"))
+                            {
+                                var add = new AddFileViewModel {FileName = Path.GetFileName(f), FullFileName = f};
+                                AddFiles.Add(add);
+                            }
                         }
                     }
                 }

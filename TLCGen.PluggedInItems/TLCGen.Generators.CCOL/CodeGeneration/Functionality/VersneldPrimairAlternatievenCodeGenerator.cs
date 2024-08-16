@@ -858,10 +858,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (sortedSyncs.oneWay.Count > 0)
                     {
                         sb.AppendLine();
-                        sb.AppendLine($"/* PAR = PAR */");
+                        sb.AppendLine($"{ts}{ts}/* PAR = PAR */");
                         foreach (var sync in sortedSyncs.oneWay)
                         {
-                            sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
+                            var gs = c.InterSignaalGroep.Gelijkstarten.FirstOrDefault(x => x.FaseVan == sync.FaseVan && x.FaseNaar == sync.FaseNaar);
+                            var vs = c.InterSignaalGroep.LateReleases.FirstOrDefault(x => x.FaseVan == sync.FaseVan && x.FaseNaar == sync.FaseNaar);
+                            var lr = c.InterSignaalGroep.Voorstarten.FirstOrDefault(x => x.FaseVan == sync.FaseVan && x.FaseNaar == sync.FaseNaar);
+                            if (gs != null && gs.DeelConflict || vs != null || lr != null)
+                            {
+                                sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && (PAR[{_fcpf}{sync.FaseVan}] || !A[{_fcpf}{sync.FaseVan}]);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{sync.FaseNaar}] = PAR[{_fcpf}{sync.FaseNaar}] && PAR[{_fcpf}{sync.FaseVan}];");
+                            }
                         }
                     }
 
