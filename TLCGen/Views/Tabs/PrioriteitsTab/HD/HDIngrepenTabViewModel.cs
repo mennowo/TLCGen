@@ -2,12 +2,11 @@
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.PrioriteitTab)]
     public class HDIngrepenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

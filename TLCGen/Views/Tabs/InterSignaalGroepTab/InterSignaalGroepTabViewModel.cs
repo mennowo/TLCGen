@@ -200,7 +200,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.SynchronisatiesType = value;
-                SelectedSynchronisatie.UpdateView();
+                SelectedSynchronisatie?.UpdateView();
                 TLCGenModelManager.Default.UpdateControllerAlerts();
                 RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
                 RaisePropertyChanged(nameof(IsSynchRealType));

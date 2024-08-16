@@ -5,7 +5,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 5, type: TabItemTypeEnum.PrioriteitTab)]
+    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.PrioriteitTab)]
 	public class HDOverzichtTabViewModel : TLCGenTabItemViewModel
 	{		
         #region Fields
