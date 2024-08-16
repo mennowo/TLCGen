@@ -1132,7 +1132,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 						if (sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
 						{ 
-							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl2}{nl:vannaar});");
+							if (nl.Detectoren?.Count > 0)
+							{
+								sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl2}{nl:vannaar});");
+							}
+							else
+							{
+                                sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, NG, NG, {_tpf}{tinl2}{nl:vannaar});");
+							}
 						}
 					}
 
