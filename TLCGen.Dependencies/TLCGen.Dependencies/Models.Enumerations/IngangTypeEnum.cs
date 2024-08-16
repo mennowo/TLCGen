@@ -7,6 +7,8 @@ namespace TLCGen.Models.Enumerations
     public enum IngangTypeEnum
     {
         [Description("Wisselcontact")]
-        WisselContact
+        WisselContact,
+        [Description("Overig")]
+        Overig
     }
 }
