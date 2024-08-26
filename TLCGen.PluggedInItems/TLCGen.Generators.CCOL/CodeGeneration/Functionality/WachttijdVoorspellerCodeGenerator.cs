@@ -234,7 +234,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         #region t_wacht_AR
                         foreach (var sgWt in c.Fasen.Where(x => x.WachttijdVoorspeller))
                         {
-                            sb.AppendLine($"{ts}t_wacht[{_fcpf}{sgWt.Naam}] = (AR[{_fcpf}{sgWt.Naam}] && (twacht_AR[{_fcpf}{sgWt.Naam}] < twacht[{_fcpf}{sgWt.Naam}])) ? twacht_AR[{_fcpf}{sgWt.Naam}] : twacht[{_fcpf}{sgWt.Naam}];");
+                            sb.AppendLine($"{ts}t_wacht[{_fcpf}{sgWt.Naam}] = (AR[{_fcpf}{sgWt.Naam}] && (twacht_AR[{_fcpf}{sgWt.Naam}] < twacht[{_fcpf}{sgWt.Naam}]) || (twacht[{_fcpf}{sgWt.Naam}] < 0)) ? twacht_AR[{_fcpf}{sgWt.Naam}] : twacht[{_fcpf}{sgWt.Naam}];");
                         }
                         #endregion
 
