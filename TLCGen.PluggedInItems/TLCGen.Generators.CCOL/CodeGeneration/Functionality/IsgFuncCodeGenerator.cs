@@ -33,6 +33,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfgd;
         private string _tnleg;
         private string _tnlegd;
+        private string _tnlcv;
+        private string _tnlcvd;
         private string _tnlsg;
         private string _tnlsgd;
         private string _hfile;
@@ -307,6 +309,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}InterStartGroenTijd_NLEG_PRIO({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar});");
                                     break;
                                 case NaloopTypeEnum.CyclischVerlengGroen:
+                                    var tnlcv = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen) ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                                    var tnlcvd = nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie) ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
+                                    sb.AppendLine($"{ts}InterStartGroenTijd_NLEVG_PRIO({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnlcv}, {tnlcvd}, {_tpf}{_tvgnaloop}{nl:vannaar});");
                                     break;
                             }
                         }
@@ -522,7 +527,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
 
                     f = true;
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
                     {
                         if (f)
                         {
@@ -530,8 +535,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             f = false;
                         }
 
-                        var nleg = nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
-                        var nlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
+                        var nleg = nl.Type == NaloopTypeEnum.EindeGroen 
+                            ? nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG"
+                            : nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                        var nlegd = nl.Type == NaloopTypeEnum.EindeGroen
+                            ? nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG"
+                            : nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
                         sb.AppendLine($"{ts}corrigeerTIGRvoorNalopen({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
                     }
                     sb.AppendLine();
@@ -551,6 +560,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var nleg = nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
                         var nlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
                         sb.AppendLine($"{ts}Realisatietijd_NLEG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg}, {nlfgd}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
+                    }
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                    {
+                        var nlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                        var nlfgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                        var nlcv = nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                        var nlcvd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
+                        sb.AppendLine($"{ts}Realisatietijd_NLEVG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg}, {nlfgd}, {nlcv}, {nlcvd}, {_tpf}vgnaloop{nl:vannaar});");
                     }
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.StartGroen))
                     {
@@ -662,6 +679,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}InterStartGroenTijd_NLEG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg}, {nlfgd}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
                                 break;
                             case NaloopTypeEnum.CyclischVerlengGroen:
+                                var nlfg1 = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                                var nlfgd1 = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                                var nlcv = nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                                var nlcvd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
+                                sb.AppendLine($"{ts}InterStartGroenTijd_NLEVG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg1}, {nlfgd1}, {nlcv}, {nlcvd}, {_tpf}vgnaloop{nl:vannaar});");
                                 break;
                         }
                     }
@@ -741,6 +763,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
