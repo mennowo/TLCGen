@@ -684,32 +684,6 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            // Syncfunc
-            if (Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
-            {
-                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.RealFunc))
-                {
-                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
-                    {
-                        Background = Brushes.LightCyan,
-                        Shown = true,
-                        Message = "***Let op!*** Realfunc is nog in de bèta test fase.",
-                        Type = ControllerAlertType.RealFunc
-                    };
-                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
-                    ControllerAlerts.Add(msg);
-                }
-            }
-            else
-            {
-                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.RealFunc);
-                if (alert != null)
-                {
-                    ControllerAlerts.Remove(alert);
-                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
-                }
-            }
-
             // Rangeer elementen
             if (Controller.Data.RangeerData.RangerenOvergezet)
             {
