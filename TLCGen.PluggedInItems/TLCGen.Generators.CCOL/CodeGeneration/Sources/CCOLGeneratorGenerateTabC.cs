@@ -266,8 +266,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         stringBuilder.AppendLine("#ifndef NO_CVN_50");
                     }
 
+                    if (last) 
+                    {
+                        stringBuilder.AppendLine($"{ts}IS_type[{_dpf}{dm.Naam}] = DSI_type;");
+                        list.Add(dm.Naam);
+                    }
+
                     if ((prevDetectorType == DetectorTypeEnum.VecomDetector ||
-                         prevDetectorType == DetectorTypeEnum.OpticomIngang) &&
+                         prevDetectorType == DetectorTypeEnum.OpticomIngang || last) &&
                         (dm.Type != DetectorTypeEnum.VecomDetector && dm.Type != DetectorTypeEnum.OpticomIngang || last))
                     {
                         stringBuilder.AppendLine("#else");
@@ -281,52 +287,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
 
-                stringBuilder.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
-                switch (dm.Type)
+                if (!last)
                 {
-                    case DetectorTypeEnum.Knop:
-                    case DetectorTypeEnum.KnopBinnen:
-                    case DetectorTypeEnum.KnopBuiten:
-                        stringBuilder.AppendLine("DK_type;");
-                        break;
-                    case DetectorTypeEnum.File:
-                    case DetectorTypeEnum.Verweg:
-                        stringBuilder.AppendLine("DVER_type;");
-                        break;
-                    case DetectorTypeEnum.Kop:
-                        stringBuilder.AppendLine("DKOP_type;");
-                        break;
-                    case DetectorTypeEnum.Lang:
-                        stringBuilder.AppendLine("DLNG_type;");
-                        break;
-                    case DetectorTypeEnum.OpticomIngang:
-                    case DetectorTypeEnum.VecomDetector:
-                        if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
-                        {
-                            stringBuilder.AppendLine("DSI_type;");
-                            list.Add(dm.Naam);
-                        }
-                        else
-                        {
-                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use?
-                            // #define DSUIT_type  (DS_type+KOP_type) /* inmelding selectief        */
-                            // #define DSIN_type   (DS_type+VER_type) /* uitmelding selectief       */
-                            stringBuilder.AppendLine("DS_type;");
-                        }
+                    stringBuilder.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                    switch (dm.Type)
+                    {
+                        case DetectorTypeEnum.Knop:
+                        case DetectorTypeEnum.KnopBinnen:
+                        case DetectorTypeEnum.KnopBuiten:
+                            stringBuilder.AppendLine("DK_type;");
+                            break;
+                        case DetectorTypeEnum.File:
+                        case DetectorTypeEnum.Verweg:
+                            stringBuilder.AppendLine("DVER_type;");
+                            break;
+                        case DetectorTypeEnum.Kop:
+                            stringBuilder.AppendLine("DKOP_type;");
+                            break;
+                        case DetectorTypeEnum.Lang:
+                            stringBuilder.AppendLine("DLNG_type;");
+                            break;
+                        case DetectorTypeEnum.OpticomIngang:
+                        case DetectorTypeEnum.VecomDetector:
+                            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
+                            {
+                                stringBuilder.AppendLine("DSI_type;");
+                                list.Add(dm.Naam);
+                            }
+                            else
+                            {
+                                // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use?
+                                // #define DSUIT_type  (DS_type+KOP_type) /* inmelding selectief        */
+                                // #define DSIN_type   (DS_type+VER_type) /* uitmelding selectief       */
+                                stringBuilder.AppendLine("DS_type;");
+                            }
 
-                        break;
-                    case DetectorTypeEnum.Overig:
-                        stringBuilder.AppendLine("DL_type;");
-                        break;
-                    case DetectorTypeEnum.WisselStandDetector:
-                    case DetectorTypeEnum.WisselDetector:
-                    case DetectorTypeEnum.WisselStroomKringDetector:
-                    case DetectorTypeEnum.Radar:
-                        stringBuilder.AppendLine("DKOP_type;");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " +
-                                                              dm.Type.ToString());
+                            break;
+                        case DetectorTypeEnum.Overig:
+                            stringBuilder.AppendLine("DL_type;");
+                            break;
+                        case DetectorTypeEnum.WisselStandDetector:
+                        case DetectorTypeEnum.WisselDetector:
+                        case DetectorTypeEnum.WisselStroomKringDetector:
+                        case DetectorTypeEnum.Radar:
+                            stringBuilder.AppendLine("DKOP_type;");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " +
+                                                                  dm.Type.ToString());
+                    }
                 }
 
                 return stringBuilder.ToString();
