@@ -20,10 +20,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("#define CCOL_IS_SPECIAL");
-            sb.AppendLine("#define XTND_DIC");
-            sb.AppendLine();
-
             if (controller.ModuleMolen.LangstWachtendeAlternatief)
             {
                 sb.AppendLine("#include \"lwmlfunc.c\"");
@@ -39,8 +35,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#include \"ccol_mon.c\"");
             }
             sb.AppendLine();
-            if (controller.InterSignaalGroep.Gelijkstarten.Any() ||
-                controller.InterSignaalGroep.Voorstarten.Any())
+            if (controller.Data.SynchronisatiesType == Models.Enumerations.SynchronisatiesTypeEnum.SyncFunc &&
+                (controller.InterSignaalGroep.Gelijkstarten.Any() ||
+                 controller.InterSignaalGroep.Voorstarten.Any()))
             {
                 sb.AppendLine($"#include \"syncfunc.c\"");
             }
@@ -48,7 +45,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"#include \"dsifunc.c\"");
             }
-            sb.AppendLine($"#include \"xtnd_dic.c\"");
             return sb.ToString();
         }
     }
