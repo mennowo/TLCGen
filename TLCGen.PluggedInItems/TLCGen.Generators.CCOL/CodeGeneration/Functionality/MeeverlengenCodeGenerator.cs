@@ -162,6 +162,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     
                                     extraConditions = $"{hfWsg}({hfWsgArgs})";
                                 }
+                                if (nl is { Type: NaloopTypeEnum.StartGroen })
+                                {
+                                    var sg1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                                    var sg2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                                    if (sg1?.Type == FaseTypeEnum.Voetganger &&
+                                        sg2?.Type == FaseTypeEnum.Voetganger)
+                                    {
+                                        extraConditions += $" && !kcv({_fcpf}{nl.FaseNaar})";
+                                    }
+                                }
                             }
                             if (!fcm.MeeverlengenTypeInstelbaarOpStraat)
                             {

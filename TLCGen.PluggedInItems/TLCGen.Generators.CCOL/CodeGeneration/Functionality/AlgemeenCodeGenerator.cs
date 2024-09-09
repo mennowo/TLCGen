@@ -175,6 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
+                CCOLCodeTypeEnum.SysHDefines => new []{20},
                 CCOLCodeTypeEnum.SysHBeforeUserDefines => new []{10},
                 CCOLCodeTypeEnum.RegCIncludes => new []{40},
                 CCOLCodeTypeEnum.RegCAanvragen => new []{91},
@@ -209,20 +210,49 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHDefines:
+                    if (c.Data.PracticeOmgeving)
+                    {
+                        sb.AppendLine($"#ifdef PRACTICE_TEST");
+                        sb.AppendLine($"#define AMSTERDAM_PC");
+                        sb.AppendLine($"#define XTND_DIC");
+                        sb.AppendLine($"#define CCOL_IS_SPECIAL");
+                        sb.AppendLine($"#endif");
+                        sb.AppendLine($"#ifndef AUTOMAAT");
+                        sb.AppendLine($"#define AMSTERDAM_PC");
+                        sb.AppendLine($"#endif");
+                    }
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     if (!string.IsNullOrWhiteSpace(c.Data.CCOLParserPassword))
                     {
                         sb.AppendLine($"{ts}#define PASSWORD \"{c.Data.CCOLParserPassword}\"");
                     }
-                    sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
+                    if (c.Data.PracticeOmgeving)
+                    {
+                        sb.AppendLine("#if defined AMSTERDAM_PC");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
+                    }
                     sb.AppendLine($"{ts}#define TESTOMGEVING");
                     sb.AppendLine($"#endif");
+
+                    /* Toevoegingen AMSTERDAM_PC (vinkje Practice omgeving in TLCGen) */
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine($"#ifdef MIRMON");
                     sb.AppendLine($"{ts}#include \"MirakelMonitor.h\"");
                     sb.AppendLine($"#endif /* MIRMON */");
+
+                    if (c.Data.PracticeOmgeving)
+                    { 
+                        sb.AppendLine("#ifdef XTND_DIC");
+                        sb.AppendLine($"{ts}#include \"xtnd_dic.c\"");
+                        sb.AppendLine("#endif");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAanvragen:
@@ -287,8 +317,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}for (i = 0; i < DPMAX; ++i) {{");
                         sb.AppendLine($"{ts}{ts}TBG_max[i]=NG;");
                         sb.AppendLine($"{ts}{ts}TOG_max[i]=NG;");
+                        sb.AppendLine($"#if !defined NO_DDFLUTTER");
                         sb.AppendLine($"{ts}{ts}TFL_max[i]=NG;");
                         sb.AppendLine($"{ts}{ts}CFL_max[i]=NG;");
+                        sb.AppendLine("#endif");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine("#endif");
 

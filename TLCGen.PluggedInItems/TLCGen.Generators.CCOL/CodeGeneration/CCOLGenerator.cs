@@ -857,7 +857,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         /// - if it is null, lines are generated like this: #define ElemName #
         /// - if it is not null, it goes like this: #define ElemName (numberdefine + #)</param>
         /// <returns></returns>
-        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null, List<CCOLElement> extraElements = null, bool useRangering = false)
+        private string GetAllElementsSysHLines(ControllerModel c, CCOLElemListData data, string numberdefine = null, List<CCOLElement> extraElements = null, bool useRangering = false)
         {
             var sb = new StringBuilder();
 
@@ -897,7 +897,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                if (c.Data.PracticeOmgeving == true)
+                {
+                    sb.AppendLine("#if defined AMSTERDAM_PC");
+                }
+                else
+                {
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                }
                 foreach (var elem in elements)
                 {
                     if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))

@@ -1257,10 +1257,10 @@
             <SubCategorie>SUBCAT_Fasebewaking</SubCategorie>
           </Setting>
           <Setting>
-            <Default>aantalvgtwijzpb</Default>
-            <Setting>aantalvgtwijzpb</Setting>
+            <Default>fci</Default>
+            <Setting>fci</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Aantal doorgegeven wijzigingen aan PB bijhouden</Description>
+            <Description>Index fc met gewijzigde TVG_max[]</Description>
             <Categorie>CAT_SpecialeIngrepen</Categorie>
             <SubCategorie>SUBCAT_Fasebewaking</SubCategorie>
           </Setting>

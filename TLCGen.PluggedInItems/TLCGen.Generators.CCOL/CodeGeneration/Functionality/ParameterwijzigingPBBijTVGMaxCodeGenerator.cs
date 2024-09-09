@@ -15,7 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _mperiod;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _mwijzpb;
-        private CCOLGeneratorCodeStringSettingModel _maantalvgtwijzpb;
+        private CCOLGeneratorCodeStringSettingModel _mfci;
 #pragma warning restore 0649
         
         #endregion // Fields
@@ -28,7 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.Data.ParameterwijzigingPBBijTVGMax) return;
             
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwijzpb}", _mwijzpb));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_maantalvgtwijzpb}", _maantalvgtwijzpb));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mfci}", _mfci));
         }
 
         public override bool HasCCOLElements() => true;
@@ -86,10 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}if(CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mwijzpb}]= CIF_PARM1WIJZPB; /* indexnummer van gewijzigde max.verlengroentijd of andere gewijzigde parameter uit PARM1 buffer */");
-                    sb.AppendLine($"{ts}{ts}if (set_parm1wijzpb_tvgmax (MM[{_mpf}{_mperiod}], {_prmpf}{firstSet.Naam.ToLower()}_{firstSetGt.FaseCyclus}, itvgmaxprm, aanttvgmaxprm)) /* argumenten: actuele periode, index eerste verlenggroen parameter, array van fc met prmvg#_$$ */");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}++MM[{_mpf}{_maantalvgtwijzpb}];");
-                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mfci}] = set_parm1wijzpb_tvgmax(MM[{_mpf}{_mperiod}], {_prmpf}{firstSet.Naam.ToLower()}_{firstSetGt.FaseCyclus}, itvgmaxprm, aanttvgmaxprm); /* argumenten: actuele periode, index eerste verlenggroen parameter, array van fc met prmvg#_$$ */");
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCTop:

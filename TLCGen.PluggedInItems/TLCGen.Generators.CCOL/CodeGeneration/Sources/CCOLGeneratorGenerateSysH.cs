@@ -43,17 +43,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHIngangen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHHulpElementen());
+            sb.Append(GenerateSysHHulpElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHGeheugenElementen());
+            sb.Append(GenerateSysHGeheugenElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHTijdElementen());
+            sb.Append(GenerateSysHTijdElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHCounters());
+            sb.Append(GenerateSysHCounters(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHSchakelaars());
+            sb.Append(GenerateSysHSchakelaars(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHParameters());
+            sb.Append(GenerateSysHParameters(c));
             sb.AppendLine();
             if (c.HasDSI())
             {
@@ -179,7 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            sb.Append(GetAllElementsSysHLines(_uitgangen, "FCMAX", useRangering: c.Data.RangeerData.RangerenUitgangen));
+            sb.Append(GetAllElementsSysHLines(c, _uitgangen, "FCMAX", useRangering: c.Data.RangeerData.RangerenUitgangen));
 
             return sb.ToString();
         }
@@ -232,7 +232,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 c.Detectoren.Any() && c.Detectoren.Any(x => x.Dummy) ||
                 ovdummies.Any())
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                if (c?.Data.PracticeOmgeving == true)
+                {
+                    sb.AppendLine("#if defined AMSTERDAM_PC");
+                }
+                else
+                {
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
+                }
                 var dummyDetectors = c.Data.RangeerData.RangerenDetectoren ? c.GetAllDetectors(x => x.Dummy).OrderBy(x =>  x is SelectieveDetectorModel ? x.RangeerIndex2 : x.RangeerIndex) : c.GetAllDetectors(x => x.Dummy);
                 foreach (var dm in dummyDetectors)
                 {
@@ -282,79 +289,79 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX", useRangering: c.Data.RangeerData.RangerenDetectoren));
+            sb.Append(GetAllElementsSysHLines(c, _ingangen, "DPMAX", useRangering: c.Data.RangeerData.RangerenDetectoren));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHHulpElementen()
+        private string GenerateSysHHulpElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(_hulpElementen));
+            sb.Append(GetAllElementsSysHLines(c, _hulpElementen));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHGeheugenElementen()
+        private string GenerateSysHGeheugenElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
 
-            sb.Append(GetAllElementsSysHLines(_geheugenElementen));
+            sb.Append(GetAllElementsSysHLines(c, _geheugenElementen));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHTijdElementen()
+        private string GenerateSysHTijdElementen(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(_timers));
+            sb.Append(GetAllElementsSysHLines(c, _timers));
 
             return sb.ToString();
         }
         
-        private string GenerateSysHCounters()
+        private string GenerateSysHCounters(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsSysHLines(_counters));
+            sb.Append(GetAllElementsSysHLines(c, _counters));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHSchakelaars()
+        private string GenerateSysHSchakelaars(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
 
-            sb.Append(GetAllElementsSysHLines(_schakelaars));
+            sb.Append(GetAllElementsSysHLines(c, _schakelaars));
 
             return sb.ToString();
         }
 
-        private string GenerateSysHParameters()
+        private string GenerateSysHParameters(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
 
-            sb.Append(GetAllElementsSysHLines(_parameters));
+            sb.Append(GetAllElementsSysHLines(c, _parameters));
 
             return sb.ToString();
         }

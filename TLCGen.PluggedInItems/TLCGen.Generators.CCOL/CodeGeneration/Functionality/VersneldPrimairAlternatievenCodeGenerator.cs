@@ -841,7 +841,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             
             if (pars[1].Count > 0)
             {
-                sb.AppendLine($"{ts} /* PAR-correcties nalopen voetgagners stap 1: naloop past of los OK */");
+                sb.AppendLine($"{ts} /* PAR-correcties nalopen voetgangers stap 1: naloop past of los OK */");
                 foreach (var s in pars[1]) sb.AppendLine(s);
                 sb.AppendLine();
             }
