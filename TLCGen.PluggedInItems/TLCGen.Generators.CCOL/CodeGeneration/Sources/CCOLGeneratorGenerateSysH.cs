@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -18,6 +19,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(c.Data));
             sb.AppendLine();
+
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+            {
+                sb.AppendLine($"/* Applicatie informatie (voor V-Log) */");
+                sb.AppendLine($"/* ---------------------------------- */");
+                sb.AppendLine($"#define VLOG_PRODNAME_CODE \"TLCGen\"");
+                var v = c.Data.TLCGenVersie.Split('.');
+                sb.AppendLine($"#define VLOG_PRODVERSION_MAJOR {v[0]}");
+                sb.AppendLine($"#define VLOG_PRODVERSION_MINOR {v[1]}");
+                sb.AppendLine($"#define VLOG_PRODVERSION_PATCH {v[2]}");
+                sb.AppendLine($"#define VLOG_APPLVERSION_CODE \"CCOL {c.Data.CCOLVersie.GetDescription()}.0\"");
+                sb.AppendLine($"#define VLOG_APPLTYPE_CODE \"Modulesturing\"");
+            }
+
             sb.AppendLine($"#define SYSTEM \"{c.Data.Naam}\"");
             if (c.Data.AanmakenVerionSysh)
             {

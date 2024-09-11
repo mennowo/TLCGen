@@ -602,6 +602,49 @@
     </Default>
 
     <!-- Overig -->
+	<Default>
+		<DefaultName>VLOG settings</DefaultName>
+		<Category>Other</Category>
+		<Selector1>VLOG330</Selector1>
+		<DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
+		<Data>
+			<VLOGToepassen>true</VLOGToepassen>
+			<VLOGVersie>VLOG33x</VLOGVersie>
+			<MONTYPE_def>1</MONTYPE_def>
+			<MONDP_def>17</MONDP_def>
+			<MONIS_def>31</MONIS_def>
+			<MONFC_def>1023</MONFC_def>
+			<MONUS_def>15</MONUS_def>
+			<MONDS_def>1</MONDS_def>
+			<LOGTYPE_def>1</LOGTYPE_def>
+			<LOGTYPE_DATI>1</LOGTYPE_DATI>
+			<LOGTYPE_DP>1</LOGTYPE_DP>
+			<LOGTYPE_IS>15</LOGTYPE_IS>
+			<LOGTYPE_FC>1023</LOGTYPE_FC>
+			<LOGTYPE_US>15</LOGTYPE_US>
+			<LOGTYPE_PS>3</LOGTYPE_PS>
+			<LOGTYPE_DS>1</LOGTYPE_DS>
+			<LOGTYPE_MLX>1</LOGTYPE_MLX>
+			<LOGTYPE_OMG>1</LOGTYPE_OMG>
+			<LOGTYPE_CRC>1</LOGTYPE_CRC>
+			<LOGTYPE_CFG>1</LOGTYPE_CFG>
+			<MONTYPE_DATI>1</MONTYPE_DATI>
+			<MONTYPE_DP>1</MONTYPE_DP>
+			<MONTYPE_IS>1</MONTYPE_IS>
+			<MONTYPE_FC>1023</MONTYPE_FC>
+			<MONTYPE_US>15</MONTYPE_US>
+			<MONTYPE_PS>3</MONTYPE_PS>
+			<MONTYPE_DS>1</MONTYPE_DS>
+			<MONTYPE_MLX>1</MONTYPE_MLX>
+			<MONTYPE_OMG>1</MONTYPE_OMG>
+			<MONTYPE_CRC>3</MONTYPE_CRC>
+			<MONTYPE_CFG>1</MONTYPE_CFG>
+			<LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
+			<LOGPRM_EVENT>6</LOGPRM_EVENT>
+			<MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
+			<MONPRM_EVENT>6</MONPRM_EVENT>
+		</Data>
+	</Default>
     <Default>
       <DefaultName>VLOG settings</DefaultName>
       <Category>Other</Category>

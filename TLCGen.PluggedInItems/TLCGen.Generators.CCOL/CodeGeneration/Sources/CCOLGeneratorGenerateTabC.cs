@@ -1318,6 +1318,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_CRC] = {c.Data.VLOGSettings.MONTYPE_CRC};");
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
                 sb.AppendLine($"{ts}MONPRM[MONPRM_EVENT] = {c.Data.VLOGSettings.MONPRM_EVENT};");
+                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+                {
+                    sb.AppendLine($"{ts}/* LOGTYPE[LOGTYPE_SRM] en MONTYPE[MONTYPE_SRM] BIT0 opzetten */");
+                    sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
+                    sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_SRM] = BIT0;");
+                    sb.AppendLine($"{ts}MONTYPE[MONTYPE_SRM] = BIT0;");
+                    sb.AppendLine($"{ts}/* LOGTYPE[LOGTYPE_SSM] en MONTYPE[MONTYPE_SSM] BIT0 opzetten */");
+                    sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
+                    sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_SSM] = BIT0;");
+                    sb.AppendLine($"{ts}MONTYPE[MONTYPE_SSM] = BIT0;");
+                }
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = {(c.Data.VLOGSettings.MONPRM_VLOGMODE == VLOGMonModeEnum.Binair ? "VLOGMODE_MON_BINAIR" : "VLOGMODE_MON_ASCII")};");
             }

@@ -137,7 +137,7 @@ namespace TLCGen.ViewModels
                 {
                     TLCGenDialogProvider.Default.ShowMessageBox(
                         "Voor deze regeling is intergroen ingesteld. Voor een intergroen regeling " +
-                        "kan de CCOL versie niet lager dan 9.5 worden ingesteld.", "Intergroen regeling", System.Windows.MessageBoxButton.OK);
+                        "kan de CCOL versie niet lager dan 9.5 worden ingesteld.", "Intergroen regeling", MessageBoxButton.OK);
                     // see here https://stackoverflow.com/questions/2585183/wpf-combobox-selecteditem-change-to-previous-value
                     GalaSoft.MvvmLight.Threading.DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => RaisePropertyChanged(nameof(CCOLVersie))));
                 }
@@ -149,14 +149,29 @@ namespace TLCGen.ViewModels
                         if(_Controller.Data.VLOGSettings == null)
                         {
                             _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
-                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, value < CCOLVersieEnum.CCOL110 ? "VLOG300" : "VLOG310");
+                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, 
+                                value < CCOLVersieEnum.CCOL110 
+                                    ? "VLOG300" 
+                                    : value < CCOLVersieEnum.CCOL121 
+                                        ? "VLOG310" 
+                                        : "VLOG330");
+                        }
+                        if (value >= CCOLVersieEnum.CCOL121 && oldValue < CCOLVersieEnum.CCOL121)
+                        {
+                            var result = TLCGenDialogProvider.Default.ShowMessageBox(
+                                "Vanaf CCOL12.1 is de VLOG versie 3.3. Opnieuw toepassen defaults voor VLOG " +
+                                "instellingen tbv. juiste instellingen?", "VLOG 3.3 instellen", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, "VLOG330");
+                            }
                         }
                         else if (value >= CCOLVersieEnum.CCOL110 && oldValue < CCOLVersieEnum.CCOL110)
                         {
                             var result = TLCGenDialogProvider.Default.ShowMessageBox(
                                 "Vanaf CCOL11 is de VLOG versie 3.1. Opnieuw toepassen defaults voor VLOG " +
-                                "instellingen tbv. juiste instellingen?", "VLOG 3.1 instellen", System.Windows.MessageBoxButton.YesNo);
-                            if (result == System.Windows.MessageBoxResult.Yes)
+                                "instellingen tbv. juiste instellingen?", "VLOG 3.1 instellen", MessageBoxButton.YesNo);
+                            if (result == MessageBoxResult.Yes)
                             {
                                 Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, "VLOG310");
                             }

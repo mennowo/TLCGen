@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}LOG_def = 1;");
                         sb.AppendLine($"#endif");
                     }
-                    else if (c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                    else if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
                              c.Data.VLOGSettings?.VLOGToepassen == true)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");

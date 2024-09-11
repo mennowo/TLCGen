@@ -392,6 +392,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
 
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* aanvragen RIS loggen in VLOG */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}if (A[fc] & BIT10) CIF_VLOG_FC_CAM[fc] |= BIT0;");
+                        sb.AppendLine($"{ts}}}");
+                    }
+
                     var ovRis = c.PrioData.PrioIngrepen
                         .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => 
                                         x2.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
@@ -477,6 +487,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
+
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* verlengen RIS loggen in VLOG */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}if (A[fc] & BIT10) CIF_VLOG_FC_CAM[fc] |= BIT1;");
+                        sb.AppendLine($"{ts}}}");
+                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
