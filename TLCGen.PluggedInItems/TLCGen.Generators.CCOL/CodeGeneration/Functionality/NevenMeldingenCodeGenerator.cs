@@ -143,9 +143,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         $"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {CCOLCodeHelper.GetAanvraagSetting(dm)}, ");
                                 }
                             }
+                            
+                            sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
 
-                        sb.AppendLine($"{ts}{ts}(va_count) END);");
                     } 
 
                     sb.AppendLine();
