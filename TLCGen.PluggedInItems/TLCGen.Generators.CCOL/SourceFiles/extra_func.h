@@ -34,7 +34,7 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
 	...);           /* drukknoppen */
-bool Rateltikkers_HoeflakeDimming(count fc,/* fase                                           */
+bool Rateltikkers_HoeflakeDimming(
                          count hperasdim,  /* hulpelement klokperiode gedimde uitsturing     */
                          count prmasndim,  /* dimnivo periode niet dimmen (0-10, 10 = tikker uit) of NG  */ 
                          count prmasdim);  /* dimnivo periode dimmen (0-10, 10 = tikker uit) of NG  */
@@ -65,7 +65,7 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
 bool hf_wsg_nl(void);
 bool hf_wsg_nl_fcfc(count fc1, count fc2);
-void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix);
+void wachttijd_leds_knip(count mmwtv, count mmwtm, count RR_T_wacht, count fix);
 bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
 bool kcv_primair_fk_gkl(count i);
 void veiligheidsgroen_V1(count fc, count tmaxvag4, ...);

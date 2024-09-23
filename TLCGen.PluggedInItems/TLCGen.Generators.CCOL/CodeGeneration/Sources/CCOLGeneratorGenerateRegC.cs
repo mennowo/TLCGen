@@ -138,6 +138,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#include \"logvar.c\"   /* variabelen t.b.v. logging                     */");
                 sb.AppendLine($"{ts}{ts}#include \"monvar.c\"   /* variabelen t.b.v. realtime monitoring         */");
                 sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
+                if (c.Data.PracticeOmgeving)
+                {
+                    sb.AppendLine($"{ts}{ts}#if defined AMSTERDAM_PC");
+                    sb.AppendLine($"{ts}{ts}{ts}#include \"vlogfunc.c\"");
+                    sb.AppendLine($"{ts}{ts}#endif");
+                }
                 sb.AppendLine($"{ts}#endif");
             }
             if(c.PrioData.PrioIngrepen.Count > 0 || c.PrioData.HDIngrepen.Count > 0)
@@ -668,11 +674,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
 
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
-            {
-                sb.AppendLine($"{ts}BepaalRealisatieTijden();");
-            }
-
             var tsts = (c.StarData.ToepassenStar || c.HalfstarData.IsHalfstar) ? ts + ts : ts;
 
             if (c.StarData.ToepassenStar)
@@ -735,6 +736,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{tsts}Verlenggroen();");
                     break;
             }
+            
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.AppendLine($"{ts}BepaalRealisatieTijden();");
+            }
+
             sb.AppendLine($"{tsts}Wachtgroen();");
             sb.AppendLine($"{tsts}Meetkriterium();");
             sb.AppendLine($"{tsts}Meeverlengen();");

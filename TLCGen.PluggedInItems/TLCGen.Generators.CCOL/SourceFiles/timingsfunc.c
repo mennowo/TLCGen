@@ -138,10 +138,8 @@ s_int16 reset_fctiming(mulv i, mulv eventnr)
 /* de functie msg_fctiming() bepaalt de fc_timing informatie in de CIF_FC_TIMING buffer.
  * de functie msg_fctiming() gebruikt de functies Evenstate_Definition(), set_fctiming() en reset_fctiming(),
  * de functie msg_fctiming() moet worden aangeroepen in de functie system_application2().
- * 
- * latency_minEndSG_fc1 - hiermee wordt de latency correctie op startgroen ingesteld
  */
-void msg_fctiming(mulv latency_minEndSG)  //@@ warning C4100: 'latency_minEndSG' : unreferenced formal parameter
+void msg_fctiming()
 {
    register count i;
    static s_int16 WPS_old= 0;       /* oude programmastatus		*/

@@ -684,7 +684,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("".PadLeft(pre));
                                         }
                                         ++i;
-                                        sb.Append($"({c.GetBoolV()}) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
+                                        sb.Append($"({c.GetBoolV()}) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
                                     }
                                     sb.AppendLine(");");
                                 }
@@ -716,7 +716,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("".PadLeft(pre));
                                         }
                                         ++i;
-                                        sb.Append($"!(CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, " +
+                                        sb.Append($"!(CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte(" +
                                                   $"{_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
                                     }
                                     sb.AppendLine(") ? BIT5 : 0;");

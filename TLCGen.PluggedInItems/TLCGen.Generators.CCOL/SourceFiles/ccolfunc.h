@@ -28,7 +28,7 @@ void WachtStand(bool *prml[], count ml, count ml_max);
 #endif
 mulv max_tar_to(count i);
 mulv max_tar_ov(count i, ...);
-bool AlternatieveRuimte(count fcalt, count fcprim, count paltg);
+bool AlternatieveRuimte`(count fcprim, count paltg);
 bool no_conflict(count fc1, count fc2);
 bool testpri_gk_calw(count i);
 bool set_PRIRLW(count i, bool period);

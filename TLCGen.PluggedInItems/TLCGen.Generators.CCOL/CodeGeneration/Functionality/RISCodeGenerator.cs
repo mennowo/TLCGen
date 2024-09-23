@@ -349,6 +349,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}{ts}/* RIS aanvragen */");
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+                    {
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[fc] &= ~BIT0;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                    }
+
                     foreach (var l in risModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
                         var risfcl = risModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
@@ -368,18 +376,53 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 
-                        if (risfcl is { UseHeading: true })
+                        if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL121)
                         {
-                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
-                                          $")) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            if (risfcl is { UseHeading: true })
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                              $")) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            }
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            if (risfcl is { UseHeading: true })
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT0;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                              $"))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT0;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT0;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}A[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT0;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                            }
                         }
                     }
 
@@ -391,16 +434,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}A[fc] &= ~(BIT10|BIT13);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
-
-                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}/* aanvragen RIS loggen in VLOG */");
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}if (A[fc] & BIT10) CIF_VLOG_FC_CAM[fc] |= BIT0;");
-                        sb.AppendLine($"{ts}}}");
-                    }
 
                     var ovRis = c.PrioData.PrioIngrepen
                         .Where(x => x.MeldingenData.Inmeldingen.Any(x2 => 
@@ -441,10 +474,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
-                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~(BIT10|BIT13);");
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
+                        sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[fc] &= ~BIT1;");
+                    sb.AppendLine($"{ts}{ts}}}");
                     foreach (var l in risModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
                         var sitf = "SYSTEM_ITF";
@@ -463,18 +498,53 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                        if (risfcl is { UseHeading: true })
+                        if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL121)
                         {
-                            sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                          $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
-                                          $")) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            if (risfcl is { UseHeading: true })
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]" +
+                                              $")) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            }
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
-                            sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}])) MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                            if (risfcl is { UseHeading: true })
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen_heading({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT1;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT1;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], SCH[{_schpf}{_schrisgeencheckopsg}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT1;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstartsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvendsrm0}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], !SCH[{_schpf}{_schrisgeencheckopsg}]))");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}MK[{_fcpf}{l.SignalGroupName}] |= BIT13;");
+                                sb.AppendLine($"{ts}{ts}{ts}CIF_VLOG_FC_CAM[{_fcpf}{l.SignalGroupName}] |= BIT1;");
+                                sb.AppendLine($"{ts}{ts}}}");
+
+                            }
                         }
                     }
                     sb.AppendLine($"{ts}#endif");
@@ -488,15 +558,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
 
-                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL121)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}/* verlengen RIS loggen in VLOG */");
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}if (A[fc] & BIT10) CIF_VLOG_FC_CAM[fc] |= BIT1;");
-                        sb.AppendLine($"{ts}}}");
-                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)

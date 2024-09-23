@@ -774,18 +774,17 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
  *  Functie  : AlternatieveRuimte
  *
  *  Functionele omschrijving :
- *      Deze functie bepaalt of de alternatieve richting in ieder geval
+ *      Deze functie bepaalt of een alternatieve richting in ieder geval
  *      zijn minimale alternatieve groentijd kan maken tijdens het
  *      resterende (verleng)groen van de primaire richting. De bool
  *              AlternatieveRuimte moet als voorwaarde worden opgenomen
  *              in de functies set_ARML() en YML[].
  *
  *  Parameters:
- *  - fcalt     alternatieve richting
  *  - fcprim    primaire richting in wiens schaduw fcalt mag komen
  *  - paltg         minimaal gewenste alternatieve groentijd
  **************************************************************************/
-bool AlternatieveRuimte(count fcalt, count fcprim, count paltg)     //@@  warning C4100: 'fcalt' : unreferenced formal parameter
+bool AlternatieveRuimte(count fcprim, count paltg)
 {
     return (TVG_max[fcprim] - TVG_timer[fcprim] >= PRM[paltg]);
 }

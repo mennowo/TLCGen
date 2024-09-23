@@ -149,9 +149,8 @@ void getrapte_fietser_halfstar(count fc1, /* fc1 */
     bool  a_bui_fc1, /* buitendrukknopaanvraag fc1 */
     bool  a_bui_fc2, /* buitendrukknopaanvraag fc2 */
     count tkopfc1fc2, /* naloop (SG) fc1 -> fc2 */
-    count tkopfc2fc1, /* naloop (SG) fc2 -> fc1 */
-    count voorstartfc1fc2, /* maximale voorstart fc1 -> fc2 (mag NG) */ //@@ warning 'voorstartfc1fc2': unreferenced formal parameter
-    count voorstartfc2fc1) /* maximale voorstart fc2 -> fc1 (mag NG) */ //@@ warning 'voorstartfc2fc1': unreferenced formal parameter
+    count tkopfc2fc1  /* naloop (SG) fc2 -> fc1 */
+    )
 {
     /* nalopen */
     RT[tkopfc1fc2] = (bool)((RA[fc1] || TFG[fc1]) && a_bui_fc1);
@@ -1073,10 +1072,8 @@ void var_txc(count fc, bool condition)
 
 /**********************************************************************************/
 /* Voorstartgroen tijdens voorstart t.o.v. sg-plan */
-void vs_ple(count fc, count prmtotxa, bool condition) //@@ warning C4100: 'prmtotxa': unreferenced formal parameter
+void vs_ple(count fc, bool condition)
 {
-    /*RS[fc] |= YS_PL[fc] && PR[fc] ||
-    ((TOTXA_PL[fc]>0) && (TOTXA_PL[fc]<PRM[prmtotxa])) ? RS_HALFSTAR : 0;*/
     RS[fc] |= condition /*&& YS_PL[fc]*/ && (TXA_PL[fc]> 0) && (tussen_txa_en_txb(fc) && PP[fc]) ? RS_HALFSTAR : 0;
 }
 

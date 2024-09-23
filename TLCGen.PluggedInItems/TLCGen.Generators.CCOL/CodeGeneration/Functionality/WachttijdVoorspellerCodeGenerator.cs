@@ -397,7 +397,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* laatste ledje laten knipperen bij ov/hd-ingreep of fixatie */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.Append($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], ");
+                        sb.Append($"{ts}wachttijd_leds_knip({_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], ");
                         if (c.Data.FixatieData.FixatieMogelijk) sb.Append($"{_ispf}{_isfix}");
                         else sb.Append("NG");
                         sb.AppendLine($");");

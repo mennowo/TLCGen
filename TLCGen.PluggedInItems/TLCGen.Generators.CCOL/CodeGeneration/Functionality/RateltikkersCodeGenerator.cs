@@ -144,11 +144,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case RateltikkerTypeEnum.HoeflakeBewaakt:
                                     if (c.Signalen.DimmingNiveauVanuitApplicatie)
                                     {
-                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, {_prmpf}{_prmnivongedimd}{rt.FaseCyclus}, {_prmpf}{_prmnivgedimd}{rt.FaseCyclus});");
+                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_hpf}{_hperiod}{_prmperrtdim}, {_prmpf}{_prmnivongedimd}{rt.FaseCyclus}, {_prmpf}{_prmnivgedimd}{rt.FaseCyclus});");
                                     }
                                     else
                                     {
-                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_fcpf}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrtdim}, NG, NG);");
+                                        sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = Rateltikkers_HoeflakeDimming({_hpf}{_hperiod}{_prmperrtdim}, NG, NG);");
                                     }
                                     break;
                             }

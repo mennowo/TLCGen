@@ -175,7 +175,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}pre_msg_fctiming();");
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}{ts}msg_fctiming(PRM[{_prmpf}{_prmlatencyminendsg}]);");
+                    sb.AppendLine($"{ts}{ts}msg_fctiming();");
                     sb.AppendLine();
 
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))

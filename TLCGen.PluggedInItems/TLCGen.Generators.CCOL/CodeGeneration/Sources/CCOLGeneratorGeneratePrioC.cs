@@ -302,8 +302,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
             var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
             var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagb");
-            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagbhd");
+            var _prmupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmupinagb");
+            var _prmupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmupinagbhd");
             var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwta");
             var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtfts");
             var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtvtg");
@@ -473,11 +473,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("	   detectie niet langer betrouwbaar gevonden */");
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] = SCH[{_schpf}{_schupinagb}{CCOLCodeHelper.GetPriorityName(c, prio)}];");
+                sb.AppendLine($"{ts}iSelDetFoutNaGB[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] = PRM[{_prmpf}{_prmupinagb}{CCOLCodeHelper.GetPriorityName(c, prio)}];");
             }
             foreach (var hd in c.PrioData.HDIngrepen)
             {
-                sb.AppendLine($"{ts}iSelDetFoutNaGB[hdFC{hd.FaseCyclus}] = SCH[{_schpf}{_schupinagbhd}{hd.FaseCyclus}];");
+                sb.AppendLine($"{ts}iSelDetFoutNaGB[hdFC{hd.FaseCyclus}] = PRM[{_prmpf}{_prmupinagbhd}{hd.FaseCyclus}];");
             }
             sb.AppendLine();
 

@@ -141,8 +141,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schpriouit;
         private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
         private CCOLGeneratorCodeStringSettingModel _uskarmelding;
-        private CCOLGeneratorCodeStringSettingModel _schupinagb;
-        private CCOLGeneratorCodeStringSettingModel _schupinagbhd;
+        private CCOLGeneratorCodeStringSettingModel _prmupinagb;
+        private CCOLGeneratorCodeStringSettingModel _prmupinagbhd;
         private CCOLGeneratorCodeStringSettingModel _schvi;
         private CCOLGeneratorCodeStringSettingModel _schhdin;
         private CCOLGeneratorCodeStringSettingModel _schhduit;
@@ -213,7 +213,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtohd}{hd.FaseCyclus}", hd.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtohd, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbghd}{hd.FaseCyclus}", hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbghd, hd.FaseCyclus));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtghd}{hd.FaseCyclus}", hd.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtghd, hd.FaseCyclus));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagbhd, hd.FaseCyclus));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, _prmupinagbhd, hd.FaseCyclus));
 
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{hd.FaseCyclus}hd", 0, CCOLElementTimeTypeEnum.TE_type, _tbtovg, hd.FaseCyclus));
 
@@ -322,7 +322,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtg}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtg, prio.FaseCyclus, prio.Type.GetDescription()));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, prio.FaseCyclus, prio.Type.GetDescription()));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.BlokkeertijdNaPrioIngreep, CCOLElementTimeTypeEnum.TE_type, _tblk, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagb}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagb, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmupinagb}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.None, _prmupinagb, prio.FaseCyclus, prio.Type.GetDescription()));
             if ((prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
                  prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit) &&
                 !string.IsNullOrWhiteSpace(prio.Koplus) && prio.Koplus != "NG")
@@ -1037,7 +1037,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                       $"{_prmpf}{_prmftsmaxpercyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
                                       (melding.FietsPrioriteitGebruikLus ? $"{_prmpf}{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
                                       $"{_prmpf}{_prmftsminwt}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
-                                      $"SH[{he}], ML, " +
+                                      $"ML, " +
                                       (melding.FietsPrioriteitGebruikRIS 
                                           ? $"{_mpf}{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, {_prmpf}{_prmftsminvtgris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}" 
                                           : "NG, NG") +

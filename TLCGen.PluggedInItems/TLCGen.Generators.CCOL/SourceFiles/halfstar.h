@@ -40,7 +40,7 @@ void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void alternatief_halfstar(count fc, mulv altp, bool condition);
 void gelijkstart_va_arg_halfstar(count h_x, count h_rr, bool  overslag, ...);
-void getrapte_fietser_halfstar(count fc1, count fc2, bool  a_bui_fc1, bool  a_bui_fc2, count tkopfc1fc2, count tkopfc2fc1, count voorstartfc1fc2,	count voorstartfc2fc1);
+void getrapte_fietser_halfstar(count fc1, count fc2, bool  a_bui_fc1, bool  a_bui_fc2, count tkopfc1fc2, count tkopfc2fc1);
 void mgcor_halfstar(count fcaan, count fcnal, count t_nal);
 void mgcor_halfstar_deelc(count fc1, count fc2);
 void naloopEG_CV_halfstar(bool period, count fc1, count fc2, mulv tvs, count tnldet, count tnl);
@@ -73,7 +73,7 @@ void set_tx_change(count fc, count pl,
 bool txb_gemist(count i, int marge);
 void var_txc(count fc, bool condition);
 void Verlengroen_na_Meeverlenggroen_PL(count fc, count prmvgmg);
-void vs_ple(count fc, count prmtotxa, bool condition);
+void vs_ple(count fc, bool condition);
 void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool condition_ws);
 void wg_ple(count fc, bool condition);
 bool ym_max_halfstar(count i, mulv koppeltijd);

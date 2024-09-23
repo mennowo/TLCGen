@@ -447,7 +447,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}/* Bepalen of regeling mag omschakelen */");
 					sb.AppendLine($"{ts}/* Tegenhouden inschakelen naar PL als een naloop nog actief is of als inrijden/inlopen actief is */");
                     sb.AppendLine($"{ts}/* Opzetten IH[homschtegenh] */");
-					sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !SCH[{_schpf}{_schvarstreng}] && !IH[{_hpf}{_hplhd}])");
+					sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !IH[{_hpf}{_hplhd}])");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_homschtegenh}] = TRUE;");
                     sb.AppendLine($"{ts}}}");
@@ -487,7 +487,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Afzetten IH[homschtegenh] */");
-                    sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !SCH[{_schpf}{_schvarstreng}] && !IH[{_hpf}{_hplhd}])");
+                    sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !IH[{_hpf}{_hplhd}])");
                     sb.AppendLine($"{ts}{{");
                     sb.Append($"{ts}{ts}if (");
                     var k = 0;
@@ -1132,14 +1132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 						if (sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
 						{ 
-							if (nl.Detectoren?.Count > 0)
-							{
-								sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{tinl2}{nl:vannaar});");
-							}
-							else
-							{
-                                sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, NG, NG, {_tpf}{tinl2}{nl:vannaar});");
-							}
+							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{tinl2}{nl:vannaar});");
 						}
 					}
 
@@ -1321,7 +1314,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}/* Voorstartgroen tijdens voorstart t.o.v. sg-plan, alleen als gekoppeld wordt geregeld */");
 #warning TODO: functie vs_ple() moet worden nagelopen en mogelijk herzien
-                    sb.AppendLine($"{ts}{ts}vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");
+                    sb.AppendLine($"{ts}{ts}vs_ple(fc, IH[{_hpf}{_hkpact}]);");
 					sb.AppendLine($"");
 					sb.AppendLine($"{ts}{ts}/* opzetten van YS en YW tijdens halfstar bedrijf */");
 					sb.AppendLine($"{ts}{ts}/* resetten */");

@@ -1732,7 +1732,7 @@
           <Setting>
             <Default>upinagb</Default>
             <Setting>upinagb</Setting>
-            <Type>Schakelaar</Type>
+            <Type>Parameter</Type>
             <Description>Selectieve detectie onbetrouwbaar na groenbewaking OV fase _E1_</Description>
             <Categorie>CAT_Prioriteren</Categorie>
             <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
@@ -1740,7 +1740,7 @@
           <Setting>
             <Default>upinagbhd</Default>
             <Setting>upinagbhd</Setting>
-            <Type>Schakelaar</Type>
+            <Type>Parameter</Type>
             <Description>Selectieve detectie onbetrouwbaar na groenbewaking HD fase _E1_</Description>
             <Categorie>CAT_Prioriteren</Categorie>
             <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
