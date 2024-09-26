@@ -158,7 +158,6 @@
         <File Id='TLCGen.Importers.Itf' Name='TLCGen.Importers.Itf.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.Itf.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.AFM' Name='TLCGen.Plugins.AFM.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.DynamischHiaat' Name='TLCGen.Plugins.DynamischHiaat.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll' KeyPath='no' />
-        <File Id='TLCGen.Plugins.RangeerElementen' Name='TLCGen.Plugins.RangeerElementen.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RangeerElementen.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.Tools' Name='TLCGen.Plugins.Tools.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Tools.dll' KeyPath='no' />
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />

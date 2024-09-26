@@ -1,0 +1,123 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TLCGen.Specificator"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <system:String x:Key="Generic_True">X</system:String>
+    <system:String x:Key="Generic_False">-</system:String>
+    
+    <system:String x:Key="Generic_fase">fase</system:String>
+    <system:String x:Key="Generic_Fase">Fase</system:String>
+    
+    <system:String x:Key="Generic_fasen">fasen</system:String>
+    <system:String x:Key="Generic_Fasen">Fasen</system:String>
+    
+    <system:String x:Key="Generic_Module">Module</system:String>
+    <system:String x:Key="Generic_module">module</system:String>
+    
+    <system:String x:Key="Generic_detector">detector</system:String>
+    <system:String x:Key="Generic_Detector">Detector</system:String>
+    
+    <!-- Algemene instellingen -->
+    <system:String x:Key="Generic_Optie">Optie</system:String>
+    <system:String x:Key="Generic_Instelling">Instelling</system:String>
+    <system:String x:Key="Generic_Fasebewaking">Fasebewaking</system:String>
+    <system:String x:Key="Generic_CCOLVersie">CCOL versie</system:String>
+    <system:String x:Key="Generic_TypeVLOG">Type VLOG</system:String>
+    <system:String x:Key="Generic_VLOGToepassen">VLOG toepassen</system:String>
+    <system:String x:Key="Generic_VLOGVersie">VLOG versie</system:String>
+    <system:String x:Key="Generic_VLOGLoggingMode">VLOG logging mode</system:String>
+    <system:String x:Key="Generic_VLOGMonitoringMode">VLOG monitoring mode</system:String>
+    <system:String x:Key="Generic_TypeKWC">Type KWC</system:String>
+    <system:String x:Key="Generic_ExtraMeevInWG">Extra meeverlengen in WG</system:String>
+    <system:String x:Key="Generic_AanstWaitsig">Aansturing waitsignalen</system:String>
+    <system:String x:Key="Generic_SegmDisplay">Segmenten display</system:String>
+    <system:String x:Key="Generic_UsPerML">Uitgang per module</system:String>
+    <system:String x:Key="Generic_FixatieMogelijk">Fixatie mogelijk</system:String>
+    <system:String x:Key="Generic_BijkomenFixatie">Bijkomen tijdens fixatie</system:String>
+    <system:String x:Key="Generic_TypeGroentijden">Type groentijden</system:String>
+    <system:String x:Key="Generic_WTVNietHalterenAlsMeerDanLeds">Niet halteren wtv bij meer dan # leds</system:String>
+    <system:String x:Key="Generic_WTVNietHalterenAlsMinderDanLeds">Niet halteren wtv bij minder dan # leds</system:String>
+    <system:String x:Key="Generic_WTVAansturenBusTijdensOV">Aansturen BUS licht in wtv bij OV ingreep</system:String>
+    
+    <!-- Intro etc. -->
+    <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
+    <system:String x:Key="Title_Document">Functionele specificatie</system:String>
+    <system:String x:Key="Title_Intro">Inleiding</system:String>
+    <system:String x:Key="Title_Functionality">Structuur en afwikkeling van de verkeersregeling</system:String>
+    
+    <!-- Fasen -->
+    <system:String x:Key="Title_StructuurEnAfwikkeling">Structuur en afhandeling</system:String>
+    <system:String x:Key="Title_SignaalgroepAfhandeling">Signaalgroepafhandeling</system:String>
+    <system:String x:Key="Title_SignaalgroepInstellingen">Signaalgroep instellingen</system:String>
+    <system:String x:Key="Title_Modulestructuur">Modulestructuur</system:String>
+    <system:String x:Key="Table_Fasen_Functies">Tabel met functie instellingen voor fasen</system:String>
+    <system:String x:Key="Table_Fasen_Tijden">Tabel met tijdsinstellingen voor fasen</system:String>
+    
+    <!-- Detectoren -->
+    <system:String x:Key="Title_Detectoren">Detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Configuratie">Configuratie detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Instellingen">Instellingen detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Richtinggevoelig">Richtinggevoelige detectie</system:String>
+    <system:String x:Key="Title_Detectoren_Storing">Omgang met detectiestoring</system:String>
+    <system:String x:Key="Table_Detectoren_Functies">Tabel met functie instellingen voor detectoren</system:String>
+    <system:String x:Key="Table_Detectoren_Tijden">Tabel met tijdsinstellingen voor detectoren</system:String>
+    <system:String x:Key="Table_Detectoren_StoringMaatregelen">Tabel met instellingen voor detectievervangende maatregelen</system:String>
+    
+    <system:String x:Key="Table_Richtinggevoelig_Aanvragen">Tabel met instellingen voor richtinggevoelige aanvragen</system:String>
+    <system:String x:Key="Table_Richtinggevoelig_Verlengen">Tabel met instellingen voor richtinggevoelig verlengen</system:String>
+    
+    <!-- Perioden -->
+    <system:String x:Key="Title_Perioden">Klokperioden</system:String>
+    <system:String x:Key="Table_Perioden">Tabel met perioden</system:String>
+    
+    <!-- Intersignaalgroep -->
+    <system:String x:Key="Title_Intersignaalgroep">Intersignaalgroep instellingen</system:String>
+    <system:String x:Key="Title_Synchronisaties">Synchronisaties</system:String>
+    <system:String x:Key="Title_Meeaanvragen">Meeaanvragen</system:String>
+    <system:String x:Key="Title_Nalopen">Nalopen</system:String>
+    <system:String x:Key="Title_Gelijkstarten">Gelijkstarten</system:String>
+    <system:String x:Key="Title_Voorstarten">Voorstarten</system:String>
+    <system:String x:Key="Title_LateRelease">Late release</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Meeaanvragen">Tabel met instellingen voor meeaanvragen</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Nalopen">Tabel met instellingen voor nalopen</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Gelijkstarten">Tabel met instellingen voor gelijkstarten</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Voorstarten">Tabel met instellingen voor voorstarten</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_LateRelease">Tabel met instellingen voor late release</system:String>
+    <system:String x:Key="Title_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
+    <system:String x:Key="Table_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
+    <system:String x:Key="Title_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
+    <system:String x:Key="Table_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
+
+    <!-- OV / HD -->
+    <system:String x:Key="Title_OVHD">Afhandeling openbaar vervoer en hulpdiensten</system:String>
+    <system:String x:Key="Title_OV">Afhandeling openbaar vervoer</system:String>
+    <system:String x:Key="Title_HD">Afhandeling hulpdiensten</system:String>
+    <system:String x:Key="Title_OVIngreep">Functionaliteit OV ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepAfkappen">Afkappen</system:String>
+    <system:String x:Key="Title_OVIngreepBijzonderRealiseren">Bijzonder realiseren</system:String>
+    <system:String x:Key="Title_OVIngreepNaOVIngreep">Na afloop OV-ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepDefecteUitmelding">Defecte uitmelding</system:String>
+    <system:String x:Key="Title_OVParameters">Parameters OV ingrepen</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsOpties">Tabel met overzicht van beschikbare prioriteitsopties</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsInstellingen">Tabel met overzicht van prioriteitsinstellingen</system:String>
+    <system:String x:Key="Table_HD_Instellingen">Tabel met instellingen voor hulpdienst ingrepen</system:String>
+    
+    <!-- Halfstar -->
+    <system:String x:Key="Title_Halfstar">Halfstar regelen</system:String>
+    
+    <!-- Opties/specials -->
+    <system:String x:Key="Title_Specials">Specials</system:String>
+    
+    <!-- Groentijden -->
+    <system:String x:Key="Title_Groentijden">Groentijden</system:String>
+    <system:String x:Key="Table_MaxGroentijden">Tabel met maximum groentijden</system:String>
+    <system:String x:Key="Table_VerlGroentijden">Tabel met verlenggroentijden</system:String>
+    
+    <!-- Modulen -->
+    <system:String x:Key="Title_Modulen">Modulen</system:String>
+    <system:String x:Key="Table_Modulen">Tabel met fasen per module</system:String>
+    <system:String x:Key="Table_VooruitAltInst">Tabel met instellingen voor alternatieven en vooruit realisaties</system:String>
+    <system:String x:Key="Table_Vooruit">Tabel met instellingen voor vooruit realisaties</system:String>
+    <system:String x:Key="Table_AlternatievenOnderDekking">Tabel met overzicht mogelijke alternatieve realisaties onder dekking</system:String>
+</ResourceDictionary>
