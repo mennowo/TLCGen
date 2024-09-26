@@ -84,7 +84,7 @@ void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, coun
 
 void SignalplanPrmsToTx(count pl, count txa1);
 bool CheckSignalplanPrms(count pl, mulv txmax, count txa1);
-void inloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1, count hd_bui_fc1, count tinlfc1fc2);
+void inloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1);
 
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)

@@ -595,9 +595,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
+            sb.AppendLine($"{ts}#if !defined CUSTOM_FILEVERWERKING");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCFileVerwerking, true, true, false, true);
 
+            sb.AppendLine($"{ts}#endif /* CUSTOM_FILEVERWERKING */");
             sb.AppendLine($"{ts}FileVerwerking_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -611,9 +613,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
+            sb.AppendLine($"{ts}#if !defined CUSTOM_DETECTIESTORING");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoring, true, true, false, true);
 
+            sb.AppendLine($"{ts}#endif /* CUSTOM_DETECTIESTORING */");
             sb.AppendLine($"{ts}DetectieStoring_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();

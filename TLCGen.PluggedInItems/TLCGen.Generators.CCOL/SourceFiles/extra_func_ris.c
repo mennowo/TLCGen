@@ -529,7 +529,7 @@ rif_int ris_verstuur_ssm(rif_int priotypefc_id, rif_int risgrenspriotype) {
 
                /* Exception #8 - [granted] -> maxPresence -> end */
                /* ---------------------------------------------- */
-               if ( EG[fc] ) {   /* afgebroken door een hulpdienst - eigenlijk logischer om Rejected te sturen, maar dat staat niet in de UC3-Specificatie @@@@@ */
+               if ( EG[fc] ) {   /* afgebroken door een hulpdienst - eigenlijk logischer om Rejected te sturen, maar dat staat niet in de UC3-Specificatie */
                   ris_put_activeprio((RIS_PRIOREQUEST_AP[r].id), (RIS_PRIOREQUEST_AP[r].sequenceNumber), RIF_PRIORITIZATIONSTATE_MAXPRESENCE); /* 6 */
                   number++;      /* SSM-bericht verzonden - verhoog number */
                }

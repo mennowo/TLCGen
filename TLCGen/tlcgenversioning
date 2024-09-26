@@ -1,5 +1,13 @@
-TLCGen=12.4.0.7
+TLCGen=12.4.0.8
 RN==TLCGen
+TLCGen versie: 12.4.0.8
+- Ondersteuning CCOL 12.1 en VLOG 3.3.0
+- Type instelbaar voor extra ingangen 
+- Verbeteren late-release code
+- Custom defines tbv uitschakelen generator code det.storing en fileverwerking
+- Diverse aanpassingen voor compiler met compiler warning level 4
+- Diverse aanpassingen voor compiler omgeving gemeente Amsterdam
+- Diverse kleine fixes
 TLCGen versie: 12.4.0.7
 - Verdere verbeteringen halfstar regelen
 TLCGen versie: 12.4.0.6
