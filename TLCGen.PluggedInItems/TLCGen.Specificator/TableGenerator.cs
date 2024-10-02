@@ -269,7 +269,6 @@ namespace TLCGen.Specificator
             return items;
         }
 
-
         public static List<OpenXmlCompositeElement> GetTable_ModuleStructuurInstellingen(WordprocessingDocument doc, ControllerModel c)
         {
             var items = new List<OpenXmlCompositeElement>();
@@ -517,15 +516,19 @@ namespace TLCGen.Specificator
                     mvfc.Naam,
                     mvfc.Meeverlengen.GetDescription(),
 
-                   (mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default         ? "1: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To              ? "2: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo            ? "3: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger      ? "4: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.DefaultCCOL     ? "5: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.ToCCOL          ? "6: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKToCCOL        ? "7: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MaatgevendGroen ? "8: " :
-                                                                                                        "0: " ) + mvfc.MeeverlengenType.GetDescription(),
+                   (mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default         ? " 0: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To              ? " 1: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo            ? " 2: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger      ? " 3: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.DefaultCCOL     ? " 4: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.ToCCOL          ? " 5: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKToCCOL        ? " 6: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MaatgevendGroen ? " 7: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default2        ? " 8: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To2             ? " 9: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo2           ? "10: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger2     ? "11: " :
+                                                                                                        " 0: " ) + mvfc.MeeverlengenType.GetDescription(),
                     mvfc.MeeverlengenTypeInstelbaarOpStraat.ToCustomString(),
                     mvmet,
                     schmvmet,
@@ -579,6 +582,89 @@ namespace TLCGen.Specificator
             return items;
         }
 
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Senioreningreep(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Senioreningreep");
+
+            items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_Senioreningreep"], styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase (##)",
+                    "Toepassen                                    SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schsi") + "##",
+                    "Perc. extra groen (t.o.v. TFG)               PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmsiexgrperc") + "##",
+                    "Detector ($$$)",
+                    "Vasthoudtijd drukknop [TE]                   T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tdbsiexgr") + "d" + "$$$",
+                }
+            };
+            var oldfc = "";
+            foreach (var si in c.Fasen.Where(x => x.SeniorenIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+            {
+                var fc = si.Naam;
+                foreach (var d in si.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten))
+                { 
+                    l.Add(new List<string>
+                    {
+                        (fc != oldfc) ? si.Naam : "",
+                        (fc != oldfc) ? si.SeniorenIngreep.GetDescription() : "",
+                        (fc != oldfc) ? si.SeniorenIngreepExtraGroenPercentage.ToString() : "",
+                        d.Naam,
+                        si.SeniorenIngreepBezetTijd.ToString(),
+                    });
+                    oldfc = fc;
+                }
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Schoolingreep(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Schoolingreep");
+
+            items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_Schoolingreep"], styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase (##)",
+                    "Toepassen                                    SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schschoolingreep") + "##",
+                    "Max. duur groen (vanaf SG) [TE]              T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tschoolingreepmaxg")  + "##",
+                    "Detector ($$$)",
+                    "Vasthoudtijd drukknop [TE]                   T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tdbsi") + "d" + "$$$",
+
+                }
+            };
+            var oldfc = "";
+            foreach (var si in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+            {
+                var fc = si.Naam;
+                foreach (var d in si.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten))
+                {
+                    l.Add(new List<string>
+                    {
+                        (fc != oldfc) ? si.Naam : "",
+                        (fc != oldfc) ? si.SchoolIngreep.GetDescription() : "",
+                        (fc != oldfc) ? si.SchoolIngreepMaximumGroen.ToString() : "",
+                        d.Naam,
+                        si.SchoolIngreepBezetTijd.ToString(),
+                    });
+                    oldfc = fc;
+                }
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+            return items;
+        }
+
         public static List<OpenXmlCompositeElement> GetTable_Detectie_Functies(ControllerModel c)
         {
             var items = new List<OpenXmlCompositeElement>();
@@ -590,71 +676,79 @@ namespace TLCGen.Specificator
             if (!(c.Fasen.Any(x => x.Detectoren.Any(y => y.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit)))) // wanneer overal veiligheidsgroen op 'nooit' is ingesteld
             {
                 var l = new List<List<string>>
-            {
-                new List<string>
                 {
-                    (string)Texts["Generic_Detector"] + " (###)",
-                    "Fase",
-                    "Type",
-                    "Aanvraagfunctie                           PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmda") + "###",
-                    "Verlengfunctie                            PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmmk") + "###",
-                    "Aanvraag direct",
-                    "Wachtlicht",
-                    "Rijstrook",
-                    "Aanvraag bij storing                      SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schdvak") + "###",
-                    "Veiligheidsgroen",
-                }
-            };
+                    new List<string>
+                    {
+                        (string)Texts["Generic_Detector"] + " (###)",
+                        "Fase",
+                        "Type",
+                        "Aanvraagfunctie                           PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmda") + "###",
+                        "Verlengfunctie                            PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmmk") + "###",
+                        "Aanvraag direct",
+                        "Wachtlicht",
+                        "Rijstrook",
+                        "Aanvraag bij storing                      SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schdvak") + "###",
+                        "Veiligheidsgroen",
+                    }
+                };
                 foreach (var fc in c.Fasen)
                 {
                     foreach (var d in fc.Detectoren)
                     {
                         l.Add(new List<string>
-                    {
-                        d.Naam,
-                        fc.Naam,
-                        d.Type.GetDescription(),
-                       (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
-                      //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
-                       (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
-                      //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
-                        d.AanvraagDirect.ToCustomString(),
-                        d.Wachtlicht.ToCustomString(),
-                        d.Rijstrook.ToString(),
-                        d.AanvraagBijStoring.GetDescription(),
-                        d.VeiligheidsGroen.GetDescription(),
-                    });
+                        {
+                            d.Naam,
+                            fc.Naam,
+                            d.Type.GetDescription(),
+                           (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
+                          //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
+                           (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
+                          //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
+                            d.AanvraagDirect.ToCustomString(),
+                            d.Wachtlicht.ToCustomString(),
+                            d.Rijstrook.ToString(),
+                            d.AanvraagBijStoring.GetDescription(),
+                            d.VeiligheidsGroen.GetDescription(),
+                        });
                     }
                 }
                 foreach (var d in c.Detectoren)
                 {
                     l.Add(new List<string>
+                    {
+                        d.Naam,
+                        "-",
+                        d.Type.GetDescription(),
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                    });
+                }
+                foreach(var d in c.SelectieveDetectoren)
                 {
-                    d.Naam,
-                    "-",
-                    d.Type.GetDescription(),
-                   (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
-                  //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
-                   (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
-                  //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
-                    d.AanvraagDirect.ToCustomString(),
-                    d.Wachtlicht.ToCustomString(),
-                    d.Rijstrook.ToString(),
-                    d.AanvraagBijStoring.GetDescription(),
-                    d.VeiligheidsGroen.GetDescription()
-                });
+                    l.Add(new List<string>
+                    {
+                        d.Naam,
+                        "-",
+                        "Selectieve detector", //d.Type.GetDescription(),
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-", 
+                    });
                 }
                 items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
             }
@@ -681,51 +775,59 @@ namespace TLCGen.Specificator
                     foreach (var d in fc.Detectoren)
                     {
                         l.Add(new List<string>
-                    {
-                         d.Naam,
-                        fc.Naam,
-                        d.Type.GetDescription(),
-                       (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
-                        d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
-                      //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
-                       (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
-                        d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
-                      //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
-                        d.AanvraagDirect.ToCustomString(),
-                        d.Wachtlicht.ToCustomString(),
-                        d.Rijstrook.ToString(),
-                        d.AanvraagBijStoring.GetDescription(),
-                      //d.VeiligheidsGroen.GetDescription(),
-                    });
+                        {
+                             d.Naam,
+                            fc.Naam,
+                            d.Type.GetDescription(),
+                           (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
+                            d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
+                          //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
+                           (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
+                            d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
+                          //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
+                            d.AanvraagDirect.ToCustomString(),
+                            d.Wachtlicht.ToCustomString(),
+                            d.Rijstrook.ToString(),
+                            d.AanvraagBijStoring.GetDescription(),
+                          //d.VeiligheidsGroen.GetDescription(),
+                        });
                     }
                 }
                 foreach (var d in c.Detectoren)
                 {
                     l.Add(new List<string>
+                    {
+                        d.Naam,
+                        "-",
+                        d.Type.GetDescription(),
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                      //"-",
+                    });
+                }
+                foreach (var d in c.SelectieveDetectoren)
                 {
-                    d.Naam,
-                    "-",
-                    d.Type.GetDescription(),
-                   (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Uit      ? "0: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG ? "1: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Rood     ? "2: " :
-                    d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel ? "3: " : "" ) + d.Aanvraag.GetDescription(),
-                  //d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen     ? "4: " : "" ) + d.Aanvraag.GetDescription(),
-                   (d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Uit    ? "0: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax ? "1: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK1    ? "2: " :
-                    d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.MK2    ? "3: " : "" ) + d.Verlengen.GetDescription(),
-                  //d.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen   ? "4: " : "" ) + d.Verlengen.GetDescription(),
-                    d.AanvraagDirect.ToCustomString(),
-                    d.Wachtlicht.ToCustomString(),
-                    d.Rijstrook.ToString(),
-                    d.AanvraagBijStoring.GetDescription(),
-                  //d.VeiligheidsGroen.GetDescription()
-                });
+                    l.Add(new List<string>
+                    {
+                        d.Naam,
+                        "-",
+                        "Selectieve detector", //d.Type.GetDescription(),
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                        "-",
+                      //"-",
+                    });
                 }
                 items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
             }
@@ -1416,9 +1518,9 @@ namespace TLCGen.Specificator
                 new List<string>
                 {
                     "Van (##)",
-                    "Naar ($$)",
+                    "Op ($$)",
                     "Voorstart tijd                                                         T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tvs") + "##$$",
-                    "Fictieve o.t.                   naar > van                             T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tfo") + "$$##"
+                    "Fictieve o.t.                     op > van                             T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tfo") + "$$##"
                 }
             };
             foreach (var ma in c.InterSignaalGroep.Voorstarten)
@@ -1448,10 +1550,10 @@ namespace TLCGen.Specificator
             {
                 new List<string>
                 {
-                    "Van",
-                    "Naar",
-                    "Late release tijd",
-                    "Fictieve o.t. naar > van"
+                    "Van (##)",
+                    "Na ($$)",
+                    "Late release tijd                                                         T " + CCOLGeneratorSettingsProvider.Default.GetElementName("treallr") + "##$$",
+                    "Fictieve o.t.                        na > van                             T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tfo") + "$$##"
                 }
             };
             foreach (var ma in c.InterSignaalGroep.LateReleases)
@@ -1469,6 +1571,261 @@ namespace TLCGen.Specificator
             return items;
         }
 
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Prio_InUit(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            foreach (PrioIngreepVoertuigTypeEnum voertuigtype in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
+            {
+                if (c.PrioData.PrioIngrepen.Exists(x => x.Type == voertuigtype &&
+                                              (x.MeldingenData. Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                               x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                {
+                    UpdateTables("In-uitmeldingen" + voertuigtype);
+                    items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: Instellingen tbv in- en uitmeldingen voor voertuigtype '{voertuigtype}'", styleid: "Caption"));
+
+                    if (voertuigtype == PrioIngreepVoertuigTypeEnum.Tram &&
+                        c.PrioData.PrioIngrepen.Exists(x => x.Type == PrioIngreepVoertuigTypeEnum.Tram && x.MeldingenData.Inmeldingen.Any(y => y.KijkNaarWisselStand)))
+                    {
+                        var l = new List<List<string>>
+                        {
+                            new List<string>
+                            {
+                                "Fase (##)",
+                                "In- of Uitmelding",
+                                "Via",
+                                "Melding trigger",
+                                "Alleen indien rood",
+                                "Alleen indien geen inmelding aanwezig",
+                                "Afhankelijk van wisselstand",
+                                "Ingang wissel 1",
+                                "Ingang wissel 2",
+                            }
+                        };
+                        var oldfc = "";
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
+                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        {
+                            var fc = prio.FaseCyclus;
+
+                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            {
+                                var wisseldc1 = prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel1Detector :
+                                                prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel1Input : "--";
+                                var wisseldc2 = prio.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel2Detector :
+                                                prio.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel2Input : "--";
+
+                                l.Add(new List<string>
+                                {
+                                   (fc != oldfc) ? prio.FaseCyclus.ToString() : "",
+                                   (melding.InUit.GetDescription() == "Inmelding") ? "In" : "Uit",
+                                   (melding.Type.GetDescription() == "Detector(en)") ? "Detectie" : ((melding.Type.GetDescription() == "KAR DSI melding") ? "KAR" : melding.Type.GetDescription()),
+                                   (melding.Type.GetDescription() == "Detector(en)") ? melding.RelatedInput1Type.GetDescription() + " " + melding.RelatedInput1
+                                                      + (melding.TweedeInput ? " EN " + melding.RelatedInput2Type.GetDescription() + " " + melding.RelatedInput2 : "")
+                                                                                       : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" :
+                                                                                       melding.Type.GetDescription() == "Selectieve detector" ? melding.RelatedInput1 : "-",
+                                    melding.AlleenIndienRood.ToCustomString(),
+                                    melding.AlleenIndienGeenInmelding.ToCustomString(),
+                                    melding.KijkNaarWisselStand.ToCustomString(),
+                                    melding.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                    melding.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                });
+                                oldfc = fc;
+                            }
+
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            {
+                                var wisseldc1 = prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel1Detector :
+                                                prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel1Input : "--";
+                                var wisseldc2 = prio.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel2Detector :
+                                                prio.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel2Input : "--";
+
+                                l.Add(new List<string>
+                                {
+                                   (fc != oldfc) ? prio.FaseCyclus.ToString() : "",
+                                   (melding.InUit.GetDescription() == "Inmelding") ? "In" : "Uit",
+                                   (melding.Type.GetDescription() == "Detector(en)") ? "Detectie" : ((melding.Type.GetDescription() == "KAR DSI melding") ? "KAR" : melding.Type.GetDescription()),
+                                   (melding.Type.GetDescription() == "Detector(en)") ? melding.RelatedInput1Type.GetDescription() + " " + melding.RelatedInput1
+                                                      + (melding.TweedeInput ? " EN " + melding.RelatedInput2Type.GetDescription() + " " + melding.RelatedInput2 : "")
+                                                                                       : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" :
+                                                                                       melding.Type.GetDescription() == "Selectieve detector" ? melding.RelatedInput1 : "-",
+                                    melding.AlleenIndienRood.ToCustomString(),
+                                    melding.AlleenIndienGeenInmelding.ToCustomString(),
+                                    melding.KijkNaarWisselStand.ToCustomString(),
+                                    melding.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                    melding.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                });
+                            }
+                        }
+                        items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+                        //items.Add(OpenXmlHelper.GetTextParagraph($"Footer commentaar {voertuigtype}.", "Footer"));
+                        items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+                    }
+                    else
+                    if (voertuigtype == PrioIngreepVoertuigTypeEnum.Fiets &&
+                        c.PrioData.PrioIngrepen.Exists(x => x.MeldingenData.Inmeldingen.Any(y => y.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)))
+                    {
+                        var l = new List<List<string>>
+                        {
+                            new List<string>
+                            {
+                                "Fase (##)",
+                                "In- of Uitmelding",
+                                "Max aantal per cyclus                       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmftsmaxpercyc") + "##fietsfiets",
+                                "Toegestaan blok (BITSgewijs)                PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmftsblok") + "##fietsfiets",
+                                "Minimaal aantal fietsers                    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmftsminvtg") + "##fietsfiets",
+                                "Minimale wachttijd                          PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmftsminwt") + "##fietsfiets",
+                                "Tel detector",
+                            }
+                        };
+                        var oldfc = "";
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
+                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        {
+                            var fc = prio.FaseCyclus;
+
+                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            {
+                                var mls = "";
+                                var blk = melding.FietsPrioriteitBlok;
+                                var blkk = blk;
+                                
+                                bool bit0 = false, bit1 = false, bit2 = false, bit3 = false, bit4 = false,
+                                     bit5 = false, bit6 = false, bit7 = false, bit8 = false, bit9 = false;
+                                
+                                if (blkk >= 512) { bit9 = true; blkk %= 512; }
+                                if (blkk >= 256) { bit8 = true; blkk %= 256; }
+                                if (blkk >= 128) { bit7 = true; blkk %= 128; }
+                                if (blkk >=  64) { bit6 = true; blkk %=  64; }
+                                if (blkk >=  32) { bit5 = true; blkk %=  32; }
+                                if (blkk >=  16) { bit4 = true; blkk %=  16; }
+                                if (blkk >=   8) { bit3 = true; blkk %=   8; }
+                                if (blkk >=   4) { bit2 = true; blkk %=   4; }
+                                if (blkk >=   2) { bit1 = true; blkk %=   2; }
+                                if (blkk >=   1) { bit0 = true; blkk %=   1; }
+                                
+                                if (bit0) mls +=                         "ML1";
+                                if (bit1) mls += (mls == "") ? "ML2" : ", ML2";
+                                if (bit2) mls += (mls == "") ? "ML3" : ", ML3";
+                                if (bit3) mls += (mls == "") ? "ML4" : ", ML4";
+                                if (bit4) mls += (mls == "") ? "ML5" : ", ML5";
+                                if (bit5) mls += (mls == "") ? "ML6" : ", ML6";
+                                if (bit6) mls += (mls == "") ? "ML7" : ", ML7";
+                                if (bit7) mls += (mls == "") ? "ML8" : ", ML8";
+                                if (bit8) mls += (mls == "") ? "ML9" : ", ML9";
+                                
+                                mls = (blk > 0) ? " (" + mls + ")" : "";
+
+                                l.Add(new List<string>
+                                {
+                                   (fc != oldfc) ? prio.FaseCyclus.ToString() : "",
+                                   (melding.InUit.GetDescription() == "Inmelding") ? "In" : "Uit",
+                                   melding.FietsPrioriteitAantalKeerPerCyclus.ToString(),
+                                   blk + mls,
+                                   melding.FietsPrioriteitMinimumAantalVoertuigen.ToString(),
+                                   melding.FietsPrioriteitMinimumWachttijdVoorPrioriteit.ToString(),
+                                   melding.FietsPrioriteitGebruikLus ? melding.RelatedInput1 : "-",
+                                });
+                                oldfc = fc;
+                            }
+                        }
+                        items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+                        items.Add(OpenXmlHelper.GetTextParagraph($"Uitmelding voor prioriteit {voertuigtype} vindt plaats op basis van groenbewaking.", "Footer"));
+                        items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+                    }
+                    else
+                    {
+                        var l = new List<List<string>>
+                        {
+                            new List<string>
+                            {
+                                "Fase (##)",
+                                "In- of Uitmelding",
+                                "Via",
+                                "Melding trigger",
+                                "Alleen indien rood",
+                                "Alleen indien geen inmelding aanwezig",
+                                //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? "Afhankelijk van wisselstand" : "",
+                            }
+                        };
+                        var oldfc = "";
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
+                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
+                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        {
+                            var fc = prio.FaseCyclus;
+
+                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            {
+                                l.Add(new List<string>
+                                {
+                                   (fc != oldfc) ? prio.FaseCyclus.ToString() : "",
+                                   (melding.InUit.GetDescription() == "Inmelding") ? "In" : "Uit",
+                                   (melding.Type.GetDescription() == "Detector(en)") ? "Detectie" : ((melding.Type.GetDescription() == "KAR DSI melding") ? "KAR" : melding.Type.GetDescription()),
+                                   (melding.Type.GetDescription() == "Detector(en)") ? melding.RelatedInput1Type.GetDescription() + " " + melding.RelatedInput1
+                                                      + (melding.TweedeInput ? " EN " + melding.RelatedInput2Type.GetDescription() + " " + melding.RelatedInput2 : "")
+                                                                                       : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                    melding.AlleenIndienRood.ToCustomString(),
+                                    melding.AlleenIndienGeenInmelding.ToCustomString(),
+                                    //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? melding.KijkNaarWisselStand.ToCustomString() : "",
+                                
+                                });
+                                oldfc = fc;
+                            }
+
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            {
+                                l.Add(new List<string>
+                                {
+                                   (fc != oldfc) ? prio.FaseCyclus.ToString() : "",
+                                   (melding.InUit.GetDescription() == "Inmelding") ? "In" : "Uit",
+                                   (melding.Type.GetDescription() == "Detector(en)") ? "Detectie" : ((melding.Type.GetDescription() == "KAR DSI melding") ? "KAR" : melding.Type.GetDescription()),
+                                   (melding.Type.GetDescription() == "Detector(en)") ? melding.RelatedInput1Type.GetDescription() + " " + melding.RelatedInput1
+                                                      + (melding.TweedeInput ? " EN " + melding.RelatedInput2Type.GetDescription() + " " + melding.RelatedInput2 : "")
+                                                                                       : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                    melding.AlleenIndienRood.ToCustomString(),
+                                    melding.AlleenIndienGeenInmelding.ToCustomString(),
+                                    //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? melding.KijkNaarWisselStand.ToCustomString() : "",
+                                });
+                            }
+                        }
+                        items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+                        //items.Add(OpenXmlHelper.GetTextParagraph($"Footer commentaar {voertuigtype}.", "Footer"));
+                        items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+                    }
+                }
+            }
+
+            if (c.PrioData.PrioIngrepen.Exists(x => !x.MeldingenData.Inmeldingen.Any() && !x.MeldingenData.Uitmeldingen.Any()))
+            {
+                UpdateTables("Prio zonder in-uitmeldingen");
+                items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: Overzicht van ingrepen zonder gestandaardiseerde in- of uitmelding", styleid: "Caption"));
+
+                var l = new List<List<string>>
+                {
+                    new List<string>
+                    {
+                        "Fase (##)",
+                        "Voertuigtype",
+                    }
+                };
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => !x.MeldingenData.Inmeldingen.Any() && !x.MeldingenData.Uitmeldingen.Any()))
+                {
+                    l.Add(new List<string>
+                    {
+                        prio.FaseCyclus.ToString(),
+                        prio.Type.GetDescription(),
+                    });
+                }
+                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: false));
+                items.Add(OpenXmlHelper.GetTextParagraph("Van deze ingrepen zijn mogelijk in de .add bestanden handmatig in- of uitmeldingen geconfigureerd.", "Footer"));
+                items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+            }
+            return items;
+        }
+
         internal static IEnumerable<OpenXmlCompositeElement> GetTable_OV_Lijnnummers(ControllerModel c)
         {
             var items = new List<OpenXmlCompositeElement>();
@@ -1476,7 +1833,7 @@ namespace TLCGen.Specificator
             UpdateTables("Table_OV_Lijnnummers");
 
             items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_OV_Lijnnummers"], styleid: "Caption"));
-
+            
             var l = new List<List<string>>
             {
                 new List<string>
@@ -1487,10 +1844,12 @@ namespace TLCGen.Specificator
             };
             foreach (var ln in c.PrioData.PrioIngrepen.Where(x => x.CheckLijnNummer))
             {
+                var lnrsbestaan = ln.LijnNummers.Any(x => x.Nummer != "0");
+
                 l.Add(new List<string>
                 {
                     ln.FaseCyclus,
-                    ln.LijnNummers.Select(x => x.Nummer).Where(p => !p.Equals("0")).Aggregate((y, z) => y + ", " + z).ToString(),
+                    lnrsbestaan ? ln.LijnNummers.Select(x => x.Nummer).Where(p => !p.Equals("0")).Aggregate((y, z) => y + ", " + z) : "niet opgegeven",
                 });
             }
             items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: false));
@@ -1692,12 +2051,17 @@ namespace TLCGen.Specificator
                 ll.Add("HD via KAR");
                 ll.Add("KAR inmeld filtertijd                T " + CCOLGeneratorSettingsProvider.Default.GetElementName("thdin") + "##kar");
                 ll.Add("KAR uitmeld filtertijd               T " + CCOLGeneratorSettingsProvider.Default.GetElementName("thduit") + "##kar");
+                if (c.PrioData.HDIngrepen.Any(x => x.InmeldingOokDoorToepassen))
+                {
+                    ll.Add("Ook inmelden door KAR richting");
+                }
             }
             ll.Add("Check sirene                             SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schchecksirene") + "##");
             ll.Add("Rijtijd ongehinderd                      PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto") + "hd##");
             ll.Add("Rijtijd bep. gehinderd                   PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg") + "hd##");
             ll.Add("Rijtijd gehinderd                        PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg") + "hd##");
             ll.Add("Groenbewaking                            T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tgb") + "hd##");
+
             if (c.HasHDOpticom())
             {
                 ll.Add("Opticom");
@@ -1716,6 +2080,13 @@ namespace TLCGen.Specificator
                     ll.Add(ovcf.KAR.ToCustomString());
                     ll.Add(ovcf.KARInmeldingFilterTijd.ToString());
                     ll.Add(ovcf.KARUitmeldingFilterTijd.ToString());
+                    if (c.PrioData.HDIngrepen.Any(x => x.InmeldingOokDoorToepassen))
+                    {
+                        ll.Add(
+                            (ovcf.InmeldingOokDoorToepassen && ovcf.KAR)?
+                            string.Join(", ", ovcf.InmeldingOokDoorFase.ToString()) :
+                            "-");
+                    }
                 }
                 ll.Add(ovcf.Sirene.ToCustomString());
                 ll.Add(ovcf.RijTijdOngehinderd.ToString());
@@ -2291,7 +2662,7 @@ namespace TLCGen.Specificator
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Woensdag      ?  "3: " :
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Donderdag     ?  "4: " :
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Vrijdag       ?  "5: " :
-                    p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Zondag        ?  "6: " :
+                    p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Zaterdag      ?  "6: " :
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Zondag        ?  "7: " :
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Werkdagen     ?  "8: " :
                     p.DagCode == Models.Enumerations.PeriodeDagCodeEnum.Weekeind      ?  "9: " :
@@ -2855,7 +3226,6 @@ namespace TLCGen.Specificator
                 {
                     UpdateTables("UC3" + voertuigtype);
 
-                    //items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_TT_UC3_Prioriteren_Logistiek"], styleid: "Caption"));
                     items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: Instellingen tbv prioriteren (UC3) voor voertuigtype '{voertuigtype}'", styleid: "Caption"));
 
                     foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&

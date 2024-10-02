@@ -138,6 +138,8 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetChapter_VasteAanvragen(c));
                 body.Append(FunctionalityGenerator.GetChapter_Meeverlengen(c));
                 body.Append(FunctionalityGenerator.GetChapter_Veiligheidsgroen(c));
+                body.Append(FunctionalityGenerator.GetChapter_Senioreningreep(c));
+                body.Append(FunctionalityGenerator.GetChapter_Schoolingreep(c));
 
                 // Chap 3: Detectoren
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren"]}", 1));

@@ -34,6 +34,11 @@ namespace TLCGen.Specificator
             return value ? (string)Texts["Special_Ja"] : (string)Texts["Special_Nee"];
         }
 
+        public static string ToCustomStringHL(this bool value)
+        {
+            return value ? (string)Texts["Special_Hoog"] : (string)Texts["Special_Laag"];
+        }
+
         public static string GetKruisingNaam(ControllerModel c)
         {
             return $"{c.Data.Straat1}" +
@@ -598,7 +603,7 @@ namespace TLCGen.Specificator
 
         }
 
-        public static List<OpenXmlCompositeElement> GetChapter_VasteAanvragen(ControllerModel c)                                         // hfdst 2.6 Meeverlengen  
+        public static List<OpenXmlCompositeElement> GetChapter_VasteAanvragen(ControllerModel c)                                       // hfdst 2.6 vaste aanvragen  
         {
             var items = new List<OpenXmlCompositeElement>();
 
@@ -614,7 +619,7 @@ namespace TLCGen.Specificator
             return items;
         }
 
-        public static List<OpenXmlCompositeElement> GetChapter_Meeverlengen(ControllerModel c)                                         // hfdst 2.6 Meeverlengen  
+        public static List<OpenXmlCompositeElement> GetChapter_Meeverlengen(ControllerModel c)                                         // hfdst 2.7 Meeverlengen  
         {
             var items = new List<OpenXmlCompositeElement>();
 
@@ -631,7 +636,7 @@ namespace TLCGen.Specificator
             return items;
         }
 
-        public static List<OpenXmlCompositeElement> GetChapter_Veiligheidsgroen(ControllerModel c)                                     // hfdst 2.7 Veiligheidsgroen  
+        public static List<OpenXmlCompositeElement> GetChapter_Veiligheidsgroen(ControllerModel c)                                     // hfdst 2.8 Veiligheidsgroen  
         {
             var items = new List<OpenXmlCompositeElement>();
 
@@ -642,6 +647,47 @@ namespace TLCGen.Specificator
             items.Add(OpenXmlHelper.GetTextParagraph($"Voor de onderstaande {Texts["Generic_fasen"]} en detectoren kan veiligheidsgroen worden ingesteld: "));
 
             items.AddRange(TableGenerator.GetTable_Veiligheidsgroen(c));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetChapter_Senioreningreep(ControllerModel c)                                      // hfdst 2.9 Senioreningreep  
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            if (!(c.Fasen.Any(x => x.SeniorenIngreep != NooitAltijdAanUitEnum.Nooit))) return items;
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Senioreningreep"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("Een senioreningreep houdt een (voetgangers)richting na het vastgroen een " +
+                "instelbaar percentage van dat vastgroen vast in wachtgroen, zodat voetgangers die moeilijk ter been zijn meer " +
+                "gelegenheid hebben om de oversteek te maken. Zij dienen daartoe een instelbaar aantal seconden achtereen " +
+                "de aanvraagknop ingedrukt te houden. Er kunnen drie opeenvolgende oversteken bediend worden. Eventuele " +
+                "volgoversteken hebben ieder hun eigen instelling voor extra groen."));
+            items.Add(OpenXmlHelper.GetTextParagraph("Wanneer het seniorengroen aktief is, worden eventuele nalopen pas " +
+                "gestart op het einde van de verlengde groentijd van de voedende richting (in plaats van op start groen), " +
+                "zodat men ook gelegenheid heeft om in trager tempo de naloop over te steken."));
+            
+            items.AddRange(TableGenerator.GetTable_Senioreningreep(c));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetChapter_Schoolingreep(ControllerModel c)                                        // hfdst 2.10 Schoolingreep  
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            if (!(c.Fasen.Any(x => x.SchoolIngreep != NooitAltijdAanUitEnum.Nooit))) return items;
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Schoolingreep"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph($"ToDo: Uitleg Schoolingreep. ", "TODO"));
+
+            items.AddRange(TableGenerator.GetTable_Schoolingreep(c));
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
 
@@ -1060,10 +1106,11 @@ namespace TLCGen.Specificator
             {
                 items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
                 items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_LateRelease"]}", 3));
-                items.Add(OpenXmlHelper.GetTextParagraph("TODO: deze tekst moet uitleg geven over de functionele werking van een late release, " +
-                    "inclusief het verschil met een reguliere voorstart.", "TODO"));
                 items.Add(OpenXmlHelper.GetTextParagraph(
-                    $"Bij toepassen van een late release ..."));
+                    $"Bij toepassen van een late release krijgt de ene richting altijd maximaal een instelbare tijd later groen dan het start groen " +
+                    $"van de andere richting. Die tweede richting wordt hiertoe tijdelijk tegengehouden. Er geldt een fictieve " +
+                    $"ontruimingstijd van de tweede richting naar de eerste; pas na het aflopen van die tijd kan de late release " +
+                    $"richting weer groen worden."));
                 items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Voor late release gelden de volgende instellingen:"));
                 items.AddRange(TableGenerator.GetTable_Intersignaalgroep_LateRelease(c));
@@ -1116,6 +1163,20 @@ namespace TLCGen.Specificator
             items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            if (c.PrioData.PrioIngrepen.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepInUitmelding"]}", startLevel + 1));
+
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Prioriteits aanvragen ('inmeldingen') voor verschillende voertuigtypen kunnen op verschillende (en soms ook meerdere) wijzen worden gedaan. " +
+                    $"Hieronder een overzicht van de in deze regeling geconfigureerde in- en uitmeldingen per voertuigtype."));
+
+                items.AddRange(TableGenerator.GetTable_Prio_InUit(c));
+
+                items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            }
 
             if (c.HasDSI() && c.PrioData.PrioIngrepen.Any(x => x.CheckLijnNummer))
             {
@@ -1757,7 +1818,6 @@ namespace TLCGen.Specificator
             return items;
         }
 
-
         internal static IEnumerable<OpenXmlElement> GetChapter_TT_Algemeen(ControllerModel c, WordprocessingDocument doc)              // hfdst 8.1 ToDo Talking Traffic  
         {
             var items = new List<OpenXmlCompositeElement>();
@@ -1935,8 +1995,8 @@ namespace TLCGen.Specificator
                 "wanneer de betreffende schakelaars SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schrisaanvraag") + 
                 " en SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schrisverlengen") + " 'AAN' staan."));
 
-            items.Add(OpenXmlHelper.GetTextParagraph("Wanneer niet op alle rijstroken dezelfde voertuigtypes zijn ingesteld voor aanvragen en verlengen, " +
-                "dient dit overzicht handmatig gecorrigeerd te worden.", "TODO"));
+            items.Add(OpenXmlHelper.GetTextParagraph("Wanneer niet op alle rijstroken dezelfde voertuigtypes zijn ingesteld voor zowel " +
+                "aanvragen als verlengen, dient onderstaand overzicht handmatig gecorrigeerd te worden.", "TODO"));
 
             items.AddRange(TableGenerator.Table_TT_UC5_Optimaliseren(c));
 

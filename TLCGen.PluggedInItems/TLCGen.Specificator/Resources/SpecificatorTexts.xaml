@@ -12,6 +12,9 @@
     <system:String x:Key="Special_Ja">Ja</system:String>
     <system:String x:Key="Special_Nee">Nee</system:String>
 
+    <system:String x:Key="Special_Hoog">Hoog</system:String>
+    <system:String x:Key="Special_Laag">Laag</system:String>
+
     <system:String x:Key="Generic_fase">fase</system:String>
     <system:String x:Key="Generic_Fase">Fase</system:String>
     
@@ -73,6 +76,11 @@
     <system:String x:Key="Title_Veiligheidsgroen">Veiligheidsgroen</system:String>
     <system:String x:Key="Table_Veiligheidsgroen">Instellingen veiligheidsgroen</system:String>
 
+    <system:String x:Key="Title_Senioreningreep">Senioreningreep</system:String>
+    <system:String x:Key="Table_Senioreningreep">Instellingen senioreningreep</system:String>
+    <system:String x:Key="Title_Schoolingreep">Schoolingreep</system:String>
+    <system:String x:Key="Table_Schoolingreep">Instellingen schoolingreep</system:String>
+
 
     <!-- Detectoren -->
     <system:String x:Key="Title_Detectoren">Detectoren</system:String>
@@ -122,12 +130,14 @@
     <system:String x:Key="Title_OV">Afhandeling openbaar vervoer</system:String>
     <system:String x:Key="Title_HD">Afhandeling hulpdiensten</system:String>
     <system:String x:Key="Title_OVIngreep">Functionaliteit prioriteitsingreep</system:String>
+    <system:String x:Key="Title_OVIngreepInUitmelding">In- en uitmeldingen</system:String>
     <system:String x:Key="Title_OVIngreepLijnnummers">Gefilterde lijnnummers</system:String>
     <system:String x:Key="Title_OVIngreepAfkappen">Afkappen</system:String>
     <system:String x:Key="Title_OVIngreepBijzonderRealiseren">Bijzonder realiseren</system:String>
     <system:String x:Key="Title_OVIngreepNaOVIngreep">Na afloop prioriteitsingreep</system:String>
     <system:String x:Key="Title_OVIngreepDefecteUitmelding">Defecte uitmelding</system:String>
     <system:String x:Key="Title_OVParameters">Parameters prioriteitsingrepen</system:String>
+    <system:String x:Key="Table_OV_InUit">Overzicht van in- en uitmeldingen</system:String>
     <system:String x:Key="Table_OV_Lijnnummers">Overzicht van gefilterde lijnnummers</system:String>
     <system:String x:Key="Table_OV_PrioriteitsOpties">Overzicht van beschikbare prioriteitsopties</system:String>
     <system:String x:Key="Table_OV_PrioriteitsInstellingen">Overzicht van prioriteitsinstellingen</system:String>
