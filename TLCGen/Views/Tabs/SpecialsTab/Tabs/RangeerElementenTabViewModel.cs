@@ -176,6 +176,8 @@ namespace TLCGen.ViewModels
                     rd.RangeerIngangen, rd.RangeerUitgangen
                 };
                 var elements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(controller);
+                if (elements == null) return;
+
                 var modelLists = new List<List<IOElementModel>>
                 {
                     elements.Where(x => x.ElementType == IOElementTypeEnum.FaseCyclus).ToList(),
