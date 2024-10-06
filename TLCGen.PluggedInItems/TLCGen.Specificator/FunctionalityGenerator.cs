@@ -685,7 +685,12 @@ namespace TLCGen.Specificator
 
             items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Schoolingreep"]}", 2));
 
-            items.Add(OpenXmlHelper.GetTextParagraph($"ToDo: Uitleg Schoolingreep. ", "TODO"));
+            items.Add(OpenXmlHelper.GetTextParagraph("Bij een schoolingreep blijft een voetgangersoversteek " +
+                "langer groen (tot een instelbaar maximum vanaf start groen) zolang de drukknop ingedrukt blijft. " +
+                "In deze tijd kan dan een schoolklas in zijn geheel oversteken. Als terugkoppeling naar de " +
+                "begeleid(st)er gaat het waitsignaal van de drukknop knipperen zolang de ingreep actief is."));
+            items.Add(OpenXmlHelper.GetTextParagraph("De knop moet worden ingedrukt tijdens rood of onmiddellijk " +
+                "na het groen worden, en ingedrukt blijven tot de laatste persoon aan de oversteek is begonnen."));
 
             items.AddRange(TableGenerator.GetTable_Schoolingreep(c));
 
