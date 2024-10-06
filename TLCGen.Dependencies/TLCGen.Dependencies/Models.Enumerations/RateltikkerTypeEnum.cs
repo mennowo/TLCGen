@@ -7,6 +7,7 @@ namespace TLCGen.Models.Enumerations
     public enum RateltikkerTypeEnum
     {
         Geen,
+        [Description("TEC / Hoeflake")]
         Hoeflake,
         [Description("Hoeflake (bewaakt)")]
         HoeflakeBewaakt,

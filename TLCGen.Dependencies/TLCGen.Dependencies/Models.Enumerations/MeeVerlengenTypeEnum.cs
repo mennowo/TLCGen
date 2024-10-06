@@ -27,8 +27,8 @@ namespace TLCGen.Models.Enumerations
         [Description("ym_max_toV2")]
         To2 = 9,
         [Description("ym_maxV2 || MK[fc] && ym_max_toV2")]
-        MKTo2,
+        MKTo2 = 10,
         [Description("ym_max_vtgV2")]
-        Voetganger2,
+        Voetganger2 = 11,
     }
 }
