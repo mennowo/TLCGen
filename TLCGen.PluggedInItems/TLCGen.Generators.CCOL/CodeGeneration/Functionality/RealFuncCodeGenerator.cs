@@ -805,11 +805,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Reset synchronisatie BITs */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}RR[fc] &= ~(BIT1 | BIT2);");
-                    sb.AppendLine($"{ts}{ts}RW[fc]&= ~(BIT1);");
-                    sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1);");
-                    sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3);");
-                    sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1|BIT2);");
+                    sb.AppendLine($"{ts}{ts}RR[fc] &= ~(BIT1|BIT2);");
+                    sb.AppendLine($"{ts}{ts}RW[fc] &= ~(BIT1);");
+                    sb.AppendLine($"{ts}{ts}YV[fc] &= ~(BIT1);");
+                    sb.AppendLine($"{ts}{ts}YM[fc] &= ~(BIT3);");
+                    sb.AppendLine($"{ts}{ts} X[fc] &= ~(BIT1|BIT2);");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Uitvoeren synchronisaties */");
