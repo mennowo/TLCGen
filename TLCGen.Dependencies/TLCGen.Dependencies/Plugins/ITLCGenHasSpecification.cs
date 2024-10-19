@@ -36,11 +36,6 @@ namespace TLCGen.Plugins
         public List<List<string>> TableData { get; set; }
     }
 
-    public class SpecificationTable2 : SpecificationDataBase
-    {
-        public List<List<string>> TableData2 { get; set; }
-    }
-
     public class SpecificationBulletList : SpecificationDataBase
     {
         public List<Tuple<string, int>> BulletData { get; set; }

@@ -471,7 +471,8 @@ namespace TLCGen.Plugins.AFM
 
         #endregion
 
-        
+        #region ITLCGenHasSpecification
+
         public SpecificationData GetSpecificationData(ControllerModel c)
         {
             if (!_afmModel.AFMToepassen) return null;
@@ -649,8 +650,6 @@ namespace TLCGen.Plugins.AFM
                 table.Add(tijden);
             }
 
-            data.Elements.Add(new SpecificationTable2 { TableData2 = table });
-
             data.Elements.Add(new SpecificationParagraph
             {
                 Type = SpecificationParagraphType.Spacer,
@@ -783,5 +782,7 @@ namespace TLCGen.Plugins.AFM
 
             return data;
         }
+
+        #endregion //ITLCGenHasSpecification
     }
 }

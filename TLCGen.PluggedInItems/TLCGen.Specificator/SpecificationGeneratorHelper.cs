@@ -254,9 +254,8 @@ namespace TLCGen.Specificator
                 var d = data[i];
                 var tc = new TableCell();
                 var run = new Run(new Text(d));
-              //if (header) run.RunProperties = new RunProperties(new Bold());
                 if (header) run.RunProperties = new RunProperties(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
-            var par = new Paragraph(run);
+                var par = new Paragraph(run);
                 
                 ApplyStyleToParagraph(par, "TableContents");
                 if (widths != null && widths.Length == data.Length)
@@ -280,10 +279,6 @@ namespace TLCGen.Specificator
                     {
                         tabProps.AppendChild(new TextDirection() { Val = TextDirectionValues.BottomToTopLeftToRight });
                         tabProps.AppendChild(new TableRowHeight() { Val = Convert.ToUInt32("1800") });
-
-                       // tabProps.AppendChild(new   LeftMargin() { Width = "-20" });
-                       // tabProps.AppendChild(new TableCell { Width = -20 });
-                       // tabProps.AppendChild(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
                     }
                     if (header) tabProps.AppendChild(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
 

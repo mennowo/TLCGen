@@ -439,6 +439,8 @@ namespace TLCGen.Plugins.DynamischHiaat
 
         #endregion //Constructor
 
+        #region ITLCGenHasSpecification
+
         public SpecificationData GetSpecificationData(ControllerModel c)
         {
             if (!_myModel.SignaalGroepenMetDynamischHiaat.Any(x => x.HasDynamischHiaat)) return null;
@@ -579,5 +581,7 @@ namespace TLCGen.Plugins.DynamischHiaat
 
             return data;
         }
+
+        #endregion //ITLCGenHasSpecification
     }
 }

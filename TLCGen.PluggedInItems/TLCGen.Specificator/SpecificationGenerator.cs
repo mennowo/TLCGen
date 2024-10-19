@@ -82,11 +82,6 @@ namespace TLCGen.Specificator
                             body.Append(docTable);
                             break;
 
-                        case SpecificationTable2 table:
-                            var docTable2 = OpenXmlHelper.GetTable(table.TableData2, firstRowVerticalText: false);
-                            body.Append(docTable2);
-                            break;
-
                         case SpecificationBulletList bulletList:
                             var docBulletList = OpenXmlHelper.GetBulletList(doc, bulletList.BulletData);
                             body.Append(docBulletList);
@@ -115,13 +110,11 @@ namespace TLCGen.Specificator
             {
                 // Add a main document part. 
                 var body = doc.MainDocumentPart.Document.Body;
-                //body.RemoveAllChildren<Paragraph>();
 
                 // Headers, title page, versioning
                 FunctionalityGenerator.AddHeaderTextsToDocument(doc, model, c.Data);
                 body.Append(FunctionalityGenerator.GetFirstPage(c.Data));
                 body.Append(FunctionalityGenerator.GetVersionControl(c.Data));
-
                 
                 // Chap 1: Introduction
                 FunctionalityGenerator.GetIntroChapter(doc, c, model);
@@ -223,20 +216,9 @@ namespace TLCGen.Specificator
                     body.Append(FunctionalityGenerator.GetChapter_TT_UC5_Optimaliseren(c));
                 }
 
-                //body.Append(OpenXmlHelper.GetChapterTitleParagraph($"TODO", 1));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk OV: details toevoegen, zoals: " +
-                //    $"lijnnummers, details rond in/uitmelden, inmelden koplus, .", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Overige punten, zoals: " +
-                //    $"ingangen, selectieve detectie, etc.", "TODO")));
-                //
-                //
-                //body.Append((OpenXmlHelper.GetTextParagraph($"", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"-------------------------------------------------- ", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"", "TODO")));
-                //body.Append((OpenXmlHelper.GetTextParagraph($"TODO: errormelding doc.Close() navragen bij Menno." +
-                //"", "TODO")));
+                //ToDo: OV nadere details (conditionele prio, inmelden koplus, prio nivo, inmelden/aanvragen koplus,
+                //                         check wagennummer, anti-jutter, klokperiode als voorwaarde, rit categorie).
+
             }
         }
     }
