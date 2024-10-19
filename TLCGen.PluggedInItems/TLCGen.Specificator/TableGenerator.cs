@@ -1631,6 +1631,43 @@ namespace TLCGen.Specificator
                                     melding.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
                                     melding.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
                                 });
+                                if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+                                {
+                                    var st1 = melding.MeldingBijstoring;
+                                    l.Add(new List<string>
+                                    {
+                                       "",
+                                       "",
+                                       "   - storingsopvang",
+                                       (st1.Type.GetDescription() == "Detector(en)") ? st1.RelatedInput1Type.GetDescription() + " " + st1.RelatedInput1
+                                                          + (st1.TweedeInput ? " EN " + st1.RelatedInput2Type.GetDescription() + " " + st1.RelatedInput2 : "")
+                                                                                           : (st1.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                        st1.AlleenIndienRood.ToCustomString(),
+                                        st1.AlleenIndienGeenInmelding.ToCustomString(),
+                                        st1.KijkNaarWisselStand.ToCustomString(),
+                                        st1.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                        st1.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                    });
+                                    if (st1.OpvangStoring && st1.MeldingBijstoring != null)
+                                    {
+                                        var st2 = st1.MeldingBijstoring;
+                                        l.Add(new List<string>
+                                        {
+                                           "",
+                                           "",
+                                           "   - storingsopvang",
+                                           (st2.Type.GetDescription() == "Detector(en)") ? st2.RelatedInput1Type.GetDescription() + " " + st2.RelatedInput1
+                                                              + (st2.TweedeInput ? " EN " + st2.RelatedInput2Type.GetDescription() + " " + st2.RelatedInput2 : "")
+                                                                                               : (st2.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                            st2.AlleenIndienRood.ToCustomString(),
+                                            st2.AlleenIndienGeenInmelding.ToCustomString(),
+                                            st2.KijkNaarWisselStand.ToCustomString(),
+                                            st2.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                            st2.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                        });
+
+                                    }
+                                }
                                 oldfc = fc;
                             }
 
@@ -1656,10 +1693,45 @@ namespace TLCGen.Specificator
                                     melding.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
                                     melding.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
                                 });
+                                if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+                                {
+                                    var st1 = melding.MeldingBijstoring;
+                                    l.Add(new List<string>
+                                    {
+                                       "",
+                                       "",
+                                       "   - storingsopvang",
+                                       (st1.Type.GetDescription() == "Detector(en)") ? st1.RelatedInput1Type.GetDescription() + " " + st1.RelatedInput1
+                                                          + (st1.TweedeInput ? " EN " + st1.RelatedInput2Type.GetDescription() + " " + st1.RelatedInput2 : "")
+                                                                                           : (st1.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                        st1.AlleenIndienRood.ToCustomString(),
+                                        st1.AlleenIndienGeenInmelding.ToCustomString(),
+                                        st1.KijkNaarWisselStand.ToCustomString(),
+                                        st1.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                        st1.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                    });
+                                    if (st1.OpvangStoring && st1.MeldingBijstoring != null)
+                                    {
+                                        var st2 = st1.MeldingBijstoring;
+                                        l.Add(new List<string>
+                                        {
+                                           "",
+                                           "",
+                                           "   - storingsopvang",
+                                           (st2.Type.GetDescription() == "Detector(en)") ? st2.RelatedInput1Type.GetDescription() + " " + st2.RelatedInput1
+                                                              + (st2.TweedeInput ? " EN " + st2.RelatedInput2Type.GetDescription() + " " + st2.RelatedInput2 : "")
+                                                                                               : (st2.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                            st2.AlleenIndienRood.ToCustomString(),
+                                            st2.AlleenIndienGeenInmelding.ToCustomString(),
+                                            st2.KijkNaarWisselStand.ToCustomString(),
+                                            st2.KijkNaarWisselStand && prio.MeldingenData.Wissel1 ? prio.MeldingenData.Wissel1InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc1 + ")" : "-",
+                                            st2.KijkNaarWisselStand && prio.MeldingenData.Wissel2 ? prio.MeldingenData.Wissel2InputVoorwaarde.ToCustomStringHL() + " (" + wisseldc2 + ")" : "-",
+                                        });
+                                    }
+                                }
                             }
                         }
                         items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-                        //items.Add(OpenXmlHelper.GetTextParagraph($"Footer commentaar {voertuigtype}.", "Footer"));
                         items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
                     }
                     else
@@ -1747,7 +1819,6 @@ namespace TLCGen.Specificator
                                 "Melding trigger",
                                 "Alleen indien rood",
                                 "Alleen indien geen inmelding aanwezig",
-                                //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? "Afhankelijk van wisselstand" : "",
                             }
                         };
                         var oldfc = "";
@@ -1769,9 +1840,37 @@ namespace TLCGen.Specificator
                                                                                        : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
                                     melding.AlleenIndienRood.ToCustomString(),
                                     melding.AlleenIndienGeenInmelding.ToCustomString(),
-                                    //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? melding.KijkNaarWisselStand.ToCustomString() : "",
-                                
                                 });
+                                if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+                                {
+                                    var st1 = melding.MeldingBijstoring;
+                                    l.Add(new List<string>
+                                    {
+                                       "",
+                                       "",
+                                       "   - storingsopvang",
+                                       (st1.Type.GetDescription() == "Detector(en)") ? st1.RelatedInput1Type.GetDescription() + " " + st1.RelatedInput1
+                                                          + (st1.TweedeInput ? " EN " + st1.RelatedInput2Type.GetDescription() + " " + st1.RelatedInput2 : "")
+                                                                                           : (st1.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                        st1.AlleenIndienRood.ToCustomString(),
+                                        st1.AlleenIndienGeenInmelding.ToCustomString(),
+                                    });
+                                    if (st1.OpvangStoring && st1.MeldingBijstoring != null)
+                                    {
+                                        var st2 = st1.MeldingBijstoring;
+                                        l.Add(new List<string>
+                                        {
+                                           "",
+                                           "",
+                                           "   - storingsopvang",
+                                           (st2.Type.GetDescription() == "Detector(en)") ? st2.RelatedInput1Type.GetDescription() + " " + st2.RelatedInput1
+                                                              + (st2.TweedeInput ? " EN " + st2.RelatedInput2Type.GetDescription() + " " + st2.RelatedInput2 : "")
+                                                                                               : (st2.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                            st2.AlleenIndienRood.ToCustomString(),
+                                            st2.AlleenIndienGeenInmelding.ToCustomString(),
+                                        });
+                                    }
+                                }
                                 oldfc = fc;
                             }
 
@@ -1787,12 +1886,40 @@ namespace TLCGen.Specificator
                                                                                        : (melding.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
                                     melding.AlleenIndienRood.ToCustomString(),
                                     melding.AlleenIndienGeenInmelding.ToCustomString(),
-                                    //(voertuigtype == PrioIngreepVoertuigTypeEnum.Tram) ? melding.KijkNaarWisselStand.ToCustomString() : "",
                                 });
+                                if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+                                {
+                                    var st1 = melding.MeldingBijstoring;
+                                    l.Add(new List<string>
+                                    {
+                                       "",
+                                       "",
+                                       "   - storingsopvang",
+                                       (st1.Type.GetDescription() == "Detector(en)") ? st1.RelatedInput1Type.GetDescription() + " " + st1.RelatedInput1
+                                                          + (st1.TweedeInput ? " EN " + st1.RelatedInput2Type.GetDescription() + " " + st1.RelatedInput2 : "")
+                                                                                           : (st1.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                        st1.AlleenIndienRood.ToCustomString(),
+                                        st1.AlleenIndienGeenInmelding.ToCustomString(),
+                                    });
+                                    if (st1.OpvangStoring && st1.MeldingBijstoring != null)
+                                    {
+                                        var st2 = st1.MeldingBijstoring;
+                                        l.Add(new List<string>
+                                        {
+                                           "",
+                                           "",
+                                           "   - storingsopvang",
+                                           (st2.Type.GetDescription() == "Detector(en)") ? st2.RelatedInput1Type.GetDescription() + " " + st2.RelatedInput1
+                                                              + (st2.TweedeInput ? " EN " + st2.RelatedInput2Type.GetDescription() + " " + st2.RelatedInput2 : "")
+                                                                                               : (st2.Type.GetDescription() == "KAR DSI melding") ? "KAR DSI bericht" : "-",
+                                            st2.AlleenIndienRood.ToCustomString(),
+                                            st2.AlleenIndienGeenInmelding.ToCustomString(),
+                                        });
+                                    }
+                                }
                             }
                         }
                         items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-                        //items.Add(OpenXmlHelper.GetTextParagraph($"Footer commentaar {voertuigtype}.", "Footer"));
                         items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
                     }
                 }
