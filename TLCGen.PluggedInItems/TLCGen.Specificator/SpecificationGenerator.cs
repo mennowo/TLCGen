@@ -216,8 +216,9 @@ namespace TLCGen.Specificator
                     body.Append(FunctionalityGenerator.GetChapter_TT_UC5_Optimaliseren(c));
                 }
 
-                //ToDo: OV nadere details (conditionele prio, inmelden koplus, prio nivo, inmelden/aanvragen koplus,
-                //                         check wagennummer, anti-jutter, klokperiode als voorwaarde, rit categorie).
+                //ToDo: - OV nadere details (conditionele prio, inmelden koplus, prio nivo, inmelden/aanvragen koplus,
+                //                           check wagennummer, anti-jutter, klokperiode als voorwaarde, rit categorie).
+                //      - Uitschrijven / verklaren meeverleng opties (ym_maxV1, ym_max_toV2, etc)).
 
             }
         }
