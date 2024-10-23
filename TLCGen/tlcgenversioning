@@ -1,5 +1,7 @@
-TLCGen=12.4.0.8
+TLCGen=12.4.0.9
 RN==TLCGen
+TLCGen versie: 12.4.0.9
+- Complete specificatie generator
 TLCGen versie: 12.4.0.8
 - Ondersteuning CCOL 12.1 en VLOG 3.3.0
 - Type instelbaar voor extra ingangen 
