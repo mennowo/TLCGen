@@ -44,7 +44,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             // Onthouden drukknop meldingen
             var madets = c.InterSignaalGroep.Meeaanvragen.Where(x => x.DetectieAfhankelijk).SelectMany(x => x.Detectoren).Select(x => x.MeeaanvraagDetector).ToList();
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ||
+                c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
                 var (_, _, twoWayPedestrians) = GroenSyncDataModel.OrderSyncs(c, groenSyncData);

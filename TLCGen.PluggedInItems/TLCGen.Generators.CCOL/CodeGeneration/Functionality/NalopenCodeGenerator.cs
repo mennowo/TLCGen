@@ -300,38 +300,57 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCMeetkriteriumNaDetectieStoring:
                     if (!c.InterSignaalGroep.Nalopen.Any()) return "";
 
-                    sb.AppendLine($"{ts}/* Volgrichting wordt vastgehouden m.b.v. het meetkriterium tijdens verlenggroen */");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen)
-                    {
-                        var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
-                        var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                    { 
+                        sb.AppendLine($"{ts}/* Volgrichting wordt vastgehouden m.b.v. het meetkriterium tijdens verlenggroen */");
+                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        {
+                            var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                            var fc2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 
-                        if (fc1 == null || fc2 == null) continue;
+                            if (fc1 == null || fc2 == null) continue;
                         
-                        if (nl.Type == NaloopTypeEnum.StartGroen &&
-                            fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
-                        {
-                            var dp = nl.DetectieAfhankelijk ? nl.Detectoren.FirstOrDefault() : null;
-                            var tnlsg = nl.VasteNaloop ? $"{_tpf}{_tnlsg}{nl:vannaar}" : "NG";
-                            var tnlsgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
-                            sb.AppendLine($"{ts}NaloopVtg({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {(dp == null ? "NG" : $"{_dpf}{dp.Detector}")}, " +
-                                          $"{(dp == null ? "NG" : $"{_hpf}{_hmad}{dp.Detector}")}, {_hpf}{_hnlsg}{nl:vannaar}, {tnlsg}, {tnlsgd});");
-                        }
-                        else if (nl.Type == NaloopTypeEnum.EindeGroen)
-                        {
-                            var tnlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
-                            var tnlfgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
-                            var tnleg = nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
-                            var tnlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
-                            sb.Append($"{ts}NaloopEG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar}, ");
-                            if (nl.DetectieAfhankelijk)
+                            if (nl.Type == NaloopTypeEnum.StartGroen &&
+                                fc1.Type == FaseTypeEnum.Voetganger && fc2.Type == FaseTypeEnum.Voetganger)
                             {
-                                foreach (var d in nl.Detectoren)
-                                {
-                                    sb.Append($"{_dpf}{d.Detector}, ");
-                                }
+                                var dp = nl.DetectieAfhankelijk ? nl.Detectoren.FirstOrDefault() : null;
+                                var tnlsg = nl.VasteNaloop ? $"{_tpf}{_tnlsg}{nl:vannaar}" : "NG";
+                                var tnlsgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
+                                sb.AppendLine($"{ts}NaloopVtg({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {(dp == null ? "NG" : $"{_dpf}{dp.Detector}")}, " +
+                                              $"{(dp == null ? "NG" : $"{_hpf}{_hmad}{dp.Detector}")}, {_hpf}{_hnlsg}{nl:vannaar}, {tnlsg}, {tnlsgd});");
                             }
-                            sb.AppendLine("END);");
+                            else if (nl.Type == NaloopTypeEnum.EindeGroen)
+                            {
+                                var tnlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                                var tnlfgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                                var tnleg = nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
+                                var tnlegd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
+                                sb.Append($"{ts}NaloopEG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar}, ");
+                                if (nl.DetectieAfhankelijk)
+                                {
+                                    foreach (var d in nl.Detectoren)
+                                    {
+                                        sb.Append($"{_dpf}{d.Detector}, ");
+                                    }
+                                }
+                                sb.AppendLine("END);");
+                            }
+                            else if (nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
+                            {
+                                var tnlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                                var tnlfgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                                var tnlcv = nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                                var tnlcvd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
+                                sb.Append($"{ts}NaloopEVG({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnlcv}, {tnlcvd}, {_tpf}{_tvgnaloop}{nl:vannaar}, ");
+                                if (nl.DetectieAfhankelijk)
+                                {
+                                    foreach (var d in nl.Detectoren)
+                                    {
+                                        sb.Append($"{_dpf}{d.Detector}, ");
+                                    }
+                                }
+                                sb.AppendLine("END);");
+                            }
                         }
                     }
 

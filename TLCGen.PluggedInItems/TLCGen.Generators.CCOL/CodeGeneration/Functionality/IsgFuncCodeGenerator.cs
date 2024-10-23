@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Documents;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -43,6 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hmad;
         private string _tvgnaloop;
         private string _schgs;
+        private string _hnlsg;
 
         #endregion // Fields
 
@@ -209,6 +211,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => new[] { 10 },
+                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new[] { 150 },
                 CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
                 CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
                 
@@ -285,6 +288,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 break;
                         }
                     }
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio:
                     sb.AppendLine($"{ts}VulHardEnGroenConflictenInPrioVars();");
@@ -395,6 +400,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{c.GetBoolV()} init_tvg;");
+                    sb.AppendLine($"{c.GetBoolV()} PAR_los[FCMAX] = {{ 0 }};");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
@@ -463,11 +469,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}IsgCorrectieTvgTimerTvgMax();");
                         sb.AppendLine($"{ts}BepaalRealisatieTijden();");
                         sb.AppendLine($"");
-                        sb.AppendLine($"    BepaalStartGroenMomentenPrioIngrepen(); /* bepaal wanneer prioriteitsrealisatie mag komen */");
-                        sb.AppendLine($"    PasTVG_maxAanStartGroenMomentenPrioIngrepen(); /* pas de verlenggroentijden hier weer op aan*/");
+                        sb.AppendLine($"{ts}BepaalStartGroenMomentenPrioIngrepen(); /* bepaal wanneer prioriteitsrealisatie mag komen */");
+                        sb.AppendLine($"{ts}PasTVG_maxAanStartGroenMomentenPrioIngrepen(); /* pas de verlenggroentijden hier weer op aan*/");
                     }
 
                     if (order == 140)
@@ -480,7 +485,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case NaloopTypeEnum.StartGroen:
                                     var nlsg = nl.VasteNaloop ? $"{_tpf}{_tnlsg}{nl:vannaar}" : "NG";
                                     var nlsgd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
-                                    sb.AppendLine($"{ts}NaloopVtg_TVG_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlsg}, {nlsgd});");
+                                    sb.AppendLine($"{ts}NaloopVtg_TVG_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_hpf}{_hnlsg}{nl:vannaar}, {nlsg}, {nlsgd});");
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
                                     var nlfg = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
@@ -490,6 +495,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}NaloopEG_TVG_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg}, {nlfgd}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
                                     break;
                                 case NaloopTypeEnum.CyclischVerlengGroen:
+                                    var nlfg2 = nl.VasteNaloop ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
+                                    var nlfgd2 = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
+                                    var nlcv = nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
+                                    var nlcvd = nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
+                                    sb.AppendLine($"{ts}NaloopEG_TVG_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nlfg2}, {nlfgd2}, {nlcv}, {nlcvd}, {_tpf}vgnaloop{nl:vannaar});");
                                     break;
                             }
                         }
@@ -771,6 +781,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
+            _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
 
             return base.SetSettings(settings);
         }

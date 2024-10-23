@@ -19,7 +19,7 @@
 extern mulv TNL_type[][FCMAX]; /* type naloop */
 extern mulv FK_type[][FCMAX]; /* type fictief conflict */
 
-extern boolv AfslaandDeelconflict[];
+extern bool AfslaandDeelconflict[];
 
 void BepaalIntergroenTijden(void);
 void corrigeerTIGRvoorNalopen(count fc1, count fc2, mulv tnleg, mulv tnlegd, mulv tvgnaloop);
@@ -35,11 +35,11 @@ void Realisatietijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2);
 void Realisatietijd_Ontruiming_Voorstart(count fcns, count fcvs, count tfo);
 void Realisatietijd_Ontruiming_Gelijkstart(count fc1, count fc2, count tfo12, count tfo21);
 void Realisatietijd_Ontruiming_LateRelease(count fcvs, count fclr, count tlr, count tfo);
-boolv Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
-boolv Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2);
-boolv Realisatietijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
+bool Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
+bool Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2);
+bool Realisatietijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
 void Bepaal_Realisatietijd_per_richting(void);
-boolv ym_max_tig_Realisatietijd(count i, count prmomx);
+bool ym_max_tig_Realisatietijd(count i, count prmomx);
 void TegenhoudenDoorRealisatietijden();
 
 void InitInterStartGroenTijden();
@@ -49,30 +49,30 @@ void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count
 void InterStartGroenTijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop);
 void InterStartGroenTijd_NLSG(count i, count j, count tnlsg, count tnlsgd);
 void InterStartGroentijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2);
-boolv InterStartGroenTijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
-boolv InterStartGroenTijd_Gelijkstart_Correctie(count fc1, count fc2);
-boolv InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
+bool InterStartGroenTijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
+bool InterStartGroenTijd_Gelijkstart_Correctie(count fc1, count fc2);
+bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
 
 void NaloopEG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
 void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop);
-void NaloopVtg_TVG_Correctie(count fc1, count fc2, count tnlsg, count tnlsgd);
+void NaloopVtg_TVG_Correctie(count fc1, count fc2, count hnlsg, count tnlsg, count tnlsgd);
 
-void NaloopVtg(count fc1, count fc2, count dk, count hdk, boolv hnlsg, count tnlsg, count tnlsgd);
+void NaloopVtg(count fc1, count fc2, count dk, count hdk, bool hnlsg, count tnlsg, count tnlsgd);
 void NaloopEG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop, ...);
 void NaloopEVG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop, ...);
 
-boolv max_par(count fc);
-boolv max_par_los(fc);
-void max_wachttijd_modulen_primair_ISG(boolv* prml[], count ml, count ml_max, mulv twacht[]);
-boolv yml_cv_pr_nl_ISG(boolv* prml[], count ml, count ml_max);
+bool max_par(count fc, bool* prml[], count ml);
+bool max_par_los(fc);
+void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[]);
+bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max);
 void set_PG_Deelconflict_Voorstart(mulv fc1, mulv fc2);
 set_PG_Deelconflict_LateRelease(mulv fc1, mulv fc2, mulv tlr);
 void MeeverlengenUitDoorDeelconflictVoorstart(mulv fc1, mulv fc2);
 void MeeverlengenUitDoorDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr);
 void MeeverlengenUitDoorVoetgangerLos(count fcvtg, count hmadk);
 void PercentageVerlengGroenTijdenISG(count fc, mulv percentage);
-boolv hf_wsg_nlISG(void);
-boolv afsluiten_aanvraaggebied_prISG(boolv* prml[], count ml);
+bool hf_wsg_nlISG(void);
+bool afsluiten_aanvraaggebied_prISG(bool* prml[], count ml);
 void BepaalVolgrichtingen(void);
 void PrioAanwezig(void);
 

@@ -35,7 +35,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	    private string _hnla;
 	    private string _hmad;
 	    private string _hnlsg;
-	    private string _mar;
+        private string _mar;
+        private string _mwtvm;
+        private string _prmwtvnhaltmin;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -321,30 +323,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* zet richtingen die alternatief gaan realiseren         */");
                         sb.AppendLine($"{ts}/* terug naar RV als er geen alternatieve ruimte meer is. */");
-
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller && molens.Any(x2 => x2.FasenModuleData.Any(x3 => x3.FaseCyclus == x.Naam))))
-                        {
-                            sb.AppendLine($"{ts}/* Dit gebeurt niet voor fasen met een wachttijd voorspeller, */");
-                            sb.AppendLine($"{ts}/* of fasen waarvan de voedende richting die heeft. */");
-                        }
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             // find signalgroup instance
                             var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
-                            // if the sg has no predictor
-                            if (ffc is {WachttijdVoorspeller: false})
+                            
+                            // find a potential feeding sg
+                            var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
+                            // if there is a feeding sg, set the sg instance to that sg
+                            if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
+                            
+                            if (ffc is {WachttijdVoorspeller: true })
                             {
-                                // find a potential feeding sg
-                                var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
-                                // if there is a feeding sg, set the sg instance to that sg
-                                if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
+                                sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
+                                                  $"R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && " +
+                                                  $"(!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) && " +
+                                                  $"MM[{_mpf}{_mwtvm}{fc.FaseCyclus}] > PRM[{_prmpf}{_prmwtvnhaltmin}] " +
+                                                  $"? BIT5 : 0;");
                             }
-                            // if the instance is not null, and it has a predictor, skip setting RR
-                            if (ffc is {WachttijdVoorspeller: true}) continue;
-                            sb.AppendLine(
-                                $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                            else
+                            {
+                                sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
+                                                  $"R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && " +
+                                                  $"(!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                            }
                         }
                         sb.AppendLine();
+
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            if (c.InterSignaalGroep.Gelijkstarten.Count > 0)
+                            {
+                                sb.AppendLine($"{ts}/* Correctie gelijkstart */");
+                                foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                                {
+                                    sb.AppendLine($"{ts}if (!(RR[{_fcpf}{gs:van}] & BIT5)) RR[{_fcpf}{gs:naar}] &= ~BIT5;");
+                                    sb.AppendLine($"{ts}if (!(RR[{_fcpf}{gs:naar}] & BIT5)) RR[{_fcpf}{gs:van}] &= ~BIT5;");
+                                }
+                                sb.AppendLine();
+                            }
+                            if (c.InterSignaalGroep.Gelijkstarten.Count > 0)
+                            {
+                                sb.AppendLine($"{ts}/* Correctie Late Release */");
+                                foreach (var lr in c.InterSignaalGroep.LateReleases)
+                                {
+                                    sb.AppendLine($"{ts}if (!((RR[{_fcpf}{lr:naar}] & BIT5) || G[{_fcpf}{lr:naar}])) RR[{_fcpf}{lr:van}] &= ~BIT5;");
+                                }
+                                sb.AppendLine();
+                            }
+                        }
 
                         List<Tuple<string, List<string>>> gelijkstarttuples = null;
                         gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
@@ -485,7 +512,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = max_par({_fcpf}{fc.FaseCyclus})");
+                                    sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = max_par({_fcpf}{fc.FaseCyclus}, PRML, ML)");
                                     sb.Append($" && SCH[{_schpf}{_schaltg}");
                                     foreach (var ofc in hasgs.Item2)
                                     {
@@ -529,7 +556,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ");
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"max_par({_fcpf}{fc.FaseCyclus}) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                    sb.AppendLine($"max_par({_fcpf}{fc.FaseCyclus}, PRML, ML) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
                                 else
                                 {
@@ -851,7 +878,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (first) sb.AppendLine($"{ts}/* Tegenrichting moet ook kunnen koppelen bij koppelaanvraag */");
                     first = false;
                     var d = nl.Detectoren.First();
-                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:naar}] && (!IH[{_hpf}{_hnla}{d.Detector}] || PAR[{_fcpf}{nl:van}]);");
+                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:naar}] && PAR[{_fcpf}{nl:van}];");
                 }
             }
             if (!first) sb.AppendLine();
@@ -868,13 +895,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (first) sb.AppendLine($"{ts}/* Bepaal naloop voetgangers wel/niet toegestaan */");
                     first = false;
                     var d = nl.Detectoren.First();
-                    sb.AppendLine($"{ts}IH[{_hpf}{_hnlsg}{nl:vannaar}] = (PR[{_fcpf}{nl:van}] || AR[{_fcpf}{nl:van}] && PAR[{_fcpf}{nl:naar}]) && IH[{_hpf}{_hnla}{d.Detector}];");
+                    sb.AppendLine($"{ts}IH[{_hpf}{_hnlsg}{nl:vannaar}] = (PR[{_fcpf}{nl:van}] || AR[{_fcpf}{nl:van}] && PAR[{_fcpf}{nl:van}]);");
                 }
             }
             if (!first) sb.AppendLine();
             first = true;
 
             var doneMeeAanvragen = new List<MeeaanvraagModel>();
+            var setPARma = new StringBuilder();
             foreach (var mav in c.InterSignaalGroep.Meeaanvragen)
             {
                 if (doneMeeAanvragen.Any(x => ReferenceEquals(x, mav))) continue;
@@ -902,9 +930,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (dBinnen1 == null || dBinnen2 == null) continue;
 
-                    sb.AppendLine($"{ts}PAR[{_fcpf}{mav:van}] = PAR[{_fcpf}{mav:van}] || IH[{_hpf}{_hmad}{dBinnen1.Naam}] && max_par_los({_fcpf}{mav:van}) && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_1]) && (!H[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_2]);");
-                    sb.AppendLine($"{ts}PAR[{_fcpf}{mav:naar}] = PAR[{_fcpf}{mav:naar}] || IH[{_hpf}{_hmad}{dBinnen2.Naam}] && max_par_los({_fcpf}{mav:naar}) && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_1]) && (!H[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_2]);");
+                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:van}] && IH[{_hpf}{_hmad}{dBinnen1.Naam}] && max_par_los({_fcpf}{mav:van}) && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_1]) && (!H[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_2]) || PAR_los[{_fcpf}{mav:van}] && RA[{_fcpf}{mav:van}]) PAR_los[{_fcpf}{mav:van}] = TRUE;");
+                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:naar}] && IH[{_hpf}{_hmad}{dBinnen2.Naam}] && max_par_los({_fcpf}{mav:naar}) && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_1]) && (!H[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_2]) || PAR_los[{_fcpf}{mav:naar}] && RA[{_fcpf}{mav:naar}]) PAR_los[{_fcpf}{mav:naar}] = TRUE;");
+
+                    setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:van}] = PAR[{_fcpf}{mav:van}] || PAR_los[{_fcpf}{mav:van}];");
+                    setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:naar}] = PAR[{_fcpf}{mav:naar}] || PAR_los[{_fcpf}{mav:naar}];");
                 }
+            }
+            if (setPARma.Length > 0) 
+            {
+                sb.AppendLine();
+                sb.Append(setPARma.ToString());
             }
 
             if (!first) sb.AppendLine();
@@ -915,8 +951,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (first) sb.AppendLine($"{ts}/* PAR correcties gelijkstart synchronisaties */");
                 first = false;
 
-                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && (PAR[{_fcpf}{gs:van}] || !A[{_fcpf}{gs:van}]);");
-                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && (PAR[{_fcpf}{gs:naar}] || !A[{_fcpf}{gs:naar}]);");
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && PAR[{_fcpf}{gs:van}];");
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && PAR[{_fcpf}{gs:naar}];");
             }
 
             return sb.ToString();
@@ -1081,6 +1117,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _mar = CCOLGeneratorSettingsProvider.Default.GetElementName("mar");
             _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
             _schlos = CCOLGeneratorSettingsProvider.Default.GetElementName("schlos");
+            _mwtvm = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtvm");
+            _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
 
             return base.SetSettings(settings);
         }
