@@ -131,6 +131,9 @@
     <system:String x:Key="Title_HD">Afhandeling hulpdiensten</system:String>
     <system:String x:Key="Title_OVIngreep">Functionaliteit prioriteitsingreep</system:String>
     <system:String x:Key="Title_OVIngreepInUitmelding">In- en uitmeldingen</system:String>
+    <system:String x:Key="Title_OVRichtingBijzonderheden">Bijzonderheden m.b.t. KAR richtingnummers</system:String>
+    <system:String x:Key="Title_OVRichtingInPRM">KAR richtingnummers in parameters</system:String>
+    <system:String x:Key="Title_OVRichtingHogeNummers">KAR richtingnummers hoger dan 200</system:String>
     <system:String x:Key="Title_OVIngreepLijnnummers">Gefilterde lijnnummers</system:String>
     <system:String x:Key="Title_OVIngreepAfkappen">Afkappen</system:String>
     <system:String x:Key="Title_OVIngreepBijzonderRealiseren">Bijzonder realiseren</system:String>

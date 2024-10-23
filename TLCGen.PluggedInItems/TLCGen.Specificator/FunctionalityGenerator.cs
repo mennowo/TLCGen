@@ -1183,6 +1183,41 @@ namespace TLCGen.Specificator
 
             }
 
+            if (c.HasKAR() && c.PrioData.PrioIngrepen.Any() && (c.PrioData.KARSignaalGroepNummersInParameters || c.PrioData.VerlaagHogeSignaalGroepNummers))
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVRichtingBijzonderheden"]}", startLevel + 1));
+
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"In de regeling wordt een afwijkende, dan wel instelbare, afhandeling van richtingnummers uit de KAR berichten toegepast. " +
+                    $"Dit wordt hieronder nader toegelicht."));
+
+                if (c.PrioData.KARSignaalGroepNummersInParameters)
+                {
+                    items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVRichtingInPRM"]}", startLevel + 2)); 
+                    
+                    items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"De richtingnummers in het KAR bericht waar de regeling op reageert, zijn per signaalgroep opgenomen in een parameter. " +
+                    $"Dit maakt het mogelijk om, bijvoorbeeld in geval van een omleiding, prioriteit aan te vragen op een andere signaalgroep " +
+                    $"(bijvoorbeeld een bus die normaal op fc03 inmeldt, kan als richting 03 is afgesloten, inmelden op fc02 zonder dat er een aanpassing in de boordcomputer nodig is). " +
+                    $"Per signaalgroep ## is er een parameter PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsg") + "## waarin " +
+                    "het KAR richtingnummer is opgegeven, zonder voorloopnul, waarop voor de betreffende signaalgroep wordt ingemeld."));
+                }
+
+                if (c.PrioData.VerlaagHogeSignaalGroepNummers)
+                {
+                    items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVRichtingHogeNummers"]}", startLevel + 2));
+
+                    items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Volgens het KAR protocol kan de waarde van het richtingnummer maximaal 255 zijn, waarbij 201, 202 en 203 een speciale " +
+                    $"(afwijkende) betekenis hebben. Hierdoor kunnen signaalgroepen hoger dan 200 niet goed met KAR worden bediend. Om dit te verhelpen " +
+                    $"wordt van deze richtingen de waarde 200 afgetrokken. Een bus op richting 202 dient dan een KAR bericht te sturen met daarin een " +
+                    $"inmelding op richting 2, een bus op richting 207 een KAR bericht met daarin richting 7, enzovoorts."));
+                }
+
+                items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            }
+
             if (c.HasDSI() && c.PrioData.PrioIngrepen.Any(x => x.CheckLijnNummer))
             {
                 items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepLijnnummers"]}", startLevel + 1));
