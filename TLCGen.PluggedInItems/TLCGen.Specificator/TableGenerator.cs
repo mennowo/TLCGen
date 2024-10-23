@@ -1996,14 +1996,30 @@ namespace TLCGen.Specificator
 
             items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_OV_PrioriteitsOpties"], styleid: "Caption"));
 
-            var l = new List<List<string>>
+            var l = new List<List<string>> { };
+
+            if (!c.HasPT())
             {
-                new List<string>
+                l = new List<List<string>>
                 {
-                    "Optie (PRM prio##xyz)",
-                    "Toelichting"
-                }
-            };
+                    new List<string>
+                    {
+                        "Optie ",
+                        "Toelichting"
+                    }
+                };
+            }
+            else
+            {
+                l = new List<List<string>>
+                {
+                    new List<string>
+                    {
+                        "Optie (PRM prio##xyz)",
+                        "Toelichting"
+                    }
+                };
+            }
             l.Add(new List<string> { "0", "Geen prioriteit" });
             l.Add(new List<string> { "1", "Aanvragen en afkappen conflicterende richtingen" });
             l.Add(new List<string> { "2", "Aanvragen en vasthouden van het groen" });
