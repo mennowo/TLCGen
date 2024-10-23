@@ -226,7 +226,7 @@ namespace TLCGen.UnitTests.Build
                 ResourceReader.GetResourceTextFile("TLCGen.Generators.CCOL.Settings.ccolgendefaults.xml", this, typeof(CCOLGeneratorSettingsProvider)));
         }
 
-        private static readonly string MsBuildPath = Path.Combine(@"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin", "MSBuild.exe");
+        private static readonly string MsBuildPath = Path.Combine(@"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin", "MSBuild.exe");
 
         private void GenerateController(string path, ControllerModel c)
         {
@@ -236,7 +236,7 @@ namespace TLCGen.UnitTests.Build
             CcolGen.Controller = c;
             CcolGen.GenerateController();
             var visualGen = new CCOLVisualProjectGenerator();
-            visualGen.GenerateVisualStudioProjectFiles(CcolGen, "Visual_2017", 2017);
+            visualGen.GenerateVisualStudioProjectFiles(CcolGen, "Visual_2022", 2022);
             TLCGenSerialization.Serialize(file, c);
         }
 
@@ -244,7 +244,7 @@ namespace TLCGen.UnitTests.Build
         {
             var start = new ProcessStartInfo();
             var p = new Process();
-            start.Arguments = " \"" + Path.Combine(path, "TEST_Visual_2017.vcxproj") + "\"";
+            start.Arguments = " \"" + Path.Combine(path, "TEST_Visual_2022.vcxproj") + "\"";
             start.FileName = MsBuildPath;
             start.WindowStyle = ProcessWindowStyle.Hidden;
             start.CreateNoWindow = true;
@@ -291,7 +291,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
         
         [Test]
@@ -355,7 +355,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
 
         
@@ -399,7 +399,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
         
         [Test]
@@ -480,7 +480,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
         
         [Test]
@@ -503,7 +503,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
 
         [Test]
@@ -526,7 +526,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.Equals(0, p.ExitCode);
+            Assert.That(0 == p.ExitCode);
         }
 
         private static void MakeStarController(ControllerModel c)

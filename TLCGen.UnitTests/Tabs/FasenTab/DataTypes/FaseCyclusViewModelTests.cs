@@ -339,7 +339,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
             var vm = new FaseCyclusViewModel(model.Fasen[0]) {HiaatKoplusBijDetectieStoring = true};
 
-            Assert.That( 5 == vm.VervangendHiaatKoplus);
+            Assert.That(vm.VervangendHiaatKoplus == 25, $"Vervangend hiaat koplus is {vm.VervangendHiaatKoplus} instead of the hardcoded value of 25");
         }
 
         [Test]

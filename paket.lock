@@ -48,7 +48,7 @@ NUGET
       System.Memory (>= 4.5.5) - restriction: >= net462
       System.Threading.Tasks.Extensions (>= 4.5.4) - restriction: >= net462
       System.ValueTuple (>= 4.5) - restriction: >= net462
-    NUnitTestAdapter (2.3)
+    NUnit3TestAdapter (4.6)
     System.Buffers (4.5.1) - restriction: || (&& (>= monoandroid) (>= netcoreapp3.1) (< netstandard1.3)) (&& (>= monoandroid) (< netstandard1.3) (>= netstandard2.0)) (&& (>= monotouch) (>= netcoreapp3.1)) (&& (>= monotouch) (>= netstandard2.0)) (&& (< net46) (< netcoreapp2.0) (>= netstandard2.0)) (>= net462) (&& (< netcoreapp2.0) (>= netcoreapp3.1)) (&& (>= netcoreapp3.1) (>= xamarintvos)) (&& (>= netcoreapp3.1) (>= xamarinwatchos)) (&& (>= netstandard2.0) (>= xamarintvos)) (&& (>= netstandard2.0) (>= xamarinwatchos)) (>= xamarinios) (>= xamarinmac)
     System.CodeDom (8.0) - restriction: >= netstandard2.0
     System.ComponentModel (4.3) - restriction: && (>= net45) (< net46) (< netstandard2.0)

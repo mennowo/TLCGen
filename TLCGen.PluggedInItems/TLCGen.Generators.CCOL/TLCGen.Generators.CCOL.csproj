@@ -148,6 +148,12 @@
     <Compile Include="Settings\CCOLGeneratorSettingsModel.cs" />
     <Compile Include="Settings\CCOLGeneratorSettingsProvider.cs" />
     <Compile Include="Settings\CodePieceSettingsTuple.cs" />
+    <Content Include="Settings\VisualTemplates\Visual_2022_filters.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2022.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Settings\VisualTemplates\Visual_2019.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

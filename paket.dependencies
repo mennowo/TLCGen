@@ -18,4 +18,4 @@ nuget FlaUI.UIA3
 nuget Markdown.XAML
 nuget CodingConnected.Topology framework: >= net45
 nuget AvalonEdit
-nuget NUnitTestAdapter
+nuget NUnit3TestAdapter

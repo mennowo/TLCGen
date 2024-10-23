@@ -199,6 +199,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     break;
                 case 2017:
                 case 2019:
+                case 2022:
                     neededlibs.Add("legacy_stdio_definitions.lib");
                     break;
                 default:

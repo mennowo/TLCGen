@@ -794,7 +794,7 @@ namespace TLCGen.ViewModels
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.DefaultCCOL.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.ToCCOL.GetDescription());
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKToCCOL.GetDescription());
-            if (TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            if (TLCGenControllerDataProvider.Default.Controller?.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MaatgevendGroen.GetDescription());
             }
@@ -811,7 +811,7 @@ namespace TLCGen.ViewModels
             AlternatieveRuimteOpties.Clear();
             AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.MaxTarToTig.GetDescription());
             AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.MaxTar.GetDescription());
-            if (TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            if (TLCGenControllerDataProvider.Default.Controller?.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 AlternatieveRuimteOpties.Add(AlternatieveRuimteTypeEnum.RealRuimte.GetDescription());
             }

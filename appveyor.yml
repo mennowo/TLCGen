@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: '0.9.0.{build}'
+version: '12.4.0.{build}'
 
 branches:
   # whitelist
@@ -61,7 +61,7 @@ configuration: Release
   # verbosity: detailed
 
 # scripts to run before build
-before_build:
+before_build: []
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:

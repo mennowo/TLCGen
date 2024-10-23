@@ -157,9 +157,9 @@ namespace TLCGen.UnitTests
 		    Assert.That(vm.Detectoren[0].AanvraagDirect == NooitAltijdAanUitEnum.SchAan);
 		    Assert.That(vm.Detectoren[1].AanvraagDirect == NooitAltijdAanUitEnum.SchAan);
 		    Assert.That(vm.Detectoren[2].AanvraagDirect == NooitAltijdAanUitEnum.SchAan);
-		    Assert.That(model.Fasen[1].Detectoren[0].AanvraagDirect);
-		    Assert.That(model.Fasen[1].Detectoren[1].AanvraagDirect);
-		    Assert.That(model.Fasen[1].Detectoren[2].AanvraagDirect);
+		    Assert.That(model.Fasen[1].Detectoren[0].AanvraagDirectSch == NooitAltijdAanUitEnum.SchAan);
+		    Assert.That(model.Fasen[1].Detectoren[1].AanvraagDirectSch == NooitAltijdAanUitEnum.SchAan);
+		    Assert.That(model.Fasen[1].Detectoren[2].AanvraagDirectSch == NooitAltijdAanUitEnum.SchAan);
 	    }
     }
 }
