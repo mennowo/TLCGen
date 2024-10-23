@@ -1404,10 +1404,21 @@ namespace TLCGen.Specificator
             if (c.HasHDKAR() && c.HasHDOpticom()) text += "KAR en Opticom.";
             else if (c.HasHDKAR()) text += "KAR.";
             else if (c.HasHDOpticom()) text += "Opticom.";
-            text +=
-                $" Een hulpdienstingreep kent de hoogste vorm van prioriteit (zie tabel {TableGenerator.Tables["Table_OV_PrioriteitsOpties"]}: " +
-                $"{Texts["Table_OV_PrioriteitsOpties"]}). Deze ingreep kapt af (na verstrijken van de garantiegroentijd) en blokkeert " +
-                $"alle signaalgroepen die conflicteren met de hulpdienst.";
+
+            if (!c.HasPT())
+            {
+                text +=
+                    $" Een hulpdienstingreep kent de hoogste vorm van prioriteit (zie onderstaande tabel). Deze ingreep kapt af (na " +
+                    $"verstrijken van de garantiegroentijd) en blokkeert alle signaalgroepen die conflicteren met de hulpdienst.";
+            }
+            else
+            {
+                text +=
+                    $" Een hulpdienstingreep kent de hoogste vorm van prioriteit: (zie tabel {TableGenerator.Tables["Table_OV_PrioriteitsOpties"]}: " +
+                    $"{Texts["Table_OV_PrioriteitsOpties"]}). Deze ingreep kapt af (na verstrijken van de garantiegroentijd) en blokkeert " +
+                    $"alle signaalgroepen die conflicteren met de hulpdienst.";
+            }
+
             if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
             {
                 if (c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
@@ -1417,6 +1428,12 @@ namespace TLCGen.Specificator
             }
             text += " Tijdens een hulpdienstingreep wordt de fasebewakingstimer herstart.";
             items.Add(OpenXmlHelper.GetTextParagraph(text));
+
+            if (!c.HasPT())
+            {
+                items.AddRange(TableGenerator.GetTable_OV_PrioriteitsOpties(c));
+                items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+            }
 
             items.Add(OpenXmlHelper.GetTextParagraph(
                 $"De instellingen en opties voor hulpdienstingrepen worden weergegeven in onderstaande tabel:"));
