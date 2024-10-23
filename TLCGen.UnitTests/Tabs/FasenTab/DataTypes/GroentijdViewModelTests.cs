@@ -28,8 +28,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
             });
             var vm = new GroentijdenSetViewModel(model.GroentijdenSets[0]);
 
-            Assert.IsTrue(vm.Groentijden[0].CompareTo(vm.Groentijden[1]) < 0, vm.Naam);
-            Assert.IsTrue(vm.Groentijden[1].CompareTo(vm.Groentijden[0]) > 0, vm.Naam);
+            Assert.That(vm.Groentijden[0].CompareTo(vm.Groentijden[1]) < 0, vm.Naam);
+            Assert.That(vm.Groentijden[1].CompareTo(vm.Groentijden[0]) > 0, vm.Naam);
         }
     }
 }

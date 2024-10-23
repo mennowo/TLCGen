@@ -26,7 +26,7 @@ namespace TLCGen.UnitTests
 
             vm.OnSelected();
 
-            Assert.AreEqual(5, vm.Fasen.Count);
+            Assert.That(5 == vm.Fasen.Count);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace TLCGen.UnitTests
             vm.OnDeselected();
             vm.OnSelected();
 
-            Assert.True(object.ReferenceEquals(vm.SelectedItem, vm.Fasen[3]));
+            Assert.That(object.ReferenceEquals(vm.SelectedItem, vm.Fasen[3]));
         }
 
         [Test]
@@ -69,11 +69,11 @@ namespace TLCGen.UnitTests
             vm.SelectedItems = new List<FaseCyclusViewModel> { vm.Fasen[1], vm.Fasen[2], vm.Fasen[3] };
             vm.Fasen[3].TGL = 50;
 
-            Assert.AreEqual(30, vm.Fasen[0].TGL);
-            Assert.AreEqual(50, vm.Fasen[1].TGL);
-            Assert.AreEqual(50, vm.Fasen[2].TGL);
-            Assert.AreEqual(50, vm.Fasen[3].TGL);
-            Assert.AreEqual(30, vm.Fasen[4].TGL);
+            Assert.That(30 == vm.Fasen[0].TGL);
+            Assert.That(50 == vm.Fasen[1].TGL);
+            Assert.That(50 == vm.Fasen[2].TGL);
+            Assert.That(50 == vm.Fasen[3].TGL);
+            Assert.That(30 == vm.Fasen[4].TGL);
         }
     }
 }

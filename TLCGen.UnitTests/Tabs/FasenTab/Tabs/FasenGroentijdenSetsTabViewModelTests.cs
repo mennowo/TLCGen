@@ -30,7 +30,7 @@ namespace TLCGen.UnitTests
 
             var result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
 
-            Assert.False(result);
+            Assert.That(!result);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace TLCGen.UnitTests
             vm.SelectedSet = vm.GroentijdenSets[0];
             var result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
         
-            Assert.True(result);
+            Assert.That(result);
         }
         
         [Test]
@@ -68,7 +68,7 @@ namespace TLCGen.UnitTests
         
             var result = vm.AddGroentijdenSetCommand.CanExecute(null);
         
-            Assert.True(result);
+            Assert.That(result);
         }
         
         [Test]
@@ -87,7 +87,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             var result = vm.AddGroentijdenSetCommand.CanExecute(null);
         
-            Assert.True(result);
+            Assert.That(result);
         }
         
         [Test]
@@ -107,7 +107,7 @@ namespace TLCGen.UnitTests
         
             vm.AddGroentijdenSetCommand.Execute(null);
         
-            Assert.AreEqual(5, vm.FasenNames.Count);
+            Assert.That(5 == vm.FasenNames.Count);
         }
         
         [Test]
@@ -127,13 +127,13 @@ namespace TLCGen.UnitTests
         
             vm.AddGroentijdenSetCommand.Execute(null);
                         
-            Assert.AreEqual(1, model.GroentijdenSets.Count);
-            Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.That(1 == model.GroentijdenSets.Count);
+            Assert.That(5 == model.GroentijdenSets[0].Groentijden.Count);
+            Assert.That("01" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("02" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("03" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
         
         [Test]
@@ -157,15 +157,15 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
         
-            Assert.AreEqual(5, model.GroentijdenSets.Count);
+            Assert.That(5 == model.GroentijdenSets.Count);
             for (var i = 0; i < 5; ++i)
             {
-                Assert.AreEqual(5, model.GroentijdenSets[i].Groentijden.Count);
-                Assert.AreEqual("01", model.GroentijdenSets[i].Groentijden[0].FaseCyclus);
-                Assert.AreEqual("02", model.GroentijdenSets[i].Groentijden[1].FaseCyclus);
-                Assert.AreEqual("03", model.GroentijdenSets[i].Groentijden[2].FaseCyclus);
-                Assert.AreEqual("04", model.GroentijdenSets[i].Groentijden[3].FaseCyclus);
-                Assert.AreEqual("05", model.GroentijdenSets[i].Groentijden[4].FaseCyclus);
+                Assert.That(5 == model.GroentijdenSets[i].Groentijden.Count);
+                Assert.That("01" == model.GroentijdenSets[i].Groentijden[0].FaseCyclus);
+                Assert.That("02" == model.GroentijdenSets[i].Groentijden[1].FaseCyclus);
+                Assert.That("03" == model.GroentijdenSets[i].Groentijden[2].FaseCyclus);
+                Assert.That("04" == model.GroentijdenSets[i].Groentijden[3].FaseCyclus);
+                Assert.That("05" == model.GroentijdenSets[i].Groentijden[4].FaseCyclus);
             }
         }
         
@@ -189,13 +189,13 @@ namespace TLCGen.UnitTests
             vm.SelectedSet = vm.GroentijdenSets[0];
             vm.RemoveGroentijdenSetCommand.Execute(null);
         
-            Assert.AreEqual(1, model.GroentijdenSets.Count);
-            Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.That(1 == model.GroentijdenSets.Count);
+            Assert.That(5 == model.GroentijdenSets[0].Groentijden.Count);
+            Assert.That("01" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("02" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("03" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
         
         [Test]
@@ -220,7 +220,7 @@ namespace TLCGen.UnitTests
             vm.SelectedSet = vm.GroentijdenSets[0];
             vm.RemoveGroentijdenSetCommand.Execute(null);
         
-            Assert.False(vm.RemoveGroentijdenSetCommand.CanExecute(null));
+            Assert.That(!vm.RemoveGroentijdenSetCommand.CanExecute(null));
         }
         
         [Test]
@@ -244,8 +244,8 @@ namespace TLCGen.UnitTests
             vm.SelectedSet = vm.GroentijdenSets[1];
             vm.RemoveGroentijdenSetCommand.Execute(null);
             
-            Assert.AreEqual("MG1", vm.GroentijdenSets[0].Naam);
-            Assert.AreEqual("MG2", vm.GroentijdenSets[1].Naam);
+            Assert.That("MG1" == vm.GroentijdenSets[0].Naam);
+            Assert.That("MG2" == vm.GroentijdenSets[1].Naam);
         }
         
         [Test]
@@ -272,9 +272,11 @@ namespace TLCGen.UnitTests
             vmfasen.Fasen[2].Naam = "07";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
             
-            Assert.AreEqual(
-                new string[5] { "01", "02", "04", "05", "07" },
-                model.GroentijdenSets[0].Groentijden.Select(x => x.FaseCyclus).ToArray());
+            Assert.That("01" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("02" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That("07" == model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
 
         [Test]
@@ -296,10 +298,12 @@ namespace TLCGen.UnitTests
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vmfasen.Fasen[2].Naam = "07";
-            
-            Assert.AreEqual(
-                new string[5] { "01", "02", "04", "05", "07" },
-                vm.FasenNames.ToArray());
+
+            Assert.That("01" == vm.FasenNames[0]);
+            Assert.That("02" == vm.FasenNames[1]);
+            Assert.That("04" == vm.FasenNames[2]);
+            Assert.That("05" == vm.FasenNames[3]);
+            Assert.That("07" == vm.FasenNames[4]);
         }
 
         [Test]
@@ -326,9 +330,11 @@ namespace TLCGen.UnitTests
             vmfasen.Fasen[2].Naam = "02";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
-            Assert.AreEqual(
-                new string[5] { "02", "05", "06", "08", "09" },
-                model.GroentijdenSets[0].Groentijden.Select(x => x.FaseCyclus).ToArray());
+            Assert.That("02" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("06" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("08" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That("09" == model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
 
         [Test]
@@ -355,9 +361,11 @@ namespace TLCGen.UnitTests
             vmfasen.Fasen[2].Naam = "02";
             vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
-            Assert.AreEqual(
-                new string[5] { "02", "05", "06", "08", "09" },
-                vm.FasenNames.ToArray());
+            Assert.That("02" == vm.FasenNames[0]);
+            Assert.That("05" == vm.FasenNames[1]);
+            Assert.That("06" == vm.FasenNames[2]);
+            Assert.That("08" == vm.FasenNames[3]);
+            Assert.That("09" == vm.FasenNames[4]);
         }
 
         [Test]
@@ -382,20 +390,20 @@ namespace TLCGen.UnitTests
             vmfasen.AddFaseCommand.Execute(null);
             vm.OnFasenChanged(new FasenChangedMessage(new List<FaseCyclusModel>{model.Fasen[5]}, null));
 
-            Assert.AreEqual(6, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("09", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
-            Assert.AreEqual(6, model.GroentijdenSets[1].Groentijden.Count);
-            Assert.AreEqual("03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("05", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("06", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("09", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
+            Assert.That(6 == model.GroentijdenSets[0].Groentijden.Count);
+            Assert.That("03" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("06" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That("08" == model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.That("09" == model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
+            Assert.That(6 == model.GroentijdenSets[1].Groentijden.Count);
+            Assert.That("03" == model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
+            Assert.That("05" == model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
+            Assert.That("06" == model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
+            Assert.That("08" == model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
+            Assert.That("09" == model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
         }
 
         [Test]
@@ -420,16 +428,16 @@ namespace TLCGen.UnitTests
             vmfasen.SelectedFaseCyclus = vmfasen.Fasen[2];
             vmfasen.RemoveFaseCommand.Execute(null);
 
-            Assert.AreEqual(4, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual(4, model.GroentijdenSets[1].Groentijden.Count);
-            Assert.AreEqual("03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("06", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
+            Assert.That(4 == model.GroentijdenSets[0].Groentijden.Count);
+            Assert.That("03" == model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.That("06" == model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.That("08" == model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.That(4 == model.GroentijdenSets[1].Groentijden.Count);
+            Assert.That("03" == model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
+            Assert.That("04" == model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
+            Assert.That("06" == model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
+            Assert.That("08" == model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
         }
 
         [Test]
@@ -453,12 +461,12 @@ namespace TLCGen.UnitTests
             model.Data.TypeGroentijden = GroentijdenTypeEnum.VerlengGroentijden;
             vm.OnGroentijdenTypeChanged(new GroentijdenTypeChangedMessage(GroentijdenTypeEnum.VerlengGroentijden));
         
-            Assert.AreEqual("VG1", model.GroentijdenSets[0].Naam);
-            Assert.AreEqual("VG2", model.GroentijdenSets[1].Naam);
-            Assert.AreEqual("VG3", model.GroentijdenSets[2].Naam);
-            Assert.AreEqual(GroentijdenTypeEnum.VerlengGroentijden, model.GroentijdenSets[0].Type);
-            Assert.AreEqual(GroentijdenTypeEnum.VerlengGroentijden, model.GroentijdenSets[1].Type);
-            Assert.AreEqual(GroentijdenTypeEnum.VerlengGroentijden, model.GroentijdenSets[2].Type);
+            Assert.That("VG1" == model.GroentijdenSets[0].Naam);
+            Assert.That("VG2" == model.GroentijdenSets[1].Naam);
+            Assert.That("VG3" == model.GroentijdenSets[2].Naam);
+            Assert.That(GroentijdenTypeEnum.VerlengGroentijden == model.GroentijdenSets[0].Type);
+            Assert.That(GroentijdenTypeEnum.VerlengGroentijden == model.GroentijdenSets[1].Type);
+            Assert.That(GroentijdenTypeEnum.VerlengGroentijden == model.GroentijdenSets[2].Type);
         }
         
         [Test]
@@ -482,12 +490,12 @@ namespace TLCGen.UnitTests
             model.Data.TypeGroentijden = GroentijdenTypeEnum.MaxGroentijden;
             vm.OnGroentijdenTypeChanged(new GroentijdenTypeChangedMessage(GroentijdenTypeEnum.MaxGroentijden));
 
-            Assert.AreEqual("MG1", model.GroentijdenSets[0].Naam);
-            Assert.AreEqual("MG2", model.GroentijdenSets[1].Naam);
-            Assert.AreEqual("MG3", model.GroentijdenSets[2].Naam);
-            Assert.AreEqual(GroentijdenTypeEnum.MaxGroentijden, model.GroentijdenSets[0].Type);
-            Assert.AreEqual(GroentijdenTypeEnum.MaxGroentijden, model.GroentijdenSets[1].Type);
-            Assert.AreEqual(GroentijdenTypeEnum.MaxGroentijden, model.GroentijdenSets[2].Type);
+            Assert.That("MG1" == model.GroentijdenSets[0].Naam);
+            Assert.That("MG2" == model.GroentijdenSets[1].Naam);
+            Assert.That("MG3" == model.GroentijdenSets[2].Naam);
+            Assert.That(GroentijdenTypeEnum.MaxGroentijden == model.GroentijdenSets[0].Type);
+            Assert.That(GroentijdenTypeEnum.MaxGroentijden == model.GroentijdenSets[1].Type);
+            Assert.That(GroentijdenTypeEnum.MaxGroentijden == model.GroentijdenSets[2].Type);
         }
     }
 }

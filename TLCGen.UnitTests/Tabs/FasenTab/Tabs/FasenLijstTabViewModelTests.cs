@@ -27,7 +27,7 @@ namespace TLCGen.UnitTests
 
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual(1, model.Fasen.Count);
+            Assert.That(1 == model.Fasen.Count);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace TLCGen.UnitTests
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual(5, model.Fasen.Count);
+            Assert.That(5 == model.Fasen.Count);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace TLCGen.UnitTests
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual("05", model.Fasen[4].Naam);
+            Assert.That("05" == model.Fasen[4].Naam);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace TLCGen.UnitTests
 
             var result = vm.RemoveFaseCommand.CanExecute(null);
             
-            Assert.False(result);
+            Assert.That(!result);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace TLCGen.UnitTests
             vm.SelectedFaseCyclus = vm.Fasen[0];
             var result = vm.RemoveFaseCommand.CanExecute(null);
 
-            Assert.True(result);
+            Assert.That(result);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace TLCGen.UnitTests
 
             var result = vm.AddFaseCommand.CanExecute(null);
 
-            Assert.True(result);
+            Assert.That(result);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace TLCGen.UnitTests
 
             var result = vm.AddFaseCommand.CanExecute(null);
 
-            Assert.True(result);
+            Assert.That(result);
         }
 
         [Test]
@@ -153,9 +153,11 @@ namespace TLCGen.UnitTests
             vm.Fasen[2].Naam = "07";
             vm.OnDeselectedPreview();
 
-            Assert.AreEqual(
-                new string[5] { "01", "02", "04", "05", "07" },
-                vm.Fasen.Select(x => x.Naam).ToArray());
+            Assert.That("01" == vm.Fasen[0].Naam);
+            Assert.That("02" == vm.Fasen[1].Naam);
+            Assert.That("04" == vm.Fasen[2].Naam);
+            Assert.That("05" == vm.Fasen[3].Naam);
+            Assert.That("07" == vm.Fasen[4].Naam);
         }
 
         [Test]
@@ -174,9 +176,11 @@ namespace TLCGen.UnitTests
             vm.Fasen[2].Naam = "07";
             vm.OnDeselectedPreview();
 
-            Assert.AreEqual(
-                new string[5] { "01", "02", "04", "05", "07" },
-                model.Fasen.Select(x => x.Naam).ToArray());
+            Assert.That("01" == vm.Fasen[0].Naam);
+            Assert.That("02" == vm.Fasen[1].Naam);
+            Assert.That("04" == vm.Fasen[2].Naam);
+            Assert.That("05" == vm.Fasen[3].Naam);
+            Assert.That("07" == vm.Fasen[4].Naam);
         }
 
         [Test]
@@ -198,8 +202,8 @@ namespace TLCGen.UnitTests
             vm.Fasen[4].Naam = "05";
             vm.OnDeselectedPreview();
 
-            Assert.AreEqual("05", vm.Fasen[2].Naam);
-            Assert.AreEqual("08", vm.Fasen[4].Naam);
+            Assert.That("05" == vm.Fasen[2].Naam);
+            Assert.That("08" == vm.Fasen[4].Naam);
         }
 
         [Test]
@@ -221,11 +225,11 @@ namespace TLCGen.UnitTests
             vm.SelectedFaseCycli.Add(vm.Fasen[4]);
             vm.Fasen[4].VasteAanvraag = NooitAltijdAanUitEnum.Altijd;
 
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[0].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[1].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[2].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[3].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[4].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[0].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[1].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[2].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[3].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[4].VasteAanvraag);
         }
 
         [Test]
@@ -245,8 +249,8 @@ namespace TLCGen.UnitTests
             vm.SelectedFaseCycli.Add(vm.Fasen[3]);
             vm.Fasen[3].VasteAanvraag = NooitAltijdAanUitEnum.Altijd;
 
-            Assert.AreNotEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[0].VasteAanvraag);
-            Assert.AreNotEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[4].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd != vm.Fasen[0].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd != vm.Fasen[4].VasteAanvraag);
         }
     }
 }

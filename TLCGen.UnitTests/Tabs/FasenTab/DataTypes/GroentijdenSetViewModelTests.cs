@@ -27,7 +27,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
             
             vm.Type = GroentijdenTypeEnum.VerlengGroentijden;
 
-            Assert.AreEqual("VG1", vm.Naam);
+            Assert.That("VG1" == vm.Naam);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 
             vm.Type = GroentijdenTypeEnum.MaxGroentijden;
 
-            Assert.AreEqual("MG1", vm.Naam);
+            Assert.That("MG1" == vm.Naam);
         }
     }
 }

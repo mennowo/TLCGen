@@ -291,7 +291,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
         
         [Test]
@@ -355,7 +355,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
 
         
@@ -399,7 +399,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
         
         [Test]
@@ -480,7 +480,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
         
         [Test]
@@ -503,7 +503,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
 
         [Test]
@@ -526,7 +526,7 @@ namespace TLCGen.UnitTests.Build
 
             var p = BuildController(path, output);
 
-            Assert.AreEqual(0, p.ExitCode);
+            Assert.Equals(0, p.ExitCode);
         }
 
         private static void MakeStarController(ControllerModel c)

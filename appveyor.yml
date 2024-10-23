@@ -85,7 +85,7 @@ after_build:
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFiles
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFilesToCopy
 
-test: off
+test: false
 
 artifacts:
 - path: '**\*.zip'
