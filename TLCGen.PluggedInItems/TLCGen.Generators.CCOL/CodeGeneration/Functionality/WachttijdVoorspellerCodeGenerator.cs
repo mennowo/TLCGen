@@ -590,24 +590,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}])");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~PRIO_RR_BIT;");
+                        var items = new List<string>{ fc.Naam };
                         foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == fc.Naam))
                         {
                             var nlfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
                             if (nlfc != null)
                             {
                                 sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nlfc.Naam}] &= ~PRIO_RR_BIT;");
+                                items.Add(nlfc.Naam);
                             }
                         }
-                        foreach (var nl in c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam))
+                        foreach (var nl in c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam || x.FaseNaar == fc.Naam))
                         {
-                            var gsfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
-                            if (gsfc != null)
+                            var gsNaar = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            if (gsNaar != null)
                             {
-                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsfc.Naam}] &= ~PRIO_RR_BIT;");
+                                if (!items.Contains(gsNaar.Naam))
+                                {
+                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsNaar.Naam}] &= ~PRIO_RR_BIT;");
+                                    items.Add(gsNaar.Naam);
+                                }
+                            }
+                            var gsVan = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                            if (gsVan != null)
+                            {
+                                if (!items.Contains(gsVan.Naam))
+                                {
+                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsVan.Naam}] &= ~PRIO_RR_BIT;");
+                                    items.Add(gsVan.Naam);
+                                }
                             }
                         }
                         sb.AppendLine($"{ts}}}");
                     }
+
+                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                    {
+                        sb.AppendLine($"{ts}if (RR[{_fcpf}{gs:van}] & PRIO_RR_BIT) RR[{_fcpf}{gs:naar}] |= PRIO_RR_BIT;");
+                        sb.AppendLine($"{ts}if (RR[{_fcpf}{gs:naar}] & PRIO_RR_BIT) RR[{_fcpf}{gs:van}] |= PRIO_RR_BIT;");
+                    }
+
                     return sb.ToString();
 
                 default:
