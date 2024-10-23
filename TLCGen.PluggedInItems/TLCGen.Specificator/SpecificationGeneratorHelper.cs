@@ -254,7 +254,7 @@ namespace TLCGen.Specificator
                 var d = data[i];
                 var tc = new TableCell();
                 var run = new Run(new Text(d));
-                if (header) run.RunProperties = new RunProperties(new Bold());
+                if (header) run.RunProperties = new RunProperties(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
                 var par = new Paragraph(run);
                 
                 ApplyStyleToParagraph(par, "TableContents");
@@ -268,6 +268,8 @@ namespace TLCGen.Specificator
                     {
                         tabProps.AppendChild(new TextDirection() { Val = TextDirectionValues.BottomToTopLeftToRight });
                     }
+                    if (header) tabProps.AppendChild(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
+
                     tc.Append(tabProps);
                 }
                 else
@@ -276,8 +278,10 @@ namespace TLCGen.Specificator
                     if (verticalText)
                     {
                         tabProps.AppendChild(new TextDirection() { Val = TextDirectionValues.BottomToTopLeftToRight });
-                        tabProps.AppendChild(new TableRowHeight() { Val = Convert.ToUInt32("1500") });
+                        tabProps.AppendChild(new TableRowHeight() { Val = Convert.ToUInt32("1800") });
                     }
+                    if (header) tabProps.AppendChild(new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Double), Size = 1 });
+
                     tc.Append(tabProps);
                 }
                 tc.Append(par);
@@ -305,6 +309,11 @@ namespace TLCGen.Specificator
         {
             var par = new Paragraph();
             var run = par.AppendChild(new Run());
+
+            var runProperties = run.AppendChild(new RunProperties());
+            var b = new Bold();
+            runProperties.AppendChild(b);
+
             run.AppendChild(new Text(title));
             ApplyStyleToParagraph(par, $"Heading{headingLevel}");
             return par;

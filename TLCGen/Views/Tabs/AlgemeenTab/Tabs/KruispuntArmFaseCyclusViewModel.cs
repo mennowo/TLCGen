@@ -2,87 +2,88 @@
 using TLCGen.Helpers;
 using TLCGen.Models;
 
-namespace TLCGen.ViewModels;
-
-public class KruispuntArmFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
+namespace TLCGen.ViewModels
 {
-    #region Properties
-
-    public KruispuntArmFaseCyclusModel Model { get; }
-
-    public string FaseCyclus
+    public class KruispuntArmFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
     {
-        get => Model.FaseCyclus;
-        set
+        #region Properties
+
+        public KruispuntArmFaseCyclusModel Model { get; }
+
+        public string FaseCyclus
         {
-            Model.FaseCyclus = value;
-            RaisePropertyChanged<object>(broadcast: true);
+            get => Model.FaseCyclus;
+            set
+            {
+                Model.FaseCyclus = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
         }
-    }
 
-    public string KruispuntArm
-    {
-        get => Model.KruispuntArm;
-        set
+        public string KruispuntArm
         {
-            Model.KruispuntArm = value;
-            RaisePropertyChanged<object>(broadcast: true);
+            get => Model.KruispuntArm;
+            set
+            {
+                Model.KruispuntArm = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
         }
-    }
 
-    public string KruispuntArmVolg
-    {
-        get => Model.KruispuntArmVolg;
-        set
+        public string KruispuntArmVolg
         {
-            Model.KruispuntArmVolg = value;
-            RaisePropertyChanged<object>(broadcast: true);
-            RaisePropertyChanged(nameof(HasVolgArm));
-            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+            get => Model.KruispuntArmVolg;
+            set
+            {
+                Model.KruispuntArmVolg = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasVolgArm));
+                RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+            }
         }
-    }
 
-    public bool HasKruispuntArmVolgTijd
-    {
-        get => Model.HasKruispuntArmVolgTijd;
-        set
+        public bool HasKruispuntArmVolgTijd
         {
-            Model.HasKruispuntArmVolgTijd = value;
-            RaisePropertyChanged<object>(broadcast: true);
-            RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+            get => Model.HasKruispuntArmVolgTijd;
+            set
+            {
+                Model.HasKruispuntArmVolgTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+            }
         }
-    }
-    
-    public int KruispuntArmVolgTijd
-    {
-        get => Model.KruispuntArmVolgTijd;
-        set
+
+        public int KruispuntArmVolgTijd
         {
-            Model.KruispuntArmVolgTijd = value;
-            RaisePropertyChanged<object>(broadcast: true);
+            get => Model.KruispuntArmVolgTijd;
+            set
+            {
+                Model.KruispuntArmVolgTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
         }
+
+        public bool HasVolgArm => KruispuntArmVolg != null && KruispuntArmVolg != "NG";
+        public bool HasVolgArmAndUseTime => HasVolgArm && HasKruispuntArmVolgTijd;
+
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return Model;
+        }
+
+        #endregion // IViewModelWithItem
+
+        #region Constructor
+
+        public KruispuntArmFaseCyclusViewModel(KruispuntArmFaseCyclusModel model)
+        {
+            Model = model;
+        }
+
+        #endregion // Constructor
     }
-
-    public bool HasVolgArm => KruispuntArmVolg != null && KruispuntArmVolg != "NG";
-    public bool HasVolgArmAndUseTime => HasVolgArm && HasKruispuntArmVolgTijd;
-
-    #endregion // Properties
-
-    #region IViewModelWithItem
-
-    public object GetItem()
-    {
-        return Model;
-    }
-
-    #endregion // IViewModelWithItem
-
-    #region Constructor
-
-    public KruispuntArmFaseCyclusViewModel(KruispuntArmFaseCyclusModel model)
-    {
-        Model = model;
-    }
-
-    #endregion // Constructor
 }

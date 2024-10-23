@@ -5,67 +5,68 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
-namespace TLCGen.ViewModels;
-
-public class KruispuntArmViewModel : ViewModelBase, IViewModelWithItem
+namespace TLCGen.ViewModels
 {
-    #region Fields
-
-    
-
-    #endregion // Fields
-
-    #region Properties
-
-    public KruispuntArmModel Model { get; }
-    
-    public string Naam
+    public class KruispuntArmViewModel : ViewModelBase, IViewModelWithItem
     {
-        get => Model.Naam;
-        set
+        #region Fields
+
+
+
+        #endregion // Fields
+
+        #region Properties
+
+        public KruispuntArmModel Model { get; }
+
+        public string Naam
         {
-            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
+            get => Model.Naam;
+            set
             {
-                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.KruispuntArm, value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
-                    var oldname = Model.Naam;
-                    Model.Naam = value;
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.KruispuntArm, value))
+                    {
+                        var oldname = Model.Naam;
+                        Model.Naam = value;
 
-                    // Notify the messenger
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
+                        // Notify the messenger
+                        MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
+                    }
                 }
+                RaisePropertyChanged<object>(broadcast: true);
             }
-            RaisePropertyChanged<object>(broadcast: true);
         }
-    }
 
-    public string Omschrijving
-    {
-        get => Model.Omschrijving;
-        set
+        public string Omschrijving
         {
-            Model.Omschrijving = value;
-            RaisePropertyChanged<object>(broadcast: true);
+            get => Model.Omschrijving;
+            set
+            {
+                Model.Omschrijving = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
         }
+
+        #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return Model;
+        }
+
+        #endregion // IViewModelWithItem
+
+        #region Constructor
+
+        public KruispuntArmViewModel(KruispuntArmModel model)
+        {
+            Model = model;
+        }
+
+        #endregion // Constructor
     }
-
-    #endregion // Properties
-
-    #region IViewModelWithItem
-    
-    public object GetItem()
-    {
-        return Model;
-    }
-
-    #endregion // IViewModelWithItem
-
-    #region Constructor
-
-    public KruispuntArmViewModel(KruispuntArmModel model)
-    {
-        Model = model;
-    }
-
-    #endregion // Constructor
 }

@@ -595,11 +595,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}#if !defined CUSTOM_FILEVERWERKING");
-
+            if (controller.FileIngrepen.Any())
+            {
+                sb.AppendLine();                                      
+                sb.AppendLine("#if !defined CUSTOM_FILEVERWERKING");  
+                sb.AppendLine();                                      
+            }
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCFileVerwerking, true, true, false, true);
 
-            sb.AppendLine($"{ts}#endif /* CUSTOM_FILEVERWERKING */");
+            if (controller.FileIngrepen.Any())
+            {
+                sb.AppendLine("#endif    // CUSTOM_FILEVERWERKING");  
+                sb.AppendLine();                                      
+            }
             sb.AppendLine($"{ts}FileVerwerking_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -610,14 +618,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCDetectieStoring(ControllerModel controller)
         {
             var sb = new StringBuilder();
+            var storingsopvang = false;
+
+            foreach (var fc in controller.Fasen)
+            {
+                foreach (var d in fc.Detectoren)
+                {
+                    if (d.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit) storingsopvang |= true;
+                    if (fc.AanvraagBijDetectieStoring) storingsopvang |= true;
+                    if (fc.HiaatKoplusBijDetectieStoring) storingsopvang |= true;
+                    if (fc.PercentageGroenBijDetectieStoring && fc.PercentageGroen.HasValue) storingsopvang |= true;
+                    if (fc.AanvraagBijDetectieStoringVertraagd) storingsopvang |= true;
+                }
+            }
 
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}#if !defined CUSTOM_DETECTIESTORING");
-
+            if (storingsopvang)
+            {
+                sb.AppendLine();                                      
+                sb.AppendLine("#if !defined CUSTOM_DETECTIESTORING");
+                sb.AppendLine();                                      
+            }
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoring, true, true, false, true);
 
-            sb.AppendLine($"{ts}#endif /* CUSTOM_DETECTIESTORING */");
+            if (storingsopvang)
+            {
+                sb.AppendLine("#endif    // CUSTOM_DETECTIESTORING");      
+                sb.AppendLine();                                      
+            }
             sb.AppendLine($"{ts}DetectieStoring_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
