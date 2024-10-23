@@ -1221,19 +1221,7 @@ rmdir "$(TargetDir)ru" /s /q
 rmdir "$(TargetDir)sv" /s /q
 rmdir "$(TargetDir)zh-Hans" /s /q
 rmdir "$(TargetDir)Updater" /s /q
-rmdir "$(TargetDir)ja-JP" /s /q
-
-REM mkdir "$(TargetDir)_LexTrafico"
-REM copy "O:\_src\_TLCGen\_SFTC\_LexTrafico\*.xml" "$(TargetDir)_LexTrafico"
-
-REM mkdir "$(TargetDir)Settings\CCOLGeneratorSettings"
-REM REM copy "O:\_src\_TLCGen\_SFTC\CCOLGeneratorSettings\ccolgensettings.xml" "$(TargetDir)Settings\CCOLGeneratorSettings"
-
-REM copy "O:\_src\_TLCGen\_SFTC\GenericSourceFilesToCopy\*.c" "$(TargetDir)SourceFilesToCopy"
-
-
-del /q "O:\_src\_TLCGen\%25date:~-4,4%25%25date:~-7,2%25%25date:~-10,2%25_TLCGenSpec_12.4.0.7.zip"
-7z.exe a -y -tzip "O:\_src\_TLCGen\%25date:~-4,4%25%25date:~-7,2%25%25date:~-10,2%25_TLCGenSpec_12.4.0.7.zip" "$(TargetDir)*"</PostBuildEvent>
+rmdir "$(TargetDir)ja-JP" /s /q</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rmdir "$(TargetDir)" /s /q
