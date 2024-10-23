@@ -2565,8 +2565,8 @@ namespace TLCGen.Specificator
                     fi.ToepassenDoseren.GetDescription(),
                     fi.ToepassenAlternatieveGroentijdenSet.GetDescription(),
                    (fi.ToepassenAlternatieveGroentijdenSet.GetDescription() == "Nooit") ? "-" : fi.AlternatieveGroentijdenSet.Any() ? fi.AlternatieveGroentijdenSet.ToString() : "-",
-                    fi.FileDetectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString(),
-                    fi.TeDoserenSignaalGroepen.Select(x => x.FaseCyclus).Aggregate((y, z) => y + ", " + z).ToString(),
+                    fi.FileDetectoren.Select(x => x.Detector).Any() ? fi.FileDetectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString() : "-",
+                    fi.TeDoserenSignaalGroepen.Select(x => x.FaseCyclus).Any() ? fi.TeDoserenSignaalGroepen.Select(x => x.FaseCyclus).Aggregate((y, z) => y + ", " + z).ToString() : "-",
                });
             }
             items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
@@ -2878,7 +2878,7 @@ namespace TLCGen.Specificator
                         rt.FaseCyclus.ToString(),
                         rt.Type.GetDescription(),
                         rt.NaloopTijd.ToString(),
-                        rt.Detectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString(),
+                        rt.Detectoren.Select(x => x.Detector).Any() ? rt.Detectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString() : "-",
                         (rt.Type == Models.Enumerations.RateltikkerTypeEnum.HoeflakeBewaakt) ? rt.DimmingNiveauPeriodeNietDimmen.ToString() : "-",
                         (rt.Type == Models.Enumerations.RateltikkerTypeEnum.HoeflakeBewaakt) ? rt.DimmingNiveauPeriodeDimmen.ToString() : "-",
                         rt.DimmenPerUitgang.ToCustomString()
@@ -2906,7 +2906,7 @@ namespace TLCGen.Specificator
                         rt.FaseCyclus.ToString(),
                         rt.Type.ToString(),
                         rt.NaloopTijd.ToString(),
-                        rt.Detectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString(),
+                        rt.Detectoren.Select(x => x.Detector).Any() ? rt.Detectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString() : "-",
                         rt.DimmenPerUitgang.ToCustomString()
                     });
                 }
@@ -3189,7 +3189,7 @@ namespace TLCGen.Specificator
                     {
                         koppu.KoppelingNaam.ToString(),
                         koppu.GekoppeldeSignaalGroep.ToString(),
-                        koppu.Detectoren.Select(x => x.DetectorNaam).Aggregate((y, z) => y + ", " + z).ToString(),
+                        koppu.Detectoren.Select(x => x.DetectorNaam).Any() ? koppu.Detectoren.Select(x => x.DetectorNaam).Aggregate((y, z) => y + ", " + z).ToString() : "-",
                         "Aan"
                     });
                 }
