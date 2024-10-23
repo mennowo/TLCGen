@@ -26,7 +26,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
-        private CCOLGeneratorCodeStringSettingModel _hisgmad;
+        private CCOLGeneratorCodeStringSettingModel _hisgmad; // obsolete ?
         private CCOLGeneratorCodeStringSettingModel _usisgtijd;
 #pragma warning restore 0649
         private string _prmaltg;
@@ -129,15 +129,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 var fc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                 if (fc == null) continue;
-                var dBinnen = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                if (dBinnen != null)
-                {
-                    _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_hisgmad}{dBinnen.Naam}",
-                        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
-                        _hisgmad, dBinnen.Naam));
-                }
+                //var dBinnen = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                //if (dBinnen != null)
+                //{
+                //    _myElements.Add(
+                //    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                //        $"{_hisgmad}{dBinnen.Naam}",
+                //        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
+                //        _hisgmad, dBinnen.Naam));
+                //}
 
                 if (!helps.Contains($"s{_schisglos}{nl.FaseVan}_1"))
                 {
