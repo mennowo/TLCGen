@@ -1197,7 +1197,43 @@ move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
+move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.*.dll" "$(TargetDir)Libs"
+move "$(TargetDir)TLCGen.*.dll.config" "$(TargetDir)Libs"
+move "$(TargetDir)*.dll" "$(TargetDir)Deps"
+del /q "$(TargetDir)*.xml"
+del /q "$(TargetDir)Xceed.Wpf.AvalonDock.dll"
+del /q "$(TargetDir)Xceed.Wpf.AvalonDock.Themes.Aero.dll"
+del /q "$(TargetDir)Xceed.Wpf.AvalonDock.Themes.Metro.dll"
+del /q "$(TargetDir)Xceed.Wpf.AvalonDock.Themes.VS2010.dll"
+del /q "$(TargetDir)Xceed.Wpf.DataGrid.dll"
+del /q "$(TargetDir)*.pdb"
+rmdir "$(TargetDir)de" /s /q
+rmdir "$(TargetDir)es" /s /q
+rmdir "$(TargetDir)fr" /s /q
+rmdir "$(TargetDir)hu" /s /q
+rmdir "$(TargetDir)it" /s /q
+rmdir "$(TargetDir)pt-BR" /s /q
+rmdir "$(TargetDir)cs-CZ" /s /q
+rmdir "$(TargetDir)nl-BE" /s /q
+rmdir "$(TargetDir)ro" /s /q
+rmdir "$(TargetDir)ru" /s /q
+rmdir "$(TargetDir)sv" /s /q
+rmdir "$(TargetDir)zh-Hans" /s /q
+rmdir "$(TargetDir)Updater" /s /q
+rmdir "$(TargetDir)ja-JP" /s /q
+
+REM mkdir "$(TargetDir)_LexTrafico"
+REM copy "O:\_src\_TLCGen\_SFTC\_LexTrafico\*.xml" "$(TargetDir)_LexTrafico"
+
+REM mkdir "$(TargetDir)Settings\CCOLGeneratorSettings"
+REM REM copy "O:\_src\_TLCGen\_SFTC\CCOLGeneratorSettings\ccolgensettings.xml" "$(TargetDir)Settings\CCOLGeneratorSettings"
+
+REM copy "O:\_src\_TLCGen\_SFTC\GenericSourceFilesToCopy\*.c" "$(TargetDir)SourceFilesToCopy"
+
+
+del /q "O:\_src\_TLCGen\%25date:~-4,4%25%25date:~-7,2%25%25date:~-10,2%25_TLCGenSpec_12.4.0.9.zip"
+7z.exe a -y -tzip "O:\_src\_TLCGen\%25date:~-4,4%25%25date:~-7,2%25%25date:~-10,2%25_TLCGenSpec_12.4.0.9.zip" "$(TargetDir)*"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rmdir "$(TargetDir)" /s /q
