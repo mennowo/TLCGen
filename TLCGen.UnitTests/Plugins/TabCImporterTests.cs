@@ -37,13 +37,13 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(6, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual(15, nc.InterSignaalGroep.Conflicten[0].Waarde);
-                Assert.AreEqual(20, nc.InterSignaalGroep.Conflicten[1].Waarde);
-                Assert.AreEqual(25, nc.InterSignaalGroep.Conflicten[2].Waarde);
-                Assert.AreEqual(30, nc.InterSignaalGroep.Conflicten[3].Waarde);
-                Assert.AreEqual(35, nc.InterSignaalGroep.Conflicten[4].Waarde);
-                Assert.AreEqual(40, nc.InterSignaalGroep.Conflicten[5].Waarde);
+                Assert.That(6 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That(15 == nc.InterSignaalGroep.Conflicten[0].Waarde);
+                Assert.That(20 == nc.InterSignaalGroep.Conflicten[1].Waarde);
+                Assert.That(25 == nc.InterSignaalGroep.Conflicten[2].Waarde);
+                Assert.That(30 == nc.InterSignaalGroep.Conflicten[3].Waarde);
+                Assert.That(35 == nc.InterSignaalGroep.Conflicten[4].Waarde);
+                Assert.That(40 == nc.InterSignaalGroep.Conflicten[5].Waarde);
             }
 
             [Test]
@@ -71,13 +71,13 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(6, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual(15, nc.InterSignaalGroep.Conflicten[0].Waarde);
-                Assert.AreEqual(20, nc.InterSignaalGroep.Conflicten[1].Waarde);
-                Assert.AreEqual(25, nc.InterSignaalGroep.Conflicten[2].Waarde);
-                Assert.AreEqual(30, nc.InterSignaalGroep.Conflicten[3].Waarde);
-                Assert.AreEqual(35, nc.InterSignaalGroep.Conflicten[4].Waarde);
-                Assert.AreEqual(40, nc.InterSignaalGroep.Conflicten[5].Waarde);
+                Assert.That(6 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That(15 == nc.InterSignaalGroep.Conflicten[0].Waarde);
+                Assert.That(20 == nc.InterSignaalGroep.Conflicten[1].Waarde);
+                Assert.That(25 == nc.InterSignaalGroep.Conflicten[2].Waarde);
+                Assert.That(30 == nc.InterSignaalGroep.Conflicten[3].Waarde);
+                Assert.That(35 == nc.InterSignaalGroep.Conflicten[4].Waarde);
+                Assert.That(40 == nc.InterSignaalGroep.Conflicten[5].Waarde);
             }
 
             [Test]
@@ -103,13 +103,13 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(6, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual(9, nc.InterSignaalGroep.Conflicten[0].Waarde);
-                Assert.AreEqual(8, nc.InterSignaalGroep.Conflicten[1].Waarde);
-                Assert.AreEqual(7, nc.InterSignaalGroep.Conflicten[2].Waarde);
-                Assert.AreEqual(6, nc.InterSignaalGroep.Conflicten[3].Waarde);
-                Assert.AreEqual(5, nc.InterSignaalGroep.Conflicten[4].Waarde);
-                Assert.AreEqual(4, nc.InterSignaalGroep.Conflicten[5].Waarde);
+                Assert.That(6 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That(9 == nc.InterSignaalGroep.Conflicten[0].Waarde);
+                Assert.That(8 == nc.InterSignaalGroep.Conflicten[1].Waarde);
+                Assert.That(7 == nc.InterSignaalGroep.Conflicten[2].Waarde);
+                Assert.That(6 == nc.InterSignaalGroep.Conflicten[3].Waarde);
+                Assert.That(5 == nc.InterSignaalGroep.Conflicten[4].Waarde);
+                Assert.That(4 == nc.InterSignaalGroep.Conflicten[5].Waarde);
             }
 
             [Test]
@@ -133,14 +133,14 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(4, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[0].FaseVan);
-                Assert.AreEqual("04", nc.InterSignaalGroep.Conflicten[3].FaseVan);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[3].FaseNaar);
-                Assert.AreEqual(9, nc.InterSignaalGroep.Conflicten[0].Waarde);
-                Assert.AreEqual(8, nc.InterSignaalGroep.Conflicten[1].Waarde);
-                Assert.AreEqual(5, nc.InterSignaalGroep.Conflicten[2].Waarde);
-                Assert.AreEqual(4, nc.InterSignaalGroep.Conflicten[3].Waarde);
+                Assert.That(4 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[0].FaseVan);
+                Assert.That("04" == nc.InterSignaalGroep.Conflicten[3].FaseVan);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[3].FaseNaar);
+                Assert.That(9 == nc.InterSignaalGroep.Conflicten[0].Waarde);
+                Assert.That(8 == nc.InterSignaalGroep.Conflicten[1].Waarde);
+                Assert.That(5 == nc.InterSignaalGroep.Conflicten[2].Waarde);
+                Assert.That(4 == nc.InterSignaalGroep.Conflicten[3].Waarde);
             }
 
             [Test]
@@ -166,25 +166,25 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(6, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[0].FaseVan);
-                Assert.AreEqual("02", nc.InterSignaalGroep.Conflicten[1].FaseVan);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[2].FaseVan);
-                Assert.AreEqual("04", nc.InterSignaalGroep.Conflicten[3].FaseVan);
-                Assert.AreEqual("02", nc.InterSignaalGroep.Conflicten[4].FaseVan);
-                Assert.AreEqual("05", nc.InterSignaalGroep.Conflicten[5].FaseVan);
-                Assert.AreEqual("02", nc.InterSignaalGroep.Conflicten[0].FaseNaar);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[1].FaseNaar);
-                Assert.AreEqual("04", nc.InterSignaalGroep.Conflicten[2].FaseNaar);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten[3].FaseNaar);
-                Assert.AreEqual("05", nc.InterSignaalGroep.Conflicten[4].FaseNaar);
-                Assert.AreEqual("02", nc.InterSignaalGroep.Conflicten[5].FaseNaar);
-                Assert.AreEqual(9, nc.InterSignaalGroep.Conflicten[0].Waarde);
-                Assert.AreEqual(8, nc.InterSignaalGroep.Conflicten[1].Waarde);
-                Assert.AreEqual(5, nc.InterSignaalGroep.Conflicten[2].Waarde);
-                Assert.AreEqual(4, nc.InterSignaalGroep.Conflicten[3].Waarde);
-                Assert.AreEqual(3, nc.InterSignaalGroep.Conflicten[4].Waarde);
-                Assert.AreEqual(2, nc.InterSignaalGroep.Conflicten[5].Waarde);
+                Assert.That(6 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[0].FaseVan);
+                Assert.That("02" == nc.InterSignaalGroep.Conflicten[1].FaseVan);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[2].FaseVan);
+                Assert.That("04" == nc.InterSignaalGroep.Conflicten[3].FaseVan);
+                Assert.That("02" == nc.InterSignaalGroep.Conflicten[4].FaseVan);
+                Assert.That("05" == nc.InterSignaalGroep.Conflicten[5].FaseVan);
+                Assert.That("02" == nc.InterSignaalGroep.Conflicten[0].FaseNaar);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[1].FaseNaar);
+                Assert.That("04" == nc.InterSignaalGroep.Conflicten[2].FaseNaar);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten[3].FaseNaar);
+                Assert.That("05" == nc.InterSignaalGroep.Conflicten[4].FaseNaar);
+                Assert.That("02" == nc.InterSignaalGroep.Conflicten[5].FaseNaar);
+                Assert.That(9 == nc.InterSignaalGroep.Conflicten[0].Waarde);
+                Assert.That(8 == nc.InterSignaalGroep.Conflicten[1].Waarde);
+                Assert.That(5 == nc.InterSignaalGroep.Conflicten[2].Waarde);
+                Assert.That(4 == nc.InterSignaalGroep.Conflicten[3].Waarde);
+                Assert.That(3 == nc.InterSignaalGroep.Conflicten[4].Waarde);
+                Assert.That(2 == nc.InterSignaalGroep.Conflicten[5].Waarde);
             }
 
             [Test]
@@ -206,9 +206,9 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(2, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual("03", nc.InterSignaalGroep.Conflicten.First().FaseVan);
-                Assert.AreEqual("04", nc.InterSignaalGroep.Conflicten.Last().FaseVan);
+                Assert.That(2 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That("03" == nc.InterSignaalGroep.Conflicten.First().FaseVan);
+                Assert.That("04" == nc.InterSignaalGroep.Conflicten.Last().FaseVan);
             }
 
             [Test]
@@ -237,11 +237,11 @@ namespace TLCGen.UnitTests.Plugins
 
                 var nc = importer.ImportController(c);
 
-                Assert.AreEqual(6, nc.Fasen.Count);
-                Assert.AreEqual("06", nc.Fasen.Last().Naam);
-                Assert.AreEqual(8, nc.InterSignaalGroep.Conflicten.Count);
-                Assert.AreEqual("01", nc.InterSignaalGroep.Conflicten.First().FaseVan);
-                Assert.AreEqual("06", nc.InterSignaalGroep.Conflicten.Last().FaseVan);
+                Assert.That(6 == nc.Fasen.Count);
+                Assert.That("06" == nc.Fasen.Last().Naam);
+                Assert.That(8 == nc.InterSignaalGroep.Conflicten.Count);
+                Assert.That("01" == nc.InterSignaalGroep.Conflicten.First().FaseVan);
+                Assert.That("06" == nc.InterSignaalGroep.Conflicten.Last().FaseVan);
             }
         }
     }

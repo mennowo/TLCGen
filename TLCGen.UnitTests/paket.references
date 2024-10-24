@@ -2,3 +2,4 @@ CommonServiceLocator
 MvvmLightLibs
 NSubstitute
 NUnit
+NUnit3TestAdapter

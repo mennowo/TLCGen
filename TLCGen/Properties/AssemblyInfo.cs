@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CodingConnected e.U.")]
 [assembly: AssemblyProduct("TLCGen")]
-[assembly: AssemblyCopyright("Copyright © CodingConnected e.U. 2016-2023")]
+[assembly: AssemblyCopyright("Copyright © CodingConnected e.U. 2016-2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,7 +49,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("12.4.0.7")]
-[assembly: AssemblyFileVersion("12.4.0.7")]
+[assembly: AssemblyVersion("12.4.0.9")]
+[assembly: AssemblyFileVersion("12.4.0.9")]
 [assembly: Guid("700FB03C-56FC-4D1F-8F92-CFDA910FC240")]
 
