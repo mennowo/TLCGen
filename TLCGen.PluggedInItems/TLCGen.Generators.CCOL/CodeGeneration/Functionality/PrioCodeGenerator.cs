@@ -696,6 +696,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmkarsghd}{hd.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsghd, hd.FaseCyclus));
+
+                    if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
+                    {
+                        var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString()
+                                                                                         : hd.InmeldingOokDoorFase.ToString();
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmkarsghd}{hdpriofcnr}", hd.InmeldingOokDoorFase, CCOLElementTimeTypeEnum.None, _prmkarsghd, hdpriofcnr));
+                    }
                 }
             }
         }
@@ -1507,8 +1515,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                             {
+                                var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString() 
+                                                                                                 : hd.InmeldingOokDoorFase.ToString();
                                 var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.InmeldingOokDoorFase}]"
+                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hdpriofcnr}]"
                                     : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
                                         ? (hd.InmeldingOokDoorFase - 200).ToString() 
                                         : hd.InmeldingOokDoorFase.ToString();
@@ -1619,8 +1629,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                             {
+                                var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString()
+                                                                                                    : hd.InmeldingOokDoorFase.ToString();
                                 var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.InmeldingOokDoorFase}]"
+                                    ? $"PRM[{_prmpf}{_prmkarsghd}{hdpriofcnr}]"
                                     : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
                                         ? (hd.InmeldingOokDoorFase - 200).ToString() 
                                         : hd.InmeldingOokDoorFase.ToString();
