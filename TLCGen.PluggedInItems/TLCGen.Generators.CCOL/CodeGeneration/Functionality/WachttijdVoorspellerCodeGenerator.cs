@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmax;
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmin;
         private CCOLGeneratorCodeStringSettingModel _uswtv;
+        private CCOLGeneratorCodeStringSettingModel _uswtvbit;
         private CCOLGeneratorCodeStringSettingModel _uswtvbus;
         private CCOLGeneratorCodeStringSettingModel _schwtv;
         private CCOLGeneratorCodeStringSettingModel _hwtv;
@@ -61,11 +62,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL110)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.WachttijdVoorspellerBitmapData0, fc.Naam));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.WachttijdVoorspellerBitmapData1, fc.Naam));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.WachttijdVoorspellerBitmapData2, fc.Naam));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtv, fc.WachttijdVoorspellerBitmapData3, fc.Naam));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtv, fc.WachttijdVoorspellerBitmapData4, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtvbit, fc.WachttijdVoorspellerBitmapData0, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtvbit, fc.WachttijdVoorspellerBitmapData1, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtvbit, fc.WachttijdVoorspellerBitmapData2, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtvbit, fc.WachttijdVoorspellerBitmapData3, fc.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtvbit, fc.WachttijdVoorspellerBitmapData4, fc.Naam));
                 }
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwtv}{fc.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schwtv, fc.Naam));

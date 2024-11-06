@@ -3494,7 +3494,13 @@
             <Default>wtv</Default>
             <Setting>wtv</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken aansturing wachttijdvoorspeller fase _E1_</Description>
+            <Description>Multivalente aansturing wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtvbit</Default>
+            <Setting>wtv</Setting>
+            <Type>Uitgang</Type>
+            <Description>Bitsgewijze aansturing wachttijdvoorspeller fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>wtvbus</Default>
