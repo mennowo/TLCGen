@@ -8,6 +8,7 @@ namespace TLCGen.Models
     public class PTPDataModel
     {
         public bool PTPInstellingenInParameters { get; set; }
+        public bool PTPAlleenTijdensControl { get; set; }
 
         [XmlArrayItem(ElementName = "PTPKoppeling")]
         public List<PTPKoppelingModel> PTPKoppelingen { get; set; }

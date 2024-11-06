@@ -34,6 +34,15 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
+        public bool PTPAlleenTijdensControl
+        {
+            get => Controller?.PTPData?.PTPAlleenTijdensControl == true;
+            set
+            {
+                Controller.PTPData.PTPAlleenTijdensControl = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         public ObservableCollection<PTPKoppelingViewModel> PTPKoppelingen
         {

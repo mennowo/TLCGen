@@ -2,6 +2,7 @@
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -193,7 +194,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
             sb.AppendLine($"{ts}}}");
-            sb.AppendLine($"{ts}else");
+            if ((c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110) && c.PTPData.PTPAlleenTijdensControl)
+            {
+                sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling in AUTOMAAT alleen bij regeling 'in control' */");
+                sb.AppendLine($"#if defined AUTOMAAT && !defined VISSIM");
+                sb.AppendLine($"{ts}else if (CIF_WPS[CIF_PROG_CONTROL] == CIF_CONTROL_INCONTROL)");
+                sb.AppendLine($"#else");
+                sb.AppendLine($"{ts}else");
+                sb.AppendLine($"#endif");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}else");
+            }
             sb.AppendLine($"{ts}{{");
             sb.AppendLine($"{ts}{ts}#ifdef FABRIKANT_DRIVER");
             sb.AppendLine($"{ts}{ts}{ts}communicatieprogramma(GEEN_INIT);");
@@ -201,9 +214,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
             {
-                sb.AppendLine($"{ts}/* afzetten van statusbit in CIF_GPS[5] */");
-                sb.AppendLine($"{ts}/* ------------------------------------ */");
-                sb.AppendLine($"{ts}CIF_GPS[AUTSTATUS] &= ~CIFA_COMF;");
+                sb.AppendLine($"{ts}{ts}/* afzetten van statusbit in CIF_GPS[5] */");
+                sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
+                sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~CIFA_COMF;");
                 sb.AppendLine();
             }
             foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
@@ -339,18 +352,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("");
                 if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
                 {
-                    sb.AppendLine($"{ts}/* opzetten van statusbit in CIF_GPS[5] */");
-                    sb.AppendLine($"{ts}/* ------------------------------------ */");
-                    sb.AppendLine($"{ts}if (!PTP_{k.TeKoppelenKruispunt}KS.OKE)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] |= CIFA_COMF;");
-                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}{ts}/* opzetten van statusbit in CIF_GPS[5] */");
+                    sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
+                    sb.AppendLine($"{ts}{ts}if (!PTP_{k.TeKoppelenKruispunt}KS.OKE)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= CIFA_COMF;");
+                    sb.AppendLine($"{ts}{ts}}}");
                 }
 
                 sb.AppendLine("#endif");
                 sb.AppendLine("");
             }
             sb.AppendLine($"{ts}}}");
+
+
+
+            //if ((c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110) && c.PTPData.PTPAlleenTijdensControl)
+            //{
+            //    sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling in AUTOMAAT alleen bij regeling 'in control' */");
+            //    sb.AppendLine($"#if defined AUTOMAAT && !defined VISSIM");
+            //    sb.AppendLine($"{ts}}}");  // tbv check op CIF_CONTROL_INCONTROL
+            //    sb.AppendLine($"#endif");
+            //}
+
+
             sb.AppendLine("}");
 
             sb.AppendLine("/* PTP POST SYSTEM APPLICATION */");

@@ -7,7 +7,7 @@
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:PTPKoppelingenTabViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300" x:Name="Root">
+             d:DesignHeight="300" d:DesignWidth="900" x:Name="Root">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
     </UserControl.Resources>
@@ -35,59 +35,102 @@
                             <DataGridTextColumn
                                 Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
                                 Header="# Uit multiv." Binding="{Binding Path=AantalsignalenMultivalentUit,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridTextColumn Header="Poort sim." Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" >
+                                <DataGridTextColumn.Header>
+                                    <DockPanel>
+                                        <TextBlock Text="Poort VRA/ITS" Margin="0,0,5,0" DockPanel.Dock="Left" />
+                                        <controls:InfoElement DockPanel.Dock="Right">
+                                            <controls:InfoElement.InfoPopup>
+                                                <TextBlock>
+                                                    PTP ID in de VRA of in de ITS-applicatie <LineBreak />
+                                                    (bij PTP over serieel is dit het COMpoort nummer).
+                                                </TextBlock>
+                                            </controls:InfoElement.InfoPopup>
+                                        </controls:InfoElement>
+                                    </DockPanel>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            
+<!--                        voorbereiding op koppeling met backup regeling
+                            
+                            <DataGridTextColumn Binding="{Binding Path=PortnummerBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
+                                                Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
+                                <DataGridTextColumn.Header>
+                                    <DockPanel>
+                                        <TextBlock Text="Poort backup" Margin="0,0,5,0" DockPanel.Dock="Left" />
+                                        <controls:InfoElement DockPanel.Dock="Right">
+                                            <controls:InfoElement.InfoPopup>
+                                                <TextBlock>
+                                                    PTP ID in de backup applicatie, <Span Background="White" FontStyle="Italic">alleen bij iVRI (-ready)</Span>.<LineBreak />
+                                                    Om gebruik te maken van het overnemen van de PTP verbinding wanneer<LineBreak />
+                                                    wordt overgeschakeld naar de backup regeling van de gekoppelde buur-VRI<LineBreak />
+                                                    - dient <Span Background="White">die buur-VRI als server / passive</Span> te worden geconfigureerd (in de TLC besturing / CCOL container),<LineBreak />
+                                                    - dient bij die buur-VRI de optie <Span Background="White">'Alleen tijdens in control'</Span> te worden aangevinkt, en<LineBreak />
+                                                    - dient de VRI waar de onderhavige regeling in komt, als <Span Background="White">client / active</Span> te worden geconfigureerd.<LineBreak />
+                                                    Zie ook het schema in de TLCGen 'Docs' directory.
+                                                </TextBlock>
+                                            </controls:InfoElement.InfoPopup>
+                                        </controls:InfoElement>
+                                    </DockPanel>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+-->
                             <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridCheckBoxColumn Header="Dummy" Binding="{Binding Path=Dummy,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridCheckBoxColumn Header="MaakIO" Binding="{Binding Path=MaakIO,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Dummy,UpdateSourceTrigger=PropertyChanged}"  Width="74">
+                                <DataGridCheckBoxColumn.Header >
+                                    <DockPanel>
+                                        <TextBlock Text="Dummy" Margin="0,0,5,0" DockPanel.Dock="Left" />
+                                        <controls:InfoElement DockPanel.Dock="Left">
+                                            <controls:InfoElement.InfoPopup>
+                                                <TextBlock>
+                                                    Maak alleen de hulpelementen hxxxiksyy en hxxxuksyy aan <LineBreak/>
+                                                    die doorgaans horen bij een ptp koppeling.<LineBreak/>
+                                                    Code in ###ptp.c wordt niet gegenereerd voor <LineBreak/>
+                                                    koppelingen waarbij 'Dummy' is geselecteerd.
+                                                </TextBlock>
+                                            </controls:InfoElement.InfoPopup>
+                                        </controls:InfoElement>
+                                    </DockPanel>
+                                </DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
+                            <DataGridCheckBoxColumn Binding="{Binding Path=MaakIO,UpdateSourceTrigger=PropertyChanged}"  Width="72">
+                                <DataGridCheckBoxColumn.Header >
+                                    <DockPanel>
+                                        <TextBlock Text="MaakIO" Margin="0,0,5,0" DockPanel.Dock="Left" />
+                                        <controls:InfoElement DockPanel.Dock="Left">
+                                            <controls:InfoElement.InfoPopup>
+                                                <TextBlock>
+                                                    Maak evenveel in- en uitgangen aan als er <LineBreak/>
+                                                    onder <Span FontWeight="Bold" Background="White"># In</Span> resp. <Span FontWeight="Bold" Background="White"># Uit</Span> zijn opgegeven.<LineBreak/>
+                                                    Deze worden in de regelapplicatie gekoppeld:<LineBreak/>
+                                                    CIF_GUS[usXP99uks01] = IH[hXP99uks01] etc.
+                                                </TextBlock>
+                                            </controls:InfoElement.InfoPopup>
+                                        </controls:InfoElement>
+                                    </DockPanel>
+                                </DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DockPanel Grid.Row="1">
-                        <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
-                        <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
-                        <controls:InfoElement Margin="5,0">
-                            <controls:InfoElement.InfoPopup>
-                                <TextBlock>
-                                Maak alleen de hulpelementen hxxxiksyy en hxxxuksyy aan <LineBreak/>
-                                die doorgaans horen bij een ptp koppeling.<LineBreak/>
-                                Code in ###ptp.c wordt niet gegenereerd voor <LineBreak/>
-                                koppelingen waarbij 'Dummy' is geselecteerd.
-                                </TextBlock>
-                            </controls:InfoElement.InfoPopup>
-                        </controls:InfoElement>
-                        <Label Content="Dummy" Height="30" RenderTransformOrigin="0.5,0.5">
-                            <Label.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform Y="2" X="-7"/>
-                                </TransformGroup>
-                            </Label.RenderTransform>
-                        </Label>
-                        <controls:InfoElement Margin="-3,0" RenderTransformOrigin="0.5,0.5">
+                    <DockPanel Grid.Row="1" Grid.ColumnSpan="2">
+                        <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="1" />
+                        <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="1" />
+                        <Label Content="" Height="30" Margin="-2.0" />
+                        <CheckBox Content="Instellingen in parameters" Margin="8" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
+                        <CheckBox Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
+                            Content="Alleen tijdens 'in control'" Margin="8" IsChecked="{Binding Path=PTPAlleenTijdensControl}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
+                        <controls:InfoElement Margin="-3,0" RenderTransformOrigin="0.5,0.5" DockPanel.Dock="Right" HorizontalAlignment="Right" 
+                                              Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
                             <controls:InfoElement.InfoPopup>
                                 <TextBlock >
-                                Maak evenveel in- en uitgangen aan als er <LineBreak/>
-                                onder <Span FontWeight="Bold" Background="White"># In</Span> resp. <Span FontWeight="Bold" Background="White"># Uit</Span> zijn opgegeven.<LineBreak/>
-                                Deze worden in de regelapplicatie gekoppeld:<LineBreak/>
-                                CIF_GUS[usXP99uks01] = IH[hXP99uks01] etc.
+                                PTP verbinding(en) alleen opzetten wanneer <LineBreak/>
+                                de (ITS/backup) regelapplicatie 'in control' is.<LineBreak/>
+                                Alleen mogelijk bij CCOL 11 en hoger.    
                                 </TextBlock>
                             </controls:InfoElement.InfoPopup>
                         </controls:InfoElement>
-                        <Label Content="MaakIO" Height="30" RenderTransformOrigin="0.5,0.5" >
-                            <Label.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform Y="2" X="1"/>
-                                </TransformGroup>
-                            </Label.RenderTransform>
-                        </Label>
-                        <Label Content="" Height="30" Margin="-2.0" />
-                        <CheckBox Content="Instellingen in parameters" Margin="5" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
                     </DockPanel>
                 </Grid>
             </TabItem>
