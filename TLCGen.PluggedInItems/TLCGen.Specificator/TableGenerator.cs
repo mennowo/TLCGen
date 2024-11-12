@@ -640,7 +640,7 @@ namespace TLCGen.Specificator
                     "Max. duur groen (vanaf SG) [TE]              T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tschoolingreepmaxg")  + "##",
                     "Detector ($$$)",
                     "Vasthoudtijd drukknop [TE]                   T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tdbsi") + "d" + "$$$",
-
+                    "Hiaattijd [TE]                               TDH $$$"
                 }
             };
             var oldfc = "";
@@ -656,6 +656,7 @@ namespace TLCGen.Specificator
                         (fc != oldfc) ? si.SchoolIngreepMaximumGroen.ToString() : "",
                         d.Naam,
                         si.SchoolIngreepBezetTijd.ToString(),
+                        d.TDH.ToString(),
                     });
                     oldfc = fc;
                 }
