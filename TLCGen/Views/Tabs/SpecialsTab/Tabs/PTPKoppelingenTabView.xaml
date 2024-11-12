@@ -57,7 +57,8 @@
                             <DataGridTextColumn Binding="{Binding Path=PortnummerBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
                                                 Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
 -->
-                            <DataGridTextColumn Binding="{Binding Path=PortNaarBackupRegeling,UpdateSourceTrigger=PropertyChanged}" >
+                            <DataGridTextColumn Binding="{Binding Path=PortNaarBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
+                                                Visibility="{Binding Path=DataContext.ShowTest,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
 
                                 <DataGridTextColumn.Header>
                                     <DockPanel>

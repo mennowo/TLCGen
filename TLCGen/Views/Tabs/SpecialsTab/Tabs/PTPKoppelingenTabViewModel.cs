@@ -66,6 +66,8 @@ namespace TLCGen.ViewModels
         
         public bool ShowMultivalent => DataAccess.TLCGenControllerDataProvider.Default.Controller?.Data?.CCOLVersie >= CCOLVersieEnum.CCOL110;
 
+        public bool ShowTest => System.DateTime.Now.Year == Controller.Data.Fasebewaking; // tbv test ptp naar backup verbergen/tonen in GUI (indien TFB == huidig jaar)
+
         #endregion // Properties
 
         #region Commands
