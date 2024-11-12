@@ -9,6 +9,7 @@ namespace TLCGen.Models
         RealFunc,
         RangerenOldNew,
         TglMinChanged,
+        PtpBackup,
         FromPlugin
     }
 

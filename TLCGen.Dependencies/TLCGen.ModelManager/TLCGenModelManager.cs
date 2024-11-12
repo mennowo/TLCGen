@@ -710,7 +710,7 @@ namespace TLCGen.ModelManagement
                 }
             }
             
-            // Rangeer elementen
+            // TGL != TGL_min
             if (Controller.Data.Intergroen && Controller.Fasen.Any(x => x.TGL != x.TGL_min))
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.TglMinChanged))
@@ -735,6 +735,33 @@ namespace TLCGen.ModelManagement
                     alert.PropertyChanged -= AlertMsgOnPropertyChanged;
                 }
             }
+
+            // ptp verbinding met backup in buur-VRI
+            if (Controller.PTPData.PTPKoppelingen.Any(x => x.PortNaarBackupRegeling != ""))
+            {
+                if (ControllerAlerts.All(x => x.Type != ControllerAlertType.PtpBackup))
+                {
+                    var msg = new ControllerAlertMessage(Guid.NewGuid().ToString())
+                    {
+                        Background = Brushes.MistyRose,
+                        Shown = true,
+                        Message = "***Beta alert:***  PTP verbindingen naar een backup applicatie bevinden zich nog in de test fase.",
+                        Type = ControllerAlertType.PtpBackup
+                    };
+                    msg.PropertyChanged += AlertMsgOnPropertyChanged;
+                    ControllerAlerts.Add(msg);
+                }
+            }
+            else
+            {
+                var alert = ControllerAlerts.FirstOrDefault(x => x.Type == ControllerAlertType.PtpBackup);
+                if (alert != null)
+                {
+                    ControllerAlerts.Remove(alert);
+                    alert.PropertyChanged -= AlertMsgOnPropertyChanged;
+                }
+            }
+
         }
 
         private void AlertMsgOnPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -53,9 +53,12 @@
                             </DataGridTextColumn>
                             
 <!--                        voorbereiding op koppeling met backup regeling
-                            
+- ->                            
                             <DataGridTextColumn Binding="{Binding Path=PortnummerBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
                                                 Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
+-->
+                            <DataGridTextColumn Binding="{Binding Path=PortNaarBackupRegeling,UpdateSourceTrigger=PropertyChanged}" >
+
                                 <DataGridTextColumn.Header>
                                     <DockPanel>
                                         <TextBlock Text="Poort backup" Margin="0,0,5,0" DockPanel.Dock="Left" />
@@ -75,6 +78,7 @@
                                     </DockPanel>
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
+<!--                            
 -->
                             <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />

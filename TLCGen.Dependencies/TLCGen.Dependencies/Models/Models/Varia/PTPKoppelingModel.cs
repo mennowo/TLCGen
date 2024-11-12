@@ -18,6 +18,7 @@ namespace TLCGen.Models
         public int AantalsignalenMultivalentUit { get; set; }
         public int PortnummerSimuatieOmgeving { get; set; }
         public int PortnummerAutomaatOmgeving { get; set; }
+        public string PortNaarBackupRegeling { get; set; }
         public int NummerSource { get; set; }
         public int NummerDestination { get; set; }
 
