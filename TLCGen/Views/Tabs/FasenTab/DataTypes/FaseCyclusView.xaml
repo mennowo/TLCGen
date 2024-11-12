@@ -203,7 +203,18 @@
                                 </ct:InfoElement.InfoPopup>
                             </ct:InfoElement>
                         </StackPanel>
-                        <Label Content="Toepassen school ingreep" />
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Toepassen school ingreep" />
+                            <ct:InfoElement>
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Voor alle drukknoppen van een richting <LineBreak />
+                                        waarvoor een schoolingreep wordt opgenomen, <LineBreak />
+                                        moet ook een TDH worden ingesteld.
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
                         <ComboBox 
                             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" 
                             IsEnabled="{Binding Path=SchoolIngreepEnabled}"
