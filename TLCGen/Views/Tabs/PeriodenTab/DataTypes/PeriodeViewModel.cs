@@ -191,6 +191,18 @@ namespace TLCGen.ViewModels
 
         public bool IsPeriodeForGroentijdenSet => Type == PeriodeTypeEnum.Groentijden;
 
+        public bool IsUitgangOverig => Type == PeriodeTypeEnum.Overig;
+
+        public bool GeenUitgangPerOverig
+        {
+            get => _Periode.GeenUitgangPerOverig;
+            set
+            {
+                _Periode.GeenUitgangPerOverig = value;
+                RaisePropertyChanged<object>(nameof(GeenUitgangPerOverig), broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region IViewModelWithItem

@@ -62,7 +62,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
+                        if (!per.GeenUitgangPerOverig)
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
+                        }
                         break;
                 }
             }
@@ -459,7 +462,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Overig))
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
+                        if (!per.GeenUitgangPerOverig)
+                        {
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
+                        }
                     }
                     return sb.ToString();
 

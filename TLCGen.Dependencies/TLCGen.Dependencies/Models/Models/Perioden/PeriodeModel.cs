@@ -25,6 +25,7 @@ namespace TLCGen.Models
         public string GroentijdenSet { get; set; }
         [HasDefault(false)]
         public string Commentaar { get; set; }
+        public bool GeenUitgangPerOverig { get; set; }
 
         [Browsable(false)]
         [IOElement("per", BitmappedItemTypeEnum.Uitgang, "BitmapNaam", "BitmapDataRelevant")]
