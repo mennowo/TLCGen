@@ -26,5 +26,7 @@ namespace TLCGen.Models.Enumerations
         //AutoRISPeloton,
         [Description("Massa peloton auto")]
         AutoMassaPeloton,
+        [Description("Ingang")]
+        Ingang,
     }
 }

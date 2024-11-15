@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using TLCGen.Models.Enumerations;
@@ -9,9 +10,9 @@ namespace TLCGen.ViewModels
     {
         #region Fields
         #endregion // Fields
-        
+
         #region Properties
-        
+
         public PrioIngreepInUitMeldingViewModel Parent { get; }
         
         public ObservableCollection<string> AvailableInputs
@@ -32,6 +33,9 @@ namespace TLCGen.ViewModels
                         return ControllerAccessProvider.Default.AllVecomDetectorStrings;
                     case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
                         break;
+                    case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
+                        return ControllerAccessProvider.Default.OVIngangenStrings;
+                        
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

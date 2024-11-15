@@ -27,6 +27,7 @@ namespace TLCGen.ViewModels
         ObservableCollection<string> AllDetectorStrings { get; }
         ObservableCollection<string> AllVecomDetectorStrings { get; }
         ObservableCollection<string> AllSelectiveDetectorStrings { get; }
+        ObservableCollection<string> OVIngangenStrings { get; }
 
         ICollectionView GetCollectionView(object type);
         void Setup();
@@ -45,6 +46,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _allDetectorStrings;
         private ObservableCollection<string> _allVecomDetectorStrings;
         private ObservableCollection<string> _allSelectiveDetectorStrings;
+        private ObservableCollection<string> _ovIngangenStrings;
         private readonly Dictionary<object, ICollectionView> _detectorsCollectionViews = new Dictionary<object, ICollectionView>();
         private bool _fasenChanging;
         private bool _detChanging;
@@ -121,6 +123,9 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<IngangViewModel> AllIngangen =>
             _allIngangen ??= new ObservableCollection<IngangViewModel>();
+
+        public ObservableCollection<string> OVIngangenStrings =>
+            _ovIngangenStrings ??= new ObservableCollection<string>();
 
         public ObservableCollection<FaseCyclusViewModel> AllSignalGroups =>
             _allSignalGroups ??= new ObservableCollection<FaseCyclusViewModel>();
@@ -215,6 +220,9 @@ namespace TLCGen.ViewModels
                     break;
                 case TLCGenObjectTypeEnum.Input:
                     AllIngangen.BubbleSort();
+                    OVIngangenStrings.Remove(obj.OldName);
+                    OVIngangenStrings.Add(obj.NewName);
+                    OVIngangenStrings.BubbleSort();
                     break;
                 case TLCGenObjectTypeEnum.SelectieveDetector:
                     AllSelectiveDetectorStrings.Remove(obj.OldName);
@@ -337,6 +345,7 @@ namespace TLCGen.ViewModels
         private void OnControllerLoaded(ControllerLoadedMessage obj)
         {
             AllIngangen.Clear();
+            OVIngangenStrings.Clear();
             AllSignalGroups.Clear();
             AllSignalGroupStrings.Clear();
             AllDetectors.Clear();
@@ -375,6 +384,10 @@ namespace TLCGen.ViewModels
             foreach (var ingang in obj.Controller.Ingangen)
             {
                 AllIngangen.Add(new IngangViewModel(ingang));
+                if (ingang.Type == IngangTypeEnum.OVmelding)
+                {
+                    OVIngangenStrings.Add(ingang.Naam);
+                }
             }
 
             foreach (var periode in obj.Controller.PeriodenData.Perioden)

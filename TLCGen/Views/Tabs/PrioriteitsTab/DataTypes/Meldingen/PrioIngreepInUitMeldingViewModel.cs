@@ -201,6 +201,7 @@ namespace TLCGen.ViewModels
                     {
                         MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     }
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang));
                     break;
                 case PrioIngreepVoertuigTypeEnum.Fiets:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
@@ -258,6 +259,7 @@ namespace TLCGen.ViewModels
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
                     ActualViewModel = ViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
