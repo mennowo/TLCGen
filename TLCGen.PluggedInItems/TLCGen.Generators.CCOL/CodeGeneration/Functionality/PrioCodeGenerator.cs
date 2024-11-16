@@ -825,13 +825,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append($" && TDH_old[{dpf}{melding.RelatedInput2}] && !TDH[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang:
-                        sb.Append($" && IS[{dpf}{melding.RelatedInput1}] && !IS_old[{dpf}{melding.RelatedInput1}]");
+                        sb.Append($" && IS[{dpf}{melding.RelatedInput2}] && !IS_old[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog:
-                        sb.Append($" && IS[{dpf}{melding.RelatedInput1}]");
+                        sb.Append($" && IS[{dpf}{melding.RelatedInput2}]");
                         break;
                     case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang:
-                        sb.Append($" && IS_old[{dpf}{melding.RelatedInput1}] && !IS[{dpf}{melding.RelatedInput1}]");
+                        sb.Append($" && IS_old[{dpf}{melding.RelatedInput2}] && !IS[{dpf}{melding.RelatedInput2}]");
                         break;
                 }
             }
