@@ -56,6 +56,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine("");
             sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine("void Maxgroen_Add(void)");
+            sb.AppendLine("{");
+            sb.AppendLine("");
+            sb.AppendLine("}");
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
             {
                 sb.AppendLine();
@@ -77,11 +82,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("");
                 sb.AppendLine("}");
             }
-            sb.AppendLine();
-            sb.AppendLine("void Maxgroen_Add(void)");
-            sb.AppendLine("{");
-            sb.AppendLine("");
-            sb.AppendLine("}");
             sb.AppendLine();
             sb.AppendLine("void Wachtgroen_Add(void)");
             sb.AppendLine("{");
