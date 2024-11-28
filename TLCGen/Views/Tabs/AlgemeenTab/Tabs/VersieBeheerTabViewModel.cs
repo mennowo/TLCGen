@@ -91,6 +91,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AanmakenVersionBakSysh
+        {
+            get => _Controller?.Data?.AanmakenVersionBakSysh ?? false;
+            set
+            {
+                _Controller.Data.AanmakenVersionBakSysh = value;
+                RaisePropertyChanged<object>(nameof(AanmakenVersionBakSysh), broadcast: true);
+            }
+        }
+
         public bool StoreCurrentController
         {
             get => _Controller?.Data?.StoreCurrentController ?? false;
