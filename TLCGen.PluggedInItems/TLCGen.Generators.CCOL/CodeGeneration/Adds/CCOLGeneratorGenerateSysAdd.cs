@@ -17,7 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateFileHeader(c.Data, "sys.add"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(c.Data));
-
+            sb.AppendLine();
             if (c.Data.AanmakenVersionBakSysh)
             {
                 var ver = c.Data.Versies.LastOrDefault();
