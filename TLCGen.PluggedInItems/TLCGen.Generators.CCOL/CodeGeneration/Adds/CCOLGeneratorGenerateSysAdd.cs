@@ -17,19 +17,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateFileHeader(c.Data, "sys.add"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(c.Data));
-
-            if (c.Data.AanmakenVersionBakSysh)
-            {
-                var ver = c.Data.Versies.LastOrDefault();
-                if (ver != null)
-                {
-                    sb.AppendLine($"#if defined NO_RIS && !defined VISSIM && !defined SUMO");
-                    sb.AppendLine($"  #undef  VERSION");
-                    sb.AppendLine($"  #define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd} backup\"");
-                    sb.AppendLine($"#endif");
-                }
-            }
-
             sb.AppendLine(_endGeneratedHeader);
 
             return sb.ToString();
