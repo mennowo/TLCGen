@@ -51,36 +51,26 @@
                                     </DockPanel>
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
-                            
-<!--                        voorbereiding op koppeling met backup regeling
-- ->                            
-                            <DataGridTextColumn Binding="{Binding Path=PortnummerBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
-                                                Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
--->
-                            <DataGridTextColumn Binding="{Binding Path=PortNaarBackupRegeling,UpdateSourceTrigger=PropertyChanged}" 
-                                                Visibility="{Binding Path=DataContext.ShowTest,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
-
+                            <DataGridTextColumn Binding="{Binding Path=PortNaarBackupRegeling,UpdateSourceTrigger=PropertyChanged}" >
                                 <DataGridTextColumn.Header>
                                     <DockPanel>
                                         <TextBlock Text="Poort backup" Margin="0,0,5,0" DockPanel.Dock="Left" />
                                         <controls:InfoElement DockPanel.Dock="Right">
                                             <controls:InfoElement.InfoPopup>
                                                 <TextBlock>
-                                                    PTP ID in de backup applicatie, <Span Background="White" FontStyle="Italic">alleen bij iVRI (-ready)</Span>.<LineBreak />
-                                                    Om gebruik te maken van het overnemen van de PTP verbinding wanneer<LineBreak />
-                                                    wordt overgeschakeld naar de backup regeling van de gekoppelde buur-VRI<LineBreak />
-                                                    - dient <Span Background="White">die buur-VRI als server / passive</Span> te worden geconfigureerd (in de TLC besturing / CCOL container),<LineBreak />
-                                                    - dient bij die buur-VRI de optie <Span Background="White">'Alleen tijdens in control'</Span> te worden aangevinkt, en<LineBreak />
-                                                    - dient de VRI waar de onderhavige regeling in komt, als <Span Background="White">client / active</Span> te worden geconfigureerd.<LineBreak />
-                                                    Zie ook het schema in de TLCGen 'Docs' directory.
+                                                    PTP ID voor verbinding met in de backup applicatie van de buur-VRI.<LineBreak />
+                                                    Om gebruik te maken van het overnemen van de PTP verbinding wanneer in<LineBreak />
+                                                    de gekoppelde buur-VRI wordt overgeschakeld naar de backup regeling<LineBreak />
+                                                    - dient de regeling in de buur-VRI tenminste CCOL 11 te zijn, en<LineBreak />
+                                                    - dient <Span FontStyle="Italic">bij de buur-VRI</Span> de optie <Span Background="White">'Alleen tijdens in control'</Span> te worden aangevinkt. <LineBreak />
+                                                    Zie ook de uitleg in het document 'PTP koppelingen in iVRI omgeving' <LineBreak />
+                                                    in de TLCGen 'Docs' directory.
                                                 </TextBlock>
                                             </controls:InfoElement.InfoPopup>
                                         </controls:InfoElement>
                                     </DockPanel>
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
-<!--                            
--->
                             <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridCheckBoxColumn Binding="{Binding Path=Dummy,UpdateSourceTrigger=PropertyChanged}"  Width="74">

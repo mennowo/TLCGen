@@ -40,8 +40,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var sb = new StringBuilder();
             var backup = "bak"; // instelbare 'suffix' 
-            var currentyear = System.DateTime.Now.Year; // tbv testen koppeling ID van backup regeling buur-VRI in
-            var tfb = c.Data.Fasebewaking;              // testomgeving (huidig jaartal invullen bij 'Fasebewaking')
 
             sb.AppendLine("/* APPLICATIE PTP-KOPPELINGEN */");
             sb.AppendLine("/* ========================== */");
@@ -205,8 +203,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Gegevens voor verbinding naar backup */");
-                    if (tfb == currentyear) sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     if (c.PTPData.PTPInstellingenInParameters)
                     {
                         sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.PORTNR     = PRM[{_prmpf}{prmbakportnr}{k.TeKoppelenKruispunt}{backup}];");
@@ -271,8 +268,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if (int.TryParse(k.PortNaarBackupRegeling, out int bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}ptp_init(&PTP_{k.TeKoppelenKruispunt}{backup});");
                     sb.AppendLine($"  #endif");
                 }
@@ -320,8 +316,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}{ts}{{");
                 if (int.TryParse(k.PortNaarBackupRegeling, out int bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS[i] = FALSE;");
                     sb.AppendLine($"{ts}#endif");
                 }
@@ -341,8 +336,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}{ts}else if (PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE) /* goede verbinding met backup - set uitgaande koppelsignalen */");
                     sb.AppendLine($"{ts}{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = FALSE;");
@@ -367,8 +361,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = FALSE;");
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS[i] = FALSE;");
                     sb.AppendLine($"{ts}#endif");
                 }
@@ -379,8 +372,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = FALSE;");
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}{ts}for (i = 0; i < PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}{backup}KS.UKS[i] = FALSE;");
                     sb.AppendLine($"{ts}#endif");
                 }
@@ -407,8 +399,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}}}");
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}else if (PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE) /* goede verbinding met backup - set inkomende koppelsignalen */");
                     sb.AppendLine($"{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}{backup}KS.IKS_MAX; ++i) {{");
@@ -450,8 +441,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.Data.PracticeOmgeving) sb.AppendLine($"{ts}#endif");
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}ptp_application_ks(&PTP_{k.TeKoppelenKruispunt}{backup}, &PTP_{k.TeKoppelenKruispunt}{backup}KS);");
                     sb.AppendLine($"{ts}{ts}ptp_control(&PTP_{k.TeKoppelenKruispunt}{backup});");
                     sb.AppendLine($"{ts}#endif");
@@ -463,8 +453,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}IH[{_hpf}{hptp}_{k.TeKoppelenKruispunt}{hptpoke}]  =  PTP_{k.TeKoppelenKruispunt}KS.OKE || PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE;");
                     sb.AppendLine($"{ts}{ts}IH[{_hpf}{hptp}_{k.TeKoppelenKruispunt}{hptperr}]  =  PTP_{k.TeKoppelenKruispunt}.COMERROR         && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE ||  PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR         && !PTP_{k.TeKoppelenKruispunt}KS.OKE ;");
                     sb.AppendLine($"{ts}{ts}IH[{_hpf}{hptp}_{k.TeKoppelenKruispunt}{hptperr0}] = (PTP_{k.TeKoppelenKruispunt}.COMERROR & BIT0) && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE || (PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR & BIT0) && !PTP_{k.TeKoppelenKruispunt}KS.OKE ;");
@@ -541,8 +530,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}/* --------------------------------------------------------------------- */");
                 if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                 {
-                    if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                    else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptpoke}] = PTP_{k.TeKoppelenKruispunt}KS.OKE    && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE                                                  || !PTP_{k.TeKoppelenKruispunt}KS.OKE    && PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE;  ");
                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptperr}] = PTP_{k.TeKoppelenKruispunt}.COMERROR && !PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE || !PTP_{k.TeKoppelenKruispunt}.COMERROR && PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR && !PTP_{k.TeKoppelenKruispunt}KS.OKE;");
                     sb.AppendLine($"{ts}#else");
@@ -563,8 +551,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
                     if (int.TryParse(k.PortNaarBackupRegeling, out bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
                     {
-                        if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
-                        else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
+                        sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
                         sb.AppendLine($"{ts}{ts}if (!(PTP_{k.TeKoppelenKruispunt}KS.OKE || PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE))");
                         sb.AppendLine($"{ts}#else");
                         sb.AppendLine($"{ts}{ts}if (!PTP_{k.TeKoppelenKruispunt}KS.OKE)");
