@@ -543,8 +543,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (tfb == currentyear) sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT /*&& defined AUTOMAAT*/");
                     else                    sb.AppendLine($"{ts}#if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
-                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptpoke}] = PTP_{k.TeKoppelenKruispunt}KS.OKE    && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE    || !PTP_{k.TeKoppelenKruispunt}KS.OKE    && PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE;  ");
-                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptperr}] = PTP_{k.TeKoppelenKruispunt}.COMERROR && !PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR || !PTP_{k.TeKoppelenKruispunt}.COMERROR && PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR;");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptpoke}] = PTP_{k.TeKoppelenKruispunt}KS.OKE    && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE                                                  || !PTP_{k.TeKoppelenKruispunt}KS.OKE    && PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE;  ");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptperr}] = PTP_{k.TeKoppelenKruispunt}.COMERROR && !PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR && !PTP_{k.TeKoppelenKruispunt}{backup}KS.OKE || !PTP_{k.TeKoppelenKruispunt}.COMERROR && PTP_{k.TeKoppelenKruispunt}{backup}.COMERROR && !PTP_{k.TeKoppelenKruispunt}KS.OKE;");
                     sb.AppendLine($"{ts}#else");
                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptpoke}] = PTP_{k.TeKoppelenKruispunt}KS.OKE;  ");
                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{usptp}_{k.TeKoppelenKruispunt}{usptperr}] = PTP_{k.TeKoppelenKruispunt}.COMERROR;");
