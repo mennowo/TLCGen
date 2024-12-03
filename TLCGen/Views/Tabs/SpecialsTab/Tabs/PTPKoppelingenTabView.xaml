@@ -114,10 +114,9 @@
                         <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="1" />
                         <Label Content="" Height="30" Margin="-2.0" />
                         <CheckBox Content="Instellingen in parameters" Margin="8" IsChecked="{Binding Path=PTPInstellingenInParameters}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                        <CheckBox Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}"
-                            Content="Alleen tijdens 'in control'" Margin="8" IsChecked="{Binding Path=PTPAlleenTijdensControl}" DockPanel.Dock="Right" HorizontalAlignment="Right" />
-                        <controls:InfoElement Margin="-3,0" RenderTransformOrigin="0.5,0.5" DockPanel.Dock="Right" HorizontalAlignment="Right" 
-                                              Visibility="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement},Converter={StaticResource Bool2VisConv}}">
+                        <CheckBox Content="Alleen tijdens 'in control'" Margin="8" IsChecked="{Binding Path=PTPAlleenTijdensControl}" DockPanel.Dock="Right" HorizontalAlignment="Right" 
+                                  IsEnabled="{Binding Path=DataContext.ShowMultivalent,Source={x:Reference ProxyElement}}" />
+                        <controls:InfoElement Margin="-3,0" RenderTransformOrigin="0.5,0.5" DockPanel.Dock="Right" HorizontalAlignment="Right" >
                             <controls:InfoElement.InfoPopup>
                                 <TextBlock >
                                 PTP verbinding(en) alleen opzetten wanneer <LineBreak/>
