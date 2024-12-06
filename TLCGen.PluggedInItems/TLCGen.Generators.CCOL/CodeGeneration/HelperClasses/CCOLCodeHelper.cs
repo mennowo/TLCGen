@@ -10,15 +10,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public static class CCOLCodeHelper
     {
+        /// <summary>
+        /// This method is here to remove duplicate string parts from element names
+        /// These may occur for example if we have an element uspl### where ### is PL1
+        /// leading to usplPL1, which is ... ugly
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static string GetNameFromCombinedNameAndElementName(CCOLGeneratorCodeStringSettingModel element, string name)
         {
             if (element.ToString() != "" &&
+                // element name is shorter,
                 element.ToString().Length < name.Length &&
-                name
-                    .Substring(element.ToString().Length, name.Length - element.ToString().Length)
+                // and the element string occurs in the name string at least twice
+                (name.Length - name.ToString().ToLower().Replace(element.ToString().ToLower(), "").Length) / element.ToString().Length >= 2 &&
+                // and the substring of name starting after the length of elementname starts with element name
+                name.Substring(element.ToString().Length, name.Length - element.ToString().Length)
                     .ToLower()
                     .StartsWith(element.ToString().ToLower()))
             {
+                // cut first part of name string
                 name = name.Substring(element.ToString().Length, name.Length - element.ToString().Length);
             }
             return name;
