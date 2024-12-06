@@ -75,6 +75,7 @@ namespace TLCGen.Models
         public int HuidigeVersieRevision { get; set; }
 
         public bool AanmakenVerionSysh { get; set; }
+        public bool AanmakenVersionBakSysh { get; set; }
         public bool StoreCurrentController { get; set; }
 
         public bool ToevoegenOVM { get; set; }

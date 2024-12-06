@@ -39,7 +39,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var ver = c.Data.Versies.LastOrDefault();
                 if (ver!= null)
                 {
-                    sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
+                    if (c.Data.AanmakenVersionBakSysh)
+                    {
+                        sb.AppendLine($"#if !defined NO_RIS || defined VISSIM || defined SUMO");
+                        sb.AppendLine($"  #define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
+                        sb.AppendLine($"#else");
+                        sb.AppendLine($"  #define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd} backup\"");
+                        sb.AppendLine($"#endif");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum:yyyyMMdd}\"");
+                    }
                 }
             }
             if (c.Data.TVGAMaxAlsDefaultGroentijdSet)

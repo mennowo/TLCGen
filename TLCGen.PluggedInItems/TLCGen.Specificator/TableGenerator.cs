@@ -516,18 +516,18 @@ namespace TLCGen.Specificator
                     mvfc.Naam,
                     mvfc.Meeverlengen.GetDescription(),
 
-                   (mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default         ? " 0: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To              ? " 1: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo            ? " 2: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger      ? " 3: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.DefaultCCOL     ? " 4: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.ToCCOL          ? " 5: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKToCCOL        ? " 6: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MaatgevendGroen ? " 7: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default2        ? " 8: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To2             ? " 9: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo2           ? "10: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger2     ? "11: " :
+                   (mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default         ? " 1: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To              ? " 2: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo            ? " 3: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger      ? " 4: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.DefaultCCOL     ? " 5: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.ToCCOL          ? " 6: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKToCCOL        ? " 7: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MaatgevendGroen ? " 8: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default2        ? " 9: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To2             ? "10: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo2           ? "11: " :
+                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger2     ? "12: " :
                                                                                                         " 0: " ) + mvfc.MeeverlengenType.GetDescription(),
                     mvfc.MeeverlengenTypeInstelbaarOpStraat.ToCustomString(),
                     mvmet,
@@ -640,7 +640,7 @@ namespace TLCGen.Specificator
                     "Max. duur groen (vanaf SG) [TE]              T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tschoolingreepmaxg")  + "##",
                     "Detector ($$$)",
                     "Vasthoudtijd drukknop [TE]                   T   " + CCOLGeneratorSettingsProvider.Default.GetElementName("tdbsi") + "d" + "$$$",
-
+                    "Hiaattijd [TE]                               TDH $$$"
                 }
             };
             var oldfc = "";
@@ -656,6 +656,7 @@ namespace TLCGen.Specificator
                         (fc != oldfc) ? si.SchoolIngreepMaximumGroen.ToString() : "",
                         d.Naam,
                         si.SchoolIngreepBezetTijd.ToString(),
+                        d.TDH.ToString(),
                     });
                     oldfc = fc;
                 }

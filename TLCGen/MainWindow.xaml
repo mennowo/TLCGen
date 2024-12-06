@@ -15,7 +15,7 @@
         dd:DragDrop.DropHandler="{Binding}"
         mc:Ignorable="d"
         DataContext="{Binding}" d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
-        Title="{Binding Path=ProgramTitle}" Height="550" Width="700">
+        Title="{Binding Path=ProgramTitle}" Height="700" Width="920">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

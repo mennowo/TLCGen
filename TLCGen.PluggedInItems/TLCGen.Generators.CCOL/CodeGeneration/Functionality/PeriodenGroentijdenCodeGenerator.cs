@@ -46,7 +46,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             // outputs
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef, c.PeriodenData.DefaultPeriodeBitmapData));
+            if (!c.Data.TVGAMaxAlsDefaultGroentijdSet) // geen (ongebruikte) USper aanmaken voor (ongebruikte) periode bij TVGAMax
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef, c.PeriodenData.DefaultPeriodeBitmapData));
+            }
             foreach (var per in c.PeriodenData.Perioden)
             {
                 switch(per.Type)
@@ -59,7 +62,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
+                        if (!per.GeenUitgangPerOverig)
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.BitmapData, per.Commentaar));
+                        }
                         break;
                 }
             }
@@ -414,7 +420,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* periode verklikking */");
                     sb.AppendLine($"{ts}/* ------------------- */");
                     iper = 0;
-                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
+                    if (!c.Data.TVGAMaxAlsDefaultGroentijdSet) // wanneer geen TVGAMax is toegepast
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
+                    }
+                    else // wanneer wel TVGAMax, geen (ongebruikte) USperdef uitsturing bij (ongebruikte) periode
+                    {
+                        iper++;
+                    }
                     foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Groentijden))
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{(c.PeriodenData.GebruikPeriodenNamen ? per.Naam : iper.ToString())}] = (MM[{_mpf}{_mperiod}] == {iper++});");
@@ -449,7 +462,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     foreach (var per in c.PeriodenData.Perioden.Where(per => per.Type == PeriodeTypeEnum.Overig))
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
+                        if (!per.GeenUitgangPerOverig)
+                        {
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
+                        }
                     }
                     return sb.ToString();
 

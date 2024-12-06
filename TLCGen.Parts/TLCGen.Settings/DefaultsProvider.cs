@@ -94,6 +94,8 @@ namespace TLCGen.Settings
                 //    return "autris";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
                     return "aut";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
+                    return "inp";
                 default:
                     throw new ArgumentOutOfRangeException();
             }

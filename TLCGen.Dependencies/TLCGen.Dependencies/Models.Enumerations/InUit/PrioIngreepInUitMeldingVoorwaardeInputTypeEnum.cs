@@ -17,6 +17,13 @@ namespace TLCGen.Models.Enumerations
         [Description("Einde detectie")]
         EindeDetectie,
         [Description("Einde detectie hiaat")]
-        EindeDetectieHiaat
+        EindeDetectieHiaat,
+        [Description("IS[] - Start ingang")]
+        StartIngang,
+        [Description("IS[] - Ingang hoog")]
+        IngangHoog,
+        [Description("IS[] - Einde ingang")]
+        EindeIngang,
     }
+
 }

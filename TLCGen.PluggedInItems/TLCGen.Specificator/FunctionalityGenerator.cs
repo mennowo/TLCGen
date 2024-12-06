@@ -691,6 +691,8 @@ namespace TLCGen.Specificator
                 "begeleid(st)er gaat het waitsignaal van de drukknop knipperen zolang de ingreep actief is."));
             items.Add(OpenXmlHelper.GetTextParagraph("De knop moet worden ingedrukt tijdens rood of onmiddellijk " +
                 "na het groen worden, en ingedrukt blijven tot de laatste persoon aan de oversteek is begonnen."));
+            items.Add(OpenXmlHelper.GetTextParagraph("Nadat de knop is losgelaten blijft de richting nog gedurende " +
+                "een instelbare hiaattijd (TDH) groen."));
 
             items.AddRange(TableGenerator.GetTable_Schoolingreep(c));
 

@@ -402,7 +402,9 @@ namespace TLCGen.ViewModels
             Type != DetectorTypeEnum.VecomDetector &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
-            Type != DetectorTypeEnum.KnopBuiten;
+            Type != DetectorTypeEnum.KnopBuiten
+             ||
+            IsDrukknop && DefaultsProvider.Default.Controller.Fasen.Any(x => (x.Naam == FaseCyclus) && (x.SchoolIngreep != NooitAltijdAanUitEnum.Nooit));
 
         public bool DetectorCanHaveTDB =>
             Type != DetectorTypeEnum.VecomDetector &&

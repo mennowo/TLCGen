@@ -1046,13 +1046,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInUitMelden, true, false, false, true);
 
-                sb.AppendLine($"{ts}/* Pririteit-inmeldingen */");
+                sb.AppendLine($"{ts}/* Prioriteit-inmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
                     sb.AppendLine($"{ts}PrioInmelden(prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}, SH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}], iInstPrioriteitsNiveau[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}], iInstPrioriteitsOpties[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}], 0, 0);");
                 }
                 sb.AppendLine();
-                sb.AppendLine($"{ts}/* Pririteit-uitmeldingen */");
+                sb.AppendLine($"{ts}/* Prioriteit-uitmeldingen */");
                 foreach (var prio in c.PrioData.PrioIngrepen)
                 {
                     sb.AppendLine($"{ts}PrioUitmelden(prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}, SH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}]);");

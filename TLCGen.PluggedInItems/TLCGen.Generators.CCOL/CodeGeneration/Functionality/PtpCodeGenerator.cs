@@ -36,6 +36,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmerr2;
 
         private CCOLGeneratorCodeStringSettingModel _prmportnr;
+        private CCOLGeneratorCodeStringSettingModel _prmbakportnr;
         private CCOLGeneratorCodeStringSettingModel _prmsrc;
         private CCOLGeneratorCodeStringSettingModel _prmdest;
         private CCOLGeneratorCodeStringSettingModel _prmtmsgw;
@@ -157,6 +158,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             k.PortnummerAutomaatOmgeving,
                             CCOLElementTimeTypeEnum.None,
                             _prmportnr, k.TeKoppelenKruispunt));
+                    if (int.TryParse(k.PortNaarBackupRegeling, out int bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmbakportnr}{k.TeKoppelenKruispunt}bak",
+                                bakpoort,
+                                CCOLElementTimeTypeEnum.None,
+                                _prmbakportnr, k.TeKoppelenKruispunt));
+                    }
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmsrc}{k.TeKoppelenKruispunt}",
@@ -225,7 +235,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCPreApplication => new []{10},
                 CCOLCodeTypeEnum.RegCPostApplication => new[] { 180 },
                 CCOLCodeTypeEnum.RegCPreSystemApplication => new[] { 10 },
-                CCOLCodeTypeEnum.RegCPostSystemApplication => new []{10},
+              //CCOLCodeTypeEnum.RegCPostSystemApplication => new []{10},
                 _ => null
             };
         }
@@ -277,13 +287,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
                     }
                     return sb.ToString();
-                case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => !x.Dummy))
-                    {
-                        sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
-                        sb.AppendLine($"{ts}ptp_post_system_app();");
-                    }
-                    return sb.ToString();
+                //case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                //    if ((c.PTPData.PTPKoppelingen.Count > 0) && c.PTPData.PTPKoppelingen.Any(x => !x.Dummy))
+                //    {
+                //        sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
+                //        sb.AppendLine($"{ts}ptp_post_system_app();");
+                //    }
+                //    return sb.ToString();
                 default:
                     return null;
             }

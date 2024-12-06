@@ -34,6 +34,15 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
+        public bool PTPAlleenTijdensControl
+        {
+            get => Controller?.PTPData?.PTPAlleenTijdensControl == true;
+            set
+            {
+                Controller.PTPData.PTPAlleenTijdensControl = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         public ObservableCollection<PTPKoppelingViewModel> PTPKoppelingen
         {
@@ -56,6 +65,8 @@ namespace TLCGen.ViewModels
         }
         
         public bool ShowMultivalent => DataAccess.TLCGenControllerDataProvider.Default.Controller?.Data?.CCOLVersie >= CCOLVersieEnum.CCOL110;
+
+        public bool ShowTest => System.DateTime.Now.Year == Controller.Data.Fasebewaking; // tbv test ptp naar backup verbergen/tonen in GUI (indien TFB == huidig jaar)
 
         #endregion // Properties
 

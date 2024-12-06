@@ -64,6 +64,19 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged}" Header="Commentaar" Width="*" />
+                <DataGridCheckBoxColumn Header="Geen uitgang" Binding="{Binding Path=GeenUitgangPerOverig,UpdateSourceTrigger=PropertyChanged}" >
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsUitgangOverig}" Value="false">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">

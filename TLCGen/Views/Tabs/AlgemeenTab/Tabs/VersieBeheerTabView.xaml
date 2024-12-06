@@ -7,6 +7,9 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -52,7 +55,11 @@
                 <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </DataGrid.Columns>
         </DataGrid>
-        <CheckBox Content="Toevoegen #define VERSION in sys.h" IsChecked="{Binding Path=AanmakenVerionSysh,UpdateSourceTrigger=PropertyChanged}" Margin="5" VerticalAlignment="Center" Grid.Row="2" />
+        <DockPanel Grid.Row="2" >
+        <CheckBox Content="Toevoegen #define VERSION in sys.h" IsChecked="{Binding Path=AanmakenVerionSysh,UpdateSourceTrigger=PropertyChanged}" Margin="5" VerticalAlignment="Center"  />
+        <CheckBox Content="Tekst 'backup' aan VERSION toevoegen bij #define NO__RIS" IsChecked="{Binding Path=AanmakenVersionBakSysh,UpdateSourceTrigger=PropertyChanged}" Margin="25,5,5,5" VerticalAlignment="Center"  
+                  Visibility="{Binding Path=AanmakenVerionSysh,Converter={StaticResource Bool2VisConv}}" />
+        </DockPanel>
         <CheckBox Content="Sla huidige regeling op bij aanmaken nieuwe versie" IsChecked="{Binding Path=StoreCurrentController,UpdateSourceTrigger=PropertyChanged}" Margin="5" VerticalAlignment="Center" Grid.Row="3" />
         <WrapPanel Grid.Row="4">
             <Button Margin="2" Content="Nieuwe versie" Command="{Binding AddVersieCommand}" />

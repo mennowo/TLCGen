@@ -710,7 +710,7 @@ namespace TLCGen.ModelManagement
                 }
             }
             
-            // Rangeer elementen
+            // TGL != TGL_min
             if (Controller.Data.Intergroen && Controller.Fasen.Any(x => x.TGL != x.TGL_min))
             {
                 if (ControllerAlerts.All(x => x.Type != ControllerAlertType.TglMinChanged))
@@ -735,6 +735,7 @@ namespace TLCGen.ModelManagement
                     alert.PropertyChanged -= AlertMsgOnPropertyChanged;
                 }
             }
+
         }
 
         private void AlertMsgOnPropertyChanged(object sender, PropertyChangedEventArgs e)

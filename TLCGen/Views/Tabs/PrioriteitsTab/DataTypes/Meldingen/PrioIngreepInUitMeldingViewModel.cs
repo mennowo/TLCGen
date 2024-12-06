@@ -98,6 +98,7 @@ namespace TLCGen.ViewModels
         public bool HasInpSD => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector;
         public bool HasDet => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector;
         public bool HasRis => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
+        public bool HasInp => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang;
 
         public ViewModelBase ActualViewModel
         {
@@ -201,6 +202,7 @@ namespace TLCGen.ViewModels
                     {
                         MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     }
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang));
                     break;
                 case PrioIngreepVoertuigTypeEnum.Fiets:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
@@ -258,6 +260,7 @@ namespace TLCGen.ViewModels
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
                     ActualViewModel = ViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:

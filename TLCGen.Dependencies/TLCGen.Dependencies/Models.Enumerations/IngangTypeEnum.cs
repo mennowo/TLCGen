@@ -9,6 +9,8 @@ namespace TLCGen.Models.Enumerations
         [Description("Wisselcontact")]
         WisselContact,
         [Description("Overig")]
-        Overig
+        Overig,
+        [Description("OV in/uitmelding")]
+        OVmelding,
     }
 }

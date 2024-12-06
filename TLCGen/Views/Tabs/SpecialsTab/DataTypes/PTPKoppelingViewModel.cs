@@ -454,6 +454,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string PortNaarBackupRegeling
+        {
+            get => _PTPKoppeling.PortNaarBackupRegeling ?? ""; // of is "-" duidelijker?
+            set
+            {
+                _PTPKoppeling.PortNaarBackupRegeling = value;
+                RaisePropertyChanged<object>(nameof(PortNaarBackupRegeling), broadcast: true);
+            }
+        }
+
         public int NummerSource
         {
             get => _PTPKoppeling.NummerSource;

@@ -188,7 +188,7 @@
                         <TextBox Margin="2" Text="{Binding UitgesteldeVasteAanvraagTijdsDuur,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UitgesteldeVasteAanvraag}" />
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Overige opties">
+                <GroupBox Header="Overige opties" Width="205">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <CheckBox Content="Toepassen MK2" IsChecked="{Binding Path=ToepassenMK2,UpdateSourceTrigger=PropertyChanged}"
@@ -198,12 +198,23 @@
                                     <TextBlock>
                                         Dit is uitsluitend beschikbaar voor auto en OV, wanneer<LineBreak />
                                         de betreffende fase meerdere rijstroken heeft. Aanvinken<LineBreak />
-                                        zorgt voor gebruik van meetkriterium2() binnen CCOL
+                                        zorgt voor gebruik van meetkriterium2() binnen CCOL.
                                     </TextBlock>
                                 </ct:InfoElement.InfoPopup>
                             </ct:InfoElement>
                         </StackPanel>
-                        <Label Content="Toepassen school ingreep" />
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Toepassen school ingreep" />
+                            <ct:InfoElement Visibility="{Binding Path=SchoolIngreepActive,Converter={StaticResource Bool2VisConverter}}">
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Voor alle drukknoppen van een richting <LineBreak />
+                                        waarvoor een schoolingreep wordt opgenomen, <LineBreak />
+                                        moet ook een TDH worden ingesteld.
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
                         <ComboBox 
                             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" 
                             IsEnabled="{Binding Path=SchoolIngreepEnabled}"

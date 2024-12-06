@@ -2356,6 +2356,14 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Loggen</SubCategorie>
           </Setting>
+		  <Setting>
+		    <Default>bakportnr</Default>
+		    <Setting>portnr</Setting>
+		    <Type>Parameter</Type>
+		    <Description>Poortnummer in het regeltoestel PTP naar backup van buur-VRI _E1_</Description>
+		    <Categorie>CAT_Basisfuncties</Categorie>
+		    <SubCategorie>SUBCAT_Loggen</SubCategorie>
+		  </Setting>	
           <Setting>
             <Default>src</Default>
             <Setting>src</Setting>
@@ -3494,7 +3502,13 @@
             <Default>wtv</Default>
             <Setting>wtv</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken aansturing wachttijdvoorspeller fase _E1_</Description>
+            <Description>Multivalente aansturing wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtvbit</Default>
+            <Setting>wtv</Setting>
+            <Type>Uitgang</Type>
+            <Description>Bitsgewijze aansturing wachttijdvoorspeller fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>wtvbus</Default>

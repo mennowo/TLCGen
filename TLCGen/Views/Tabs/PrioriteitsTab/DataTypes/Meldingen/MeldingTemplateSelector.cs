@@ -29,6 +29,7 @@ namespace TLCGen.Views
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
                 default: 
                     return RegularTemplate ?? throw new NullReferenceException();
             }
