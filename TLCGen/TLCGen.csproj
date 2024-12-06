@@ -1180,7 +1180,27 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)
+ELSE (
+mkdir "$(TargetDir)Plugins"
+mkdir "$(TargetDir)Updater"
+mkdir "$(TargetDir)Deps"
+mkdir "$(TargetDir)Libs"
+::copy "C:\GIT\TLCGen.Plugins.Utrecht\TLCGen.Plugins.Utrecht\bin\Debug\TLCGen.Plugins.Utrecht.dll" "$(TargetDir)"
+copy "$(TargetDir)CommonServiceLocator.dll" "$(TargetDir)Updater"
+copy "$(TargetDir)GalaSoft.MvvmLight.dll" "$(TargetDir)Updater"
+copy "$(TargetDir)GalaSoft.MvvmLight.Platform.dll" "$(TargetDir)Updater"
+copy "$(TargetDir)System.Windows.Interactivity.dll" "$(TargetDir)Updater"
+move "$(TargetDir)TLCGen.Updater.exe" "$(TargetDir)Updater"
+move "$(TargetDir)TLCGen.Updater.exe.config" "$(TargetDir)Updater"
+move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rmdir "$(TargetDir)" /s /q
