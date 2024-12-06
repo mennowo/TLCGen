@@ -83,12 +83,17 @@ namespace TLCGen.Models
         {
             return c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc || x.FaseNaar == fc);
         }
-        
+
         public static IEnumerable<VoorstartModel> GetVoorstarten(this ControllerModel c, string fcFrom)
         {
             return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == fcFrom);
         }
-        
+
+        public static IEnumerable<VoorstartModel> GetVoorstarten(this ControllerModel c, string fcFrom, string fcTo)
+        {
+            return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseVan == fcFrom && x.FaseNaar == fcTo);
+        }
+
         public static IEnumerable<VoorstartModel> GetVoorstartenNaar(this ControllerModel c, string fcTo)
         {
             return c.InterSignaalGroep.Voorstarten.Where(x => x.FaseNaar == fcTo);
@@ -98,7 +103,12 @@ namespace TLCGen.Models
         {
             return c.InterSignaalGroep.LateReleases.Where(x => x.FaseVan == fcFrom);
         }
-        
+
+        public static IEnumerable<LateReleaseModel> GetLateReleases(this ControllerModel c, string fcFrom, string fcTo)
+        {
+            return c.InterSignaalGroep.LateReleases.Where(x => x.FaseVan == fcFrom && x.FaseNaar == fcTo);
+        }
+
         public static IEnumerable<LateReleaseModel> GetLateReleasesNaar(this ControllerModel c, string fcTo)
         {
             return c.InterSignaalGroep.LateReleases.Where(x => x.FaseNaar == fcTo);

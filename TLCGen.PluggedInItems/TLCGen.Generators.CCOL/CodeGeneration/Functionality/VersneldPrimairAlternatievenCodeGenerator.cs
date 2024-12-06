@@ -837,8 +837,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (dBinnen1 == null || dBinnen2 == null) continue;
 
-                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:van}] && IH[{_hpf}{_hmad}{dBinnen1.Naam}] && max_par_los({_fcpf}{mav:van}) && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_1]) && (!H[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_2]) || PAR_los[{_fcpf}{mav:van}] && RA[{_fcpf}{mav:van}]) PAR_los[{_fcpf}{mav:van}] = TRUE;");
-                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:naar}] && IH[{_hpf}{_hmad}{dBinnen2.Naam}] && max_par_los({_fcpf}{mav:naar}) && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_1]) && (!H[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_2]) || PAR_los[{_fcpf}{mav:naar}] && RA[{_fcpf}{mav:naar}]) PAR_los[{_fcpf}{mav:naar}] = TRUE;");
+                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:van}] && IH[{_hpf}{_hmad}{dBinnen1.Naam}] && max_par_los({_fcpf}{mav:van}) && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_1]) && (!H[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:van}_2]) || PAR_los[{_fcpf}{mav:van}] && RA[{_fcpf}{mav:van}]) PAR_los[{_fcpf}{mav:van}] = TRUE; else PAR_los[{_fcpf}{mav:van}] = FALSE;");
+                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:naar}] && IH[{_hpf}{_hmad}{dBinnen2.Naam}] && max_par_los({_fcpf}{mav:naar}) && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_1]) && (!H[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schlos}{mav:naar}_2]) || PAR_los[{_fcpf}{mav:naar}] && RA[{_fcpf}{mav:naar}]) PAR_los[{_fcpf}{mav:naar}] = TRUE; else PAR_los[{_fcpf}{mav:naar}] = FALSE;");
 
                     setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:van}] = PAR[{_fcpf}{mav:van}] || PAR_los[{_fcpf}{mav:van}];");
                     setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:naar}] = PAR[{_fcpf}{mav:naar}] || PAR_los[{_fcpf}{mav:naar}];");

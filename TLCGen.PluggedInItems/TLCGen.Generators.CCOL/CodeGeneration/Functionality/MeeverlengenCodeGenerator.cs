@@ -20,6 +20,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0649
         private string _hfile;
         private string _hplact;
+        private string _trealvs;
+        private string _treallr;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -288,19 +290,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach(var mvfc in fcm.HardMeeverlengenFaseCycli)
                             {
                                 sb.Append($"{ts}if (SCH[{_schpf}{_schhardmv}{fcm.Naam}{mvfc.FaseCyclus}] && ");
-                                switch (mvfc.Type)
+                                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    case HardMeevelengenTypeEnum.Groen:
-                                        sb.Append($"(RA[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
-                                        break;
-                                    case HardMeevelengenTypeEnum.CyclischVerlengGroen:
-                                        sb.Append($"CV[{_fcpf}{mvfc.FaseCyclus}]");
-                                        break;
-                                    case HardMeevelengenTypeEnum.CyclischVerlengGroenEnGroen:
-                                        sb.Append($"(CV[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
-                                        break;
+                                    var lr = c.GetLateReleases(fcm.Naam, mvfc.FaseCyclus);
+                                    var vs = c.GetVoorstarten(fcm.Naam, mvfc.FaseCyclus);
+                                    sb.AppendLine(
+                                         $"G[{_fcpf}{mvfc.FaseCyclus}] || RA[{_fcpf}{mvfc.FaseCyclus}] || R[{_fcpf}{mvfc.FaseCyclus}] && AA[{_fcpf}{mvfc.FaseCyclus}] || " +
+                                         $"A[{_fcpf}{mvfc.FaseCyclus}] && (twacht[{_fcpf}{mvfc.FaseCyclus}] >= 0) && (twacht[{_fcpf}{mvfc.FaseCyclus}] <= (TGL_max[{_fcpf}{fcm.Naam}] + " +
+                                         $"TRG_max[{_fcpf}{fcm.Naam}]" +
+                                         (lr.Any() 
+                                            ? $" - T_max[{_tpf}{_treallr}{fcm.Naam}{mvfc.FaseCyclus }]"
+                                            : vs.Any() 
+                                                ? $" + T_max[{_tpf}{_trealvs}{fcm.Naam}{mvfc.FaseCyclus}]"
+                                                : "") +
+                                         $"))) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
                                 }
-                                sb.AppendLine($" && !kcv({_fcpf}{fcm.Naam})) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
+                                else
+                                { 
+                                    switch (mvfc.Type)
+                                    {
+                                        case HardMeevelengenTypeEnum.Groen:
+                                            sb.Append($"(RA[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
+                                            break;
+                                        case HardMeevelengenTypeEnum.CyclischVerlengGroen:
+                                            sb.Append($"CV[{_fcpf}{mvfc.FaseCyclus}]");
+                                            break;
+                                        case HardMeevelengenTypeEnum.CyclischVerlengGroenEnGroen:
+                                            sb.Append($"(CV[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
+                                            break;
+                                    }
+                                    sb.AppendLine($" && !kcv({_fcpf}{fcm.Naam})) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
+                                }
                             }
                         }
                     }
@@ -329,6 +349,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _trealvs = CCOLGeneratorSettingsProvider.Default.GetElementName("trealvs");
+            _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
 
             return base.SetSettings(settings);
         }
