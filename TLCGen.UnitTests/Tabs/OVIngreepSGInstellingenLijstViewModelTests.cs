@@ -27,7 +27,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.Other
         //    vm.IngreepSGParameters.First(x => x.FaseCyclus == "02").MinimumGroentijdConflictOVRealisatie = 55;
         //    vm.OnOVIngreepSignaalGroepParametersChanged(new Messaging.Messages.PrioIngreepSignaalGroepParametersChangedMessage(vm.OVIngreepSGParameters.First(x => x.FaseCyclus == "02").Parameters));
         //    
-        //    Assert.AreEqual(model.PrioData.PrioIngreepSignaalGroepParameters.First(x => x.FaseCyclus == "03").MinimumGroentijdConflictOVRealisatie, 55);
+        //    Assert.That(model.PrioData.PrioIngreepSignaalGroepParameters.First(x => x.FaseCyclus == "03").MinimumGroentijdConflictOVRealisatie == 55);
         //}
     }
 }

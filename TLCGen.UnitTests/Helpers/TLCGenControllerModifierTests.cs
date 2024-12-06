@@ -19,8 +19,8 @@ namespace TLCGen.UnitTests.Helpers
 
             TLCGenControllerModifier.Default.RemoveModelItemFromController("01", TLCGenObjectTypeEnum.Fase);
 
-            Assert.AreEqual(0, controller.Fasen.Count);
-            Assert.AreEqual(0, controller.FileIngrepen[0].TeDoserenSignaalGroepen.Count);
+            Assert.That(0 == controller.Fasen.Count);
+            Assert.That(0 == controller.FileIngrepen[0].TeDoserenSignaalGroepen.Count);
         }
 
         [Test]
@@ -34,9 +34,9 @@ namespace TLCGen.UnitTests.Helpers
 
             TLCGenControllerModifier.Default.RemoveModelItemFromController("01", TLCGenObjectTypeEnum.Fase);
 
-            Assert.AreEqual(0, controller.Fasen.Count);
-            Assert.AreEqual(0, controller.ModuleMolen.FasenModuleData.Count);
-            Assert.AreEqual(0, controller.ModuleMolen.Modules[0].Fasen.Count);
+            Assert.That(0 == controller.Fasen.Count);
+            Assert.That(0 == controller.ModuleMolen.FasenModuleData.Count);
+            Assert.That(0 == controller.ModuleMolen.Modules[0].Fasen.Count);
         }
 
         [Test]
@@ -64,8 +64,8 @@ namespace TLCGen.UnitTests.Helpers
 
             TLCGenControllerModifier.Default.RemoveModelItemFromController("s011", TLCGenObjectTypeEnum.SelectieveDetector);
 
-            Assert.AreEqual(0, controller.SelectieveDetectoren.Count);
-            Assert.AreEqual(0, controller.PrioData.PrioIngrepen[0].MeldingenData.Inmeldingen.Count);
+            Assert.That(0 == controller.SelectieveDetectoren.Count);
+            Assert.That(0 == controller.PrioData.PrioIngrepen[0].MeldingenData.Inmeldingen.Count);
         }
     }
 }

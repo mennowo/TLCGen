@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Documents;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -646,8 +643,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch (nl.Type)
                             {
                                 case NaloopTypeEnum.StartGroen:
-                                //    sb.AppendLine($"{ts}wijziging |= Correctie_REALISATIETIJD_LateRelease({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:naarvan});");
-                                //    break;
+                                    var sg1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                                    var sg2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                                    if (sg1?.Type == FaseTypeEnum.Voetganger && sg2?.Type == FaseTypeEnum.Voetganger)
+                                    {
+                                        var dk1 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                                        var dk2 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                                        if (dk1 != null)
+                                        { 
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hisglos}{nl:van}] = RA[{_fcpf}{nl:van}] && (!H[{_hpf}{_hmad}{dk1}] || SCH[{_schpf}{_schisglos}{nl:van}_1] && H[{_hpf}{_hmad}{dk2}]) || H[{_hpf}{_hisglos}{nl:van}] && !SG[{_fcpf}{nl:van}];");
+                                        }
+                                    }
+                                    
+                                    sb.AppendLine($"{ts}wijziging |= (!IH[{_hpf}{_hisglos}{nl:van}]) ? Realisatietijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar}) : 0;");
+                                    break;
                                 case NaloopTypeEnum.EindeGroen:
                                 case NaloopTypeEnum.CyclischVerlengGroen:
                                     sb.AppendLine($"{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");

@@ -131,7 +131,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         //    vm.SelectedFaseCyclusOVIngreep = true;
 
         //    Assert.IsNotNull(vm.SelectedOVIngreep);
-        //    Assert.AreEqual(1, model.PrioData.PrioIngrepen.Count);
+        //    Assert.That(1 == model.PrioData.PrioIngrepen.Count);
         //    Assert.True(vm.SelectedOVIngreep.OVIngreep == model.PrioData.PrioIngrepen[0]);
         //}
 
@@ -153,7 +153,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         //    vm.SelectedFaseCyclusOVIngreep = false;
 
         //    Assert.IsNull(vm.SelectedOVIngreep);
-        //    Assert.AreEqual(0, model.PrioData.PrioIngrepen.Count);
+        //    Assert.That(0 == model.PrioData.PrioIngrepen.Count);
         //}
 
         //[Test]
@@ -175,7 +175,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         //    vm.SelectedFaseCyclusHDIngreep = true;
 
         //    Assert.IsNotNull(vm.SelectedHDIngreep);
-        //    Assert.AreEqual(1, model.PrioData.HDIngrepen.Count);
+        //    Assert.That(1 == model.PrioData.HDIngrepen.Count);
         //    Assert.True(vm.SelectedHDIngreep.HDIngreep == model.PrioData.HDIngrepen[0]);
         //}
 
@@ -198,7 +198,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         //    vm.SelectedFaseCyclusHDIngreep = false;
 
         //    Assert.IsNull(vm.SelectedHDIngreep);
-        //    Assert.AreEqual(0, model.PrioData.HDIngrepen.Count);
+        //    Assert.That(0 == model.PrioData.HDIngrepen.Count);
         //}
 
     }

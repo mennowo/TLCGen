@@ -174,7 +174,7 @@ namespace TLCGen.Specificator
 
                 //body.Append(FunctionalityGenerator.GetModulenChapter(doc, c));
 
-                doc.Close();
+                doc.Dispose();
                 //foreach (var g in gensWithElems)
                 //{
                 //    if (g.Item2.Any())

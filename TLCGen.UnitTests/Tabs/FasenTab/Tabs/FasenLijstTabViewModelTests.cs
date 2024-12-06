@@ -27,7 +27,7 @@ namespace TLCGen.UnitTests
 
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual(1, model.Fasen.Count);
+            Assert.That(1 == model.Fasen.Count);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace TLCGen.UnitTests
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual(5, model.Fasen.Count);
+            Assert.That(5 == model.Fasen.Count);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace TLCGen.UnitTests
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
 
-            Assert.AreEqual("05", model.Fasen[4].Naam);
+            Assert.That("05" == model.Fasen[4].Naam);
         }
 
         [Test]
@@ -198,8 +198,8 @@ namespace TLCGen.UnitTests
             vm.Fasen[4].Naam = "05";
             vm.OnDeselectedPreview();
 
-            Assert.AreEqual("05", vm.Fasen[2].Naam);
-            Assert.AreEqual("08", vm.Fasen[4].Naam);
+            Assert.That("05" == vm.Fasen[2].Naam);
+            Assert.That("08" == vm.Fasen[4].Naam);
         }
 
         [Test]
@@ -221,11 +221,11 @@ namespace TLCGen.UnitTests
             vm.SelectedFaseCycli.Add(vm.Fasen[4]);
             vm.Fasen[4].VasteAanvraag = NooitAltijdAanUitEnum.Altijd;
 
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[0].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[1].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[2].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[3].VasteAanvraag);
-            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[4].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[0].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[1].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[2].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[3].VasteAanvraag);
+            Assert.That(NooitAltijdAanUitEnum.Altijd == vm.Fasen[4].VasteAanvraag);
         }
 
         [Test]

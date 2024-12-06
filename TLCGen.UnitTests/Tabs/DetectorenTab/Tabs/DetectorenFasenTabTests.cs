@@ -21,7 +21,7 @@ namespace TLCGen.UnitTests
 
 	        vm.OnSelected();
 
-            Assert.AreEqual(5, vm.Fasen.Count);
+            Assert.That(5 == vm.Fasen.Count);
         }
 
 	    [Test]
@@ -32,8 +32,8 @@ namespace TLCGen.UnitTests
 
 		    vm.OnSelected();
 
-		    Assert.AreEqual("01", vm.SelectedFaseNaam);
-		    Assert.AreEqual("011", vm.SelectedDetector.Naam);
+		    Assert.That("01" == vm.SelectedFaseNaam);
+		    Assert.That("011" == vm.SelectedDetector.Naam);
 	    }
 
 	    [Test]
@@ -45,8 +45,8 @@ namespace TLCGen.UnitTests
 		    vm.OnSelected();
 		    vm.SelectedFaseNaam = "02";
 
-		    Assert.AreEqual(3, vm.Detectoren.Count);
-		    Assert.AreEqual("021", vm.SelectedDetector.Naam);
+		    Assert.That(3 == vm.Detectoren.Count);
+		    Assert.That("021" == vm.SelectedDetector.Naam);
 	    }
 
 	    [Test]
@@ -61,11 +61,11 @@ namespace TLCGen.UnitTests
             vm.OnSelected(); 
 			vm.AddDetectorCommand.Execute(null);
 
-		    Assert.AreEqual(3, vm.Detectoren.Count);
+		    Assert.That(3 == vm.Detectoren.Count);
 		    var fc = model.Fasen[0];
-		    Assert.AreEqual("011", fc.Detectoren[0].Naam);
-		    Assert.AreEqual("012", fc.Detectoren[1].Naam);
-		    Assert.AreEqual("013", fc.Detectoren[2].Naam);
+		    Assert.That("011" == fc.Detectoren[0].Naam);
+		    Assert.That("012" == fc.Detectoren[1].Naam);
+		    Assert.That("013" == fc.Detectoren[2].Naam);
 	    }
 
 	    [Test]
@@ -91,12 +91,12 @@ namespace TLCGen.UnitTests
 		    vm.AddDetectorCommand.Execute(null);
 		    vm.AddDetectorCommand.Execute(null);
 
-		    Assert.AreEqual(DetectorTypeEnum.Kop, model.Fasen[0].Detectoren[0].Type);
-		    Assert.AreEqual(DetectorTypeEnum.Lang, model.Fasen[0].Detectoren[1].Type);
-		    Assert.AreEqual(DetectorTypeEnum.Kop, model.Fasen[1].Detectoren[0].Type);
-		    Assert.AreEqual(DetectorTypeEnum.Knop, model.Fasen[1].Detectoren[1].Type);
-		    Assert.AreEqual(DetectorTypeEnum.KnopBuiten, model.Fasen[2].Detectoren[0].Type);
-		    Assert.AreEqual(DetectorTypeEnum.KnopBinnen, model.Fasen[2].Detectoren[1].Type);
+		    Assert.That(DetectorTypeEnum.Kop == model.Fasen[0].Detectoren[0].Type);
+		    Assert.That(DetectorTypeEnum.Lang == model.Fasen[0].Detectoren[1].Type);
+		    Assert.That(DetectorTypeEnum.Kop == model.Fasen[1].Detectoren[0].Type);
+		    Assert.That(DetectorTypeEnum.Knop == model.Fasen[1].Detectoren[1].Type);
+		    Assert.That(DetectorTypeEnum.KnopBuiten == model.Fasen[2].Detectoren[0].Type);
+		    Assert.That(DetectorTypeEnum.KnopBinnen == model.Fasen[2].Detectoren[1].Type);
 	    }
 
 	    [Test]
@@ -154,12 +154,12 @@ namespace TLCGen.UnitTests
 		    };
 		    vm.Detectoren[2].AanvraagDirect = NooitAltijdAanUitEnum.SchAan;
 
-		    Assert.AreEqual(true, vm.Detectoren[0].AanvraagDirect);
-		    Assert.AreEqual(true, vm.Detectoren[1].AanvraagDirect);
-		    Assert.AreEqual(true, vm.Detectoren[2].AanvraagDirect);
-		    Assert.AreEqual(true, model.Fasen[1].Detectoren[0].AanvraagDirect);
-		    Assert.AreEqual(true, model.Fasen[1].Detectoren[1].AanvraagDirect);
-		    Assert.AreEqual(true, model.Fasen[1].Detectoren[2].AanvraagDirect);
+		    Assert.That(true == vm.Detectoren[0].AanvraagDirect);
+		    Assert.That(true == vm.Detectoren[1].AanvraagDirect);
+		    Assert.That(true == vm.Detectoren[2].AanvraagDirect);
+		    Assert.That(true == model.Fasen[1].Detectoren[0].AanvraagDirect);
+		    Assert.That(true == model.Fasen[1].Detectoren[1].AanvraagDirect);
+		    Assert.That(true == model.Fasen[1].Detectoren[2].AanvraagDirect);
 	    }
     }
 }

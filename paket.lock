@@ -8,7 +8,9 @@ NUGET
     CommonServiceLocator (2.0.7) - restriction: >= net45
       NETStandard.Library (>= 1.6.1) - restriction: && (< net46) (< netcoreapp1.0) (>= netstandard1.0) (< netstandard2.0)
       System.ComponentModel (>= 4.3) - restriction: && (< net46) (< netcoreapp1.0) (>= netstandard1.0) (< netstandard2.0)
-    DocumentFormat.OpenXml (2.20) - restriction: >= net45
+    DocumentFormat.OpenXml (3.2) - restriction: >= net45
+      DocumentFormat.OpenXml.Framework (>= 3.2)
+    DocumentFormat.OpenXml.Framework (3.2) - restriction: || (&& (< net35) (>= net45) (>= netstandard2.0)) (&& (>= net45) (< netstandard2.0)) (>= net46)
     Extended.Wpf.Toolkit (4.5) - restriction: >= net45
     FlaUI.Core (4.0)
       Microsoft.Win32.Registry (>= 5.0)
