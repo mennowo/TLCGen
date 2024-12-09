@@ -491,7 +491,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
 					if (c.InterSignaalGroep.Nalopen.Count > 0)
 					{
-						tts = ts + ts;
 						sb.Append($"{ts}{ts}if (");
 						var k = 0;
 						foreach (var nl in c.InterSignaalGroep.Nalopen)
