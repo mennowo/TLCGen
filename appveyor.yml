@@ -81,6 +81,7 @@ after_build:
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Updater
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Plugins
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings
+  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Docs
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings\VisualTemplates
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFiles
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFilesToCopy
