@@ -181,7 +181,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCAanvragen => new []{91},
                 CCOLCodeTypeEnum.RegCInitApplication => new []{40},
                 CCOLCodeTypeEnum.RegCPostApplication => new []{30},
-                CCOLCodeTypeEnum.RegCSystemApplication => new []{100},
+                CCOLCodeTypeEnum.RegCSystemApplication => new []{200},
                 CCOLCodeTypeEnum.RegCPostSystemApplication => new []{20},
                 _ => null
             };
