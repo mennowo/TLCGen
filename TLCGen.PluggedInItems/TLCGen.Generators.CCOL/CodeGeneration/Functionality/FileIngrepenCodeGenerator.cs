@@ -238,7 +238,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCInitApplication => new []{10},
                 CCOLCodeTypeEnum.RegCSystemApplication => new []{10},
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{20},
-                CCOLCodeTypeEnum.RegCFileVerwerking => new []{10},
+                CCOLCodeTypeEnum.RegCFileVerwerking => new []{10, 20, 90},
                 CCOLCodeTypeEnum.PrioCPARCorrecties => new []{20},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{30},
                 CCOLCodeTypeEnum.PrioCPrioriteitsToekenning => new []{10},
@@ -456,158 +456,194 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
                     if (!c.FileIngrepen.Any()) return "";
-
-                    sb.AppendLine($"{ts}/* File afhandeling */");
-                    sb.AppendLine($"{ts}/* ---------------- */");
-                    sb.AppendLine();
-
-                    if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MinimaleRoodtijd)))
+                    if (order == 10)
                     {
-                        sb.AppendLine($"{ts}/* reset bitsturing */");
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MaximaleGroentijd)))
-                            sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
-                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MinimaleRoodtijd)))
-                            sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT5;");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
+                        sb.AppendLine("#if !defined CUSTOM_FILEVERWERKING");
+                        return sb.ToString();
                     }
-
-                    foreach (var fm in c.FileIngrepen)
+                    else if (order == 20)
                     {
-                        if (!first) sb.AppendLine();
-
-                        sb.AppendLine($"{ts}/* File ingreep {fm.Naam} */");
+                        sb.AppendLine($"{ts}/* File afhandeling */");
+                        sb.AppendLine($"{ts}/* ---------------- */");
                         sb.AppendLine();
 
-                        foreach (var fd in fm.FileDetectoren)
+                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MinimaleRoodtijd)))
                         {
-                            sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_tafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector});");
+                            sb.AppendLine($"{ts}/* reset bitsturing */");
+                            sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                            sb.AppendLine($"{ts}{{");
+                            if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.AfkappenOpStartFile || x2.MaximaleGroentijd)))
+                                sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
+                            if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MinimaleRoodtijd)))
+                                sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT5;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
                         }
 
-                        sb.Append($"{ts}RT[{_tpf}{_tafv}{fm.Naam}] = ");
-                        var i = 0;
-                        foreach (var fd in fm.FileDetectoren)
+                        foreach (var fm in c.FileIngrepen)
                         {
-                            if (i != 0)
-                            {
-                                sb.Append(" || ");
-                            }
-                            sb.Append($"D[{_dpf}{fd.Detector}]");
-                            ++i;
-                        }
-                        sb.AppendLine(";");
+                            if (!first) sb.AppendLine();
 
-                        sb.AppendLine($"{ts}if (!(T[{_tpf}{_tafv}{fm.Naam}] || RT[{_tpf}{_tafv}{fm.Naam}]))");
-                        sb.AppendLine($"{ts}{{");
-                        foreach (var fd in fm.FileDetectoren)
-                        {
-                            sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hfile}{fd.Detector}] = FALSE;");
-                        }
-                        sb.AppendLine($"{ts}}}");
-                        
-                        var detectorDict = new Dictionary<int, List<string>>();
-                        foreach (var fmd in fm.FileDetectoren)
-                        {
-                            var d = c.Fasen.SelectMany(x => x.Detectoren).FirstOrDefault(x => x.Naam == fmd.Detector) ?? 
-                                    c.Detectoren.FirstOrDefault(x => x.Naam == fmd.Detector);
-                            if (d?.Rijstrook == null) continue;
-                            if (!detectorDict.ContainsKey(d.Rijstrook.Value))
+                            sb.AppendLine($"{ts}/* File ingreep {fm.Naam} */");
+                            sb.AppendLine();
+
+                            foreach (var fd in fm.FileDetectoren)
                             {
-                                detectorDict.Add(d.Rijstrook.Value, new List<string> {fmd.Detector});
+                                sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_tafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector});");
                             }
-                            else
+
+                            sb.Append($"{ts}RT[{_tpf}{_tafv}{fm.Naam}] = ");
+                            var i = 0;
+                            foreach (var fd in fm.FileDetectoren)
                             {
-                                detectorDict[d.Rijstrook.Value].Add(fmd.Detector);
-                            }
-                        }
-                        var multiStrook = detectorDict.Count > 1;
-                        var multiLusPerStrook = detectorDict.Any(x => x.Value.Count > 1) ||
-                                                detectorDict.Count == 0 && fm.FileDetectoren.Count > 1;
-                        if (multiStrook)
-                        {
-                            if (multiLusPerStrook)
-                            {
-                                sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparstrook}])");
-                                sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}/* strook en lus parallel: file via om het even welke lus */");
-                                sb.AppendLine($"{ts}{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                                var id = 0;
-                                foreach (var fd in fm.FileDetectoren)
+                                if (i != 0)
                                 {
-                                    if (id > 0) sb.Append(" || ");
-                                    ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    sb.Append(" || ");
                                 }
-                                sb.AppendLine($";");
-                                sb.AppendLine($"{ts}{ts}}}");
-                                sb.AppendLine($"{ts}{ts}/* alleen strook parallel: file via alle lussen op 1 strook */");
-                                sb.AppendLine($"{ts}{ts}else");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                                id = 0;
-                                foreach (var dd in detectorDict)
+                                sb.Append($"D[{_dpf}{fd.Detector}]");
+                                ++i;
+                            }
+                            sb.AppendLine(";");
+
+                            sb.AppendLine($"{ts}if (!(T[{_tpf}{_tafv}{fm.Naam}] || RT[{_tpf}{_tafv}{fm.Naam}]))");
+                            sb.AppendLine($"{ts}{{");
+                            foreach (var fd in fm.FileDetectoren)
+                            {
+                                sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hfile}{fd.Detector}] = FALSE;");
+                            }
+                            sb.AppendLine($"{ts}}}");
+
+                            var detectorDict = new Dictionary<int, List<string>>();
+                            foreach (var fmd in fm.FileDetectoren)
+                            {
+                                var d = c.Fasen.SelectMany(x => x.Detectoren).FirstOrDefault(x => x.Naam == fmd.Detector) ??
+                                        c.Detectoren.FirstOrDefault(x => x.Naam == fmd.Detector);
+                                if (d?.Rijstrook == null) continue;
+                                if (!detectorDict.ContainsKey(d.Rijstrook.Value))
                                 {
-                                    if (id > 0) sb.Append(" || ");
-                                    ++id;
-                                    sb.Append("(");
-                                    var rid = 0;
-                                    foreach (var rstrd in dd.Value)
+                                    detectorDict.Add(d.Rijstrook.Value, new List<string> {fmd.Detector});
+                                }
+                                else
+                                {
+                                    detectorDict[d.Rijstrook.Value].Add(fmd.Detector);
+                                }
+                            }
+                            var multiStrook = detectorDict.Count > 1;
+                            var multiLusPerStrook = detectorDict.Any(x => x.Value.Count > 1) ||
+                                                    detectorDict.Count == 0 && fm.FileDetectoren.Count > 1;
+                            if (multiStrook)
+                            {
+                                if (multiLusPerStrook)
+                                {
+                                    sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparstrook}])");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}/* strook en lus parallel: file via om het even welke lus */");
+                                    sb.AppendLine($"{ts}{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    var id = 0;
+                                    foreach (var fd in fm.FileDetectoren)
                                     {
-                                        if (rid > 0) sb.Append(" && ");
-                                        ++rid;
-                                        sb.Append($"IH[{_hpf}{_hfile}{rstrd}]");
+                                        if (id > 0) sb.Append(" || ");
+                                        ++id;
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                     }
-                                    sb.Append(")");
-                                }
-                                sb.AppendLine(";");
-                                sb.AppendLine($"{ts}{ts}}}");
-                                sb.AppendLine($"{ts}}}");
-                                sb.AppendLine($"{ts}else");
-                                sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}/* alleen parallel lus: file via minimaal 1 lus per strook */");
-                                sb.AppendLine($"{ts}{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                                id = 0;
-                                foreach (var dd in detectorDict)
-                                {
-                                    if (id > 0) sb.Append(" && ");
-                                    ++id;
-                                    sb.Append("(");
-                                    var rid = 0;
-                                    foreach (var rstrd in dd.Value)
+                                    sb.AppendLine($";");
+                                    sb.AppendLine($"{ts}{ts}}}");
+                                    sb.AppendLine($"{ts}{ts}/* alleen strook parallel: file via alle lussen op 1 strook */");
+                                    sb.AppendLine($"{ts}{ts}else");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    id = 0;
+                                    foreach (var dd in detectorDict)
                                     {
-                                        if (rid > 0) sb.Append(" || ");
-                                        ++rid;
-                                        sb.Append($"IH[{_hpf}{_hfile}{rstrd}]");
+                                        if (id > 0) sb.Append(" || ");
+                                        ++id;
+                                        sb.Append("(");
+                                        var rid = 0;
+                                        foreach (var rstrd in dd.Value)
+                                        {
+                                            if (rid > 0) sb.Append(" && ");
+                                            ++rid;
+                                            sb.Append($"IH[{_hpf}{_hfile}{rstrd}]");
+                                        }
+                                        sb.Append(")");
                                     }
-                                    sb.Append(")");
+                                    sb.AppendLine(";");
+                                    sb.AppendLine($"{ts}{ts}}}");
+                                    sb.AppendLine($"{ts}}}");
+                                    sb.AppendLine($"{ts}else");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}/* alleen parallel lus: file via minimaal 1 lus per strook */");
+                                    sb.AppendLine($"{ts}{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    id = 0;
+                                    foreach (var dd in detectorDict)
+                                    {
+                                        if (id > 0) sb.Append(" && ");
+                                        ++id;
+                                        sb.Append("(");
+                                        var rid = 0;
+                                        foreach (var rstrd in dd.Value)
+                                        {
+                                            if (rid > 0) sb.Append(" || ");
+                                            ++rid;
+                                            sb.Append($"IH[{_hpf}{_hfile}{rstrd}]");
+                                        }
+                                        sb.Append(")");
+                                    }
+                                    sb.AppendLine(";");
+                                    sb.AppendLine($"{ts}{ts}}}");
+                                    sb.AppendLine($"{ts}{ts}/* niet parallel: file bij melding van alle lussen */");
+                                    sb.AppendLine($"{ts}{ts}else");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    id = 0;
+                                    foreach (var fd in fm.FileDetectoren)
+                                    {
+                                        if (id > 0) sb.Append(" && ");
+                                        ++id;
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    }
+                                    sb.AppendLine($";");
+                                    sb.AppendLine($"{ts}{ts}}}");
+                                    sb.AppendLine($"{ts}}}");
                                 }
-                                sb.AppendLine(";");
-                                sb.AppendLine($"{ts}{ts}}}");
-                                sb.AppendLine($"{ts}{ts}/* niet parallel: file bij melding van alle lussen */");
-                                sb.AppendLine($"{ts}{ts}else");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.Append($"{ts}{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                                id = 0;
-                                foreach (var fd in fm.FileDetectoren)
+                                else
                                 {
-                                    if (id > 0) sb.Append(" && ");
-                                    ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    sb.AppendLine($"{ts}{ts}/* strook parallel: file bij melding op 1 strook */");
+                                    sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparstrook}])");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    var id = 0;
+                                    foreach (var fd in fm.FileDetectoren)
+                                    {
+                                        if (id > 0) sb.Append(" || ");
+                                        ++id;
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    }
+                                    sb.AppendLine($";");
+                                    sb.AppendLine($"{ts}}}");
+                                    sb.AppendLine($"{ts}/* niet parallel: file bij melding van alle lussen */");
+                                    sb.AppendLine($"{ts}else");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                    id = 0;
+                                    foreach (var fd in fm.FileDetectoren)
+                                    {
+                                        if (id > 0) sb.Append(" && ");
+                                        ++id;
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    }
+                                    sb.AppendLine($";");
+                                    sb.AppendLine($"{ts}}}");
                                 }
-                                sb.AppendLine($";");
-                                sb.AppendLine($"{ts}{ts}}}");
-                                sb.AppendLine($"{ts}}}");
                             }
-                            else
+                            else if (multiLusPerStrook)
                             {
-                                sb.AppendLine($"{ts}{ts}/* strook parallel: file bij melding op 1 strook */");
-                                sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparstrook}])");
+                                sb.AppendLine($"{ts}/* lus parallel: file bij melding op 1 lus */");
+                                sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
                                 sb.AppendLine($"{ts}{{");
                                 sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
                                 var id = 0;
@@ -617,7 +653,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     ++id;
                                     sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 }
-                                sb.AppendLine($";");
+                                sb.AppendLine(";");
                                 sb.AppendLine($"{ts}}}");
                                 sb.AppendLine($"{ts}/* niet parallel: file bij melding van alle lussen */");
                                 sb.AppendLine($"{ts}else");
@@ -633,302 +669,279 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($";");
                                 sb.AppendLine($"{ts}}}");
                             }
-                        }
-                        else if (multiLusPerStrook)
-                        {
-                            sb.AppendLine($"{ts}/* lus parallel: file bij melding op 1 lus */");
-                            sb.AppendLine($"{ts}if(SCH[{_schpf}{_hfile}{fm.Naam}{_schparlus}])");
-                            sb.AppendLine($"{ts}{{");
-                            sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                            var id = 0;
-                            foreach (var fd in fm.FileDetectoren)
+                            else // 1 lus
                             {
-                                if (id > 0) sb.Append(" || ");
-                                ++id;
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
-                            }
-                            sb.AppendLine(";");
-                            sb.AppendLine($"{ts}}}");
-                            sb.AppendLine($"{ts}/* niet parallel: file bij melding van alle lussen */");
-                            sb.AppendLine($"{ts}else");
-                            sb.AppendLine($"{ts}{{");
-                            sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                            id = 0;
-                            foreach (var fd in fm.FileDetectoren)
-                            {
-                                if (id > 0) sb.Append(" && ");
-                                ++id;
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
-                            }
-                            sb.AppendLine($";");
-                            sb.AppendLine($"{ts}}}");
-                        }
-                        else // 1 lus
-                        {
-                            sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
-                            i = 0;
-                            foreach (var fd in fm.FileDetectoren)
-                            {
-                                if (i != 0)
+                                sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                                i = 0;
+                                foreach (var fd in fm.FileDetectoren)
                                 {
-                                    sb.Append(" || ");
-                                }
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
-                                ++i;
-                            }
-                            sb.AppendLine($";");
-                        }
-                        
-                        sb.AppendLine();
-                        tts = ts;
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            tts += ts;
-                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
-                            sb.AppendLine($"{ts}{{");
-                        }
-
-                        if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit)
-                        {
-                            sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
-                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
-                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
-                            {
-                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
-                            }
-                            sb.AppendLine(")");
-                            sb.AppendLine($"{tts}{{");
-                            foreach (var ff in fm.TeDoserenSignaalGroepen)
-                            {
-                                var grfunc = c.Data.TypeGroentijden switch
-                                {
-                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
-                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
-                                    _ => ""
-                                };
-                                sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
-                                sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
-                                var rest = "";
-                                var irest = 1;
-                                if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
-                                {
-                                    rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}]";
-                                }
-                                else
-                                {
-                                    rest += $", TVGA_max[{_fcpf}{ff.FaseCyclus}]";
-                                }
-
-                                foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
-                                {
-                                    var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == per.GroentijdenSet);
-
-                                    if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
+                                    if (i != 0)
                                     {
-                                        ++irest;
-                                        rest += $", PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}]";
+                                        sb.Append(" || ");
                                     }
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    ++i;
                                 }
-
-                                sb.AppendLine($"{irest}{rest});");
+                                sb.AppendLine($";");
                             }
-                            sb.AppendLine($"{tts}}}");
-                        }
 
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            sb.AppendLine($"{ts}}}");
-                            sb.AppendLine($"{ts}else");
-                            sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{tts}/* percentage MG bij filemelding tijdens halfstar */");
-                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
-                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
+                            sb.AppendLine();
+                            tts = ts;
+                            if (c.HalfstarData.IsHalfstar)
                             {
-                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
+                                tts += ts;
+                                sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                                sb.AppendLine($"{ts}{{");
                             }
-                            sb.AppendLine(")");
-                            sb.AppendLine($"{tts}{{");
-                            foreach (var ff in fm.TeDoserenSignaalGroepen)
+
+                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit)
                             {
-                                var grfunc = c.Data.TypeGroentijden switch
+                                sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
+                                sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                                if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
                                 {
-                                    GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
-                                    GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
-                                    _ => ""
-                                };
-                                sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");
+                                    sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
+                                }
+                                sb.AppendLine(")");
+                                sb.AppendLine($"{tts}{{");
+                                foreach (var ff in fm.TeDoserenSignaalGroepen)
+                                {
+                                    var grfunc = c.Data.TypeGroentijden switch
+                                    {
+                                        GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden",
+                                        GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden",
+                                        _ => ""
+                                    };
+                                    sb.AppendLine(fm.EerlijkDoseren
+                                        ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}],"
+                                        : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, PRM[{_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}],");
+                                    sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
+                                    var rest = "";
+                                    var irest = 1;
+                                    if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
+                                    {
+                                        rest += $", PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet?.ToLower() ?? "NG"}_{ff.FaseCyclus}]";
+                                    }
+                                    else
+                                    {
+                                        rest += $", TVGA_max[{_fcpf}{ff.FaseCyclus}]";
+                                    }
+
+                                    foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                                    {
+                                        var greentimeSet = c.GroentijdenSets.FirstOrDefault(x => x.Naam == per.GroentijdenSet);
+
+                                        if (greentimeSet.Groentijden.Any(x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
+                                        {
+                                            ++irest;
+                                            rest += $", PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}]";
+                                        }
+                                    }
+
+                                    sb.AppendLine($"{irest}{rest});");
+                                }
+                                sb.AppendLine($"{tts}}}");
                             }
-                            sb.AppendLine($"{tts}}}");
-                            sb.AppendLine($"{ts}}}");
-                        }
 
-                        sb.AppendLine();
-
-                        if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile || x.MaximaleGroentijd))
-                        {
-                            sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen)
+                            if (c.HalfstarData.IsHalfstar)
                             {
-                                if (tdfc.AfkappenOpStartFile)
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}else");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{tts}/* percentage MG bij filemelding tijdens halfstar */");
+                                sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                                if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
                                 {
-                                    sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
-                                                  $"ER[{_fcpf}{tdfc.FaseCyclus}] && " +
-                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                    sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                    sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
+                                    sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
                                 }
-                                
-                                if (tdfc.MaximaleGroentijd)
+                                sb.AppendLine(")");
+                                sb.AppendLine($"{tts}{{");
+                                foreach (var ff in fm.TeDoserenSignaalGroepen)
                                 {
-                                    sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    var grfunc = c.Data.TypeGroentijden switch
+                                    {
+                                        GroentijdenTypeEnum.MaxGroentijden => "PercentageMaxGroenTijden_halfstar",
+                                        GroentijdenTypeEnum.VerlengGroentijden => "PercentageVerlengGroenTijden_halfstar",
+                                        _ => ""
+                                    };
+                                    sb.AppendLine(fm.EerlijkDoseren
+                                        ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
+                                        : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");
                                 }
+                                sb.AppendLine($"{tts}}}");
+                                sb.AppendLine($"{ts}}}");
+                            }
 
-                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
-                                {
-                                    sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
-                                    sb.AppendLine($"{ts}{{");
-                                    sb.Append($"{ts}{ts}if (");
-                                }
+                            sb.AppendLine();
 
-                                var padding = $"{ts}{ts}if (".Length;
-                                if (tdfc.AfkappenOpStartFile)
-                                {
-                                    sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
-                                    sb.Append("".PadLeft(padding) +
-                                        $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
-                                                  $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
-                                }
-
-                                if (tdfc.MaximaleGroentijd)
+                            if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile || x.MaximaleGroentijd))
+                            {
+                                sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
+                                foreach (var tdfc in fm.TeDoserenSignaalGroepen)
                                 {
                                     if (tdfc.AfkappenOpStartFile)
                                     {
-                                        sb.AppendLine(" || ");
-                                        sb.Append("".PadLeft(padding));
+                                        sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
+                                        sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
+                                                      $"ER[{_fcpf}{tdfc.FaseCyclus}] && " +
+                                                      $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                        sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
+                                        sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
                                     }
-                                    sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
+
+                                    if (tdfc.MaximaleGroentijd)
+                                    {
+                                        sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
+                                        sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    }
+
+                                    if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
+                                    {
+                                        sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                        sb.AppendLine($"{ts}{{");
+                                        sb.Append($"{ts}{ts}if (");
+                                    }
+
+                                    var padding = $"{ts}{ts}if (".Length;
+                                    if (tdfc.AfkappenOpStartFile)
+                                    {
+                                        sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                      $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] &&");
+                                        sb.Append("".PadLeft(padding) +
+                                            $"!RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                      $"!T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
+                                                      $"!(MK[{_fcpf}{tdfc.FaseCyclus}] & PRIO_MK_BIT)");
+                                    }
+
+                                    if (tdfc.MaximaleGroentijd)
+                                    {
+                                        if (tdfc.AfkappenOpStartFile)
+                                        {
+                                            sb.AppendLine(" || ");
+                                            sb.Append("".PadLeft(padding));
+                                        }
+                                        sb.Append($"!RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && !T[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]");
+                                    }
+
+                                    if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
+                                    {
+                                        sb.AppendLine($")");
+                                        sb.AppendLine($"{ts}{ts}{{");
+                                        sb.AppendLine($"{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                        sb.AppendLine($"{ts}{ts}}}");
+
+                                        sb.AppendLine($"{ts}}}");
+                                    }
                                 }
+                                sb.AppendLine();
+                            }
 
-                                if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
+                            if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
+                            {
+                                sb.AppendLine($"{ts}/* Minimale roodtijden tijdens file ingreep {fm.Naam} */");
+                                foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
                                 {
-                                    sb.AppendLine($")");
-                                    sb.AppendLine($"{ts}{ts}{{");
-                                    sb.AppendLine($"{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
-                                    sb.AppendLine($"{ts}{ts}}}");
-
+                                    sb.AppendLine($"{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
+                                    sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                                     sb.AppendLine($"{ts}}}");
                                 }
                             }
-                            sb.AppendLine();
-                        }
 
-                        if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
+                            first = false;
+                        }
+                        if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                         {
-                            sb.AppendLine($"{ts}/* Minimale roodtijden tijdens file ingreep {fm.Naam} */");
-                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
+                            tts = ts;
+                            if (c.HalfstarData.IsHalfstar)
                             {
-                                sb.AppendLine($"{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                tts += ts;
+                                sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
                                 sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                            }
+
+                            sb.Append($"{tts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
+                            foreach (var fm in c.FileIngrepen)
+                            {
+                                if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
+                                {
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{tts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
+                                    sb.AppendLine($"{tts}{{");
+                                    if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                    {
+                                        if (!c.Data.MultiModuleReeksen)
+                                        {
+                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML, {_mpf}{_mperiod});");
+                                        }
+                                        else
+                                        {
+                                            var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
+                                            if (r != null)
+                                            {
+                                                sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PR{r.Reeks}, {r.Reeks}, {_mpf}{_mperiod});");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!c.Data.MultiModuleReeksen)
+                                        {
+                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML, {_mpf}{_mperiod});");
+                                        }
+                                        else
+                                        {
+                                            var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
+                                            if (r != null)
+                                            {
+                                                sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PR{r.Reeks}, {r.Reeks}, {_mpf}{_mperiod});");
+                                            }
+                                        }
+                                    }
+
+                                    sb.AppendLine($"{tts}}}");
+                                }
+                            }
+
+                            if (c.HalfstarData.IsHalfstar)
+                            {
                                 sb.AppendLine($"{ts}}}");
                             }
                         }
 
-                        first = false;
-                    }
-                    if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
-                    {
-                        tts = ts;
-                        if (c.HalfstarData.IsHalfstar)
+                        if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                         {
-                            tts += ts;
-                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
-                            sb.AppendLine($"{ts}{{");
-                        }
-
-                        sb.Append($"{tts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
-                        foreach (var fm in c.FileIngrepen)
-                        {
-                            if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
+                            var fcWithFileIngreep = c.FileIngrepen.SelectMany(x => x.TeDoserenSignaalGroepen).Distinct();
+                            first = true;
+                            foreach (var fc in fcWithFileIngreep)
                             {
-                                sb.AppendLine();
-                                sb.AppendLine($"{tts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
-                                sb.AppendLine($"{tts}{{");
-                                if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                if (first)
                                 {
-                                    if (!c.Data.MultiModuleReeksen)
-                                    {
-                                        sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML, {_mpf}{_mperiod});");
-                                    }
-                                    else
-                                    {
-                                        var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
-                                        if (r != null)
-                                        {
-                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PR{r.Reeks}, {r.Reeks}, {_mpf}{_mperiod});");
-                                        }
-                                    }
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
+                                    first = false;
                                 }
-                                else
+                                if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                                 {
-                                    if (!c.Data.MultiModuleReeksen)
-                                    {
-                                        sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML, {_mpf}{_mperiod});");
-                                    }
-                                    else
-                                    {
-                                        var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
-                                        if (r != null)
-                                        {
-                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PR{r.Reeks}, {r.Reeks}, {_mpf}{_mperiod});");
-                                        }
-                                    }
+                                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
+                                    sb.AppendLine($"{ts}}}");
                                 }
-                                    
-                                sb.AppendLine($"{tts}}}");
                             }
                         }
 
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            sb.AppendLine($"{ts}}}");
-                        }
+                        return sb.ToString();
                     }
-
-                    if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+                    else if (order == 90)
                     {
-                        var fcWithFileIngreep = c.FileIngrepen.SelectMany(x => x.TeDoserenSignaalGroepen).Distinct();
-                        first = true;
-                        foreach (var fc in fcWithFileIngreep)
-                        {
-                            if (first)
-                            {
-                                sb.AppendLine();
-                                sb.AppendLine($"{ts}/* Als hulpdienst ingreep aktief is op kruispunt arm dan nooit uitstel of afbreken als gevolg van file stroomafwaarts */");
-                                first = false;
-                            }
-                            if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
-                            {
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
-                                sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
-                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
-                                sb.AppendLine($"{ts}}}");
-                            }
-                        }
+                        sb.AppendLine("#endif    // CUSTOM_FILEVERWERKING");
+                        return sb.ToString();
                     }
-                    
-                    return sb.ToString();
+                    return null;
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (!c.FileIngrepen.Any()) return "";

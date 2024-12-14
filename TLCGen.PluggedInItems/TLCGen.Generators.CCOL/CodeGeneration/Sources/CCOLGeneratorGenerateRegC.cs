@@ -595,19 +595,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
-            if (controller.FileIngrepen.Any())
-            {
-                sb.AppendLine();                                      
-                sb.AppendLine("#if !defined CUSTOM_FILEVERWERKING");  
-                sb.AppendLine();                                      
-            }
+            
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCFileVerwerking, true, true, false, true);
-
-            if (controller.FileIngrepen.Any())
-            {
-                sb.AppendLine("#endif    // CUSTOM_FILEVERWERKING");  
-                sb.AppendLine();                                      
-            }
+            
             sb.AppendLine($"{ts}FileVerwerking_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
