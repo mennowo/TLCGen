@@ -78,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCDetectieStoring => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoring => new []{10, 20, 90},
                 _ => null
             };
         }
@@ -430,33 +430,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCDetectieStoring:
-
-                    sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
-                    sb.AppendLine();
-
-                    AanvraagAlleDetectoren(sb, c, ts);
-
-                    VervangendHiaatKoplus(sb, c, ts);
-
-                    if (c.HalfstarData.IsHalfstar)
+                    if (order == 10)
                     {
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
-                        sb.AppendLine($"{ts}{{");
-                        PercentageGroen(sb, c, ts + ts, ts, true);
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}else");
-                        sb.AppendLine($"{ts}{{");
-                        PercentageGroen(sb, c, ts + ts, ts, false);
-                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine("#if !defined CUSTOM_DETECTIESTORING");
+                        return sb.ToString();
                     }
-                    else
+                    else if (order == 20)
                     {
-                        PercentageGroen(sb, c, ts, ts, false);
-                    }
+                        sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
+                        sb.AppendLine();
 
-                    return sb.ToString();
+                        AanvraagAlleDetectoren(sb, c, ts);
+
+                        VervangendHiaatKoplus(sb, c, ts);
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                            PercentageGroen(sb, c, ts + ts, ts, true);
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            PercentageGroen(sb, c, ts + ts, ts, false);
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        else
+                        {
+                            PercentageGroen(sb, c, ts, ts, false);
+                        }
+
+                        return sb.ToString();
+                    }
+                    else if (order == 90)
+                    {
+                        sb.AppendLine("#endif    // CUSTOM_DETECTIESTORING");
+                        return sb.ToString();
+                    }
+                    return null;
 
                 default:
                     return null;
