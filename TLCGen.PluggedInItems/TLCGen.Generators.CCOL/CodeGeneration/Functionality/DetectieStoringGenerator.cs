@@ -79,6 +79,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return type switch
             {
                 CCOLCodeTypeEnum.RegCDetectieStoring => new []{10, 20, 90},
+                CCOLCodeTypeEnum.RegCPostDetectieStoring => new[] {10},
                 _ => null
             };
         }
@@ -470,6 +471,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         return sb.ToString();
                     }
                     return null;
+
+                case CCOLCodeTypeEnum.RegCPostDetectieStoring:
+                    /* Placeholder PostDetectieStoring */
+                    return sb.ToString();
 
                 default:
                     return null;

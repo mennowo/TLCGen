@@ -597,7 +597,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCFileVerwerking, true, true, false, true);
-            
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostFileVerwerking, true, true, false, true);
+
             sb.AppendLine($"{ts}FileVerwerking_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -613,6 +615,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoring, true, true, false, true);
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostDetectieStoring, true, true, false, true);
 
             sb.AppendLine($"{ts}DetectieStoring_Add();");
 	        sb.AppendLine("}");

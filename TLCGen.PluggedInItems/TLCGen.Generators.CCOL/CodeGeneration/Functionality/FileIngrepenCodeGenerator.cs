@@ -239,6 +239,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCSystemApplication => new []{10},
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{20},
                 CCOLCodeTypeEnum.RegCFileVerwerking => new []{10, 20, 90},
+                CCOLCodeTypeEnum.RegCPostFileVerwerking => new[] {10},
                 CCOLCodeTypeEnum.PrioCPARCorrecties => new []{20},
                 CCOLCodeTypeEnum.PrioCPrioriteitsOpties => new []{30},
                 CCOLCodeTypeEnum.PrioCPrioriteitsToekenning => new []{10},
@@ -942,6 +943,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         return sb.ToString();
                     }
                     return null;
+
+                case CCOLCodeTypeEnum.RegCPostFileVerwerking:
+                    if (!c.FileIngrepen.Any()) return "";
+                    /* Placeholder PostFileVerwerking */
+                    return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (!c.FileIngrepen.Any()) return "";
