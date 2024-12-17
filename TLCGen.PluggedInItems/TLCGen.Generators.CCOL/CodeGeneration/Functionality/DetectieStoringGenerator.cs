@@ -78,7 +78,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCDetectieStoring => new []{10},
+                CCOLCodeTypeEnum.RegCDetectieStoring => new []{10, 20, 90},
+                CCOLCodeTypeEnum.RegCPostDetectieStoring => new[]{10},
                 _ => null
             };
         }
@@ -430,8 +431,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCDetectieStoring:
-
-                    sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
+                    if (order == 10)
+                    {
+                        sb.AppendLine("#if !defined CUSTOM_DETECTIESTORING");
+                        return sb.ToString();
+                    }
+                    else if (order == 20)
+                    {
+                        sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
                     sb.AppendLine();
@@ -456,6 +463,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         PercentageGroen(sb, c, ts, ts, false);
                     }
 
+                    return sb.ToString();
+                    }
+                    else if (order == 90)
+                    {
+                        sb.AppendLine("#endif    // CUSTOM_DETECTIESTORING");
+                        return sb.ToString();
+                    }
+                    return null;
+
+                case CCOLCodeTypeEnum.RegCPostDetectieStoring:
+                    /* Placeholder PostDetectieStoring */
                     return sb.ToString();
 
                 default:
