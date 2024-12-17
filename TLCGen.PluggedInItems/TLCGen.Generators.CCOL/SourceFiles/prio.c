@@ -891,6 +891,9 @@ void PrioCcolElementen(int prio, int tgb, int trt, int hprio, int cvc, int tblk)
         if (hprio >= 0 && hprio < HE_MAX)
         {
             IH[hprio] = (bool)iPrioriteit[prio];
+            RTFB |= ((SH[hprio]) && (    iPrioriteitsOpties[prio] & poNoodDienst)) ? PRIO_RTFB_BIT : FALSE; /* Eenmalig herstarten bij start en einde hulpdiensten van TFB */
+            RTFB |= ((EH[hprio]) && (iInstPrioriteitsOpties[prio] & poNoodDienst)) ? PRIO_RTFB_BIT : FALSE; /* Eenmalig herstarten bij start en einde hulpdiensten van TFB */
+
         }
         if (cvc >= 0 && cvc < CT_MAX)
         {
@@ -1441,10 +1444,6 @@ void PrioTegenhouden(void)
         {
             fc = iFC_PRIOix[prio];
             TegenHoudenStartGroen(fc, iStartGroen[prio]);
-            if (iPrioriteitsOpties[prio] & poNoodDienst)
-            {
-                RTFB |= PRIO_RTFB_BIT;
-            }
         }
     }
     TegenhoudenConflictenExtra();

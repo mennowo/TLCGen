@@ -489,110 +489,117 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Afzetten IH[homschtegenh] */");
                     sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hpervar}] && !SCH[{_schpf}{_schvar}] && !IH[{_hpf}{_hplhd}])");
                     sb.AppendLine($"{ts}{{");
-                    sb.Append($"{ts}{ts}if (");
-                    var k = 0;
-                    foreach (var nl in c.InterSignaalGroep.Nalopen)
-                    {
-                        if (k != 0)
-                        {
-                            sb.AppendLine(" &&");
-							sb.Append($"{ts}{ts}    ");
-                        }
-						var tnlf = nl.Type switch
-                        {
-                            NaloopTypeEnum.StartGroen => null,
-                            NaloopTypeEnum.EindeGroen => _tnlfg,
-                            NaloopTypeEnum.CyclischVerlengGroen => _tnlfg,
-                            _ => throw new NotImplementedException(),
-                        };
-                        var tnlfd = nl.Type switch
-                        {
-                            NaloopTypeEnum.StartGroen => null,
-                            NaloopTypeEnum.EindeGroen => _tnlfgd,
-                            NaloopTypeEnum.CyclischVerlengGroen => _tnlfgd,
-                            _ => throw new NotImplementedException(),
-                        };
-                        var tnl = nl.Type switch
-                        {
-                            NaloopTypeEnum.StartGroen => _tnlsg,
-                            NaloopTypeEnum.EindeGroen => _tnleg,
-                            NaloopTypeEnum.CyclischVerlengGroen => _tnlcv,
-                            _ => throw new NotImplementedException(),
-                        };
-                        var tnld = nl.Type switch
-                        {
-                            NaloopTypeEnum.StartGroen => _tnlsgd,
-                            NaloopTypeEnum.EindeGroen => _tnlegd,
-                            NaloopTypeEnum.CyclischVerlengGroen => _tnlcvd,
-                            _ => throw new NotImplementedException(),
-                        };
-						if (!nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen)) 
+					if (c.InterSignaalGroep.Nalopen.Count > 0)
+					{
+						sb.Append($"{ts}{ts}if (");
+						var k = 0;
+						foreach (var nl in c.InterSignaalGroep.Nalopen)
 						{
-							tnlf = null;
-                            tnlfd = null;
+							if (k != 0)
+							{
+								sb.AppendLine(" &&");
+								sb.Append($"{ts}{ts}    ");
+							}
+							var tnlf = nl.Type switch
+							{
+								NaloopTypeEnum.StartGroen => null,
+								NaloopTypeEnum.EindeGroen => _tnlfg,
+								NaloopTypeEnum.CyclischVerlengGroen => _tnlfg,
+								_ => throw new NotImplementedException(),
+							};
+							var tnlfd = nl.Type switch
+							{
+								NaloopTypeEnum.StartGroen => null,
+								NaloopTypeEnum.EindeGroen => _tnlfgd,
+								NaloopTypeEnum.CyclischVerlengGroen => _tnlfgd,
+								_ => throw new NotImplementedException(),
+							};
+							var tnl = nl.Type switch
+							{
+								NaloopTypeEnum.StartGroen => _tnlsg,
+								NaloopTypeEnum.EindeGroen => _tnleg,
+								NaloopTypeEnum.CyclischVerlengGroen => _tnlcv,
+								_ => throw new NotImplementedException(),
+							};
+							var tnld = nl.Type switch
+							{
+								NaloopTypeEnum.StartGroen => _tnlsgd,
+								NaloopTypeEnum.EindeGroen => _tnlegd,
+								NaloopTypeEnum.CyclischVerlengGroen => _tnlcvd,
+								_ => throw new NotImplementedException(),
+							};
+							if (!nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen)) 
+							{
+								tnlf = null;
+								tnlfd = null;
+							}
+							if (!nl.DetectieAfhankelijk || nl.Detectoren.Count == 0)
+							{ 
+								tnld = null;
+								tnlfd = null;
+							}
+							if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+							{
+								sb.Append($"!T[{_tpf}{tnlf}{nl:vannaar}] && !RT[{_tpf}{tnlf}{nl:vannaar}] && ");
+							}
+							if (nl.VasteNaloop)
+							{ 
+								sb.Append($"!T[{_tpf}{tnl}{nl:vannaar}] && !RT[{_tpf}{tnl}{nl:vannaar}]");
+							}
+							if (nl.VasteNaloop && nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
+							{
+								sb.Append(" && ");
+							}
+							if (nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
+							{
+								sb.Append($"!T[{_tpf}{tnld}{nl:vannaar}] && !RT[{_tpf}{tnld}{nl:vannaar}]");
+								if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+								{
+									sb.Append($" && !T[{_tpf}{tnlfd}{nl:vannaar}] && !RT[{_tpf}{tnlfd}{nl:vannaar}]");
+								}
+							}
+							++k;
 						}
-						if (!nl.DetectieAfhankelijk || nl.Detectoren.Count == 0)
-						{ 
-							tnld = null;
-                            tnlfd = null;
-						}
-						if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+						foreach (var nl in c.InterSignaalGroep.Nalopen)
 						{
-                            sb.Append($"!T[{_tpf}{tnlf}{nl:vannaar}] && !RT[{_tpf}{tnlf}{nl:vannaar}] && ");
-						}
-						if (nl.VasteNaloop)
-						{ 
-							sb.Append($"!T[{_tpf}{tnl}{nl:vannaar}] && !RT[{_tpf}{tnl}{nl:vannaar}]");
-						}
-						if (nl.VasteNaloop && nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
-						{
-							sb.Append(" && ");
-						}
-						if (nl.DetectieAfhankelijk && nl.Detectoren.Count > 0)
-						{
-							sb.Append($"!T[{_tpf}{tnld}{nl:vannaar}] && !RT[{_tpf}{tnld}{nl:vannaar}]");
-                            if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
-                            {
-                                sb.Append($" && !T[{_tpf}{tnlfd}{nl:vannaar}] && !RT[{_tpf}{tnlfd}{nl:vannaar}]");
-                            }
-                        }
-                        ++k;
-                    }
-                    foreach (var nl in c.InterSignaalGroep.Nalopen)
-                    {
-                        if (k != 0)
-                        {
-                            sb.AppendLine(" &&");
-							sb.Append($"{ts}{ts}    ");
-                        }
+							if (k != 0)
+							{
+								sb.AppendLine(" &&");
+								sb.Append($"{ts}{ts}    ");
+							}
 
-                        var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
-                        var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
-                        if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
-                            sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
-                        {
+							var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+							var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+							if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+								sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+							{
 
-                            if (nl.MaximaleVoorstart.HasValue)
-                            {
-                                sb.Append($"!T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] && !RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] ");
-                            }
-                        }
-                        else
-                        {
-                            if (nl.MaximaleVoorstart.HasValue)
-                            {
-                                var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
-                                    ? tinl
-                                    : _treallr;
-                                sb.Append($"!T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] && !RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]");
-                            }
-                        }
-                        ++k;
-                    }
-                    sb.AppendLine($"{ts}{ts})");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
-                    sb.AppendLine($"{ts}{ts}}}");
+								if (nl.MaximaleVoorstart.HasValue)
+								{
+									sb.Append($"!T[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] && !RT[{_tpf}{tinl}{nl.FaseVan}{nl.FaseNaar}] ");
+								}
+							}
+							else
+							{
+								if (nl.MaximaleVoorstart.HasValue)
+								{
+									var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
+										? tinl
+										: _treallr;
+									sb.Append($"!T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] && !RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]");
+								}
+							}
+							++k;
+						}
+						sb.AppendLine($"{ts}{ts})");
+						sb.AppendLine($"{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
+						sb.AppendLine($"{ts}{ts}}}");
+					}
+					else
+					{ 
+                        sb.AppendLine($"{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
+					}
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
 

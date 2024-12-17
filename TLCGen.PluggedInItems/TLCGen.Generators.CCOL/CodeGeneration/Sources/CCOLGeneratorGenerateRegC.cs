@@ -26,6 +26,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define NALOPEN");
             }
+            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                sb.AppendLine("#define REALFUNC");
+            }
             if (controller.PrioData.PrioIngrepen.Count > 0 || controller.PrioData.HDIngrepen.Count > 0)
             {
                 sb.AppendLine("#define PRIO_ADDFILE");
