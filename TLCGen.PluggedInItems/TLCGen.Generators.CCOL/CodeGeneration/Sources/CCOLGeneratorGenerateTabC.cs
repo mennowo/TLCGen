@@ -487,29 +487,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var totigmax = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_max" : "TO_max";
             var totigmin = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_min" : "TO_min";
 
-            if (controller.InterSignaalGroep.Conflicten?.Count > 0)
-            {
-                var prevfasefrom = "";
-                foreach (var conflict in controller.InterSignaalGroep.Conflicten)
-                {
-                    var ff = conflict.GetFaseFromDefine();
-                    var ft = conflict.GetFaseToDefine();
-                    if (ff == ft) continue;
-
-                    // Cause an empty line in between signalgroups
-                    if (prevfasefrom.Length == 0)
-                    {
-                        prevfasefrom = ff;
-                    }
-                    if(prevfasefrom != ff)
-                    {
-                        prevfasefrom = ff;
-                        sb.AppendLine();
-                    }
-                    sb.AppendLine($"{ts}{totigmax}[{ff}][{ft}] = {conflict.SerializedWaarde};");
-                }
-            }
-
             if(controller.Fasen.Count > 0)
             { 
                 var matrix = new int[controller.Fasen.Count, controller.Fasen.Count];
@@ -742,6 +719,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     if (appendEmptyLine) sb.AppendLine();
                 }
+            }
+
+            if (controller.InterSignaalGroep.Conflicten?.Count > 0)
+            {
+                var prevfasefrom = "";
+                foreach (var conflict in controller.InterSignaalGroep.Conflicten)
+                {
+                    var ff = conflict.GetFaseFromDefine();
+                    var ft = conflict.GetFaseToDefine();
+                    if (ff == ft) continue;
+
+                    // Cause an empty line in between signalgroups
+                    if (prevfasefrom.Length == 0)
+                    {
+                        prevfasefrom = ff;
+                    }
+                    if (prevfasefrom != ff)
+                    {
+                        prevfasefrom = ff;
+                        sb.AppendLine();
+                    }
+                    sb.AppendLine($"{ts}{totigmax}[{ff}][{ft}] = {conflict.SerializedWaarde};");
+                }
 
                 if (controller.Data.GarantieOntruimingsTijden)
                 {
@@ -757,7 +757,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         sb.AppendLine();
 
-                        var prevfasefrom = "";
+                        prevfasefrom = "";
                         foreach (var conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
                         {
                             var ff = conflict.GetFaseFromDefine();
@@ -777,11 +777,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                             if (conflict.GarantieWaarde != null) sb.AppendLine($"{ts}{totigmin}[{ff}][{ft}] = {conflict.GarantieWaarde.Value};");
                         }
-
                     }
                 }
             }
-
 
             return sb.ToString();
         }
