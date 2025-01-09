@@ -440,7 +440,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] &= ~BIT8;");
                                     sb.AppendLine(
                                         $"{ts}if (CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && " +
-                                        $"rr_twacht[{_fcpf}{fc.Naam}] && IH[{_hpf}{_hwtv}{fc.Naam}] && " +
+                                        $"rr_twacht{reeks}[{_fcpf}{fc.Naam}] && IH[{_hpf}{_hwtv}{fc.Naam}] && " +
                                         $"(SCH[{_schpf}{_schwtvbusbijhd}] || !(RTFB & PRIO_RTFB_BIT)))");
                                     sb.AppendLine($"{ts}{{");
                                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] |= BIT8;");
