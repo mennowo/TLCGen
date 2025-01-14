@@ -208,4 +208,6 @@ extern int prioKFC_MAX[];
 extern int* prioTO_pointer[];
 extern int iLangstWachtendeAlternatief;
 
+extern bool bHDAanwezig;
+
 #endif // __PRIOH
