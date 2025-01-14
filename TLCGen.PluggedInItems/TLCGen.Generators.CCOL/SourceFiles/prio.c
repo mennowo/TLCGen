@@ -91,7 +91,7 @@ int* prioTO_pointer[prioFCMAX];
 int prioM_TO_pointer[prioFCMAX * prioFCMAX];
 int iLangstWachtendeAlternatief;
 
-extern bool bHDAanwezig;
+bool bHDAanwezig;
 
 void PrioInit(void)
 {
