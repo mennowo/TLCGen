@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TLCGen.Dialogs"
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="Over TLCGen" Width="300">
+        Title="Over TLCGen" Width="350">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,6 +28,9 @@
                 Datum: <TextBlock Name="DateTB" />
                 <LineBreak />
                 Info: <Hyperlink Click="InfoHyperlink_Click">menno@codingconnected.eu</Hyperlink>
+                <LineBreak />
+                <LineBreak />
+                <Span FontWeight="Bold">Wiki: <Hyperlink Click="WikiHyperlink_Click">https://www.codingconnected.eu/tlcgenwiki</Hyperlink></Span>
                 <LineBreak />
                 <LineBreak />
                 Een open source applicatie voor specificeren en genereren van software voor verkeerslichten.

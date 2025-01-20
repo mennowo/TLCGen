@@ -57,6 +57,7 @@
         <KeyBinding Command="{Binding Path=CloseFileCommand}" Gesture="Ctrl+F4" />
         <KeyBinding Command="{Binding Path=GenerateControllerCommand}" Gesture="Ctrl+G" />
         <KeyBinding Command="{Binding Path=ShowAboutCommand}" Gesture="F1" />
+        <KeyBinding Command="{Binding Path=ShowWikiCommand}" Gesture="Ctrl+F1" />
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -124,6 +125,11 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" InputGestureText="F1" />
                 <MenuItem Header="_Versie informatie" Command="{Binding Path=ShowVersionInfoCommand}" />
+                <MenuItem Header="_Wiki" Command="{Binding Path=ShowWikiCommand}" InputGestureText="Ctrl+F1">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource AppIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <ToolBarTray Grid.Row="1" x:Name="MainToolBarTray">

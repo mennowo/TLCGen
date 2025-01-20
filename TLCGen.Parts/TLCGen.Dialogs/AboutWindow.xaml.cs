@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using TLCGen.Extensions;
 
@@ -24,17 +25,38 @@ namespace TLCGen.Dialogs
 
         private void InfoHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:menno@codingconnected.eu");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "mailto:menno@codingconnected.eu",
+                UseShellExecute = true
+            });
+        }
+
+        private void WikiHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.codingconnected.eu/tlcgenwiki/",
+                UseShellExecute = true
+            });
         }
 
         private void FontHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.marksimonson.com/fonts/view/anonymous-pro");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "http://www.marksimonson.com/fonts/view/anonymous-pro",
+                UseShellExecute = true
+            });
         }
 
         private void IconsHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://p.yusukekamiyamane.com/");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "http://p.yusukekamiyamane.com/",
+                UseShellExecute = true
+            });
         }
     }
 }

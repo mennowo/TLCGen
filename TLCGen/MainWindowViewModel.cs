@@ -27,6 +27,7 @@ using Microsoft.Win32;
 using System.Net;
 using GalaSoft.MvvmLight.Threading;
 using TLCGen.Dependencies.Providers;
+using System.Diagnostics;
 
 namespace TLCGen.ViewModels
 {
@@ -42,19 +43,20 @@ namespace TLCGen.ViewModels
         private IGeneratorViewModel _SelectedGenerator;
         private bool _showAlertMessage;
         
-        RelayCommand _newFileCommand;
-        RelayCommand _openFileCommand;
-        RelayCommand _saveFileCommand;
-        RelayCommand _saveAsFileCommand;
-        RelayCommand _closeFileCommand;
-        RelayCommand _exitApplicationCommand;
-        RelayCommand _showSettingsWindowCommand;
-        RelayCommand _showAboutCommand;
-        RelayCommand _showVersionInfoCommand;
-        RelayCommand _generateControllerCommand;
-        RelayCommand _importControllerCommand;
-        RelayCommand _hideAlertMessageCommand;
-        RelayCommand _hideAllAlertMessagesCommand;
+        private RelayCommand _newFileCommand;
+        private RelayCommand _openFileCommand;
+        private RelayCommand _saveFileCommand;
+        private RelayCommand _saveAsFileCommand;
+        private RelayCommand _closeFileCommand;
+        private RelayCommand _exitApplicationCommand;
+        private RelayCommand _showSettingsWindowCommand;
+        private RelayCommand _showAboutCommand;
+        private RelayCommand _showVersionInfoCommand;
+        private RelayCommand _generateControllerCommand;
+        private RelayCommand _importControllerCommand;
+        private RelayCommand _hideAlertMessageCommand;
+        private RelayCommand _hideAllAlertMessagesCommand;
+        private RelayCommand _showWikiCommand;
 
         private readonly List<Tuple<Version, string>> VersionFiles = new List<Tuple<Version, string>>();
 
@@ -226,6 +228,8 @@ namespace TLCGen.ViewModels
         public ICommand ShowAboutCommand => _showAboutCommand ??= new RelayCommand(ShowAboutCommand_Executed, null);
 
         public ICommand ShowVersionInfoCommand => _showVersionInfoCommand ??= new RelayCommand(ShowVersionInfoCommand_Executed, null);
+        
+        public ICommand ShowWikiCommand => _showWikiCommand ??= new RelayCommand(ShowWikiCommand_Executed, null);
 
         public ICommand HideAlertMessageCommand => _hideAlertMessageCommand ??= new RelayCommand(HideAlertMessageCommand_Executed, null);
 
@@ -478,6 +482,15 @@ namespace TLCGen.ViewModels
                 Owner = Application.Current.MainWindow
             };
             infoW.ShowDialog();
+        }
+
+        private void ShowWikiCommand_Executed(object obj)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.codingconnected.eu/tlcgenwiki/",
+                UseShellExecute = true
+            });
         }
 
         private void HideAlertMessageCommand_Executed(object obj)
