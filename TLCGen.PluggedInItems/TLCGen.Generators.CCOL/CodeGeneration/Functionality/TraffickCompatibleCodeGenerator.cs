@@ -64,9 +64,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCPreApplication => new []{130},
                 CCOLCodeTypeEnum.RegCAanvragen => new []{130},
                 CCOLCodeTypeEnum.RegCKlokPerioden => new []{130},
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{20},
-                CCOLCodeTypeEnum.RegCVerlenggroen => new []{80},
-                CCOLCodeTypeEnum.RegCMaxgroen => new []{80},
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new []{130},
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{40},
                 CCOLCodeTypeEnum.RegCMeetkriterium => new []{130},
                 CCOLCodeTypeEnum.RegCMeeverlengen => new []{30},
@@ -202,14 +200,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) RealTraffick();");
-                    return sb.ToString();    
-                
-                case CCOLCodeTypeEnum.RegCVerlenggroen:
-                case CCOLCodeTypeEnum.RegCMaxgroen:
-                    sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}])");
                     sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}RealTraffick();");
                     sb.AppendLine($"{ts}{ts}BepaalAltRuimte();");
                     sb.AppendLine($"{ts}{ts}bepaal_maximum_groen_traffick();");
                     sb.AppendLine($"{ts}}}");
