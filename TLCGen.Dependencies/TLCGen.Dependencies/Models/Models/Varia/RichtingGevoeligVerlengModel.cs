@@ -24,9 +24,13 @@ namespace TLCGen.Models
 
         #endregion // Properties
 
+        #region Constructor
+        
         public RichtingGevoeligVerlengModel()
         {
             AltijdAanUit = AltijdAanUitEnum.SchAan;
         }
+
+        #endregion // Constructor
     }
 }
