@@ -2559,8 +2559,8 @@ namespace TLCGen.Specificator
                     fi.Naam,
                     fi.FileMetingLocatie.GetDescription(),
                     fi.AanUit.ToCustomString2(),
-                    fi.MetingPerLus ? fi.MetingPerLus.ToCustomString() : "-",
-                    fi.MetingPerStrook ? fi.MetingPerStrook.ToCustomString() : "-",
+                    fi.MetingPerLus.ToCustomStringJN(),
+                    fi.MetingPerStrook.ToCustomStringJN(),
                     fi.AfvalVertraging.ToString(),
                     fi.EerlijkDoseren ? fi.EerlijkDoseren.ToCustomString() : "-",
                     fi.ToepassenDoseren.GetDescription(),
@@ -3067,19 +3067,18 @@ namespace TLCGen.Specificator
                 l.Add(new List<string>
                 {
                     kopp.KoppelingNaam.ToString(),
-                    kopp.PTPKruising.ToString(),
+                    kopp.IsIntern ? "-" : kopp.PTPKruising.ToString(),
                     kopp.Richting.ToString(),
                     kopp.GekoppeldeSignaalGroep.ToString(),
                     kopp.Type.GetDescription(),
                     kopp.IsIntern.ToCustomString(),
-                    kopp.IsIntern ? kopp.GerelateerdePelotonKoppeling.ToString() : "-"
-
+                    kopp.IsIntern && (kopp.Richting == PelotonKoppelingRichtingEnum.Inkomend) ? kopp.GerelateerdePelotonKoppeling.ToString() : "-"
                  });
             }
             items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
-
+           
             if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Type == Models.Enumerations.PelotonKoppelingTypeEnum.DenHaag))
             {
                 UpdateTables("Table_Pelotonkoppelingen_Inkomend_DenHaag");
@@ -3139,11 +3138,10 @@ namespace TLCGen.Specificator
                     {
                         "Naam (###)",
                         "Fase",
-                        "Verschuiving                 PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmpelverschuif") + "###",
-                        "Min. duur peloton            ",
-                        "Min. aantal mvt              PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmpelgrens") + "###",
+                        "Verschuiving [s]             PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmpelverschuif") + "###",
+                        "Min. duur peloton [s]        PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmpelgrens") + "###",
                         "Toepassen RW                 SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpelrw") + "###",
-                        "Nalooptijd                   T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tpelnl") + "###",
+                        "Nalooptijd [s]               T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tpelnl") + "###",
                         "Toepassen A                  SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpela") + "###",
                         "Toepassen MK                 SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpelmk") + "###",
                     }
@@ -3155,7 +3153,6 @@ namespace TLCGen.Specificator
                         koppi.KoppelingNaam.ToString(),
                         koppi.GekoppeldeSignaalGroep.ToString(),
                         koppi.Verschuiving.ToString(),
-                        koppi.Meetperiode.ToString(),
                         koppi.MinimaalAantalVoertuigen.ToString(),
                         koppi.ToepassenRetourWachtgroen.GetDescription(),
                         koppi.TijdRetourWachtgroen.ToString(),
@@ -3200,7 +3197,7 @@ namespace TLCGen.Specificator
 
                 items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
             }
-
+            
             return items;
         }
 

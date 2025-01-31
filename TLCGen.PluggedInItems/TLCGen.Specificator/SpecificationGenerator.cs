@@ -46,6 +46,8 @@ namespace TLCGen.Specificator
 
             foreach (var specData in pluginData.Where(x => (x.Subject == SpecificationSubject.DynHiaat)
                                                         || (x.Subject == SpecificationSubject.AFM)
+                                                        || (x.Subject == SpecificationSubject.GebruikersPlugin1)
+                                                        || (x.Subject == SpecificationSubject.GebruikersPlugin2)
                                                         ))
             {
                 // verwerken spec data uit plugins
@@ -215,6 +217,11 @@ namespace TLCGen.Specificator
                     body.Append(FunctionalityGenerator.GetChapter_TT_UC4_Informeren(c, doc));
                     body.Append(FunctionalityGenerator.GetChapter_TT_UC5_Optimaliseren(c));
                 }
+
+                // Chaps gebruikers plugins
+                AppendGenericSpecificationData(doc, pluginData.Where(x => x.Subject == SpecificationSubject.GebruikersPlugin1));
+
+                AppendGenericSpecificationData(doc, pluginData.Where(x => x.Subject == SpecificationSubject.GebruikersPlugin2));
 
                 //ToDo: - OV nadere details (conditionele prio, inmelden koplus, prio nivo, inmelden/aanvragen koplus,
                 //                           check wagennummer, anti-jutter, klokperiode als voorwaarde, rit categorie).
