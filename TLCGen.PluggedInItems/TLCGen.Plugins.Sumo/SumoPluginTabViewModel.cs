@@ -262,6 +262,7 @@ namespace TLCGen.Plugins.Sumo
             XmlDocument sumoConfig = new XmlDocument();
             sumoConfig.Load(SumoConfigPath);
             XmlNode node = sumoConfig.DocumentElement.SelectSingleNode("/configuration/input/net-file");
+            if (node == null) node = sumoConfig.DocumentElement.SelectSingleNode("/sumoConfiguration/input/net-file");
             if (node.Attributes.Count > 0)
             {
                 var netFile = node.Attributes["value"];

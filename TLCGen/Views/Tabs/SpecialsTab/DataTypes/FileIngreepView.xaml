@@ -34,7 +34,7 @@
         <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         <Label Content="In/uitschakelen ingreep" />
         <CheckBox IsChecked="{Binding Path=AanUit}" Margin="5"/>
-        <Label Content="Toepassen alternatieve groentijdenset" />
+        <Label Content="Locatie file meting" />
         <ComboBox 
                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FileMetingLocatieEnum}}}"
                SelectedItem="{Binding Path=FileMetingLocatie,UpdateSourceTrigger=PropertyChanged}" 
