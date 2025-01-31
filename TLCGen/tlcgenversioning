@@ -1,5 +1,18 @@
-TLCGen=12.4.0.9
+TLCGen=12.4.0.10
 RN==TLCGen
+TLCGen versie: 12.4.0.10
+- Fileingreep is nu middels een schakelaar in/uit te schakelen
+- Paar kleine aanvullingen specificatie-generator 
+- Alleen PTP signalen uitzenden indien de regeling in control is
+- Mogelijkheid tot het overnemen van de PTP verbinding wanneer in de gekoppelde buur-VRI wordt overgeschakeld naar de backup regeling
+- Mogelijkheid om prioriteitsingrepen in te melden via een ingangssignaal (vaak soms gebruikt bij gekoppelde VRI's)
+- Indien een schoolmeesteringreep is ogpenomen dan is het nu ook mogelijk de TDH_max van de drukknop op te geven
+- Het aanpassen van de detectornamen bij de optie richtinggevoelig verlengen indien je de naamgeving van de detectie wijzigt 
+- Meeste recente files behorende bij Traffick compatabiliteit
+- Eenmalige herstart fasebewakingsteller bij start en einde hulpdiensten
+- Maatgevend groen meeverlengoptie van de realfunc werkt nu
+- Correct weergeven F11 scherm bij Traffick compatabiliteit
+- Diverse kleinere verbeteringen
 TLCGen versie: 12.4.0.9
 - Complete specificatie generator
 TLCGen versie: 12.4.0.8
