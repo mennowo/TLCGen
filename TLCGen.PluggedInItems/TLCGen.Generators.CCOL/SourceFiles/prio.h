@@ -102,7 +102,7 @@ void PrioRijTijdScenario(int ov,
 	int dkop,
 	int dlang,
 	int tbezet);
-void PrioCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
+void PrioCcolElementen(int ov, int tgb, int trt, int cvc, int tblk);
 void PrioCcol(void);
 void KonfliktTijden(void);
 void SKVoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit);

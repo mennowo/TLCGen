@@ -311,7 +311,6 @@ void PrioTimers(void)
         YM[fc] &= ~PRIO_YM_BIT;
         MK[fc] &= ~PRIO_MK_BIT;
         PP[fc] &= ~PRIO_PP_BIT;
-        RTFB &= ~PRIO_RTFB_BIT;
 
         if (G[fc])
         {
@@ -870,42 +869,34 @@ void StelInCounter(int iIndex, int iActueleWaarde, int iInstelling)
    CCOL-elementen voor het OV:
    - de groenbewakingstimer tgb.
    - de rijtimer trt.
-   - het hulpelement voor de prioriteit hprio.
    - de counter voor het aantal OV-inmeldingen cvc.
    - de blokkeringstimer tblk.
    -------------------------------------------------------- */
-void PrioCcolElementen(int prio, int tgb, int trt, int hprio, int cvc, int tblk)
+void PrioCcolElementen(int prio, int tgb, int trt, int cvc, int tblk)
 {
     if (prio >= 0 && prio < prioFCMAX)
     {
         if (tgb >= 0 && tgb < TM_MAX)
         {
             T_max[tgb] = (mulv)iGroenBewakingsTijd[prio];
-            T[tgb] = (bool)(iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]);
+            T[tgb] = (boolv)(iGroenBewakingsTimer[prio] < iGroenBewakingsTijd[prio]);
             T_timer[tgb] = T[tgb] ? (mulv)iGroenBewakingsTimer[prio] : T_max[tgb];
         }
         if (trt >= 0 && trt < TM_MAX)
         {
             T_max[trt] = (mulv)iRijTijd[prio];
-            T[trt] = (bool)(iRijTimer[prio] < iRijTijd[prio]);
+            T[trt] = (boolv)(iRijTimer[prio] < iRijTijd[prio]);
             T_timer[trt] = T[trt] ? (mulv)iRijTimer[prio] : T_max[trt];
-        }
-        if (hprio >= 0 && hprio < HE_MAX)
-        {
-            IH[hprio] = (bool)iPrioriteit[prio];
-            RTFB |= ((SH[hprio]) && (    iPrioriteitsOpties[prio] & poNoodDienst)) ? PRIO_RTFB_BIT : FALSE; /* Eenmalig herstarten bij start en einde hulpdiensten van TFB */
-            RTFB |= ((EH[hprio]) && (iInstPrioriteitsOpties[prio] & poNoodDienst)) ? PRIO_RTFB_BIT : FALSE; /* Eenmalig herstarten bij start en einde hulpdiensten van TFB */
-
         }
         if (cvc >= 0 && cvc < CT_MAX)
         {
             C_counter[cvc] = (mulv)iAantalInmeldingen[prio];
-            C[cvc] = (bool)(iAantalInmeldingen[prio] > 0);
+            C[cvc] = (boolv)(iAantalInmeldingen[prio] > 0);
         }
         if (tblk >= 0 && tblk < TM_MAX)
         {
             T_max[tblk] = (mulv)iBlokkeringsTijd[prio];
-            T[tblk] = (bool)(iBlokkeringsTimer[prio] < iBlokkeringsTijd[prio]);
+            T[tblk] = (boolv)(iBlokkeringsTimer[prio] < iBlokkeringsTijd[prio]);
             T_timer[tblk] = T[tblk] ? (mulv)iBlokkeringsTimer[prio] : T_max[tblk];
         }
     }
@@ -1415,7 +1406,7 @@ void TegenHoudenStartGroen(int fc, int iStartGroenFC)
    Daartoe wordt het OV-bitje van de instructievariabele
    RR[fc] gebruikt.
    Bij een nooddienstinmelding wordt tevens het OV-bitje
-   van de instructievariabele RTFB opgezet.
+   van de instructievariabele RTFB opgezet bij in- of uitmelding HD.
    Een konflikt wordt tegengehouden als een realisatie
    zou veroorzaken dat het startgroenmoment van een
    OV-richting niet meer haalbaar is.

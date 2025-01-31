@@ -1082,6 +1082,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInUitMelden, false, true, true, true);
 
+            if (c.PrioData.HDIngrepen.Count > 0)
+            {
+                sb.AppendLine($"{ts}/* herstarten FB_timer bij in- of uitmelding HD */");
+                sb.Append($"{ts}RTFB &= ~PRIO_RTFB_BIT;");
+                sb.Append($"{ts}if (");
+                var tss = $"{ts}    ";
+                var first = true;
+                foreach (var hd in c.PrioData.HDIngrepen)
+                {
+                    if (!first)
+                    {
+                        sb.AppendLine(" ||");
+                        sb.Append(tss);
+                    }
+                    first = false;
+                    sb.Append($"IH[{_hpf}{_hhdin}{hd.FaseCyclus}] || IH[{_hpf}{_hhduit}{hd.FaseCyclus}]");
+                }
+                sb.AppendLine(")");
+                sb.AppendLine($"{ts}{{");
+                sb.AppendLine($"{ts}{ts}RTFB |= PRIO_RTFB_BIT;");
+                sb.AppendLine($"{ts}}}");
+            }
+
             if (c.HasKAR())
             {
                 sb.AppendLine();
