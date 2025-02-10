@@ -1013,6 +1013,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
             var _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
@@ -1084,8 +1085,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.PrioData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}/* herstarten FB_timer bij in- of uitmelding HD */");
-                sb.Append($"{ts}RTFB &= ~PRIO_RTFB_BIT;");
+                sb.AppendLine($"{ts}/* herstarten FB_timer bij in- of uitmelding HD of einde ingreep (door groenbewaking) */");
+                sb.AppendLine($"{ts}RTFB &= ~PRIO_RTFB_BIT;");
                 sb.Append($"{ts}if (");
                 var tss = $"{ts}    ";
                 var first = true;
@@ -1097,7 +1098,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.Append(tss);
                     }
                     first = false;
-                    sb.Append($"IH[{_hpf}{_hhdin}{hd.FaseCyclus}] || IH[{_hpf}{_hhduit}{hd.FaseCyclus}]");
+                    sb.Append($"IH[{_hpf}{_hhdin}{hd.FaseCyclus}]|| IH[{_hpf}{_hhduit}{hd.FaseCyclus}] || EH[{_hpf}{_hhd}{hd.FaseCyclus}]");
                 }
                 sb.AppendLine(")");
                 sb.AppendLine($"{ts}{{");
@@ -1371,11 +1372,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioCcol(void) {");
             foreach (var ov in c.PrioData.PrioIngrepen)
             {
-                sb.AppendLine($"{ts}PrioCcolElementen(prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}, {_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, ov)}, {_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(c, ov)}, {_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(c, ov)}, {_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, ov)}, {_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(c, ov)});");
+                sb.AppendLine($"{ts}PrioCcolElementen(" +
+                    $"prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(c, ov)});");
             }
             foreach(var hd in c.PrioData.HDIngrepen)
             {
-                sb.AppendLine($"  PrioCcolElementen(hdFC{hd.FaseCyclus}, {_tpf}{_tgbhd}{hd.FaseCyclus}, {_tpf}{_trthd}{hd.FaseCyclus}, {_hpf}{_hhd}{hd.FaseCyclus}, {_cpf}{_cvchd}{hd.FaseCyclus}, -1);");
+                sb.AppendLine($"{ts}PrioCcolElementen(" +
+                    $"hdFC{hd.FaseCyclus}, " +
+                    $"{_tpf}{_tgbhd}{hd.FaseCyclus}, " +
+                    $"{_tpf}{_trthd}{hd.FaseCyclus}, " +
+                    $"{_hpf}{_hhd}{hd.FaseCyclus}, " +
+                    $"{_cpf}{_cvchd}{hd.FaseCyclus}, " +
+                    $"-1);");
             }
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCPARCcol, true, true, false, false);
