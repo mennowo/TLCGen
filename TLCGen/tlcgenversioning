@@ -1,7 +1,7 @@
-TLCGen=12.4.0.11
+TLCGen=12.4.0.12
 RN==TLCGen
-TLCGen versie: 12.4.0.11
-- Fix voor herstart fasebewakingsteller bij start en einde hulpdiensten
+TLCGen versie: 12.4.0.11 / 12.4.0.12
+- Fixes voor herstart fasebewakingsteller bij start en einde hulpdiensten
 TLCGen versie: 12.4.0.10
 - Fileingreep is nu middels een schakelaar in/uit te schakelen
 - Paar kleine aanvullingen specificatie-generator 

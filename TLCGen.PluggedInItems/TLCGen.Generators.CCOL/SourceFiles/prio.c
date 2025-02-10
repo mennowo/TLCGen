@@ -869,10 +869,11 @@ void StelInCounter(int iIndex, int iActueleWaarde, int iInstelling)
    CCOL-elementen voor het OV:
    - de groenbewakingstimer tgb.
    - de rijtimer trt.
+   - het hulpelement voor de prioriteit hprio.
    - de counter voor het aantal OV-inmeldingen cvc.
    - de blokkeringstimer tblk.
    -------------------------------------------------------- */
-void PrioCcolElementen(int prio, int tgb, int trt, int cvc, int tblk)
+void PrioCcolElementen(int prio, int tgb, int trt, int hprio, int cvc, int tblk)
 {
     if (prio >= 0 && prio < prioFCMAX)
     {
@@ -887,6 +888,10 @@ void PrioCcolElementen(int prio, int tgb, int trt, int cvc, int tblk)
             T_max[trt] = (mulv)iRijTijd[prio];
             T[trt] = (boolv)(iRijTimer[prio] < iRijTijd[prio]);
             T_timer[trt] = T[trt] ? (mulv)iRijTimer[prio] : T_max[trt];
+        }
+        if (hprio >= 0 && hprio < HE_MAX)
+        {
+            IH[hprio] = (boolv)iPrioriteit[prio];
         }
         if (cvc >= 0 && cvc < CT_MAX)
         {

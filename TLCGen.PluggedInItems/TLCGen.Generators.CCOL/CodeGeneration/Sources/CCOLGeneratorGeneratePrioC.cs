@@ -1376,15 +1376,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     $"prioFC{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
                     $"{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
                     $"{_tpf}{_trt}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
+                    $"{_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
                     $"{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, ov)}, " +
                     $"{_tpf}{_tblk}{CCOLCodeHelper.GetPriorityName(c, ov)});");
             }
             foreach(var hd in c.PrioData.HDIngrepen)
             {
-                sb.AppendLine($"  PrioCcolElementen(" +
+                sb.AppendLine($"{ts}PrioCcolElementen(" +
                     $"hdFC{hd.FaseCyclus}, " +
                     $"{_tpf}{_tgbhd}{hd.FaseCyclus}, " +
                     $"{_tpf}{_trthd}{hd.FaseCyclus}, " +
+                    $"{_hpf}{_hhd}{hd.FaseCyclus}, " +
                     $"{_cpf}{_cvchd}{hd.FaseCyclus}, " +
                     $"-1);");
             }
