@@ -79,7 +79,7 @@ namespace TLCGen.Specificator
                     "Rijstroken",
                     "Vaste aanvraag                       SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schca") + "##",
                     "Uitgestelde vaste aanvraag ",
-                    "Tijd uitgest. aanvr.                 T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tuitgestca") + "##",
+                    "Tijd uitgest.aanvr.[TE]              T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tuitgestca") + "##",
                     "Wachtgroen                           SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schwg") + "##",
                     "Meeverlengen                         SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schmv") + "##",
                     "Wachttijd- voorspeller",
@@ -185,10 +185,11 @@ namespace TLCGen.Specificator
                     p.GroentijdenSet });
             }
             items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
+            if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
+                items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Wanneer geen van bovenstaande perioden actief is geldt de dalperiode (met groentijdenset {c.PeriodenData.DefaultPeriodeGroentijdenSet}).", "Footer"));
 
-            items.Add(OpenXmlHelper.GetTextParagraph("Voor het dagtype geldt: 1 t/m 7 zijn de individuele dagen maandag t/m zondag, 8 = weekdagen,                                         " +
+            items.Add(OpenXmlHelper.GetTextParagraph("Voor het dagtype geldt: 1 t/m 7 zijn de individuele dagen maandag t/m zondag, 8 = werkdagen,                                         " +
                                               "9 = weekend, 10 = alle dagen; 0 = uitgeschakeld.", "Footer"));
 
             return items;
@@ -214,26 +215,55 @@ namespace TLCGen.Specificator
 
             var l = new List<List<string>>();
             var l1 = new List<string> { (string)Texts["Fase"] };
-            foreach (var set in c.GroentijdenSets)
+            if (c.Data.TVGAMaxAlsDefaultGroentijdSet)
             {
-                l1.Add(set.Naam);
+                foreach (var set in c.GroentijdenSets.Where(x => x.Naam != c.PeriodenData.DefaultPeriodeGroentijdenSet))
+                {
+                    l1.Add(set.Naam);
+                }
+            }
+            else
+            {
+                foreach (var set in c.GroentijdenSets)
+                {
+                    l1.Add(set.Naam);
+                }
             }
             l.Add(l1);
             foreach (var fc in c.Fasen)
             {
                 var l2 = new List<string> { fc.Naam };
-                foreach (var set in c.GroentijdenSets)
+                if (c.Data.TVGAMaxAlsDefaultGroentijdSet)
                 {
-                    var f = set.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
-                    if (f != null)
+                    foreach (var set in c.GroentijdenSets.Where(x => x.Naam != c.PeriodenData.DefaultPeriodeGroentijdenSet))
                     {
-                        l2.Add(f.Waarde.HasValue ? f.Waarde.Value.ToString() : "-");
-                    }
-                    else
-                    {
-                        l2.Add("-");
+                        var f = set.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                        if (f != null)
+                        {
+                            l2.Add(f.Waarde.HasValue ? f.Waarde.Value.ToString() : "-");
+                        }
+                        else
+                        {
+                            l2.Add("-");
+                        }
                     }
                 }
+                else
+                {
+                    foreach (var set in c.GroentijdenSets)
+                    {
+                        var f = set.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                        if (f != null)
+                        {
+                            l2.Add(f.Waarde.HasValue ? f.Waarde.Value.ToString() : "-");
+                        }
+                        else
+                        {
+                            l2.Add("-");
+                        }
+                    }
+                }
+
                 l.Add(l2);
             }
             items.Add(OpenXmlHelper.GetTable(l));
