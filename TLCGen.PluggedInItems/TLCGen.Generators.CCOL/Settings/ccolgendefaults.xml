@@ -491,6 +491,14 @@
             <Categorie>CAT_SpecialeIngrepen</Categorie>
             <SubCategorie>SUBCAT_Fixatie</SubCategorie>
           </Setting>
+			<Setting>
+				<Default>fixatietegenh</Default>
+				<Setting>fixatietegenh</Setting>
+				<Type>HulpElement</Type>
+				<Description>Fixatie tegenhouden</Description>
+				<Categorie>CAT_SpecialeIngrepen</Categorie>
+				<SubCategorie>SUBCAT_Fixatie</SubCategorie>
+			</Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
