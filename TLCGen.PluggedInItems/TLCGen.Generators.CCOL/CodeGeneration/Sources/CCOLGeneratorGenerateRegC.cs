@@ -703,6 +703,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
             var _schbmfix = CCOLGeneratorSettingsProvider.Default.GetElementName("schbmfix");
+            var _hfixatietegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("hfixatietegenh");
             var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
             var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
             var _schstar = CCOLGeneratorSettingsProvider.Default.GetElementName("schstar");
@@ -840,13 +841,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (!c.Data.MultiModuleReeksen)
                 {
-                    sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PRML, ML);");
+                    sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], IH[{_hpf}{_hfixatietegenh}], PRML, ML);");
                 }
                 else
                 {
                     foreach(var r in c.MultiModuleMolens)
                     {
-                        sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], PR{r.Reeks}, {r.Reeks});");
+                        sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], IH[{_hpf}{_hfixatietegenh}], PR{r.Reeks}, {r.Reeks});");
                     }
                 }
             }

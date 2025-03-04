@@ -12,6 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _isfix;
         private CCOLGeneratorCodeStringSettingModel _schbmfix;
+        private CCOLGeneratorCodeStringSettingModel _hfixatietegenh;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -30,6 +31,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_isfix}",
                         _isfix, c.Data.FixatieData.FixatieBitmapData));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_hfixatietegenh}",
+                        0,
+                        CCOLElementTimeTypeEnum.None,
+                        _hfixatietegenh));
             }
         }
         
@@ -55,7 +62,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.PrioCAfkappen: return new []{50};
+                case CCOLCodeTypeEnum.RegCPreApplication: return new []{25};
+                case CCOLCodeTypeEnum.PrioCAfkappen: return new[] { 50 };
             }
             return null;
         }
@@ -65,6 +73,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var sb = new StringBuilder();
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (!c.Data.FixatieData.FixatieMogelijk) return null;
+                    sb.AppendLine($"{ts}/* Soms is het wenselijk om een fixatie ingreep te kunnen uitstellen, */");
+                    sb.AppendLine($"{ts}/* bijvoorbeeld bij een AFT of WTV die laag staat; in dat geval kan   */");
+                    sb.AppendLine($"{ts}/* hulpelement IH[{_hpf}{_hfixatietegenh}] hoog gemaakt worden.                */");
+                    sb.AppendLine($"{ts}IH[{_hpf}{_hfixatietegenh}] = FALSE;");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.PrioCAfkappen:
                     if (!c.Data.FixatieData.FixatieMogelijk) return null;
                     sb.AppendLine($"{ts}/* Niet afkappen tijdens fixeren */");
@@ -72,7 +88,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}Z[fc] &= ~PRIO_Z_BIT;");
+                    sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~PRIO_Z_BIT;");
                     sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~PRIO_FM_BIT;");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
