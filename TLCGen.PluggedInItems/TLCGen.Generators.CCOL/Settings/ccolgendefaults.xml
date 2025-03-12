@@ -109,12 +109,18 @@
             <Type>Uitgang</Type>
             <Description>Verklikken of applicatie daadwerkelijk de TLC aanstuurt</Description>
           </Setting>
-          <Setting>
-            <Default>nocontrol</Default>
-            <Setting>nocontrol</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken of applicatie niet in staat is te regelen</Description>
-          </Setting>
+		  <Setting>
+			<Default>nocontrol</Default>
+			<Setting>nocontrol</Setting>
+			<Type>Uitgang</Type>
+			<Description>Verklikken of applicatie niet in staat is te regelen</Description>
+	      </Setting>
+		  <Setting>
+			<Default>typeuswt</Default>
+			<Setting>typeuswt</Setting>
+			<Type>Schakelaar</Type>
+			<Description>Type aansturing waitsignalering 1 = drukknopgebruik, 2 = aanvraag</Description>
+		  </Setting>
           <Setting>
             <Default>fb</Default>
             <Setting>fb</Setting>

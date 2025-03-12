@@ -46,6 +46,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (!c.Fasen.SelectMany(x => x.Detectoren).Any(x2 => x2.Wachtlicht))
                 return "";
 
+            var _schtypeuswt = CCOLGeneratorSettingsProvider.Default.GetElementName("schtypeuswt");
+
             var sb = new StringBuilder();
 
             switch (type)
@@ -62,14 +64,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 var wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine(_uswt + d.Naam);
                                 var ddef = d.GetDefine();
                                 var fcdef = fc.GetDefine();
-                                if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik)
-                                {
-                                    sb.AppendLine($"{ts}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");
-                                }
-                                else if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.AanvraagGezet)
-                                {
-                                    sb.AppendLine($"{ts}CIF_GUS[{wtdef}] = !G[{fcdef}] && A[{fcdef}] && REG;");
-                                }
+                                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtypeuswt}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}else");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}CIF_GUS[{wtdef}] = !G[{fcdef}] && A[{fcdef}] && REG;");
+                                sb.AppendLine($"{ts}}}");
                             }
                         }
                     }

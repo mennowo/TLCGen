@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hmad;
         private CCOLGeneratorCodeStringSettingModel _usincontrol;
         private CCOLGeneratorCodeStringSettingModel _usnocontrol;
+        private CCOLGeneratorCodeStringSettingModel _schtypeuswt;
 #pragma warning restore 0649
 
 
@@ -110,6 +111,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmxx}", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, _prmxx));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmyy}", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, _prmyy));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
+
+            // Waitsignalering
+            if (c.GetAllDetectors(x => x.Wachtlicht).Any())
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtypeuswt}", c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik ? 1 : 0, CCOLElementTimeTypeEnum.None, _schtypeuswt));   
+            }
 
             // OVM
             if (c.Data.ToevoegenOVM)
