@@ -771,32 +771,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile || x.MaximaleGroentijd))
                         {
                             sb.AppendLine($"{ts}/* Afkappen tijdens file ingreep {fm.Naam} */");
+                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfile}{fm.Naam}])");
+                            sb.AppendLine($"{ts}{{");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen)
                             {
                                 if (tdfc.AfkappenOpStartFile)
                                 {
-                                    sb.AppendLine($"{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
+                                    sb.AppendLine($"{ts}{ts}/* Eenmalig afkappen fase {tdfc.FaseCyclus} op start file ingreep */");
+                                    sb.AppendLine($"{ts}{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = " +
                                                   $"ER[{_fcpf}{tdfc.FaseCyclus}] && " +
                                                   $"T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                    sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                    sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
+                                    sb.AppendLine($"{ts}{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
+                                    sb.AppendLine($"{ts}{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
                                 }
                                 
                                 if (tdfc.MaximaleGroentijd)
                                 {
-                                    sb.AppendLine($"{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
-                                    sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                    sb.AppendLine($"{ts}{ts}/* Afkappen fase {tdfc.FaseCyclus} op max. groentijd tijdens file ingreep */");
+                                    sb.AppendLine($"{ts}{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
                                 }
 
                                 if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
                                 {
-                                    sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
-                                    sb.AppendLine($"{ts}{{");
-                                    sb.Append($"{ts}{ts}if (");
+                                    sb.AppendLine($"{ts}{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                    sb.AppendLine($"{ts}{ts}{{");
+                                    sb.Append($"{ts}{ts}{ts}if (");
                                 }
 
-                                var padding = $"{ts}{ts}if (".Length;
+                                var padding = $"{ts}{ts}{ts}if (".Length;
                                 if (tdfc.AfkappenOpStartFile)
                                 {
                                     sb.AppendLine($"IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && " +
@@ -820,28 +822,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (tdfc.AfkappenOpStartFile || tdfc.MaximaleGroentijd)
                                 {
                                     sb.AppendLine($")");
-                                    sb.AppendLine($"{ts}{ts}{{");
-                                    sb.AppendLine($"{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
-                                    sb.AppendLine($"{ts}{ts}}}");
+                                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}{ts}{ts}Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                    sb.AppendLine($"{ts}{ts}{ts}}}");
 
-                                    sb.AppendLine($"{ts}}}");
+                                    sb.AppendLine($"{ts}{ts}}}");
                                 }
                             }
+                            sb.AppendLine($"{ts}}}");
                             sb.AppendLine();
                         }
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
                         {
                             sb.AppendLine($"{ts}/* Minimale roodtijden tijdens file ingreep {fm.Naam} */");
+                            sb.AppendLine($"{ts}if (SCH[{_schpf}{_schfile}{fm.Naam}])");
+                            sb.AppendLine($"{ts}{{");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
                             {
-                                sb.AppendLine($"{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}])");
-                                sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
-                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
+                                sb.AppendLine($"{ts}{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{ts}{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}])");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}BL[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}{ts}}}");
                             }
+                            sb.AppendLine($"{ts}}}");
                         }
 
                         first = false;
@@ -862,7 +868,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
                                 sb.AppendLine();
-                                sb.AppendLine($"{tts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
+                                sb.AppendLine($"{tts}if (SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}])");
                                 sb.AppendLine($"{tts}{{");
                                 if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
                                 {
