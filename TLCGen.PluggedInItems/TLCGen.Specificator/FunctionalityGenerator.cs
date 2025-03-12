@@ -331,6 +331,36 @@ namespace TLCGen.Specificator
             }
 
             body.Append(OpenXmlHelper.GetTable(l));
+
+            body.Append(OpenXmlHelper.GetTextParagraph(
+                ""));
+
+            body.Append(OpenXmlHelper.GetChapterTitleParagraph("Prioriteit instellingen", 2));
+            body.Append(OpenXmlHelper.GetTextParagraph(
+                "Onderstaande tabel geeft een overzicht van een aantal algemene instellingen rond prioriteitsverlening."));
+            l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    (string)Texts["Generic_Optie"],
+                    (string)Texts["Generic_Instelling"]
+                }
+            };
+            l.Add(new List<string> { (string)Texts["Prio_CheckDSin"], c.PrioData.CheckOpDSIN.ToCustomString() });
+            l.Add(new List<string> { (string)Texts["Prio_MaxWtMvt"], c.PrioData.MaxWachttijdAuto.ToString() });
+            l.Add(new List<string> { (string)Texts["Prio_MaxWtFts"], c.PrioData.MaxWachttijdFiets.ToString() });
+            l.Add(new List<string> { (string)Texts["Prio_MaxWtVtg"], c.PrioData.MaxWachttijdVoetganger.ToString() });
+            l.Add(new List<string> { (string)Texts["Prio_GecPrioTV"], c.PrioData.GeconditioneerdePrioGrensTeVroeg.ToString() });
+            l.Add(new List<string> { (string)Texts["Prio_GecPrioTL"], c.PrioData.GeconditioneerdePrioGrensTeLaat.ToString() });
+            l.Add(new List<string> { (string)Texts["Prio_HD_BL_NC"], c.PrioData.BlokkeerNietConflictenBijHDIngreep.ToCustomString() });
+            if (c.PrioData.BlokkeerNietConflictenBijHDIngreep)
+                l.Add(new List<string> { (string)Texts["Prio_HD_BL_NC_LV"], c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer.ToCustomString() });
+            l.Add(new List<string> { (string)Texts["Prio_PrioUber"], c.PrioData.VerklikkenPrioTellerUber.GetDescription() });
+            l.Add(new List<string> { (string)Texts["Prio_VerlaagSG"], c.PrioData.VerlaagHogeSignaalGroepNummers.ToCustomString() });
+            l.Add(new List<string> { (string)Texts["Prio_KARinPRM"], c.PrioData.KARSignaalGroepNummersInParameters.ToCustomString() });
+
+
+            body.Append(OpenXmlHelper.GetTable(l));
         }
 
         public static List<OpenXmlCompositeElement> GetChapter_StructureIntroduction(ControllerModel c)                                // hfdst 2.0 Regelstructuur en afhandeling  

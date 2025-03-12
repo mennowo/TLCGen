@@ -54,7 +54,20 @@
     <system:String x:Key="Generic_WTVNietHalterenAlsMinderDanLeds">Niet halteren wtv bij minder dan # leds</system:String>
     <system:String x:Key="Generic_WTVAansturenBusTijdensOV">Aansturen BUS licht in wtv bij OV ingreep</system:String>
     <system:String x:Key="Generic_WTVAansturenBusTijdensHD">Aansturen BUS licht in wtv bij HD ingreep</system:String>
-    
+
+    <!-- Prio basis instellingen -->
+    <system:String x:Key="Prio_CheckDSin">Check type op DSI bericht bij vecom</system:String>
+    <system:String x:Key="Prio_MaxWtMvt">Maximale wachttijd auto</system:String>
+    <system:String x:Key="Prio_MaxWtFts">Maximale wachttijd fiets</system:String>
+    <system:String x:Key="Prio_MaxWtVtg">Maximale wachttijd voetganger</system:String>
+    <system:String x:Key="Prio_GecPrioTV">Grens 'te vroeg' tbv geconditioneerde prio</system:String>
+    <system:String x:Key="Prio_GecPrioTL">Grens 'te laat' tbv geconditioneerde prio</system:String>
+    <system:String x:Key="Prio_HD_BL_NC">Blokkeren niet-conflicten tijdens HD ingreep</system:String>
+    <system:String x:Key="Prio_HD_BL_NC_LV">Blokkeren niet-conflicten alleen voor langzaam verkeer</system:String>
+    <system:String x:Key="Prio_PrioUber">Verklikken prio teller via CIF_UBER</system:String>
+    <system:String x:Key="Prio_VerlaagSG">Behandel signaalgroepen hoger dan 2## als ## tbv KAR</system:String>
+    <system:String x:Key="Prio_KARinPRM">KAR signaalgroepnummers in parameters</system:String>
+
     <!-- Intro etc. -->
     <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
     <system:String x:Key="Title_Document">Functionele specificatie</system:String>
@@ -67,7 +80,7 @@
     <system:String x:Key="Title_SignaalgroepInstellingen">Signaalgroep instellingen</system:String>
     <system:String x:Key="Title_Modulestructuur">Modulestructuur</system:String>
     <system:String x:Key="Table_Fasen_Functies">Kenmerken en functie instellingen voor fasen</system:String>
-    <system:String x:Key="Table_Fasen_Tijden">Signaalgroeptijden</system:String>
+    <system:String x:Key="Table_Fasen_Tijden">Signaalgroeptijden (in TE)</system:String>
 
     <system:String x:Key="Title_VasteAanvragen">Vaste (cyclische) aanvragen</system:String>
     <system:String x:Key="Table_VasteAanvragen">Instellingen cyclische aanvragen</system:String>
