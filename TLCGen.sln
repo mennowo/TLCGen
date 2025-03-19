@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TLCGen.PluggedInItems", "TL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.GebruikersOpties", "TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj", "{DEAE73BC-0C8E-47BF-B7AE-850617A34949}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TLCGen.Setup", "TLCGen.Setup\TLCGen.Setup.wixproj", "{3B94F7B2-FBF9-4935-B173-CC8F50B53083}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "TLCGen.Setup", "TLCGen.Setup\TLCGen.Setup.wixproj", "{3B94F7B2-FBF9-4935-B173-CC8F50B53083}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.CCOL", "TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj", "{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -57,7 +57,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
-		build.cake = build.cake
 		LICENSE.md = LICENSE.md
 		local.cake = local.cake
 		README.md = README.md
@@ -88,6 +87,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Plugins.AutoBuild", "TLCGen.PluggedInItems\TLCGen.Plugins.AutoBuild\TLCGen.Plugins.AutoBuild.csproj", "{73AFE044-0175-4EA0-BC0D-7E9A5386DAB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Plugins.Additor", "TLCGen.PluggedInItems\TLCGen.Plugins.Additor\TLCGen.Plugins.Additor.csproj", "{E8EAB6E3-B769-481A-8712-12442767742C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{31240136-1A28-4697-801B-2605758F2BFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -319,6 +320,12 @@ Global
 		{E8EAB6E3-B769-481A-8712-12442767742C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8EAB6E3-B769-481A-8712-12442767742C}.Release|x86.ActiveCfg = Release|Any CPU
 		{E8EAB6E3-B769-481A-8712-12442767742C}.Release|x86.Build.0 = Release|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Debug|x86.Build.0 = Debug|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Release|x86.ActiveCfg = Release|Any CPU
+		{31240136-1A28-4697-801B-2605758F2BFD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
