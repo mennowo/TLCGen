@@ -1,13 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
-    public class DetectorenTemplatesEditorTabViewModel : ViewModelBase
+    public class DetectorenTemplatesEditorTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -33,8 +35,8 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedDetectorTemplate = value;
-                RaisePropertyChanged("SelectedDetectorTemplate");
-                RaisePropertyChanged(nameof(HasDC));
+                OnPropertyChanged("SelectedDetectorTemplate");
+                OnPropertyChanged(nameof(HasDC));
             }
         }
 
@@ -73,7 +75,7 @@ namespace TLCGen.Settings
 
         #region Command Functionality
 
-        private void AddDetectorTemplateCommand_Executed(object prm)
+        private void AddDetectorTemplateCommand_Executed()
         {
             var dtm = new TLCGenTemplateModel<DetectorModel>
             {
@@ -90,22 +92,22 @@ namespace TLCGen.Settings
             var d = new DetectorTemplateViewModel(dtm);
             DetectorenTemplates.Add(d);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.DetectorenTemplates.Add(dtm);
-            MessengerInstance.Send(new TemplatesChangedMessage());
+            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
             SelectedDetectorTemplate = d;
         }
 
-        bool AddDetectorTemplateCommand_CanExecute(object prm)
+        bool AddDetectorTemplateCommand_CanExecute()
         {
             return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
-        void RemoveDetectorTemplateCommand_Executed(object prm)
+        void RemoveDetectorTemplateCommand_Executed()
         {
             DetectorenTemplates.Remove(SelectedDetectorTemplate);
             SelectedDetectorTemplate = null;
         }
 
-        bool RemoveDetectorTemplateCommand_CanExecute(object prm)
+        bool RemoveDetectorTemplateCommand_CanExecute()
         {
             return SelectedDetectorTemplate != null && SelectedDetectorTemplate.Editable;
         }

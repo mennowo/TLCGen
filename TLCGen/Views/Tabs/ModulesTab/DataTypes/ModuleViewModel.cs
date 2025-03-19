@@ -1,13 +1,14 @@
 ﻿using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Models;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using GalaSoft.MvvmLight.Messaging;
+
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleViewModel : ViewModelBase
+    public class ModuleViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -29,7 +30,7 @@ namespace TLCGen.ViewModels
                 {
                     _Module.Naam = value;
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(nameof(Naam), broadcast: true);
             }
         }
 
@@ -65,7 +66,7 @@ namespace TLCGen.ViewModels
                     _Module.Fasen.Remove(mfcvm.ModuleFaseCyclus);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

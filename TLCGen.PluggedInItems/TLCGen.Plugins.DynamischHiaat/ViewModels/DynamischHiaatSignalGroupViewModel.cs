@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 {
-    internal class DynamischHiaatSignalGroupViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    internal class DynamischHiaatSignalGroupViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -30,12 +30,12 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 _selectedDefault = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 if(value != null)
                 {
                     var v = Snelheid;
                     SelectedDefaultSnelheden = value.Snelheden;
-                    RaisePropertyChanged(nameof(SelectedDefaultSnelheden));
+                    OnPropertyChanged(nameof(SelectedDefaultSnelheden));
                     Snelheid = v;
                 }
             }
@@ -64,7 +64,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 SignalGroup.SignalGroupName = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -103,7 +103,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                 {
                     DynamischHiaatDetectoren.RemoveAll();
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 SignalGroup.Opdrempelen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -125,7 +125,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                 if (SignalGroup.Snelheid != value)
                 {
                     ApplySnelheidsDefaultsToDetectoren(value);
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
                 SignalGroup.Snelheid = value;
             }
@@ -138,7 +138,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 SignalGroup.KijkenNaarKoplus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

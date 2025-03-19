@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
-using TLCGen.DataAccess;
+﻿using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class VoorstartViewModel : ViewModelBase
+    public class VoorstartViewModel : ObservableObjectEx
 	{
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_voorstart.VoorstartTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_voorstart.VoorstartOntruimingstijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 

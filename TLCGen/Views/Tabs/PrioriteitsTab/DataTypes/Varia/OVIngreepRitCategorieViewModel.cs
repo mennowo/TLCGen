@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepRitCategorieViewModel : ViewModelBase, IViewModelWithItem
+    public class OVIngreepRitCategorieViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RitCategorie = value;
-                RaisePropertyChanged<object>("_RitCategorie", broadcast: true);
+                OnPropertyChanged("_RitCategorie", broadcast: true);
             }
         }
 
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RitCategorie.Nummer = value;
-                RaisePropertyChanged<object>(nameof(Nummer), broadcast: true);
+                OnPropertyChanged(nameof(Nummer), broadcast: true);
             }
         }
 

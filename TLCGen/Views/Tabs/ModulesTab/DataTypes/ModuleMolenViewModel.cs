@@ -1,17 +1,16 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleMolenViewModel : ViewModelBase
+    public class ModuleMolenViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -55,7 +54,7 @@ namespace TLCGen.ViewModels
                     _ModulesTabVM.SetSelectedModule(value);
                 }
 
-                RaisePropertyChanged("SelectedModule");
+                OnPropertyChanged("SelectedModule");
             }
         }
 
@@ -65,7 +64,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedModuleFase = null;
-                RaisePropertyChanged("SelectedModuleFase");
+                OnPropertyChanged("SelectedModuleFase");
                 _SelectedModuleFase = value;
                 if (_ModulesTabVM != null)
                 {
@@ -87,8 +86,8 @@ namespace TLCGen.ViewModels
                 if (_ModuleMolen != null)
                 {
                     _ModuleMolen.LangstWachtendeAlternatief = value;
-                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
-                    RaisePropertyChanged("NotLangstWachtendeAlternatief");
+                    OnPropertyChanged(nameof(LangstWachtendeAlternatief), broadcast: true);
+                    OnPropertyChanged("NotLangstWachtendeAlternatief");
                 }
             }
         }
@@ -104,12 +103,12 @@ namespace TLCGen.ViewModels
                 if (_ModuleMolen != null && value != null)
                 {
                     _ModuleMolen.WachtModule = value;
-                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                    OnPropertyChanged(nameof(WachtModule), broadcast: true);
                 }
                 else if (!_Modules.Any())
                 {
                     _ModuleMolen.WachtModule = null;
-                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                    OnPropertyChanged(nameof(WachtModule), broadcast: true);
                 }
             }
         }
@@ -174,7 +173,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        private void MoveModuleUpCommand_Executed(object obj)
+        private void MoveModuleUpCommand_Executed()
         {
             var index = -1;
             foreach(var mvm in Modules)
@@ -196,7 +195,7 @@ namespace TLCGen.ViewModels
         }
 
 
-        private void MoveModuleDownCommand_Executed(object obj)
+        private void MoveModuleDownCommand_Executed()
         {
             var index = -1;
             foreach (var mvm in Modules)
@@ -217,7 +216,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        void AddNewModuleCommand_Executed(object prm)
+        void AddNewModuleCommand_Executed()
         {
             var mm = new ModuleModel
             {
@@ -226,15 +225,15 @@ namespace TLCGen.ViewModels
             var mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
             SelectedModule = mvm;
-            MessengerInstance.Send(new ModulesChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ModulesChangedMessage());
         }
 
-        bool AddNewModuleCommand_CanExecute(object prm)
+        bool AddNewModuleCommand_CanExecute()
         {
             return Modules != null;
         }
 
-        void RemoveModuleCommand_Executed(object prm)
+        void RemoveModuleCommand_Executed()
         {
             var index = Modules.IndexOf(SelectedModule);
             Modules.Remove(SelectedModule);
@@ -250,10 +249,10 @@ namespace TLCGen.ViewModels
                     SelectedModule = Modules[index];
                 }
             }
-            MessengerInstance.Send(new ModulesChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ModulesChangedMessage());
         }
 
-        bool ChangeModuleCommand_CanExecute(object prm)
+        bool ChangeModuleCommand_CanExecute()
         {
             return SelectedModule != null;
         }
@@ -280,12 +279,12 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             ReloadModules();
         }
 
-        private void OnConflictsChanged(ConflictsChangedMessage message)
+        private void OnConflictsChanged(object sender, ConflictsChangedMessage message)
         {
             ReloadModules();
         }
@@ -319,8 +318,8 @@ namespace TLCGen.ViewModels
                 {
                     WachtModule = Modules[0].Naam;
                 }
-                RaisePropertyChanged(nameof(WachtModule));
-                Messenger.Default.Send(new ControllerDataChangedMessage());
+                OnPropertyChanged(nameof(WachtModule));
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
@@ -333,8 +332,8 @@ namespace TLCGen.ViewModels
             _ModuleMolen = moduleMolen;
             ReloadModules();
             _ModulesTabVM = mltab;
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

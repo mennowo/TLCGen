@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -9,7 +10,7 @@ using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
-    public class GroentijdenSetViewModel : ViewModelBase
+    public class GroentijdenSetViewModel : ObservableObject
     {
         #region Fields
         
@@ -32,10 +33,10 @@ namespace TLCGen.ViewModels
                         _GroentijdenSet.Naam = value;
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
+WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -58,8 +59,8 @@ namespace TLCGen.ViewModels
                     }
                 }
 
-                RaisePropertyChanged(nameof(Naam));
-                RaisePropertyChanged();
+                OnPropertyChanged(nameof(Naam));
+                OnPropertyChanged();
             }
         }
 

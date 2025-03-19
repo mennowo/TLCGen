@@ -1,5 +1,6 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 using TLCGen.Settings;
@@ -10,7 +11,7 @@ using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
-    public class PeriodeViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class PeriodeViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -33,10 +34,10 @@ namespace TLCGen.ViewModels
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, value))
                     {
                         _Periode.Naam = value;
-						MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
+						WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
                     }
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(nameof(Naam), broadcast: true);
             }
         }
 
@@ -46,7 +47,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Periode.Commentaar = value;
-                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
+                OnPropertyChanged(nameof(Commentaar), broadcast: true);
             }
         }
         
@@ -87,8 +88,8 @@ namespace TLCGen.ViewModels
                 {
                     throw new ArgumentOutOfRangeException("Unknown period type: " + value);
                 }
-                RaisePropertyChanged(string.Empty);
-                RaisePropertyChanged<object>(nameof(TypeAsString), broadcast: true);
+                OnPropertyChanged(string.Empty);
+                OnPropertyChanged(nameof(TypeAsString), broadcast: true);
             }
         }
 
@@ -112,9 +113,9 @@ namespace TLCGen.ViewModels
                     }
                     _Periode.Naam = newname;
                 }
-                RaisePropertyChanged(string.Empty);
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                MessengerInstance.Send(new PeriodenChangedMessage());
+                OnPropertyChanged(string.Empty);
+                OnPropertyChanged(nameof(Type), broadcast: true);
+                WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
             }
         }
 
@@ -124,7 +125,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.DagCode = value;
-                RaisePropertyChanged<object>(nameof(DagCode), broadcast: true);
+                OnPropertyChanged(nameof(DagCode), broadcast: true);
             }
         }
         
@@ -134,8 +135,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.StartTijd = value;
-                RaisePropertyChanged<object>(nameof(StartTijd), broadcast: true);
-                RaisePropertyChanged(nameof(StartTijdAsText));
+                OnPropertyChanged(nameof(StartTijd), broadcast: true);
+                OnPropertyChanged(nameof(StartTijdAsText));
             }
         }
 
@@ -145,8 +146,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.EindTijd = value;
-                RaisePropertyChanged<object>(nameof(EindTijd), broadcast: true);
-                RaisePropertyChanged(nameof(EindTijdAsText));
+                OnPropertyChanged(nameof(EindTijd), broadcast: true);
+                OnPropertyChanged(nameof(EindTijdAsText));
             }
         }
 
@@ -185,7 +186,7 @@ namespace TLCGen.ViewModels
                 {
                     _Periode.GroentijdenSet = value;
                 }
-                RaisePropertyChanged<object>(nameof(GroentijdenSet), broadcast: true);
+                OnPropertyChanged(nameof(GroentijdenSet), broadcast: true);
             }
         }
 
@@ -199,7 +200,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.GeenUitgangPerOverig = value;
-                RaisePropertyChanged<object>(nameof(GeenUitgangPerOverig), broadcast: true);
+                OnPropertyChanged(nameof(GeenUitgangPerOverig), broadcast: true);
             }
         }
 

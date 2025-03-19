@@ -1,13 +1,16 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+
 
 namespace TLCGen.ViewModels
 {
@@ -15,7 +18,7 @@ namespace TLCGen.ViewModels
     /// ViewModel meant for displaying a list of phases in the Modules tab.
     /// Also handles clicks on the list, adding and removing phases from modules accordingly.
     /// </summary>
-    public class ModulesTabFasenLijstViewModel : ViewModelBase
+    public class ModulesTabFasenLijstViewModel : ObservableObject
     {
         #region Fields
         
@@ -64,7 +67,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                OnPropertyChanged("SelectedFaseCyclus");
             }
         }
         
@@ -90,7 +93,7 @@ namespace TLCGen.ViewModels
                     }
                     fcmvm.UpdateModuleInfo();
                 }
-                RaisePropertyChanged("SelectedModule");
+                OnPropertyChanged("SelectedModule");
             }
         }
 
@@ -116,7 +119,7 @@ namespace TLCGen.ViewModels
                     }
                     fcmvm.UpdateModuleInfo();
                 }
-                RaisePropertyChanged("SelectedModuleFase");
+                OnPropertyChanged("SelectedModuleFase");
             }
         }
 
@@ -124,14 +127,14 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddRemoveFaseCommand;
+        RelayCommand<object> _AddRemoveFaseCommand;
         public ICommand AddRemoveFaseCommand
         {
             get
             {
                 if (_AddRemoveFaseCommand == null)
                 {
-                    _AddRemoveFaseCommand = new RelayCommand(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
+                    _AddRemoveFaseCommand = new RelayCommand<object>(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
                 }
                 return _AddRemoveFaseCommand;
             }
@@ -198,7 +201,7 @@ namespace TLCGen.ViewModels
                 }
                 _fcmvm.UpdateModuleInfo();
             }
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool AddRemoveFaseCommand_CanExecute(object prm)
@@ -214,7 +217,7 @@ namespace TLCGen.ViewModels
         
         #region Message handling
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             var sfc = SelectedFaseCyclus;
             Fasen.Clear();
@@ -239,12 +242,12 @@ namespace TLCGen.ViewModels
             Fasen.BubbleSort();
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             Fasen.BubbleSort();
         }
 
-        private void OnFasenSortedChanged(FasenSortedMessage obj)
+        private void OnFasenSortedChanged(object sender, FasenSortedMessage obj)
         {
             Fasen.BubbleSort();
         }
@@ -255,9 +258,9 @@ namespace TLCGen.ViewModels
 
         public ModulesTabFasenLijstViewModel()
         {   
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSortedChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSortedChanged);
         }
 
         #endregion // Constructor

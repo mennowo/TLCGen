@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -229,7 +230,7 @@ namespace TLCGen.Plugins.Additor
 		
         #region Command Functionality
 
-        private void ShowSettingsCommand_Executed(object obj)
+        private void ShowSettingsCommand_Executed()
         {
             var w = new AdditorSettingsView()
             {
@@ -246,7 +247,7 @@ namespace TLCGen.Plugins.Additor
             window.ShowDialog();
         }
 
-        private bool ShowSettingsCommand_CanExecute(object obj)
+        private bool ShowSettingsCommand_CanExecute()
         {
             return true;
         }

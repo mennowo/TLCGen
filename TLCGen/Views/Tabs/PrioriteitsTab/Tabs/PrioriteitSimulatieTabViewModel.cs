@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -63,7 +63,7 @@ namespace TLCGen.ViewModels
                 {
                     _DummyDetectoren = null;
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -143,11 +143,11 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            RaisePropertyChanged("");
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            OnPropertyChanged("");
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             foreach (var d in DummyDetectoren)
             {
-                d.RaisePropertyChanged("");
+                d.OnPropertyChanged("");
             }
         }
 
@@ -185,17 +185,17 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        public void OnPrioIngrepenChangedMessage(PrioIngrepenChangedMessage message)
+        public void OnPrioIngrepenChangedMessage(object sender, PrioIngrepenChangedMessage message)
         {
             RebuildDetectorenList();
         }
 
-        public void OnHDIngrepenChangedMessage(HDIngrepenChangedMessage message)
+        public void OnHDIngrepenChangedMessage(object sender, HDIngrepenChangedMessage message)
         {
             RebuildDetectorenList();
         }
 
-		private void OnPrioIngreepMeldingChangedMessage(PrioIngreepMeldingChangedMessage message)
+		private void OnPrioIngreepMeldingChangedMessage(object sender, PrioIngreepMeldingChangedMessage message)
 		{
 			RebuildDetectorenList();
 		}
@@ -206,9 +206,9 @@ namespace TLCGen.ViewModels
 
         public PrioriteitSimulatieTabViewModel()
         {
-            MessengerInstance.Register(this, new Action<PrioIngrepenChangedMessage>(OnPrioIngrepenChangedMessage));
-            MessengerInstance.Register(this, new Action<HDIngrepenChangedMessage>(OnHDIngrepenChangedMessage));
-			MessengerInstance.Register(this, new Action<PrioIngreepMeldingChangedMessage>(OnPrioIngreepMeldingChangedMessage));
+            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
+            WeakReferenceMessenger.Default.Register<HDIngrepenChangedMessage>(this, OnHDIngrepenChangedMessage);
+			WeakReferenceMessenger.Default.Register<PrioIngreepMeldingChangedMessage>(this, OnPrioIngreepMeldingChangedMessage);
         }
 
 		#endregion // Constructor

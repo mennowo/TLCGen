@@ -1,10 +1,10 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.Generators.CCOL.Settings
 {
     [Serializable]
-    public class CCOLGeneratorFolderSettingModel : ViewModelBase
+    public class CCOLGeneratorFolderSettingModel : ObservableObject
     {
         private string _Setting;
 
@@ -18,7 +18,7 @@ namespace TLCGen.Generators.CCOL.Settings
                     _Setting = value;
                 else if (value != null)
                     _Setting = value + ";";
-                RaisePropertyChanged("Setting");
+                OnPropertyChanged("Setting");
             }
         }
         public string Description { get; set; }

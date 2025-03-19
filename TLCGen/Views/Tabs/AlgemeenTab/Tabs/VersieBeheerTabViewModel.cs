@@ -1,6 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -8,12 +6,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Dependencies.Helpers;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -34,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedVersie = value;
-                RaisePropertyChanged("SelectedVersie");
+                OnPropertyChanged("SelectedVersie");
             }
         }
 
@@ -57,7 +56,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMajor = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieMajor), broadcast: true);
+                OnPropertyChanged(nameof(HuidigeVersieMajor), broadcast: true);
             }
         }
 
@@ -67,7 +66,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMinor = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieMinor), broadcast: true);
+                OnPropertyChanged(nameof(HuidigeVersieMinor), broadcast: true);
             }
         }
 
@@ -77,7 +76,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieRevision = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieRevision), broadcast: true);
+                OnPropertyChanged(nameof(HuidigeVersieRevision), broadcast: true);
             }
         }
 
@@ -87,7 +86,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AanmakenVerionSysh = value;
-                RaisePropertyChanged<object>(nameof(AanmakenVerionSysh), broadcast: true);
+                OnPropertyChanged(nameof(AanmakenVerionSysh), broadcast: true);
             }
         }
 
@@ -97,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AanmakenVersionBakSysh = value;
-                RaisePropertyChanged<object>(nameof(AanmakenVersionBakSysh), broadcast: true);
+                OnPropertyChanged(nameof(AanmakenVersionBakSysh), broadcast: true);
             }
         }
 
@@ -107,7 +106,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.StoreCurrentController = value;
-                RaisePropertyChanged<object>(nameof(StoreCurrentController), broadcast: true);
+                OnPropertyChanged(nameof(StoreCurrentController), broadcast: true);
             }
         }
 
@@ -334,13 +333,13 @@ namespace TLCGen.ViewModels
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;
-                    RaisePropertyChanged("");
+                    OnPropertyChanged("");
                 }
                 else
                 {
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
-                    RaisePropertyChanged("");
+                    OnPropertyChanged("");
                 }
             }
         }
@@ -365,7 +364,7 @@ namespace TLCGen.ViewModels
                     _Controller.Data.Versies.Remove(vvm.VersieEntry);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

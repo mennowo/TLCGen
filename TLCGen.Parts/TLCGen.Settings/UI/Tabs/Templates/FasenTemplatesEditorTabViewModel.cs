@@ -1,13 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
-    public class FasenTemplatesEditorTabViewModel : ViewModelBase
+    public class FasenTemplatesEditorTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -33,8 +35,8 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedFaseCyclusTemplate = value;
-                RaisePropertyChanged(nameof(SelectedFaseCyclusTemplate));
-                RaisePropertyChanged(nameof(HasDC));
+                OnPropertyChanged(nameof(SelectedFaseCyclusTemplate));
+                OnPropertyChanged(nameof(HasDC));
             }
         }
 
@@ -73,7 +75,7 @@ namespace TLCGen.Settings
 
         #region Command Functionality
 
-        private void AddFaseTemplateCommand_Executed(object prm)
+        private void AddFaseTemplateCommand_Executed()
         {
             var fct = new TLCGenTemplateModel<FaseCyclusModel>
             {
@@ -89,22 +91,22 @@ namespace TLCGen.Settings
             var f = new FaseCyclusTemplateViewModel(fct);
             FasenTemplates.Add(f);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.FasenTemplates.Add(fct);
-            MessengerInstance.Send(new TemplatesChangedMessage());
+            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
             SelectedFaseCyclusTemplate = f;
         }
 
-        bool AddFaseTemplateCommand_CanExecute(object prm)
+        bool AddFaseTemplateCommand_CanExecute()
         {
             return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
-        void RemoveFaseTemplateCommand_Executed(object prm)
+        void RemoveFaseTemplateCommand_Executed()
         {
             FasenTemplates.Remove(SelectedFaseCyclusTemplate);
             SelectedFaseCyclusTemplate = null;
         }
 
-        bool RemoveFaseTemplateCommand_CanExecute(object prm)
+        bool RemoveFaseTemplateCommand_CanExecute()
         {
             return SelectedFaseCyclusTemplate != null && SelectedFaseCyclusTemplate.Editable;
         }

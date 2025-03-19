@@ -1,19 +1,20 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Settings;
 using System.Collections;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.ViewModels
 {
-    public class TemplateProviderViewModel<T1,T2> : ViewModelBase where T1 : class where T2 : class
+    public class TemplateProviderViewModel<T1,T2> : ObservableObject where T1 : class where T2 : class
     {
         #region Fields
 
@@ -23,8 +24,8 @@ namespace TLCGen.ViewModels
         private T1 _selectedTemplate;
         private T2 _applyToItem;
         private IList<T2> _applyToItems;
-        RelayCommand _applyTemplateCommand;
-        RelayCommand _addFromTemplateCommand;
+        RelayCommand<object> _applyTemplateCommand;
+        RelayCommand<object> _addFromTemplateCommand;
 
         #endregion // Fields
 
@@ -48,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedTemplate = value;
-                RaisePropertyChanged(nameof(SelectedTemplate));
+                OnPropertyChanged(nameof(SelectedTemplate));
             }
         }
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _applyToItem = value;
-                RaisePropertyChanged(nameof(ApplyToItem));
+                OnPropertyChanged(nameof(ApplyToItem));
             }
         }
 
@@ -68,7 +69,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _applyToItems = value;
-                RaisePropertyChanged(nameof(ApplyToItems));
+                OnPropertyChanged(nameof(ApplyToItems));
             }
         }
 
@@ -82,7 +83,7 @@ namespace TLCGen.ViewModels
             {
                 if (_applyTemplateCommand == null)
                 {
-                    _applyTemplateCommand = new RelayCommand(obj =>
+                    _applyTemplateCommand = new RelayCommand<object>(obj =>
                         {
                             if(ApplyToItems != null)
                             {
@@ -112,7 +113,7 @@ namespace TLCGen.ViewModels
             {
                 if (_addFromTemplateCommand == null)
                 {
-                    _addFromTemplateCommand = new RelayCommand(obj =>
+                    _addFromTemplateCommand = new RelayCommand<object>(obj =>
                     {
                         var items = new List<T2>();
                         var template = SelectedTemplate as TLCGenTemplateModel<T2>;
@@ -302,7 +303,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnTemplatesChanged(TemplatesChangedMessage message)
+        public void OnTemplatesChanged(object sender, TemplatesChangedMessage message)
         {
             this.Update();
         }
@@ -316,7 +317,7 @@ namespace TLCGen.ViewModels
             _sourceVm = vm;
             _replaceNameOnApply = replacenameonapply;
             this.Update();
-            Messenger.Default.Register(this, new Action<TemplatesChangedMessage>(OnTemplatesChanged));
+            WeakReferenceMessenger.Default.Register<TemplatesChangedMessage>(this, OnTemplatesChanged);
         }
 
         #endregion // Constructor

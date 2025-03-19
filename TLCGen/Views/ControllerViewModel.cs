@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using TLCGen.DataAccess;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
@@ -13,7 +15,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public class ControllerViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class ControllerViewModel : ObservableObject
     {
         #region Fields
         
@@ -40,7 +42,7 @@ namespace TLCGen.ViewModels
                     tab.Controller = value;
                 }
                 SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
-                RaisePropertyChanged(string.Empty);
+                OnPropertyChanged(string.Empty);
             }
         }
 
@@ -82,7 +84,7 @@ namespace TLCGen.ViewModels
                 {
                     _SelectedTab = value;
                     _SelectedTab.OnSelected();
-                    RaisePropertyChanged("SelectedTab");
+                    OnPropertyChanged("SelectedTab");
                 }
             }
         }
@@ -100,7 +102,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void ReloadController()
         {
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }
 
@@ -135,7 +137,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Message handling
 
-        private void OnUpdateTabsEnabled(UpdateTabsEnabledMessage message)
+        private void OnUpdateTabsEnabled(object sender, UpdateTabsEnabledMessage message)
         {
             foreach(var item in TabItems)
             {
@@ -165,7 +167,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnIsFasenConflictRequestReceived(IsFasenConflictingRequest request)
+        private void OnIsFasenConflictRequestReceived(object sender, IsFasenConflictingRequest request)
         {
             if (request.Handled == false)
             {
@@ -174,12 +176,12 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnControllerDataChanged(ControllerDataChangedMessage message)
+        public void OnControllerDataChanged(object sender, ControllerDataChangedMessage message)
         {
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
 
-        public void OnPropertyChangedMessageBase(PropertyChangedMessageBase message)
+        public void OnPropertyChangedMessageBase(object sender, PropertyChangedMessage<object> message)
         {
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
@@ -222,10 +224,10 @@ namespace TLCGen.ViewModels
                 }
             }
             
-            MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
-            MessengerInstance.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
-            MessengerInstance.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
-            MessengerInstance.Register(this, new Action<PropertyChangedMessage<object>>(OnPropertyChangedMessageBase));
+            WeakReferenceMessenger.Default.Register<UpdateTabsEnabledMessage>(this, OnUpdateTabsEnabled);
+            WeakReferenceMessenger.Default.Register<IsFasenConflictingRequest>(this, OnIsFasenConflictRequestReceived);
+            WeakReferenceMessenger.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
+            WeakReferenceMessenger.Default.Register<PropertyChangedMessage<object>>(this, OnPropertyChangedMessageBase);
 
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }

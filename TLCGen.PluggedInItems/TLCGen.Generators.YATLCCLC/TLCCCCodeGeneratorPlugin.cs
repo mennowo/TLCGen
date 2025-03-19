@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Generators.TLCCC.CodeGeneration;
 using TLCGen.Generators.TLCCC.GeneratorUI;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -61,7 +62,7 @@ namespace TLCGen.Generators.TLCCC
 
         public void UpdateTLCGenMessaging()
         {
-            Messenger.Default.Register(this, new Action<Messaging.Messages.ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // ITLCGenPlugMessaging
@@ -90,7 +91,7 @@ namespace TLCGen.Generators.TLCCC
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(Messaging.Messages.ControllerFileNameChangedMessage msg)
+        private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage msg)
         {
             if (msg.NewFileName == null) return;
 

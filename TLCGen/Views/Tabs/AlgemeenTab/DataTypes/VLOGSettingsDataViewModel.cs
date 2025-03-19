@@ -1,12 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using TLCGen.Controls;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class VLOGSettingsDataViewModel : ViewModelBase
+    public class VLOGSettingsDataViewModel : ObservableObjectEx
     {
         public readonly VLOGSettingsDataModel VLOGSettingsData;
 
@@ -18,8 +18,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) Settings.DefaultsProvider.Default.SetDefaultsOnModel(VLOGSettingsData);
                 VLOGSettingsData.VLOGToepassen = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged("");
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged("");
             }
         }
 
@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGPRM_VLOGMODE = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONPRM_VLOGMODE = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -70,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -82,7 +82,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONDP_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONIS_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -106,7 +106,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONFC_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -118,7 +118,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONUS_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -130,7 +130,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONDS_def = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -143,7 +143,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_DATI = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_DP = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -167,7 +167,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_IS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -179,7 +179,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_FC = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -191,7 +191,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_US = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -203,7 +203,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_PS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -215,7 +215,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_DS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -227,7 +227,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_MLX = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -239,7 +239,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_OMG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -251,7 +251,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_CRC = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -263,7 +263,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.LOGTYPE_CFG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -277,7 +277,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_DATI = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -289,7 +289,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_DP = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -301,7 +301,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_IS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -313,7 +313,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_FC = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -325,7 +325,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_US = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -337,7 +337,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_PS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -349,7 +349,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_DS = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -361,7 +361,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_MLX = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -373,7 +373,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_OMG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -385,7 +385,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_CRC = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -397,7 +397,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONTYPE_CFG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -409,7 +409,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VLOGSettingsData.MONPRM_EVENT = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -12,6 +14,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -32,7 +35,7 @@ namespace TLCGen.ViewModels
         
         private RelayCommand _addConflictGroepCommand;
         private RelayCommand _removeConflictGroepCommand;
-        private RelayCommand _addRemoveFaseCommand;
+        private RelayCommand<object> _addRemoveFaseCommand;
 
         #endregion // Fields
 
@@ -46,10 +49,10 @@ namespace TLCGen.ViewModels
             set
             {
                 RoBuGrover.ToestaanNietConflictenInConflictGroepen = value;
-                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
                 TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
-                OnConflictsChanged(new ConflictsChangedMessage());
-                RaisePropertyChanged<object>(broadcast: true);
+                OnConflictsChanged(this, new ConflictsChangedMessage());
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -60,8 +63,8 @@ namespace TLCGen.ViewModels
             {
                 var oldval = _selectedConflictGroep;
                 _selectedConflictGroep = value;
-                RaisePropertyChanged();
-                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                OnPropertyChanged();
+WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
             }
         }
 
@@ -71,7 +74,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedSignaalGroepInstelling = value;
-                RaisePropertyChanged<object>(nameof(SelectedSignaalGroepInstelling), null, null, true);
+                // TODO Check OK ? OnPropertyChanged(nameof(SelectedSignaalGroepInstelling), null, null, true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -81,7 +85,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedFaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -136,7 +140,7 @@ namespace TLCGen.ViewModels
             {
                 if (_addRemoveFaseCommand == null)
                 {
-                    _addRemoveFaseCommand = new RelayCommand(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
+                    _addRemoveFaseCommand = new RelayCommand<object>(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
                 }
                 return _addRemoveFaseCommand;
             }
@@ -146,24 +150,24 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        private bool AddConflictGroepCommand_CanExecute(object obj)
+        private bool AddConflictGroepCommand_CanExecute()
         {
             return true;
         }
 
-        private void AddConflictGroepCommand_Executed(object obj)
+        private void AddConflictGroepCommand_Executed()
         {
             var cgm = new RoBuGroverConflictGroepModel();
             ConflictGroepen.Add(new RoBuGroverConflictGroepViewModel(cgm));
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        private bool RemoveConflictGroepCommand_CanExecute(object obj)
+        private bool RemoveConflictGroepCommand_CanExecute()
         {
             return SelectedConflictGroep != null;
         }
 
-        private void RemoveConflictGroepCommand_Executed(object obj)
+        private void RemoveConflictGroepCommand_Executed()
         {
             var selectedConflictGroep = SelectedConflictGroep;
             ConflictGroepen.Remove(SelectedConflictGroep);
@@ -190,7 +194,7 @@ namespace TLCGen.ViewModels
             }
 
             SelectedConflictGroep = null;
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         void AddRemoveFaseCommand_Executed(object prm)
@@ -243,7 +247,7 @@ namespace TLCGen.ViewModels
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
-                MessengerInstance.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             }
             else if (fc is {IsInConflictGroep: true})
             {
@@ -259,7 +263,7 @@ namespace TLCGen.ViewModels
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
-                MessengerInstance.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             }
             foreach (var tfc in Fasen)
             {
@@ -333,8 +337,8 @@ namespace TLCGen.ViewModels
                     ConflictGroepen = null;
                     SignaalGroepInstellingen = null;
                 }
-                RaisePropertyChanged(nameof(ConflictGroepen));
-                RaisePropertyChanged(nameof(SignaalGroepInstellingen));
+                OnPropertyChanged(nameof(ConflictGroepen));
+                OnPropertyChanged(nameof(SignaalGroepInstellingen));
             }
         }
 
@@ -342,19 +346,19 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             UpdateFasenEnDetectoren();
             SignaalGroepInstellingen.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             UpdateFasenEnDetectoren();
             SignaalGroepInstellingen.Rebuild();
         }
 
-        private void OnConflictsChanged(ConflictsChangedMessage message)
+        private void OnConflictsChanged(object sender, ConflictsChangedMessage message)
         {
             UpdateFasenEnDetectoren();
             ConflictGroepen.Rebuild();
@@ -367,9 +371,9 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverTabViewModel()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

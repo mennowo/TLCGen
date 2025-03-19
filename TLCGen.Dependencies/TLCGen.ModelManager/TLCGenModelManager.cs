@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +11,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using System.Xml.Serialization;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Providers;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -57,8 +57,6 @@ namespace TLCGen.ModelManagement
                 return _Default;
             }
         }
-
-        private IMessenger MessengerInstance { get; set; }
 
         public ControllerModel Controller
         {
@@ -753,7 +751,7 @@ namespace TLCGen.ModelManagement
 
         #region TLCGen Messaging
 
-        public void OnFasenChanging(FasenChangingMessage message)
+        public void OnFasenChanging(object sender, FasenChangingMessage message)
         {
             if (message.AddedFasen != null)
             {
@@ -849,22 +847,22 @@ namespace TLCGen.ModelManagement
             Controller.ModuleMolen.FasenModuleData.BubbleSort();
 
             // Messaging
-            MessengerInstance.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
+            WeakReferenceMessenger.Default.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
         }
 
-        private void OnNameChanging(NameChangingMessage msg)
+        private void OnNameChanging(object sender, NameChangingMessage msg)
         {
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName, msg.ObjectType);
             if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {
                 Controller.Fasen.Sort();
             }
-            MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
+            WeakReferenceMessenger.Default.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
 
             // Force the viewmodel to order+rebuild relevant lists
             if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {
-                MessengerInstance.Send(new FasenChangedMessage(null, null));
+                WeakReferenceMessenger.Default.Send(new FasenChangedMessage(null, null));
             }
         }
 
@@ -925,7 +923,7 @@ namespace TLCGen.ModelManagement
             return i;
         }
 
-        public void OnModelManagerMessage(ModelManagerMessageBase msg)
+        public void OnModelManagerMessage(object sender, ModelManagerMessageBase msg)
         {
             PrepareModelForUI(Controller);
             switch (msg)
@@ -1042,7 +1040,7 @@ namespace TLCGen.ModelManagement
             }
         }
 
-        private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
+        private void OnPrepareForGenerationRequest(object sender, PrepareForGenerationRequest msg)
         {
             PrepareModelForUI(msg.Controller);
 
@@ -1055,7 +1053,7 @@ namespace TLCGen.ModelManagement
             msg.Controller.SelectieveDetectoren.BubbleSort();
         }
 
-        private void OnDetectorenChangedMessage(DetectorenChangedMessage msg)
+        private void OnDetectorenChangedMessage(object sender, DetectorenChangedMessage msg)
         {
             if (msg.RemovedDetectoren == null || !msg.RemovedDetectoren.Any()) return;
 
@@ -1069,7 +1067,7 @@ namespace TLCGen.ModelManagement
             }
         }
 
-        private void OnFaseDetectorTypeChangedMessage(FaseDetectorTypeChangedMessage msg)
+        private void OnFaseDetectorTypeChangedMessage(object sender, FaseDetectorTypeChangedMessage msg)
         {
             if (msg.OldType != DetectorTypeEnum.OpticomIngang || msg.NewType == DetectorTypeEnum.OpticomIngang) return;
 
@@ -1084,18 +1082,14 @@ namespace TLCGen.ModelManagement
 
         #region Constructor
 
-        public TLCGenModelManager(IMessenger messengerinstance = null)
+        public TLCGenModelManager()
         {
-            if(messengerinstance == null)
-            {
-                MessengerInstance = Messenger.Default;
-            }
-            MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
-            MessengerInstance.Register(this, new Action<NameChangingMessage>(OnNameChanging));
-            MessengerInstance.Register(this, true, new Action<ModelManagerMessageBase>(OnModelManagerMessage));
-            MessengerInstance.Register(this, new Action<PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
-            MessengerInstance.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChangedMessage));
-            MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChangedMessage));
+            WeakReferenceMessenger.Default.Register<FasenChangingMessage>(this, OnFasenChanging);
+            WeakReferenceMessenger.Default.Register<NameChangingMessage>(this, OnNameChanging);
+            WeakReferenceMessenger.Default.Register<ModelManagerMessageBase>(this, OnModelManagerMessage);
+            WeakReferenceMessenger.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChangedMessage);
+            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedMessage);
         }
 
         #endregion // Constructor

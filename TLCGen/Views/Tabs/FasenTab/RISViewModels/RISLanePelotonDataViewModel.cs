@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
+
 namespace TLCGen.ViewModels
 {
-    public class RISLanePelotonDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISLanePelotonDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         private RISLanePelotonDataModel _laneData;
 
@@ -17,7 +18,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.RISPelotonBepaling = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -27,7 +28,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.PelotonBepalingStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.PelotonBepalingEnd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -48,7 +49,7 @@ namespace TLCGen.ViewModels
             {
                 _laneData.SignalGroupName = value;
                 UpdateRijstroken();
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.RijstrookIndex = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -68,7 +69,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -85,7 +86,7 @@ namespace TLCGen.ViewModels
                 Rijstroken.Add(i + 1);
             }
             if (!Rijstroken.Contains(RijstrookIndex)) RijstrookIndex = 1;
-            RaisePropertyChanged(nameof(Rijstroken));
+            OnPropertyChanged(nameof(Rijstroken));
         }
 
         public object GetItem()

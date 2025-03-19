@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.MultiSim
 {
-    public class MultiSimEntrySetViewModel : ViewModelBase, IViewModelWithItem
+    public class MultiSimEntrySetViewModel : ObservableObjectEx, IViewModelWithItem
     {
         public MultiSimEntrySetModel MultiSimEntrySet { get; }
 
@@ -13,7 +13,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntrySet.Description = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

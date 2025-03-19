@@ -1,17 +1,19 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System.ComponentModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 using TLCGen.Controls;
+using TLCGen.Helpers;
 using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioDataViewModel : ViewModelBase
+    public class PrioDataViewModel : ObservableObjectEx
     {
         #region Properties
 
@@ -21,7 +23,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -37,10 +39,10 @@ namespace TLCGen.ViewModels
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.PrioData);
                 }
                 _Controller.PrioData.PrioIngreepType = value;
-                Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged<object>(nameof(PrioIngreepType), broadcast: true);
-                RaisePropertyChanged(nameof(HasPrio));
+WeakReferenceMessenger.Default.Send(new ControllerHasOVChangedMessage(value));
+WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                OnPropertyChanged(nameof(PrioIngreepType), broadcast: true);
+                OnPropertyChanged(nameof(HasPrio));
             }
         }
 
@@ -51,7 +53,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.PrioUitgangPerFase = value;
-                RaisePropertyChanged<object>(nameof(PrioUitgangPerFase), broadcast: true);
+                OnPropertyChanged(nameof(PrioUitgangPerFase), broadcast: true);
 
                 TLCGenModelManager.Default.SetSpecialIOPerSignalGroup(_Controller);
             }
@@ -68,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.CheckOpDSIN = value;
-                RaisePropertyChanged<object>(nameof(CheckOpDSIN), broadcast: true);
+                OnPropertyChanged(nameof(CheckOpDSIN), broadcast: true);
             }
         }
 
@@ -79,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.MaxWachttijdAuto = value;
-                RaisePropertyChanged<object>(nameof(MaxWachttijdAuto), broadcast: true);
+                OnPropertyChanged(nameof(MaxWachttijdAuto), broadcast: true);
             }
         }
 
@@ -90,7 +92,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.MaxWachttijdFiets = value;
-                RaisePropertyChanged<object>(nameof(MaxWachttijdFiets), broadcast: true);
+                OnPropertyChanged(nameof(MaxWachttijdFiets), broadcast: true);
             }
         }
 
@@ -101,7 +103,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.MaxWachttijdVoetganger = value;
-                RaisePropertyChanged<object>(nameof(MaxWachttijdVoetganger), broadcast: true);
+                OnPropertyChanged(nameof(MaxWachttijdVoetganger), broadcast: true);
             }
         }
 
@@ -112,7 +114,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.GeconditioneerdePrioGrensTeVroeg = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeVroeg), broadcast: true);
+                OnPropertyChanged(nameof(GeconditioneerdePrioGrensTeVroeg), broadcast: true);
             }
         }
 
@@ -123,7 +125,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.GeconditioneerdePrioGrensTeLaat = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeLaat), broadcast: true);
+                OnPropertyChanged(nameof(GeconditioneerdePrioGrensTeLaat), broadcast: true);
             }
         }
 
@@ -134,7 +136,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.BlokkeerNietConflictenBijHDIngreep = value;
-                RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenBijHDIngreep), broadcast: true);
+                OnPropertyChanged(nameof(BlokkeerNietConflictenBijHDIngreep), broadcast: true);
             }
         }
 
@@ -146,7 +148,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer = value;
-                RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenAlleenLangzaamVerkeer), broadcast: true);
+                OnPropertyChanged(nameof(BlokkeerNietConflictenAlleenLangzaamVerkeer), broadcast: true);
             }
         }
 
@@ -157,7 +159,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.VerklikkenPrioTellerUber = value;
-                RaisePropertyChanged<object>(nameof(VerklikkenPrioTellerUber), broadcast: true);
+                OnPropertyChanged(nameof(VerklikkenPrioTellerUber), broadcast: true);
             }
         }
 
@@ -168,7 +170,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.VerlaagHogeSignaalGroepNummers = value;
-                RaisePropertyChanged<object>(nameof(VerlaagHogeSignaalGroepNummers), broadcast: true);
+                OnPropertyChanged(nameof(VerlaagHogeSignaalGroepNummers), broadcast: true);
             }
         }
 
@@ -179,7 +181,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.KARSignaalGroepNummersInParameters = value;
-                RaisePropertyChanged<object>(nameof(KARSignaalGroepNummersInParameters), broadcast: true);
+                OnPropertyChanged(nameof(KARSignaalGroepNummersInParameters), broadcast: true);
             }
         }
         
@@ -190,7 +192,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.WeglatenIngreepNaamBijEnkeleIngreepPerFase = value;
-                RaisePropertyChanged<object>(nameof(WeglatenIngreepNaamBijEnkeleIngreepPerFase), broadcast: true);
+                OnPropertyChanged(nameof(WeglatenIngreepNaamBijEnkeleIngreepPerFase), broadcast: true);
             }
         }
 

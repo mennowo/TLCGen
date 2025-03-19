@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -59,7 +62,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -121,12 +124,12 @@ namespace TLCGen.ViewModels
 
         #region Command Functionality
 
-        private bool AddPelotonKoppelingCommand_CanExecute(object obj)
+        private bool AddPelotonKoppelingCommand_CanExecute()
         {
             return true;
         }
 
-        private void AddPelotonKoppelingCommand_Executed(object obj)
+        private void AddPelotonKoppelingCommand_Executed()
         {
             var Peloton = new PelotonKoppelingModel();
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
@@ -143,34 +146,34 @@ namespace TLCGen.ViewModels
             SelectedPelotonKoppeling = vm;
         }
 
-        private bool RemovePelotonKoppelingCommand_CanExecute(object obj)
+        private bool RemovePelotonKoppelingCommand_CanExecute()
         {
             return SelectedPelotonKoppeling != null;
         }
 
-        private void RemovePelotonKoppelingCommand_Executed(object obj)
+        private void RemovePelotonKoppelingCommand_Executed()
         {
             PelotonKoppelingen.Remove(SelectedPelotonKoppeling);
             SelectedPelotonKoppeling = PelotonKoppelingen.Any() ? PelotonKoppelingen[0] : null;
         }
 
-        private bool MoveUpPelotonKoppelingCommand_CanExecute(object obj)
+        private bool MoveUpPelotonKoppelingCommand_CanExecute()
         {
             return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0;
         }
 
-        private void MoveUpPelotonKoppelingCommand_Executed(object obj)
+        private void MoveUpPelotonKoppelingCommand_Executed()
         {
             PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) - 1);
             PelotonKoppelingen.RebuildList();
         }
 
-        private bool MoveDownPelotonKoppelingCommand_CanExecute(object obj)
+        private bool MoveDownPelotonKoppelingCommand_CanExecute()
         {
             return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1);
         }
 
-        private void MoveDownPelotonKoppelingCommand_Executed(object obj)
+        private void MoveDownPelotonKoppelingCommand_Executed()
         {
             PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
             PelotonKoppelingen.RebuildList();
@@ -237,14 +240,14 @@ namespace TLCGen.ViewModels
 
         private void PelotonKoppelingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
 
         #region TLCGen Events
 
-        private void OnPTPKoppelingenChanged(PTPKoppelingenChangedMessage msg)
+        private void OnPTPKoppelingenChanged(object sender, PTPKoppelingenChangedMessage msg)
         {
             var rems = new List<string>();
             foreach (var ptpk in PTPKruisingenNames)
@@ -276,7 +279,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
 
             if (PTPKruisingenNames.Contains(msg.OldName))
@@ -299,8 +302,8 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingenTabViewModel() : base()
         {
-            MessengerInstance.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

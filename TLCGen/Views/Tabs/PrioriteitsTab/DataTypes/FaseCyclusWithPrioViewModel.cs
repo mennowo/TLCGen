@@ -5,14 +5,15 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+
 
 namespace TLCGen.ViewModels
 {
@@ -44,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _naam = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -139,8 +140,8 @@ namespace TLCGen.ViewModels
                     ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.BubbleSort();
                     var prioVm = new PrioIngreepViewModel(prio, this);
                     // needed to regulate dummies for KAR
-                    if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                    if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                    if (inM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                    if (uitM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                     Ingrepen.Add(prioVm);
                 });
             }
@@ -168,10 +169,10 @@ namespace TLCGen.ViewModels
 
         public void UpdateTypes()
         {
-            RaisePropertyChanged(nameof(HasBus));
-            RaisePropertyChanged(nameof(HasTram));
-            RaisePropertyChanged(nameof(HasBicycle));
-            RaisePropertyChanged(nameof(HasTruck));
+            OnPropertyChanged(nameof(HasBus));
+            OnPropertyChanged(nameof(HasTram));
+            OnPropertyChanged(nameof(HasBicycle));
+            OnPropertyChanged(nameof(HasTruck));
         }
 
         #endregion // Public Methods

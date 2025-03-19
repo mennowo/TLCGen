@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class NevenMeldingViewModel : ViewModelBase, IViewModelWithItem
+    public class NevenMeldingViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Properties
 
@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
                 NevenMelding.FaseCyclus1 = value;
                 if (FaseCyclus2 == value) FaseCyclus2 = null;
                 if (FaseCyclus3 == value) FaseCyclus3 = null;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
                 NevenMelding.FaseCyclus2 = value; 
                 if (FaseCyclus1 == value) FaseCyclus1 = null;
                 if (FaseCyclus3 == value) FaseCyclus3 = null;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
                 NevenMelding.FaseCyclus3 = value; 
                 if (FaseCyclus1 == value) FaseCyclus1 = null;
                 if (FaseCyclus2 == value) FaseCyclus2 = null;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
             set
             {
                 NevenMelding.BezetTijdLaag = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
             set
             {
                 NevenMelding.BezetTijdHoog = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
             set
             {
                 NevenMelding.Rijtijd = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

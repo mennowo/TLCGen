@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class HardMeeverlengenFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
+    public class HardMeeverlengenFaseCyclusViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -23,7 +23,7 @@ namespace TLCGen.ViewModels
             set
             {
                 HardMeeverlengenFaseCyclus.Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 HardMeeverlengenFaseCyclus.AanUit = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

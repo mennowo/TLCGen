@@ -1,10 +1,12 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -13,6 +15,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -50,7 +53,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedIngang = value;
-                RaisePropertyChanged("SelectedIngang");
+                OnPropertyChanged("SelectedIngang");
             }
         }
 
@@ -60,7 +63,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedIngangen = value;
-                RaisePropertyChanged("SelectedIngangen");
+                OnPropertyChanged("SelectedIngangen");
                 if (value != null)
                 {
                     var sl = new List<IngangModel>();
@@ -107,7 +110,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddIngangCommand_Executed(object prm)
+        void AddIngangCommand_Executed()
         {
             var dm = new IngangModel();
             var newname = "i001";
@@ -133,15 +136,15 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             var dvm1 = new IngangViewModel(dm);
             Ingangen.Add(dvm1);
-            Messenger.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
+            WeakReferenceMessenger.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
         }
 
-        bool AddIngangCommand_CanExecute(object prm)
+        bool AddIngangCommand_CanExecute()
         {
             return Ingangen != null;
         }
 
-        void RemoveIngangCommand_Executed(object prm)
+        void RemoveIngangCommand_Executed()
         {
             var changed = false;
             var rems = new List<IngangModel>();
@@ -161,15 +164,15 @@ namespace TLCGen.ViewModels
                 rems.Add(SelectedIngang.Ingang);
             }
             RebuildIngangenList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                Messenger.Default.Send(new IngangenChangedMessage(rems, null));
+WeakReferenceMessenger.Default.Send(new IngangenChangedMessage(rems, null));
             }
         }
 
-        bool RemoveIngangCommand_CanExecute(object prm)
+        bool RemoveIngangCommand_CanExecute()
         {
             return Ingangen != null &&
                 (SelectedIngang != null ||
@@ -191,7 +194,7 @@ namespace TLCGen.ViewModels
                 Ingangen.Add(dvm);
             }
             Ingangen.CollectionChanged += Ingangen_CollectionChanged;
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // Private Methods

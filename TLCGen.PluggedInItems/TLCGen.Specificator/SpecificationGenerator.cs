@@ -4,12 +4,9 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
-using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 
 namespace TLCGen.Specificator
 {

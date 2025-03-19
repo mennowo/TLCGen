@@ -7,7 +7,6 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              x:Name="Root"
@@ -42,7 +41,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <ag:AutoGrid Columns="Auto,*" RowCount="39">
+                    <ct:AutoGrid Columns="Auto,*" RowCount="39">
                         <!-- Algemeen -->
                         <TextBlock Text="Algemene opties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
                         <StackPanel Orientation="Horizontal">
@@ -213,7 +212,7 @@
                         </DataGrid>
                         <local:ItemsManagerView DataContext="{Binding Path=GerelateerdePeriodenManager}" 
                                                 IsEnabled="{Binding ElementName=Root,Path=DataContext.CheckPeriode}" Grid.ColumnSpan="2" />
-                    </ag:AutoGrid>
+                    </ct:AutoGrid>
                 </Grid>
             </Grid>
         </TabItem>

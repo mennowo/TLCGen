@@ -1,9 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -11,7 +12,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Settings
 {
-    public class FaseCyclusTemplateViewModel : ViewModelBase, IViewModelWithItem
+    public class FaseCyclusTemplateViewModel : ObservableObject, IViewModelWithItem
     {
         #region Fields
 
@@ -114,7 +115,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Naam = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -124,7 +125,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Replace = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -152,7 +153,7 @@ namespace TLCGen.Settings
                 else
                     SelectedFaseCyclusTypeString = null;
 
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
         
@@ -178,7 +179,7 @@ namespace TLCGen.Settings
                 SelectedFaseCyclusDetector = sd;
                 // End of trick
 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -188,7 +189,7 @@ namespace TLCGen.Settings
             set
             {
                 _selectedFaseCyclusDetector.VissimNaam = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -203,10 +204,10 @@ namespace TLCGen.Settings
                 else
                     SelectedDetectorTypeString = null;
 
-                RaisePropertyChanged(nameof(SelectedFaseCyclusDetectorNaam));
-                RaisePropertyChanged(nameof(SelectedFaseCyclusDetectorVissimNaam));
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(SelectedDetectorTypeString));
+                OnPropertyChanged(nameof(SelectedFaseCyclusDetectorNaam));
+                OnPropertyChanged(nameof(SelectedFaseCyclusDetectorVissimNaam));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedDetectorTypeString));
             }
         }
 
@@ -290,7 +291,7 @@ namespace TLCGen.Settings
                         throw new ArgumentOutOfRangeException("Unknown fase type: " + value);
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -355,7 +356,7 @@ namespace TLCGen.Settings
                         throw new ArgumentOutOfRangeException("Unknown detector type: " + value);
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -440,30 +441,30 @@ namespace TLCGen.Settings
 
         #region Command Functionality
 
-        private void AddFaseCommand_Executed(object prm)
+        private void AddFaseCommand_Executed()
         {
             var fc = new FaseCyclusModel();
             fc.Naam = "fase" + (Fasen.Count + 1);
             Fasen.Add(fc);
         }
 
-        private bool AddFaseCommand_CanExecute(object prm)
+        private bool AddFaseCommand_CanExecute()
         {
             return string.IsNullOrEmpty(Replace);
         }
 
-        private void RemoveFaseCommand_Executed(object prm)
+        private void RemoveFaseCommand_Executed()
         {
             Fasen.Remove(SelectedFaseCyclus);
             SelectedFaseCyclus = null;
         }
 
-        private bool RemoveFaseCommand_CanExecute(object prm)
+        private bool RemoveFaseCommand_CanExecute()
         {
             return SelectedFaseCyclus != null && Fasen.Count > 1;
         }
 
-        private void AddFaseDetectorCommand_Executed(object prm)
+        private void AddFaseDetectorCommand_Executed()
         {
             var d = new DetectorModel
             {
@@ -472,23 +473,23 @@ namespace TLCGen.Settings
             FaseDetectoren.Add(d);
         }
 
-        private bool AddFaseDetectorCommand_CanExecute(object prm)
+        private bool AddFaseDetectorCommand_CanExecute()
         {
             return SelectedFaseCyclus != null;
         }
 
-        private void RemoveFaseDetectorCommand_Executed(object prm)
+        private void RemoveFaseDetectorCommand_Executed()
         {
             FaseDetectoren.Remove(SelectedFaseCyclusDetector);
             SelectedFaseCyclusDetector = null;
         }
 
-        private bool RemoveFaseDetectorCommand_CanExecute(object prm)
+        private bool RemoveFaseDetectorCommand_CanExecute()
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
         }
 
-        private void ApplyDefaultsToFaseCommand_Executed(object prm)
+        private void ApplyDefaultsToFaseCommand_Executed()
         {
             var fc = SelectedFaseCyclus;
             SelectedFaseCyclus = null;
@@ -496,12 +497,12 @@ namespace TLCGen.Settings
             SelectedFaseCyclus = fc;
         }
 
-        private bool ApplyDefaultsToFaseCommand_CanExecute(object prm)
+        private bool ApplyDefaultsToFaseCommand_CanExecute()
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclus != null;
         }
 
-        private void ApplyDefaultsToFaseDetectorCommand_Executed(object prm)
+        private void ApplyDefaultsToFaseDetectorCommand_Executed()
         {
             var d = SelectedFaseCyclusDetector;
             SelectedFaseCyclusDetector = null;
@@ -509,7 +510,7 @@ namespace TLCGen.Settings
             SelectedFaseCyclusDetector = d;
         }
 
-        private bool ApplyDefaultsToFaseDetectorCommand_CanExecute(object prm)
+        private bool ApplyDefaultsToFaseDetectorCommand_CanExecute()
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
         }
@@ -543,7 +544,7 @@ namespace TLCGen.Settings
                     _template.Items.Remove(fc);
                 }
             }
-            RaisePropertyChanged(nameof(IsReplaceAvailable));
+            OnPropertyChanged(nameof(IsReplaceAvailable));
         }
 
         private void FaseDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

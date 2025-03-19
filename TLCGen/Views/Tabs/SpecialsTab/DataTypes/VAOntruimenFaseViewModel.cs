@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
+
 namespace TLCGen.ViewModels
 {
-    public class VAOntruimenFaseViewModel : ViewModelBase, IViewModelWithItem
+    public class VAOntruimenFaseViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -29,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.FaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -39,7 +41,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.VAOntrMax = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -49,13 +51,13 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.KijkNaarWisselstand = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel1));
-                RaisePropertyChanged(nameof(HasWissel2));
-                RaisePropertyChanged(nameof(HasWissel1Voorwaarde));
-                RaisePropertyChanged(nameof(HasWissel2Voorwaarde));
-                RaisePropertyChanged(nameof(IsWissel1Detector));
-                RaisePropertyChanged(nameof(IsWissel1Ingang));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel1));
+                OnPropertyChanged(nameof(HasWissel2));
+                OnPropertyChanged(nameof(HasWissel1Voorwaarde));
+                OnPropertyChanged(nameof(HasWissel2Voorwaarde));
+                OnPropertyChanged(nameof(IsWissel1Detector));
+                OnPropertyChanged(nameof(IsWissel1Ingang));
             }
         }
 
@@ -65,10 +67,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.Wissel1Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel1Voorwaarde));
-                RaisePropertyChanged(nameof(IsWissel1Detector));
-                RaisePropertyChanged(nameof(IsWissel1Ingang));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel1Voorwaarde));
+                OnPropertyChanged(nameof(IsWissel1Detector));
+                OnPropertyChanged(nameof(IsWissel1Ingang));
             }
         }
 
@@ -80,11 +82,11 @@ namespace TLCGen.ViewModels
                 if(value != null)
                 {
                     _VAOntruimenFase.Wissel1Input = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
                 else
                 {
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -97,11 +99,11 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     _VAOntruimenFase.Wissel1Detector = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
                 else
                 {
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -112,7 +114,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.Wissel1InputVoorwaarde = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -122,11 +124,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.Wissel2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel2));
-                RaisePropertyChanged(nameof(IsWissel2Detector));
-                RaisePropertyChanged(nameof(IsWissel2Ingang));
-                RaisePropertyChanged(nameof(HasWissel2Voorwaarde));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel2));
+                OnPropertyChanged(nameof(IsWissel2Detector));
+                OnPropertyChanged(nameof(IsWissel2Ingang));
+                OnPropertyChanged(nameof(HasWissel2Voorwaarde));
             }
         }
 
@@ -136,10 +138,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.Wissel2Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel2Voorwaarde));
-                RaisePropertyChanged(nameof(IsWissel2Detector));
-                RaisePropertyChanged(nameof(IsWissel2Ingang));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel2Voorwaarde));
+                OnPropertyChanged(nameof(IsWissel2Detector));
+                OnPropertyChanged(nameof(IsWissel2Ingang));
             }
         }
 
@@ -151,11 +153,11 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     _VAOntruimenFase.Wissel2Input = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
                 else
                 {
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -168,11 +170,11 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     _VAOntruimenFase.Wissel2Detector = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
                 else
                 {
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -183,7 +185,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.Wissel2InputVoorwaarde = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -270,7 +272,7 @@ namespace TLCGen.ViewModels
             if (ConflicterendeFasen.Count == 0 || VAOntruimenDetectoren.Count == 0)
             {
                 VAOntruimenMatrix = null;
-                RaisePropertyChanged("VAOntruimenMatrix");
+                OnPropertyChanged("VAOntruimenMatrix");
                 return;
             }
 
@@ -285,7 +287,7 @@ namespace TLCGen.ViewModels
                     VAOntruimenMatrix[cfc, d] = VAOntruimenDetectoren[d].ConflicterendeFasen[cfc];
                 }
             }
-            RaisePropertyChanged("VAOntruimenMatrix");
+            OnPropertyChanged("VAOntruimenMatrix");
         }
 
         #endregion // Private methods
@@ -299,14 +301,14 @@ namespace TLCGen.ViewModels
             VAOntruimenDetectoren.CollectionChanged += VAOntruimenDetectoren_CollectionChanged;
             RebuildVAOnruimenMatrix();
             DetectorManager = null;
-            RaisePropertyChanged("DetectorManager");
+            OnPropertyChanged("DetectorManager");
         }
 
         #endregion // Public Methods
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             _detectorManager?.Refresh();
 
@@ -321,7 +323,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnIngangenChanged(IngangenChangedMessage obj)
+        private void OnIngangenChanged(object sender, IngangenChangedMessage obj)
         {
             WisselInputs.Clear();
             foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
@@ -330,7 +332,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             if (obj.ObjectType != TLCGenObjectTypeEnum.Detector) return;
             _detectorManager?.Refresh();
@@ -351,7 +353,7 @@ namespace TLCGen.ViewModels
         
         private void VAOntruimenDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
@@ -366,11 +368,11 @@ namespace TLCGen.ViewModels
 
             WisselDetectoren = new ObservableCollection<string>();
             WisselInputs = new ObservableCollection<string>();
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            OnDetectorenChanged(null);
-            OnIngangenChanged(null);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            OnDetectorenChanged(null, null);
+            OnIngangenChanged(null, null);
 
             Refresh();
         }

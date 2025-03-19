@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-	public class SignaalPlanViewModel : ViewModelBase, IViewModelWithItem
+	public class SignaalPlanViewModel : ObservableObjectEx, IViewModelWithItem
 	{
 		#region Properties
 
@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				SignaalPlan.Naam = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 
@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				SignaalPlan.Commentaar = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
                         SwitchMoment = value;
                     }
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
                 {
 				    SignaalPlan.StartMoment = value;
                 }
-			    RaisePropertyChanged<object>(broadcast: true);
+			    OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
                 {
                     SignaalPlan.SwitchMoment = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 		

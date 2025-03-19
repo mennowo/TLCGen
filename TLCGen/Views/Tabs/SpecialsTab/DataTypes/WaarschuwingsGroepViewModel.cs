@@ -1,10 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class WaarschuwingsGroepViewModel : ViewModelBase, IViewModelWithItem
+    public class WaarschuwingsGroepViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +21,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Naam = value;
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(nameof(Naam), broadcast: true);
             }
         }
 
@@ -30,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Lichten = value;
-                RaisePropertyChanged<object>(nameof(Lichten), broadcast: true);
+                OnPropertyChanged(nameof(Lichten), broadcast: true);
             }
         }
 
@@ -40,9 +41,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Bellen = value;
-                RaisePropertyChanged<object>(nameof(Bellen), broadcast: true);
+                OnPropertyChanged(nameof(Bellen), broadcast: true);
                 // cause a check, so rtbel will be hidden or shown in the bitmap tab
-                MessengerInstance.Send(new Messaging.Messages.ModelManagerMessageBase());
+                WeakReferenceMessenger.Default.Send(new Messaging.Messages.ModelManagerMessageBase());
             }
         }
 
@@ -55,7 +56,7 @@ namespace TLCGen.ViewModels
                 {
                     _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
                 }
-                RaisePropertyChanged<object>(nameof(FaseCyclusVoorAansturing), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclusVoorAansturing), broadcast: true);
             }
         }
 

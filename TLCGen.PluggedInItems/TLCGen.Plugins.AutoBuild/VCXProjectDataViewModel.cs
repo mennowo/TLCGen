@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.Plugins.AutoBuild
 {
-    public class VCXProjectDataViewModel : ViewModelBase
+    public class VCXProjectDataViewModel : ObservableObject
     {
         private string _name;
         private string _fileName;
@@ -18,7 +18,7 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _name = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -28,7 +28,7 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _fileName = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

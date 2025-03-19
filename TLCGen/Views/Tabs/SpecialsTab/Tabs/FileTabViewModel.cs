@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -36,7 +39,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFileIngreep = value;
                 _SelectedFileIngreep?.OnSelected(_ControllerFasen);
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -90,7 +93,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewFileIngreepCommand_Executed(object prm)
+        void AddNewFileIngreepCommand_Executed()
         {
             var fim = new FileIngreepModel();
             DefaultsProvider.Default.SetDefaultsOnModel(fim);
@@ -104,22 +107,22 @@ namespace TLCGen.ViewModels
             var fivm = new FileIngreepViewModel(fim);
             FileIngrepen.Add(fivm);
 
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        bool AddNewFileIngreepCommand_CanExecute(object prm)
+        bool AddNewFileIngreepCommand_CanExecute()
         {
             return true;
         }
 
-        void RemoveFileIngreepCommand_Executed(object prm)
+        void RemoveFileIngreepCommand_Executed()
         {
             FileIngrepen.Remove(SelectedFileIngreep);
             SelectedFileIngreep = null;
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        bool RemoveFileIngreepCommand_CanExecute(object prm)
+        bool RemoveFileIngreepCommand_CanExecute()
         {
             return SelectedFileIngreep != null;
         }
@@ -182,7 +185,7 @@ namespace TLCGen.ViewModels
                 {
                     FileIngrepen = null;
                 }
-                RaisePropertyChanged("FileIngrepen");
+                OnPropertyChanged("FileIngrepen");
             }
         }
 
@@ -190,17 +193,17 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             FileIngrepen?.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             FileIngrepen?.Rebuild();
         }
 
-        public void OnFileIngreepTeDoserenSignaalPercentageChanged(FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)
+        public void OnFileIngreepTeDoserenSignaalPercentageChanged(object sender, FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)
         {
 
             foreach (var fivm in FileIngrepen)
@@ -229,9 +232,9 @@ namespace TLCGen.ViewModels
 
         public FileTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(OnFileIngreepTeDoserenSignaalPercentageChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(this, OnFileIngreepTeDoserenSignaalPercentageChanged);
         }
 
         #endregion // Constructor

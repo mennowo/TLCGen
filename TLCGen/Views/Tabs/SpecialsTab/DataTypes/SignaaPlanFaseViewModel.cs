@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class SignaalPlanFaseViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class SignaalPlanFaseViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
 
         #region Fields
@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.A1 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
         }
         public int B1
@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.B1 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
         }
         public int? C1
@@ -44,7 +44,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.C1 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
         }
         public int D1
@@ -53,7 +53,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.D1 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
         }
         public int? E1
@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.E1 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
         }
         public int? A2
@@ -71,16 +71,16 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.A2 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 	            if (B2 == null)
 	            {
 		            _Fase.B2 = 0;
-		            RaisePropertyChanged<object>(nameof(B2), broadcast: true);
+		            OnPropertyChanged(nameof(B2), broadcast: true);
 	            }
 	            if (D2 == null)
 	            {
 		            _Fase.D2 = 0;
-		            RaisePropertyChanged<object>(nameof(D2), broadcast: true);
+		            OnPropertyChanged(nameof(D2), broadcast: true);
 	            }
 			}
         }
@@ -95,7 +95,7 @@ namespace TLCGen.ViewModels
 		            if (D2 == null)
 		            {
 			            _Fase.D2 = 0;
-			            RaisePropertyChanged<object>(nameof(D2), broadcast: true);
+			            OnPropertyChanged(nameof(D2), broadcast: true);
 		            }
 	            }
 	            else
@@ -104,12 +104,12 @@ namespace TLCGen.ViewModels
 		            _Fase.C2 = null;
 		            _Fase.D2 = null;
 		            _Fase.E2 = null;
-		            RaisePropertyChanged<object>(nameof(A2), broadcast: true);
-		            RaisePropertyChanged<object>(nameof(C2));
-		            RaisePropertyChanged<object>(nameof(D2));
-		            RaisePropertyChanged<object>(nameof(E2));
+		            OnPropertyChanged(nameof(A2), broadcast: true);
+		            OnPropertyChanged(nameof(C2));
+		            OnPropertyChanged(nameof(D2));
+		            OnPropertyChanged(nameof(E2));
 	            }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         public int? C2
@@ -118,16 +118,16 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.C2 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 	            if (B2 == null)
 	            {
 		            _Fase.B2 = 0;
-		            RaisePropertyChanged<object>(nameof(B2), broadcast: true);
+		            OnPropertyChanged(nameof(B2), broadcast: true);
 	            }
 	            if (D2 == null)
 	            {
 		            _Fase.D2 = 0;
-		            RaisePropertyChanged<object>(nameof(D2), broadcast: true);
+		            OnPropertyChanged(nameof(D2), broadcast: true);
 	            }
 			}
         }
@@ -142,7 +142,7 @@ namespace TLCGen.ViewModels
 		            if (B2 == null)
 		            {
 			            _Fase.B2 = 0;
-			            RaisePropertyChanged<object>(nameof(B2), broadcast: true);
+			            OnPropertyChanged(nameof(B2), broadcast: true);
 		            }
 	            }
 	            else
@@ -151,12 +151,12 @@ namespace TLCGen.ViewModels
 		            _Fase.B2 = null;
 		            _Fase.C2 = null;
 		            _Fase.E2 = null;
-		            RaisePropertyChanged<object>(nameof(A2), broadcast: true);
-		            RaisePropertyChanged<object>(nameof(B2));
-		            RaisePropertyChanged<object>(nameof(C2));
-		            RaisePropertyChanged<object>(nameof(E2));
+		            OnPropertyChanged(nameof(A2), broadcast: true);
+		            OnPropertyChanged(nameof(B2));
+		            OnPropertyChanged(nameof(C2));
+		            OnPropertyChanged(nameof(E2));
 	            }
-	            RaisePropertyChanged<object>(broadcast: true);
+	            OnPropertyChanged(broadcast: true);
 			}
         }
         public int? E2
@@ -165,16 +165,16 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Fase.E2 = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 	            if (B2 == null)
 	            {
 		            _Fase.B2 = 0;
-		            RaisePropertyChanged<object>(nameof(B2), broadcast: true);
+		            OnPropertyChanged(nameof(B2), broadcast: true);
 	            }
 	            if (D2 == null)
 	            {
 		            _Fase.D2 = 0;
-		            RaisePropertyChanged<object>(nameof(D2), broadcast: true);
+		            OnPropertyChanged(nameof(D2), broadcast: true);
 	            }
 			}
         }

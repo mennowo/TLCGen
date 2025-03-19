@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -30,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.RangeerData.RangerenFasen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 UpdateRangeerIndices(_Controller);
             }
         }
@@ -41,7 +43,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.RangeerData.RangerenDetectoren = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 UpdateRangeerIndices(_Controller);
             }
         }
@@ -52,7 +54,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.RangeerData.RangerenIngangen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 UpdateRangeerIndices(_Controller);
             }
         }
@@ -63,7 +65,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.RangeerData.RangerenUitgangen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 UpdateRangeerIndices(_Controller);
             }
         }
@@ -74,7 +76,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.RangeerData.RangerenSelectieveDetectoren = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 UpdateRangeerIndices(_Controller);
             }
         }
@@ -85,7 +87,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _fasen = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -95,7 +97,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detectoren = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -105,7 +107,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _outputs = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -115,7 +117,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _inputs = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -125,7 +127,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectieveDetectoren = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -158,7 +160,7 @@ namespace TLCGen.ViewModels
                     UpdateModel(value);
                     UpdateRangeerIndices(value);
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -312,7 +314,7 @@ namespace TLCGen.ViewModels
             SelectieveDetectoren = new ObservableCollection<IOElementViewModel>(vms[4].items.OrderBy(x => x.RangeerIndex));
         }
 
-        private void OnPrepareForGenerationRequestReceived(PrepareForGenerationRequest obj)
+        private void OnPrepareForGenerationRequestReceived(object sender, PrepareForGenerationRequest obj)
         {
             UpdateRangeerIndices(obj.Controller);
         }
@@ -321,7 +323,7 @@ namespace TLCGen.ViewModels
 
         public RangeerElementenTabViewModel()
         {
-            MessengerInstance.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequestReceived);
+            WeakReferenceMessenger.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequestReceived);
         }
 
         #endregion // Constructor

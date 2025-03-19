@@ -1,17 +1,18 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class PelotonKoppelingViewModel : ViewModelBase, IViewModelWithItem
+    public class PelotonKoppelingViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -37,12 +38,12 @@ namespace TLCGen.ViewModels
                     PelotonKoppeling.KoppelingNaam = value;
 
                     // Notify the messenger
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
-                    RaisePropertyChanged<object>(broadcast: true);
+                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
+                    OnPropertyChanged(broadcast: true);
                 }
                 else
                 {
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -57,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.GekoppeldeSignaalGroep = value;
-                RaisePropertyChanged<object>(nameof(GekoppeldeSignaalGroep), broadcast: true);
+                OnPropertyChanged(nameof(GekoppeldeSignaalGroep), broadcast: true);
             }
         }
 
@@ -69,7 +70,7 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     PelotonKoppeling.GekoppeldeSignaalGroep = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -80,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.Meetperiode = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -90,7 +91,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.Verschuiving = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -100,7 +101,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.MaximaalHiaat = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -110,7 +111,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.MinimaalAantalVoertuigen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -120,7 +121,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.TijdTotAanvraag = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -130,7 +131,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.TijdTotRetourWachtgroen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -140,7 +141,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.TijdRetourWachtgroen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -150,7 +151,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.MaxTijdToepassenRetourWachtgroen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -160,8 +161,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.ToepassenAanvraag = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasAanvraag));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasAanvraag));
             }
         }
 
@@ -171,7 +172,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.ToepassenMeetkriterium = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -181,8 +182,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.ToepassenRetourWachtgroen = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasRetourWachtgroen));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasRetourWachtgroen));
             }
         }
 
@@ -196,11 +197,11 @@ namespace TLCGen.ViewModels
                 {
                     PelotonKoppeling.PTPKruising = "INTERN";
                 }
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(PTPKruising));
-                RaisePropertyChanged(nameof(IsNotIntern));
-                RaisePropertyChanged(nameof(IsInternIn));
-                RaisePropertyChanged(nameof(IsInternUit));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(PTPKruising));
+                OnPropertyChanged(nameof(IsNotIntern));
+                OnPropertyChanged(nameof(IsInternIn));
+                OnPropertyChanged(nameof(IsInternUit));
             }
         }
 
@@ -216,7 +217,7 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     PelotonKoppeling.GerelateerdePelotonKoppeling = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -229,7 +230,7 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     PelotonKoppeling.PTPKruising = value;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                     if (value == "INTERN") IsIntern = true;
                 }
             }
@@ -241,7 +242,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.KoppelWijze = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -261,12 +262,12 @@ namespace TLCGen.ViewModels
                         Detectoren.Remove(r);
                     }
                 }
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(IsInkomend));
-                RaisePropertyChanged(nameof(IsInkomendDenHaag));
-                RaisePropertyChanged(nameof(IsInkomendRHDHV));
-                RaisePropertyChanged(nameof(IsUitgaand));
-                RaisePropertyChanged(nameof(HasRichting));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(IsInkomend));
+                OnPropertyChanged(nameof(IsInkomendDenHaag));
+                OnPropertyChanged(nameof(IsInkomendRHDHV));
+                OnPropertyChanged(nameof(IsUitgaand));
+                OnPropertyChanged(nameof(HasRichting));
             }
         }
 
@@ -276,12 +277,12 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(IsInkomend));
-                RaisePropertyChanged(nameof(IsInkomendDenHaag));
-                RaisePropertyChanged(nameof(IsInkomendRHDHV));
-                RaisePropertyChanged(nameof(IsUitgaand));
-                RaisePropertyChanged(nameof(HasRichting));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(IsInkomend));
+                OnPropertyChanged(nameof(IsInkomendDenHaag));
+                OnPropertyChanged(nameof(IsInkomendRHDHV));
+                OnPropertyChanged(nameof(IsUitgaand));
+                OnPropertyChanged(nameof(HasRichting));
             }
         }
 
@@ -292,7 +293,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedDetector = value;
                 _uitgaandeDetectorenManager.SelectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -389,7 +390,7 @@ namespace TLCGen.ViewModels
 
         private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Constructor

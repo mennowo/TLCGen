@@ -1,114 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1687E431-D444-4D29-AB19-3688E47FB411}</ProjectGuid>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TLCGen.Generators.TLCCC</RootNamespace>
-    <AssemblyName>TLCGen.Generators.TLCCC</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+	  <langVersion>latest</langVersion>
+	  <Platforms>AnyCPU;x64;x86</Platforms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateDplC.cs" />
-    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateRegC.cs" />
-    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateTabC.cs" />
-    <Compile Include="CodeGeneration\HelperClasses\TLCCCElementCollector.cs" />
-    <Compile Include="CodeGeneration\HelperClasses\TLCCCElementTimeTypeEnum.cs" />
-    <Compile Include="CodeGeneration\HelperClasses\TLCCCElementTypeEnum.cs" />
-    <Compile Include="CodeGeneration\HelperClasses\TLCCCElement.cs" />
-    <Compile Include="CodeGeneration\HelperClasses\TLCCCElemListData.cs" />
-    <Compile Include="CodeGeneration\TLCCCGeneratorGeneral.cs" />
-    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateSysH.cs" />
-    <Compile Include="CodeGeneration\TLCCCGenerator.cs" />
-    <Compile Include="GeneratorUI\TLCCCGeneratorView.xaml.cs">
-      <DependentUpon>TLCCCGeneratorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GeneratorUI\TLCCCGeneratorViewModel.cs">
-      <DependentUpon>TLCCCGeneratorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\TLCCCGeneratorCodeStringSettingModel.cs" />
-    <Compile Include="Settings\TLCCCGeneratorSettingsModel.cs" />
-    <Compile Include="Settings\TLCCCGeneratorSettingsProvider.cs" />
-    <Compile Include="TLCCCCodeGeneratorPlugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="SourceFiles\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GeneratorUI\TLCCCGeneratorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
-      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
-      <Name>TLCGen.Dependencies</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

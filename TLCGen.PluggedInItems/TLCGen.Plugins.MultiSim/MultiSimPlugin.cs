@@ -124,7 +124,7 @@ namespace TLCGen.Plugins.MultiSim
                 _model = new MultiSimDataModel();
             }
             _multiSimVM.MultiSimDataModel = _model;
-            _multiSimVM.RaisePropertyChanged("");
+            _multiSimVM.OnPropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)

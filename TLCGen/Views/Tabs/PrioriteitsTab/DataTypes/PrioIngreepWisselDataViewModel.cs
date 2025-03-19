@@ -1,14 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
 using TLCGen.Controls;
-using TLCGen.Messaging.Messages;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepWisselDataViewModel : ViewModelBase
+    public class PrioIngreepWisselDataViewModel : ObservableObjectEx
     {
         public PrioIngreepMeldingenDataModel PrioIngreepMeldingenData { get; }
 
@@ -28,7 +26,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -39,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -60,8 +58,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel));
             }
         }
 
@@ -72,9 +70,9 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel1Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(IsWissel1Ingang));
-                RaisePropertyChanged(nameof(IsWissel1Detector));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(IsWissel1Ingang));
+                OnPropertyChanged(nameof(IsWissel1Detector));
             }
         }
 
@@ -89,7 +87,7 @@ namespace TLCGen.ViewModels
                 {
                     PrioIngreepMeldingenData.Wissel1Input = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -101,7 +99,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel1InputVoorwaarde = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -116,7 +114,7 @@ namespace TLCGen.ViewModels
                 {
                     PrioIngreepMeldingenData.Wissel1Detector = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -127,8 +125,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasWissel));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasWissel));
             }
         }
 
@@ -139,9 +137,9 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel2Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(IsWissel2Ingang));
-                RaisePropertyChanged(nameof(IsWissel2Detector));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(IsWissel2Ingang));
+                OnPropertyChanged(nameof(IsWissel2Detector));
             }
         }
 
@@ -156,7 +154,7 @@ namespace TLCGen.ViewModels
                 {
                     PrioIngreepMeldingenData.Wissel2Input = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -171,7 +169,7 @@ namespace TLCGen.ViewModels
                 {
                     PrioIngreepMeldingenData.Wissel2Detector = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -183,7 +181,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepMeldingenData.Wissel2InputVoorwaarde = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

@@ -1,5 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -7,7 +7,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.GebruikersOpties
 {
-    public class GebruikersOptieViewModel : ViewModelBase, IViewModelWithItem
+    public class GebruikersOptieViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
         #endregion // Fields
@@ -29,10 +29,10 @@ namespace TLCGen.GebruikersOpties
                         GebruikersOptie.Naam = value;
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
+                        WeakReferenceMessenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -44,7 +44,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 GebruikersOptie.Type = value;
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -54,7 +54,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 GebruikersOptie.Instelling = value;
-                RaisePropertyChanged<object>(nameof(Instelling), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -64,7 +64,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 GebruikersOptie.Dummy = value;
-                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 GebruikersOptie.Commentaar = value;
-                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

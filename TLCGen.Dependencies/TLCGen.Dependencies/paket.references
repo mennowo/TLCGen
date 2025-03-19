@@ -1,2 +1,5 @@
+CommunityToolkit.Mvvm
 Extended.Wpf.Toolkit
-MvvmLightLibs
+Microsoft.Xaml.Behaviors.Wpf
+System.Drawing.Common
+Newtonsoft.Json

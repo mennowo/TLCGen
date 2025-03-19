@@ -1,13 +1,14 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverTabFaseViewModel : ViewModelBase
+    public class RoBuGroverTabFaseViewModel : ObservableObject
     {
         #region Fields
 
@@ -39,7 +40,7 @@ namespace TLCGen.ViewModels
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
                         var request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
-                        Messenger.Default.Send(request);
+WeakReferenceMessenger.Default.Send(request);
                         if (request.Handled && !request.IsConflicting)
                             return false;
                     }
@@ -95,16 +96,16 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void UpdateConflictGroepInfo()
         {
-            RaisePropertyChanged("CanBeAddedToConflictGroep");
-            RaisePropertyChanged("IsInConflictGroep");
-            RaisePropertyChanged("NoConflictGroepAvailable");
+            OnPropertyChanged("CanBeAddedToConflictGroep");
+            OnPropertyChanged("IsInConflictGroep");
+            OnPropertyChanged("NoConflictGroepAvailable");
         }
 
         #endregion // Public methods
 
         #region TLCGen Message Handling
 
-        private void OnSelectedConflictGroepChanged(SelectedConflictGroepChangedMessage message)
+        private void OnSelectedConflictGroepChanged(object sender, SelectedConflictGroepChangedMessage message)
         {
             _SelectedConflictGroep = message.NewGroep;
             _CheckConflicts = message.NewGroupCheckConflicts;
@@ -119,7 +120,7 @@ namespace TLCGen.ViewModels
         {
             _FaseCyclusNaam = fasenaam;
 
-            Messenger.Default.Register(this, new Action<SelectedConflictGroepChangedMessage>(OnSelectedConflictGroepChanged));
+            WeakReferenceMessenger.Default.Register<SelectedConflictGroepChangedMessage>(this, OnSelectedConflictGroepChanged);
         }
 
         #endregion // Constructor

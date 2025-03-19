@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -39,7 +40,7 @@ namespace TLCGen.ViewModels
                     if (KruispuntArmen != null) KruispuntArmen.CollectionChanged -= KruispuntArmen_CollectionChanged;
                     KruispuntArmen = new ObservableCollectionAroundList<KruispuntArmViewModel, KruispuntArmModel>(value.Kruispunt.KruispuntArmen);
                     KruispuntArmen.CollectionChanged += KruispuntArmen_CollectionChanged;
-                    RaisePropertyChanged(nameof(KruispuntArmen));
+                    OnPropertyChanged(nameof(KruispuntArmen));
 
                     FasenMetKruispuntArmen = new ObservableCollectionAroundList<KruispuntArmFaseCyclusViewModel, KruispuntArmFaseCyclusModel>(value.Kruispunt.FasenMetKruispuntArmen);
                     foreach (var fc in value.Fasen)
@@ -54,7 +55,7 @@ namespace TLCGen.ViewModels
                             }));
                         }
                     }
-                    RaisePropertyChanged(nameof(FasenMetKruispuntArmen));
+                    OnPropertyChanged(nameof(FasenMetKruispuntArmen));
 
                     UpdateSelectables();
                 }
@@ -102,13 +103,13 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedKruispuntArm = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
         private void KruispuntArmen_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void UpdateSelectables()
@@ -126,7 +127,7 @@ namespace TLCGen.ViewModels
                     if (!SelectableKruispuntArmen.Contains(fc.KruispuntArmVolg)) fc.KruispuntArmVolg = "NG";
                 }
             }
-            RaisePropertyChanged(nameof(SelectableKruispuntArmen));
+            OnPropertyChanged(nameof(SelectableKruispuntArmen));
         }
 
         public override bool CanBeEnabled()
@@ -140,11 +141,11 @@ namespace TLCGen.ViewModels
 
         public KruispuntArmenTabViewModel()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
             UpdateSelectables();
         }
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             if (message.AddedFasen != null && message.AddedFasen.Count > 0)
             {

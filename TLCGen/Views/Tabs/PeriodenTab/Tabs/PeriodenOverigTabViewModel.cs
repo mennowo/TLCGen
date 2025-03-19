@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -14,6 +16,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -52,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPeriode = value;
-                RaisePropertyChanged("SelectedPeriode");
+                OnPropertyChanged("SelectedPeriode");
             }
         }
 
@@ -117,7 +120,7 @@ namespace TLCGen.ViewModels
 
         #region Command Functionality
 
-        private void MovePeriodeUpCommand_Executed(object obj)
+        private void MovePeriodeUpCommand_Executed()
         {
             var index = Periodes.IndexOf(SelectedPeriode);
             if (index >= 1)
@@ -131,7 +134,7 @@ namespace TLCGen.ViewModels
                     Periodes.Insert(index - 1, mvm);
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-                    Messenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == 0 || index + 1 < Periodes.Count && Periodes[index + 1].Type != PeriodeTypeEnum.Groentijden)
@@ -143,7 +146,7 @@ namespace TLCGen.ViewModels
         }
 
 
-        private void MovePeriodeDownCommand_Executed(object obj)
+        private void MovePeriodeDownCommand_Executed()
         {
             var index = Periodes.IndexOf(SelectedPeriode);
             if (index - 1 < Periodes.Count)
@@ -164,7 +167,7 @@ namespace TLCGen.ViewModels
                     }
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-                    Messenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == Periodes.Count - 1 || index - 1 >= 0 && Periodes[index - 1].Type != PeriodeTypeEnum.Groentijden)
@@ -175,7 +178,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        void AddNewPeriodeCommand_Executed(object prm)
+        void AddNewPeriodeCommand_Executed()
         {
             var mm = new PeriodeModel();
             mm.Type = PeriodeTypeEnum.Overig;
@@ -201,23 +204,23 @@ namespace TLCGen.ViewModels
             }
 
             Periodes.RebuildList();
-	        Messenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
 		}
 
-		bool AddNewPeriodeCommand_CanExecute(object prm)
+		bool AddNewPeriodeCommand_CanExecute()
         {
             return Periodes != null;
         }
 
-        void RemovePeriodeCommand_Executed(object prm)
+        void RemovePeriodeCommand_Executed()
         {
 			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam, TLCGenObjectTypeEnum.Periode);
 	        Periodes.Remove(SelectedPeriode);
 	        SelectedPeriode = null;
-	        Messenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
 		}
 
-        bool ChangePeriodeCommand_CanExecute(object prm)
+        bool ChangePeriodeCommand_CanExecute()
         {
             return SelectedPeriode != null;
         }
@@ -264,7 +267,7 @@ namespace TLCGen.ViewModels
                 {
                     Periodes = null;
                 }
-                RaisePropertyChanged("Periodes");
+                OnPropertyChanged("Periodes");
             }
         }
 
@@ -284,14 +287,14 @@ namespace TLCGen.ViewModels
 
         private void Periodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
 
         #region TLCGen Events
 
-        private void OnPeriodenChanged(PeriodenChangedMessage message)
+        private void OnPeriodenChanged(object sender, PeriodenChangedMessage message)
         {
             var sel = SelectedPeriode;
             Periodes.Rebuild();
@@ -326,7 +329,7 @@ namespace TLCGen.ViewModels
 
         public PeriodenOverigTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
+            WeakReferenceMessenger.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
 
             PeriodeTypeOpties.Clear();
             var descs = Enum.GetValues(typeof(PeriodeTypeEnum));

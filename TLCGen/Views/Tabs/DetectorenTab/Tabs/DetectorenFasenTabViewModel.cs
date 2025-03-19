@@ -1,14 +1,16 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -106,8 +108,8 @@ namespace TLCGen.ViewModels
                 if (Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];
 
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(Detectoren));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Detectoren));
             }
         }
 
@@ -117,7 +119,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
             }
         }
@@ -128,7 +130,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 if (value != null)
                 {
                     var sl = new List<DetectorModel>();
@@ -160,9 +162,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _showAlles = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowFunctiesActual));
-                RaisePropertyChanged(nameof(ShowTijdenActual));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowFunctiesActual));
+                OnPropertyChanged(nameof(ShowTijdenActual));
             }
         }
 
@@ -173,9 +175,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _showFuncties = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowFunctiesActual));
-                RaisePropertyChanged(nameof(ShowTijdenActual));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowFunctiesActual));
+                OnPropertyChanged(nameof(ShowTijdenActual));
             }
         }
 
@@ -186,9 +188,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _showTijden = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowTijdenActual));
-                RaisePropertyChanged(nameof(ShowFunctiesActual));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowTijdenActual));
+                OnPropertyChanged(nameof(ShowFunctiesActual));
             }
         }
 
@@ -227,7 +229,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddDetectorCommand_Executed(object prm)
+        void AddDetectorCommand_Executed()
         {
             var _dm = new DetectorModel();
             var inewname = 1;
@@ -262,15 +264,15 @@ namespace TLCGen.ViewModels
             _Detectoren.Add(dvm1);
             dvm1.PropertyChanged += Detector_PropertyChanged;
             Detectoren.BubbleSort();
-            Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
+WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
         }
 
-        bool AddDetectorCommand_CanExecute(object prm)
+        bool AddDetectorCommand_CanExecute()
         {
             return _SelectedFase?.Detectoren != null;
         }
 
-        void RemoveDetectorCommand_Executed(object prm)
+        void RemoveDetectorCommand_Executed()
         {
             var changed = false;
             var remDets = new List<DetectorModel>();
@@ -293,11 +295,11 @@ namespace TLCGen.ViewModels
             if (changed)
             {
                 SelectedFaseNaam = SelectedFaseNaam;
-                Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
             }
         }
 
-        bool RemoveDetectorCommand_CanExecute(object prm)
+        bool RemoveDetectorCommand_CanExecute()
         {
             return _SelectedFase?.Detectoren != null && (SelectedDetector != null ||
                                                          SelectedDetectoren != null && SelectedDetectoren.Count > 0);
@@ -399,15 +401,15 @@ namespace TLCGen.ViewModels
                 dvm.FaseCyclus = SelectedFaseNaam;
                 Detectoren.Add(dvm);
 
-                Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
         public void UpdateAfterApplyTemplate(DetectorModel item)
         {
             var d = Detectoren.First(x => x.Detector == item);
-            d.RaisePropertyChanged("");
-            Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
+            d.OnPropertyChanged("");
+WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates
@@ -439,10 +441,12 @@ namespace TLCGen.ViewModels
         {
             _showAlles = true;
 
-            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
-            {
-                Detectoren.BubbleSort();
-            });
+            WeakReferenceMessenger.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPreparForGenerationRequest);
+        }
+
+        private void OnPreparForGenerationRequest(object recipient, PrepareForGenerationRequest message)
+        {
+            Detectoren.BubbleSort();
         }
 
         #endregion // Constructor

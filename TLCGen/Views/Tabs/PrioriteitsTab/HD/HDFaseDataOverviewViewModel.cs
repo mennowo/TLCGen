@@ -1,12 +1,13 @@
 ﻿using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HDFaseDataOverviewViewModel : ViewModelBase
+    public class HDFaseDataOverviewViewModel : ObservableObject
 	{
 		#region Fields
 
@@ -74,9 +75,9 @@ namespace TLCGen.ViewModels
 						}
 					}
 				}
-				MessengerInstance.Send(new PrioIngrepenChangedMessage());
+				WeakReferenceMessenger.Default.Send(new PrioIngrepenChangedMessage());
 				Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -86,7 +87,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_hdIngreep = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using TLCGen.Controls;
-using TLCGen.Helpers;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -71,7 +68,7 @@ namespace TLCGen.ViewModels
                      + _ingreep.PrioIngreep.Naam
                      + DefaultsProvider.Default.GetMeldingShortcode(m)
                      + (MeldingType == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.FaseCyclus, m));
+            WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.FaseCyclus, m));
         });
 
         #endregion // Commands

@@ -1,17 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
+
 namespace TLCGen.ViewModels
 {
-    public class MeeaanvraagViewModel : ViewModelBase
+    public class MeeaanvraagViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -31,8 +31,8 @@ namespace TLCGen.ViewModels
                 if (value != _Meeaanvraag.Type)
                 {
                     _Meeaanvraag.Type = value;
-                    RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                    RaisePropertyChanged(nameof(UitgesteldPossible));
+                    OnPropertyChanged(nameof(Type), broadcast: true);
+                    OnPropertyChanged(nameof(UitgesteldPossible));
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Meeaanvraag.AanUit = value;
-                RaisePropertyChanged<object>(nameof(AanUit), broadcast: true);
+                OnPropertyChanged(nameof(AanUit), broadcast: true);
             }
         }
 
@@ -53,8 +53,8 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Meeaanvraag.TypeInstelbaarOpStraat = value;
-                RaisePropertyChanged<object>(nameof(TypeInstelbaarOpStraat), broadcast: true);
-                RaisePropertyChanged(nameof(UitgesteldPossible));
+                OnPropertyChanged(nameof(TypeInstelbaarOpStraat), broadcast: true);
+                OnPropertyChanged(nameof(UitgesteldPossible));
             }
         }
 
@@ -64,7 +64,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _DetectieAfhankelijkPossible = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -99,7 +99,7 @@ namespace TLCGen.ViewModels
 				            throw new ArgumentOutOfRangeException();
 		            }
 	            }
-                RaisePropertyChanged<object>(nameof(DetectieAfhankelijk), broadcast: true);
+                OnPropertyChanged(nameof(DetectieAfhankelijk), broadcast: true);
             }
         }
 
@@ -109,7 +109,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Meeaanvraag.Uitgesteld = value;
-                RaisePropertyChanged<object>(nameof(Uitgesteld), broadcast: true);
+                OnPropertyChanged(nameof(Uitgesteld), broadcast: true);
             }
         }
 
@@ -119,7 +119,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Meeaanvraag.UitgesteldTijdsduur = value;
-                RaisePropertyChanged<object>(nameof(UitgesteldTijdsduur), broadcast: true);
+                OnPropertyChanged(nameof(UitgesteldTijdsduur), broadcast: true);
             }
         }
 
@@ -143,7 +143,7 @@ namespace TLCGen.ViewModels
                 if (DetectorManager != null)
                 {
                     DetectorManager.SelectedItem = value;
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -162,8 +162,8 @@ namespace TLCGen.ViewModels
                         x => new MeeaanvraagDetectorModel{ MeeaanvraagDetector = x },
                         x => Detectoren.All(y => y.MeeaanvraagDetector != x),
                         null,
-                        () => RaisePropertyChanged(nameof(SelectedDetector)),
-                        () => RaisePropertyChanged(nameof(SelectedDetector)));
+                        () => OnPropertyChanged(nameof(SelectedDetector)),
+                        () => OnPropertyChanged(nameof(SelectedDetector)));
                 }
                 return _detectorManager;
             }
@@ -189,14 +189,14 @@ namespace TLCGen.ViewModels
                     _Meeaanvraag.Detectoren.Remove(d);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             _detectorManager?.Refresh();
 
@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             _detectorManager?.Refresh();
         }
@@ -231,8 +231,8 @@ namespace TLCGen.ViewModels
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
 
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

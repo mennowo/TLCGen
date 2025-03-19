@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepPeriodeViewModel : ViewModelBase, IViewModelWithItem
+    public class OVIngreepPeriodeViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
         #endregion // Fields
@@ -36,7 +36,7 @@ namespace TLCGen.ViewModels
         #endregion // Constructor
     }
 
-    public class OVIngreepLijnNummerViewModel : ViewModelBase, IViewModelWithItem
+    public class OVIngreepLijnNummerViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer = value;
-                RaisePropertyChanged<object>(nameof(LijnNummer), broadcast: true);
+                OnPropertyChanged(nameof(LijnNummer), broadcast: true);
             }
         }
 
@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer.Nummer = value;
-                RaisePropertyChanged<object>(nameof(Nummer), broadcast: true);
+                OnPropertyChanged(nameof(Nummer), broadcast: true);
             }
         }
 
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer.RitCategorie = value;
-                RaisePropertyChanged<object>(nameof(RitCategorie), broadcast: true);
+                OnPropertyChanged(nameof(RitCategorie), broadcast: true);
             }
         }
 

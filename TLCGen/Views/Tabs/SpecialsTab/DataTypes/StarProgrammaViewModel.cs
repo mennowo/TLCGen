@@ -1,5 +1,6 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -8,7 +9,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class StarProgrammaViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class StarProgrammaViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Properties
 
@@ -25,9 +26,9 @@ namespace TLCGen.ViewModels
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, value))
                 {
                     StarProgramma.Naam = value;
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));
+                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StarProgramma.Cyclustijd = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 
 namespace TLCGen.Plugins.AutoBuild
 {
-    public class AutoBuildToolBarViewModel : ViewModelBase
+    public class AutoBuildToolBarViewModel : ObservableObject
     {
         #region Fields
 
@@ -36,7 +37,7 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _selectedVcxProject = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -46,7 +47,7 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _controllerFileName = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -97,7 +98,7 @@ namespace TLCGen.Plugins.AutoBuild
 
         public void UpdateTLCGenMessaging()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // Public Methods
@@ -236,7 +237,7 @@ namespace TLCGen.Plugins.AutoBuild
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
+        private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage message)
         {
             VcxProjects.Clear();
 
@@ -250,11 +251,11 @@ namespace TLCGen.Plugins.AutoBuild
                 ControllerFileName = null;
             }
 
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
 
-            _buildAndRunCommand?.RaiseCanExecuteChanged();
-            _buildCommand?.RaiseCanExecuteChanged();
-			_refreshCommand?.RaiseCanExecuteChanged();
+            _buildAndRunCommand?.NotifyCanExecuteChanged();
+            _buildCommand?.NotifyCanExecuteChanged();
+			_refreshCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // TLCGen Events

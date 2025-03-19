@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -137,9 +140,9 @@ namespace TLCGen.ViewModels
                                                               .Select(x => x.Naam));
                 }
                 _SelectedDetectorAanvraag2 = DetectorenAanvraag2.Where(x => x != SelectedDetectorAanvraag1).LastOrDefault();
-                RaisePropertyChanged("SelectedFaseAanvraag");
-                RaisePropertyChanged("SelectedDetectorAanvraag1");
-                RaisePropertyChanged("SelectedDetectorAanvraag2");
+                OnPropertyChanged("SelectedFaseAanvraag");
+                OnPropertyChanged("SelectedDetectorAanvraag1");
+                OnPropertyChanged("SelectedDetectorAanvraag2");
             }
         }
         public string SelectedDetectorAanvraag1
@@ -148,7 +151,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorAanvraag1 = value;
-                RaisePropertyChanged("SelectedDetectorAanvraag1");
+                OnPropertyChanged("SelectedDetectorAanvraag1");
             }
         }
         public string SelectedDetectorAanvraag2
@@ -157,7 +160,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorAanvraag2 = value;
-                RaisePropertyChanged("SelectedDetectorAanvraag2");
+                OnPropertyChanged("SelectedDetectorAanvraag2");
             }
         }
 
@@ -188,9 +191,9 @@ namespace TLCGen.ViewModels
                                                              .Select(x => x.Naam));
                 }
                 _SelectedDetectorVerleng2 = DetectorenVerleng2.Where(x => x != SelectedDetectorVerleng1).LastOrDefault();
-                RaisePropertyChanged("SelectedFaseVerleng");
-                RaisePropertyChanged("SelectedDetectorVerleng1");
-                RaisePropertyChanged("SelectedDetectorVerleng2");
+                OnPropertyChanged("SelectedFaseVerleng");
+                OnPropertyChanged("SelectedDetectorVerleng1");
+                OnPropertyChanged("SelectedDetectorVerleng2");
             }
         }
         public string SelectedDetectorVerleng1
@@ -199,7 +202,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorVerleng1 = value;
-                RaisePropertyChanged("SelectedDetectorVerleng1");
+                OnPropertyChanged("SelectedDetectorVerleng1");
             }
         }
         public string SelectedDetectorVerleng2
@@ -208,7 +211,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorVerleng2 = value;
-                RaisePropertyChanged("SelectedDetectorVerleng2");
+                OnPropertyChanged("SelectedDetectorVerleng2");
             }
         }
 
@@ -231,7 +234,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRichtingGevoeligeAanvraag = value;
-                RaisePropertyChanged("SelectedRichtingGevoeligeAanvraag");
+                OnPropertyChanged("SelectedRichtingGevoeligeAanvraag");
             }
         }
 
@@ -242,7 +245,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRichtingGevoeligVerleng = value;
-                RaisePropertyChanged("SelectedRichtingGevoeligVerleng");
+                OnPropertyChanged("SelectedRichtingGevoeligVerleng");
             }
         }
 
@@ -306,13 +309,13 @@ namespace TLCGen.ViewModels
 
         #region Command Functionality
 
-        private bool AddRichtingGevoeligeAanvraag_CanExecute(object prm)
+        private bool AddRichtingGevoeligeAanvraag_CanExecute()
         {
             return SelectedFaseAanvraag != null && SelectedDetectorAanvraag1 != null && SelectedDetectorAanvraag2 != null &&
                 SelectedDetectorAanvraag1 != SelectedDetectorAanvraag2;
         }
 
-        private void AddRichtingGevoeligeAanvraag_Executed(object prm)
+        private void AddRichtingGevoeligeAanvraag_Executed()
         {
             var rga = new RichtingGevoeligeAanvraagModel()
             {
@@ -326,19 +329,19 @@ namespace TLCGen.ViewModels
             _SelectedFaseAanvraag = null;
             _SelectedDetectorAanvraag1 = null;
             _SelectedDetectorAanvraag2 = null;
-            RaisePropertyChanged("SelectedFaseAanvraag");
-            RaisePropertyChanged("SelectedDetectorAanvraag1");
-            RaisePropertyChanged("SelectedDetectorAanvraag2");
+            OnPropertyChanged("SelectedFaseAanvraag");
+            OnPropertyChanged("SelectedDetectorAanvraag1");
+            OnPropertyChanged("SelectedDetectorAanvraag2");
 
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        private bool AddRichtingGevoeligVerleng_CanExecute(object prm)
+        private bool AddRichtingGevoeligVerleng_CanExecute()
         {
             return SelectedFaseVerleng != null && SelectedDetectorVerleng1 != null && SelectedDetectorVerleng2 != null;
         }
 
-        private void AddRichtingGevoeligVerleng_Executed(object prm)
+        private void AddRichtingGevoeligVerleng_Executed()
         {
             var rgv = new RichtingGevoeligVerlengModel()
             {
@@ -352,35 +355,35 @@ namespace TLCGen.ViewModels
             _SelectedFaseVerleng = null;
             _SelectedDetectorVerleng1 = null;
             _SelectedDetectorVerleng2 = null;
-            RaisePropertyChanged("SelectedFaseVerleng");
-            RaisePropertyChanged("SelectedDetectorVerleng1");
-            RaisePropertyChanged("SelectedDetectorVerleng2");
+            OnPropertyChanged("SelectedFaseVerleng");
+            OnPropertyChanged("SelectedDetectorVerleng1");
+            OnPropertyChanged("SelectedDetectorVerleng2");
 
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        private bool RemoveRichtingGevoeligeAanvraag_CanExecute(object prm)
+        private bool RemoveRichtingGevoeligeAanvraag_CanExecute()
         {
             return SelectedRichtingGevoeligeAanvraag != null;
         }
 
-        private void RemoveRichtingGevoeligeAanvraag_Executed(object prm)
+        private void RemoveRichtingGevoeligeAanvraag_Executed()
         {
             RichtingGevoeligeAanvragen.Remove(SelectedRichtingGevoeligeAanvraag);
             SelectedRichtingGevoeligeAanvraag = null;
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
-        private bool RemoveRichtingGevoeligVerleng_CanExecute(object prm)
+        private bool RemoveRichtingGevoeligVerleng_CanExecute()
         {
             return SelectedRichtingGevoeligVerleng != null;
         }
 
-        private void RemoveRichtingGevoeligVerleng_Executed(object prm)
+        private void RemoveRichtingGevoeligVerleng_Executed()
         {
             RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVerleng);
             SelectedRichtingGevoeligVerleng = null;
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Command Functionality
@@ -426,8 +429,8 @@ namespace TLCGen.ViewModels
                     RichtingGevoeligeAanvragen = null;
                     RichtingGevoeligVerlengen = null;
                 }
-                RaisePropertyChanged("RichtingGevoeligeAanvragen");
-                RaisePropertyChanged("RichtingGevoeligVerlengen");
+                OnPropertyChanged("RichtingGevoeligeAanvragen");
+                OnPropertyChanged("RichtingGevoeligVerlengen");
             }
         }
 
@@ -435,13 +438,13 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             RichtingGevoeligeAanvragen.Rebuild();
             RichtingGevoeligVerlengen.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             RichtingGevoeligeAanvragen.Rebuild();
             RichtingGevoeligVerlengen.Rebuild();
@@ -453,8 +456,8 @@ namespace TLCGen.ViewModels
 
         public DetectorenRichtingGevoeligTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
 

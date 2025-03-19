@@ -1,21 +1,19 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Extensions;
-using RelayCommandWpf = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Helpers
 {
-    public class AddRemoveItemsManager<T1, T2, T3> : ViewModelBase where T1 : IViewModelWithItem
+    public class AddRemoveItemsManager<T1, T2, T3> : ObservableObject where T1 : IViewModelWithItem
     {
         public ObservableCollectionAroundList<T1, T2> ItemsSource { get; }
-        public ObservableCollection<T3> AllSelectableItems { get; } = new ObservableCollection<T3>();
-        public ObservableCollection<T3> SelectableItems { get; } = new ObservableCollection<T3>();
+        public ObservableCollection<T3> AllSelectableItems { get; } = new();
+        public ObservableCollection<T3> SelectableItems { get; } = new();
         
         private T3 _selectedItemToAdd;
         public T3 SelectedItemToAdd
@@ -24,7 +22,7 @@ namespace TLCGen.Helpers
             set
             {
                 _selectedItemToAdd = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -35,7 +33,7 @@ namespace TLCGen.Helpers
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -43,8 +41,8 @@ namespace TLCGen.Helpers
         public Func<T1, T3, bool> SelectableEqualsItem { get; }
         public Action OnCollectionChanged { get; }
 
-        RelayCommandWpf _addItemCommand;
-        public ICommand AddItemCommand => _addItemCommand ?? (_addItemCommand = new RelayCommandWpf(AddItemCommand_executed, AddItemCommand_canExecute));
+        RelayCommand _addItemCommand;
+        public ICommand AddItemCommand => _addItemCommand ??= new RelayCommand(AddItemCommand_executed, AddItemCommand_canExecute);
 
         private bool AddItemCommand_canExecute()
         {
@@ -69,8 +67,8 @@ namespace TLCGen.Helpers
             }
         }
 
-        RelayCommandWpf _removeItemCommand;
-        public ICommand RemoveItemCommand => _removeItemCommand ?? (_removeItemCommand = new RelayCommandWpf(RemoveItemCommand_executed, RemoveItemCommand_canExecute));
+        RelayCommand _removeItemCommand;
+        public ICommand RemoveItemCommand => _removeItemCommand ??= new RelayCommand(RemoveItemCommand_executed, RemoveItemCommand_canExecute);
 
         private bool RemoveItemCommand_canExecute()
         {

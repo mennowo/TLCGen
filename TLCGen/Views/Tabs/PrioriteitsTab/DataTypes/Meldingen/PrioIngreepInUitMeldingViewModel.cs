@@ -1,8 +1,10 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -10,7 +12,6 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -26,14 +27,14 @@ namespace TLCGen.ViewModels
         }
     }
 
-    public class PrioIngreepInUitMeldingViewModel : ViewModelBase, IViewModelWithItem
+    public class PrioIngreepInUitMeldingViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
         private readonly PrioIngreepViewModel _ingreep;
         private RelayCommand _removeMeldingCommand;
         private readonly object _parent;
-        private ViewModelBase _actualViewModel;
+        private ObservableObjectEx _actualViewModel;
         private PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper _prioIngreepInUitMeldingType;
 
         #endregion // Fields
@@ -46,7 +47,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreepInUitMelding.Naam = value;
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(nameof(Naam), broadcast: true);
             }
         }
 
@@ -67,7 +68,7 @@ namespace TLCGen.ViewModels
                 {
                     var raise = PrioIngreepInUitMelding.Type != value.Value;
                     PrioIngreepInUitMelding.Type = value.Value;
-                    if (raise) RaisePropertyChanged<object>(broadcast: true);
+                    if (raise) OnPropertyChanged(broadcast: true);
                 }
 
                 if (Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
@@ -79,16 +80,16 @@ namespace TLCGen.ViewModels
                     }
                 }
 
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
 
                 var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
-                MessengerInstance.Send(msg);
+                WeakReferenceMessenger.Default.Send(msg);
                 if (msg.FaseCyclus == null) return;
                 Naam = msg.FaseCyclus 
                        + msg.Ingreep 
                        + DefaultsProvider.Default.GetMeldingShortcode(PrioIngreepInUitMelding)
                        + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-                MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
+                WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
                 SetActualViewModel();
             }
         }
@@ -100,13 +101,13 @@ namespace TLCGen.ViewModels
         public bool HasRis => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
         public bool HasInp => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang;
 
-        public ViewModelBase ActualViewModel
+        public ObservableObjectEx ActualViewModel
         {
             get => _actualViewModel;
             set
             {
                 _actualViewModel = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -137,8 +138,8 @@ namespace TLCGen.ViewModels
                     MeldingBijstoring.Clear();
                     PrioIngreepInUitMelding.MeldingBijstoring = null;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(MeldingBijstoring));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(MeldingBijstoring));
             }
         }
         
@@ -162,7 +163,7 @@ namespace TLCGen.ViewModels
                             break;
                         case PrioIngreepMeldingenListViewModel list:
                             list.Meldingen.Remove(this);
-                            MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
+                            WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
                             break;
                     }
                 });
@@ -279,7 +280,7 @@ namespace TLCGen.ViewModels
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            ActualViewModel.RaisePropertyChanged("");
+            ActualViewModel.OnPropertyChanged("");
         }
 
         #endregion // Private Methods

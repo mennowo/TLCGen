@@ -1,5 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.GebruikersOpties
 {
 
-    public class GebruikersOptieWithIOViewModel : ViewModelBase, IViewModelWithItem
+    public class GebruikersOptieWithIOViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -33,10 +33,10 @@ namespace TLCGen.GebruikersOpties
                         _GebruikersOptieWithOI.Naam = value;
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
+                        WeakReferenceMessenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -46,7 +46,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Multivalent = value;
-                RaisePropertyChanged<object>(nameof(Multivalent), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -56,7 +56,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Dummy = value;
-                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Commentaar = value;
-                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

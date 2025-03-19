@@ -1,12 +1,13 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepSignaalGroepParametersViewModel : ViewModelBase, IComparable, IViewModelWithItem
+    public class PrioIngreepSignaalGroepParametersViewModel : ObservableObjectEx, IComparable, IViewModelWithItem
     {
         #region Properties
 
@@ -18,7 +19,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parameters.FaseCyclus = value;
-                RaisePropertyChanged("FaseCyclus");
+                OnPropertyChanged("FaseCyclus");
             }
         }
 
@@ -29,7 +30,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.AantalKerenNietAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(AantalKerenNietAfkappen), broadcast: true);
+                OnPropertyChanged(nameof(AantalKerenNietAfkappen), broadcast: true);
             }
         }
         public int MinimumGroentijdConflictOVRealisatie
@@ -39,7 +40,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.MinimumGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(MinimumGroentijdConflictOVRealisatie), broadcast: true);
+                OnPropertyChanged(nameof(MinimumGroentijdConflictOVRealisatie), broadcast: true);
             }
         }
 
@@ -50,7 +51,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.PercMaxGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(PercMaxGroentijdConflictOVRealisatie), broadcast: true);
+                OnPropertyChanged(nameof(PercMaxGroentijdConflictOVRealisatie), broadcast: true);
             }
         }
 
@@ -61,7 +62,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.PercMaxGroentijdVoorTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(PercMaxGroentijdVoorTerugkomen), broadcast: true);
+                OnPropertyChanged(nameof(PercMaxGroentijdVoorTerugkomen), broadcast: true);
             }
         }
 
@@ -72,7 +73,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.OndergrensNaTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(OndergrensNaTerugkomen), broadcast: true);
+                OnPropertyChanged(nameof(OndergrensNaTerugkomen), broadcast: true);
             }
         }
 
@@ -83,7 +84,7 @@ namespace TLCGen.ViewModels
             {
                 Parameters.OphoogpercentageNaAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>(nameof(OphoogpercentageNaAfkappen), broadcast: true);
+                OnPropertyChanged(nameof(OphoogpercentageNaAfkappen), broadcast: true);
             }
         }
 
@@ -101,7 +102,7 @@ namespace TLCGen.ViewModels
 
         private void SendTLCGenChangedMessage()
         {
-            Messenger.Default.Send(
+WeakReferenceMessenger.Default.Send(
                     new Messaging.Messages.PrioIngreepSignaalGroepParametersChangedMessage(
                         (PrioIngreepSignaalGroepParametersModel)this.GetItem()));
         }
@@ -121,7 +122,7 @@ namespace TLCGen.ViewModels
                     prop.SetValue(this.GetItem(), prop.GetValue(sgprm));
                 }
             }
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // Public methods

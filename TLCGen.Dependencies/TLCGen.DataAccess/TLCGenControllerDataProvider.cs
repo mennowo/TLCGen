@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Windows;
 using System.Xml;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -62,7 +62,7 @@ namespace TLCGen.DataAccess
 	        private set
             {
                 _Controller = value;
-                Messenger.Default.Send(new ControllerLoadedMessage(Controller));
+                WeakReferenceMessenger.Default.Send(new ControllerLoadedMessage(Controller));
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
                 {
                     pl.Item2.Controller = value;
@@ -226,7 +226,7 @@ namespace TLCGen.DataAccess
             {
                 // Save all changes to model
                 // Request to process all synchronisation data from matrix to model
-                Messenger.Default.Send(new ProcessSynchronisationsRequest());
+                WeakReferenceMessenger.Default.Send(new ProcessSynchronisationsRequest());
 
                 // Check data integrity: do not save wrong data
                 var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
@@ -280,7 +280,7 @@ namespace TLCGen.DataAccess
         {
             // Save all changes to model
             // Request to process all synchronisation data from matrix to model
-            Messenger.Default.Send(new ProcessSynchronisationsRequest());
+            WeakReferenceMessenger.Default.Send(new ProcessSynchronisationsRequest());
 
             // Check data integrity: do not save wrong data
             var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
@@ -310,7 +310,7 @@ namespace TLCGen.DataAccess
                 SaveController();
                 
                 ControllerHasChanged = false;
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename ?? ""));
+                WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename ?? ""));
 
                 return true;
             }
@@ -336,7 +336,7 @@ namespace TLCGen.DataAccess
         /// </summary>
         public void SetControllerChanged()
         {
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace TLCGen.DataAccess
                 }
 
             }
-            Messenger.Default.Send(new ControllerFileNameChangedMessage(Default.ControllerFileName, null));
+            WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(Default.ControllerFileName, null));
             return true;
         }
 #endif

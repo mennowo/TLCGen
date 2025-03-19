@@ -1,15 +1,15 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class CombinatieTemplateItemViewModel : ViewModelBase
+    public class CombinatieTemplateItemViewModel : ObservableObject
     {
         #region Fields
 
@@ -33,7 +33,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -43,7 +43,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 CombinatieTemplateItem.Description = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -53,7 +53,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 CombinatieTemplateItem.Type = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 SetSelectableItems();
             }
         }
@@ -65,7 +65,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 CombinatieTemplateItem.ObjectJson = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 CheckTemplateCommand.Execute(null);
             }
         }
@@ -77,7 +77,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 _isObjectJsonOk = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -175,7 +175,7 @@ namespace TLCGen.Plugins.Tools
             {
                 IsObjectJsonOk = false;
             }
-            RaisePropertyChanged(nameof(Foreground));
+            OnPropertyChanged(nameof(Foreground));
         }));
 
         public ICommand ApplyItemFromControllerCommand => _applyItemFromControllerCommand ?? (_applyItemFromControllerCommand = new RelayCommand(() =>

@@ -1,6 +1,6 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace TLCGen.Controls
 {
@@ -18,7 +18,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FolderProperty =
-            DependencyProperty.Register("Folder", typeof(string), typeof(FolderTextBox), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(Folder), typeof(string), typeof(FolderTextBox), new PropertyMetadata(""));
 
         public string ChooseDialogTitle
         {
@@ -28,7 +28,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for ChooseDialogTitle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ChooseDialogTitleProperty =
-            DependencyProperty.Register("ChooseDialogTitle", typeof(string), typeof(FolderTextBox), new PropertyMetadata("Choose folder"));
+            DependencyProperty.Register(nameof(ChooseDialogTitle), typeof(string), typeof(FolderTextBox), new PropertyMetadata("Choose folder"));
 
         public bool EnsurePathExists
         {
@@ -38,7 +38,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for EnsurePathExists.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EnsurePathExistsProperty =
-            DependencyProperty.Register("EnsurePathExists", typeof(bool), typeof(FolderTextBox), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(EnsurePathExists), typeof(bool), typeof(FolderTextBox), new PropertyMetadata(true));
 
         public FolderTextBox()
         {
@@ -47,16 +47,14 @@ namespace TLCGen.Controls
 
         private void SelectStdFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            var ofd = new CommonOpenFileDialog
+            var ofd = new OpenFolderDialog
             {
-                IsFolderPicker = true,
                 Title = ChooseDialogTitle,
-                EnsurePathExists = EnsurePathExists,
                 Multiselect = false
             };
-            if (ofd.ShowDialog(Window.GetWindow(this)) == CommonFileDialogResult.Ok)
+            if (ofd.ShowDialog(Window.GetWindow(this)) == true)
             {
-                Folder = ofd.FileName;
+                Folder = ofd.FolderName;
             }
         }
     }

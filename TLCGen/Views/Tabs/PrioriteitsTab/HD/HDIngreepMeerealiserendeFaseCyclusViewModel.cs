@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HDIngreepMeerealiserendeFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
+    public class HDIngreepMeerealiserendeFaseCyclusViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(Fase), broadcast: true);
+                OnPropertyChanged(nameof(Fase), broadcast: true);
             }
         }
 

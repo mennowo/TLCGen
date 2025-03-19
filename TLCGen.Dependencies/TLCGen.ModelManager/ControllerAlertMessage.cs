@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.Models
 {
@@ -12,7 +12,7 @@ namespace TLCGen.Models
         FromPlugin
     }
 
-    public class ControllerAlertMessage : ViewModelBase
+    public class ControllerAlertMessage : ObservableObject
     {
         #region Fields
 
@@ -34,7 +34,7 @@ namespace TLCGen.Models
             set
             {
                 _shown = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

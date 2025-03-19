@@ -114,7 +114,7 @@ namespace TLCGen.Plugins.Sumo
 
                 _sumoPluginViewModel.Detectoren.BubbleSort();
 
-                _sumoPluginViewModel.RaisePropertyChanged("");
+                _sumoPluginViewModel.OnPropertyChanged("");
             }
         }
 
@@ -210,7 +210,7 @@ namespace TLCGen.Plugins.Sumo
             _sumoPluginViewModel.Data = _MyModel;
             _sumoPluginViewModel.FaseCycli.BubbleSort();
             _sumoPluginViewModel.Detectoren.BubbleSort();
-            _sumoPluginViewModel.RaisePropertyChanged("");
+            _sumoPluginViewModel.OnPropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)

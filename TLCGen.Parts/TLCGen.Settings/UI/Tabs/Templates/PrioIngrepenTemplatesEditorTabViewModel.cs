@@ -1,14 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Settings
 {
-    public class PrioIngrepenTemplatesEditorTabViewModel : ViewModelBase
+    public class PrioIngrepenTemplatesEditorTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -34,8 +35,8 @@ namespace TLCGen.Settings
             set
             {
                 _selectedPrioIngreepTemplate = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasDc));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasDc));
             }
         }
 
@@ -62,7 +63,7 @@ namespace TLCGen.Settings
                         var pvm = new PrioIngreepTemplateViewModel(pmt);
                         PrioIngrepenTemplates.Add(pvm);
                         TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.PrioIngreepTemplates.Add(pmt);
-                        MessengerInstance.Send(new TemplatesChangedMessage());
+                        WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
                         SelectedPrioIngreepTemplate = pvm;
                     }, () => TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable));
                 }

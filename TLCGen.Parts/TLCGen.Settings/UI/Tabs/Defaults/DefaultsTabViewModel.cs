@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 
 namespace TLCGen.Settings
 {
-    public class DefaultsTabViewModel : ViewModelBase
+    public class DefaultsTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -36,7 +36,7 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedFaseCyclusDefault = value;
-                RaisePropertyChanged("SelectedFaseCyclusDefault");
+                OnPropertyChanged("SelectedFaseCyclusDefault");
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedDetectorDefault = value;
-                RaisePropertyChanged("SelectedDetectorDefault");
+                OnPropertyChanged("SelectedDetectorDefault");
             }
         }
 
@@ -80,7 +80,7 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedOtherDefault = value;
-                RaisePropertyChanged("SelectedOtherDefault");
+                OnPropertyChanged("SelectedOtherDefault");
             }
         }
 

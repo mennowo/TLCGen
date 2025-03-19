@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -11,7 +12,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverSignaalGroepInstellingenViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RoBuGroverSignaalGroepInstellingenViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -29,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 FileDetectorManager.SelectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -39,7 +40,7 @@ namespace TLCGen.ViewModels
             set
             {
                 HiaatDetectorManager.SelectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -49,7 +50,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _signaalGroepInstellingen.FaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -59,7 +60,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _signaalGroepInstellingen.MinGroenTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -69,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _signaalGroepInstellingen.MaxGroenTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -100,8 +101,8 @@ namespace TLCGen.ViewModels
                     },
                     x => FileDetectoren.All(y => y.Detector != x),
                     x => SelectedFileDetector,
-                    () => RaisePropertyChanged<object>(broadcast: true),
-                    () => RaisePropertyChanged<object>(broadcast: true)));
+                    () => OnPropertyChanged(broadcast: true),
+                    () => OnPropertyChanged(broadcast: true)));
         
         public ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager =>
             _hiaatDetectorManager ?? (_hiaatDetectorManager =
@@ -137,8 +138,8 @@ namespace TLCGen.ViewModels
 
         private void OnHiaatDetectorListChanged()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-            RaisePropertyChanged(nameof(SelectedHiaatDetector));
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            OnPropertyChanged(nameof(SelectedHiaatDetector));
         }
 
         #endregion // Private methods
@@ -149,13 +150,13 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage msg)
         {
             _fileDetectorManager?.Refresh();
             _hiaatDetectorManager?.Refresh();
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             if (msg.ObjectType != TLCGenObjectTypeEnum.Detector) return;
             _fileDetectorManager?.Refresh();
@@ -195,8 +196,8 @@ namespace TLCGen.ViewModels
             FileDetectoren = new ObservableCollectionAroundList<RoBuGroverFileDetectorViewModel, RoBuGroverFileDetectorModel>(_signaalGroepInstellingen.FileDetectoren);
             HiaatDetectoren = new ObservableCollectionAroundList<RoBuGroverHiaatDetectorViewModel, RoBuGroverHiaatDetectorModel>(_signaalGroepInstellingen.HiaatDetectoren);
 
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

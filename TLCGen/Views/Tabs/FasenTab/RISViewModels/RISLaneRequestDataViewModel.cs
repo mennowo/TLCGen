@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,10 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
+
 namespace TLCGen.ViewModels
 {
-    public class RISLaneRequestDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISLaneRequestDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         private RISLaneRequestDataModel _laneData;
         
@@ -18,7 +19,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.RISAanvraag = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -28,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.AanvraagStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -38,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.AanvraagEnd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -48,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.AanvraagStartSrm0 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.AanvraagEndSrm0 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -69,7 +70,7 @@ namespace TLCGen.ViewModels
             {
                 _laneData.SignalGroupName = value;
                 UpdateRijstroken();
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -79,7 +80,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.RijstrookIndex = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -89,7 +90,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -106,7 +107,7 @@ namespace TLCGen.ViewModels
                 Rijstroken.Add(i + 1);
             }
             if (!Rijstroken.Contains(RijstrookIndex)) RijstrookIndex = 1;
-            RaisePropertyChanged(nameof(Rijstroken));
+            OnPropertyChanged(nameof(Rijstroken));
         }
 
         public object GetItem()

@@ -8,12 +8,12 @@ using System.Windows.Input;
 using System.Xml;
 using System.Windows.Media;
 using TLCGen.Integrity;
-using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Models.Enumerations;
 using System.Linq;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using GongSolutions.Wpf.DragDrop;
 
@@ -21,7 +21,7 @@ namespace TLCGen.GebruikersOpties
 {
     [TLCGenTabItem(-1, TabItemTypeEnum.MainWindow)]
     [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter | TLCGenPluginElems.IOElementProvider)]
-    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider, IDropTarget
+    public class GebruikersOptiesTabViewModel : ObservableObject, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider, IDropTarget
     {
         #region Constants
 
@@ -86,7 +86,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _MyGebruikersOpties = value;
                 ImportExportVM.DataModel = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -98,7 +98,7 @@ namespace TLCGen.GebruikersOpties
             {
                 if (value) ImportExportVM.RebuildAllItems(this);
                 _isImportExportSelected = value;
-                RaisePropertyChanged(nameof(IsImportExportNotSelected));
+                OnPropertyChanged(nameof(IsImportExportNotSelected));
             }
         }
 
@@ -108,8 +108,8 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _SelectedTabIndex = value;
-                RaisePropertyChanged("SelectedOptie");
-                RaisePropertyChanged("SelectedTabIndex");
+                OnPropertyChanged(nameof(SelectedOptie));
+                OnPropertyChanged();
             }
         }
 
@@ -128,7 +128,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     _SelectedOptie[SelectedTabIndex] = value;
                 }
-                RaisePropertyChanged("SelectedOptie");
+                OnPropertyChanged();
             }
         }
 
@@ -149,7 +149,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     _SelectedOpties[SelectedTabIndex] = value;
                 }
-                RaisePropertyChanged("SelectedOpties");
+                OnPropertyChanged();
             }
         }
 
@@ -290,7 +290,7 @@ namespace TLCGen.GebruikersOpties
             else
                 ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
 
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool AddNewGebruikersOptieCommand_CanExecute()
@@ -374,7 +374,7 @@ namespace TLCGen.GebruikersOpties
                     SelectedOptie = null;
             }
 
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool RemoveGebruikersOptieCommand_CanExecute()
@@ -446,7 +446,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             SelectedOptie = optie;
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmhoogCommand_CanExecute()
@@ -521,7 +521,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             SelectedOptie = optie;
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmlaagCommand_CanExecute()
@@ -613,49 +613,49 @@ namespace TLCGen.GebruikersOpties
         private void Uitgangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Uitgangen.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Ingangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Ingangen.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void HulpElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             HulpElementen.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Timers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Timers.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Counters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Counters.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Schakelaars_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Schakelaars.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void GeheugenElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             GeheugenElementen.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Parameters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Parameters.RebuildList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }
 
 
@@ -692,7 +692,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     ResetMyGebruikersOpties();
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -726,7 +726,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _IsEnabled = value;
-                RaisePropertyChanged("IsEnabled");
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -735,8 +735,7 @@ namespace TLCGen.GebruikersOpties
         public ImageSource Icon
         {
             get
-            {
-                var dict = new ResourceDictionary();
+            { var dict = new ResourceDictionary();
                 var u = new Uri("pack://application:,,,/" +
                                 System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                                 ";component/" + "Resources/GebruikersOptiesIcon.xaml");
@@ -824,7 +823,7 @@ namespace TLCGen.GebruikersOpties
                 foreach (var el in GeheugenElementen) el.ObjectType = TLCGenObjectTypeEnum.CCOLMemoryElement;
                 foreach (var el in Parameters) el.ObjectType = TLCGenObjectTypeEnum.CCOLParameter;
 
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -978,11 +977,11 @@ namespace TLCGen.GebruikersOpties
             {
                 case ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel> o1:
                     o1.RebuildList();
-                    MessengerInstance.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
                     break;
                 case ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel> o2:
                     o2.RebuildList();
-                    MessengerInstance.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
                     break;
             }
         }

@@ -1,10 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class VersieViewModel : ViewModelBase
+    public class VersieViewModel : ObservableObjectEx
     {
         public VersieModel VersieEntry { get; }
 
@@ -14,7 +15,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VersieEntry.Versie = value;
-                RaisePropertyChanged<object>(nameof(Versie), broadcast: true);
+                OnPropertyChanged(nameof(Versie), broadcast: true);
             }
         }
 
@@ -24,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VersieEntry.Datum = value;
-                RaisePropertyChanged<object>(nameof(Datum), broadcast: true);
+                OnPropertyChanged(nameof(Datum), broadcast: true);
             }
         }
 
@@ -34,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VersieEntry.Ontwerper = value;
-                RaisePropertyChanged<object>(nameof(Ontwerper), broadcast: true);
+                OnPropertyChanged(nameof(Ontwerper), broadcast: true);
             }
         }
 
@@ -44,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 VersieEntry.Commentaar = value;
-                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
+                OnPropertyChanged(nameof(Commentaar), broadcast: true);
             }
         }
 

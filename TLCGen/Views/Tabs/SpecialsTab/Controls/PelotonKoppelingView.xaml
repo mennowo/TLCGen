@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -54,7 +53,7 @@
                                      SelectedItemToAdd="{Binding Path=UitgaandeDetectorenManager.SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
-        <ag:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="14">
+        <ct:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="14">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
                       SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
@@ -104,8 +103,8 @@
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
                                      AddItemCommand="{Binding Path=AddInkomendeDetectorCommand}" RemoveItemCommand="{Binding Path=RemoveInkomendeDetectorCommand}" />
             </Grid>
-        </ag:AutoGrid>
-        <ag:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="10">
+        </ct:AutoGrid>
+        <ct:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="10">
             <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
                       SelectedValue="{Binding Path=PTPKruising,UpdateSourceTrigger=PropertyChanged}" Margin="2" IsEnabled="{Binding Path=IsNotIntern}"/>
@@ -130,7 +129,7 @@
             <Label Content="Toepassen MK" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                       SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
-        </ag:AutoGrid>
+        </ct:AutoGrid>
         <Border Grid.Row="0" Background="LightGray">
             <Border.Style>
                 <Style TargetType="Border">

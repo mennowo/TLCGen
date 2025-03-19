@@ -1,12 +1,12 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
 using System.Windows.Input;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.Specificator
 {
-    public class SpecificatorViewModel : ViewModelBase
+    public class SpecificatorViewModel : ObservableObject
     {
         #region Fields
 
@@ -24,7 +24,7 @@ namespace TLCGen.Specificator
             set
             {
                 _data = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -61,7 +62,7 @@ namespace TLCGen.ViewModels
                 {
                     SelectedSynchronisatie = ConflictMatrix[0, 1];
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -98,7 +99,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedGarantieTijdenConvertValue = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -141,11 +142,11 @@ namespace TLCGen.ViewModels
                 }
                 if (_selectedSynchronisatie?.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
                 {
-                    RaisePropertyChanged(nameof(GelijkstartDeelConflict));
-                    RaisePropertyChanged(nameof(GelijkstartOntruimingstijdFaseVan));
-                    RaisePropertyChanged(nameof(GelijkstartOntruimingstijdFaseNaar));
+                    OnPropertyChanged(nameof(GelijkstartDeelConflict));
+                    OnPropertyChanged(nameof(GelijkstartOntruimingstijdFaseVan));
+                    OnPropertyChanged(nameof(GelijkstartOntruimingstijdFaseNaar));
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -164,8 +165,8 @@ namespace TLCGen.ViewModels
             get => _MatrixChanged;
             set
             {
-                if (value)
-                    RaisePropertyChanged(nameof(MatrixChanged), _MatrixChanged, true, true);
+                // TODO ckeck OK? if (value) OnPropertyChanged(nameof(MatrixChanged), _MatrixChanged, true, true);
+                if (value) OnPropertyChanged(broadcast: true);
                 _MatrixChanged = value;
             }
         }
@@ -177,7 +178,8 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.GarantieOntruimingsTijden = value;
                 MatrixChanged = true;
-                RaisePropertyChanged(nameof(UseGarantieOntruimingsTijden), _Controller.Data.GarantieOntruimingsTijden, value, true);
+                OnPropertyChanged(broadcast: true);
+                // TODO check OK? OnPropertyChanged(nameof(UseGarantieOntruimingsTijden), _Controller.Data.GarantieOntruimingsTijden, value, true);
             }
         }
 
@@ -188,7 +190,8 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.RealFuncBepaalRealisatieTijdenAltijd = value;
                 MatrixChanged = true;
-                RaisePropertyChanged(nameof(RealFuncBepaalRealisatieTijdenAltijd), _Controller.Data.RealFuncBepaalRealisatieTijdenAltijd, value, true);
+                // TODO check OK? OnPropertyChanged(nameof(RealFuncBepaalRealisatieTijdenAltijd), _Controller.Data.RealFuncBepaalRealisatieTijdenAltijd, value, true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -202,9 +205,9 @@ namespace TLCGen.ViewModels
                 _Controller.Data.SynchronisatiesType = value;
                 SelectedSynchronisatie?.UpdateView();
                 TLCGenModelManager.Default.UpdateControllerAlerts();
-                RaisePropertyChanged<object>(nameof(SynchronisatiesType), broadcast: true);
-                RaisePropertyChanged(nameof(IsSynchRealType));
-                MessengerInstance.Send(new SynchronisatiesTypeChangedMessage());
+                OnPropertyChanged(nameof(SynchronisatiesType), broadcast: true);
+                OnPropertyChanged(nameof(IsSynchRealType));
+                WeakReferenceMessenger.Default.Send(new SynchronisatiesTypeChangedMessage());
             }
         }
 
@@ -233,7 +236,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         public int GelijkstartOntruimingstijdFaseNaar
@@ -255,7 +258,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         public bool GelijkstartDeelConflict
@@ -277,7 +280,7 @@ namespace TLCGen.ViewModels
                         svm.Gelijkstart.DeelConflict = value;
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -293,7 +296,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Voorstart.VoorstartTijd = value;
-                RaisePropertyChanged<object>(nameof(VoorstartTijd), broadcast: true);
+                OnPropertyChanged(nameof(VoorstartTijd), broadcast: true);
             }
         }
 
@@ -309,7 +312,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Voorstart.VoorstartOntruimingstijd = value;
-                RaisePropertyChanged<object>(nameof(VoorstartOntruimingstijd), broadcast: true);
+                OnPropertyChanged(nameof(VoorstartOntruimingstijd), broadcast: true);
             }
         }
 
@@ -443,31 +446,31 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void DeleteValueCommand_Executed(object prm)
+        void DeleteValueCommand_Executed()
         {
             if (SelectedSynchronisatie != null)
                 SelectedSynchronisatie.ConflictValue = "";
         }
 
-        bool DeleteValueCommand_CanExecute(object prm)
+        bool DeleteValueCommand_CanExecute()
         {
             return SelectedSynchronisatie != null;
         }
 
-        void CheckItCommand_Executed(object prm)
+        void CheckItCommand_Executed()
         {
             var b = SelectedSynchronisatie.IsCoupled;
             SelectedSynchronisatie.IsCoupled = !b;
         }
 
-        bool CheckItCommand_CanExecute(object prm)
+        bool CheckItCommand_CanExecute()
         {
             return SelectedSynchronisatie != null &&
                 DisplayType != IntersignaalGroepTypeEnum.Conflict &&
                 DisplayType != IntersignaalGroepTypeEnum.GarantieConflict;
         }
 
-        private bool SetGarantieValuesCommand_CanExecute(object obj)
+        private bool SetGarantieValuesCommand_CanExecute()
         {
             return ConflictMatrix != null &&
                    Fasen != null &&
@@ -476,7 +479,7 @@ namespace TLCGen.ViewModels
                    GarantieTijdenConvertValues.Count > 0;
         }
 
-        private void SetGarantieValuesCommand_Executed(object obj)
+        private void SetGarantieValuesCommand_Executed()
         {
             var fccount = Fasen.Count;
 
@@ -502,12 +505,12 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private bool AddGarantieConvertValue_CanExecute(object obj)
+        private bool AddGarantieConvertValue_CanExecute()
         {
             return true;
         }
 
-        private void AddGarantieConvertValue_Executed(object obj)
+        private void AddGarantieConvertValue_Executed()
         {
             var h = new GarantieTijdConvertHelper(this);
 
@@ -529,12 +532,12 @@ namespace TLCGen.ViewModels
             GarantieTijdenConvertValues.Add(h);
         }
 
-        private bool RemoveGarantieConvertValue_CanExecute(object obj)
+        private bool RemoveGarantieConvertValue_CanExecute()
         {
             return SelectedGarantieTijdenConvertValue != null;
         }
 
-        private void RemoveGarantieConvertValue_Executed(object obj)
+        private void RemoveGarantieConvertValue_Executed()
         {
             GarantieTijdenConvertValues.Remove(SelectedGarantieTijdenConvertValue);
             SelectedGarantieTijdenConvertValue = null;
@@ -557,7 +560,7 @@ namespace TLCGen.ViewModels
                 if (_MatrixChanged == true)
                 {
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
-                    Messenger.Default.Send(new ConflictsChangedMessage());
+WeakReferenceMessenger.Default.Send(new ConflictsChangedMessage());
                 }
                 _MatrixChanged = false;
                 return true;
@@ -618,7 +621,7 @@ namespace TLCGen.ViewModels
                 _Controller.Fasen.Count <= 0)
             {
                 ConflictMatrix = null;
-                RaisePropertyChanged("ConflictMatrix");
+                OnPropertyChanged("ConflictMatrix");
                 return;
             }
 
@@ -629,7 +632,7 @@ namespace TLCGen.ViewModels
             {
                 FasenNames.Add(fcvm.Naam);
             }
-            RaisePropertyChanged("FasenNames");
+            OnPropertyChanged("FasenNames");
 
             ConflictMatrix = new SynchronisatieViewModel[fccount, fccount];
             for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
@@ -767,7 +770,7 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            RaisePropertyChanged("ConflictMatrix");
+            OnPropertyChanged("ConflictMatrix");
 
             _MatrixChanged = false;
 
@@ -850,17 +853,17 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Event handling
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             BuildConflictMatrix();
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             BuildConflictMatrix();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             if (Fasen.Any(x => x.Naam == message.NewName))
             {
@@ -868,7 +871,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnInterSignaalGroepChanged(InterSignaalGroepChangedMessage message)
+        private void OnInterSignaalGroepChanged(object sender, InterSignaalGroepChangedMessage message)
         {
             _MatrixChanged = true;
 
@@ -1027,7 +1030,7 @@ namespace TLCGen.ViewModels
 
         private bool _IsProcessing = false;
 
-        private void OnProcesSynchornisationsRequested(ProcessSynchronisationsRequest request)
+        private void OnProcesSynchornisationsRequested(object sender, ProcessSynchronisationsRequest request)
         {
             if (_IsProcessing)
                 return;
@@ -1037,10 +1040,10 @@ namespace TLCGen.ViewModels
             _IsProcessing = false;
         }
 
-        private void OnIntergreenTimesTypeChanged(ControllerIntergreenTimesTypeChangedMessage msg)
+        private void OnIntergreenTimesTypeChanged(object sender, ControllerIntergreenTimesTypeChangedMessage msg)
         {
-            RaisePropertyChanged(nameof(TijdenLabel));
-            RaisePropertyChanged(nameof(GarantieTijdenLabel));
+            OnPropertyChanged(nameof(TijdenLabel));
+            OnPropertyChanged(nameof(GarantieTijdenLabel));
         }
 
         #endregion // TLCGen Event handling
@@ -1049,11 +1052,11 @@ namespace TLCGen.ViewModels
 
         public SynchronisatiesTabViewModel() : base()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            MessengerInstance.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));
-            MessengerInstance.Register(this, new Action<ProcessSynchronisationsRequest>(OnProcesSynchornisationsRequested));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<InterSignaalGroepChangedMessage>(this, OnInterSignaalGroepChanged);
+            WeakReferenceMessenger.Default.Register<ProcessSynchronisationsRequest>(this, OnProcesSynchornisationsRequested);
         }
 
         #endregion // Constructor

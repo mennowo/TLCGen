@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class StarProgrammaFaseViewModel : ViewModelBase, IViewModelWithItem
+    public class StarProgrammaFaseViewModel : ObservableObjectEx, IViewModelWithItem
     {
         public StarProgrammaFase Fase { get; }
 
@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Fase.Start1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Fase.Start2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -36,7 +36,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Fase.Eind1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -46,7 +46,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Fase.Eind2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

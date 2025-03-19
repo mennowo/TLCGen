@@ -1,19 +1,19 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Settings
 {
-    public class PrioIngreepTemplateViewModel : ViewModelBase, IViewModelWithItem
+    public class PrioIngreepTemplateViewModel : ObservableObject, IViewModelWithItem
     {
         #region Fields
 
@@ -115,7 +115,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Naam = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -125,7 +125,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Replace = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -157,7 +157,7 @@ namespace TLCGen.Settings
                 PrioIngreepUitmeldingen.CollectionChanged += PrioIngreepUitmeldingenOnCollectionChanged;
                 PrioIngreepSelectedInmelding = PrioIngreepInmeldingen.FirstOrDefault();
                 PrioIngreepSelectedUitmelding = PrioIngreepUitmeldingen.FirstOrDefault();
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -215,7 +215,7 @@ namespace TLCGen.Settings
             set
             {
                 _prioIngreepSelectedInmelding = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -237,7 +237,7 @@ namespace TLCGen.Settings
             set
             {
                 _prioIngreepSelectedUitmelding = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

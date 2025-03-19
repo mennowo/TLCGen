@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -30,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PrioData.PrioIngreepSignaalGroepParametersHard = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -82,7 +84,7 @@ namespace TLCGen.ViewModels
                 {
                     PrioriteitIngreepSGParameters = null;
                 }
-                RaisePropertyChanged(nameof(PrioriteitIngreepSGParameters));
+                OnPropertyChanged(nameof(PrioriteitIngreepSGParameters));
             }
         }
 
@@ -106,7 +108,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             if (_Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
             {
@@ -114,7 +116,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnControllerHasOVChanged(ControllerHasOVChangedMessage message)
+        public void OnControllerHasOVChanged(object sender, ControllerHasOVChangedMessage message)
         {
             switch (message.Type)
             {
@@ -139,7 +141,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnFasenSorted(FasenSortedMessage message)
+        public void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             if (_Controller.PrioData.PrioIngreepType != Models.Enumerations.PrioIngreepTypeEnum.Geen)
             {
@@ -148,7 +150,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnOVIngreepSignaalGroepParametersChanged(PrioIngreepSignaalGroepParametersChangedMessage message)
+        public void OnOVIngreepSignaalGroepParametersChanged(object sender, PrioIngreepSignaalGroepParametersChangedMessage message)
         {
             /* Set all options equal for signal groups that are synchronised */
             foreach (var gs in _Controller.InterSignaalGroep.Gelijkstarten)
@@ -182,10 +184,10 @@ namespace TLCGen.ViewModels
 
         public PrioriteitSignaalGroepInstellingenTabViewModel()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessengerInstance.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
-            MessengerInstance.Register(this, new Action<PrioIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessenger.Default.Register<ControllerHasOVChangedMessage>(this, OnControllerHasOVChanged);
+            WeakReferenceMessenger.Default.Register<PrioIngreepSignaalGroepParametersChangedMessage>(this, OnOVIngreepSignaalGroepParametersChanged);
         }
 
         #endregion // Constructor

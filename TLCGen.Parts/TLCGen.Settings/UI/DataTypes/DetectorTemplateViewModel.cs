@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -11,7 +13,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Settings
 {
-    public class DetectorTemplateViewModel : ViewModelBase, IViewModelWithItem
+    public class DetectorTemplateViewModel : ObservableObject, IViewModelWithItem
     {
         #region Fields
 
@@ -100,7 +102,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Naam = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -110,7 +112,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Replace = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -126,7 +128,7 @@ namespace TLCGen.Settings
                 else
                     SelectedDetectorTypeString = null;
 
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -219,7 +221,7 @@ namespace TLCGen.Settings
                         throw new ArgumentOutOfRangeException("Unknown detector type: " + value);
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -256,23 +258,14 @@ namespace TLCGen.Settings
         }
 
         RelayCommand _applyDefaultsCommand;
-        public ICommand ApplyDefaultsCommand
-        {
-            get
-            {
-                if (_applyDefaultsCommand == null)
-                {
-                    _applyDefaultsCommand = new RelayCommand(ApplyDefaultsCommand_Executed, ApplyDefaultsCommand_CanExecute);
-                }
-                return _applyDefaultsCommand;
-            }
-        }
+        public ICommand ApplyDefaultsCommand => _applyDefaultsCommand ?? (_applyDefaultsCommand =
+                new RelayCommand(ApplyDefaultsCommand_Executed, ApplyDefaultsCommand_CanExecute));
 
         #endregion // Commands
 
         #region Command Functionality
 
-        private void AddDetectorCommand_Executed(object prm)
+        private void AddDetectorCommand_Executed()
         {
             var d = new DetectorModel
             {
@@ -281,23 +274,23 @@ namespace TLCGen.Settings
             Detectoren.Add(d);
         }
 
-        bool AddDetectorCommand_CanExecute(object prm)
+        bool AddDetectorCommand_CanExecute()
         {
             return true;
         }
 
-        void RemoveDetectorCommand_Executed(object prm)
+        void RemoveDetectorCommand_Executed()
         {
             Detectoren.Remove(SelectedDetector);
             SelectedDetector = null;
         }
 
-        bool RemoveDetectorCommand_CanExecute(object prm)
+        bool RemoveDetectorCommand_CanExecute()
         {
             return SelectedDetector != null && Detectoren.Count > 0;
         }
 
-        void ApplyDefaultsCommand_Executed(object prm)
+        void ApplyDefaultsCommand_Executed()
         {
             var d = SelectedDetector;
             SelectedDetector = null;
@@ -305,7 +298,7 @@ namespace TLCGen.Settings
             SelectedDetector = d;
         }
 
-        bool ApplyDefaultsCommand_CanExecute(object prm)
+        bool ApplyDefaultsCommand_CanExecute()
         {
             return SelectedDetector != null && Detectoren.Count > 0;
         }

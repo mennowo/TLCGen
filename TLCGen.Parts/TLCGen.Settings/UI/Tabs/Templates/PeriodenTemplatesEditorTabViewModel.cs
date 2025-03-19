@@ -1,13 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.Settings
 {
-    public class PeriodenTemplatesEditorTabViewModel : ViewModelBase
+    public class PeriodenTemplatesEditorTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -33,8 +35,8 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedPeriodeTemplate = value;
-                RaisePropertyChanged("SelectedPeriodeTemplate");
-                RaisePropertyChanged(nameof(HasDC));
+                OnPropertyChanged("SelectedPeriodeTemplate");
+                OnPropertyChanged(nameof(HasDC));
             }
         }
 
@@ -73,7 +75,7 @@ namespace TLCGen.Settings
 
         #region Command Functionality
 
-        private void AddPeriodeTemplateCommand_Executed(object prm)
+        private void AddPeriodeTemplateCommand_Executed() 
         {
             var pmt = new TLCGenTemplateModel<PeriodeModel>
             {
@@ -90,22 +92,22 @@ namespace TLCGen.Settings
             var pvm = new PeriodeTemplateViewModel(pmt);
             PeriodenTemplates.Add(pvm);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.PeriodenTemplates.Add(pmt);
-            MessengerInstance.Send(new TemplatesChangedMessage());
+            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
             SelectedPeriodeTemplate = pvm;
         }
 
-        bool AddPeriodeTemplateCommand_CanExecute(object prm)
+        bool AddPeriodeTemplateCommand_CanExecute()
         {
             return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
-        void RemovePeriodeTemplateCommand_Executed(object prm)
+        void RemovePeriodeTemplateCommand_Executed()
         {
             PeriodenTemplates.Remove(SelectedPeriodeTemplate);
             SelectedPeriodeTemplate = null;
         }
 
-        bool RemovePeriodeTemplateCommand_CanExecute(object prm)
+        bool RemovePeriodeTemplateCommand_CanExecute()
         {
             return SelectedPeriodeTemplate != null && SelectedPeriodeTemplate.Editable;
         }

@@ -12,13 +12,14 @@ using System.Windows.Controls;
 using TLCGen.Models;
 using TLCGen.Messaging.Messages;
 using System.Windows.Media.Imaging;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;
 using TLCGen.Messaging.Requests;
 using System.Reflection;
 using System.Collections;
 using System.Windows;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dialogs;
 using Point = System.Drawing.Point;
 using TLCGen.Extensions;
@@ -44,10 +45,10 @@ namespace TLCGen.ViewModels
         private string _controllerFileName;
         private int _width = int.MaxValue, _height = int.MaxValue;
         
-        RelayCommand _setCoordinatesCommand;
+        RelayCommand<object> _setCoordinatesCommand;
         RelayCommand _refreshBitmapCommand;
         RelayCommand _resetBitmapIOCommand;
-        RelayCommand _resetBitmapCommand;
+        RelayCommand<object> _resetBitmapCommand;
         RelayCommand _importDplCCommand;
 
         private readonly Color _defaultFillColor = Color.LightGray;
@@ -146,7 +147,7 @@ namespace TLCGen.ViewModels
                             FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -156,7 +157,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedTab = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -170,7 +171,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _controllerFileName = value;
-                RaisePropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -178,13 +179,13 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
+        public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand<object>(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
 
         public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
         
         public ICommand ResetBitmapIOCommand => _resetBitmapIOCommand ??= new RelayCommand(ResetBitmapIOCommand_Executed, ResetBitmapIOCommand_CanExecute);
 
-        public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
+        public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand<object>(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
 
         public ICommand ImportDplCCommand => _importDplCCommand ??= new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute);
 
@@ -222,7 +223,7 @@ namespace TLCGen.ViewModels
         #endregion // TabItem Overrides
 
         #region Command functionality
-
+        
         private void SetCoordinatesCommand_Executed(object prm)
         {
             var p = (Point)prm;
@@ -272,12 +273,12 @@ namespace TLCGen.ViewModels
             return SelectedItem != null;
         }
 
-        void RefreshBitmapCommand_Executed(object prm)
+        void RefreshBitmapCommand_Executed()
         {
             LoadBitmap();
         }
 
-        bool RefreshBitmapCommand_CanExecute(object prm)
+        bool RefreshBitmapCommand_CanExecute()
         {
             return BitmapFileName != null;
         }
@@ -293,7 +294,7 @@ namespace TLCGen.ViewModels
             return true;
         }
 
-        private void ResetBitmapIOCommand_Executed(object obj)
+        private void ResetBitmapIOCommand_Executed()
         {
             var ok = MessageBox.Show("Alle aangeklinkt IO wordt gereset. Doorgaan?", "Bevestigen reset", MessageBoxButton.YesNo);
 
@@ -319,19 +320,19 @@ namespace TLCGen.ViewModels
             LoadBitmap();
         }
 
-        private bool ResetBitmapIOCommand_CanExecute(object obj)
+        private bool ResetBitmapIOCommand_CanExecute()
         {
             return true;
         }
 
-        void ImportDplCCommand_Executed(object prm)
+        void ImportDplCCommand_Executed()
         {
             var dlg = new ImportDplCWindow(_Controller) {Owner = Application.Current.MainWindow};
             dlg.ShowDialog();
             LoadBitmap();
         }
 
-        bool ImportDplCCommand_CanExecute(object prm)
+        bool ImportDplCCommand_CanExecute()
         {
             return BitmapFileName != null;
         }
@@ -518,7 +519,7 @@ namespace TLCGen.ViewModels
             if(_editableBitmap == null)
             {
                 MyBitmap = null;
-                RaisePropertyChanged(nameof(MyBitmap));
+                OnPropertyChanged(nameof(MyBitmap));
                 return;
             }
 
@@ -532,7 +533,7 @@ namespace TLCGen.ViewModels
             MyBitmap.CacheOption = BitmapCacheOption.OnLoad;
             MyBitmap.EndInit();
 
-            RaisePropertyChanged(nameof(MyBitmap));
+            OnPropertyChanged(nameof(MyBitmap));
         }
 
         private void CorrectCoordinates()
@@ -622,7 +623,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Message Handling
 
-        private void OnFileNameChanged(ControllerFileNameChangedMessage message)
+        private void OnFileNameChanged(object sender, ControllerFileNameChangedMessage message)
         {
             if (message.NewFileName == null) return;
             
@@ -631,7 +632,7 @@ namespace TLCGen.ViewModels
             RefreshMyBitmapImage();
         }
 
-        private void OnRefreshBitmapRequest(RefreshBitmapRequest request)
+        private void OnRefreshBitmapRequest(object sender, RefreshBitmapRequest request)
         {
             if (request.Coordinates?.Count > 0)
             {
@@ -646,26 +647,26 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
         }
 
 
-		private void OnNameChanged(NameChangedMessage message)
+		private void OnNameChanged(object sender, NameChangedMessage message)
 		{
 			CollectAllIO();
 			RefreshMyBitmapImage();
 		}
 
-		private void OnDetectorenChanged(DetectorenChangedMessage message)
+		private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
         }
 
-        private void OnOVIngrepenChanged(PrioIngrepenChangedMessage message)
+        private void OnOVIngrepenChanged(object sender, PrioIngrepenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
@@ -679,12 +680,12 @@ namespace TLCGen.ViewModels
         {
             _floodFiller = new QueueLinearFloodFiller(null);
 
-            Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
-            Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<PrioIngrepenChangedMessage>(OnOVIngrepenChanged));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnFileNameChanged);
+            WeakReferenceMessenger.Default.Register<RefreshBitmapRequest>(this, OnRefreshBitmapRequest);
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

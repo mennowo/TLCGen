@@ -1,16 +1,15 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Plugins.MultiSim
 {
-    public class MultiSimTabViewModel : ViewModelBase
+    public class MultiSimTabViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -33,7 +32,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 _selectedSimEntrySet = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -44,7 +43,7 @@ namespace TLCGen.Plugins.MultiSim
             {
                 _multiSimDataModel = value;
                 MultiSimEntrySets = new ObservableCollectionAroundList<MultiSimEntrySetViewModel, MultiSimEntrySetModel>(value.SimulationEntries);
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -72,13 +71,13 @@ namespace TLCGen.Plugins.MultiSim
                 set.SimulationEntries.Add(entry);
             }
             MultiSimEntrySets.Add(new MultiSimEntrySetViewModel(set));
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         }));
 
         public ICommand RemoveMultiSimEntrySetCommand => _removeMultiSimEntrySetCommand ?? (_removeMultiSimEntrySetCommand = new RelayCommand(() =>
         {
             MultiSimEntrySets.Remove(SelectedSimEntrySet);
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         },
         () => SelectedSimEntrySet != null));
 
@@ -99,7 +98,7 @@ namespace TLCGen.Plugins.MultiSim
                     d.Simulatie.Q4 = e.Q4;
                 }
             }
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         },
         () => SelectedSimEntrySet != null));
 
@@ -107,12 +106,12 @@ namespace TLCGen.Plugins.MultiSim
 
         #region TLCGen messaging
 
-        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage msg)
         {
             // TODO
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Detector)
             {
@@ -126,8 +125,8 @@ namespace TLCGen.Plugins.MultiSim
 
         public void UpdateMessaging()
         {
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Public Methods

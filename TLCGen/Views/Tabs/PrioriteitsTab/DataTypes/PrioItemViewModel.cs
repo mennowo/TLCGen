@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using GalaSoft.MvvmLight;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioItemViewModel : ViewModelBase
+    public class PrioItemViewModel : ObservableObjectEx
     {
         private bool _isExpanded;
         private bool _isSelected;
@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _isExpanded = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
                         IsExpanded = true;
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
     }

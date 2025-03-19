@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepPelotonMeldingViewModel : ViewModelBase
+    public class PrioIngreepPelotonMeldingViewModel : ObservableObjectEx
     {
         #region Fields
         #endregion // Fields
@@ -17,7 +17,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisStart = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisEnd = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

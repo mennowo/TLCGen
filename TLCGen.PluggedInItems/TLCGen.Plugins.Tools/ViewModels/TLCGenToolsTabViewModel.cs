@@ -1,16 +1,16 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class TLCGenToolsTabViewModel : ViewModelBase
+    public class TLCGenToolsTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -44,7 +44,7 @@ namespace TLCGen.Plugins.Tools
             private set
             {
                 _fasen = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -70,8 +70,8 @@ namespace TLCGen.Plugins.Tools
                         }
                     }
                 }
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasNoSelectedItem));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasNoSelectedItem));
             }
         }
 
@@ -79,7 +79,7 @@ namespace TLCGen.Plugins.Tools
 
         #region Private Methods
 
-        private void OnFasenChanged(Messaging.Messages.FasenChangedMessage msg)
+        private void OnFasenChanged(object sender, FasenChangedMessage msg)
         {
             UpdateFasen();
             foreach (var c in CombinatieTemplates)
@@ -94,7 +94,7 @@ namespace TLCGen.Plugins.Tools
             }
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             UpdateFasen();
         }
@@ -112,7 +112,7 @@ namespace TLCGen.Plugins.Tools
                 fasen.Add(f.Naam);
             }
             Fasen = fasen;
-            RaisePropertyChanged(nameof(Fasen));
+            OnPropertyChanged(nameof(Fasen));
         }
 
         #endregion // Private Methods
@@ -159,8 +159,8 @@ namespace TLCGen.Plugins.Tools
         {
             _plugin = plugin;
             CombinatieTemplates = combinatieTemplates;
-            MessengerInstance.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

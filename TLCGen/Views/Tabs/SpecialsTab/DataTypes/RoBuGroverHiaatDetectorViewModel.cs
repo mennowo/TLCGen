@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverHiaatDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class RoBuGroverHiaatDetectorViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HiaatDetector.Detector = value;
-                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
+                OnPropertyChanged(nameof(Detector), broadcast: true);
             }
         }
         public int HiaatTijd
@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HiaatDetector.HiaatTijd = value;
-                RaisePropertyChanged<object>(nameof(HiaatTijd), broadcast: true);
+                OnPropertyChanged(nameof(HiaatTijd), broadcast: true);
             }
         }
 

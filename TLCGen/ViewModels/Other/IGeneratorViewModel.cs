@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public class IGeneratorViewModel : ViewModelBase
+    public class IGeneratorViewModel : ObservableObject
     {
         private ITLCGenGenerator _Generator;
 

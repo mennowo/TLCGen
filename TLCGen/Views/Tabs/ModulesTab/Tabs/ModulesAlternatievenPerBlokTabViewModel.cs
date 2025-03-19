@@ -1,12 +1,14 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -60,7 +62,7 @@ namespace TLCGen.ViewModels
                     {
                         AlternatievenPerBlok.RemoveAll();
                     }
-                    RaisePropertyChanged("");
+                    OnPropertyChanged("");
                 }
             }
         }
@@ -90,7 +92,7 @@ namespace TLCGen.ViewModels
                             }
                         }
                     }
-                    RaisePropertyChanged<object>(nameof(ToepassenAlternatievenPerBlok), true);
+                    OnPropertyChanged(nameof(ToepassenAlternatievenPerBlok), true);
                 }
             }
         }
@@ -127,7 +129,7 @@ namespace TLCGen.ViewModels
                     }
                 }
                 _numberOfModules = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -153,7 +155,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             if (message.AddedFasen?.Count > 0)
             {
@@ -179,17 +181,17 @@ namespace TLCGen.ViewModels
             AlternatievenPerBlok.BubbleSort();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             AlternatievenPerBlok.BubbleSort();
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             AlternatievenPerBlok.BubbleSort();
         }
 
-        private void OnModulesChanged(ModulesChangedMessage obj)
+        private void OnModulesChanged(object sender, ModulesChangedMessage obj)
         {
             NumberOfModules = _Controller.Data.MultiModuleReeksen ? _Controller.MultiModuleMolens.Max(x => x.Modules.Count) : _Controller.ModuleMolen.Modules.Count;
         }
@@ -200,10 +202,10 @@ namespace TLCGen.ViewModels
 
         public ModulesAlternatievenPerBlokTabViewModel() : base()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessengerInstance.Register(this, new Action<ModulesChangedMessage>(OnModulesChanged));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessenger.Default.Register<ModulesChangedMessage>(this, OnModulesChanged);
         }
 
         #endregion // Constructor

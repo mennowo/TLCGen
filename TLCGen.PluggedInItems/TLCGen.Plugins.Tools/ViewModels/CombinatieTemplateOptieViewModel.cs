@@ -1,10 +1,8 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class CombinatieTemplateOptieViewModel : ViewModelBase
+    public class CombinatieTemplateOptieViewModel : ObservableObject
     {
         #region Fields
 
@@ -20,7 +18,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 Optie.Description = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -30,7 +28,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 Optie.Type = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -40,7 +38,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 Optie.Search = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -52,7 +50,7 @@ namespace TLCGen.Plugins.Tools
                 if (value != null)
                 {
                     Optie.Replace = value;
-                    RaisePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -70,7 +68,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 Replace = value.ToString();
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

@@ -1,10 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class IOElementViewModel : ViewModelBase, IComparable
+    public class IOElementViewModel : ObservableObjectEx, IComparable
     {
         public IOElementViewModel(IOElementModel element)
         {
@@ -36,7 +37,7 @@ namespace TLCGen.ViewModels
                 {
                     SavedData.ManualNaam = value;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -50,7 +51,7 @@ namespace TLCGen.ViewModels
                 {
                     ManualNaam = SavedData.Naam;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         

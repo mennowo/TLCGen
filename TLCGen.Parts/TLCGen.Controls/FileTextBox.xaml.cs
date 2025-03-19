@@ -1,6 +1,6 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace TLCGen.Controls
 {
@@ -57,24 +57,14 @@ namespace TLCGen.Controls
 
         private void SelectFileButton_Click(object sender, RoutedEventArgs e)
         {
-	        var ofd = new CommonOpenFileDialog
+	        var ofd = new OpenFileDialog
 	        {
-		        IsFolderPicker = false,
 				Title = ChooseDialogTitle,
-		        EnsurePathExists = EnsurePathExists,
-		        Multiselect = false
+                CheckFileExists = EnsurePathExists,
+		        Multiselect = false, Filter = ChooseDialogFilter
 	        };
 
-	        var exts = ChooseDialogFilter.Split('|');
-	        if (exts.Length > 0 && exts.Length % 2 == 0)
-	        {
-		        for (var i = 0; i < exts.Length; i += 2)
-		        {
-			        ofd.Filters.Add(new CommonFileDialogFilter(exts[i + 1], exts[i]));
-		        }
-	        }
-
-	        if (ofd.ShowDialog(Window.GetWindow(this)) == CommonFileDialogResult.Ok)
+	        if (ofd.ShowDialog(Window.GetWindow(this)) == true)
             {
                 File = ofd.FileName;
             }

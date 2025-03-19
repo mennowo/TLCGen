@@ -1,16 +1,16 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.ViewModels.Enums;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class SynchronisatieViewModel : ViewModelBase
+    public class SynchronisatieViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -163,17 +163,17 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _displayType = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ConflictValue));
-                RaisePropertyChanged(nameof(IsCoupled));
-                RaisePropertyChanged(nameof(HasNoCoupling));
-                RaisePropertyChanged(nameof(IsEnabled));
-                RaisePropertyChanged(nameof(ConflictForeground));
-                RaisePropertyChanged(nameof(ConflictBackground));
-                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
-                RaisePropertyChanged(nameof(DisplayTypeTimings));
-                RaisePropertyChanged(nameof(SelectedObject));
-                RaisePropertyChanged(nameof(ShowIsCoupled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ConflictValue));
+                OnPropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged(nameof(HasNoCoupling));
+                OnPropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged(nameof(ConflictForeground));
+                OnPropertyChanged(nameof(ConflictBackground));
+                OnPropertyChanged(nameof(SynchronisatieIndicatorBrush));
+                OnPropertyChanged(nameof(DisplayTypeTimings));
+                OnPropertyChanged(nameof(SelectedObject));
+                OnPropertyChanged(nameof(ShowIsCoupled));
             }
         }
 
@@ -191,7 +191,7 @@ namespace TLCGen.ViewModels
                 {
                     elem.Value.FaseVan = value;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -205,7 +205,7 @@ namespace TLCGen.ViewModels
                 {
                     elem.Value.FaseNaar = value;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -228,10 +228,10 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
-                RaisePropertyChanged(nameof(HasConflict));
-                RaisePropertyChanged(nameof(IsEnabled));
-                RaisePropertyChanged(nameof(ConflictBackground));
+                OnPropertyChanged(nameof(ConflictValue), broadcast: true);
+                OnPropertyChanged(nameof(HasConflict));
+                OnPropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged(nameof(ConflictBackground));
             }
         }
 
@@ -266,10 +266,10 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
-                RaisePropertyChanged(nameof(HasConflict));
-                RaisePropertyChanged(nameof(IsEnabled));
-                RaisePropertyChanged(nameof(ConflictBackground));
+                OnPropertyChanged(nameof(ConflictValue), broadcast: true);
+                OnPropertyChanged(nameof(HasConflict));
+                OnPropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged(nameof(ConflictBackground));
             }
         }
 
@@ -301,9 +301,9 @@ namespace TLCGen.ViewModels
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                RaisePropertyChanged<object>(nameof(IsCoupled), broadcast: true);
-                RaisePropertyChanged(nameof(HasNoCoupling));
-                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
+                OnPropertyChanged(nameof(IsCoupled), broadcast: true);
+                OnPropertyChanged(nameof(HasNoCoupling));
+                OnPropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -337,30 +337,30 @@ namespace TLCGen.ViewModels
                 {
                     case IntersignaalGroepTypeEnum.Gelijkstart:
                         HasGelijkstart = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Gelijkstart, value));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Gelijkstart, value));
                         break;
                     case IntersignaalGroepTypeEnum.Voorstart:
                         HasVoorstart = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Voorstart, value));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Voorstart, value));
                         break;
                     case IntersignaalGroepTypeEnum.Naloop:
                         HasNaloop = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Naloop, value));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Naloop, value));
                         break;
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         HasMeeaanvraag = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Meeaanvraag, value));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Meeaanvraag, value));
                         break;
                     case IntersignaalGroepTypeEnum.LateRelease:
                         HasLateRelease = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, LateRelease, value));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, LateRelease, value));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                RaisePropertyChanged<object>(nameof(IsCoupled), broadcast: true);
-                RaisePropertyChanged(nameof(HasNoCoupling));
-                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
+                OnPropertyChanged(nameof(IsCoupled), broadcast: true);
+                OnPropertyChanged(nameof(HasNoCoupling));
+                OnPropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -370,8 +370,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasConflict = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -381,7 +381,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasGarantieConflict = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -391,8 +391,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasGelijkstart = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCoupled));
             }
         }
 
@@ -402,8 +402,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasNaloop = value;
-                RaisePropertyChanged(nameof(IsCoupled));
-                RaisePropertyChanged($"IsCoupled");
+                OnPropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged($"IsCoupled");
             }
         }
 
@@ -413,8 +413,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasVoorstart = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCoupled));
             }
         }
 
@@ -424,8 +424,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasMeeaanvraag = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCoupled));
             }
         }
 
@@ -435,8 +435,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasLateRelease = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsCoupled));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCoupled));
             }
         }
 
@@ -447,10 +447,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasOppositeVoorstart = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsEnabled));
-                RaisePropertyChanged(nameof(ConflictBackground));
-                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEnabled));
+                OnPropertyChanged(nameof(ConflictBackground));
+                OnPropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -461,8 +461,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasOppositeNaloop = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsEnabled");
+                OnPropertyChanged();
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -473,8 +473,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasOppositeMeeaanvraag = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsEnabled");
+                OnPropertyChanged();
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -486,8 +486,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _hasOppositeLateRelease = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsEnabled");
+                OnPropertyChanged();
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -685,7 +685,7 @@ namespace TLCGen.ViewModels
 
             if (sendmessage)
             {
-                Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
             }
         }
 
@@ -752,7 +752,7 @@ namespace TLCGen.ViewModels
 
             if(sendmessage)
             {
-                Messenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
+WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
             }
         }
 
@@ -771,8 +771,8 @@ namespace TLCGen.ViewModels
 
         public void UpdateView()
         {
-            RaisePropertyChanged("");
-            if (SelectedObject is ViewModelBase vmb) vmb.RaisePropertyChanged("");
+            OnPropertyChanged("");
+            if (SelectedObject is ObservableObjectEx vmb) vmb.OnPropertyChanged("");
         }
 
         #endregion // Public methods

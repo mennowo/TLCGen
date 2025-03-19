@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RISFaseCyclusLaneSimulatedStationViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISFaseCyclusLaneSimulatedStationViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         public RISFaseCyclusLaneSimulatedStationModel StationData { get; }
 
@@ -16,8 +16,8 @@ namespace TLCGen.ViewModels
             {
                 StationData.Type = value;
                 StationData.SimulationData.RelatedName = StationData.Naam;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasEx));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasEx));
             }
         }
 
@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.VehicleRole = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.VehicleSubrole = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.Prioriteit = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.Flow = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.Snelheid = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -82,7 +82,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.Afstand = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -92,7 +92,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.Q1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.Q2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         public int Q3
@@ -111,7 +111,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.Q3 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -121,7 +121,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.Q4 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -131,7 +131,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.Stopline = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -141,7 +141,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.SimulationData.FCNr = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -151,7 +151,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StationData.Importance = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

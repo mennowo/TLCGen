@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -42,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -68,12 +71,12 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        private bool GenerateSimulationValuesCommand_CanExecute(object obj)
+        private bool GenerateSimulationValuesCommand_CanExecute()
         {
             return Detectoren != null && Detectoren.Count > 0;
         }
 
-        private void GenerateSimulationValuesCommand_Executed(object obj)
+        private void GenerateSimulationValuesCommand_Executed()
         {
             var rd = new Random();
             
@@ -173,11 +176,11 @@ namespace TLCGen.ViewModels
                     dm.Simulatie.FCNr = "NG";
             }
 
-            RaisePropertyChanged("");
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            OnPropertyChanged("");
+WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             foreach(var d in Detectoren)
             {
-                d.RaisePropertyChanged("");
+                d.OnPropertyChanged("");
             }
         }
 
@@ -237,7 +240,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
         
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             UpdateDetectoren();
         }
@@ -265,7 +268,7 @@ namespace TLCGen.ViewModels
 
         public DetectorenSimulatieTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
         #endregion // Constructor

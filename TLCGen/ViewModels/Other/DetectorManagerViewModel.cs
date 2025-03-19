@@ -1,14 +1,14 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.ViewModels
 {
-    public class ItemsManagerViewModel<T1, T2> : ViewModelBase where T1 : class where T2 : class
+    public class ItemsManagerViewModel<T1, T2> : ObservableObject where T1 : class where T2 : class
     {
         #region Fields
 
@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItemToAdd = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         public T2 SelectedItemToRemove
@@ -46,7 +46,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItemToRemove = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -56,7 +56,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

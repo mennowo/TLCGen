@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HalfstarOVIngreepViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class HalfstarOVIngreepViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ovIngreep.Prioriteit = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ovIngreep.GroenNaTXDTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

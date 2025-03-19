@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -15,6 +17,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -39,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                OnPropertyChanged("SelectedFaseCyclus");
                 if (value != null) TemplatesProviderVm.SetSelectedApplyToItem(value.FaseCyclus);
             }
         }
@@ -51,7 +54,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedFaseCycli = value;
                 _SettingMultiple = false;
-                RaisePropertyChanged("SelectedFaseCycli");
+                OnPropertyChanged("SelectedFaseCycli");
                 if (value != null)
                 {
                     var sl = new List<FaseCyclusModel>();
@@ -101,7 +104,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewFaseCommand_Executed(object prm)
+        void AddNewFaseCommand_Executed()
         {
             var fcm = new FaseCyclusModel();
 
@@ -126,12 +129,12 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
             
             // This will cause the model to be updated
-            Messenger.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
+WeakReferenceMessenger.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
         }
 
-        bool AddNewFaseCommand_CanExecute(object prm) => Fasen != null;
+        bool AddNewFaseCommand_CanExecute() => Fasen != null;
 
-        void RemoveFaseCommand_Executed(object prm)
+        void RemoveFaseCommand_Executed()
         {
             var changed = false;
             var remfcs = new List<FaseCyclusModel>();
@@ -163,12 +166,12 @@ namespace TLCGen.ViewModels
                     Fasen.Add(new FaseCyclusViewModel(fc));
                 }
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
-                Messenger.Default.Send(new FasenChangingMessage(null, remfcs));
+WeakReferenceMessenger.Default.Send(new FasenChangingMessage(null, remfcs));
             }
 
         }
 
-        bool RemoveFaseCommand_CanExecute(object prm)
+        bool RemoveFaseCommand_CanExecute()
         {
             return Fasen != null &&
                 (SelectedFaseCyclus != null ||
@@ -202,7 +205,7 @@ namespace TLCGen.ViewModels
                 {
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
                 }
-                Messenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
+WeakReferenceMessenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
             }
             return true;
@@ -292,14 +295,14 @@ namespace TLCGen.ViewModels
                     return;
                 }
             }
-            Messenger.Default.Send(new FasenChangingMessage(items, null));
+WeakReferenceMessenger.Default.Send(new FasenChangingMessage(items, null));
         }
 
         public void UpdateAfterApplyTemplate(FaseCyclusModel item)
         {
             var fc = Fasen.First(x => x.FaseCyclus == item);
-            fc.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
+            fc.OnPropertyChanged("");
+WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
         }
 
         #endregion // IAllowTemplates

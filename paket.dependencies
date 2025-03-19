@@ -1,21 +1,20 @@
 source https://api.nuget.org/v3/index.json
+framework: auto-detect
 
-nuget Extended.Wpf.Toolkit framework: >= net45
-nuget Microsoft.WindowsAPICodePack.Core framework: >= net45
-nuget Microsoft.WindowsAPICodePack.Shell framework: >= net45
-nuget MvvmLightLibs framework: >= net45
-nuget NSubstitute framework: >= net45
-nuget NUnit framework: >= net45
-nuget Gu.Wpf.DataGrid2D framework: >= net45
-nuget WpfAutoGrid framework: >= net45
-nuget gong-wpf-dragdrop >= 2 alpha framework: >= net45
-nuget DocumentFormat.OpenXml framework: >= net45
-nuget InputSimulator framework: >= net45
-nuget NewtonSoft.Json framework: >= net45
-nuget AvalonEdit framework: >= net45
-nuget GitVersionTask framework: >= net45
-nuget FlaUI.UIA3
-nuget Markdown.XAML
-nuget CodingConnected.Topology framework: >= net45
+nuget Extended.Wpf.Toolkit
+nuget CommunityToolkit.Mvvm
+nuget NSubstitute
+nuget NUnit
+nuget Gu.Wpf.DataGrid2D
+nuget gong-wpf-dragdrop
+nuget DocumentFormat.OpenXml
+nuget InputSimulator
+nuget NewtonSoft.Json
 nuget AvalonEdit
+nuget Markdown.XAML
+nuget CodingConnected.Topology
+nuget AvalonEdit
+nuget GitVersionTask
 nuget NUnit3TestAdapter
+nuget Microsoft.Xaml.Behaviors.Wpf
+nuget System.Drawing.Common

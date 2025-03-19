@@ -1,11 +1,12 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Specificator
 {
-    public class SpecificatorTabViewModel : ViewModelBase
+    public class SpecificatorTabViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -26,7 +27,7 @@ namespace TLCGen.Specificator
             set
             {
                 _data = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -36,7 +37,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.Organisatie = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -46,7 +47,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.Straat = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -56,7 +57,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.Postcode = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -66,7 +67,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.Stad = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -76,7 +77,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.TelefoonNummer = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -86,7 +87,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.EMail = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -96,7 +97,7 @@ namespace TLCGen.Specificator
             set
             {
                 Data.Website = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -106,7 +107,7 @@ namespace TLCGen.Specificator
             set
             {
                 _selectedSpecialsParagraaf = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -121,7 +122,7 @@ namespace TLCGen.Specificator
             var par = new SpecificatorSpecialsParagraafViewModel(new SpecificatorSpecialsParagraaf { Titel = "Paragraaf titel", Text = "Paragraaf text" });
             SpecialsParagrafen.Add(par);
             SelectedSpecialsParagraaf = par;
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }));
 
         public ICommand RemoveParagraafCommand => _removeParagraafCommand ?? (_removeParagraafCommand = new RelayCommand(() =>
@@ -140,7 +141,7 @@ namespace TLCGen.Specificator
                     SelectedSpecialsParagraaf = SpecialsParagrafen[index];
                 }
             }
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         },
         () => SelectedSpecialsParagraaf != null));
 

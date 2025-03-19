@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using TLCGen.Helpers;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepRegularMeldingViewModel : ViewModelBase
+    public class PrioIngreepRegularMeldingViewModel : ObservableObjectEx
     {
         #region Fields
         #endregion // Fields
@@ -67,8 +66,8 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.TweedeInput = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasInput2));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasInput2));
             }
         }
 
@@ -81,7 +80,7 @@ namespace TLCGen.ViewModels
                 {
                     Parent.PrioIngreepInUitMelding.RelatedInput1 = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -91,7 +90,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.RelatedInput1Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -104,7 +103,7 @@ namespace TLCGen.ViewModels
                 {
                     Parent.PrioIngreepInUitMelding.RelatedInput2 = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -114,7 +113,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.RelatedInput2Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -124,7 +123,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.KijkNaarWisselStand = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -134,7 +133,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.OpvangStoring = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -144,7 +143,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.AlleenIndienGeenInmelding = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -154,7 +153,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.AlleenIndienRood = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -164,7 +163,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.AntiJutterTijdToepassen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -174,7 +173,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.CheckAltijdOpDsinBijVecom = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -184,7 +183,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.AntiJutterTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         

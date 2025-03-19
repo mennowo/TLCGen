@@ -1,25 +1,22 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using TLCGen.Models.Enumerations;
 using WindowsInput;
 
 namespace TLCGen.Plugins.Sumo
 {
-    public class SumoPluginTabViewModel : ViewModelBase
+    public class SumoPluginTabViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -42,7 +39,7 @@ namespace TLCGen.Plugins.Sumo
                     FaseCycli = new ObservableCollectionAroundList<FaseCyclusSumoDataViewModel, FaseCyclusSumoDataModel>(_data.FaseCycli);
                     Detectoren = new ObservableCollectionAroundList<DetectorSumoDataViewModel, DetectorSumoDataModel>(_data.Detectoren);
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -54,7 +51,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.GenererenSumoCode = value;
-                    RaisePropertyChanged<object>(nameof(GenererenSumoCode), broadcast: true);
+                    OnPropertyChanged(nameof(GenererenSumoCode), broadcast: true);
                 }
             }
         }
@@ -67,7 +64,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoPort = value;
-                    RaisePropertyChanged<object>(nameof(SumoPort), broadcast: true);
+                    OnPropertyChanged(nameof(SumoPort), broadcast: true);
                 }
             }
         }
@@ -80,7 +77,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoOrder = value;
-                    RaisePropertyChanged<object>(nameof(SumoOrder), broadcast: true);
+                    OnPropertyChanged(nameof(SumoOrder), broadcast: true);
                 }
             }
         }
@@ -93,7 +90,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdUur = value;
-                    RaisePropertyChanged<object>(nameof(StartTijdUur), broadcast: true);
+                    OnPropertyChanged(nameof(StartTijdUur), broadcast: true);
                 }
             }
         }
@@ -106,7 +103,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdMinuut = value;
-                    RaisePropertyChanged<object>(nameof(StartTijdMinuut), broadcast: true);
+                    OnPropertyChanged(nameof(StartTijdMinuut), broadcast: true);
                 }
             }
         }
@@ -119,7 +116,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntNaam = value;
-                    RaisePropertyChanged<object>(nameof(SumoKruispuntNaam), broadcast: true);
+                    OnPropertyChanged(nameof(SumoKruispuntNaam), broadcast: true);
                 }
             }
         }
@@ -132,7 +129,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntLinkMax = value;
-                    RaisePropertyChanged<object>(nameof(SumoKruispuntLinkMax), broadcast: true);
+                    OnPropertyChanged(nameof(SumoKruispuntLinkMax), broadcast: true);
                 }
             }
         }
@@ -145,7 +142,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.PrependIdToDetectors = value;
-                    RaisePropertyChanged<object>(nameof(PrependIdToDetectors), broadcast: true);
+                    OnPropertyChanged(nameof(PrependIdToDetectors), broadcast: true);
                 }
             }
         }
@@ -158,7 +155,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.AutoStartSumo = value;
-                    RaisePropertyChanged<object>(nameof(AutoStartSumo), broadcast: true);
+                    OnPropertyChanged(nameof(AutoStartSumo), broadcast: true);
                 }
             }
         }
@@ -171,7 +168,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoHomePath = value;
-                    RaisePropertyChanged<object>(nameof(SumoHomePath), broadcast: true);
+                    OnPropertyChanged(nameof(SumoHomePath), broadcast: true);
                 }
             }
         }
@@ -184,7 +181,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoConfigPath = value;
-                    RaisePropertyChanged<object>(nameof(SumoConfigPath), broadcast: true);
+                    OnPropertyChanged(nameof(SumoConfigPath), broadcast: true);
                 }
             }
         }
@@ -207,25 +204,25 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 _selectedDetector = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         #endregion // Properties
 
         #region Commands
 
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _startSUMODetectorNamingCommand;
-        public ICommand StartSUMODetectorNamingCommand => _startSUMODetectorNamingCommand ?? (_startSUMODetectorNamingCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+        private RelayCommand _startSUMODetectorNamingCommand;
+        public ICommand StartSUMODetectorNamingCommand => _startSUMODetectorNamingCommand ?? (_startSUMODetectorNamingCommand = new RelayCommand(() =>
             {
                 _namingHotkey = new HotKey(Key.F6, KeyModifier.None, OnHotKeyHandler);
             },
             () => _namingHotkey == null && SelectedDetector != null));
 
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _stopSUMODetectorNamingCommand;
+        private RelayCommand _stopSUMODetectorNamingCommand;
         private DetectorSumoDataViewModel _selectedDetector;
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _getLinkIdsFromNetworkCommand;
+        private RelayCommand _getLinkIdsFromNetworkCommand;
 
-        public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ?? (_stopSUMODetectorNamingCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+        public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ?? (_stopSUMODetectorNamingCommand = new RelayCommand(() =>
             {
             _namingHotkey.Unregister();
             _namingHotkey.Dispose();
@@ -251,7 +248,7 @@ namespace TLCGen.Plugins.Sumo
             sim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
         }
 
-        public ICommand GetLinkIdsFromNetworkCommand => _getLinkIdsFromNetworkCommand ?? (_getLinkIdsFromNetworkCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+        public ICommand GetLinkIdsFromNetworkCommand => _getLinkIdsFromNetworkCommand ?? (_getLinkIdsFromNetworkCommand = new RelayCommand(() =>
         {
             foreach (var f in FaseCycli)
             {
@@ -333,10 +330,10 @@ namespace TLCGen.Plugins.Sumo
 
         public void UpdateTLCGenMessaging()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
         }
 
         #endregion // Public Methods
@@ -352,7 +349,7 @@ namespace TLCGen.Plugins.Sumo
             _plugin.UpdateModel();
         }
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             if (message.AddedFasen?.Count > 0)
             {
@@ -377,7 +374,7 @@ namespace TLCGen.Plugins.Sumo
             FaseCycli.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             if (message.AddedDetectoren?.Count > 0)
             {
@@ -410,7 +407,7 @@ namespace TLCGen.Plugins.Sumo
             Detectoren.Rebuild();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             switch (message.ObjectType)
             {
@@ -435,7 +432,7 @@ namespace TLCGen.Plugins.Sumo
             }
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             FaseCycli.BubbleSort();
         }
@@ -444,7 +441,7 @@ namespace TLCGen.Plugins.Sumo
 
         #region Constructor
 
-        public SumoPluginTabViewModel(SumoPlugin plugin, IMessenger messenger = null) : base(messenger)
+        public SumoPluginTabViewModel(SumoPlugin plugin) : base()
         {
             _plugin = plugin;
         }

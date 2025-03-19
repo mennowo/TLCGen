@@ -1,15 +1,15 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class CombinatieTemplatesSettingsWindowViewModel : ViewModelBase
+    public class CombinatieTemplatesSettingsWindowViewModel : ObservableObject
     {
         #region Fields
 
@@ -31,7 +31,7 @@ namespace TLCGen.Plugins.Tools
             {
                 _selectedTemplate = value;
                 _selectedTemplate?.SelectedItem?.SetSelectableItems();
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -41,8 +41,8 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 _plugin.TemplatesLocation = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasTemplates));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasTemplates));
             }
         }
 
