@@ -34,13 +34,6 @@ class Build : NukeBuild
                 var fs = Directory.EnumerateFiles(x);
                 fs.ForEach(File.Delete);
             });
-
-            var project = Solution.GetProject("QIC");
-            if (project != null)
-            {
-                var confusedDirectory = project.Directory / "bin" / "x64" / "Release" / "net8.0-windows" / "Confused";
-                confusedDirectory.CreateOrCleanDirectory();
-            }
         });
 
     Target Restore => _ => _
