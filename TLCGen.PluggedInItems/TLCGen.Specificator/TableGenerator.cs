@@ -2935,7 +2935,7 @@ namespace TLCGen.Specificator
                     l.Add(new List<string>
                     {
                         rt.FaseCyclus.ToString(),
-                        rt.Type.ToString(),
+                        rt.Type.GetDescription(),
                         rt.NaloopTijd.ToString(),
                         rt.Detectoren.Select(x => x.Detector).Any() ? rt.Detectoren.Select(x => x.Detector).Aggregate((y, z) => y + ", " + z).ToString() : "-",
                         rt.DimmenPerUitgang.ToCustomString()
