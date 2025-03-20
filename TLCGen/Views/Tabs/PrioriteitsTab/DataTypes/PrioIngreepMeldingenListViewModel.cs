@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -68,7 +69,7 @@ namespace TLCGen.ViewModels
                      + _ingreep.PrioIngreep.Naam
                      + DefaultsProvider.Default.GetMeldingShortcode(m)
                      + (MeldingType == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-            WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.FaseCyclus, m));
+            WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.FaseCyclus, m));
         });
 
         #endregion // Commands

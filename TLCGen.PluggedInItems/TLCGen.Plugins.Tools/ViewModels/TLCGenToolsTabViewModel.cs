@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
@@ -159,8 +160,8 @@ namespace TLCGen.Plugins.Tools
         {
             _plugin = plugin;
             CombinatieTemplates = combinatieTemplates;
-            WeakReferenceMessenger.Default.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

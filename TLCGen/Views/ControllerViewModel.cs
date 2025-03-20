@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
@@ -224,10 +225,10 @@ namespace TLCGen.ViewModels
                 }
             }
             
-            WeakReferenceMessenger.Default.Register<UpdateTabsEnabledMessage>(this, OnUpdateTabsEnabled);
-            WeakReferenceMessenger.Default.Register<IsFasenConflictingRequest>(this, OnIsFasenConflictRequestReceived);
-            WeakReferenceMessenger.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
-            WeakReferenceMessenger.Default.Register<PropertyChangedMessage<object>>(this, OnPropertyChangedMessageBase);
+            WeakReferenceMessengerEx.Default.Register<UpdateTabsEnabledMessage>(this, OnUpdateTabsEnabled);
+            WeakReferenceMessengerEx.Default.Register<IsFasenConflictingRequest>(this, OnIsFasenConflictRequestReceived);
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
+            WeakReferenceMessengerEx.Default.Register<PropertyChangedMessage<object>>(this, OnPropertyChangedMessageBase);
 
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }

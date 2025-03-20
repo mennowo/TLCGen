@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
                     foreach (var mfcvm in _ModuleVM.Fasen)
                     {
                         var request = new IsFasenConflictingRequest(this.Naam, mfcvm.FaseCyclusNaam);
-WeakReferenceMessenger.Default.Send(request);
+WeakReferenceMessengerEx.Default.Send(request);
                         if (request.Handled && request.IsConflicting)
                             return false;
                     }
@@ -77,7 +77,7 @@ WeakReferenceMessenger.Default.Send(request);
                 {
                     if (_ModuleFaseVM.FaseCyclusNaam == Naam) return false;
                     var request = new IsFasenConflictingRequest(this.Naam, _ModuleFaseVM.FaseCyclusNaam);
-WeakReferenceMessenger.Default.Send(request);
+WeakReferenceMessengerEx.Default.Send(request);
                     if (request.Handled && request.IsConflicting)
                         return false;
                 }

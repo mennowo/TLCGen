@@ -207,7 +207,7 @@ namespace TLCGen.ViewModels
                 TLCGenModelManager.Default.UpdateControllerAlerts();
                 OnPropertyChanged(nameof(SynchronisatiesType), broadcast: true);
                 OnPropertyChanged(nameof(IsSynchRealType));
-                WeakReferenceMessenger.Default.Send(new SynchronisatiesTypeChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new SynchronisatiesTypeChangedMessage());
             }
         }
 
@@ -560,7 +560,7 @@ namespace TLCGen.ViewModels
                 if (_MatrixChanged == true)
                 {
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
-WeakReferenceMessenger.Default.Send(new ConflictsChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ConflictsChangedMessage());
                 }
                 _MatrixChanged = false;
                 return true;
@@ -1052,11 +1052,11 @@ WeakReferenceMessenger.Default.Send(new ConflictsChangedMessage());
 
         public SynchronisatiesTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<InterSignaalGroepChangedMessage>(this, OnInterSignaalGroepChanged);
-            WeakReferenceMessenger.Default.Register<ProcessSynchronisationsRequest>(this, OnProcesSynchornisationsRequested);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<InterSignaalGroepChangedMessage>(this, OnInterSignaalGroepChanged);
+            WeakReferenceMessengerEx.Default.Register<ProcessSynchronisationsRequest>(this, OnProcesSynchornisationsRequested);
         }
 
         #endregion // Constructor

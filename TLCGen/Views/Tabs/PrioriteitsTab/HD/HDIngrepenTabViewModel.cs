@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -95,7 +96,7 @@ namespace TLCGen.ViewModels
                             SelectedHDIngreep = null;
                         }
                     }
-                    WeakReferenceMessenger.Default.Send(new PrioIngrepenChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
                 // TODO Check OK ?  OnPropertyChanged(nameof(SelectedFaseCyclusHDIngreep), null, null, true);

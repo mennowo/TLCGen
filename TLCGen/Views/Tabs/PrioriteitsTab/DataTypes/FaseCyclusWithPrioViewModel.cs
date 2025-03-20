@@ -140,8 +140,8 @@ namespace TLCGen.ViewModels
                     ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.BubbleSort();
                     var prioVm = new PrioIngreepViewModel(prio, this);
                     // needed to regulate dummies for KAR
-                    if (inM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                    if (uitM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                    if (inM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                    if (uitM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                     Ingrepen.Add(prioVm);
                 });
             }

@@ -95,12 +95,12 @@ namespace TLCGen.Generators.CCOL
                 _plugin.Controller.Data.TLCGenVersie = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
             }
             var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_plugin.Controller);
-            WeakReferenceMessenger.Default.Send(prepreq);
+            WeakReferenceMessengerEx.Default.Send(prepreq);
             var s = TLCGenIntegrityChecker.IsControllerDataOK(_plugin.Controller);
             if (s == null)
             {
                 _codeGenerator.GenerateSourceFiles(_plugin.Controller, Path.GetDirectoryName(_plugin.ControllerFileName));
-                WeakReferenceMessenger.Default.Send(new ControllerCodeGeneratedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerCodeGeneratedMessage());
             }
             else
             {
@@ -124,7 +124,7 @@ namespace TLCGen.Generators.CCOL
             var vVer = Regex.Replace(SelectedVisualProject, @"Visual.?([0-9]+).*", "$1");
             if (!int.TryParse(vVer, out var iVer)) return;
             _projectGenerator.GenerateVisualStudioProjectFiles(_plugin, SelectedVisualProject.Replace(" ", "_"), iVer);
-            WeakReferenceMessenger.Default.Send(new ControllerProjectGeneratedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerProjectGeneratedMessage());
         }
 
         private bool GenerateVisualProjectCommand_CanExecute()

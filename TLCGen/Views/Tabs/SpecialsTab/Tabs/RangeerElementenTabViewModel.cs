@@ -4,6 +4,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -323,7 +324,7 @@ namespace TLCGen.ViewModels
 
         public RangeerElementenTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequestReceived);
+            WeakReferenceMessengerEx.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequestReceived);
         }
 
         #endregion // Constructor

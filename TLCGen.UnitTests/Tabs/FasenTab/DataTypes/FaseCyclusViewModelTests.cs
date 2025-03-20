@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using NSubstitute;
 using NUnit.Framework;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
@@ -19,7 +20,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
         public void FaseCyclusViewModel_NameChanged_NameChangedMessageSent()
         {
             NameChangedMessage msg = null;
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, (recipient, message) => msg = message);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, (recipient, message) => msg = message);
             var messengermock = FakesCreator.CreateMessenger();
             var model = new ControllerModel();
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));

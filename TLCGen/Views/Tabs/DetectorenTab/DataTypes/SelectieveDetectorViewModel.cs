@@ -23,7 +23,7 @@ namespace TLCGen.ViewModels
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(Models.Enumerations.TLCGenObjectTypeEnum.Input, value))
                 {
                     SelectieveDetector.Naam = value;
-                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.SelectieveDetector, old, value));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.SelectieveDetector, old, value));
                 }
                 OnPropertyChanged(broadcast: true);
             }

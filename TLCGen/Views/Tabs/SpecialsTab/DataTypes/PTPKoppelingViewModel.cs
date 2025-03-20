@@ -306,7 +306,7 @@ namespace TLCGen.ViewModels
                     var oldname = _PTPKoppeling.TeKoppelenKruispunt;
                     _PTPKoppeling.TeKoppelenKruispunt = value;
                     OnPropertyChanged(nameof(TeKoppelenKruispunt), broadcast: true);
-WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PTPKruising, oldname, value));
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PTPKruising, oldname, value));
                 }
             }
         }

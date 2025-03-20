@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
                             {
                                 var oldD = detector.Naam;
                                 detector.Naam = nd;
-WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldD, detector.Naam));
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldD, detector.Naam));
                             }
 
                             nd = detector.VissimNaam?.Replace(oldFaseCyclusName, value);
@@ -62,7 +62,7 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
                         FaseCyclus.Naam = value;
 
                         // Notify the messenger
-WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Fase, oldname, value));
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Fase, oldname, value));
 
                         // set new type
                         Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
@@ -116,7 +116,7 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
                     if (iL != FaseCyclus.AantalRijstroken)
                     {
-                        WeakReferenceMessenger.Default.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
+                        WeakReferenceMessengerEx.Default.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
                     }
 
                     if (value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
@@ -128,7 +128,7 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
                     OnPropertyChanged(string.Empty); // Update all properties
                     OnPropertyChanged(nameof(Type), broadcast: true);
 
-                    WeakReferenceMessenger.Default.Send(new FaseTypeChangedMessage(FaseCyclus, old, value));
+                    WeakReferenceMessengerEx.Default.Send(new FaseTypeChangedMessage(FaseCyclus, old, value));
                 }
             }
         }
@@ -276,7 +276,7 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
                 }
                 OnPropertyChanged(nameof(ToepassenMK2Enabled));
                 OnPropertyChanged(nameof(AantalRijstroken), broadcast: true);
-                WeakReferenceMessenger.Default.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
+                WeakReferenceMessengerEx.Default.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
             }
         }
 
@@ -861,9 +861,9 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
             SetMeeverlengenOpties();
             SetAlternatieveRuimteTypeOpties();
 
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<SynchronisatiesTypeChangedMessage>(this, OnSynchronisatiesTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<SynchronisatiesTypeChangedMessage>(this, OnSynchronisatiesTypeChanged);
         }
 
         #endregion // Constructor

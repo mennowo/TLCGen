@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
                     PelotonKoppeling.KoppelingNaam = value;
 
                     // Notify the messenger
-                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
                     OnPropertyChanged(broadcast: true);
                 }
                 else
@@ -390,7 +390,7 @@ namespace TLCGen.ViewModels
 
         private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Constructor

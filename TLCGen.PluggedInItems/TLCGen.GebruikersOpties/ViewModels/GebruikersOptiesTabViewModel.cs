@@ -290,7 +290,7 @@ namespace TLCGen.GebruikersOpties
             else
                 ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
 
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool AddNewGebruikersOptieCommand_CanExecute()
@@ -374,7 +374,7 @@ namespace TLCGen.GebruikersOpties
                     SelectedOptie = null;
             }
 
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool RemoveGebruikersOptieCommand_CanExecute()
@@ -446,7 +446,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             SelectedOptie = optie;
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmhoogCommand_CanExecute()
@@ -521,7 +521,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             SelectedOptie = optie;
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmlaagCommand_CanExecute()
@@ -613,49 +613,49 @@ namespace TLCGen.GebruikersOpties
         private void Uitgangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Uitgangen.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Ingangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Ingangen.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void HulpElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             HulpElementen.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Timers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Timers.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Counters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Counters.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Schakelaars_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Schakelaars.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void GeheugenElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             GeheugenElementen.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Parameters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Parameters.RebuildList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
 
@@ -977,11 +977,11 @@ namespace TLCGen.GebruikersOpties
             {
                 case ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel> o1:
                     o1.RebuildList();
-                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                     break;
                 case ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel> o2:
                     o2.RebuildList();
-                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                     break;
             }
         }

@@ -84,7 +84,7 @@ namespace TLCGen.Settings
             var d = new DetectorTemplateViewModel(dtm);
             DetectorenTemplates.Add(d);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.DetectorenTemplates.Add(dtm);
-            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new TemplatesChangedMessage());
             SelectedDetectorTemplate = d;
         }
 

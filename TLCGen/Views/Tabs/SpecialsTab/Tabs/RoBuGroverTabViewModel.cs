@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 RoBuGrover.ToestaanNietConflictenInConflictGroepen = value;
-WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
                 TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
                 OnConflictsChanged(this, new ConflictsChangedMessage());
                 OnPropertyChanged(broadcast: true);
@@ -64,7 +64,7 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
                 var oldval = _selectedConflictGroep;
                 _selectedConflictGroep = value;
                 OnPropertyChanged();
-WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
             }
         }
 
@@ -159,7 +159,7 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
         {
             var cgm = new RoBuGroverConflictGroepModel();
             ConflictGroepen.Add(new RoBuGroverConflictGroepViewModel(cgm));
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveConflictGroepCommand_CanExecute()
@@ -194,7 +194,7 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
             }
 
             SelectedConflictGroep = null;
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         void AddRemoveFaseCommand_Executed(object prm)
@@ -247,7 +247,7 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
-                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
             else if (fc is {IsInConflictGroep: true})
             {
@@ -263,7 +263,7 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
-                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
             foreach (var tfc in Fasen)
             {
@@ -371,9 +371,9 @@ WeakReferenceMessenger.Default.Send(new SelectedConflictGroepChangedMessage(_sel
 
         public RoBuGroverTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

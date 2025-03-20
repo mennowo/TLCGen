@@ -66,7 +66,7 @@ namespace TLCGen.ViewModels
                     _Module.Fasen.Remove(mfcvm.ModuleFaseCyclus);
                 }
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

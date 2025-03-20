@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -224,10 +225,10 @@ namespace TLCGen.ViewModels
 
         public PrioIngrepenTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
-            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessageReceived);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessageReceived);
         }
 
         private void OnPrioIngrepenChangedMessageReceived(object sender, PrioIngrepenChangedMessage obj)
@@ -251,12 +252,12 @@ namespace TLCGen.ViewModels
                 // needed to regulate KAR dummies
                 var inM = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
                 var uitM = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
-                if (inM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                if (uitM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                if (inM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                if (uitM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                 SelectedFaseCyclus.Ingrepen.Add(new PrioIngreepViewModel(prio, SelectedFaseCyclus));
             }
             
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         public void UpdateAfterApplyTemplate(PrioIngreepModel item)

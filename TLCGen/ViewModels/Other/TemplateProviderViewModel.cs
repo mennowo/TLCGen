@@ -317,7 +317,7 @@ namespace TLCGen.ViewModels
             _sourceVm = vm;
             _replaceNameOnApply = replacenameonapply;
             this.Update();
-            WeakReferenceMessenger.Default.Register<TemplatesChangedMessage>(this, OnTemplatesChanged);
+            WeakReferenceMessengerEx.Default.Register<TemplatesChangedMessage>(this, OnTemplatesChanged);
         }
 
         #endregion // Constructor

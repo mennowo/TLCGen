@@ -75,7 +75,7 @@ namespace TLCGen.ViewModels
                         _detector.Naam = value;
                         
                         // Notify the messenger
-                        WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldname, _detector.Naam));
+                        WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldname, _detector.Naam));
                     }
                 }
                 OnPropertyChanged(nameof(Naam), broadcast: true);
@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
                 }
                 OnPropertyChanged(string.Empty); // Update all properties
                 OnPropertyChanged(nameof(Type), broadcast: true);
-                WeakReferenceMessenger.Default.Send(new FaseDetectorTypeChangedMessage(TLCGenControllerDataProvider.Default.Controller, Naam, old, value));
+                WeakReferenceMessengerEx.Default.Send(new FaseDetectorTypeChangedMessage(TLCGenControllerDataProvider.Default.Controller, Naam, old, value));
             }
         }
 
@@ -271,7 +271,7 @@ namespace TLCGen.ViewModels
                     if (VeiligheidsGroenHiaat == 0) VeiligheidsGroenHiaat = 20;
                     if (VeiligheidsGroenVolgtijd == 0) VeiligheidsGroenVolgtijd = 25;
                 }
-                WeakReferenceMessenger.Default.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
+                WeakReferenceMessengerEx.Default.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
                 OnPropertyChanged(nameof(VeiligheidsGroen), broadcast: true);
             }
         }

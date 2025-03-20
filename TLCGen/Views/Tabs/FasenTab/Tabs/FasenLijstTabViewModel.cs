@@ -129,7 +129,7 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
             
             // This will cause the model to be updated
-WeakReferenceMessenger.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
+WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
         }
 
         bool AddNewFaseCommand_CanExecute() => Fasen != null;
@@ -166,7 +166,7 @@ WeakReferenceMessenger.Default.Send(new FasenChangingMessage(new List<FaseCyclus
                     Fasen.Add(new FaseCyclusViewModel(fc));
                 }
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
-WeakReferenceMessenger.Default.Send(new FasenChangingMessage(null, remfcs));
+WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(null, remfcs));
             }
 
         }
@@ -205,7 +205,7 @@ WeakReferenceMessenger.Default.Send(new FasenChangingMessage(null, remfcs));
                 {
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
                 }
-WeakReferenceMessenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
+WeakReferenceMessengerEx.Default.Send(new FasenSortedMessage(_Controller.Fasen));
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
             }
             return true;
@@ -295,14 +295,14 @@ WeakReferenceMessenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
                     return;
                 }
             }
-WeakReferenceMessenger.Default.Send(new FasenChangingMessage(items, null));
+WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(items, null));
         }
 
         public void UpdateAfterApplyTemplate(FaseCyclusModel item)
         {
             var fc = Fasen.First(x => x.FaseCyclus == item);
             fc.OnPropertyChanged("");
-WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
+WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
         }
 
         #endregion // IAllowTemplates

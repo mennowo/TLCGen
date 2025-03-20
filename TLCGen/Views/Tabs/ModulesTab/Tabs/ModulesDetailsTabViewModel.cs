@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -94,7 +95,7 @@ namespace TLCGen.ViewModels
                 {
                     _Controller.ModuleMolen.LangstWachtendeAlternatief = value;
                     OnPropertyChanged(nameof(LangstWachtendeAlternatief), broadcast: true);
-                    WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                    WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                     _ModuleMolenVM.LangstWachtendeAlternatief = value;
                 }
             }

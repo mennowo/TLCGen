@@ -136,7 +136,7 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             var dvm1 = new IngangViewModel(dm);
             Ingangen.Add(dvm1);
-            WeakReferenceMessenger.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
+            WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
         }
 
         bool AddIngangCommand_CanExecute()
@@ -164,11 +164,11 @@ namespace TLCGen.ViewModels
                 rems.Add(SelectedIngang.Ingang);
             }
             RebuildIngangenList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-WeakReferenceMessenger.Default.Send(new IngangenChangedMessage(rems, null));
+WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(rems, null));
             }
         }
 

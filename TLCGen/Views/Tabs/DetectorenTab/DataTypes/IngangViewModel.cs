@@ -22,7 +22,7 @@ namespace TLCGen.ViewModels
                 {
                     var oldname = Ingang.Naam;
                     Ingang.Naam = value;
-                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Input, oldname, value));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Input, oldname, value));
                 }
                 OnPropertyChanged(broadcast: true);
             }

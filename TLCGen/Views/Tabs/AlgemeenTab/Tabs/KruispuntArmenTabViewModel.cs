@@ -109,7 +109,7 @@ namespace TLCGen.ViewModels
 
         private void KruispuntArmen_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void UpdateSelectables()
@@ -141,7 +141,7 @@ namespace TLCGen.ViewModels
 
         public KruispuntArmenTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
             UpdateSelectables();
         }
 

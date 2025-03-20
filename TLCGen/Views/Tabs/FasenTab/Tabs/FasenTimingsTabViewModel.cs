@@ -169,7 +169,7 @@ namespace TLCGen.ViewModels
 
         public FasenTimingsTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

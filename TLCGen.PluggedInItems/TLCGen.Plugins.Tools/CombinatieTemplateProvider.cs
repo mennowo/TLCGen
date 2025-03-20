@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -235,28 +236,28 @@ namespace TLCGen.Plugins.Tools
                     case DetectorModel d:
                         var fc = (FaseCyclusModel)i.Item2;
                         fc.Detectoren.Add(d);
-                        WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(c, new List<DetectorModel> { d }, null));
+                        WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(c, new List<DetectorModel> { d }, null));
                         break;
                     case NaloopModel nl:
                         c.InterSignaalGroep.Nalopen.Add(nl);
-                        WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(nl.FaseVan, nl.FaseNaar, nl, isnew: true));
+                        WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(nl.FaseVan, nl.FaseNaar, nl, isnew: true));
                         break;
                     case MeeaanvraagModel ma:
                         c.InterSignaalGroep.Meeaanvragen.Add(ma);
-                        WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(ma.FaseVan, ma.FaseNaar, ma, isnew: true));
+                        WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(ma.FaseVan, ma.FaseNaar, ma, isnew: true));
                         break;
                     case GelijkstartModel gs:
                         c.InterSignaalGroep.Gelijkstarten.Add(gs);
-                        WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(gs.FaseVan, gs.FaseNaar, gs, isnew: true));
+                        WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(gs.FaseVan, gs.FaseNaar, gs, isnew: true));
                         break;
                     case LateReleaseModel lr:
                         c.InterSignaalGroep.LateReleases.Add(lr);
-                        WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(lr.FaseVan, lr.FaseNaar, lr, isnew: true));
+                        WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(lr.FaseVan, lr.FaseNaar, lr, isnew: true));
                         break;
                     case RatelTikkerModel rt:
                         c.Signalen.Rateltikkers.Add(rt);
                         // Trick to force rebuilding list in UI
-                        WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(c, null, null));
+                        WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(c, null, null));
                         break;
                     case PrioIngreepModel prio:
                         c.PrioData.PrioIngrepen.Add(prio);
@@ -264,9 +265,9 @@ namespace TLCGen.Plugins.Tools
                         // needed to regulate KAR dummies
                         var inM = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
                         var uitM = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
-                        if (inM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                        if (uitM != null) WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
-                        WeakReferenceMessenger.Default.Send(new PrioIngrepenChangedMessage());
+                        if (inM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                        if (uitM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                        WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
                         break;
                 }
             }

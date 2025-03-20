@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
                     _HDIngreep.DummyKARUitmelding = null;
                 }
                 OnPropertyChanged(nameof(KAR), broadcast: true);
-WeakReferenceMessenger.Default.Send(new PrioIngrepenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
             }
         }
 
@@ -523,9 +523,9 @@ WeakReferenceMessenger.Default.Send(new PrioIngrepenChangedMessage());
 
             RefreshDetectoren();
 
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
 
             foreach (RISVehicleImportance importance in Enum.GetValues(typeof(RISVehicleImportance)))
             {

@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.StarProgramma, value))
                 {
                     StarProgramma.Naam = value;
-                    WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.StarProgramma, oldName, StarProgramma.Naam));
                 }
                 OnPropertyChanged(broadcast: true);
             }

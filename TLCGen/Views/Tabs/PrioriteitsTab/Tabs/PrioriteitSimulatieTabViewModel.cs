@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -144,7 +145,7 @@ namespace TLCGen.ViewModels
             }
 
             OnPropertyChanged("");
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             foreach (var d in DummyDetectoren)
             {
                 d.OnPropertyChanged("");
@@ -206,9 +207,9 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
         public PrioriteitSimulatieTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
-            WeakReferenceMessenger.Default.Register<HDIngrepenChangedMessage>(this, OnHDIngrepenChangedMessage);
-			WeakReferenceMessenger.Default.Register<PrioIngreepMeldingChangedMessage>(this, OnPrioIngreepMeldingChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<HDIngrepenChangedMessage>(this, OnHDIngrepenChangedMessage);
+			WeakReferenceMessengerEx.Default.Register<PrioIngreepMeldingChangedMessage>(this, OnPrioIngreepMeldingChangedMessage);
         }
 
 		#endregion // Constructor

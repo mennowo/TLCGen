@@ -253,8 +253,8 @@ namespace TLCGen.ViewModels
                 TLCGenControllerDataProvider.Default.NewController();
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(HasController));
                 OnPropertyChanged(nameof(ProgramTitle));
                 ShowAlertMessage = false;
@@ -280,7 +280,7 @@ namespace TLCGen.ViewModels
         {
             if (TLCGenControllerDataProvider.Default.SaveController())
             {
-                WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
@@ -299,8 +299,8 @@ namespace TLCGen.ViewModels
             var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
             if (TLCGenControllerDataProvider.Default.SaveControllerAs())
             {
-                WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(ProgramTitle));
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
@@ -321,7 +321,7 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.CloseController())
             {
                 DefaultsProvider.Default.Controller = null;
-                WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 OnPropertyChanged(nameof(HasController));
                 OnPropertyChanged(nameof(ProgramTitle));
                 GuiActionsManager.SetStatusBarMessage("");
@@ -357,7 +357,7 @@ namespace TLCGen.ViewModels
             if (imp.ImportsIntoExisting)
             {
                 // Request to process all synchronisation data from matrix to model
-                WeakReferenceMessenger.Default.Send(new ProcessSynchronisationsRequest());
+                WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
 
                 // Check data integrity
                 var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
@@ -386,7 +386,7 @@ namespace TLCGen.ViewModels
                 }
                 SetController(c2);
                 ControllerVM.ReloadController();
-                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
@@ -415,9 +415,9 @@ namespace TLCGen.ViewModels
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling geïmporteerd");
-                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
-            WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+            WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
             OnPropertyChanged(nameof(HasController));
         }
 
@@ -429,14 +429,14 @@ namespace TLCGen.ViewModels
         private void GenerateControllerCommand_Executed()
         {
             // Request to process all synchronisation data from matrix to model
-            WeakReferenceMessenger.Default.Send(new ProcessSynchronisationsRequest());
+            WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
 
             var s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
             if (s == null)
             {
                 TLCGenControllerDataProvider.Default.Controller.Data.TLCGenVersie = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 SelectedGenerator.Generator.GenerateController();
-                WeakReferenceMessenger.Default.Send(new ControllerCodeGeneratedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerCodeGeneratedMessage());
             }
             else
             {
@@ -633,8 +633,8 @@ namespace TLCGen.ViewModels
                 var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                WeakReferenceMessenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(ProgramTitle));
                 OnPropertyChanged(nameof(HasController));
                 OnPropertyChanged(nameof(ControllerVersion));
@@ -669,7 +669,7 @@ namespace TLCGen.ViewModels
         private void OnPrepareForGenerationRequest(object sender, PrepareForGenerationRequest request)
         {
             var procreq = new ProcessSynchronisationsRequest();
-            WeakReferenceMessenger.Default.Send(procreq);
+            WeakReferenceMessengerEx.Default.Send(procreq);
         }
 
         private void OnControllerCodeGenerated(object sender, ControllerCodeGeneratedMessage message)
@@ -702,10 +702,10 @@ namespace TLCGen.ViewModels
 
             GuiActionsManager.SetStatusBarMessage = text => { StatusBarVM.StatusText = text; };
 
-            WeakReferenceMessenger.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
-            WeakReferenceMessenger.Default.Register<ControllerCodeGeneratedMessage>(this, OnControllerCodeGenerated);
-            WeakReferenceMessenger.Default.Register<ControllerProjectGeneratedMessage>(this, OnControllerProjectGenerated);
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
+            WeakReferenceMessengerEx.Default.Register<ControllerCodeGeneratedMessage>(this, OnControllerCodeGenerated);
+            WeakReferenceMessengerEx.Default.Register<ControllerProjectGeneratedMessage>(this, OnControllerProjectGenerated);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
 
             // Load application settings and defaults
             ControllerAccessProvider.Default.Setup();

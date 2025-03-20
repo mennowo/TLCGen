@@ -208,7 +208,7 @@ namespace TLCGen.Specificator
 
         public void UpdateTLCGenMessaging()
         {
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // ITLCGenPlugMessaging

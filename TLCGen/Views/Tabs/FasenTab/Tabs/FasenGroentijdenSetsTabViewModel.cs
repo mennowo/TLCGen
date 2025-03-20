@@ -201,7 +201,7 @@ namespace TLCGen.ViewModels
             }
             if(changed)
             {
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
             }
 
             GroentijdenSets.Remove(SelectedSet);
@@ -499,7 +499,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
                     _Controller.GroentijdenSets.Remove(mgsvm.GroentijdenSet);
                 }
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -508,11 +508,11 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
         public FasenGroentijdenSetsTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<GroentijdenTypeChangedMessage>(this, OnGroentijdenTypeChanged);
-            WeakReferenceMessenger.Default.Register<GroentijdChangedMessage>(this, OnGroentijdChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<GroentijdenTypeChangedMessage>(this, OnGroentijdenTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<GroentijdChangedMessage>(this, OnGroentijdChanged);
         }
 
 

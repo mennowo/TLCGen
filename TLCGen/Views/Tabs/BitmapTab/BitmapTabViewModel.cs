@@ -680,12 +680,12 @@ namespace TLCGen.ViewModels
         {
             _floodFiller = new QueueLinearFloodFiller(null);
 
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnFileNameChanged);
-            WeakReferenceMessenger.Default.Register<RefreshBitmapRequest>(this, OnRefreshBitmapRequest);
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<RefreshBitmapRequest>(this, OnRefreshBitmapRequest);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

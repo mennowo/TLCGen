@@ -266,7 +266,7 @@ namespace TLCGen.ViewModels
                     _naloop.Detectoren.Remove(d);
                 }
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Tijden_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -285,7 +285,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
                     _naloop.Tijden.Remove(t);
                 }
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
@@ -330,8 +330,8 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             Tijden.CollectionChanged += Tijden_CollectionChanged;
 
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
             {
                 _RatelTikker.Type = value;
                 OnPropertyChanged(nameof(Type), broadcast: true);
-                WeakReferenceMessenger.Default.Send(new RatelTikkerTypeChangedMessage(_RatelTikker));
+                WeakReferenceMessengerEx.Default.Send(new RatelTikkerTypeChangedMessage(_RatelTikker));
             }
         }
 
@@ -172,8 +172,8 @@ namespace TLCGen.ViewModels
         {
             _RatelTikker = rateltikker;
             Detectoren = new ObservableCollectionAroundList<RatelTikkerDetectorViewModel, RatelTikkerDetectorModel>(_RatelTikker.Detectoren);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

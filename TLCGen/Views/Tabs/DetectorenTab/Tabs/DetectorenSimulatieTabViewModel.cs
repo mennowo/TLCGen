@@ -177,7 +177,7 @@ namespace TLCGen.ViewModels
             }
 
             OnPropertyChanged("");
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             foreach(var d in Detectoren)
             {
                 d.OnPropertyChanged("");
@@ -268,7 +268,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
         public DetectorenSimulatieTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
         #endregion // Constructor

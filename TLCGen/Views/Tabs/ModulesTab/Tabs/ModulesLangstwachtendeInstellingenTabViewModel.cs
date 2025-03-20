@@ -112,10 +112,10 @@ namespace TLCGen.ViewModels
 
         public ModulesLangstwachtendeInstellingenTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<UpdateTabsEnabledMessage>(this, (o, x) => OnPropertyChanged(string.Empty));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<UpdateTabsEnabledMessage>(this, (o, x) => OnPropertyChanged(string.Empty));
         }
 
         #endregion // Constructor

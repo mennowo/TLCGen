@@ -33,7 +33,7 @@ namespace TLCGen.GebruikersOpties
                         _GebruikersOptieWithOI.Naam = value;
 
                         // Notify the messenger
-                        WeakReferenceMessenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
+                        WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
                 OnPropertyChanged(broadcast: true);

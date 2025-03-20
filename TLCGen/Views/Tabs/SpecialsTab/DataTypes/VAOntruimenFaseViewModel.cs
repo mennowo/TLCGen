@@ -353,7 +353,7 @@ namespace TLCGen.ViewModels
         
         private void VAOntruimenDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
@@ -368,9 +368,9 @@ namespace TLCGen.ViewModels
 
             WisselDetectoren = new ObservableCollection<string>();
             WisselInputs = new ObservableCollection<string>();
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
             OnDetectorenChanged(null, null);
             OnIngangenChanged(null, null);
 

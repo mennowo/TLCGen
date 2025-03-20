@@ -83,7 +83,7 @@ namespace TLCGen.ViewModels
                 {
 		            var oldName = _Controller.PeriodenData.DefaultPeriodeNaam;
 					_Controller.PeriodenData.DefaultPeriodeNaam = value;
-		            WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
+		            WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
 	            }
                 // TODO Check OK ? OnPropertyChanged(nameof(DefaultPeriodeNaam), null, null, true);
                 OnPropertyChanged(broadcast: true);
@@ -178,7 +178,7 @@ namespace TLCGen.ViewModels
                     Periodes.Insert(index - 1, mvm);
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == 0 || index + 1 < Periodes.Count && Periodes[index + 1].Type == PeriodeTypeEnum.Groentijden)
@@ -210,7 +210,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
                     }
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == Periodes.Count - 1 || index - 1 >= 0 && Periodes[index - 1].Type == PeriodeTypeEnum.Groentijden)
@@ -246,7 +246,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
             {
                 Periodes.Insert(0, mvm);
             }
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
 		}
 
 		bool AddNewPeriodeCommand_CanExecute()
@@ -259,7 +259,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
 			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam, TLCGenObjectTypeEnum.Periode);
 	        Periodes.Remove(SelectedPeriode);
 	        SelectedPeriode = null;
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
 		}
 
 		bool ChangePeriodeCommand_CanExecute()
@@ -333,7 +333,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
 
         private void Periodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -362,7 +362,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             {
                 Periodes.Add(new PeriodeViewModel(per));
             }
-WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
         }
 
         public void UpdateAfterApplyTemplate(PeriodeModel item)
@@ -399,7 +399,7 @@ WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
 
         public PeriodenGroentijdenTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
         }
 
         #endregion // Constructor

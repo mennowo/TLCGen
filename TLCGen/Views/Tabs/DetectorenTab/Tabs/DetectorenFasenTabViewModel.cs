@@ -264,7 +264,7 @@ namespace TLCGen.ViewModels
             _Detectoren.Add(dvm1);
             dvm1.PropertyChanged += Detector_PropertyChanged;
             Detectoren.BubbleSort();
-WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
+WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
         }
 
         bool AddDetectorCommand_CanExecute()
@@ -295,7 +295,7 @@ WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, ne
             if (changed)
             {
                 SelectedFaseNaam = SelectedFaseNaam;
-WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
             }
         }
 
@@ -401,7 +401,7 @@ WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, nu
                 dvm.FaseCyclus = SelectedFaseNaam;
                 Detectoren.Add(dvm);
 
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
@@ -409,7 +409,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.OnPropertyChanged("");
-WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
+WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates
@@ -441,7 +441,7 @@ WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, ne
         {
             _showAlles = true;
 
-            WeakReferenceMessenger.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPreparForGenerationRequest);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPreparForGenerationRequest);
         }
 
         private void OnPreparForGenerationRequest(object recipient, PrepareForGenerationRequest message)

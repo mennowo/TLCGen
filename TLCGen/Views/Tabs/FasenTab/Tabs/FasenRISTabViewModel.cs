@@ -84,7 +84,7 @@ namespace TLCGen.ViewModels
 
         private void MultiSystemITF_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
@@ -197,7 +197,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
@@ -215,7 +215,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
         
         public AddRemoveItemsManager<RISLanePelotonDataViewModel, RISLanePelotonDataModel, string> LanesPelotonManager =>
@@ -233,7 +233,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         #endregion // Properties
@@ -582,7 +582,7 @@ namespace TLCGen.ViewModels
                         RijstrookIndex = 1,
                         Type = GetTypeForFase(fc)
                     }));
-                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 }
             }
             RISFasen.BubbleSort();
@@ -797,10 +797,10 @@ namespace TLCGen.ViewModels
 
         public FasenRISTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
-            WeakReferenceMessenger.Default.Register<SystemITFChangedMessage>(this, OnSystemITFChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
+            WeakReferenceMessengerEx.Default.Register<SystemITFChangedMessage>(this, OnSystemITFChanged);
         }
 
         #endregion // Constructor

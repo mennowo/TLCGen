@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models.Enumerations;
 
@@ -71,7 +72,7 @@ namespace TLCGen.ViewModels
                 {
                     if (Coordinates?.Count > 0)
                     {
-                        WeakReferenceMessenger.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
+                        WeakReferenceMessengerEx.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
                     }
                     Coordinates.RemoveAll();
                     OnPropertyChanged("HasCoordinates");
@@ -109,7 +110,7 @@ namespace TLCGen.ViewModels
                 foreach (var bmcm in coords)
                     _IOElement.BitmapCoordinaten.Remove(bmcm);
             }
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             OnPropertyChanged("HasCoordinates");
         }
 

@@ -101,12 +101,12 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         public void UpdateTLCGenMessaging()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-            WeakReferenceMessenger.Default.Register<FaseTypeChangedMessage>(this, OnFaseTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<FaseTypeChangedMessage>(this, OnFaseTypeChanged);
         }
 
         private void OnFaseTypeChanged(object sender, FaseTypeChangedMessage obj)

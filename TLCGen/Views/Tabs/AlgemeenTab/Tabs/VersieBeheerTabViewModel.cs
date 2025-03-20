@@ -364,7 +364,7 @@ namespace TLCGen.ViewModels
                     _Controller.Data.Versies.Remove(vvm.VersieEntry);
                 }
             }
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

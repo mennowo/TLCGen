@@ -93,7 +93,7 @@ namespace TLCGen.Settings
             var f = new FaseCyclusTemplateViewModel(fct);
             FasenTemplates.Add(f);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.FasenTemplates.Add(fct);
-            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new TemplatesChangedMessage());
             SelectedFaseCyclusTemplate = f;
         }
 

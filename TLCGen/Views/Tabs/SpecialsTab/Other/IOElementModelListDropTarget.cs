@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 
 namespace TLCGen.ViewModels
@@ -114,7 +115,7 @@ namespace TLCGen.ViewModels
                     col[i].RangeerIndex = i;
                 }
             }
-            if (changed) WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            if (changed) WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
     }
 }

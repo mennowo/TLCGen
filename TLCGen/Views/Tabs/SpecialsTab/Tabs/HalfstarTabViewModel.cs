@@ -683,7 +683,7 @@ namespace TLCGen.ViewModels
 			}));
 			HoofdRichtingen.BubbleSort();
 			UpdateSelectables();
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         private bool RemoveHoofdRichtingCommand_CanExecute()
@@ -696,7 +696,7 @@ namespace TLCGen.ViewModels
 			HoofdRichtingen.Remove(SelectedHoofdRichtingToRemove);
 			HoofdRichtingen.BubbleSort();
 			UpdateSelectables();
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         private bool AddGekoppeldeKruisingCommand_CanExecute()
@@ -743,7 +743,7 @@ namespace TLCGen.ViewModels
 				});
 			}
 			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         private bool RemoveGekoppeldeKruisingCommand_CanExecute()
@@ -775,7 +775,7 @@ namespace TLCGen.ViewModels
 					GekoppeldeKruisingen[0].Type = HalfstarGekoppeldTypeEnum.Master;
 				}
 			}
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         #endregion // Command functionality
@@ -1126,12 +1126,12 @@ namespace TLCGen.ViewModels
 
 		public HalfstarTabViewModel() : base()
 		{
-			WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-			WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-			WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-			WeakReferenceMessenger.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
-			WeakReferenceMessenger.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
-			WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
+			WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+			WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+			WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+			WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+			WeakReferenceMessengerEx.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
+			WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
 
             if (SignaalPlannen?.Any() == true)
             {

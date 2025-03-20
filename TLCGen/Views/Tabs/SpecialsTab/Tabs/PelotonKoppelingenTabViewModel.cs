@@ -240,7 +240,7 @@ namespace TLCGen.ViewModels
 
         private void PelotonKoppelingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -302,8 +302,8 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingenTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

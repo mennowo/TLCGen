@@ -189,7 +189,7 @@ namespace TLCGen.ViewModels
                     _Meeaanvraag.Detectoren.Remove(d);
                 }
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
@@ -231,8 +231,8 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
 
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

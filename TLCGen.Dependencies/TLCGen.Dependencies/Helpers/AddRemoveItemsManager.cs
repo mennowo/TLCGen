@@ -5,10 +5,62 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 
 namespace TLCGen.Helpers
 {
+    public class WeakReferenceMessengerEx : IMessenger
+    {
+        private static IMessenger _default;
+        public static IMessenger Default => _default ??= WeakReferenceMessenger.Default;
+
+        public static void OverrideDefault(IMessenger messenger)
+        {
+            _default = messenger;
+        }
+
+        public bool IsRegistered<TMessage, TToken>(object recipient, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            return _default.IsRegistered<TMessage, TToken>(recipient, token);
+        }
+
+        public void Register<TRecipient, TMessage, TToken>(TRecipient recipient, TToken token, MessageHandler<TRecipient, TMessage> handler) where TRecipient : class where TMessage : class where TToken : IEquatable<TToken>
+        {
+            _default.Register(recipient, token, handler);
+        }
+
+        public void UnregisterAll(object recipient)
+        {
+            _default.UnregisterAll(recipient);
+        }
+
+        public void UnregisterAll<TToken>(object recipient, TToken token) where TToken : IEquatable<TToken>
+        {
+            _default.UnregisterAll(recipient, token);
+        }
+
+        public void Unregister<TMessage, TToken>(object recipient, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            _default.Unregister<TMessage, TToken>(recipient, token);
+        }
+
+        public TMessage Send<TMessage, TToken>(TMessage message, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            return _default.Send(message, token);
+        }
+
+        public void Cleanup()
+        {
+            _default.Cleanup();
+        }
+
+        public void Reset()
+        {
+            _default.Reset();
+        }
+    }
+
     public class AddRemoveItemsManager<T1, T2, T3> : ObservableObject where T1 : IViewModelWithItem
     {
         private T1 _selectedItem;

@@ -107,7 +107,7 @@ namespace TLCGen.ViewModels
             var fivm = new FileIngreepViewModel(fim);
             FileIngrepen.Add(fivm);
 
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool AddNewFileIngreepCommand_CanExecute()
@@ -119,7 +119,7 @@ namespace TLCGen.ViewModels
         {
             FileIngrepen.Remove(SelectedFileIngreep);
             SelectedFileIngreep = null;
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool RemoveFileIngreepCommand_CanExecute()
@@ -232,9 +232,9 @@ namespace TLCGen.ViewModels
 
         public FileTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(this, OnFileIngreepTeDoserenSignaalPercentageChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(this, OnFileIngreepTeDoserenSignaalPercentageChanged);
         }
 
         #endregion // Constructor

@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
                         _GroentijdenSet.Naam = value;
 
                         // Notify the messenger
-WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
                     }
                 }
                 OnPropertyChanged();

@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, value))
                     {
                         _Periode.Naam = value;
-						WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
+						WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
                     }
                 }
                 OnPropertyChanged(nameof(Naam), broadcast: true);
@@ -115,7 +115,7 @@ namespace TLCGen.ViewModels
                 }
                 OnPropertyChanged(string.Empty);
                 OnPropertyChanged(nameof(Type), broadcast: true);
-                WeakReferenceMessenger.Default.Send(new PeriodenChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
             }
         }
 

@@ -148,7 +148,7 @@ namespace TLCGen.ViewModels
             var grvm = new WaarschuwingsGroepViewModel(grm);
             WaarschuwingsGroepen.Add(grvm);
             SelectedWaarschuwingsGroep = grvm;
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
 
             if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.BellenActief))
@@ -160,7 +160,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
                 AddPeriodToModel(PeriodeTypeEnum.BellenDimmen, "beldim");
             }
             
-WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
+WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
         }
 
         bool AddWaarschuwingsGroepCommand_CanExecute()
@@ -179,8 +179,8 @@ WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
                 id = id >= WaarschuwingsGroepen.Count ? WaarschuwingsGroepen.Count - 1 : id;
                 SelectedWaarschuwingsGroep = WaarschuwingsGroepen[id];
             }
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
-WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
             UpdateSelectables();
         }
 
@@ -212,7 +212,7 @@ WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
             var rtvm = new RatelTikkerViewModel(rtm);
             RatelTikkers.Add(rtvm);
             SelectedRatelTikker = rtvm;
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
             if (SelectableRatelTikkerFasen.Count > 0)
             {
@@ -236,7 +236,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             
             RatelTikkers.BubbleSort();
 
-WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
+WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
         }
 
         bool AddRatelTikkerCommand_CanExecute()
@@ -255,7 +255,7 @@ WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
             }
             UpdateSelectables();
             SelectedRatelTikker = null;
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             if (RatelTikkers.Count > 0)
             {
                 id = id < 0 ? 0 : id;
@@ -268,7 +268,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
                 id2 = id2 >= SelectableRatelTikkerFasen.Count ? SelectableRatelTikkerFasen.Count - 1 : id2;
                 SelectedRatelTikkerFaseToAdd = SelectableRatelTikkerFasen[id2];
             }
-WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
+WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
         }
 
         bool RemoveRatelTikkerCommand_CanExecute()
@@ -445,10 +445,10 @@ WeakReferenceMessenger.Default.Send(new ModelManagerMessageBase());
 
         public SignalenTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<RatelTikkerTypeChangedMessage>(this, OnRatelTikkerTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<RatelTikkerTypeChangedMessage>(this, OnRatelTikkerTypeChanged);
         }
 
         #endregion // Constructor

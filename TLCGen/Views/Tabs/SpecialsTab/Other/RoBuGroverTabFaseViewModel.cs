@@ -2,6 +2,7 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
@@ -40,7 +41,7 @@ namespace TLCGen.ViewModels
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
                         var request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
-WeakReferenceMessenger.Default.Send(request);
+WeakReferenceMessengerEx.Default.Send(request);
                         if (request.Handled && !request.IsConflicting)
                             return false;
                     }
@@ -120,7 +121,7 @@ WeakReferenceMessenger.Default.Send(request);
         {
             _FaseCyclusNaam = fasenaam;
 
-            WeakReferenceMessenger.Default.Register<SelectedConflictGroepChangedMessage>(this, OnSelectedConflictGroepChanged);
+            WeakReferenceMessengerEx.Default.Register<SelectedConflictGroepChangedMessage>(this, OnSelectedConflictGroepChanged);
         }
 
         #endregion // Constructor

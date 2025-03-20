@@ -1,8 +1,11 @@
 ﻿using System.Linq;
+using System.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using NUnit.Framework;
 using TLCGen.ViewModels;
 using NSubstitute;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.Models.Enumerations;
@@ -12,6 +15,7 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [NonParallelizable]
     public class FasenLijstTabViewModelTests
     {
         [Test]
@@ -158,6 +162,7 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_HigherThanOthers_SortsModelCorrectlyAfterTabChange()
         {
+            WeakReferenceMessengerEx.OverrideDefault(Substitute.For<IMessenger>());
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
@@ -170,11 +175,11 @@ namespace TLCGen.UnitTests
             vm.Fasen[2].Naam = "07";
             vm.OnDeselectedPreview();
 
-            Assert.That("01" == vm.Fasen[0].Naam);
-            Assert.That("02" == vm.Fasen[1].Naam);
-            Assert.That("04" == vm.Fasen[2].Naam);
-            Assert.That("05" == vm.Fasen[3].Naam);
-            Assert.That("07" == vm.Fasen[4].Naam);
+            Assert.That("01" == model.Fasen[0].Naam);
+            Assert.That("02" == model.Fasen[1].Naam);
+            Assert.That("04" == model.Fasen[2].Naam);
+            Assert.That("05" == model.Fasen[3].Naam);
+            Assert.That("07" == model.Fasen[4].Naam);
         }
 
         [Test]

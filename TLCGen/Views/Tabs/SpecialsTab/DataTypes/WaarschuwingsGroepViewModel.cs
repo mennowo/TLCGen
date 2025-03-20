@@ -43,7 +43,7 @@ namespace TLCGen.ViewModels
                 _WaarschuwingsGroep.Bellen = value;
                 OnPropertyChanged(nameof(Bellen), broadcast: true);
                 // cause a check, so rtbel will be hidden or shown in the bitmap tab
-                WeakReferenceMessenger.Default.Send(new Messaging.Messages.ModelManagerMessageBase());
+                WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ModelManagerMessageBase());
             }
         }
 

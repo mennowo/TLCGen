@@ -39,8 +39,8 @@ namespace TLCGen.ViewModels
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.PrioData);
                 }
                 _Controller.PrioData.PrioIngreepType = value;
-WeakReferenceMessenger.Default.Send(new ControllerHasOVChangedMessage(value));
-WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerHasOVChangedMessage(value));
+WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(PrioIngreepType), broadcast: true);
                 OnPropertyChanged(nameof(HasPrio));
             }

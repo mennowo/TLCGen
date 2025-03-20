@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using TLCGen.Generators.TLCCC.CodeGeneration;
 using TLCGen.Generators.TLCCC.GeneratorUI;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -62,7 +63,7 @@ namespace TLCGen.Generators.TLCCC
 
         public void UpdateTLCGenMessaging()
         {
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // ITLCGenPlugMessaging

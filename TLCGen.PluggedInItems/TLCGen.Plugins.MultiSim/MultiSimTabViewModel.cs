@@ -71,13 +71,13 @@ namespace TLCGen.Plugins.MultiSim
                 set.SimulationEntries.Add(entry);
             }
             MultiSimEntrySets.Add(new MultiSimEntrySetViewModel(set));
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }));
 
         public ICommand RemoveMultiSimEntrySetCommand => _removeMultiSimEntrySetCommand ?? (_removeMultiSimEntrySetCommand = new RelayCommand(() =>
         {
             MultiSimEntrySets.Remove(SelectedSimEntrySet);
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         },
         () => SelectedSimEntrySet != null));
 
@@ -98,7 +98,7 @@ namespace TLCGen.Plugins.MultiSim
                     d.Simulatie.Q4 = e.Q4;
                 }
             }
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         },
         () => SelectedSimEntrySet != null));
 
@@ -125,8 +125,8 @@ namespace TLCGen.Plugins.MultiSim
 
         public void UpdateMessaging()
         {
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Public Methods

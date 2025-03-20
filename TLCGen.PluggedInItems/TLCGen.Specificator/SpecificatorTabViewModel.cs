@@ -122,7 +122,7 @@ namespace TLCGen.Specificator
             var par = new SpecificatorSpecialsParagraafViewModel(new SpecificatorSpecialsParagraaf { Titel = "Paragraaf titel", Text = "Paragraaf text" });
             SpecialsParagrafen.Add(par);
             SelectedSpecialsParagraaf = par;
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }));
 
         public ICommand RemoveParagraafCommand => _removeParagraafCommand ?? (_removeParagraafCommand = new RelayCommand(() =>
@@ -141,7 +141,7 @@ namespace TLCGen.Specificator
                     SelectedSpecialsParagraaf = SpecialsParagrafen[index];
                 }
             }
-            WeakReferenceMessenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         },
         () => SelectedSpecialsParagraaf != null));
 

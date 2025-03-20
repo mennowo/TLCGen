@@ -7,6 +7,7 @@ using System.Windows.Data;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -157,15 +158,15 @@ namespace TLCGen.ViewModels
 
         public void Setup()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnSignalGroupsChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<ControllerLoadedMessage>(this, OnControllerLoaded);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnSignalGroupFaseDetectorTypeChanged);
-            WeakReferenceMessenger.Default.Register<FaseDetectorVeiligheidsGroenChangedMessage>(this, OnSignalGroupDetectorVeiligheidsGroenChanged);
-            WeakReferenceMessenger.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnSignalGroupsChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerLoadedMessage>(this, OnControllerLoaded);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnSignalGroupFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorVeiligheidsGroenChangedMessage>(this, OnSignalGroupDetectorVeiligheidsGroenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
         }
 
         private void OnPeriodenChanged(object sender, PeriodenChangedMessage obj)

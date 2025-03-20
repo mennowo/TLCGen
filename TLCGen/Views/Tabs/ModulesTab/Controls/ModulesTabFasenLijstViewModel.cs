@@ -201,7 +201,7 @@ namespace TLCGen.ViewModels
                 }
                 _fcmvm.UpdateModuleInfo();
             }
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool AddRemoveFaseCommand_CanExecute(object prm)
@@ -258,9 +258,9 @@ namespace TLCGen.ViewModels
 
         public ModulesTabFasenLijstViewModel()
         {   
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSortedChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSortedChanged);
         }
 
         #endregion // Constructor

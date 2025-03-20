@@ -103,7 +103,7 @@ namespace TLCGen.ViewModels
                     return FasenRISTabViewModel.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
                 },
                 (x, y) => false,
-                () => WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         public object GetItem()

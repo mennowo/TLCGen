@@ -62,7 +62,7 @@ namespace TLCGen.Settings
                 PrioIngrepenTemplates.Add(pvm);
                 TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.PrioIngreepTemplates
                     .Add(pmt);
-                WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new TemplatesChangedMessage());
                 SelectedPrioIngreepTemplate = pvm;
             }, 
             () => TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable)));

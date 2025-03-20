@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             {
                 _Groentijd.Waarde = value;
                 OnPropertyChanged(nameof(Waarde), broadcast: true);
-                WeakReferenceMessenger.Default.Send(new GroentijdChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new GroentijdChangedMessage());
             }
         }
 

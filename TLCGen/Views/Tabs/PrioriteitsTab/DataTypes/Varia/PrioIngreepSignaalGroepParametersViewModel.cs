@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
 
         private void SendTLCGenChangedMessage()
         {
-WeakReferenceMessenger.Default.Send(
+WeakReferenceMessengerEx.Default.Send(
                     new Messaging.Messages.PrioIngreepSignaalGroepParametersChangedMessage(
                         (PrioIngreepSignaalGroepParametersModel)this.GetItem()));
         }

@@ -225,7 +225,7 @@ namespace TLCGen.ViewModels
             var mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
             SelectedModule = mvm;
-            WeakReferenceMessenger.Default.Send(new ModulesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
         }
 
         bool AddNewModuleCommand_CanExecute()
@@ -249,7 +249,7 @@ namespace TLCGen.ViewModels
                     SelectedModule = Modules[index];
                 }
             }
-            WeakReferenceMessenger.Default.Send(new ModulesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
         }
 
         bool ChangeModuleCommand_CanExecute()
@@ -319,7 +319,7 @@ namespace TLCGen.ViewModels
                     WachtModule = Modules[0].Naam;
                 }
                 OnPropertyChanged(nameof(WachtModule));
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
@@ -332,8 +332,8 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             _ModuleMolen = moduleMolen;
             ReloadModules();
             _ModulesTabVM = mltab;
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

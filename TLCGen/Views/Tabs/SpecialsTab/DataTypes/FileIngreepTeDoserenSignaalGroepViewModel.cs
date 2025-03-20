@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
                 OnPropertyChanged(broadcast: true);
-WeakReferenceMessenger.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
+WeakReferenceMessengerEx.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
             }
         }
 

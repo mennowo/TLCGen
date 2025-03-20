@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.BitmapNaam = value;
                 OnPropertyChanged(nameof(BitmapNaam), broadcast: true);
-WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -179,15 +179,15 @@ WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
                             }
                         }
                     }
-                    WeakReferenceMessenger.Default.Send(new ControllerIntergreenTimesTypeChangedMessage());
-WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerIntergreenTimesTypeChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                     OnPropertyChanged(nameof(CCOLVersie), broadcast: true);
                 }
                 OnPropertyChanged(nameof(IsCCOLVersieLowerThan9));
                 OnPropertyChanged(nameof(IsCCOLVersieHigherThan9));
                 OnPropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo110));
                 OnPropertyChanged(nameof(IsCCOLVersieHigherThanOrEqualTo9));
-                WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 
                 if (oldValue >= CCOLVersieEnum.CCOL110 && _Controller.Data.CCOLVersie < CCOLVersieEnum.CCOL110 &&
                     _Controller.PrioData.HasPrio &&
@@ -199,7 +199,7 @@ WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
                         "Prioriteit RIS niet beschikbaar", MessageBoxButton.OK);
                 }
                 
-                WeakReferenceMessenger.Default.Send(new CCOLVersionChangedMessage(oldValue, _Controller.Data.CCOLVersie));
+                WeakReferenceMessengerEx.Default.Send(new CCOLVersionChangedMessage(oldValue, _Controller.Data.CCOLVersie));
             }
         }
         
@@ -410,7 +410,7 @@ WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
             {
                 _Controller.Data.TypeGroentijden = value;
                 OnPropertyChanged(broadcast: true);
-WeakReferenceMessenger.Default.Send(new GroentijdenTypeChangedMessage(value));
+WeakReferenceMessengerEx.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }
         
@@ -501,7 +501,7 @@ WeakReferenceMessenger.Default.Send(new GroentijdenTypeChangedMessage(value));
                 OnPropertyChanged(nameof(NotMultiModuleReeksen));
 
                 _Controller.Data.ModulenDisplayBitmapData.Clear();
-                if (UitgangPerModule) WeakReferenceMessenger.Default.Send(new ModulesChangedMessage());
+                if (UitgangPerModule) WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
             }
         }
 
@@ -637,7 +637,7 @@ WeakReferenceMessenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             {
                 _Controller.Data.TraffickCompatible = value;
                 OnPropertyChanged(nameof(TraffickCompatible), broadcast: true);
-WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -672,7 +672,7 @@ WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
             {
                 _Controller.Data.NietGebruikenBitmap = value;
                 OnPropertyChanged(nameof(GebruikBitmap), broadcast: true);
-WeakReferenceMessenger.Default.Send(new UpdateTabsEnabledMessage());
+WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 

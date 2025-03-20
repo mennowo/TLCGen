@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
         {
             _VAOntruimenDetector = vaontruimend;
             ConflicterendeFasen = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ConflicterendeFasen);
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

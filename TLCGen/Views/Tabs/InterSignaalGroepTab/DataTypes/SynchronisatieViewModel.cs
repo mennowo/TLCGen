@@ -337,23 +337,23 @@ namespace TLCGen.ViewModels
                 {
                     case IntersignaalGroepTypeEnum.Gelijkstart:
                         HasGelijkstart = value;
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Gelijkstart, value));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Gelijkstart, value));
                         break;
                     case IntersignaalGroepTypeEnum.Voorstart:
                         HasVoorstart = value;
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Voorstart, value));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Voorstart, value));
                         break;
                     case IntersignaalGroepTypeEnum.Naloop:
                         HasNaloop = value;
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Naloop, value));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Naloop, value));
                         break;
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         HasMeeaanvraag = value;
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Meeaanvraag, value));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Meeaanvraag, value));
                         break;
                     case IntersignaalGroepTypeEnum.LateRelease:
                         HasLateRelease = value;
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, LateRelease, value));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, LateRelease, value));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -685,7 +685,7 @@ WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan,
 
             if (sendmessage)
             {
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
             }
         }
 
@@ -752,7 +752,7 @@ WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan,
 
             if(sendmessage)
             {
-WeakReferenceMessenger.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
+WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVan, FaseNaar, Conflict));
             }
         }
 

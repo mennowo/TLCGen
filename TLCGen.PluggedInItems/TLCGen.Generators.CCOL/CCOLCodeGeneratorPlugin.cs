@@ -77,8 +77,8 @@ namespace TLCGen.Generators.CCOL
 
         public void UpdateTLCGenMessaging()
         {
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
-            WeakReferenceMessenger.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
         }
 
         #endregion // ITLCGenPlugMessaging

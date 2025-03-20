@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
                 var old = _model.SystemITF;
                 _model.SystemITF = value;
                 OnPropertyChanged(broadcast: true);
-                WeakReferenceMessenger.Default.Send(new SystemITFChangedMessage(old, _model.SystemITF));
+                WeakReferenceMessengerEx.Default.Send(new SystemITFChangedMessage(old, _model.SystemITF));
             }
         }
 

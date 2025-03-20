@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
                         Model.Naam = value;
 
                         // Notify the messenger
-                        WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
+                        WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
                     }
                 }
                 OnPropertyChanged(broadcast: true);

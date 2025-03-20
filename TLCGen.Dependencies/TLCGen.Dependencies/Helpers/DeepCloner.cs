@@ -11,7 +11,7 @@ namespace TLCGen.Helpers
     {
         public void OnPropertyChanged([CallerMemberName] string propertyName = "", bool broadcast = true)
         {
-            if (broadcast) WeakReferenceMessenger.Default.Send(new BroadcastMessage(this));
+            if (broadcast) WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(this));
             base.OnPropertyChanged(propertyName);
         }
     }

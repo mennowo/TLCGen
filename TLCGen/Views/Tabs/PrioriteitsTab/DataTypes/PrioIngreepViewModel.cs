@@ -539,7 +539,7 @@ namespace TLCGen.ViewModels
                         LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
                     }
                     NewLijnNummer = "";
-                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
                 }, () => LijnNummers != null);
             }
@@ -575,7 +575,7 @@ namespace TLCGen.ViewModels
                         LijnNummers.RemoveAt(LijnNummers.Count - 1);
                     }
 
-                    WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 }, () => LijnNummers != null && LijnNummers.Count > 0);
             }
         }
@@ -587,7 +587,7 @@ namespace TLCGen.ViewModels
                 return _removeIngreepCommand ??= new RelayCommand(() =>
                 {
                     _parentIngreep.Ingrepen.Remove(this);
-                    WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
+                    WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
                 });
             }
         }
@@ -669,9 +669,9 @@ namespace TLCGen.ViewModels
             PrioIngreep = ovingreep;
             _parentIngreep = parentIngreep;
             
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
-            WeakReferenceMessenger.Default.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null, null);
 

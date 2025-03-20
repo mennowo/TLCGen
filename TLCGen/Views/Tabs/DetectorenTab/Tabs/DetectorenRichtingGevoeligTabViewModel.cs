@@ -333,7 +333,7 @@ namespace TLCGen.ViewModels
             OnPropertyChanged("SelectedDetectorAanvraag1");
             OnPropertyChanged("SelectedDetectorAanvraag2");
 
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool AddRichtingGevoeligVerleng_CanExecute()
@@ -359,7 +359,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
             OnPropertyChanged("SelectedDetectorVerleng1");
             OnPropertyChanged("SelectedDetectorVerleng2");
 
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveRichtingGevoeligeAanvraag_CanExecute()
@@ -371,7 +371,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         {
             RichtingGevoeligeAanvragen.Remove(SelectedRichtingGevoeligeAanvraag);
             SelectedRichtingGevoeligeAanvraag = null;
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveRichtingGevoeligVerleng_CanExecute()
@@ -383,7 +383,7 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
         {
             RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVerleng);
             SelectedRichtingGevoeligVerleng = null;
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Command Functionality
@@ -456,8 +456,8 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
         public DetectorenRichtingGevoeligTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
 

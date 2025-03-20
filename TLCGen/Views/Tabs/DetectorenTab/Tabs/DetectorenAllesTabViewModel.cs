@@ -129,7 +129,7 @@ namespace TLCGen.ViewModels
 
         public DetectorenAllesTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
         #endregion // Constructor

@@ -94,7 +94,7 @@ namespace TLCGen.Settings
             var pvm = new PeriodeTemplateViewModel(pmt);
             PeriodenTemplates.Add(pvm);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.PeriodenTemplates.Add(pmt);
-            WeakReferenceMessenger.Default.Send(new TemplatesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new TemplatesChangedMessage());
             SelectedPeriodeTemplate = pvm;
         }
 

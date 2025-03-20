@@ -167,7 +167,7 @@ namespace TLCGen.ViewModels
             dm.AanvraagDirectSch = NooitAltijdAanUitEnum.Nooit; // Not possible / allowed on loose detector
             var dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
-            WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
+            WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
             Detectoren.BubbleSort();
         }
 
@@ -196,11 +196,11 @@ namespace TLCGen.ViewModels
                 Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedDetector.Naam, TLCGenObjectTypeEnum.Detector);
             }
             RebuildDetectorenList();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+                WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
                 Detectoren.BubbleSort();
             }
         }
@@ -294,7 +294,7 @@ namespace TLCGen.ViewModels
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.OnPropertyChanged("");
-			WeakReferenceMessenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
+			WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates
@@ -336,8 +336,8 @@ namespace TLCGen.ViewModels
                     _Controller.Detectoren.Remove(dvm.Detector);
                 }
             };
-WeakReferenceMessenger.Default.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
-WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -346,8 +346,8 @@ WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
 
         public DetectorenExtraTabViewModel() : base()
         {
-            WeakReferenceMessenger.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChangedMessage);
         }
 
         private void OnPrepareForGenerationRequest(object recipient, PrepareForGenerationRequest message)

@@ -123,7 +123,7 @@ namespace TLCGen.ViewModels
             var vm = new PTPKoppelingViewModel(ptp);
             PTPKoppelingen.Add(vm);
             SelectedPTPKoppeling = vm;
-			WeakReferenceMessenger.Default.Send(new PTPKoppelingenChangedMessage());
+			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         }
 
         private bool RemovePTPKoppelingCommand_CanExecute()
@@ -135,7 +135,7 @@ namespace TLCGen.ViewModels
         {
             PTPKoppelingen.Remove(SelectedPTPKoppeling);
             SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
-			WeakReferenceMessenger.Default.Send(new PTPKoppelingenChangedMessage());
+			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         }
 
         #endregion // Command Functionality
@@ -268,7 +268,7 @@ namespace TLCGen.ViewModels
                     _Controller.PTPData.PTPKoppelingen.Remove(ptp.PTPKoppeling);
                 }
             };
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

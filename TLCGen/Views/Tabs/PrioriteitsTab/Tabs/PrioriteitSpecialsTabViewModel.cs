@@ -165,8 +165,8 @@ namespace TLCGen.ViewModels
 
         public PrioriteitSpecialsTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

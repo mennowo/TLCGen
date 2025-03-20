@@ -847,7 +847,7 @@ namespace TLCGen.ModelManagement
             Controller.ModuleMolen.FasenModuleData.BubbleSort();
 
             // Messaging
-            WeakReferenceMessenger.Default.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
+            WeakReferenceMessengerEx.Default.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
         }
 
         private void OnNameChanging(object sender, NameChangingMessage msg)
@@ -859,12 +859,12 @@ namespace TLCGen.ModelManagement
             {
                 Controller.Fasen.Sort();
             }
-            WeakReferenceMessenger.Default.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
+            WeakReferenceMessengerEx.Default.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
 
             // Force the viewmodel to order+rebuild relevant lists
             if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {
-                WeakReferenceMessenger.Default.Send(new FasenChangedMessage(null, null));
+                WeakReferenceMessengerEx.Default.Send(new FasenChangedMessage(null, null));
             }
         }
 
@@ -1086,12 +1086,12 @@ namespace TLCGen.ModelManagement
 
         public TLCGenModelManager()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangingMessage>(this, OnFasenChanging);
-            WeakReferenceMessenger.Default.Register<NameChangingMessage>(this, OnNameChanging);
-            WeakReferenceMessenger.Default.Register<ModelManagerMessageBase>(this, OnModelManagerMessage);
-            WeakReferenceMessenger.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChangedMessage);
-            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<FasenChangingMessage>(this, OnFasenChanging);
+            WeakReferenceMessengerEx.Default.Register<NameChangingMessage>(this, OnNameChanging);
+            WeakReferenceMessengerEx.Default.Register<ModelManagerMessageBase>(this, OnModelManagerMessage);
+            WeakReferenceMessengerEx.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedMessage);
         }
 
         #endregion // Constructor

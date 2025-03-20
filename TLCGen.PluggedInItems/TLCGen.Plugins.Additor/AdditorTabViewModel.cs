@@ -8,6 +8,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.Additor
 {
@@ -167,7 +168,7 @@ namespace TLCGen.Plugins.Additor
 
         public void UpdateTLCGenMessaging()
         {
-            WeakReferenceMessenger.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // Public Methods

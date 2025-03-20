@@ -83,13 +83,13 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("");
 
                 var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
-                WeakReferenceMessenger.Default.Send(msg);
+                WeakReferenceMessengerEx.Default.Send(msg);
                 if (msg.FaseCyclus == null) return;
                 Naam = msg.FaseCyclus 
                        + msg.Ingreep 
                        + DefaultsProvider.Default.GetMeldingShortcode(PrioIngreepInUitMelding)
                        + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-                WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
+                WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
                 SetActualViewModel();
             }
         }
@@ -163,7 +163,7 @@ namespace TLCGen.ViewModels
                             break;
                         case PrioIngreepMeldingenListViewModel list:
                             list.Meldingen.Remove(this);
-                            WeakReferenceMessenger.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
+                            WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
                             break;
                     }
                 });

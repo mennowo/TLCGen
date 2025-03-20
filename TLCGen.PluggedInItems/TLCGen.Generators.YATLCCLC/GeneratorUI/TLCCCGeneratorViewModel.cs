@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Generators.TLCCC.CodeGeneration;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 
@@ -41,12 +42,12 @@ namespace TLCGen.Generators.TLCCC.GeneratorUI
         private void GenerateCodeCommand_Executed()
         {
             var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_plugin.Controller);
-            WeakReferenceMessenger.Default.Send(prepreq);
+            WeakReferenceMessengerEx.Default.Send(prepreq);
             var s = TLCGenIntegrityChecker.IsControllerDataOK(_plugin.Controller);
             if (s == null)
             {
                 _codeGenerator.GenerateSourceFiles(_plugin.Controller, Path.GetDirectoryName(_plugin.ControllerFileName));
-                WeakReferenceMessenger.Default.Send(new ControllerCodeGeneratedMessage());
+                WeakReferenceMessengerEx.Default.Send(new ControllerCodeGeneratedMessage());
             }
             else
             {

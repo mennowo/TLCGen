@@ -184,10 +184,10 @@ namespace TLCGen.ViewModels
 
         public PrioriteitSignaalGroepInstellingenTabViewModel()
         {
-            WeakReferenceMessenger.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
-            WeakReferenceMessenger.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
-            WeakReferenceMessenger.Default.Register<ControllerHasOVChangedMessage>(this, OnControllerHasOVChanged);
-            WeakReferenceMessenger.Default.Register<PrioIngreepSignaalGroepParametersChangedMessage>(this, OnOVIngreepSignaalGroepParametersChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<ControllerHasOVChangedMessage>(this, OnControllerHasOVChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngreepSignaalGroepParametersChangedMessage>(this, OnOVIngreepSignaalGroepParametersChanged);
         }
 
         #endregion // Constructor

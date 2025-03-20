@@ -122,9 +122,9 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             var dvm1 = new SelectieveDetectorViewModel(dm);
             SelectieveDetectoren.Add(dvm1);
-            WeakReferenceMessenger.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
+            WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
             SelectedSelectieveDetectoren.BubbleSort();
-            WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool AddSelectieveDetectorCommand_CanExecute()
@@ -155,8 +155,8 @@ namespace TLCGen.ViewModels
 
             if (changed)
             {
-                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
-                WeakReferenceMessenger.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
             }
         }
 

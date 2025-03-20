@@ -105,7 +105,7 @@ namespace TLCGen.ViewModels
 			            _FileIngreep.Naam = value;
 
 						// Notify the messenger
-WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.FileIngreep, oldname, value));
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.FileIngreep, oldname, value));
 						OnPropertyChanged(nameof(Naam), broadcast: true);
 		            }
 				}
@@ -396,9 +396,9 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
         {
             _FileIngreep = fileingreep;
 
-            WeakReferenceMessenger.Default.Register<NameChangedMessage>(this, OnNameChanged);
-            WeakReferenceMessenger.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            WeakReferenceMessenger.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
 
             FileDetectoren = new ObservableCollectionAroundList<FileIngreepDetectorViewModel, FileIngreepDetectorModel>(_FileIngreep.FileDetectoren);
             FileDetectoren.CollectionChanged += (o, e) =>
