@@ -72,18 +72,27 @@ WeakReferenceMessenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum
                             RenameDetector(d, oldname);
                         }
 
-                        var prios = TLCGenControllerDataProvider.Default.Controller.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == FaseCyclus.Naam);
-                        var hds = TLCGenControllerDataProvider.Default.Controller.PrioData.HDIngrepen.Where(x => x.FaseCyclus == FaseCyclus.Naam);
-                        foreach (var prio in prios)
+                        if (TLCGenControllerDataProvider.Default.Controller != null)
                         {
-                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.DummyKARMelding != null)) RenameDetector(melding.DummyKARMelding, oldname);
-                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.DummyKARMelding != null)) RenameDetector(melding.DummyKARMelding, oldname);
-                        }
+                            var prios = TLCGenControllerDataProvider.Default.Controller.PrioData.PrioIngrepen.Where(x =>
+                                x.FaseCyclus == FaseCyclus.Naam);
+                            var hds = TLCGenControllerDataProvider.Default.Controller.PrioData.HDIngrepen.Where(x =>
+                                x.FaseCyclus == FaseCyclus.Naam);
+                            foreach (var prio in prios)
+                            {
+                                foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x =>
+                                             x.DummyKARMelding != null))
+                                    RenameDetector(melding.DummyKARMelding, oldname);
+                                foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x =>
+                                             x.DummyKARMelding != null))
+                                    RenameDetector(melding.DummyKARMelding, oldname);
+                            }
 
-                        foreach (var hd in hds)
-                        {
-                            RenameDetector(hd.DummyKARInmelding, oldname);
-                            RenameDetector(hd.DummyKARUitmelding, oldname);
+                            foreach (var hd in hds)
+                            {
+                                RenameDetector(hd.DummyKARInmelding, oldname);
+                                RenameDetector(hd.DummyKARUitmelding, oldname);
+                            }
                         }
                     }
                 }

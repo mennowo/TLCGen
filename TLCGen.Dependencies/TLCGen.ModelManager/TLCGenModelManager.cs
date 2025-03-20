@@ -852,6 +852,8 @@ namespace TLCGen.ModelManagement
 
         private void OnNameChanging(object sender, NameChangingMessage msg)
         {
+            if (Controller == null) return;
+
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName, msg.ObjectType);
             if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {

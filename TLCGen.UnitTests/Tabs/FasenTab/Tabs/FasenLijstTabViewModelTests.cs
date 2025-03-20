@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using TLCGen.ViewModels;
-using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using TLCGen.DataAccess;
 using TLCGen.Models;
@@ -19,7 +18,6 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed_AddsFase()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -34,7 +32,6 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_Adds5Fasen()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -53,7 +50,6 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_5thFaseCorrectlyNamed()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -141,7 +137,6 @@ namespace TLCGen.UnitTests
         public void RenameFase_HigherThanOthers_SortsCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -164,7 +159,6 @@ namespace TLCGen.UnitTests
         public void RenameFase_HigherThanOthers_SortsModelCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -187,7 +181,6 @@ namespace TLCGen.UnitTests
         public void RenameFase_LowerThanOthers_SortsCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));

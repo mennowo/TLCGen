@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using NSubstitute;
 using TLCGen.DataAccess;
 using TLCGen.Dependencies.Providers;
