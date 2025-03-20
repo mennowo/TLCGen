@@ -113,6 +113,7 @@ namespace TLCGen.Settings
             {
                 _SelectedPeriode = value;
                 OnPropertyChanged("");
+                _RemovePeriodeCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -147,9 +148,19 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        public ICommand AddPeriodeCommand => _AddPeriodeCommand ??= new RelayCommand(AddPeriodeCommand_Executed, AddPeriodeCommand_CanExecute);
+        public ICommand AddPeriodeCommand => _AddPeriodeCommand ??= new RelayCommand(() =>
+            {
+                var d = new PeriodeModel();
+                d.Naam = "per" + (Perioden.Count + 1);
+                Perioden.Add(d);
+            });
 
-        public ICommand RemovePeriodeCommand => _RemovePeriodeCommand ??= new RelayCommand(RemovePeriodeCommand_Executed, RemovePeriodeCommand_CanExecute);
+        public ICommand RemovePeriodeCommand => _RemovePeriodeCommand ??= new RelayCommand(() =>
+            {
+                Perioden.Remove(SelectedPeriode);
+                SelectedPeriode = null;
+            }, 
+            () => SelectedPeriode != null);
 
         #endregion // Commands
 

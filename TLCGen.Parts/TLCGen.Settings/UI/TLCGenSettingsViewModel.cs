@@ -56,6 +56,7 @@ namespace TLCGen.Settings
                 _FasenTemplatesEditorTabVM = null;
                 _DetectorenTemplatesEditorTabVM = null;
                 _PeriodenTemplatesEditorTabVM = null;
+                _CreateTemplateFileCommand?.NotifyCanExecuteChanged();
                 OnPropertyChanged("");
             }
         }

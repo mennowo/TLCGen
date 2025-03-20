@@ -6,6 +6,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using CommunityToolkit.Mvvm.Messaging;
+using System;
 
 namespace TLCGen.Settings
 {
@@ -37,6 +38,7 @@ namespace TLCGen.Settings
                 _SelectedPeriodeTemplate = value;
                 OnPropertyChanged("SelectedPeriodeTemplate");
                 OnPropertyChanged(nameof(HasDC));
+                _RemovePeriodeTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -109,7 +111,7 @@ namespace TLCGen.Settings
 
         bool RemovePeriodeTemplateCommand_CanExecute()
         {
-            return SelectedPeriodeTemplate != null && SelectedPeriodeTemplate.Editable;
+            return SelectedPeriodeTemplate is { Editable: true };
         }
 
         #endregion // Command Functionality
@@ -122,7 +124,18 @@ namespace TLCGen.Settings
 
         public PeriodenTemplatesEditorTabViewModel()
         {
+            TemplatesProvider.Default.LoadedTemplatesChanged += DefaultOnLoadedTemplatesChanged;
             PeriodenTemplates = new ObservableCollectionAroundList<PeriodeTemplateViewModel, TLCGenTemplateModel<PeriodeModel>>(TemplatesProvider.Default.Templates.PeriodenTemplates);
+        }
+
+        private void DefaultOnLoadedTemplatesChanged(object sender, EventArgs e)
+        {
+            _AddPeriodeTemplateCommand?.NotifyCanExecuteChanged();
+        }
+
+        ~PeriodenTemplatesEditorTabViewModel()
+        {
+            TemplatesProvider.Default.LoadedTemplatesChanged -= DefaultOnLoadedTemplatesChanged;
         }
 
         #endregion // Constructor

@@ -11,11 +11,15 @@ namespace TLCGen.Helpers
 {
     public class AddRemoveItemsManager<T1, T2, T3> : ObservableObject where T1 : IViewModelWithItem
     {
-        public ObservableCollectionAroundList<T1, T2> ItemsSource { get; }
-        public ObservableCollection<T3> AllSelectableItems { get; } = new();
-        public ObservableCollection<T3> SelectableItems { get; } = new();
-        
+        private T1 _selectedItem;
         private T3 _selectedItemToAdd;
+        private RelayCommand _addItemCommand;
+        private RelayCommand _removeItemCommand;
+
+        public ObservableCollectionAroundList<T1, T2> ItemsSource { get; }
+        public ObservableCollection<T3> AllSelectableItems { get; } = [];
+        public ObservableCollection<T3> SelectableItems { get; } = [];
+
         public T3 SelectedItemToAdd
         {
             get => _selectedItemToAdd;
@@ -23,10 +27,10 @@ namespace TLCGen.Helpers
             {
                 _selectedItemToAdd = value;
                 OnPropertyChanged();
+                _addItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
-        private T1 _selectedItem;
         public T1 SelectedItem
         {
             get => _selectedItem;
@@ -34,14 +38,16 @@ namespace TLCGen.Helpers
             {
                 _selectedItem = value;
                 OnPropertyChanged();
+                _removeItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
         public Func<T3, T1> GetNewItem { get; }
+        
         public Func<T1, T3, bool> SelectableEqualsItem { get; }
+        
         public Action OnCollectionChanged { get; }
 
-        RelayCommand _addItemCommand;
         public ICommand AddItemCommand => _addItemCommand ??= new RelayCommand(AddItemCommand_executed, AddItemCommand_canExecute);
 
         private bool AddItemCommand_canExecute()
@@ -67,7 +73,6 @@ namespace TLCGen.Helpers
             }
         }
 
-        RelayCommand _removeItemCommand;
         public ICommand RemoveItemCommand => _removeItemCommand ??= new RelayCommand(RemoveItemCommand_executed, RemoveItemCommand_canExecute);
 
         private bool RemoveItemCommand_canExecute()
@@ -129,6 +134,7 @@ namespace TLCGen.Helpers
                 }
             }
             if (SelectableItems.Any()) SelectedItemToAdd = SelectableItems[0];
+            _addItemCommand?.NotifyCanExecuteChanged();
         }
 
         public AddRemoveItemsManager(ObservableCollectionAroundList<T1, T2> itemsSource, Func<T3, T1> getNewItem, Func<T1, T3, bool> selectableEqualsItem, Action onCollectionChanged = null)

@@ -20,7 +20,6 @@ namespace TLCGen.Models
 
         #endregion // Fields
         
-
         #region Properties
 
         public string Id { get; }

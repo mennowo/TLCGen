@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using System;
 
 namespace TLCGen.Settings
 {
@@ -37,6 +38,7 @@ namespace TLCGen.Settings
                 _SelectedFaseCyclusTemplate = value;
                 OnPropertyChanged(nameof(SelectedFaseCyclusTemplate));
                 OnPropertyChanged(nameof(HasDC));
+                _RemoveFaseTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -108,20 +110,27 @@ namespace TLCGen.Settings
 
         bool RemoveFaseTemplateCommand_CanExecute()
         {
-            return SelectedFaseCyclusTemplate != null && SelectedFaseCyclusTemplate.Editable;
+            return SelectedFaseCyclusTemplate is { Editable: true };
         }
 
         #endregion // Command Functionality
-
-        #region Private Methods
-
-        #endregion // Private Methods
 
         #region Constructor
 
         public FasenTemplatesEditorTabViewModel()
         {
+            TemplatesProvider.Default.LoadedTemplatesChanged += DefaultOnLoadedTemplatesChanged;
             FasenTemplates = new ObservableCollectionAroundList<FaseCyclusTemplateViewModel, TLCGenTemplateModel<FaseCyclusModel>>(TemplatesProvider.Default.Templates.FasenTemplates);
+        }
+
+        private void DefaultOnLoadedTemplatesChanged(object sender, EventArgs e)
+        {
+            _AddFaseTemplateCommand?.NotifyCanExecuteChanged();
+        }
+
+        ~FasenTemplatesEditorTabViewModel()
+        {
+            TemplatesProvider.Default.LoadedTemplatesChanged -= DefaultOnLoadedTemplatesChanged;
         }
 
         #endregion // Constructor
