@@ -29,6 +29,7 @@ namespace TLCGen.DataAccess
         private XmlDocument _ControllerXml;
 
 	    private Action<object> _setDefaultsAction;
+        private bool _controllerHasChanged;
 
         #endregion // Fields
 
@@ -81,7 +82,15 @@ namespace TLCGen.DataAccess
         /// </summary>
         public string ControllerFileName { get; set; }
 
-        public bool ControllerHasChanged { get; set; }
+        public bool ControllerHasChanged
+        {
+            get => _controllerHasChanged;
+            set
+            {
+                _controllerHasChanged = value;
+                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            }
+        }
 
         public ITLCGenGenerator CurrentGenerator { get; set; }
 

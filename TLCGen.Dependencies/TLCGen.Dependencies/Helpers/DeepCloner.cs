@@ -9,7 +9,7 @@ namespace TLCGen.Helpers
 {
     public class ObservableObjectEx : ObservableObject
     {
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "", bool broadcast = true)
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "", bool broadcast = false)
         {
             if (broadcast) WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(this));
             base.OnPropertyChanged(propertyName);

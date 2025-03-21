@@ -177,16 +177,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnControllerDataChanged(object sender, ControllerDataChangedMessage message)
-        {
-            TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
-        }
-
-        public void OnPropertyChangedMessageBase(object sender, PropertyChangedMessage<object> message)
-        {
-            TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
-        }
-
         #endregion // TLCGen Message handling
 
         #region Constructor
@@ -227,8 +217,6 @@ namespace TLCGen.ViewModels
             
             WeakReferenceMessengerEx.Default.Register<UpdateTabsEnabledMessage>(this, OnUpdateTabsEnabled);
             WeakReferenceMessengerEx.Default.Register<IsFasenConflictingRequest>(this, OnIsFasenConflictRequestReceived);
-            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
-            WeakReferenceMessengerEx.Default.Register<PropertyChangedMessage<object>>(this, OnPropertyChangedMessageBase);
 
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }

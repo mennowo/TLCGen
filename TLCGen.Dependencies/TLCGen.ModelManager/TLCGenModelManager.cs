@@ -626,7 +626,7 @@ namespace TLCGen.ModelManagement
                 TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
         }
         
-        public ObservableCollection<ControllerAlertMessage> ControllerAlerts { get; } = new ObservableCollection<ControllerAlertMessage>();
+        public ObservableCollection<ControllerAlertMessage> ControllerAlerts { get; } = [];
 
         public void AddControllerAlert(ControllerAlertMessage msg)
         {

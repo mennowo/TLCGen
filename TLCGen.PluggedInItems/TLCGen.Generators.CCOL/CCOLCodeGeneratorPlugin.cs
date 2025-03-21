@@ -199,6 +199,8 @@ namespace TLCGen.Generators.CCOL
                 _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
             }
+
+            _myVm.UpdateCommands();
         }
 
         public void SaveSettings()
@@ -399,7 +401,15 @@ namespace TLCGen.Generators.CCOL
         #region Properties
 
         [Browsable(false)]
-        public string ControllerFileName { get; set; }
+        public string ControllerFileName
+        {
+            get => _controllerFileName;
+            set
+            {
+                _controllerFileName = value; 
+                _myVm.UpdateCommands();
+            }
+        }
 
         #endregion // Properties
 
@@ -412,17 +422,25 @@ namespace TLCGen.Generators.CCOL
         #region Commands
 
         RelayCommand _showSettingsCommand;
-        public ICommand ShowSettingsCommand
-        {
-            get
+        private string _controllerFileName;
+
+        public ICommand ShowSettingsCommand => _showSettingsCommand ??= new RelayCommand(() =>
             {
-                if (_showSettingsCommand == null)
+                var w = new CCOLGeneratorSettingsView
                 {
-                    _showSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
-                }
-                return _showSettingsCommand;
-            }
-        }
+                    DataContext =
+                        new CCOLGeneratorSettingsViewModel(CCOLGeneratorSettingsProvider.Default.Settings, _generator)
+                };
+                var window = new Window
+                {
+                    Title = "CCOL Code Generator instellingen",
+                    Content = w,
+                    Width = 560,
+                    Height = 450
+                };
+                window.ShowDialog();
+                _myVm.UpdateCommands();
+            });
 
         #endregion // Commands
 
@@ -473,6 +491,7 @@ namespace TLCGen.Generators.CCOL
 
         private void OnControllerDataChanged(object sender, ControllerDataChangedMessage msg)
         {
+            _myVm.UpdateCommands();
         }
 
         #endregion // TLCGen Events

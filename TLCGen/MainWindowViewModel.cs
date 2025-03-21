@@ -147,6 +147,7 @@ namespace TLCGen.ViewModels
                 _SelectedGenerator = value;
                 TLCGenControllerDataProvider.Default.CurrentGenerator = value.Generator;
                 OnPropertyChanged();
+                _generateControllerCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -209,43 +210,11 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand NewFileCommand => _newFileCommand ??= new RelayCommand(NewFileCommand_Executed, NewFileCommand_CanExecute);
-
-        public ICommand OpenFileCommand => _openFileCommand ??= new RelayCommand(OpenFileCommand_Executed, OpenFileCommand_CanExecute);
-
-        public ICommand SaveFileCommand => _saveFileCommand ??= new RelayCommand(SaveFileCommand_Executed, SaveFileCommand_CanExecute);
-
-        public ICommand SaveAsFileCommand => _saveAsFileCommand ??= new RelayCommand(SaveAsFileCommand_Executed, SaveAsFileCommand_CanExecute);
-
-        public ICommand CloseFileCommand => _closeFileCommand ??= new RelayCommand(CloseFileCommand_Executed, CloseFileCommand_CanExecute);
-
-        public ICommand ExitApplicationCommand => _exitApplicationCommand ??= new RelayCommand(ExitApplicationCommand_Executed, ExitApplicationCommand_CanExecute);
-
-        public ICommand GenerateControllerCommand => _generateControllerCommand ??= new RelayCommand(GenerateControllerCommand_Executed, GenerateControllerCommand_CanExecute);
-
-        public ICommand ImportControllerCommand => _importControllerCommand ??= new RelayCommand<object>(ImportControllerCommand_Executed, ImportControllerCommand_CanExecute);
-
-        public ICommand ShowSettingsWindowCommand => _showSettingsWindowCommand ??= new RelayCommand(ShowSettingsWindowCommand_Executed);
-
-        public ICommand ShowAboutCommand => _showAboutCommand ??= new RelayCommand(ShowAboutCommand_Executed);
-
-        public ICommand ShowVersionInfoCommand => _showVersionInfoCommand ??= new RelayCommand(ShowVersionInfoCommand_Executed);
-        
-        public ICommand ShowWikiCommand => _showWikiCommand ??= new RelayCommand(ShowWikiCommand_Executed);
-
-        public ICommand HideAlertMessageCommand => _hideAlertMessageCommand ??= new RelayCommand(HideAlertMessageCommand_Executed);
-
-        public ICommand HideAllAlertMessagesCommand => _hideAllAlertMessagesCommand ??= new RelayCommand(HideAllAlertMessagesCommand_Executed, HideAllAlertMessagesCommand_CanExecute);
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        private void NewFileCommand_Executed()
-        {
-            if (TLCGenControllerDataProvider.Default.NewController())
+        public ICommand NewFileCommand => _newFileCommand ??= new RelayCommand(() =>
             {
-                var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                if (!TLCGenControllerDataProvider.Default.NewController()) return;
+
+                var lastFileName = TLCGenControllerDataProvider.Default.ControllerFileName;
 
                 // This allows plugins to reset their content
                 ControllerVM.Controller = null;
@@ -253,264 +222,219 @@ namespace TLCGen.ViewModels
                 TLCGenControllerDataProvider.Default.NewController();
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                WeakReferenceMessengerEx.Default.Send(
+                    new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName,
+                        lastFileName));
                 WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(HasController));
                 OnPropertyChanged(nameof(ProgramTitle));
                 ShowAlertMessage = false;
-            }
-        }
+                UpdateCommands();
+            });
 
-        private bool NewFileCommand_CanExecute()
-        {
-            return true;
-        }
+        public ICommand OpenFileCommand => _openFileCommand ??= new RelayCommand(() => LoadController());
 
-        private void OpenFileCommand_Executed()
-        {
-            LoadController();
-        }
-
-        private bool OpenFileCommand_CanExecute()
-        {
-            return true;
-        }
-
-        private void SaveFileCommand_Executed()
-        {
-            if (TLCGenControllerDataProvider.Default.SaveController())
+        public ICommand SaveFileCommand => _saveFileCommand ??= new RelayCommand(() =>
             {
-                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
-                GuiActionsManager.SetStatusBarMessage(
-                    DateTime.Now.ToLongTimeString() +
-                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
-                FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
-            }
-        }
+                if (TLCGenControllerDataProvider.Default.SaveController())
+                {
+                    WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
+                    GuiActionsManager.SetStatusBarMessage(
+                        DateTime.Now.ToLongTimeString() +
+                        " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
+                    FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
+                }
+            }, 
+            () => TLCGenControllerDataProvider.Default.Controller != null &&
+                     TLCGenControllerDataProvider.Default.ControllerHasChanged);
 
-        private bool SaveFileCommand_CanExecute()
-        {
-            return TLCGenControllerDataProvider.Default.Controller != null &&
-                   TLCGenControllerDataProvider.Default.ControllerHasChanged;
-        }
-
-        private void SaveAsFileCommand_Executed()
-        {
-            var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-            if (TLCGenControllerDataProvider.Default.SaveControllerAs())
+        public ICommand SaveAsFileCommand => _saveAsFileCommand ??= new RelayCommand(() =>
             {
-                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                if (!TLCGenControllerDataProvider.Default.SaveControllerAs()) return;
+
+                var lastFileName = TLCGenControllerDataProvider.Default.ControllerFileName;
+                
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastFileName));
                 WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged(nameof(ProgramTitle));
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
                 FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
-            }
-        }
+            }, 
+            () => TLCGenControllerDataProvider.Default.Controller != null
+                 && TLCGenControllerDataProvider.Default.Controller.Data.Naam != null);
 
-        private bool SaveAsFileCommand_CanExecute()
-        {
-            return TLCGenControllerDataProvider.Default.Controller != null
-                && ControllerVM.Controller.Data.Naam != null;
-        }
-
-        private void CloseFileCommand_Executed()
-        {
-            var lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-            if (TLCGenControllerDataProvider.Default.CloseController())
+        public ICommand CloseFileCommand => _closeFileCommand ??= new RelayCommand(() =>
             {
-                DefaultsProvider.Default.Controller = null;
-                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                OnPropertyChanged(nameof(HasController));
-                OnPropertyChanged(nameof(ProgramTitle));
-                GuiActionsManager.SetStatusBarMessage("");
-                ShowAlertMessage = false;
-                SetControllerForStatics(null);
-            }
-        }
+                var lastFileName = TLCGenControllerDataProvider.Default.ControllerFileName;
+                if (TLCGenControllerDataProvider.Default.CloseController())
+                {
+                    DefaultsProvider.Default.Controller = null;
+                    WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastFileName));
+                    OnPropertyChanged(nameof(HasController));
+                    OnPropertyChanged(nameof(ProgramTitle));
+                    GuiActionsManager.SetStatusBarMessage("");
+                    ShowAlertMessage = false;
+                    SetControllerForStatics(null);
+                }
+                UpdateCommands();
+            }, 
+            () => TLCGenControllerDataProvider.Default.Controller != null);
 
-        private bool CloseFileCommand_CanExecute()
-        {
-            return TLCGenControllerDataProvider.Default.Controller != null;
-        }
+        public ICommand ExitApplicationCommand => _exitApplicationCommand ??= new RelayCommand(Application.Current.Shutdown);
 
-        private void ExitApplicationCommand_Executed()
-        {
-            Application.Current.Shutdown();
-        }
-
-        private bool ExitApplicationCommand_CanExecute()
-        {
-            return true;
-        }
-
-        private void ImportControllerCommand_Executed(object obj)
-        {
-            if (obj == null)
-                throw new NullReferenceException();
-            if (!(obj is ITLCGenImporter imp))
-                throw new InvalidCastException();
-
-            // Import into existing controller
-            if (TLCGenControllerDataProvider.Default.CheckChanged()) return;
-            if (imp.ImportsIntoExisting)
+        public ICommand GenerateControllerCommand => _generateControllerCommand ??= new RelayCommand(() =>
             {
                 // Request to process all synchronisation data from matrix to model
                 WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
 
-                // Check data integrity
-                var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
-                if (s1 != null)
+                var s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
+                if (s == null)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling", MessageBoxButton.OK);
-                    return;
+                    TLCGenControllerDataProvider.Default.Controller.Data.TLCGenVersie = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                    SelectedGenerator.Generator.GenerateController();
+                    WeakReferenceMessengerEx.Default.Send(new ControllerCodeGeneratedMessage());
                 }
-                // Import to clone of original (so we can discard if wrong)
-                var c1 = DeepCloner.DeepClone(ControllerVM.Controller);
-                var c2 = imp.ImportController(c1);
-
-                // Do nothing if the importer returned nothing
-                if (c2 == null)
+                else
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Importeren is afgebroken door de gebruiker", "Importeren afgebroken", MessageBoxButton.OK);
-                    return;
+                    TLCGenDialogProvider.Default.ShowMessageBox(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling", MessageBoxButton.OK);
                 }
+            }, 
+            () => SelectedGenerator is { Generator: not null } && SelectedGenerator.Generator.CanGenerateController());
 
-                // Check data integrity
-                s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
-                if (s1 != null)
+        public ICommand ImportControllerCommand => _importControllerCommand ??= new RelayCommand<object>(obj =>
+            {
+                if (obj == null)
+                    throw new NullReferenceException();
+                if (!(obj is ITLCGenImporter imp))
+                    throw new InvalidCastException();
+
+                // Import into existing controller
+                if (TLCGenControllerDataProvider.Default.CheckChanged()) return;
+                if (imp.ImportsIntoExisting)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
-                    return;
+                    // Request to process all synchronisation data from matrix to model
+                    WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
+
+                    // Check data integrity
+                    var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
+                    if (s1 != null)
+                    {
+                        TLCGenDialogProvider.Default.ShowMessageBox("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling", MessageBoxButton.OK);
+                        return;
+                    }
+                    // Import to clone of original (so we can discard if wrong)
+                    var c1 = DeepCloner.DeepClone(ControllerVM.Controller);
+                    var c2 = imp.ImportController(c1);
+
+                    // Do nothing if the importer returned nothing
+                    if (c2 == null)
+                    {
+                        TLCGenDialogProvider.Default.ShowMessageBox("Importeren is afgebroken door de gebruiker", "Importeren afgebroken", MessageBoxButton.OK);
+                        return;
+                    }
+
+                    // Check data integrity
+                    s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
+                    if (s1 != null)
+                    {
+                        TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
+                        return;
+                    }
+                    SetController(c2);
+                    ControllerVM.ReloadController();
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                    GuiActionsManager.SetStatusBarMessage(
+                        DateTime.Now.ToLongTimeString() +
+                        " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
                 }
-                SetController(c2);
-                ControllerVM.ReloadController();
-                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-                GuiActionsManager.SetStatusBarMessage(
-                    DateTime.Now.ToLongTimeString() +
-                    " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
-            }
-            // Import as new controller
-            else
-            {
-                var c1 = imp.ImportController();
-
-                // Do nothing if the importer returned nothing
-                if (c1 == null)
-                    return;
-
-                // Check data integrity
-                var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
-                if (s1 != null)
+                // Import as new controller
+                else
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
-                    return;
+                    var c1 = imp.ImportController();
+
+                    // Do nothing if the importer returned nothing
+                    if (c1 == null)
+                        return;
+
+                    // Check data integrity
+                    var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
+                    if (s1 != null)
+                    {
+                        TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data", MessageBoxButton.OK);
+                        return;
+                    }
+                    TLCGenControllerDataProvider.Default.CloseController();
+                    DefaultsProvider.Default.SetDefaultsOnModel(c1.Data);
+                    DefaultsProvider.Default.SetDefaultsOnModel(c1.PrioData);
+                    SetController(c1);
+                    ControllerVM.ReloadController();
+                    GuiActionsManager.SetStatusBarMessage(
+                        DateTime.Now.ToLongTimeString() +
+                        " - Regeling geïmporteerd");
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 }
-                TLCGenControllerDataProvider.Default.CloseController();
-                DefaultsProvider.Default.SetDefaultsOnModel(c1.Data);
-                DefaultsProvider.Default.SetDefaultsOnModel(c1.PrioData);
-                SetController(c1);
-                ControllerVM.ReloadController();
-                GuiActionsManager.SetStatusBarMessage(
-                    DateTime.Now.ToLongTimeString() +
-                    " - Regeling geïmporteerd");
-                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-            }
-            WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
-            OnPropertyChanged(nameof(HasController));
-        }
-
-        private bool GenerateControllerCommand_CanExecute()
-        {
-            return SelectedGenerator != null && SelectedGenerator.Generator != null && SelectedGenerator.Generator.CanGenerateController();
-        }
-
-        private void GenerateControllerCommand_Executed()
-        {
-            // Request to process all synchronisation data from matrix to model
-            WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
-
-            var s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
-            if (s == null)
+                WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
+                OnPropertyChanged(nameof(HasController));
+            }, 
+            obj =>
             {
-                TLCGenControllerDataProvider.Default.Controller.Data.TLCGenVersie = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                SelectedGenerator.Generator.GenerateController();
-                WeakReferenceMessengerEx.Default.Send(new ControllerCodeGeneratedMessage());
-            }
-            else
+                if (obj == null)
+                    return false;
+
+                if (obj is not ITLCGenImporter imp)
+                    throw new InvalidCastException();
+
+                if (imp.ImportsIntoExisting)
+                    return TLCGenControllerDataProvider.Default.Controller != null;
+
+                return true;
+            });
+
+        public ICommand ShowSettingsWindowCommand => _showSettingsWindowCommand ??= new RelayCommand(() =>
             {
-                TLCGenDialogProvider.Default.ShowMessageBox(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling", MessageBoxButton.OK);
-            }
-        }
+                var settingsWindow = new Settings.Views.TLCGenSettingsWindow
+                {
+                    DataContext = new TLCGenSettingsViewModel(),
+                    Owner = Application.Current.MainWindow
+                };
+                settingsWindow.ShowDialog();
+            });
 
-        private bool ImportControllerCommand_CanExecute(object obj)
-        {
-            if (obj == null)
-                return false;
-
-            if (!(obj is ITLCGenImporter imp))
-                throw new InvalidCastException();
-
-            if (imp.ImportsIntoExisting)
-                return TLCGenControllerDataProvider.Default.Controller != null;
-
-            return true;
-        }
-
-        private void ShowSettingsWindowCommand_Executed()
-        {
-            var settingswin = new Settings.Views.TLCGenSettingsWindow
+        public ICommand ShowAboutCommand => _showAboutCommand ??= new RelayCommand(() =>
             {
-                DataContext = new TLCGenSettingsViewModel(),
-                Owner = Application.Current.MainWindow
-            };
-            settingswin.ShowDialog();
-        }
+                var about = new AboutWindow
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                about.ShowDialog();
+            });
 
-        private void ShowAboutCommand_Executed()
-        {
-            var about = new AboutWindow
+        public ICommand ShowVersionInfoCommand => _showVersionInfoCommand ??= new RelayCommand(() =>
             {
-                Owner = Application.Current.MainWindow
-            };
-            about.ShowDialog();
-        }
-
-        private void ShowVersionInfoCommand_Executed()
-        {
-            var infoW = new VersionInfoWindow(ControllerVersion, VersionFiles)
-            {
-                Owner = Application.Current.MainWindow
-            };
-            infoW.ShowDialog();
-        }
-
-        private void ShowWikiCommand_Executed()
-        {
-            Process.Start(new ProcessStartInfo
+                var infoW = new VersionInfoWindow(ControllerVersion, VersionFiles)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                infoW.ShowDialog();
+            });
+        
+        public ICommand ShowWikiCommand => _showWikiCommand ??= new RelayCommand(() => Process.Start(new ProcessStartInfo
             {
                 FileName = "https://www.codingconnected.eu/tlcgenwiki/",
                 UseShellExecute = true
-            });
-        }
+            }));
 
-        private void HideAlertMessageCommand_Executed()
-        {
-            ShowAlertMessage = false;
-        }
+        public ICommand HideAlertMessageCommand => _hideAlertMessageCommand ??= new RelayCommand(() => ShowAlertMessage = false);
 
-        private void HideAllAlertMessagesCommand_Executed()
-        {
-            foreach (var msg in AlertMessages) msg.Shown = false;
-        }
+        public ICommand HideAllAlertMessagesCommand => _hideAllAlertMessagesCommand ??= new RelayCommand(() =>
+            {
+                foreach (var msg in AlertMessages) msg.Shown = false;
+            }, 
+            () => AlertMessages.Any(x => x.Shown));
 
-        private bool HideAllAlertMessagesCommand_CanExecute()
-        {
-            return AlertMessages.Any(x => x.Shown);
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 
@@ -646,9 +570,11 @@ namespace TLCGen.ViewModels
                 };
                 JumpList.AddToRecentCategory(jumpTask);
                 ShowAlertMessage = System.Version.Parse(ControllerVersion) < VersionFiles.Max(x => x.Item1);
+                UpdateCommands();
                 return true;
             }
             if (filename != null) FileOpenFailed?.Invoke(this, filename);
+            UpdateCommands();
             return false;
         }
 
@@ -695,6 +621,19 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
+        private void ControllerDataChangedAction()
+        {
+            TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
+        }
+
+        private void UpdateCommands()
+        {
+            _saveFileCommand?.NotifyCanExecuteChanged();
+            _saveAsFileCommand?.NotifyCanExecuteChanged();
+            _closeFileCommand?.NotifyCanExecuteChanged();
+            _generateControllerCommand?.NotifyCanExecuteChanged();
+        }
+
         public MainWindowViewModel()
         {
             var tmpCurDir = Directory.GetCurrentDirectory();
@@ -706,6 +645,8 @@ namespace TLCGen.ViewModels
             WeakReferenceMessengerEx.Default.Register<ControllerCodeGeneratedMessage>(this, OnControllerCodeGenerated);
             WeakReferenceMessengerEx.Default.Register<ControllerProjectGeneratedMessage>(this, OnControllerProjectGenerated);
             WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<BroadcastMessage>(this, (recipient, message) => ControllerDataChangedAction());
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, (recipient, message) => UpdateCommands());
 
             // Load application settings and defaults
             ControllerAccessProvider.Default.Setup();
@@ -818,8 +759,16 @@ namespace TLCGen.ViewModels
 
             Directory.SetCurrentDirectory(tmpCurDir);
 
-            TLCGenModelManager.Default.ControllerAlertsUpdated += (sender, args) => OnPropertyChanged(nameof(ShowAlertMessages));
-            AlertMessages.CollectionChanged += (sender, args) => OnPropertyChanged(nameof(ShowAlertMessages));
+            TLCGenModelManager.Default.ControllerAlertsUpdated += (sender, args) =>
+            {
+                OnPropertyChanged(nameof(ShowAlertMessages));
+                _hideAllAlertMessagesCommand?.NotifyCanExecuteChanged();
+            };
+            AlertMessages.CollectionChanged += (sender, args) =>
+            {
+                OnPropertyChanged(nameof(ShowAlertMessages));
+                _hideAllAlertMessagesCommand?.NotifyCanExecuteChanged();
+            };
 
 #if !DEBUG
             // Find out if there is a newer version available via online check
