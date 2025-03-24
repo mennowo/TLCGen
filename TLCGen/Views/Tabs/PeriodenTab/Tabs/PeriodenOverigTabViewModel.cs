@@ -27,6 +27,12 @@ namespace TLCGen.ViewModels
 
         private PeriodeViewModel _SelectedPeriode;
         private ObservableCollection<string> _GroentijdenSets;
+        private RelayCommand _AddPeriodeCommand;
+        private RelayCommand _RemovePeriodeCommand;
+        private RelayCommand _MovePeriodeUpCommand;
+        private RelayCommand _MovePeriodeDownCommand;
+        private List<string> _PeriodeTypeOpties;
+        private ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel> _periodes;
 
         #endregion // Fields
 
@@ -34,7 +40,13 @@ namespace TLCGen.ViewModels
 
         public ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel> Periodes
         {
-            get; private set;
+            get => _periodes;
+            private set
+            {
+                _periodes = value;
+                OnPropertyChanged();
+                _AddPeriodeCommand?.NotifyCanExecuteChanged();
+            }
         }
 
         public ObservableCollection<string> GroentijdenSets
@@ -55,7 +67,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPeriode = value;
-                OnPropertyChanged("SelectedPeriode");
+                OnPropertyChanged();
+                _RemovePeriodeCommand?.NotifyCanExecuteChanged();
+                _MovePeriodeUpCommand?.NotifyCanExecuteChanged();
+                _MovePeriodeDownCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -63,64 +78,44 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddPeriodeCommand;
-        public ICommand AddPeriodeCommand
+        public ICommand AddPeriodeCommand => _AddPeriodeCommand ??= new RelayCommand(() =>
         {
-            get
+            var mm = new PeriodeModel();
+            mm.Type = PeriodeTypeEnum.Overig;
+            mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
+            var inewname = Periodes.Count;
+            do
             {
-                if (_AddPeriodeCommand == null)
-                {
-                    _AddPeriodeCommand = new RelayCommand(AddNewPeriodeCommand_Executed, AddNewPeriodeCommand_CanExecute);
-                }
-                return _AddPeriodeCommand;
+                inewname++;
+                mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
             }
-        }
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
 
+            var mvm = new PeriodeViewModel(mm);
 
-        RelayCommand _RemovePeriodeCommand;
-        public ICommand RemovePeriodeCommand
+            if(Periodes.Any(x => x.Type != PeriodeTypeEnum.Groentijden))
+            {
+                var index = Periodes.Count(x => x.Type != PeriodeTypeEnum.Groentijden);
+                Periodes.Insert(index, mvm);
+            }
+            else
+            {
+                Periodes.Insert(0, mvm);
+            }
+
+            Periodes.RebuildList();
+            WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
+        }, () => Periodes != null);
+
+        public ICommand RemovePeriodeCommand => _RemovePeriodeCommand ??= new RelayCommand(() =>
         {
-            get
-            {
-                if (_RemovePeriodeCommand == null)
-                {
-                    _RemovePeriodeCommand = new RelayCommand(RemovePeriodeCommand_Executed, ChangePeriodeCommand_CanExecute);
-                }
-                return _RemovePeriodeCommand;
-            }
-        }
+            TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam, TLCGenObjectTypeEnum.Periode);
+            Periodes.Remove(SelectedPeriode);
+            SelectedPeriode = null;
+            WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
+        }, () => SelectedPeriode != null);
 
-        RelayCommand _MovePeriodeUpCommand;
-        public ICommand MovePeriodeUpCommand
-        {
-            get
-            {
-                if (_MovePeriodeUpCommand == null)
-                {
-                    _MovePeriodeUpCommand = new RelayCommand(MovePeriodeUpCommand_Executed, ChangePeriodeCommand_CanExecute);
-                }
-                return _MovePeriodeUpCommand;
-            }
-        }
-
-        RelayCommand _MovePeriodeDownCommand;
-        public ICommand MovePeriodeDownCommand
-        {
-            get
-            {
-                if (_MovePeriodeDownCommand == null)
-                {
-                    _MovePeriodeDownCommand = new RelayCommand(MovePeriodeDownCommand_Executed, ChangePeriodeCommand_CanExecute);
-                }
-                return _MovePeriodeDownCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        private void MovePeriodeUpCommand_Executed()
+        public ICommand MovePeriodeUpCommand => _MovePeriodeUpCommand ??= new RelayCommand(() =>
         {
             var index = Periodes.IndexOf(SelectedPeriode);
             if (index >= 1)
@@ -134,7 +129,7 @@ namespace TLCGen.ViewModels
                     Periodes.Insert(index - 1, mvm);
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == 0 || index + 1 < Periodes.Count && Periodes[index + 1].Type != PeriodeTypeEnum.Groentijden)
@@ -143,10 +138,9 @@ WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     }
                 }   
             }
-        }
+        }, () => SelectedPeriode != null);
 
-
-        private void MovePeriodeDownCommand_Executed()
+        public ICommand MovePeriodeDownCommand => _MovePeriodeDownCommand ??= new RelayCommand(() =>
         {
             var index = Periodes.IndexOf(SelectedPeriode);
             if (index - 1 < Periodes.Count)
@@ -167,7 +161,7 @@ WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     }
                     SelectedPeriode = mvm;
                     Periodes.RebuildList();
-WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     index = Periodes.IndexOf(SelectedPeriode);
 
                     if (index == Periodes.Count - 1 || index - 1 >= 0 && Periodes[index - 1].Type != PeriodeTypeEnum.Groentijden)
@@ -176,56 +170,9 @@ WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
                     }
                 }   
             }
-        }
+        }, () => SelectedPeriode != null);
 
-        void AddNewPeriodeCommand_Executed()
-        {
-            var mm = new PeriodeModel();
-            mm.Type = PeriodeTypeEnum.Overig;
-            mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
-			var inewname = Periodes.Count;
-	        do
-	        {
-		        inewname++;
-		        mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
-	        }
-	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
-
-			var mvm = new PeriodeViewModel(mm);
-
-            if(Periodes.Any(x => x.Type != PeriodeTypeEnum.Groentijden))
-            {
-                var index = Periodes.Count(x => x.Type != PeriodeTypeEnum.Groentijden);
-                Periodes.Insert(index, mvm);
-            }
-            else
-            {
-                Periodes.Insert(0, mvm);
-            }
-
-            Periodes.RebuildList();
-WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
-		}
-
-		bool AddNewPeriodeCommand_CanExecute()
-        {
-            return Periodes != null;
-        }
-
-        void RemovePeriodeCommand_Executed()
-        {
-			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam, TLCGenObjectTypeEnum.Periode);
-	        Periodes.Remove(SelectedPeriode);
-	        SelectedPeriode = null;
-WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
-		}
-
-        bool ChangePeriodeCommand_CanExecute()
-        {
-            return SelectedPeriode != null;
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region TabItem Overrides
 
@@ -314,7 +261,6 @@ WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
         #region Constructor
 
-        private List<string> _PeriodeTypeOpties;
         public List<string> PeriodeTypeOpties
         {
             get
