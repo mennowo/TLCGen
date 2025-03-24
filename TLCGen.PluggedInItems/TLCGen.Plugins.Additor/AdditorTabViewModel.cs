@@ -93,6 +93,7 @@ namespace TLCGen.Plugins.Additor
                 }
                 _selectedAddFileChanged = false;
                 OnPropertyChanged();
+                _saveAddFileCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -100,15 +101,7 @@ namespace TLCGen.Plugins.Additor
 
         #region Commands
 
-        public ICommand RefreshFilesListCommand => _refreshFilesListCommand ??= new RelayCommand(RefreshFilesListCommand_Executed, RefreshFilesListCommand_CanExecute);
-
-	    public ICommand SaveAddFileCommand => _saveAddFileCommand ??= new RelayCommand(SaveAddFileCommand_Executed, SaveAddFileCommand_CanExecute);
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        private void RefreshFilesListCommand_Executed()
+        public ICommand RefreshFilesListCommand => _refreshFilesListCommand ??= new RelayCommand(() =>
         {
             if (!string.IsNullOrWhiteSpace(ControllerFileName) && File.Exists(ControllerFileName))
             {
@@ -138,14 +131,9 @@ namespace TLCGen.Plugins.Additor
                     SelectedAddFile = AddFiles[0];
                 }
             }
-        }
+        }, () => !string.IsNullOrWhiteSpace(ControllerFileName));
 
-        private bool RefreshFilesListCommand_CanExecute()
-        {
-            return !string.IsNullOrWhiteSpace(ControllerFileName);
-        }
-
-        private void SaveAddFileCommand_Executed()
+	    public ICommand SaveAddFileCommand => _saveAddFileCommand ??= new RelayCommand(() =>
         {
             try
             {
@@ -153,16 +141,11 @@ namespace TLCGen.Plugins.Additor
             }
             catch (Exception e)
             {
-	            MessageBox.Show("Error bij schrijven van add file: \n" + e);
+                MessageBox.Show("Error bij schrijven van add file: \n" + e);
             }
-        }
+        }, () => SelectedAddFile != null);
 
-        private bool SaveAddFileCommand_CanExecute()
-        {
-            return SelectedAddFile != null;
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Public Methods
 
@@ -212,22 +195,24 @@ namespace TLCGen.Plugins.Additor
         private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage message)
         {
             ControllerFileName = message.NewFileName;
-            if(RefreshFilesListCommand_CanExecute())
+            if (RefreshFilesListCommand?.CanExecute(null) == true)
             {
-                RefreshFilesListCommand_Executed();
+                RefreshFilesListCommand.Execute(null);
             }
 
-            if(string.IsNullOrWhiteSpace(message.NewFileName))
+            if (string.IsNullOrWhiteSpace(message.NewFileName))
             {
                 SelectedAddFile = null;
             }
+
+            _refreshFilesListCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // TLCGen Events
 
         #region Constructor
 
-	    public AdditorTabViewModel(AdditorPlugin plugin)
+        public AdditorTabViewModel(AdditorPlugin plugin)
 	    {
             _plugin = plugin;
 	    }

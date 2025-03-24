@@ -20,9 +20,14 @@ namespace TLCGen.Plugins.Sumo
     {
         #region Fields
 
-        SumoDataModel _data;
-        SumoPlugin _plugin;
-        HotKey _namingHotkey = null;
+        private SumoDataModel _data;
+        private SumoPlugin _plugin;
+        private HotKey _namingHotkey = null;
+
+        private DetectorSumoDataViewModel _selectedDetector;
+        private RelayCommand _startSUMODetectorNamingCommand;
+        private RelayCommand _stopSUMODetectorNamingCommand;
+        private RelayCommand _getLinkIdsFromNetworkCommand;
 
         #endregion // Fields
 
@@ -51,7 +56,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.GenererenSumoCode = value;
-                    OnPropertyChanged(nameof(GenererenSumoCode), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -64,7 +69,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoPort = value;
-                    OnPropertyChanged(nameof(SumoPort), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -77,7 +82,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoOrder = value;
-                    OnPropertyChanged(nameof(SumoOrder), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -90,7 +95,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdUur = value;
-                    OnPropertyChanged(nameof(StartTijdUur), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -103,7 +108,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.StartTijdMinuut = value;
-                    OnPropertyChanged(nameof(StartTijdMinuut), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -116,7 +121,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntNaam = value;
-                    OnPropertyChanged(nameof(SumoKruispuntNaam), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -129,7 +134,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoKruispuntLinkMax = value;
-                    OnPropertyChanged(nameof(SumoKruispuntLinkMax), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -142,7 +147,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.PrependIdToDetectors = value;
-                    OnPropertyChanged(nameof(PrependIdToDetectors), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -155,7 +160,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.AutoStartSumo = value;
-                    OnPropertyChanged(nameof(AutoStartSumo), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -168,7 +173,7 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoHomePath = value;
-                    OnPropertyChanged(nameof(SumoHomePath), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }
@@ -181,8 +186,9 @@ namespace TLCGen.Plugins.Sumo
                 if (_data != null)
                 {
                     _data.SumoConfigPath = value;
-                    OnPropertyChanged(nameof(SumoConfigPath), broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
+                _getLinkIdsFromNetworkCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -205,30 +211,29 @@ namespace TLCGen.Plugins.Sumo
             {
                 _selectedDetector = value;
                 OnPropertyChanged();
+                _startSUMODetectorNamingCommand?.NotifyCanExecuteChanged();
             }
         }
         #endregion // Properties
 
         #region Commands
 
-        private RelayCommand _startSUMODetectorNamingCommand;
-        public ICommand StartSUMODetectorNamingCommand => _startSUMODetectorNamingCommand ?? (_startSUMODetectorNamingCommand = new RelayCommand(() =>
+        public ICommand StartSUMODetectorNamingCommand => _startSUMODetectorNamingCommand ??= new RelayCommand(() =>
             {
                 _namingHotkey = new HotKey(Key.F6, KeyModifier.None, OnHotKeyHandler);
+                _startSUMODetectorNamingCommand?.NotifyCanExecuteChanged();
+                _stopSUMODetectorNamingCommand?.NotifyCanExecuteChanged();
             },
-            () => _namingHotkey == null && SelectedDetector != null));
+            () => _namingHotkey == null && SelectedDetector != null);
 
-        private RelayCommand _stopSUMODetectorNamingCommand;
-        private DetectorSumoDataViewModel _selectedDetector;
-        private RelayCommand _getLinkIdsFromNetworkCommand;
 
-        public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ?? (_stopSUMODetectorNamingCommand = new RelayCommand(() =>
+        public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ??= new RelayCommand(() =>
             {
-            _namingHotkey.Unregister();
-            _namingHotkey.Dispose();
-            _namingHotkey = null;
+                _namingHotkey.Unregister();
+                _namingHotkey.Dispose();
+                _namingHotkey = null;
             },
-            () => _namingHotkey != null));
+            () => _namingHotkey != null);
 
         private void OnHotKeyHandler(HotKey hotKey)
         {
@@ -248,7 +253,7 @@ namespace TLCGen.Plugins.Sumo
             sim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
         }
 
-        public ICommand GetLinkIdsFromNetworkCommand => _getLinkIdsFromNetworkCommand ?? (_getLinkIdsFromNetworkCommand = new RelayCommand(() =>
+        public ICommand GetLinkIdsFromNetworkCommand => _getLinkIdsFromNetworkCommand ??= new RelayCommand(() =>
         {
             foreach (var f in FaseCycli)
             {
@@ -318,13 +323,9 @@ namespace TLCGen.Plugins.Sumo
                     fc.SumoIds = link.Value;
                 }
             }
-        }, () => !string.IsNullOrEmpty(SumoConfigPath) && File.Exists(SumoConfigPath)));
+        }, () => !string.IsNullOrEmpty(SumoConfigPath) && File.Exists(SumoConfigPath));
 
         #endregion // Commands
-
-        #region Command Functionality
-
-        #endregion // Command Functionality
 
         #region Public Methods
 

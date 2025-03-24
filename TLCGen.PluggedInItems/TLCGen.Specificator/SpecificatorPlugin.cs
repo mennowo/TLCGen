@@ -209,11 +209,17 @@ namespace TLCGen.Specificator
         public void UpdateTLCGenMessaging()
         {
             WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
         }
 
         #endregion // ITLCGenPlugMessaging
 
         #region TLCGen Events
+
+        private void OnControllerDataChanged(object recipient, ControllerDataChangedMessage message)
+        {
+            SpecificatorVM?.UpdateCommands();
+        }
 
         private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage msg)
         {

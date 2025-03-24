@@ -73,6 +73,7 @@ namespace TLCGen.Plugins.Tools
                 }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasNoSelectedItem));
+                _applyTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -120,37 +121,37 @@ namespace TLCGen.Plugins.Tools
 
         #region Commands
 
-        public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new RelayCommand(() =>
-        {
-            var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
-            if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
+        public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand(() =>
             {
-                var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
-                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
-                if (alert.Item1)
+                var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
+                if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
                 {
-                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+                    var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
+                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
+                    if (alert.Item1)
+                    {
+                        GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+                    }
+                    else
+                    {
+                        GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
+                    }
                 }
                 else
                 {
-                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
+                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
                 }
-            }
-            else
-            {
-                GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
-            }
-        },
-        () => SelectedTemplate != null));
+            },
+            () => SelectedTemplate != null);
 
-        public ICommand SettingsWindowCommand => _settingsWindowCommand ?? (_settingsWindowCommand = new RelayCommand(() => 
+        public ICommand SettingsWindowCommand => _settingsWindowCommand ??= new RelayCommand(() => 
         {
             var window = new CombinatieTemplatesSettingsWindow
             {
                 DataContext = new CombinatieTemplatesSettingsWindowViewModel(CombinatieTemplates, _plugin)
             };
             window.ShowDialog();
-        }));
+        });
 
         #endregion // Commands
 

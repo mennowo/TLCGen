@@ -155,17 +155,7 @@ namespace TLCGen.ViewModels
         /// Holds a list of available menu items that are bound to the View. This allows the user
         /// to click a menu item to instruct an importer to import data.
         /// </summary>
-        public List<MenuItem> ImportMenuItems
-        {
-            get
-            {
-                if (_ImportMenuItems == null)
-                {
-                    _ImportMenuItems = new List<MenuItem>();
-                }
-                return _ImportMenuItems;
-            }
-        }
+        public List<MenuItem> ImportMenuItems => _ImportMenuItems ??= new List<MenuItem>();
 
         public List<MenuItem> PluginMenuItems
         {
@@ -632,6 +622,7 @@ namespace TLCGen.ViewModels
             _saveAsFileCommand?.NotifyCanExecuteChanged();
             _closeFileCommand?.NotifyCanExecuteChanged();
             _generateControllerCommand?.NotifyCanExecuteChanged();
+            _importControllerCommand?.NotifyCanExecuteChanged();
         }
 
         public MainWindowViewModel()

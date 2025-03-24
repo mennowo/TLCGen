@@ -77,10 +77,6 @@ namespace TLCGen.Plugins.AFM
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region TLCGen messaging
 
         private void OnFasenChanged(object sender, FasenChangedMessage msg)

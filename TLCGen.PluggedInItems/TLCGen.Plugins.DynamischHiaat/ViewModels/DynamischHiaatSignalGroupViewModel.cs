@@ -144,10 +144,6 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region IViewModelWithItem
 
         public object GetItem()

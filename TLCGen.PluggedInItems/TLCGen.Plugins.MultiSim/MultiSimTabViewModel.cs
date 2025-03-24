@@ -33,6 +33,8 @@ namespace TLCGen.Plugins.MultiSim
             {
                 _selectedSimEntrySet = value;
                 OnPropertyChanged();
+                _removeMultiSimEntrySetCommand?.NotifyCanExecuteChanged();
+                _applyMultiSimEntrySetCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -53,7 +55,7 @@ namespace TLCGen.Plugins.MultiSim
 
         #region Commands
 
-        public ICommand AddMultiSimEntrySetCommand => _addMultiSimEntrySetCommand ?? (_addMultiSimEntrySetCommand = new RelayCommand(() =>
+        public ICommand AddMultiSimEntrySetCommand => _addMultiSimEntrySetCommand ??= new RelayCommand(() =>
         {
             var set = new MultiSimEntrySetModel { Description = "Sim set" };
 
@@ -72,14 +74,14 @@ namespace TLCGen.Plugins.MultiSim
             }
             MultiSimEntrySets.Add(new MultiSimEntrySetViewModel(set));
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }));
+        });
 
-        public ICommand RemoveMultiSimEntrySetCommand => _removeMultiSimEntrySetCommand ?? (_removeMultiSimEntrySetCommand = new RelayCommand(() =>
-        {
-            MultiSimEntrySets.Remove(SelectedSimEntrySet);
-            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        },
-        () => SelectedSimEntrySet != null));
+        public ICommand RemoveMultiSimEntrySetCommand => _removeMultiSimEntrySetCommand ??= new RelayCommand(() =>
+            {
+                MultiSimEntrySets.Remove(SelectedSimEntrySet);
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            },
+            () => SelectedSimEntrySet != null);
 
         public ICommand ApplyMultiSimEntrySetCommand => _applyMultiSimEntrySetCommand ?? (_applyMultiSimEntrySetCommand = new RelayCommand(() =>
         {

@@ -34,6 +34,7 @@ namespace TLCGen.Plugins.Tools
             {
                 _selectedItem = value;
                 OnPropertyChanged();
+                _applyItemFromControllerCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -144,7 +145,7 @@ namespace TLCGen.Plugins.Tools
 
         #region Commands
 
-        public ICommand CheckTemplateCommand => _checkTemplateCommand ?? (_checkTemplateCommand = new RelayCommand(() =>
+        public ICommand CheckTemplateCommand => _checkTemplateCommand ??= new RelayCommand(() =>
         {
             try
             {
@@ -176,14 +177,14 @@ namespace TLCGen.Plugins.Tools
                 IsObjectJsonOk = false;
             }
             OnPropertyChanged(nameof(Foreground));
-        }));
+        });
 
-        public ICommand ApplyItemFromControllerCommand => _applyItemFromControllerCommand ?? (_applyItemFromControllerCommand = new RelayCommand(() =>
-        {
-            ObjectJson = JsonConvert.SerializeObject(SelectedItem.Object, Formatting.Indented);
-            Type = SelectedItem.Type;
-        },
-        () => SelectedItem != null));
+        public ICommand ApplyItemFromControllerCommand => _applyItemFromControllerCommand ??= new RelayCommand(() =>
+            {
+                ObjectJson = JsonConvert.SerializeObject(SelectedItem.Object, Formatting.Indented);
+                Type = SelectedItem.Type;
+            },
+            () => SelectedItem != null);
 
         #endregion // Commands
 

@@ -64,6 +64,7 @@ namespace TLCGen.Generators.TLCCC
         public void UpdateTLCGenMessaging()
         {
             WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
         }
 
         #endregion // ITLCGenPlugMessaging
@@ -91,6 +92,11 @@ namespace TLCGen.Generators.TLCCC
         #endregion // Properties
 
         #region TLCGen Events
+
+        private void OnControllerDataChanged(object recipient, ControllerDataChangedMessage message)
+        {
+            _myVm?.UpdateCommands();
+        }
 
         private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage msg)
         {

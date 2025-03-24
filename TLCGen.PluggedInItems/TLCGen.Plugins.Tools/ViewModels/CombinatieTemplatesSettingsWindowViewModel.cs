@@ -32,6 +32,7 @@ namespace TLCGen.Plugins.Tools
                 _selectedTemplate = value;
                 _selectedTemplate?.SelectedItem?.SetSelectableItems();
                 OnPropertyChanged();
+                _removeCombinatieTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -52,7 +53,7 @@ namespace TLCGen.Plugins.Tools
 
         #region Commands
 
-        public ICommand AddCombinatieTemplateCommand => _addCombinatieTemplateCommand ?? (_addCombinatieTemplateCommand = new RelayCommand(() =>
+        public ICommand AddCombinatieTemplateCommand => _addCombinatieTemplateCommand ??= new RelayCommand(() =>
         {
             var vm = new CombinatieTemplateViewModel(new CombinatieTemplateModel { Name = "Nieuw template" });
             vm.Items.Add(new CombinatieTemplateItemViewModel(new CombinatieTemplateItemModel
@@ -63,20 +64,20 @@ namespace TLCGen.Plugins.Tools
             CombinatieTemplates.Add(vm);
             SelectedTemplate = vm;
             vm.SelectedItem = vm.Items.First();
-        }));
+        });
 
-        public ICommand RemoveCombinatieTemplateCommand => _removeCombinatieTemplateCommand ?? (_removeCombinatieTemplateCommand = new RelayCommand(() =>
-        {
-            var i = CombinatieTemplates.IndexOf(SelectedTemplate);
-            CombinatieTemplates.Remove(SelectedTemplate);
-            SelectedTemplate = null;
-            if (CombinatieTemplates.Any())
+        public ICommand RemoveCombinatieTemplateCommand => _removeCombinatieTemplateCommand ??= new RelayCommand(() =>
             {
-                if (i >= CombinatieTemplates.Count) SelectedTemplate = CombinatieTemplates.Last();
-                else if (i >= 0 && i < CombinatieTemplates.Count) SelectedTemplate = CombinatieTemplates[i];
-            }
-        },
-        () => SelectedTemplate != null));
+                var i = CombinatieTemplates.IndexOf(SelectedTemplate);
+                CombinatieTemplates.Remove(SelectedTemplate);
+                SelectedTemplate = null;
+                if (CombinatieTemplates.Any())
+                {
+                    if (i >= CombinatieTemplates.Count) SelectedTemplate = CombinatieTemplates.Last();
+                    else if (i >= 0 && i < CombinatieTemplates.Count) SelectedTemplate = CombinatieTemplates[i];
+                }
+            },
+            () => SelectedTemplate != null);
 
         #endregion // Commands
 
