@@ -61,6 +61,7 @@ namespace TLCGen.ViewModels
         private readonly Color _defaultFaseColor = Color.DarkRed;
         private readonly Color _defaultDetectorColor = Color.Yellow;
         private readonly Color _defaultDetectorSelectedColor = Color.Magenta;
+        private string _bitmapFileName;
 
         #endregion // Fields
 
@@ -148,6 +149,7 @@ namespace TLCGen.ViewModels
                     RefreshMyBitmapImage();
                 }
                 OnPropertyChanged();
+                _setCoordinatesCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -163,7 +165,17 @@ namespace TLCGen.ViewModels
 
         public BitmapImage MyBitmap { get; private set; }
 
-        public string BitmapFileName { get; set; }
+        public string BitmapFileName
+        {
+            get => _bitmapFileName;
+            set
+            {
+                _bitmapFileName = value;
+                OnPropertyChanged();
+                _refreshBitmapCommand?.NotifyCanExecuteChanged();
+                _importDplCCommand?.NotifyCanExecuteChanged();
+            }
+        }
 
         public string ControllerFileName
         {
@@ -179,15 +191,92 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand<object>(SetCoordinatesCommand_Executed, SetCoordinatesCommand_CanExecute);
+        public ICommand SetCoordinatesCommand => _setCoordinatesCommand ??= new RelayCommand<object>(prm =>
+            {
+                var p = (Point)prm;
 
-        public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
+                var c = _editableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
+
+                if(c.ToArgb().Equals(GetFillColor(true).ToArgb()))
+                {
+                    if (SelectedItem.HasCoordinates)
+                    {
+                        var coords = new List<Point>();
+                        foreach (var pp in SelectedItem.Coordinates)
+                        {
+                            if (pp.X <= _editableBitmap.Bitmap.Width && pp.Y <= _editableBitmap.Bitmap.Height)
+                            {
+                                FillMyBitmap(pp, _testFillColor);
+                                if (_editableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == _testFillColor.ToArgb())
+                                {
+                                    FillMyBitmap(pp, _defaultFillColor);
+                                    coords.Add(pp);
+                                }
+                                else
+                                {
+                                    FillMyBitmap(pp, GetFillColor(true));
+                                }
+                            }
+                        }
+                        foreach(var pp in coords)
+                            SelectedItem.Coordinates.Remove(pp);
+                    }
+                }
+                else if (!c.ToArgb().Equals(Color.Black.ToArgb()) &&
+                         !c.ToArgb().Equals(_defaultFaseColor.ToArgb()) &&
+                         !c.ToArgb().Equals(_defaultDetectorColor.ToArgb()) &&
+                         !c.ToArgb().Equals(_defaultDetectorSelectedColor.ToArgb()))
+                {
+                    SelectedItem.Coordinates.Add(p);
+
+                    FillMyBitmap(p, GetFillColor(true));
+
+                }
+                RefreshMyBitmapImage();
+            }, 
+            prm => SelectedItem != null);
+
+        public ICommand RefreshBitmapCommand => _refreshBitmapCommand ??= new RelayCommand(LoadBitmap, () => BitmapFileName != null);
         
-        public ICommand ResetBitmapIOCommand => _resetBitmapIOCommand ??= new RelayCommand(ResetBitmapIOCommand_Executed, ResetBitmapIOCommand_CanExecute);
+        public ICommand ResetBitmapIOCommand => _resetBitmapIOCommand ??= new RelayCommand(() =>
+            {
+                var ok = MessageBox.Show("Alle aangeklinkt IO wordt gereset. Doorgaan?", "Bevestigen reset", MessageBoxButton.YesNo);
 
-        public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand<object>(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
+                if (ok != MessageBoxResult.Yes) return;
 
-        public ICommand ImportDplCCommand => _importDplCCommand ??= new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute);
+                foreach (var io in Fasen)
+                {
+                    io.Coordinates.RemoveAll();
+                }
+                foreach (var io in Detectoren)
+                {
+                    io.Coordinates.RemoveAll();
+                }
+                foreach (var io in OverigeIngangen)
+                {
+                    io.Coordinates.RemoveAll();
+                }
+                foreach (var io in OverigeUitgangen)
+                {
+                    io.Coordinates.RemoveAll();
+                }
+
+                LoadBitmap();
+            });
+
+        public ICommand ResetBitmapCommand => _resetBitmapCommand ??= new RelayCommand<object>(obj =>
+            {
+                var zb = obj as Controls.ZoomViewbox;
+                zb?.Reset();
+            });
+
+        public ICommand ImportDplCCommand => _importDplCCommand ??= new RelayCommand(() =>
+            {
+                var dlg = new ImportDplCWindow(_Controller) {Owner = Application.Current.MainWindow};
+                dlg.ShowDialog();
+                LoadBitmap();
+            }, 
+            () => BitmapFileName != null);
 
         
         #endregion // Commands
