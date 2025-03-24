@@ -516,87 +516,59 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddLijnNummerCommand
-        {
-            get
+        public ICommand AddLijnNummerCommand => _addLijnNummerCommand ??= new RelayCommand(() => 
             {
-                return _addLijnNummerCommand ??= new RelayCommand(() => 
+                if (!string.IsNullOrWhiteSpace(NewLijnNummer))
                 {
-                    if (!string.IsNullOrWhiteSpace(NewLijnNummer))
+                    var nummer = new OVIngreepLijnNummerModel()
                     {
-                        var nummer = new OVIngreepLijnNummerModel()
-                        {
-                            Nummer = NewLijnNummer, RitCategorie = "999"
-                        };
-                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                    }
-                    else
-                    {
-                        var nummer = new OVIngreepLijnNummerModel()
-                        {
-                            Nummer = "0", RitCategorie = "999"
-                        };
-                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                    }
-                    NewLijnNummer = "";
-                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-
-                }, () => LijnNummers != null);
-            }
-        }
-
-        public ICommand Add10LijnNummersCommand
-        {
-            get
-            {
-                return _add10LijnNummersCommand ??= new RelayCommand(
-                    () =>
-                    {
-                        for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
-                    }, () => LijnNummers != null);
-            }
-        }
-
-
-
-        public ICommand RemoveLijnNummerCommand
-        {
-            get
-            {
-                return _removeLijnNummerCommand ??= new RelayCommand(() =>
+                        Nummer = NewLijnNummer, RitCategorie = "999"
+                    };
+                    LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                }
+                else
                 {
-                    if (SelectedLijnNummer != null)
+                    var nummer = new OVIngreepLijnNummerModel()
                     {
-                        LijnNummers.Remove(SelectedLijnNummer);
-                        SelectedLijnNummer = null;
-                    }
-                    else
-                    {
-                        LijnNummers.RemoveAt(LijnNummers.Count - 1);
-                    }
+                        Nummer = "0", RitCategorie = "999"
+                    };
+                    LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                }
+                NewLijnNummer = "";
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                _removeLijnNummerCommand?.NotifyCanExecuteChanged();
+            });
 
-                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-                }, () => LijnNummers != null && LijnNummers.Count > 0);
-            }
-        }
-
-        public ICommand RemoveIngreepCommand
-        {
-            get
+        public ICommand Add10LijnNummersCommand => _add10LijnNummersCommand ??= new RelayCommand(
+            () =>
             {
-                return _removeIngreepCommand ??= new RelayCommand(() =>
+                for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
+            }, () => LijnNummers != null);
+
+
+        public ICommand RemoveLijnNummerCommand => _removeLijnNummerCommand ??= new RelayCommand(() =>
+            {
+                if (SelectedLijnNummer != null)
                 {
-                    _parentIngreep.Ingrepen.Remove(this);
-                    WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
-                });
-            }
-        }
-        
+                    LijnNummers.Remove(SelectedLijnNummer);
+                    SelectedLijnNummer = null;
+                }
+                else
+                {
+                    LijnNummers.RemoveAt(LijnNummers.Count - 1);
+                }
+
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                _removeLijnNummerCommand?.NotifyCanExecuteChanged();
+            }, () => LijnNummers is { Count: > 0 });
+
+        public ICommand RemoveIngreepCommand => _removeIngreepCommand ??= new RelayCommand(() =>
+            {
+                _parentIngreep.Ingrepen.Remove(this);
+                WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
+            });
+
         #endregion // Commands
-
-        #region Private Methods
-
-        #endregion // Private Methods
 
         #region Public Methods
         

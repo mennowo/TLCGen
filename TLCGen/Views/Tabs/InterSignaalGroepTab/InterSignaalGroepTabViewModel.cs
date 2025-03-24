@@ -23,7 +23,7 @@ namespace TLCGen.ViewModels
     [TLCGenTabItem(index: 6)]
     public class SynchronisatiesTabViewModel : TLCGenTabItemViewModel
     {
-
+        #region Fields
 
         private List<string> _AllDetectoren;
         private ObservableCollection<string> _FasenNames;
@@ -33,11 +33,11 @@ namespace TLCGen.ViewModels
         private bool _MatrixChanged;
         private IntersignaalGroepTypeEnum _DisplayType;
 
-        RelayCommand _DeleteValueCommand;
-        RelayCommand _CheckItCommand;
-        RelayCommand _AddGarantieConvertValue;
-        RelayCommand _RemoveGarantieConvertValue;
-        RelayCommand _SetGarantieValuesCommand;
+        private RelayCommand _DeleteValueCommand;
+        private RelayCommand _CheckItCommand;
+        private RelayCommand _AddGarantieConvertValue;
+        private RelayCommand _RemoveGarantieConvertValue;
+        private RelayCommand _SetGarantieValuesCommand;
 
         #endregion // Fields
 

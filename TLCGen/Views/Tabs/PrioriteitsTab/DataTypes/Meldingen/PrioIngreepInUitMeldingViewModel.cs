@@ -150,25 +150,19 @@ namespace TLCGen.ViewModels
         #region Commands
 
         
-        public ICommand RemoveMeldingCommand
-        {
-            get
+        public ICommand RemoveMeldingCommand => _removeMeldingCommand ??= new RelayCommand(() =>
             {
-                return _removeMeldingCommand ??= new RelayCommand(() =>
+                switch (_parent)
                 {
-                    switch (_parent)
-                    {
-                        case PrioIngreepInUitMeldingViewModel iu:
-                            iu.OpvangStoring = false;
-                            break;
-                        case PrioIngreepMeldingenListViewModel list:
-                            list.Meldingen.Remove(this);
-                            WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
-                            break;
-                    }
-                });
-            }
-        }
+                    case PrioIngreepInUitMeldingViewModel iu:
+                        iu.OpvangStoring = false;
+                        break;
+                    case PrioIngreepMeldingenListViewModel list:
+                        list.Meldingen.Remove(this);
+                        WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
+                        break;
+                }
+            });
 
         #endregion // Commands
 
