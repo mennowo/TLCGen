@@ -21,13 +21,12 @@ namespace TLCGen.ViewModels
         
         private DetectorViewModel _SelectedDetector;
         private IList _SelectedDetectoren = new ArrayList();
-        private ObservableCollection<DetectorViewModel> _Detectoren;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<DetectorViewModel> Detectoren => _Detectoren ?? (_Detectoren = new ObservableCollection<DetectorViewModel>());
+        public ObservableCollection<DetectorViewModel> Detectoren { get; } = [];
 
         public DetectorViewModel SelectedDetector
         {

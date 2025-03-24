@@ -37,6 +37,11 @@ namespace TLCGen.ViewModels
         private string _SelectedDetectorVerleng1;
         private string _SelectedDetectorVerleng2;
 
+        private RelayCommand _AddRichtingGevoeligeAanvraag;
+        private RelayCommand _AddRichtingGevoeligVerleng;
+        private RelayCommand _RemoveRichtingGevoeligeAanvraag;
+        private RelayCommand _RemoveRichtingGevoeligVerleng;
+
         #endregion // Fields
 
         #region Properties
@@ -143,6 +148,7 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("SelectedFaseAanvraag");
                 OnPropertyChanged("SelectedDetectorAanvraag1");
                 OnPropertyChanged("SelectedDetectorAanvraag2");
+                _AddRichtingGevoeligeAanvraag?.NotifyCanExecuteChanged();
             }
         }
         public string SelectedDetectorAanvraag1
@@ -152,6 +158,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorAanvraag1 = value;
                 OnPropertyChanged("SelectedDetectorAanvraag1");
+                _AddRichtingGevoeligeAanvraag?.NotifyCanExecuteChanged();
             }
         }
         public string SelectedDetectorAanvraag2
@@ -161,6 +168,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorAanvraag2 = value;
                 OnPropertyChanged("SelectedDetectorAanvraag2");
+                _AddRichtingGevoeligeAanvraag?.NotifyCanExecuteChanged();
             }
         }
 
@@ -194,6 +202,7 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("SelectedFaseVerleng");
                 OnPropertyChanged("SelectedDetectorVerleng1");
                 OnPropertyChanged("SelectedDetectorVerleng2");
+                _AddRichtingGevoeligVerleng?.NotifyCanExecuteChanged();
             }
         }
         public string SelectedDetectorVerleng1
@@ -203,6 +212,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorVerleng1 = value;
                 OnPropertyChanged("SelectedDetectorVerleng1");
+                _AddRichtingGevoeligVerleng?.NotifyCanExecuteChanged();
             }
         }
         public string SelectedDetectorVerleng2
@@ -212,6 +222,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorVerleng2 = value;
                 OnPropertyChanged("SelectedDetectorVerleng2");
+                _AddRichtingGevoeligVerleng?.NotifyCanExecuteChanged();
             }
         }
 
@@ -235,6 +246,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedRichtingGevoeligeAanvraag = value;
                 OnPropertyChanged("SelectedRichtingGevoeligeAanvraag");
+                _RemoveRichtingGevoeligeAanvraag?.NotifyCanExecuteChanged();
             }
         }
 
@@ -246,6 +258,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedRichtingGevoeligVerleng = value;
                 OnPropertyChanged("SelectedRichtingGevoeligVerleng");
+                _RemoveRichtingGevoeligVerleng?.NotifyCanExecuteChanged();
             }
         }
 
@@ -253,57 +266,66 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddRichtingGevoeligeAanvraag;
-        public ICommand AddRichtingGevoeligeAanvraag
-        {
-            get
+        public ICommand AddRichtingGevoeligeAanvraag => _AddRichtingGevoeligeAanvraag ??= new RelayCommand(() =>
             {
-                if (_AddRichtingGevoeligeAanvraag == null)
+                var rga = new RichtingGevoeligeAanvraagModel()
                 {
-                    _AddRichtingGevoeligeAanvraag = new RelayCommand(AddRichtingGevoeligeAanvraag_Executed, AddRichtingGevoeligeAanvraag_CanExecute);
-                }
-                return _AddRichtingGevoeligeAanvraag;
-            }
-        }
+                    FaseCyclus = SelectedFaseAanvraag,
+                    VanDetector = SelectedDetectorAanvraag1,
+                    NaarDetector = SelectedDetectorAanvraag2
+                };
+                DefaultsProvider.Default.SetDefaultsOnModel(rga);
+                RichtingGevoeligeAanvragen.Add(new RichtingGevoeligeAanvraagViewModel(rga));
 
-        RelayCommand _AddRichtingGevoeligVerleng;
-        public ICommand AddRichtingGevoeligVerleng
-        {
-            get
-            {
-                if (_AddRichtingGevoeligVerleng == null)
-                {
-                    _AddRichtingGevoeligVerleng = new RelayCommand(AddRichtingGevoeligVerleng_Executed, AddRichtingGevoeligVerleng_CanExecute);
-                }
-                return _AddRichtingGevoeligVerleng;
-            }
-        }
+                _SelectedFaseAanvraag = null;
+                _SelectedDetectorAanvraag1 = null;
+                _SelectedDetectorAanvraag2 = null;
+                OnPropertyChanged("SelectedFaseAanvraag");
+                OnPropertyChanged("SelectedDetectorAanvraag1");
+                OnPropertyChanged("SelectedDetectorAanvraag2");
 
-        RelayCommand _RemoveRichtingGevoeligeAanvraag;
-        public ICommand RemoveRichtingGevoeligeAanvraag
-        {
-            get
-            {
-                if (_RemoveRichtingGevoeligeAanvraag == null)
-                {
-                    _RemoveRichtingGevoeligeAanvraag = new RelayCommand(RemoveRichtingGevoeligeAanvraag_Executed, RemoveRichtingGevoeligeAanvraag_CanExecute);
-                }
-                return _RemoveRichtingGevoeligeAanvraag;
-            }
-        }
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            }, 
+            () => SelectedFaseAanvraag != null && SelectedDetectorAanvraag1 != null && SelectedDetectorAanvraag2 != null &&
+                 SelectedDetectorAanvraag1 != SelectedDetectorAanvraag2);
 
-        RelayCommand _RemoveRichtingGevoeligVerleng;
-        public ICommand RemoveRichtingGevoeligVerleng
-        {
-            get
+        public ICommand AddRichtingGevoeligVerleng => _AddRichtingGevoeligVerleng ??= new RelayCommand(() =>
             {
-                if (_RemoveRichtingGevoeligVerleng == null)
+                var rgv = new RichtingGevoeligVerlengModel()
                 {
-                    _RemoveRichtingGevoeligVerleng = new RelayCommand(RemoveRichtingGevoeligVerleng_Executed, RemoveRichtingGevoeligVerleng_CanExecute);
-                }
-                return _RemoveRichtingGevoeligVerleng;
-            }
-        }
+                    FaseCyclus = SelectedFaseVerleng,
+                    VanDetector = SelectedDetectorVerleng1,
+                    NaarDetector = SelectedDetectorVerleng2
+                };
+                DefaultsProvider.Default.SetDefaultsOnModel(rgv);
+                RichtingGevoeligVerlengen.Add(new RichtingGevoeligVerlengViewModel(rgv));
+
+                _SelectedFaseVerleng = null;
+                _SelectedDetectorVerleng1 = null;
+                _SelectedDetectorVerleng2 = null;
+                OnPropertyChanged("SelectedFaseVerleng");
+                OnPropertyChanged("SelectedDetectorVerleng1");
+                OnPropertyChanged("SelectedDetectorVerleng2");
+
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            }, 
+            () => SelectedFaseVerleng != null && SelectedDetectorVerleng1 != null && SelectedDetectorVerleng2 != null);
+
+        public ICommand RemoveRichtingGevoeligeAanvraag => _RemoveRichtingGevoeligeAanvraag ??= new RelayCommand(() =>
+            {
+                RichtingGevoeligeAanvragen.Remove(SelectedRichtingGevoeligeAanvraag);
+                SelectedRichtingGevoeligeAanvraag = null;
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            },
+            () => SelectedRichtingGevoeligeAanvraag != null);
+
+        public ICommand RemoveRichtingGevoeligVerleng => _RemoveRichtingGevoeligVerleng ??= new RelayCommand(() =>
+            {
+                RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVerleng);
+                SelectedRichtingGevoeligVerleng = null;
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            }, 
+            () => SelectedRichtingGevoeligVerleng != null);
 
         #endregion // Commands
 

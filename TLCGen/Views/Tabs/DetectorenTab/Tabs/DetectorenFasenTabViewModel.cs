@@ -37,6 +37,8 @@ namespace TLCGen.ViewModels
         private bool _showAlles;
         private bool _showFuncties;
         private bool _showTijden;
+        private RelayCommand _AddDetectorCommand;
+        private RelayCommand _RemoveDetectorCommand;
 
         #endregion // Fields
 
@@ -121,6 +123,7 @@ namespace TLCGen.ViewModels
                 _SelectedDetector = value;
                 OnPropertyChanged();
                 if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
+                _RemoveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -140,6 +143,7 @@ namespace TLCGen.ViewModels
                     }
                     TemplatesProviderVM.SetSelectedApplyToItems(sl);
                 }
+                _RemoveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -198,32 +202,71 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddDetectorCommand;
-        public ICommand AddDetectorCommand
-        {
-            get
+        public ICommand AddDetectorCommand => _AddDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_AddDetectorCommand == null)
+                var _dm = new DetectorModel();
+                var inewname = 1;
+                var newname = inewname.ToString();
+                while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, _SelectedFase.Naam + newname))
                 {
-                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
+                    inewname++;
+                    newname = inewname.ToString();
                 }
-                return _AddDetectorCommand;
-            }
-        }
+                _dm.Naam = _SelectedFase.Naam + newname;
+                _dm.VissimNaam = _dm.Naam;
+                _dm.Simulatie.FCNr = _SelectedFase.Naam;
+                if (_SelectedFase.Detectoren.Count == 0)
+                {
+                    if (_SelectedFase.Type == FaseTypeEnum.Auto) _dm.Type = DetectorTypeEnum.Kop;
+                    if (_SelectedFase.Type == FaseTypeEnum.Fiets) _dm.Type = DetectorTypeEnum.Kop;
+                    if (_SelectedFase.Type == FaseTypeEnum.Voetganger) _dm.Type = DetectorTypeEnum.KnopBuiten;
+                }
+                else
+                {
+                    if (_SelectedFase.Type == FaseTypeEnum.Auto) _dm.Type = DetectorTypeEnum.Lang;
+                    if (_SelectedFase.Type == FaseTypeEnum.Fiets) _dm.Type = DetectorTypeEnum.Knop;
+                    if (_SelectedFase.Type == FaseTypeEnum.Voetganger) _dm.Type = DetectorTypeEnum.KnopBinnen;
+                }
+                DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
+                var dvm1 = new DetectorViewModel(_dm)
+                {
+                    FaseCyclus = _SelectedFase.Naam,
+                    Rijstrook = 1
+                };
+                _SelectedFase.Detectoren.Add(_dm);
+                _Detectoren.Add(dvm1);
+                dvm1.PropertyChanged += Detector_PropertyChanged;
+                Detectoren.BubbleSort();
+                WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
+            });
 
-
-        RelayCommand _RemoveDetectorCommand;
-        public ICommand RemoveDetectorCommand
-        {
-            get
+        public ICommand RemoveDetectorCommand => _RemoveDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_RemoveDetectorCommand == null)
+                var changed = false;
+                var remDets = new List<DetectorModel>();
+                if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
                 {
-                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
+                    changed = true;
+                    foreach (DetectorViewModel dvm in SelectedDetectoren)
+                    {
+                        remDets.Add(dvm.Detector);
+                        Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(dvm.Naam, TLCGenObjectTypeEnum.Detector);
+                    }
                 }
-                return _RemoveDetectorCommand;
-            }
-        }
+                else if (SelectedDetector != null)
+                {
+                    changed = true;
+                    remDets.Add(SelectedDetector.Detector);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedDetector.Naam, TLCGenObjectTypeEnum.Detector);
+                }
+
+                if (changed)
+                {
+                    SelectedFaseNaam = SelectedFaseNaam;
+                    WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+                }
+            }, 
+            () => SelectedDetector != null || SelectedDetectoren != null && SelectedDetectoren.Count > 0);
 
         #endregion // Commands
 
