@@ -20,6 +20,10 @@ namespace TLCGen.ViewModels
         private ModuleViewModel _SelectedModule;
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
         private volatile bool _reloading;
+        private RelayCommand _AddModuleCommand;
+        private RelayCommand _RemoveModuleCommand;
+        private RelayCommand _MoveModuleUpCommand;
+        private RelayCommand _MoveModuleDownCommand;
 
         #endregion // Fields
 
@@ -27,17 +31,8 @@ namespace TLCGen.ViewModels
 
         public string Reeks => _ModuleMolen.Reeks;
 
-        public ObservableCollection<ModuleViewModel> Modules
-        {
-            get
-            {
-                if (_Modules == null)
-                {
-                    _Modules = new ObservableCollection<ModuleViewModel>();
-                }
-                return _Modules;
-            }
-        }
+        public ObservableCollection<ModuleViewModel> Modules { get; } = [];
+        
         public ModuleViewModel SelectedModule
         {
             get => _SelectedModule;
@@ -54,7 +49,10 @@ namespace TLCGen.ViewModels
                     _ModulesTabVM.SetSelectedModule(value);
                 }
 
-                OnPropertyChanged("SelectedModule");
+                OnPropertyChanged();
+                _RemoveModuleCommand?.NotifyCanExecuteChanged();
+                _MoveModuleUpCommand?.NotifyCanExecuteChanged();
+                _MoveModuleDownCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -116,64 +114,38 @@ namespace TLCGen.ViewModels
         #endregion // Properties
 
         #region Commands
-
-        RelayCommand _AddModuleCommand;
-        public ICommand AddModuleCommand
+        public ICommand AddModuleCommand => _AddModuleCommand ??= new RelayCommand(() =>
         {
-            get
+            var mm = new ModuleModel
             {
-                if (_AddModuleCommand == null)
-                {
-                    _AddModuleCommand = new RelayCommand(AddNewModuleCommand_Executed, AddNewModuleCommand_CanExecute);
-                }
-                return _AddModuleCommand;
-            }
-        }
+                Naam = Reeks + (Modules.Count + 1).ToString()
+            };
+            var mvm = new ModuleViewModel(mm);
+            Modules.Add(mvm);
+            SelectedModule = mvm;
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
+        });
 
-
-        RelayCommand _RemoveModuleCommand;
-        public ICommand RemoveModuleCommand
+        public ICommand RemoveModuleCommand => _RemoveModuleCommand ??= new RelayCommand(() =>
         {
-            get
+            var index = Modules.IndexOf(SelectedModule);
+            Modules.Remove(SelectedModule);
+            SelectedModule = null;
+            if (Modules.Count > 0)
             {
-                if (_RemoveModuleCommand == null)
+                if (index >= Modules.Count)
                 {
-                    _RemoveModuleCommand = new RelayCommand(RemoveModuleCommand_Executed, ChangeModuleCommand_CanExecute);
+                    SelectedModule = Modules[Modules.Count - 1];
                 }
-                return _RemoveModuleCommand;
-            }
-        }
-
-        RelayCommand _MoveModuleUpCommand;
-        public ICommand MoveModuleUpCommand
-        {
-            get
-            {
-                if (_MoveModuleUpCommand == null)
+                else
                 {
-                    _MoveModuleUpCommand = new RelayCommand(MoveModuleUpCommand_Executed, ChangeModuleCommand_CanExecute);
+                    SelectedModule = Modules[index];
                 }
-                return _MoveModuleUpCommand;
             }
-        }
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
+        }, () => SelectedModule != null);
 
-        RelayCommand _MoveModuleDownCommand;
-        public ICommand MoveModuleDownCommand
-        {
-            get
-            {
-                if (_MoveModuleDownCommand == null)
-                {
-                    _MoveModuleDownCommand = new RelayCommand(MoveModuleDownCommand_Executed, ChangeModuleCommand_CanExecute);
-                }
-                return _MoveModuleDownCommand;
-            }
-        }
-        #endregion // Commands
-
-        #region Command functionality
-
-        private void MoveModuleUpCommand_Executed()
+        public ICommand MoveModuleUpCommand => _MoveModuleUpCommand ??= new RelayCommand(() =>
         {
             var index = -1;
             foreach(var mvm in Modules)
@@ -192,10 +164,9 @@ namespace TLCGen.ViewModels
                 Modules.Insert(index - 1, mvm);
                 SelectedModule = mvm;
             }
-        }
+        }, () => SelectedModule != null);
 
-
-        private void MoveModuleDownCommand_Executed()
+        public ICommand MoveModuleDownCommand => _MoveModuleDownCommand ??= new RelayCommand(() =>
         {
             var index = -1;
             foreach (var mvm in Modules)
@@ -214,50 +185,9 @@ namespace TLCGen.ViewModels
                 Modules.Insert(index + 1, mvm);
                 SelectedModule = mvm;
             }
-        }
+        }, () => SelectedModule != null);
 
-        void AddNewModuleCommand_Executed()
-        {
-            var mm = new ModuleModel
-            {
-                Naam = Reeks + (Modules.Count + 1).ToString()
-            };
-            var mvm = new ModuleViewModel(mm);
-            Modules.Add(mvm);
-            SelectedModule = mvm;
-            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
-        }
-
-        bool AddNewModuleCommand_CanExecute()
-        {
-            return Modules != null;
-        }
-
-        void RemoveModuleCommand_Executed()
-        {
-            var index = Modules.IndexOf(SelectedModule);
-            Modules.Remove(SelectedModule);
-            SelectedModule = null;
-            if (Modules.Count > 0)
-            {
-                if (index >= Modules.Count)
-                {
-                    SelectedModule = Modules[Modules.Count - 1];
-                }
-                else
-                {
-                    SelectedModule = Modules[index];
-                }
-            }
-            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
-        }
-
-        bool ChangeModuleCommand_CanExecute()
-        {
-            return SelectedModule != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private Methods
 

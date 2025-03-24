@@ -50,6 +50,8 @@ namespace TLCGen.ViewModels
             {
                 _selectedTemplate = value;
                 OnPropertyChanged(nameof(SelectedTemplate));
+                _addFromTemplateCommand?.NotifyCanExecuteChanged();
+                _applyTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -60,6 +62,7 @@ namespace TLCGen.ViewModels
             {
                 _applyToItem = value;
                 OnPropertyChanged(nameof(ApplyToItem));
+                _applyTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -70,6 +73,7 @@ namespace TLCGen.ViewModels
             {
                 _applyToItems = value;
                 OnPropertyChanged(nameof(ApplyToItems));
+                _applyTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -77,105 +81,87 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand ApplyTemplateCommand
-        {
-            get
+        public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand<object>(obj =>
             {
-                if (_applyTemplateCommand == null)
+                if (ApplyToItems != null)
                 {
-                    _applyTemplateCommand = new RelayCommand<object>(obj =>
-                        {
-                            if(ApplyToItems != null)
-                            {
-                                foreach(var i in ApplyToItems)
-                                {
-                                    ApplyTo(i, obj);
-                                    _sourceVm.UpdateAfterApplyTemplate(i);
-                                }
-                            }
-                            if (ApplyToItem is { } item)
-                            {
-                                ApplyTo(item, obj);
-                                _sourceVm.UpdateAfterApplyTemplate(item);
-                            }
-                        }, 
-                        _ => SelectedTemplate != null &&
-                              (!string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>)?.Replace) || !_replaceNameOnApply) &&
-                              (ApplyToItem != null || ApplyToItems != null && ApplyToItems.Any()));
-                }
-                return _applyTemplateCommand;
-            }
-        }
-
-        public ICommand AddFromTemplateCommand
-        {
-            get
-            {
-                if (_addFromTemplateCommand == null)
-                {
-                    _addFromTemplateCommand = new RelayCommand<object>(obj =>
+                    foreach (var i in ApplyToItems)
                     {
-                        var items = new List<T2>();
-                        var template = SelectedTemplate as TLCGenTemplateModel<T2>;
-                        if (template == null) return;
-                        
-                        // No data provided from view, but a replace value is needed for this template
-                        if(obj == null && !string.IsNullOrWhiteSpace(template.Replace))
-                        {
-                            var dialog = new Dialogs.ApplyTemplateWindow();
-                            dialog.ShowDialog();
-                            var applyString = dialog.TemplateApplyString;
-                            if(!string.IsNullOrWhiteSpace(applyString))
-                            {
-                                var list = applyString.Replace(" ", "");
-                                var elems = list.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                                foreach (var elem in elems)
-                                {
-                                    var tempitems = template.GetItems();
-                                    foreach (var item in tempitems)
-                                    {
-                                        var cloneditem = DeepCloner.DeepClone((T2)item);
-                                        ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
-                                        items.Add(cloneditem);
-                                    }
-                                }
-                                _sourceVm.InsertItemsFromTemplate(items);
-                            }
-                        }
-                        // Data provided from view, for use with replace value
-                        else if (obj != null && !string.IsNullOrWhiteSpace(template.Replace))
-                        {
-                            var elem = obj as string;
-                            if (!string.IsNullOrWhiteSpace(elem))
-                            {
-                                var tempitems = template.GetItems();
-                                foreach (var item in tempitems)
-                                {
-                                    var cloneditem = DeepCloner.DeepClone((T2)item);
-                                    ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
-                                    items.Add(cloneditem);
-                                }
-                                _sourceVm.InsertItemsFromTemplate(items);
-                            }
-                        }
-                        // Fixed template
-                        else if (string.IsNullOrWhiteSpace(template.Replace))
+                        ApplyTo(i, obj);
+                        _sourceVm.UpdateAfterApplyTemplate(i);
+                    }
+                }
+
+                if (ApplyToItem is { } item)
+                {
+                    ApplyTo(item, obj);
+                    _sourceVm.UpdateAfterApplyTemplate(item);
+                }
+            },
+            _ => SelectedTemplate != null &&
+                 (!string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>)?.Replace) ||
+                  !_replaceNameOnApply) &&
+                 (ApplyToItem != null || ApplyToItems != null && ApplyToItems.Any()));
+
+        public ICommand AddFromTemplateCommand => _addFromTemplateCommand ??= new RelayCommand<object>(obj =>
+            {
+                var items = new List<T2>();
+                if (SelectedTemplate is not TLCGenTemplateModel<T2> template) return;
+
+                // No data provided from view, but a replace value is needed for this template
+                if (obj == null && !string.IsNullOrWhiteSpace(template.Replace))
+                {
+                    var dialog = new Dialogs.ApplyTemplateWindow();
+                    dialog.ShowDialog();
+                    var applyString = dialog.TemplateApplyString;
+                    if (!string.IsNullOrWhiteSpace(applyString))
+                    {
+                        var list = applyString.Replace(" ", "");
+                        var elems = list.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var elem in elems)
                         {
                             var tempitems = template.GetItems();
-                            foreach(var item in tempitems)
+                            foreach (var cloneditem in tempitems.Select(item => DeepCloner.DeepClone((T2)item)))
                             {
-                                var cloneditem = DeepCloner.DeepClone((T2)item);
+                                ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
                                 items.Add(cloneditem);
                             }
-                            _sourceVm.InsertItemsFromTemplate(items);
                         }
-                    }, 
-                    _ => SelectedTemplate != null);
+
+                        _sourceVm.InsertItemsFromTemplate(items);
+                    }
                 }
-                return _addFromTemplateCommand;
-            }
-        }
-        
+                // Data provided from view, for use with replace value
+                else if (obj != null && !string.IsNullOrWhiteSpace(template.Replace))
+                {
+                    var elem = obj as string;
+                    if (!string.IsNullOrWhiteSpace(elem))
+                    {
+                        var tempitems = template.GetItems();
+                        foreach (var cloneditem in tempitems.Select(item => DeepCloner.DeepClone((T2)item)))
+                        {
+                            ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
+                            items.Add(cloneditem);
+                        }
+
+                        _sourceVm.InsertItemsFromTemplate(items);
+                    }
+                }
+                // Fixed template
+                else if (string.IsNullOrWhiteSpace(template.Replace))
+                {
+                    var tempitems = template.GetItems();
+                    foreach (var item in tempitems)
+                    {
+                        var cloneditem = DeepCloner.DeepClone((T2)item);
+                        items.Add(cloneditem);
+                    }
+
+                    _sourceVm.InsertItemsFromTemplate(items);
+                }
+            },
+            _ => SelectedTemplate != null);
+
         #endregion // Commands Functionality
 
         #region Private Methods

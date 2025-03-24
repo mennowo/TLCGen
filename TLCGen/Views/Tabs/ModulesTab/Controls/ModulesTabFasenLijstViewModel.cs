@@ -27,6 +27,7 @@ namespace TLCGen.ViewModels
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
         private ObservableCollection<FaseCyclusModuleViewModel> _Fasen;
         private ControllerModel _Controller;
+        private RelayCommand<object> _AddRemoveFaseCommand;
 
         #endregion // Fields
 
@@ -94,6 +95,7 @@ namespace TLCGen.ViewModels
                     fcmvm.UpdateModuleInfo();
                 }
                 OnPropertyChanged("SelectedModule");
+                _AddRemoveFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -120,6 +122,7 @@ namespace TLCGen.ViewModels
                     fcmvm.UpdateModuleInfo();
                 }
                 OnPropertyChanged("SelectedModuleFase");
+                _AddRemoveFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -127,24 +130,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand<object> _AddRemoveFaseCommand;
-        public ICommand AddRemoveFaseCommand
-        {
-            get
-            {
-                if (_AddRemoveFaseCommand == null)
-                {
-                    _AddRemoveFaseCommand = new RelayCommand<object>(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
-                }
-                return _AddRemoveFaseCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        void AddRemoveFaseCommand_Executed(object prm)
+        public ICommand AddRemoveFaseCommand => _AddRemoveFaseCommand ??= new RelayCommand<object>(prm =>
         {
             var fcmvm = prm as FaseCyclusModuleViewModel;
             SelectedFaseCyclus = fcmvm;
@@ -202,14 +188,9 @@ namespace TLCGen.ViewModels
                 _fcmvm.UpdateModuleInfo();
             }
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }
+        }, prm => SelectedModule != null || SelectedModuleFase != null);
 
-        bool AddRemoveFaseCommand_CanExecute(object prm)
-        {
-            return SelectedModule != null || SelectedModuleFase != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Public Methods
 
