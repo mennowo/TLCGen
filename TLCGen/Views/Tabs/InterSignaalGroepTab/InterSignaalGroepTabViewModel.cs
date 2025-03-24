@@ -24,12 +24,10 @@ namespace TLCGen.ViewModels
     public class SynchronisatiesTabViewModel : TLCGenTabItemViewModel
     {
 
-        #region Fields
 
         private List<string> _AllDetectoren;
         private ObservableCollection<string> _FasenNames;
         private ObservableCollection<string> _Detectoren;
-        private ObservableCollection<GarantieTijdConvertHelper> _GarantieTijdenConvertValues;
         private SynchronisatieViewModel _selectedSynchronisatie;
         private GarantieTijdConvertHelper _SelectedGarantieTijdenConvertValue;
         private bool _MatrixChanged;
@@ -63,6 +61,8 @@ namespace TLCGen.ViewModels
                     SelectedSynchronisatie = ConflictMatrix[0, 1];
                 }
                 OnPropertyChanged("");
+                _CheckItCommand?.NotifyCanExecuteChanged();
+                _SetGarantieValuesCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -90,8 +90,7 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<string> Detectoren => _Detectoren ??= new ObservableCollection<string>();
 
-        public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues => 
-            _GarantieTijdenConvertValues ??= new ObservableCollection<GarantieTijdConvertHelper>();
+        public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues { get; } = [];
 
         public GarantieTijdConvertHelper SelectedGarantieTijdenConvertValue
         {
@@ -100,6 +99,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedGarantieTijdenConvertValue = value;
                 OnPropertyChanged();
+                _RemoveGarantieConvertValue?.NotifyCanExecuteChanged();
             }
         }
 
@@ -147,13 +147,24 @@ namespace TLCGen.ViewModels
                     OnPropertyChanged(nameof(GelijkstartOntruimingstijdFaseNaar));
                 }
                 OnPropertyChanged("");
+                _DeleteValueCommand?.NotifyCanExecuteChanged();
+                _CheckItCommand?.NotifyCanExecuteChanged();
             }
         }
 
         /// <summary>
         /// Symmetrical, two dimensional matrix used to display phasecycle conflicts.
         /// </summary>
-        public SynchronisatieViewModel[,] ConflictMatrix { get; set; }
+        public SynchronisatieViewModel[,] ConflictMatrix
+        {
+            get => _conflictMatrix;
+            set
+            {
+                _conflictMatrix = value;
+                OnPropertyChanged();
+                _SetGarantieValuesCommand?.NotifyCanExecuteChanged();
+            }
+        }
 
         /// <summary>
         /// Boolean set by instances of ConflictViewModel when their DisplayWaarde property is 
@@ -432,121 +443,84 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand DeleteValueCommand => _DeleteValueCommand ??= new RelayCommand(DeleteValueCommand_Executed, DeleteValueCommand_CanExecute);
-
-        public ICommand CheckItCommand => _CheckItCommand ??= new RelayCommand(CheckItCommand_Executed, CheckItCommand_CanExecute);
-
-        public ICommand SetGarantieValuesCommand => _SetGarantieValuesCommand ??= new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
-
-        public ICommand AddGarantieConvertValue => _AddGarantieConvertValue ??= new RelayCommand(AddGarantieConvertValue_Executed, AddGarantieConvertValue_CanExecute);
-
-        public ICommand RemoveGarantieConvertValue => _RemoveGarantieConvertValue ??= new RelayCommand(RemoveGarantieConvertValue_Executed, RemoveGarantieConvertValue_CanExecute);
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        void DeleteValueCommand_Executed()
-        {
-            if (SelectedSynchronisatie != null)
-                SelectedSynchronisatie.ConflictValue = "";
-        }
-
-        bool DeleteValueCommand_CanExecute()
-        {
-            return SelectedSynchronisatie != null;
-        }
-
-        void CheckItCommand_Executed()
-        {
-            var b = SelectedSynchronisatie.IsCoupled;
-            SelectedSynchronisatie.IsCoupled = !b;
-        }
-
-        bool CheckItCommand_CanExecute()
-        {
-            return SelectedSynchronisatie != null &&
-                DisplayType != IntersignaalGroepTypeEnum.Conflict &&
-                DisplayType != IntersignaalGroepTypeEnum.GarantieConflict;
-        }
-
-        private bool SetGarantieValuesCommand_CanExecute()
-        {
-            return ConflictMatrix != null &&
-                   Fasen != null &&
-                   DisplayType == IntersignaalGroepTypeEnum.GarantieConflict &&
-                   GarantieTijdenConvertValues != null &&
-                   GarantieTijdenConvertValues.Count > 0;
-        }
-
-        private void SetGarantieValuesCommand_Executed()
-        {
-            var fccount = Fasen.Count;
-
-            for (var fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
+        public ICommand DeleteValueCommand => _DeleteValueCommand ??= new RelayCommand(() =>
             {
-                for (var fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
+                if (SelectedSynchronisatie != null)
+                    SelectedSynchronisatie.ConflictValue = "";
+            }, 
+            () => SelectedSynchronisatie != null);
+
+        public ICommand CheckItCommand => _CheckItCommand ??= new RelayCommand(() =>
+            {
+                var b = SelectedSynchronisatie.IsCoupled;
+                SelectedSynchronisatie.IsCoupled = !b;
+            }, () => SelectedSynchronisatie != null &&
+                 DisplayType != IntersignaalGroepTypeEnum.Conflict &&
+                 DisplayType != IntersignaalGroepTypeEnum.GarantieConflict);
+
+        public ICommand SetGarantieValuesCommand => _SetGarantieValuesCommand ??= new RelayCommand(() =>
+            {
+                var fccount = Fasen.Count;
+
+                for (var fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
                 {
-                    int i;
-                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()) && Int32.TryParse(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue(), out i))
+                    for (var fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                     {
-                        foreach (var conv in GarantieTijdenConvertValues)
+                        int i;
+                        if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()) && Int32.TryParse(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue(), out i))
                         {
-                            if (i >= conv.Van && i < conv.Tot)
+                            foreach (var conv in GarantieTijdenConvertValues)
                             {
-                                i -= conv.Verschil;
-                                if (i < 0) i = 0;
-                                break;
+                                if (i >= conv.Van && i < conv.Tot)
+                                {
+                                    i -= conv.Verschil;
+                                    if (i < 0) i = 0;
+                                    break;
+                                }
                             }
+                            ConflictMatrix[fcvm_from, fcvm_to].ConflictValue = i.ToString();
                         }
-                        ConflictMatrix[fcvm_from, fcvm_to].ConflictValue = i.ToString();
                     }
                 }
-            }
-        }
+            }, 
+            () => ConflictMatrix != null &&
+                     DisplayType == IntersignaalGroepTypeEnum.GarantieConflict &&
+                     GarantieTijdenConvertValues.Count > 0);
 
-        private bool AddGarantieConvertValue_CanExecute()
-        {
-            return true;
-        }
-
-        private void AddGarantieConvertValue_Executed()
-        {
-            var h = new GarantieTijdConvertHelper(this);
-
-            _SettingGarConvs = true;
-
-            if (GarantieTijdenConvertValues.Count > 0)
+        public ICommand AddGarantieConvertValue => _AddGarantieConvertValue ??= new RelayCommand(() =>
             {
-                h.Tot = GarantieTijdenConvertValues[GarantieTijdenConvertValues.Count - 1].Tot;
-                h.MinVan = h.Van = h.Tot;
-            }
-            else
+                var h = new GarantieTijdConvertHelper(this);
+
+                _SettingGarConvs = true;
+
+                if (GarantieTijdenConvertValues.Count > 0)
+                {
+                    h.Tot = GarantieTijdenConvertValues[GarantieTijdenConvertValues.Count - 1].Tot;
+                    h.MinVan = h.Van = h.Tot;
+                }
+                else
+                {
+                    h.MinVan = h.Van = h.Tot = 0;
+                }
+                h.Verschil = 0;
+
+                _SettingGarConvs = false;
+
+                GarantieTijdenConvertValues.Add(h);
+                _SetGarantieValuesCommand?.NotifyCanExecuteChanged();
+            });
+
+        public ICommand RemoveGarantieConvertValue => _RemoveGarantieConvertValue ??= new RelayCommand(() =>
             {
-                h.MinVan = h.Van = h.Tot = 0;
-            }
-            h.Verschil = 0;
+                GarantieTijdenConvertValues.Remove(SelectedGarantieTijdenConvertValue);
+                SelectedGarantieTijdenConvertValue = null;
 
-            _SettingGarConvs = false;
+                SetGarantieConvertValuesVan();
+                SetGarantieConvertValuesTot();
+                _SetGarantieValuesCommand?.NotifyCanExecuteChanged();
+            }, () => SelectedGarantieTijdenConvertValue != null);
 
-            GarantieTijdenConvertValues.Add(h);
-        }
-
-        private bool RemoveGarantieConvertValue_CanExecute()
-        {
-            return SelectedGarantieTijdenConvertValue != null;
-        }
-
-        private void RemoveGarantieConvertValue_Executed()
-        {
-            GarantieTijdenConvertValues.Remove(SelectedGarantieTijdenConvertValue);
-            SelectedGarantieTijdenConvertValue = null;
-
-            SetGarantieConvertValuesVan();
-            SetGarantieConvertValuesTot();
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 
@@ -847,10 +821,6 @@ WeakReferenceMessengerEx.Default.Send(new ConflictsChangedMessage());
 
         #endregion // Public methods
 
-        #region Collection Changed
-
-        #endregion // Collection Changed
-
         #region TLCGen Event handling
 
         private void OnFasenChanged(object sender, FasenChangedMessage message)
@@ -1029,6 +999,7 @@ WeakReferenceMessengerEx.Default.Send(new ConflictsChangedMessage());
         }
 
         private bool _IsProcessing = false;
+        private SynchronisatieViewModel[,] _conflictMatrix;
 
         private void OnProcesSynchornisationsRequested(object sender, ProcessSynchronisationsRequest request)
         {

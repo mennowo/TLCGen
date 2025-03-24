@@ -603,14 +603,6 @@ WeakReferenceMessengerEx.Default.Send(new InterSignaalGroepChangedMessage(FaseVa
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
-
         #region Private methods
 
         public string GetConflictValue()

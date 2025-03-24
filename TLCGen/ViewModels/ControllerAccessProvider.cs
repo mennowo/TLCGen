@@ -127,8 +127,7 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> OVIngangenStrings =>
             _ovIngangenStrings ??= new ObservableCollection<string>();
 
-        public ObservableCollection<FaseCyclusViewModel> AllSignalGroups =>
-            _allSignalGroups ??= new ObservableCollection<FaseCyclusViewModel>();
+        public ObservableCollection<FaseCyclusViewModel> AllSignalGroups { get; } = [];
         
         public ObservableCollection<string> AllSignalGroupStrings =>
             _allSignalGroupStrings ??= new ObservableCollection<string>();
