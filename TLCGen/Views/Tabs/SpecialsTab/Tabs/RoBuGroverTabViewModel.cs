@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 RoBuGrover.ToestaanNietConflictenInConflictGroepen = value;
-WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, null, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
                 TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
                 OnConflictsChanged(this, new ConflictsChangedMessage());
                 OnPropertyChanged(broadcast: true);
@@ -64,7 +64,9 @@ WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_s
                 var oldval = _selectedConflictGroep;
                 _selectedConflictGroep = value;
                 OnPropertyChanged();
-WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_selectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, !RoBuGrover.ToestaanNietConflictenInConflictGroepen));
+                _removeConflictGroepCommand?.NotifyCanExecuteChanged();
+                _addRemoveFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -110,64 +112,14 @@ WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_s
 
         #region Commands
 
-        public ICommand AddConflictGroepCommand
-        {
-            get
-            {
-                if (_addConflictGroepCommand == null)
-                {
-                    _addConflictGroepCommand = new RelayCommand(AddConflictGroepCommand_Executed, AddConflictGroepCommand_CanExecute);
-                }
-                return _addConflictGroepCommand;
-            }
-        }
-
-        public ICommand RemoveConflictGroepCommand
-        {
-            get
-            {
-                if (_removeConflictGroepCommand == null)
-                {
-                    _removeConflictGroepCommand = new RelayCommand(RemoveConflictGroepCommand_Executed, RemoveConflictGroepCommand_CanExecute);
-                }
-                return _removeConflictGroepCommand;
-            }
-        }
-
-        public ICommand AddRemoveFaseCommand
-        {
-            get
-            {
-                if (_addRemoveFaseCommand == null)
-                {
-                    _addRemoveFaseCommand = new RelayCommand<object>(AddRemoveFaseCommand_Executed, AddRemoveFaseCommand_CanExecute);
-                }
-                return _addRemoveFaseCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        private bool AddConflictGroepCommand_CanExecute()
-        {
-            return true;
-        }
-
-        private void AddConflictGroepCommand_Executed()
+        public ICommand AddConflictGroepCommand => _addConflictGroepCommand ??= new RelayCommand(() =>
         {
             var cgm = new RoBuGroverConflictGroepModel();
             ConflictGroepen.Add(new RoBuGroverConflictGroepViewModel(cgm));
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }
+        });
 
-        private bool RemoveConflictGroepCommand_CanExecute()
-        {
-            return SelectedConflictGroep != null;
-        }
-
-        private void RemoveConflictGroepCommand_Executed()
+        public ICommand RemoveConflictGroepCommand => _removeConflictGroepCommand ??= new RelayCommand(() =>
         {
             var selectedConflictGroep = SelectedConflictGroep;
             ConflictGroepen.Remove(SelectedConflictGroep);
@@ -183,7 +135,7 @@ WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_s
 
                     if ((!ConflictGroepen.SelectMany(x => x.Fasen).Any() || 
                          ConflictGroepen.SelectMany(x => x.Fasen).All(y => y.FaseCyclus != fc.FaseCyclus)) &&
-                         SignaalGroepInstellingen.Any(x => x.FaseCyclus == fc.FaseCyclus))
+                        SignaalGroepInstellingen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                     {
                         var instvm = SignaalGroepInstellingen.First(x => x.FaseCyclus == fc.FaseCyclus);
                         SignaalGroepInstellingen.Remove(instvm);
@@ -195,9 +147,9 @@ WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_s
 
             SelectedConflictGroep = null;
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }
+        }, () => SelectedConflictGroep != null);
 
-        void AddRemoveFaseCommand_Executed(object prm)
+        public ICommand AddRemoveFaseCommand => _addRemoveFaseCommand ??= new RelayCommand<object>(prm =>
         {
             var fc = prm as RoBuGroverTabFaseViewModel;
             SelectedFaseCyclus = fc;
@@ -269,14 +221,9 @@ WeakReferenceMessengerEx.Default.Send(new SelectedConflictGroepChangedMessage(_s
             {
                 tfc.UpdateConflictGroepInfo();
             }
-        }
+        }, prm => SelectedConflictGroep != null);
 
-        bool AddRemoveFaseCommand_CanExecute(object prm)
-        {
-            return SelectedConflictGroep != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 

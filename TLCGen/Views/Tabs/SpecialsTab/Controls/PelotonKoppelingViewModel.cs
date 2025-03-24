@@ -268,6 +268,7 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(nameof(IsInkomendRHDHV));
                 OnPropertyChanged(nameof(IsUitgaand));
                 OnPropertyChanged(nameof(HasRichting));
+                _addInkomendeDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -294,6 +295,7 @@ namespace TLCGen.ViewModels
                 _selectedDetector = value;
                 _uitgaandeDetectorenManager.SelectedItem = value;
                 OnPropertyChanged();
+                _removeInkomendeDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -304,8 +306,7 @@ namespace TLCGen.ViewModels
         public ObservableCollectionAroundList<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel> Detectoren { get; }
 
         public AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string> UitgaandeDetectorenManager =>
-            _uitgaandeDetectorenManager ??
-            (_uitgaandeDetectorenManager = new AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string>(
+            _uitgaandeDetectorenManager ??= new AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string>(
                 Detectoren,
                 x =>
                 {
@@ -316,57 +317,23 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (x, y) => x.DetectorNaam == y
-                ));
+            );
 
 
         #endregion // Properties
 
         #region Commands
 
-        public ICommand AddInkomendeDetectorCommand
-        {
-            get
+        public ICommand AddInkomendeDetectorCommand => _addInkomendeDetectorCommand ??= new RelayCommand(
+            () => Detectoren.Add(new PelotonKoppelingDetectorViewModel(new PelotonKoppelingDetectorModel())), 
+            () => Richting == PelotonKoppelingRichtingEnum.Inkomend);
+
+        public ICommand RemoveInkomendeDetectorCommand => _removeInkomendeDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_addInkomendeDetectorCommand == null)
-                {
-                    _addInkomendeDetectorCommand = new RelayCommand(AddInkomendeDetectorCommand_Executed, AddInkomendeDetectorCommand_CanExecute);
-                }
-                return _addInkomendeDetectorCommand;
-            }
-        }
-
-        private bool AddInkomendeDetectorCommand_CanExecute()
-        {
-            return Richting == PelotonKoppelingRichtingEnum.Inkomend;
-        }
-
-        private void AddInkomendeDetectorCommand_Executed()
-        {
-            Detectoren.Add(new PelotonKoppelingDetectorViewModel(new PelotonKoppelingDetectorModel()));
-        }
-
-        public ICommand RemoveInkomendeDetectorCommand
-        {
-            get
-            {
-                if (_removeInkomendeDetectorCommand == null)
-                {
-                    _removeInkomendeDetectorCommand = new RelayCommand(RemoveInkomendeDetectorCommand_Executed, RemoveInkomendeDetectorCommand_CanExecute);
-                }
-                return _removeInkomendeDetectorCommand;
-            }
-        }
-
-        private bool RemoveInkomendeDetectorCommand_CanExecute()
-        {
-            return SelectedDetector != null;
-        }
-
-        private void RemoveInkomendeDetectorCommand_Executed()
-        {
-            Detectoren.Remove(SelectedDetector);
-            SelectedDetector = Detectoren.Any() ? Detectoren[0] : null;
-        }
+                Detectoren.Remove(SelectedDetector);
+                SelectedDetector = Detectoren.Any() ? Detectoren[0] : null;
+            },
+            () => SelectedDetector != null);
 
         #endregion // Commands
 

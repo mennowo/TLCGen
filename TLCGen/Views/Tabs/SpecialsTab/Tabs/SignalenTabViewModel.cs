@@ -47,6 +47,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedWaarschuwingsGroep = value;
                 OnPropertyChanged();
+                _RemoveWaarschuwingsGroepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -58,6 +59,7 @@ namespace TLCGen.ViewModels
                 _SelectedRatelTikker = value;
                 OnPropertyChanged();
                 UpdateSelectables();
+                _RemoveRatelTikkerCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -119,23 +121,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddWaarschuwingsGroepCommand => _AddWaarschuwingsGroepCommand ?? (_AddWaarschuwingsGroepCommand =
-	                                                        new RelayCommand(AddWaarschuwingsGroepCommand_Executed, AddWaarschuwingsGroepCommand_CanExecute));
-
-	    public ICommand RemoveWaarschuwingsGroepCommand => _RemoveWaarschuwingsGroepCommand ?? (_RemoveWaarschuwingsGroepCommand =
-		                                                       new RelayCommand(RemoveWaarschuwingsGroepCommand_Executed, RemoveWaarschuwingsGroepCommand_CanExecute));
-
-	    public ICommand AddRatelTikkerCommand => _AddRatelTikkerCommand ?? (_AddRatelTikkerCommand =
-		                                             new RelayCommand(AddRatelTikkerCommand_Executed, AddRatelTikkerCommand_CanExecute));
-
-	    public ICommand RemoveRatelTikkerCommand => _RemoveRatelTikkerCommand ?? (_RemoveRatelTikkerCommand =
-		                                                new RelayCommand(RemoveRatelTikkerCommand_Executed, RemoveRatelTikkerCommand_CanExecute));
-
-	    #endregion // Commands
-
-        #region Command functionality
-
-        void AddWaarschuwingsGroepCommand_Executed()
+        public ICommand AddWaarschuwingsGroepCommand => _AddWaarschuwingsGroepCommand ??= new RelayCommand(() =>
         {
             var grm = new WaarschuwingsGroepModel();
             var i = WaarschuwingsGroepen.Count + 1;
@@ -148,7 +134,7 @@ namespace TLCGen.ViewModels
             var grvm = new WaarschuwingsGroepViewModel(grm);
             WaarschuwingsGroepen.Add(grvm);
             SelectedWaarschuwingsGroep = grvm;
-WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
 
             if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.BellenActief))
@@ -160,15 +146,10 @@ WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 AddPeriodToModel(PeriodeTypeEnum.BellenDimmen, "beldim");
             }
             
-WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
-        }
+            WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
+        });
 
-        bool AddWaarschuwingsGroepCommand_CanExecute()
-        {
-            return true;
-        }
-
-        void RemoveWaarschuwingsGroepCommand_Executed()
+	    public ICommand RemoveWaarschuwingsGroepCommand => _RemoveWaarschuwingsGroepCommand ??= new RelayCommand(() =>
         {
             var id = WaarschuwingsGroepen.IndexOf(SelectedWaarschuwingsGroep);
             WaarschuwingsGroepen.Remove(SelectedWaarschuwingsGroep);
@@ -179,17 +160,12 @@ WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
                 id = id >= WaarschuwingsGroepen.Count ? WaarschuwingsGroepen.Count - 1 : id;
                 SelectedWaarschuwingsGroep = WaarschuwingsGroepen[id];
             }
-WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
             UpdateSelectables();
-        }
+        }, () => SelectedWaarschuwingsGroep != null);
 
-        bool RemoveWaarschuwingsGroepCommand_CanExecute()
-        {
-            return SelectedWaarschuwingsGroep != null;
-        }
-
-        void AddRatelTikkerCommand_Executed()
+	    public ICommand AddRatelTikkerCommand => _AddRatelTikkerCommand ??= new RelayCommand(() =>
         {
             var id = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
             var rtm = new RatelTikkerModel()
@@ -205,14 +181,14 @@ WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
                         if(d.Type == Models.Enumerations.DetectorTypeEnum.Knop ||
                            d.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen ||
                            d.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)
-                        rtm.Detectoren.Add(new RatelTikkerDetectorModel { Detector = d.Naam });
+                            rtm.Detectoren.Add(new RatelTikkerDetectorModel { Detector = d.Naam });
                     }
                 }
             }
             var rtvm = new RatelTikkerViewModel(rtm);
             RatelTikkers.Add(rtvm);
             SelectedRatelTikker = rtvm;
-WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
             if (SelectableRatelTikkerFasen.Count > 0)
             {
@@ -221,30 +197,25 @@ WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 SelectedRatelTikkerFaseToAdd = SelectableRatelTikkerFasen[id];
             }
 
-	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAanvraag))
-	        {
-		       AddPeriodToModel(PeriodeTypeEnum.RateltikkersAanvraag, "rtaanvr");
-			}
-	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAltijd))
-	        {
-		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersAltijd, "rtaltijd");
-	        }
-	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersDimmen))
-	        {
-		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen, "rtdimmen");
+            if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAanvraag))
+            {
+                AddPeriodToModel(PeriodeTypeEnum.RateltikkersAanvraag, "rtaanvr");
+            }
+            if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAltijd))
+            {
+                AddPeriodToModel(PeriodeTypeEnum.RateltikkersAltijd, "rtaltijd");
+            }
+            if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersDimmen))
+            {
+                AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen, "rtdimmen");
             }
             
             RatelTikkers.BubbleSort();
 
-WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
-        }
+            WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
+        });
 
-        bool AddRatelTikkerCommand_CanExecute()
-        {
-            return true;
-        }
-
-        void RemoveRatelTikkerCommand_Executed()
+	    public ICommand RemoveRatelTikkerCommand => _RemoveRatelTikkerCommand ??= new RelayCommand(() =>
         {
             var id = RatelTikkers.IndexOf(SelectedRatelTikker);
             var id2 = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
@@ -255,7 +226,7 @@ WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
             }
             UpdateSelectables();
             SelectedRatelTikker = null;
-WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             if (RatelTikkers.Count > 0)
             {
                 id = id < 0 ? 0 : id;
@@ -268,15 +239,10 @@ WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 id2 = id2 >= SelectableRatelTikkerFasen.Count ? SelectableRatelTikkerFasen.Count - 1 : id2;
                 SelectedRatelTikkerFaseToAdd = SelectableRatelTikkerFasen[id2];
             }
-WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
-        }
+            WeakReferenceMessengerEx.Default.Send(new ModelManagerMessageBase());
+        }, () => SelectedRatelTikker != null);
 
-        bool RemoveRatelTikkerCommand_CanExecute()
-        {
-            return SelectedRatelTikker != null;
-        }
-
-        #endregion // Command functionality
+	    #endregion // Commands
 
         #region Private methods
 

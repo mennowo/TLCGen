@@ -134,30 +134,14 @@ namespace TLCGen.ViewModels
         #region Commands
 
         RelayCommand _SetRoBuGroverDefaultsCommand;
-        public ICommand SetRoBuGroverDefaultsCommand
-        {
-            get
-            {
-                if (_SetRoBuGroverDefaultsCommand == null)
-                {
-                    _SetRoBuGroverDefaultsCommand = new RelayCommand(SetRoBuGroverDefaultsCommand_Executed);
-                }
-                return _SetRoBuGroverDefaultsCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        public void SetRoBuGroverDefaultsCommand_Executed()
+        public ICommand SetRoBuGroverDefaultsCommand => _SetRoBuGroverDefaultsCommand ??= new RelayCommand(() =>
         {
             DefaultsProvider.Default.SetDefaultsOnModel(_RoBuGrover);
             OnPropertyChanged("");
             OnPropertyChanged(nameof(RoBuGrover), broadcast: true);
-        }
+        });
 
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Constructor
 

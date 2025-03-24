@@ -62,7 +62,10 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
                 }
-                OnPropertyChanged();
+                OnPropertyChanged(); 
+                _removePelotonKoppelingCommand?.NotifyCanExecuteChanged();
+                _moveUpPelotonKoppelingCommand?.NotifyCanExecuteChanged();
+                _moveDownPelotonKoppelingCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -72,64 +75,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_addPelotonKoppelingCommand == null)
-                {
-                    _addPelotonKoppelingCommand = new RelayCommand(AddPelotonKoppelingCommand_Executed, AddPelotonKoppelingCommand_CanExecute);
-                }
-                return _addPelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand RemovePelotonKoppelingCommand
-        {
-            get
-            {
-                if (_removePelotonKoppelingCommand == null)
-                {
-                    _removePelotonKoppelingCommand = new RelayCommand(RemovePelotonKoppelingCommand_Executed, RemovePelotonKoppelingCommand_CanExecute);
-                }
-                return _removePelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand MoveUpPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_moveUpPelotonKoppelingCommand == null)
-                {
-                    _moveUpPelotonKoppelingCommand = new RelayCommand(MoveUpPelotonKoppelingCommand_Executed, MoveUpPelotonKoppelingCommand_CanExecute);
-                }
-                return _moveUpPelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand MoveDownPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_moveDownPelotonKoppelingCommand == null)
-                {
-                    _moveDownPelotonKoppelingCommand = new RelayCommand(MoveDownPelotonKoppelingCommand_Executed, MoveDownPelotonKoppelingCommand_CanExecute);
-                }
-                return _moveDownPelotonKoppelingCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        private bool AddPelotonKoppelingCommand_CanExecute()
-        {
-            return true;
-        }
-
-        private void AddPelotonKoppelingCommand_Executed()
+        public ICommand AddPelotonKoppelingCommand => _addPelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             var Peloton = new PelotonKoppelingModel();
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
@@ -144,42 +90,28 @@ namespace TLCGen.ViewModels
             var vm = new PelotonKoppelingViewModel(Peloton);
             PelotonKoppelingen.Add(vm);
             SelectedPelotonKoppeling = vm;
-        }
+        });
 
-        private bool RemovePelotonKoppelingCommand_CanExecute()
-        {
-            return SelectedPelotonKoppeling != null;
-        }
-
-        private void RemovePelotonKoppelingCommand_Executed()
+        public ICommand RemovePelotonKoppelingCommand => _removePelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             PelotonKoppelingen.Remove(SelectedPelotonKoppeling);
             SelectedPelotonKoppeling = PelotonKoppelingen.Any() ? PelotonKoppelingen[0] : null;
-        }
+        }, () => SelectedPelotonKoppeling != null);
 
-        private bool MoveUpPelotonKoppelingCommand_CanExecute()
-        {
-            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0;
-        }
-
-        private void MoveUpPelotonKoppelingCommand_Executed()
+        public ICommand MoveUpPelotonKoppelingCommand => _moveUpPelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) - 1);
             PelotonKoppelingen.RebuildList();
-        }
+        }, () => SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0);
 
-        private bool MoveDownPelotonKoppelingCommand_CanExecute()
-        {
-            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1);
-        }
+        public ICommand MoveDownPelotonKoppelingCommand => _moveDownPelotonKoppelingCommand ??= new RelayCommand(() =>
+            {
+                PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
+                PelotonKoppelingen.RebuildList();
+            },
+                () => SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1));
 
-        private void MoveDownPelotonKoppelingCommand_Executed()
-        {
-            PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
-            PelotonKoppelingen.RebuildList();
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Public methods
 

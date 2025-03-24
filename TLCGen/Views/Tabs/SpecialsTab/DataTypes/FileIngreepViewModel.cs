@@ -69,6 +69,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseNaam = value;
                 OnPropertyChanged("SelectedFaseNaam");
+                _AddTeDoserenSignaalGroepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -79,6 +80,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedTeDoserenFase = value;
                 OnPropertyChanged("SelectedTeDoserenFase");
+                _RemoveTeDoserenSignaalGroepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -277,47 +279,25 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
 
         #region Commands
         
-        public ICommand AddTeDoserenSignaalGroepCommand =>
-            _AddTeDoserenSignaalGroepCommand ?? (_AddTeDoserenSignaalGroepCommand =
-                new RelayCommand(AddNewTeDoserenSignaalGroepCommand_Executed,
-                    AddNewTeDoserenSignaalGroepCommand_CanExecute));
+        public ICommand AddTeDoserenSignaalGroepCommand => _AddTeDoserenSignaalGroepCommand ??= new RelayCommand(() =>
+            {
+                var dos = new FileIngreepTeDoserenSignaalGroepModel();
+                DefaultsProvider.Default.SetDefaultsOnModel(dos);
+                dos.FaseCyclus = SelectedFaseNaam;
+                TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
+                UpdateSelectables();
+            },
+            () => !string.IsNullOrWhiteSpace(SelectedFaseNaam));
 
-        public ICommand RemoveTeDoserenSignaalGroepCommand =>
-            _RemoveTeDoserenSignaalGroepCommand ?? (_RemoveTeDoserenSignaalGroepCommand =
-                new RelayCommand(RemoveTeDoserenSignaalGroepCommand_Executed,
-                    RemoveTeDoserenSignaalGroepCommand_CanExecute));
+        public ICommand RemoveTeDoserenSignaalGroepCommand => _RemoveTeDoserenSignaalGroepCommand ??= new RelayCommand(() =>
+            {
+                TeDoserenSignaalGroepen.Remove(SelectedTeDoserenFase);
+                SelectedTeDoserenFase = null;
+                UpdateSelectables();
+            },
+            () => SelectedTeDoserenFase != null);
 
         #endregion // Commands
-
-        #region Command Functionality
-
-        private void AddNewTeDoserenSignaalGroepCommand_Executed()
-        {
-            var dos = new FileIngreepTeDoserenSignaalGroepModel();
-            DefaultsProvider.Default.SetDefaultsOnModel(dos);
-            dos.FaseCyclus = SelectedFaseNaam;
-            TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
-            UpdateSelectables();
-        }
-
-        private bool AddNewTeDoserenSignaalGroepCommand_CanExecute()
-        {
-            return !string.IsNullOrWhiteSpace(SelectedFaseNaam);
-        }
-
-        private void RemoveTeDoserenSignaalGroepCommand_Executed()
-        {
-            TeDoserenSignaalGroepen.Remove(SelectedTeDoserenFase);
-            SelectedTeDoserenFase = null;
-            UpdateSelectables();
-        }
-
-        private bool RemoveTeDoserenSignaalGroepCommand_CanExecute()
-        {
-            return SelectedTeDoserenFase != null;
-        }
-
-        #endregion // Command Functionality
 
         #region Private methods
 

@@ -122,10 +122,6 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region Private methods
 
         #endregion // Private methods

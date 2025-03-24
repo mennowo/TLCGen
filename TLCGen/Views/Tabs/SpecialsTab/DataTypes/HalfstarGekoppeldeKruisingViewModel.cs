@@ -79,14 +79,6 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 		public bool ShowKoppelsignalenOpties => _gekoppeldeKruising.KoppelWijze == HalfstarGekoppeldWijzeEnum.Koppelsignalen;
 
 		#endregion // Properties
-		
-		#region Commands
-
-		#endregion // Commands
-
-		#region Command functionality
-
-		#endregion // Command functionality
 
 		#region Private methods
 

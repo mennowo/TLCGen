@@ -1,5 +1,4 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -7,7 +6,6 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 {
 	public class HalfstarHoofdrichtingViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
 	{
-
 		#region Properties
 
 		public HalfstarHoofdrichtingModel Hoofdrichting { get; }

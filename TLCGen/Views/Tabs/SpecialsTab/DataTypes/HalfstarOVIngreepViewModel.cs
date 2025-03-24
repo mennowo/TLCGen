@@ -1,5 +1,4 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -42,9 +41,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
-
-        #region Commands
-        #endregion // Commands
 
         #region IViewModelWithItem
 

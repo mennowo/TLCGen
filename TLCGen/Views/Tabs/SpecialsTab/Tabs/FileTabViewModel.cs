@@ -40,6 +40,7 @@ namespace TLCGen.ViewModels
                 _SelectedFileIngreep = value;
                 _SelectedFileIngreep?.OnSelected(_ControllerFasen);
                 OnPropertyChanged();
+                _RemoveFileIngreepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -65,35 +66,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddFileIngreepCommand
-        {
-            get
-            {
-                if (_AddFileIngreepCommand == null)
-                {
-                    _AddFileIngreepCommand = new RelayCommand(AddNewFileIngreepCommand_Executed, AddNewFileIngreepCommand_CanExecute);
-                }
-                return _AddFileIngreepCommand;
-            }
-        }
-
-        public ICommand RemoveFileIngreepCommand
-        {
-            get
-            {
-                if (_RemoveFileIngreepCommand == null)
-                {
-                    _RemoveFileIngreepCommand = new RelayCommand(RemoveFileIngreepCommand_Executed, RemoveFileIngreepCommand_CanExecute);
-                }
-                return _RemoveFileIngreepCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        void AddNewFileIngreepCommand_Executed()
+        public ICommand AddFileIngreepCommand => _AddFileIngreepCommand ??= new RelayCommand(() =>
         {
             var fim = new FileIngreepModel();
             DefaultsProvider.Default.SetDefaultsOnModel(fim);
@@ -108,26 +81,16 @@ namespace TLCGen.ViewModels
             FileIngrepen.Add(fivm);
 
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }
+        });
 
-        bool AddNewFileIngreepCommand_CanExecute()
-        {
-            return true;
-        }
-
-        void RemoveFileIngreepCommand_Executed()
+        public ICommand RemoveFileIngreepCommand => _RemoveFileIngreepCommand ??= new RelayCommand(() =>
         {
             FileIngrepen.Remove(SelectedFileIngreep);
             SelectedFileIngreep = null;
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
-        }
+        }, () => SelectedFileIngreep != null);
 
-        bool RemoveFileIngreepCommand_CanExecute()
-        {
-            return SelectedFileIngreep != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 

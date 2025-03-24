@@ -107,14 +107,6 @@ WeakReferenceMessengerEx.Default.Send(new FileIngreepTeDoserenSignaalGroepPercen
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
-
         #region Private methods
 
         #endregion // Private methods

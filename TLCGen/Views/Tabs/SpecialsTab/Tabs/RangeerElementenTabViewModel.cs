@@ -136,10 +136,6 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region TLCGen TabItem overrides
 
         public override string DisplayName => "Rangeren IO";

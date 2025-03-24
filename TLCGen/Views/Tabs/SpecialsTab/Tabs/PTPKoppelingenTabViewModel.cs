@@ -23,6 +23,8 @@ namespace TLCGen.ViewModels
 
         private PTPKoppelingViewModel _SelectedPTPKoppeling;
         private ObservableCollection<PTPKoppelingViewModel> _PTPKoppelingen;
+        private RelayCommand _AddPTPKoppelingCommand;
+        private RelayCommand _RemovePTPKoppelingCommand;
 
         #endregion // Fields
 
@@ -63,7 +65,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPTPKoppeling = value;
-                OnPropertyChanged("SelectedPTPKoppeling");
+                OnPropertyChanged();
+                _RemovePTPKoppelingCommand?.NotifyCanExecuteChanged();
             }
         }
         
@@ -75,31 +78,28 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddPTPKoppelingCommand;
-        public ICommand AddPTPKoppelingCommand
+        public ICommand AddPTPKoppelingCommand => _AddPTPKoppelingCommand ??= new RelayCommand(() =>
         {
-            get
+            var inewname = 1;
+            var ptp = new PTPKoppelingModel();
+            do
             {
-                if (_AddPTPKoppelingCommand == null)
-                {
-                    _AddPTPKoppelingCommand = new RelayCommand(AddPTPKoppelingCommand_Executed, AddPTPKoppelingCommand_CanExecute);
-                }
-                return _AddPTPKoppelingCommand;
+                inewname++;
+                ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
             }
-        }
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
+            var vm = new PTPKoppelingViewModel(ptp);
+            PTPKoppelingen.Add(vm);
+            SelectedPTPKoppeling = vm;
+            WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
+        });
 
-        RelayCommand _RemovePTPKoppelingCommand;
-        public ICommand RemovePTPKoppelingCommand
+        public ICommand RemovePTPKoppelingCommand => _RemovePTPKoppelingCommand ??= new RelayCommand(() =>
         {
-            get
-            {
-                if (_RemovePTPKoppelingCommand == null)
-                {
-                    _RemovePTPKoppelingCommand = new RelayCommand(RemovePTPKoppelingCommand_Executed, RemovePTPKoppelingCommand_CanExecute);
-                }
-                return _RemovePTPKoppelingCommand;
-            }
-        }
+            PTPKoppelingen.Remove(SelectedPTPKoppeling);
+            SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
+            WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
+        }, () => SelectedPTPKoppeling != null);
 
         #endregion // Commands
 
