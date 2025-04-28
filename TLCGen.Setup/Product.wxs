@@ -1,262 +1,334 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <?include "Config.wxi"?>
-	<Package Name="TLCGen" Language="1033" Version="12.4.0.12" Manufacturer="CodingConnected e.U." UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382" InstallerVersion="200">
-       
-    <SummaryInformation Keywords="Installer" Description="TLCGen" Manufacturer="CodingConnected e.U." />
-    
-    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" 
+	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
+	 xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
+	
+	<?include "Config.wxi"?>
+	
+	<Package Name="TLCGen" Language="1033" Version="12.4.0.14" 
+			 Manufacturer="CodingConnected e.U."
+			 UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382" InstallerVersion="200">
 
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<SummaryInformation Keywords="Installer" Description="TLCGen" Manufacturer="CodingConnected e.U." />
 
-    <MediaTemplate EmbedCab="yes" />
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
 
-    <Feature Id="Complete" Title="TLCGen" Level="1" AllowAdvertise="no" InstallDefault="local" ConfigurableDirectory="INSTALLFOLDER" Display="expand" AllowAbsent="no">
-      <Feature Id="MainProgram" Title="TLCGen" Description="TLCGen programma bestanden" Level="1" AllowAdvertise="no" AllowAbsent="no">
-        <ComponentGroupRef Id="TLCGenMain" />
-        <ComponentGroupRef Id="TLCGenUpdater" />
-        <ComponentGroupRef Id="TLCGenDependencies" />
-        <ComponentGroupRef Id="TLCGenLicenses" />
-        <ComponentGroupRef Id="TLCGenComponents" />
-        <ComponentGroupRef Id="TLCGenPlugins" />
-        <ComponentGroupRef Id="TLCGenSettings" />
-        <ComponentGroupRef Id="TLCGenCCOLDocs" />
-        <ComponentGroupRef Id="TLCGenCCOLSources" />
-        <ComponentGroupRef Id="TLCGenCCOLSourcesToCopy" />
-        <ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
-        <ComponentRef Id="ProgramMenuDir" />
-      </Feature>
-      <Feature Id="TLCGenAutoBuild" Title="AutoBuild plugin" Description="Plugin waarmee direct vanuit TLCGen regelingen kunnen worden gecompileerd" Level="2" AllowAdvertise="no">
-        <ComponentGroupRef Id="TLCGenAutoBuildPlugin" />
-        <ComponentGroupRef Id="TLCGenAutoBuildPluginDeps" />
-      </Feature>
-      <Feature Id="TLCGenAdditor" Title="Additor plugin" Description="Plugin waarmee binnen TLCGen .add en .c bestanden kunnen worden bewerkt" Level="2" AllowAdvertise="no">
-        <ComponentGroupRef Id="TLCGenAdditorPlugin" />
-      </Feature>
-    </Feature>
-    
-    <Icon Id="TLCGen.exe" SourceFile="$(var.ReleaseDir)/TLCGen.exe" />
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-    <ui:WixUI Id="WixUI_FeatureTree" />
-	  <UIRef Id="WixUI_ErrorProgressText" />
+		<MediaTemplate EmbedCab="yes" />
 
-    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="Er is reeds een nieuwere versie van [ProductName] geinstalleerd." />
-      
+		<Feature Id="Complete" Title="TLCGen" Level="1" AllowAdvertise="no" InstallDefault="local" ConfigurableDirectory="INSTALLFOLDER" Display="expand" AllowAbsent="no">
+			<Feature Id="MainProgram" Title="TLCGen" Description="TLCGen programma bestanden" Level="1" AllowAdvertise="no" AllowAbsent="no">
+				<ComponentGroupRef Id="TLCGenMain" />
+				<ComponentGroupRef Id="TLCGenUpdater" />
+				<ComponentGroupRef Id="TLCGenDependencies" />
+				<ComponentGroupRef Id="TLCGenLicenses" />
+				<ComponentGroupRef Id="TLCGenComponents" />
+				<ComponentGroupRef Id="TLCGenPlugins" />
+				<ComponentGroupRef Id="TLCGenSettings" />
+				<ComponentGroupRef Id="TLCGenCCOLDocs" />
+				<ComponentGroupRef Id="TLCGenCCOLSources" />
+				<ComponentGroupRef Id="TLCGenCCOLSourcesToCopy" />
+				<ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
+				<ComponentGroupRef Id="TLCGenNativeAssets" />
+				<ComponentRef Id="ProgramMenuDir" />
+			</Feature>
+			<Feature Id="TLCGenAutoBuild" Title="AutoBuild plugin" InstallDefault="local" Level="2" AllowAdvertise="no"
+					 Description="Plugin waarmee direct vanuit TLCGen regelingen kunnen worden gecompileerd">
+				<ComponentGroupRef Id="TLCGenAutoBuildPlugin" />
+			</Feature>
+			<Feature Id="TLCGenAdditor" Title="Additor plugin" InstallDefault="local" Level="2" AllowAdvertise="no"
+					 Description="Plugin waarmee binnen TLCGen .add en .c bestanden kunnen worden bewerkt">
+				<ComponentGroupRef Id="TLCGenAdditorPlugin" />
+			</Feature>
+		</Feature>
+
+		<Icon Id="TLCGen.exe" SourceFile="$(var.ReleaseDir)/TLCGen.exe" />
+
+		<ui:WixUI Id="WixUI_FeatureTree" />
+		<UIRef Id="WixUI_ErrorProgressText" />
+
+		<Property Id="ARPPRODUCTICON" Value="TCLGen.exe" />
+
+		<WixVariable Id="WixUIBannerBmp" Value=".\images\setup_banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value=".\images\setup_start.bmp" />
+
+		<MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="Er is reeds een nieuwere versie van [ProductName] geinstalleerd." />
+
 	</Package>
 
 	<Fragment>
-			<StandardDirectory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="TLCGen">
-          <Directory Id="UPDATERFOLDER" Name="Updater" />
-          <Directory Id="LIBSFOLDER" Name="Libs" />
-          <Directory Id="DEPSFOLDER" Name="Deps" />
-          <Directory Id="PLUGINSFOLDER" Name="Plugins" />
-          <Directory Id="SETTINGSFOLDER" Name="Settings">
-            <Directory Id="VISUALTEMPLATESFOLDER" Name="VisualTemplates" />
-          </Directory>
-          <Directory Id="CCOLSOURCEFILESFOLDER" Name="SourceFiles" />
-          <Directory Id="CCOLDOCSFOLDER" Name="Docs" />
-          <Directory Id="LICENSESFOLDER" Name="Licenses" />
-          <Directory Id="CCOLSOURCEFILESTOCOPYFOLDER" Name="SourceFilesToCopy" />
-        </Directory>
-			</StandardDirectory>
-		  <StandardDirectory Id="ProgramMenuFolder">
-		    <Directory Id="ProgramMenuDir" Name="TLCGen">
-		      <Component Id="ProgramMenuDir" Guid="D5A4893E-69D9-4031-8D40-BD8D752107F1">
-		        <RemoveFolder Id="ProgramMenuDir" On="uninstall" />
-		        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes" />
-		      </Component>
-		    </Directory>
-		  </StandardDirectory>
-		</Fragment>
-  
-  <Fragment>
-    <ComponentGroup Id="TLCGenMain" Directory="INSTALLFOLDER">
-      <Component Id="MainExecutable" Guid="BA458570-4450-46AB-9975-B6C69801AAE5">
-        <File Id="TLCGenEXE" Name="TLCGen.exe" Source="$(var.ReleaseDir)/TLCGen.exe" KeyPath="yes">
-          <Shortcut Id="startmenuTLCGen" Directory="ProgramMenuDir" Name="TLCGen" WorkingDirectory="INSTALLFOLDER" Icon="TLCGen.exe" IconIndex="0" Advertise="yes" />
-        </File>
-        <File Id="TLCGenEXEConfig" Name="TLCGen.exe.config" Source="$(var.ReleaseDir)/TLCGen.exe.config" KeyPath="no" />
-        <ProgId Id="TLCGen.tlc" Description="TLCGen file" Icon="TLCGenEXE">
-          <Extension Id="tlc" ContentType="application/tlc">
-            <Verb Id="open" Command="Open" TargetFile="TLCGenEXE" Argument="&quot;%1&quot;" />
-          </Extension>
-        </ProgId>
-      </Component>
-    </ComponentGroup>
-    
-    <!-- Updater -->
-    <ComponentGroup Id="TLCGenUpdater" Directory="UPDATERFOLDER">
-      <Component Id="UpdaterExecutable" Guid="888E5F09-ECCF-4E75-B15E-05B743F1B9DB">
-        <File Id="TLCGenUpdaterEXE" Name="TLCGen.Updater.exe" Source="$(var.UpdaterDir)/TLCGen.Updater.exe" KeyPath="no" />
-        <File Id="TLCGenUpdaterEXEConfig" Name="TLCGen.Updater.exe.config" Source="$(var.UpdaterDir)/TLCGen.Updater.exe.config" KeyPath="no" />
-        <File Id="GalaSoft.MvvmLight.Updater" Name="GalaSoft.MvvmLight.dll" Source="$(var.ReleaseDir)/GalaSoft.MvvmLight.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
+		<StandardDirectory Id="ProgramFilesFolder">
+			<Directory Id="INSTALLFOLDER" Name="TLCGen">
+				<Directory Id="UPDATERFOLDER" Name="Updater" />
+				<Directory Id="PLUGINSFOLDER" Name="Plugins" />
+				<Directory Id="SETTINGSFOLDER" Name="Settings">
+					<Directory Id="VISUALTEMPLATESFOLDER" Name="VisualTemplates" />
+				</Directory>
+				<Directory Id="CCOLSOURCEFILESFOLDER" Name="SourceFiles" />
+				<Directory Id="CCOLDOCSFOLDER" Name="Docs" />
+				<Directory Id="LICENSESFOLDER" Name="Licenses" />
+				<Directory Id="CCOLSOURCEFILESTOCOPYFOLDER" Name="SourceFilesToCopy" />
+				<Directory Id="RUNTIMESFOLDER" Name="runtimes">
+					<Directory Id="RTWINFOLDER" Name="win">
+						<Directory Id="RTWINLIBFOLDER" Name="lib">
+							<Directory Id="RTWINLIBNET8FOLDER" Name="net8.0" />
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</StandardDirectory>
+		<StandardDirectory Id="ProgramMenuFolder">
+			<Directory Id="ProgramMenuDir" Name="TLCGen">
+				<Component Id="ProgramMenuDir" Guid="D5A4893E-69D9-4031-8D40-BD8D752107F1">
+					<RemoveFolder Id="ProgramMenuDir" On="uninstall" />
+					<RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes" />
+				</Component>
+			</Directory>
+		</StandardDirectory>
+	</Fragment>
 
-    <!-- Licensing -->
-    <ComponentGroup Id="TLCGenLicenses" Directory="LICENSESFOLDER">
-      <Component Id="AllLicenses" Guid="69F35ABD-8434-47C3-901F-EAD57D8E7205">
-        <File Id="TLCGenEULA" Name="TLCGen_EULA.rtf" Source="$(var.ReleaseDir)/Licenses/TLCGen_EULA.rtf" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- External dependencies -->
-    <ComponentGroup Id="TLCGenDependencies" Directory="DEPSFOLDER">
-      <Component Id="AllDependencies" Guid="4C9EE2EC-0333-4AEC-8A7C-C006F052558E">
-        <File Id="CodingConnected.Topology" Name="CodingConnected.Topology.dll" Source="$(var.ReleaseDir)/CodingConnected.Topology.dll" KeyPath="no" />
-        <File Id="CommonServiceLocator" Name="CommonServiceLocator.dll" Source="$(var.ReleaseDir)/CommonServiceLocator.dll" KeyPath="no" />
-		<File Id="DocumentFormat.OpenXml" Name="DocumentFormat.OpenXml.dll" Source="$(var.ReleaseDir)/DocumentFormat.OpenXml.dll" KeyPath="no" />
-		<File Id="DocumentFormat.OpenXml.Framework" Name="DocumentFormat.OpenXml.Framework.dll" Source="$(var.ReleaseDir)/DocumentFormat.OpenXml.Framework.dll" KeyPath="no" />
-        <File Id="GalaSoft.MvvmLight" Name="GalaSoft.MvvmLight.dll" Source="$(var.ReleaseDir)/GalaSoft.MvvmLight.dll" KeyPath="no" />
-        <File Id="GalaSoft.MvvmLight.Platform" Name="GalaSoft.MvvmLight.Platform.dll" Source="$(var.ReleaseDir)/GalaSoft.MvvmLight.Platform.dll" KeyPath="no" />
-        <File Id="GongSolutions.WPF.DragDrop" Name="GongSolutions.WPF.DragDrop.dll" Source="$(var.ReleaseDir)/GongSolutions.WPF.DragDrop.dll" KeyPath="no" />
-        <File Id="Gu.Wpf.DataGrid2D" Name="Gu.Wpf.DataGrid2D.dll" Source="$(var.ReleaseDir)/Gu.Wpf.DataGrid2D.dll" KeyPath="no" />
-        <File Id="Markdown.XAML" Name="Markdown.XAML.dll" Source="$(var.ReleaseDir)/Markdown.XAML.dll" KeyPath="no" />
-        <File Id="Microsoft.WindowsAPICodePack" Name="Microsoft.WindowsAPICodePack.dll" Source="$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.dll" KeyPath="no" />
-        <File Id="Microsoft.WindowsAPICodePack.Shell" Name="Microsoft.WindowsAPICodePack.Shell.dll" Source="$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.Shell.dll" KeyPath="no" />
-        <File Id="Newtonsoft.Json" Name="Newtonsoft.Json.dll" Source="$(var.ReleaseDir)/Newtonsoft.Json.dll" KeyPath="no" />
-        <File Id="System.Windows.Interactivity" Name="System.Windows.Interactivity.dll" Source="$(var.ReleaseDir)/System.Windows.Interactivity.dll" KeyPath="no" />
-        <File Id="WindowsInput" Name="WindowsInput.dll" Source="$(var.ReleaseDir)/WindowsInput.dll" KeyPath="no" />
-        <File Id="WpfAutoGrid" Name="WpfAutoGrid.dll" Source="$(var.ReleaseDir)/WpfAutoGrid.dll" KeyPath="no" />
-        <File Id="Xceed.Wpf.Toolkit" Name="Xceed.Wpf.Toolkit.dll" Source="$(var.ReleaseDir)/Xceed.Wpf.Toolkit.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- Internal components -->
-    <ComponentGroup Id="TLCGenComponents" Directory="LIBSFOLDER">
-      <Component Id="AllComponents" Guid="4B43DC27-A5B8-4D18-8850-65FC69B9D090">
-        <File Id="TLCGen.Controls" Name="TLCGen.Controls.dll" Source="$(var.ReleaseDir)/TLCGen.Controls.dll" KeyPath="no" />
-        <File Id="TLCGen.CustomPropertyEditors" Name="TLCGen.CustomPropertyEditors.dll" Source="$(var.ReleaseDir)/TLCGen.CustomPropertyEditors.dll" KeyPath="no" />
-        <File Id="TLCGen.Dialogs" Name="TLCGen.Dialogs.dll" Source="$(var.ReleaseDir)/TLCGen.Dialogs.dll" KeyPath="no" />
-        <File Id="TLCGen.Settings" Name="TLCGen.Settings.dll" Source="$(var.ReleaseDir)/TLCGen.Settings.dll" KeyPath="no" />
-        <File Id="TLCGen.Dependencies" Name="TLCGen.Dependencies.dll" Source="$(var.ReleaseDir)/TLCGen.Dependencies.dll" KeyPath="no" />
-        <File Id="TLCGen.DataAccess" Name="TLCGen.DataAccess.dll" Source="$(var.ReleaseDir)/TLCGen.DataAccess.dll" KeyPath="no" />
-        <File Id="TLCGen.ModelManagement" Name="TLCGen.ModelManagement.dll" Source="$(var.ReleaseDir)/TLCGen.ModelManagement.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- TLCGen internal plugins -->
-    <ComponentGroup Id="TLCGenPlugins" Directory="PLUGINSFOLDER">
-      <Component Id="AllPlugins" Guid="29508888-3720-4415-8318-3B39424F553D">
-        <File Id="TLCGen.GebruikersOpties" Name="TLCGen.GebruikersOpties.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.GebruikersOpties.dll" KeyPath="no" />
-        <File Id="TLCGen.Generators.CCOL" Name="TLCGen.Generators.CCOL.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Generators.CCOL.dll" KeyPath="no" />
-        <File Id="TLCGen.Generators.TLCCC" Name="TLCGen.Generators.TLCCC.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll" KeyPath="no" />
-        <File Id="TLCGen.Importers.TabC" Name="TLCGen.Importers.TabC.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll" KeyPath="no" />
-        <File Id="TLCGen.Importers.Itf" Name="TLCGen.Importers.Itf.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Importers.Itf.dll" KeyPath="no" />
-        <File Id="TLCGen.Plugins.AFM" Name="TLCGen.Plugins.AFM.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll" KeyPath="no" />
-        <File Id="TLCGen.Plugins.DynamischHiaat" Name="TLCGen.Plugins.DynamischHiaat.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll" KeyPath="no" />
-        <File Id="TLCGen.Plugins.SUMO" Name="TLCGen.Plugins.SUMO.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll" KeyPath="no" />
-        <File Id="TLCGen.Plugins.Tools" Name="TLCGen.Plugins.Tools.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Tools.dll" KeyPath="no" />
-        <File Id="TLCGen.Specificator" Name="TLCGen.Specificator.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- TLCGen settings -->
-    <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
-      <Component Id="AllSettings" Guid="A7F61BAA-AAA1-4BF7-B2BD-200FF1E83123">
-        <File Id="tlcgendefaultdefaults" Name="tlcgendefaultdefaults.xml" Source="$(var.ReleaseDir)/Settings/tlcgendefaultdefaults.xml" KeyPath="no" />
-        <File Id="tlcgendefaulttemplates" Name="tlcgendefaulttemplates.xml" Source="$(var.ReleaseDir)/Settings/tlcgendefaulttemplates.xml" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- Visual Studio templates -->
-    <ComponentGroup Id="TLCGenCCOLVisualTemplates" Directory="VISUALTEMPLATESFOLDER">
-      <Component Id="AllCCOLVisualTemplates" Guid="3ED972D5-FB4B-43FE-8486-EDE282B3B534">
-        <File Id="VisualTemplatesReadme" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Readme.txt" />
-        <File Id="VisualTemplate2017" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017.xml" />
-        <File Id="VisualTemplate2017filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_filters.xml" />
-        <File Id="VisualTemplate2017vissim" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim.xml" />
-        <File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- Various documents -->
-    <ComponentGroup Id="TLCGenCCOLDocs" Directory="CCOLDOCSFOLDER">
-      <Component Id="AllCCOLDocs" Guid="343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9">
-        <File Id="fildocD3B88A5E78E73E3F80CF84F42E47C" KeyPath="no" Source="$(var.ReleaseDir)\Docs\BITSturing.ods" />
-      </Component>
-    </ComponentGroup>
-    
-    <!-- Source files -->
-    <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
-      <Component Id="AllCCOLSources" Guid="F49B3B56-5D3E-4279-811B-778E1BE2C91F">
-        <File Id="filD3B88A5E78E73E3F80CF84F42E47C65E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.h" />
-        <File Id="fil47361FC1607FC552D1136C75F73C2712" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.c" />
-        <File Id="filBE5158919B33076208AF23472800AEF5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.h" />
-        <File Id="fil9FD18B3DFE64FB421CA43BC877C5DF1E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.c" />
-        <File Id="filCC84D40C3235DB153D9083B0D02ABFF4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\detectie.c" />
-        <File Id="filADD130ED1545F8B1F2C36BACC6711EB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.c" />
-        <File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
-        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.c" />
-        <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.h" />
-        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A3A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.c" />
-        <File Id="fil2C2767D07BD36C11862CF72D0CF6B577" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.h" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
-        <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837H" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.c" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837I" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.h" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.h" />
-        <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.h" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837F" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.c" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837G" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.h" />
-        <File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.c" />
-        <File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.h" />
-        <File Id="filF6CA61EA27285C0D1CDDA9537E62336C" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\realfunc.c" />
-        <File Id="filF6CA61EA27285C0D1CDDA9537E62336D" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgv_overslag.c" />
-        <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
-        <File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />
-        <File Id="fil0B33645B3DCD9F2524A99FF42B3775C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.c" />
-        <File Id="fil0B33645B3DCD9F2524A99FF42B3775C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.h" />
-		<File Id="fil0B33645B3DCD9F2524A99FF42B3775C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.c" />
-		<File Id="fil0B33645B3DCD9F2524A99FF42B3775C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.h" />
-        <File Id="fil0B33645B3DCD9F2524A99FF42B3775C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncfunc.c" />
-        <File Id="fil6574194A3387BCCF8502B7EDD51FBF30" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.c" />
-        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
-        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB2" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsfunc.c" />
-        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsvar.c" />
-        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timings_uc4.c" />
-        <File Id="fil2E1DB38115F3B820EBC2C980F2B2F729" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.c" />
-        <File Id="filEAB7EBA79349A3C4DDF6069B282EC308" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.h" />
-        <File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.h" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\wtv_testwin.c" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\dynamischhiaat.c" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.h" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.lib" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.c" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.h" />
-      </Component>
-    </ComponentGroup>
+	<Fragment>
+		<ComponentGroup Id="TLCGenMain" Directory="INSTALLFOLDER">
+			<Component Id="MainExecutable" Guid="BA458570-4450-46AB-9975-B6C69801AAE5">
+				<File Id="TLCGenEXE" Name="TLCGen.exe" Source="$(var.ReleaseDir)/TLCGen.exe" KeyPath="yes">
+					<Shortcut Id="startmenuTLCGen" Directory="ProgramMenuDir" Name="TLCGen" WorkingDirectory="INSTALLFOLDER" Icon="TLCGen.exe" IconIndex="0" Advertise="yes" />
+				</File>
+				<File Id="TLCGenDLL" Name="TLCGen.dll" Source="$(var.ReleaseDir)/TLCGen.dll" KeyPath="no" />
+				<File Id="TLCGenDLLConfig" Name="TLCGen.dll.config" Source="$(var.ReleaseDir)/TLCGen.dll.config" KeyPath="no" />
+				<ProgId Id="TLCGen.tlc" Description="TLCGen file" Icon="TLCGenEXE">
+					<Extension Id="tlc" ContentType="application/tlc">
+						<Verb Id="open" Command="Open" TargetFile="TLCGenEXE" Argument="&quot;%1&quot;" />
+					</Extension>
+				</ProgId>
+			</Component>
+		</ComponentGroup>
 
-    <!-- Sources to copy: to enable user sources -->
-    <ComponentGroup Id="TLCGenCCOLSourcesToCopy" Directory="CCOLSOURCEFILESTOCOPYFOLDER">
-      <Component Id="AllCCOLSourcesToCopy" Guid="C142297C-DC60-4286-93E0-E243CE3293D4">
-        <File Id="SourceFilesToCopyReadmeTXT" KeyPath="no" Source="$(var.ReleaseDir)\SourceFilesToCopy\Readme.txt" />
-      </Component>
-    </ComponentGroup>
+		<Property Id="LAUNCHAPPLICATION" Value="1" Secure="yes" />
+		<SetProperty Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" After="CostFinalize" Condition="LAUNCHAPPLICATION &lt;&gt; 0" />
+		<UI>
+			<Publish Dialog="ExitDialog"
+			         Control="Finish"
+			         Event="DoAction"
+			         Value="LaunchApplication"
+			         Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
+		</UI>
+		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Starten !(bind.Property.ProductName)" />
+		<CustomAction Id="LaunchApplication"
+		              Execute="immediate"
+		              Impersonate="yes"
+		              Return="asyncNoWait"
+		              FileRef="TLCGenEXE"
+		              ExeCommand="" />
+		<InstallExecuteSequence>
+			<Custom Action="LaunchApplication" After="InstallFinalize" Condition="NOT Installed AND UILevel &lt;&gt; 5 AND LAUNCHAPPLICATION &lt;&gt; 0" />
+		</InstallExecuteSequence>
 
-    <!-- AutoBuilder plugin -->
-    <ComponentGroup Id="TLCGenAutoBuildPlugin" Directory="PLUGINSFOLDER">
-      <Component Id="AutoBuildPlugin" Guid="0CA0C7F0-7CCD-49EA-A3B1-F3DDA339491E">
-        <File Id="TLCGen.Plugins.AutoBuild.dll" Name="TLCGen.Plugins.AutoBuild.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AutoBuild.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-    <ComponentGroup Id="TLCGenAutoBuildPluginDeps" Directory="DEPSFOLDER">
-      <Component Id="AutoBuildPluginDependencies" Guid="2E092419-2E62-4EB5-8D89-3542EBA0B65B">
-        <File Id="ICSharpCode.AvalonEdit.dll" Name="ICSharpCode.AvalonEdit.dll" Source="$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
+		<!-- Updater -->
+		<ComponentGroup Id="TLCGenUpdater" Directory="UPDATERFOLDER">
+			<Component Id="UpdaterExecutable" Guid="888E5F09-ECCF-4E75-B15E-05B743F1B9DB">
+				<File Id="TLCGenUpdaterEXE" Name="TLCGen.Updater.exe" Source="$(var.UpdaterDir)/TLCGen.Updater.exe" KeyPath="no" />
+				<File Id="TLCGenUpdaterDLL" Name="TLCGen.Updater.dll" Source="$(var.UpdaterDir)/TLCGen.Updater.dll" KeyPath="no" />
+				<File Id="TLCGenUpdaterDLLConfig" Name="TLCGen.Updater.dll.config" Source="$(var.UpdaterDir)/TLCGen.Updater.dll.config" KeyPath="no" />
+				<File Id="TLCGenUpdaterDepsJson" Name="TLCGen.Updater.deps.json" Source="$(var.UpdaterDir)/TLCGen.Updater.deps.json" KeyPath="no" />
+				<File Id="TLCGenUpdaterRuntimeconfigJson" Name="TLCGen.Updater.runtimeconfig.json" Source="$(var.UpdaterDir)/TLCGen.Updater.runtimeconfig.json" KeyPath="no" />
+				<File Id="CommunityToolkit.Mvvm.Updater" Name="CommunityToolkit.Mvvm.dll" Source="$(var.ReleaseDir)/CommunityToolkit.Mvvm.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
 
-    <!-- Additor plugin -->
-    <ComponentGroup Id="TLCGenAdditorPlugin" Directory="PLUGINSFOLDER">
-      <Component Id="AdditorPlugin" Guid="5CEFEF5A-580A-4E0B-929C-34C1E98964B8">
-        <File Id="TLCGen.Plugins.Additor.dll" Name="TLCGen.Plugins.Additor.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Additor.dll" KeyPath="no" />
-      </Component>
-    </ComponentGroup>
-  </Fragment>
-  
+		<!-- Licensing -->
+		<ComponentGroup Id="TLCGenLicenses" Directory="LICENSESFOLDER">
+			<Component Id="AllLicenses" Guid="69F35ABD-8434-47C3-901F-EAD57D8E7205">
+				<File Id="TLCGenEULA" Name="TLCGen_EULA.rtf" Source="$(var.ReleaseDir)/Licenses/TLCGen_EULA.rtf" KeyPath="no" />
+				<File Id="LGPL.txt" Name="LGPL.txt" Source="$(var.ReleaseDir)/Licenses/LGPL.txt" KeyPath="no" />
+				<File Id="MSPL.txt" Name="MS-PL.txt" Source="$(var.ReleaseDir)/Licenses/MS-PL.txt" KeyPath="no" />
+				<File Id="BSD3CLAUSE.txt" Name="BSD-3-CLAUSE.txt" Source="$(var.ReleaseDir)/Licenses/BSD-3-CLAUSE.txt" KeyPath="no" />
+				<File Id="dependencies.txt" Name="dependencies.txt" Source="$(var.ReleaseDir)/Licenses/dependencies.txt" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Native assets -->
+		<ComponentGroup Id="TLCGenNativeAssets" Directory="RTWINLIBNET8FOLDER">
+			<Component Id="TLCGenNativeData" Guid="5457D2D5-9BA6-47FC-BE66-C7BCD4F988AF">
+				<File Id="Microsoft.Win32.SystemEvents.dll.native" Name="Microsoft.Win32.SystemEvents.dll" Source="$(var.ReleaseDir)/runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+		
+		<!-- External dependencies -->
+		<ComponentGroup Id="TLCGenDependencies" Directory="INSTALLFOLDER">
+			<Component Id="AllDependencies" Guid="4C9EE2EC-0333-4AEC-8A7C-C006F052558E">
+
+				<!-- mit -->
+				<File Id="CodingConnected.Topology" Name="CodingConnected.Topology.dll" Source="$(var.ReleaseDir)/CodingConnected.Topology.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/CommunityToolkit -->
+				<File Id="CommunityToolkit.Mvvm" Name="CommunityToolkit.Mvvm.dll" Source="$(var.ReleaseDir)/CommunityToolkit.Mvvm.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/dotnet/Open-XML-SDK -->
+				<File Id="DocumentFormat.OpenXml" Name="DocumentFormat.OpenXml.dll" Source="$(var.ReleaseDir)/DocumentFormat.OpenXml.dll" KeyPath="no" />
+				<File Id="DocumentFormat.OpenXml.Framework" Name="DocumentFormat.OpenXml.Framework.dll" Source="$(var.ReleaseDir)/DocumentFormat.OpenXml.Framework.dll" KeyPath="no" />
+
+				<!-- ms-pl // https://github.com/dotnetprojects/WpfExtendedToolkit -->
+				<File Id="DotNetProjects.Wpf.Extended.Toolkit" Name="DotNetProjects.Wpf.Extended.Toolkit.dll" Source="$(var.ReleaseDir)/DotNetProjects.Wpf.Extended.Toolkit.dll" KeyPath="no" />
+
+				<!-- bsd clause 3 // https://github.com/punker76/gong-wpf-dragdrop -->
+				<File Id="GongSolutions.WPF.DragDrop" Name="GongSolutions.WPF.DragDrop.dll" Source="$(var.ReleaseDir)/GongSolutions.WPF.DragDrop.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/GuOrg/Gu.Wpf.DataGrid2D -->
+				<File Id="Gu.Wpf.DataGrid2D" Name="Gu.Wpf.DataGrid2D.dll" Source="$(var.ReleaseDir)/Gu.Wpf.DataGrid2D.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/whistyun/MdXaml-->
+				<File Id="MdXaml.dll" Name="MdXaml.dll" Source="$(var.ReleaseDir)/MdXaml.dll" KeyPath="no" />
+				<File Id="MdXaml.Plugins.dll" Name="MdXaml.Plugins.dll" Source="$(var.ReleaseDir)/MdXaml.Plugins.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/dotnet/runtime -->
+				<File Id="Microsoft.Win32.SystemEvents" Name="Microsoft.Win32.SystemEvents.dll" Source="$(var.ReleaseDir)/Microsoft.Win32.SystemEvents.dll" KeyPath="no" />
+				<File Id="System.Drawing.Common" Name="System.Drawing.Common.dll" Source="$(var.ReleaseDir)/System.Drawing.Common.dll" KeyPath="no" />
+				<File Id="System.IO.Packaging" Name="System.IO.Packaging.dll" Source="$(var.ReleaseDir)/System.IO.Packaging.dll" KeyPath="no" />
+				<File Id="System.Private.Windows.Core" Name="System.Private.Windows.Core.dll" Source="$(var.ReleaseDir)/System.Private.Windows.Core.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/microsoft/XamlBehaviorsWpf -->
+				<File Id="Microsoft.Xaml.Behaviors" Name="Microsoft.Xaml.Behaviors.dll" Source="$(var.ReleaseDir)/Microsoft.Xaml.Behaviors.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/JamesNK/Newtonsoft.Json -->
+				<File Id="Newtonsoft.Json" Name="Newtonsoft.Json.dll" Source="$(var.ReleaseDir)/Newtonsoft.Json.dll" KeyPath="no" />
+
+				<!-- mit // https://github.com/MediatedCommunications/WindowsInput -->
+				<File Id="WindowsInput" Name="WindowsInput.dll" Source="$(var.ReleaseDir)/WindowsInput.dll" KeyPath="no" />
+
+			</Component>
+		</ComponentGroup>
+
+		<!-- Internal components -->
+		<ComponentGroup Id="TLCGenComponents" Directory="INSTALLFOLDER">
+			<Component Id="AllComponents" Guid="4B43DC27-A5B8-4D18-8850-65FC69B9D090">
+				<File Id="TLCGen.Controls" Name="TLCGen.Controls.dll" Source="$(var.ReleaseDir)/TLCGen.Controls.dll" KeyPath="no" />
+				<File Id="TLCGen.CustomPropertyEditors" Name="TLCGen.CustomPropertyEditors.dll" Source="$(var.ReleaseDir)/TLCGen.CustomPropertyEditors.dll" KeyPath="no" />
+				<File Id="TLCGen.DataAccess" Name="TLCGen.DataAccess.dll" Source="$(var.ReleaseDir)/TLCGen.DataAccess.dll" KeyPath="no" />
+				<File Id="TLCGen.Dependencies" Name="TLCGen.Dependencies.dll" Source="$(var.ReleaseDir)/TLCGen.Dependencies.dll" KeyPath="no" />
+				<File Id="TLCGen.Dialogs" Name="TLCGen.Dialogs.dll" Source="$(var.ReleaseDir)/TLCGen.Dialogs.dll" KeyPath="no" />
+				<File Id="TLCGen.ModelManagement" Name="TLCGen.ModelManagement.dll" Source="$(var.ReleaseDir)/TLCGen.ModelManagement.dll" KeyPath="no" />
+				<File Id="TLCGen.Settings" Name="TLCGen.Settings.dll" Source="$(var.ReleaseDir)/TLCGen.Settings.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- TLCGen internal plugins -->
+		<ComponentGroup Id="TLCGenPlugins" Directory="PLUGINSFOLDER">
+			<Component Id="AllPlugins" Guid="29508888-3720-4415-8318-3B39424F553D">
+				<File Id="TLCGen.GebruikersOpties" Name="TLCGen.GebruikersOpties.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.GebruikersOpties.dll" KeyPath="no" />
+				<File Id="TLCGen.Generators.CCOL" Name="TLCGen.Generators.CCOL.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Generators.CCOL.dll" KeyPath="no" />
+				<File Id="TLCGen.Generators.TLCCC" Name="TLCGen.Generators.TLCCC.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll" KeyPath="no" />
+				<File Id="TLCGen.Importers.TabC" Name="TLCGen.Importers.TabC.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll" KeyPath="no" />
+				<File Id="TLCGen.Importers.Itf" Name="TLCGen.Importers.Itf.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Importers.Itf.dll" KeyPath="no" />
+				<File Id="TLCGen.Plugins.AFM" Name="TLCGen.Plugins.AFM.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll" KeyPath="no" />
+				<File Id="TLCGen.Plugins.DynamischHiaat" Name="TLCGen.Plugins.DynamischHiaat.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll" KeyPath="no" />
+				<File Id="TLCGen.Plugins.SUMO" Name="TLCGen.Plugins.SUMO.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll" KeyPath="no" />
+				<File Id="TLCGen.Plugins.Tools" Name="TLCGen.Plugins.Tools.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Tools.dll" KeyPath="no" />
+				<File Id="TLCGen.Specificator" Name="TLCGen.Specificator.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- TLCGen settings -->
+		<ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
+			<Component Id="AllSettings" Guid="A7F61BAA-AAA1-4BF7-B2BD-200FF1E83123">
+				<File Id="tlcgendefaultdefaults" Name="tlcgendefaultdefaults.xml" Source="$(var.ReleaseDir)/Settings/tlcgendefaultdefaults.xml" KeyPath="no" />
+				<File Id="tlcgendefaulttemplates" Name="tlcgendefaulttemplates.xml" Source="$(var.ReleaseDir)/Settings/tlcgendefaulttemplates.xml" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Visual Studio templates -->
+		<ComponentGroup Id="TLCGenCCOLVisualTemplates" Directory="VISUALTEMPLATESFOLDER">
+			<Component Id="AllCCOLVisualTemplates" Guid="3ED972D5-FB4B-43FE-8486-EDE282B3B534">
+				<File Id="VisualTemplatesReadme" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Readme.txt" />
+				<File Id="VisualTemplate2017" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017.xml" />
+				<File Id="VisualTemplate2017filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_filters.xml" />
+				<File Id="VisualTemplate2017vissim" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim.xml" />
+				<File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Various documents -->
+		<ComponentGroup Id="TLCGenCCOLDocs" Directory="CCOLDOCSFOLDER">
+			<Component Id="AllCCOLDocs" Guid="343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9">
+				<File Id="fildocD3B88A5E78E73E3F80CF84F42E47C" KeyPath="no" Source="$(var.ReleaseDir)\Docs\BITSturing.ods" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Source files -->
+		<ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
+			<Component Id="AllCCOLSources" Guid="F49B3B56-5D3E-4279-811B-778E1BE2C91F">
+				<File Id="filD3B88A5E78E73E3F80CF84F42E47C65E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.h" />
+				<File Id="fil47361FC1607FC552D1136C75F73C2712" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.c" />
+				<File Id="filBE5158919B33076208AF23472800AEF5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.h" />
+				<File Id="fil9FD18B3DFE64FB421CA43BC877C5DF1E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.c" />
+				<File Id="filCC84D40C3235DB153D9083B0D02ABFF4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\detectie.c" />
+				<File Id="filADD130ED1545F8B1F2C36BACC6711EB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.c" />
+				<File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
+				<File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.c" />
+				<File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_prio.h" />
+				<File Id="fil32691AA79643F0C1E35E0BBC1CC01A3A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.c" />
+				<File Id="fil2C2767D07BD36C11862CF72D0CF6B577" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ris.h" />
+				<File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
+				<File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
+				<File Id="fil29C62D038F3BAA50853B269B2F63837H" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.c" />
+				<File Id="fil29C62D038F3BAA50853B269B2F63837I" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\gkvar.h" />
+				<File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
+				<File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
+				<File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.c" />
+				<File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_prio.h" />
+				<File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
+				<File Id="fil29C62D038F3BAA50853B269B2F63837E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.h" />
+				<File Id="fil29C62D038F3BAA50853B269B2F63837F" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.c" />
+				<File Id="fil29C62D038F3BAA50853B269B2F63837G" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nlvar.h" />
+				<File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.c" />
+				<File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\prio.h" />
+				<File Id="filF6CA61EA27285C0D1CDDA9537E62336C" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\realfunc.c" />
+				<File Id="filF6CA61EA27285C0D1CDDA9537E62336D" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgv_overslag.c" />
+				<File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
+				<File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />
+				<File Id="fil0B33645B3DCD9F2524A99FF42B3775C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.c" />
+				<File Id="fil0B33645B3DCD9F2524A99FF42B3775C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starfunc.h" />
+				<File Id="fil0B33645B3DCD9F2524A99FF42B3775C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.c" />
+				<File Id="fil0B33645B3DCD9F2524A99FF42B3775C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\starvar.h" />
+				<File Id="fil0B33645B3DCD9F2524A99FF42B3775C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncfunc.c" />
+				<File Id="fil6574194A3387BCCF8502B7EDD51FBF30" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.c" />
+				<File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
+				<File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB2" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsfunc.c" />
+				<File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsvar.c" />
+				<File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timings_uc4.c" />
+				<File Id="fil2E1DB38115F3B820EBC2C980F2B2F729" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.c" />
+				<File Id="filEAB7EBA79349A3C4DDF6069B282EC308" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.h" />
+				<File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.h" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\wtv_testwin.c" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\dynamischhiaat.c" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C6" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.h" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\MirakelMonitor.lib" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C8" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.c" />
+				<File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C9" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\traffick2tlcgen.h" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Sources to copy: to enable user sources -->
+		<ComponentGroup Id="TLCGenCCOLSourcesToCopy" Directory="CCOLSOURCEFILESTOCOPYFOLDER">
+			<Component Id="AllCCOLSourcesToCopy" Guid="C142297C-DC60-4286-93E0-E243CE3293D4">
+				<File Id="SourceFilesToCopyReadmeTXT" KeyPath="no" Source="$(var.ReleaseDir)\SourceFilesToCopy\Readme.txt" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- AutoBuilder plugin -->
+		<ComponentGroup Id="TLCGenAutoBuildPlugin" Directory="PLUGINSFOLDER">
+			<Component Id="AutoBuildPlugin" Guid="0CA0C7F0-7CCD-49EA-A3B1-F3DDA339491E">
+				<File Id="TLCGen.Plugins.AutoBuild.dll" Name="TLCGen.Plugins.AutoBuild.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AutoBuild.dll" KeyPath="no" />
+				<File Id="ICSharpCode.AvalonEdit.dll" Name="ICSharpCode.AvalonEdit.dll" Source="$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Additor plugin -->
+		<ComponentGroup Id="TLCGenAdditorPlugin" Directory="PLUGINSFOLDER">
+			<Component Id="AdditorPlugin" Guid="5CEFEF5A-580A-4E0B-929C-34C1E98964B8">
+				<File Id="TLCGen.Plugins.Additor.dll" Name="TLCGen.Plugins.Additor.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Additor.dll" KeyPath="no" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+
 </Wix>

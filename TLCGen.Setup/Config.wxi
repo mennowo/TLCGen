@@ -1,4 +1,4 @@
 ﻿<Include xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <?define ReleaseDir = "..\TLCGen\bin\Release" ?>
-  <?define UpdaterDir = "..\TLCGen.Dependencies\TLCGen.Updater\bin\Release" ?>
+  <?define ReleaseDir = "..\TLCGen\bin\x64\Release\net8.0-windows" ?>
+  <?define UpdaterDir = "..\TLCGen.Dependencies\TLCGen.Updater\bin\x64\Release\net8.0-windows" ?>
 </Include>

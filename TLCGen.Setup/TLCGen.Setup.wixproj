@@ -19,7 +19,8 @@
     <Content Include="license.rtf" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+	  <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+	  <PackageReference Include="WixToolset.Netfx.wixext" Version="5.0.2" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
