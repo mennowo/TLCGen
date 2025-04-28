@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
@@ -11,7 +12,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class RatelTikkerViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RatelTikkerViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -27,8 +28,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.Type = value;
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                MessengerInstance.Send(new RatelTikkerTypeChangedMessage(_RatelTikker));
+                OnPropertyChanged(nameof(Type), broadcast: true);
+                WeakReferenceMessengerEx.Default.Send(new RatelTikkerTypeChangedMessage(_RatelTikker));
             }
         }
 
@@ -38,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.NaloopTijd = value;
-                RaisePropertyChanged<object>(nameof(NaloopTijd), broadcast: true);
+                OnPropertyChanged(nameof(NaloopTijd), broadcast: true);
             }
         }
 
@@ -48,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -60,7 +61,7 @@ namespace TLCGen.ViewModels
                 _RatelTikker.DimmingNiveauPeriodeDimmen = value;
                 if (_RatelTikker.DimmingNiveauPeriodeDimmen < 0) _RatelTikker.DimmingNiveauPeriodeDimmen = 0;
                 if (_RatelTikker.DimmingNiveauPeriodeDimmen > 10) _RatelTikker.DimmingNiveauPeriodeDimmen = 10;
-                RaisePropertyChanged<object>(nameof(DimmingNiveauPeriodeDimmen), broadcast: true);
+                OnPropertyChanged(nameof(DimmingNiveauPeriodeDimmen), broadcast: true);
             }
         }
         
@@ -72,7 +73,7 @@ namespace TLCGen.ViewModels
                 _RatelTikker.DimmingNiveauPeriodeNietDimmen = value;
                 if (_RatelTikker.DimmingNiveauPeriodeNietDimmen < 0) _RatelTikker.DimmingNiveauPeriodeNietDimmen = 0;
                 if (_RatelTikker.DimmingNiveauPeriodeNietDimmen > 10) _RatelTikker.DimmingNiveauPeriodeNietDimmen = 10;
-                RaisePropertyChanged<object>(nameof(DimmingNiveauPeriodeNietDimmen), broadcast: true);
+                OnPropertyChanged(nameof(DimmingNiveauPeriodeNietDimmen), broadcast: true);
             }
         }
 
@@ -82,7 +83,7 @@ namespace TLCGen.ViewModels
             set
             {
                 DetectorManager.SelectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -107,20 +108,12 @@ namespace TLCGen.ViewModels
                     x => new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel{Detector = x}),
                     x => Detectoren.All(y => y.Detector != x),
                     null,
-                    () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true),
-                    () => RaisePropertyChanged<object>(nameof(SelectedDetector), broadcast: true));
+                    () => OnPropertyChanged(nameof(SelectedDetector), broadcast: true),
+                    () => OnPropertyChanged(nameof(SelectedDetector), broadcast: true));
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 
@@ -141,12 +134,12 @@ namespace TLCGen.ViewModels
 
         #region TLCGen messaging
 
-        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage msg)
         {
             _DetectorManager?.Refresh();
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             if (msg.ObjectType != TLCGenObjectTypeEnum.Detector) return;
             _DetectorManager?.Refresh();
@@ -171,8 +164,8 @@ namespace TLCGen.ViewModels
         {
             _RatelTikker = rateltikker;
             Detectoren = new ObservableCollectionAroundList<RatelTikkerDetectorViewModel, RatelTikkerDetectorModel>(_RatelTikker.Detectoren);
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

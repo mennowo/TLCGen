@@ -1,13 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class CombinatieTemplateViewModel : ViewModelBase
+    public class CombinatieTemplateViewModel : ObservableObject
     {
         #region Fields
 
@@ -30,7 +29,7 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 Template.Name = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -44,7 +43,8 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 _selectedOptie = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removeTemplateOptieCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -55,7 +55,8 @@ namespace TLCGen.Plugins.Tools
             {
                 _selectedItem = value;
                 value?.SetSelectableItems();
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removeTemplateItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -63,41 +64,41 @@ namespace TLCGen.Plugins.Tools
 
         #region Commands
 
-        public ICommand AddTemplateItemCommand => _addTemplateItemCommand ?? (_addTemplateItemCommand = new RelayCommand(() =>
+        public ICommand AddTemplateItemCommand => _addTemplateItemCommand ??= new RelayCommand(() =>
         {
             Items.Add(new CombinatieTemplateItemViewModel(new CombinatieTemplateItemModel { Description = "Nieuw template item" }));
-        }));
+        });
 
-        public ICommand RemoveTemplateItemCommand => _removeTemplateItemCommand ?? (_removeTemplateItemCommand = new RelayCommand(() =>
-        {
-            var i = Items.IndexOf(SelectedItem);
-            Items.Remove(SelectedItem);
-            SelectedItem = null;
-            if (Items.Any())
+        public ICommand RemoveTemplateItemCommand => _removeTemplateItemCommand ??= new RelayCommand(() =>
             {
-                if (i >= Items.Count) SelectedItem = Items.Last();
-                else if (i >= 0 && i < Items.Count) SelectedItem = Items[i];
-            }
-        },
-        () => SelectedItem != null));
+                var i = Items.IndexOf(SelectedItem);
+                Items.Remove(SelectedItem);
+                SelectedItem = null;
+                if (Items.Any())
+                {
+                    if (i >= Items.Count) SelectedItem = Items.Last();
+                    else if (i >= 0 && i < Items.Count) SelectedItem = Items[i];
+                }
+            },
+            () => SelectedItem != null);
 
-        public ICommand AddTemplateOptieCommand => _addTemplateOptieCommand ?? (_addTemplateOptieCommand = new RelayCommand(() =>
+        public ICommand AddTemplateOptieCommand => _addTemplateOptieCommand ??= new RelayCommand(() =>
         {
             Opties.Add(new CombinatieTemplateOptieViewModel(new CombinatieTemplateOptieModel { Description = "Nieuwe template optie" }));
-        }));
+        });
 
-        public ICommand RemoveTemplateOptieCommand => _removeTemplateOptieCommand ?? (_removeTemplateOptieCommand = new RelayCommand(() =>
-        {
-            var i = Opties.IndexOf(SelectedOptie);
-            Opties.Remove(SelectedOptie);
-            SelectedOptie = null;
-            if (Opties.Any())
+        public ICommand RemoveTemplateOptieCommand => _removeTemplateOptieCommand ??= new RelayCommand(() =>
             {
-                if (i >= Opties.Count) SelectedOptie = Opties.Last();
-                else if (i >= 0 && i < Opties.Count) SelectedOptie = Opties[i];
-            }
-        },
-        () => SelectedOptie != null));
+                var i = Opties.IndexOf(SelectedOptie);
+                Opties.Remove(SelectedOptie);
+                SelectedOptie = null;
+                if (Opties.Any())
+                {
+                    if (i >= Opties.Count) SelectedOptie = Opties.Last();
+                    else if (i >= 0 && i < Opties.Count) SelectedOptie = Opties[i];
+                }
+            },
+            () => SelectedOptie != null);
 
         #endregion // Commands
 

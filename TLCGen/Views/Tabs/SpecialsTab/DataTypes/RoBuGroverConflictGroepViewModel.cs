@@ -1,13 +1,14 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverConflictGroepViewModel : ViewModelBase, IViewModelWithItem
+    public class RoBuGroverConflictGroepViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -32,19 +33,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFase = value;
-                RaisePropertyChanged<object>(nameof(SelectedFase), broadcast: true);
+                OnPropertyChanged(nameof(SelectedFase), broadcast: true);
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 
@@ -65,11 +58,11 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             Fasen.Rebuild();
         }
-        private void OnConflictsChanged(ConflictsChangedMessage message)
+        private void OnConflictsChanged(object sender, ConflictsChangedMessage message)
         {
             Fasen.Rebuild();
         }
@@ -82,8 +75,8 @@ namespace TLCGen.ViewModels
         {
             _ConflictGroep = conflictgroep;
             Fasen = new ObservableCollectionAroundList<RoBuGroverConflictGroepFaseViewModel, RoBuGroverConflictGroepFaseModel>(_ConflictGroep.Fasen);
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

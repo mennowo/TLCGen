@@ -1,6 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -8,12 +6,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Dependencies.Helpers;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -23,6 +22,9 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private VersieViewModel _SelectedVersie;
+        private RelayCommand _AddVersieCommand;
+        private RelayCommand _RemoveVersieCommand;
+        private RelayCommand _RestoreVersieCommand;
 
         #endregion // Fields
 
@@ -34,22 +36,13 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedVersie = value;
-                RaisePropertyChanged("SelectedVersie");
+                OnPropertyChanged();
+                _RemoveVersieCommand?.NotifyCanExecuteChanged();
+               _RestoreVersieCommand?.NotifyCanExecuteChanged();
             }
         }
 
-        private ObservableCollection<VersieViewModel> _Versies;
-        public ObservableCollection<VersieViewModel> Versies
-        {
-            get
-            {
-                if (_Versies == null)
-                {
-                    _Versies = new ObservableCollection<VersieViewModel>();
-                }
-                return _Versies;
-            }
-        }
+        public ObservableCollection<VersieViewModel> Versies { get; } = [];
 
         public int HuidigeVersieMajor
         {
@@ -57,7 +50,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMajor = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieMajor), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -67,7 +60,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieMinor = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieMinor), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -77,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.HuidigeVersieRevision = value;
-                RaisePropertyChanged<object>(nameof(HuidigeVersieRevision), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -87,7 +80,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AanmakenVerionSysh = value;
-                RaisePropertyChanged<object>(nameof(AanmakenVerionSysh), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -97,7 +90,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AanmakenVersionBakSysh = value;
-                RaisePropertyChanged<object>(nameof(AanmakenVersionBakSysh), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -107,7 +100,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.StoreCurrentController = value;
-                RaisePropertyChanged<object>(nameof(StoreCurrentController), broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -115,193 +108,133 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddVersieCommand;
-        public ICommand AddVersieCommand
-        {
-            get
+        public ICommand AddVersieCommand => _AddVersieCommand ??= new RelayCommand(() =>
             {
-                if (_AddVersieCommand == null)
+                var vm = new VersieModel
                 {
-                    _AddVersieCommand = new RelayCommand(AddVersieCommand_Executed, AddVersieCommand_CanExecute);
-                }
-                return _AddVersieCommand;
-            }
-        }
-
-        RelayCommand _RemoveVersieCommand;
-        public ICommand RemoveVersieCommand
-        {
-            get
-            {
-                if (_RemoveVersieCommand == null)
+                    Datum = DateTime.Now
+                };
+                string nextver = null;
+                int nextmajor = 1, nextminor = 0;
+                if (Versies != null && Versies.Count > 0)
                 {
-                    _RemoveVersieCommand = new RelayCommand(RemoveVersieCommand_Executed, RemoveVersieCommand_CanExecute);
-                }
-                return _RemoveVersieCommand;
-            }
-        }
-
-        RelayCommand _RestoreVersieCommand;
-        public ICommand RestoreVersieCommand
-        {
-            get
-            {
-                if (_RestoreVersieCommand == null)
-                {
-                    _RestoreVersieCommand = new RelayCommand(RestoreVersieCommand_Executed, RestoreVersieCommand_CanExecute);
-                }
-                return _RestoreVersieCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        void AddVersieCommand_Executed()
-        {
-            var vm = new VersieModel
-            {
-                Datum = DateTime.Now
-            };
-            string nextver = null;
-            int nextmajor = 1, nextminor = 0;
-            if (Versies != null && Versies.Count > 0)
-            {
-                var m = Regex.Match(Versies[Versies.Count - 1].Versie, @"([0-9]+)\.([0-9]+)\.([0-9]+)");
-                if (m.Groups.Count == 4)
-                {
-                    var majver = m.Groups[1].Value;
-                    var midver = m.Groups[2].Value;
-                    if (int.TryParse(majver, out var nextmajver))
+                    var m = Regex.Match(Versies[Versies.Count - 1].Versie, @"([0-9]+)\.([0-9]+)\.([0-9]+)");
+                    if (m.Groups.Count == 4)
                     {
-                        nextmajor = nextmajver;
-                    }
-                    if (int.TryParse(midver, out var nextmidver))
-                    {
-                        nextminor = nextmidver + 1;
-                        nextver = m.Groups[1].Value + "." + (nextmidver + 1).ToString() + ".0";
-                    }
-                }
-            }
-            HuidigeVersieMajor = nextmajor;
-            HuidigeVersieMinor = nextminor;
-            HuidigeVersieRevision = 0;
-            vm.Versie = nextver ?? "1.0.0";
-            vm.Ontwerper = Environment.UserName;
-            if (StoreCurrentController)
-            {
-                var controller = DeepCloner.DeepClone(Controller);
-                var pluginData = new XmlDocument();
-                var elem = pluginData.CreateElement("root");
-                pluginData.AppendChild(elem);
-                foreach(var pl in TLCGenPluginManager.Default.ApplicationPlugins)
-                {
-                    if(pl.Item2 is ITLCGenXMLNodeWriter nodeWriter)
-                    {
-                        nodeWriter.SetXmlInDocument(pluginData);
-                    }
-                }
-                controller.Data.Versies.Clear();
-                vm.Controller = controller;
-                vm.ControllerPluginData = Base64Encoding.EncodeTo64(pluginData.OuterXml);
-            }
-            var vvm = new VersieViewModel(vm);
-            Versies?.Add(vvm);
-        }
-
-        bool AddVersieCommand_CanExecute()
-        {
-            return Versies != null;
-        }
-
-        void RemoveVersieCommand_Executed()
-        {
-            Versies.Remove(SelectedVersie);
-            SelectedVersie = null;
-        }
-
-        bool RemoveVersieCommand_CanExecute()
-        {
-            return Versies != null && Versies.Count > 0 && SelectedVersie != null;
-        }
-
-        void RestoreVersieCommand_Executed()
-        {
-            var c = DeepCloner.DeepClone(SelectedVersie.VersieEntry.Controller);
-            XmlDocument pluginXmlDoc = null;
-            if (SelectedVersie.VersieEntry.ControllerPluginData != null)
-            {
-                pluginXmlDoc = new XmlDocument();
-                pluginXmlDoc.LoadXml(Base64Encoding.DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
-            }
-
-            var iIndex = Versies.IndexOf(SelectedVersie);
-            for (var i = 0; i <= iIndex; i++)
-            {
-                var ve = DeepCloner.DeepClone(Versies[i].VersieEntry);
-                c.Data.Versies.Add(ve);
-            }
-
-            var dlg = new SaveFileDialog();
-            dlg.Filter = "TLCGen files|*.tlc|TLCGen gzipped files|*.tlcgz";
-            dlg.CheckFileExists = false;
-            dlg.CheckPathExists = true;
-            dlg.OverwritePrompt = true;
-            dlg.FileName = c.Data.Naam + "_" + SelectedVersie.Versie + ".tlc";
-            dlg.DefaultExt = ".tlc";
-            if(!string.IsNullOrWhiteSpace(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
-            {
-                dlg.InitialDirectory = System.IO.Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);
-            }
-            dlg.Title = "Selecteer het bestand om de regeling in op te slaan";
-            if (dlg.ShowDialog() == true)
-            {
-                try
-                {
-                    var cDoc = TLCGenSerialization.SerializeToXmlDocument(c);
-                    if(pluginXmlDoc != null)
-                    {
-                        foreach(XmlNode node in pluginXmlDoc.FirstChild)
+                        var majver = m.Groups[1].Value;
+                        var midver = m.Groups[2].Value;
+                        if (int.TryParse(majver, out var nextmajver))
                         {
-                            var iNode = cDoc.ImportNode(node, true);
-                            cDoc.DocumentElement.AppendChild(iNode);
+                            nextmajor = nextmajver;
+                        }
+                        if (int.TryParse(midver, out var nextmidver))
+                        {
+                            nextminor = nextmidver + 1;
+                            nextver = m.Groups[1].Value + "." + (nextmidver + 1).ToString() + ".0";
                         }
                     }
-
-                    if (File.Exists(dlg.FileName))
+                }
+                HuidigeVersieMajor = nextmajor;
+                HuidigeVersieMinor = nextminor;
+                HuidigeVersieRevision = 0;
+                vm.Versie = nextver ?? "1.0.0";
+                vm.Ontwerper = Environment.UserName;
+                if (StoreCurrentController)
+                {
+                    var controller = DeepCloner.DeepClone(Controller);
+                    var pluginData = new XmlDocument();
+                    var elem = pluginData.CreateElement("root");
+                    pluginData.AppendChild(elem);
+                    foreach(var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                     {
-                        File.Delete(dlg.FileName);
-                    }
-                    if (dlg.FileName.EndsWith(".tlcgz"))
-                    {
-                        using (var fs = File.Create(dlg.FileName))
+                        if(pl.Item2 is ITLCGenXMLNodeWriter nodeWriter)
                         {
-                            using (var gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Compress))
+                            nodeWriter.SetXmlInDocument(pluginData);
+                        }
+                    }
+                    controller.Data.Versies.Clear();
+                    vm.Controller = controller;
+                    vm.ControllerPluginData = Base64Encoding.EncodeTo64(pluginData.OuterXml);
+                }
+                var vvm = new VersieViewModel(vm);
+                Versies?.Add(vvm);
+            });
+
+        public ICommand RemoveVersieCommand => _RemoveVersieCommand ??= new RelayCommand(() =>
+            {
+                Versies.Remove(SelectedVersie);
+                SelectedVersie = null;
+            }, 
+            () => Versies.Count > 0 && SelectedVersie != null);
+
+        public ICommand RestoreVersieCommand => _RestoreVersieCommand ??= new RelayCommand(() =>
+            {
+                var c = DeepCloner.DeepClone(SelectedVersie.VersieEntry.Controller);
+                XmlDocument pluginXmlDoc = null;
+                if (SelectedVersie.VersieEntry.ControllerPluginData != null)
+                {
+                    pluginXmlDoc = new XmlDocument();
+                    pluginXmlDoc.LoadXml(Base64Encoding.DecodeFrom64(SelectedVersie.VersieEntry.ControllerPluginData));
+                }
+
+                var iIndex = Versies.IndexOf(SelectedVersie);
+                for (var i = 0; i <= iIndex; i++)
+                {
+                    var ve = DeepCloner.DeepClone(Versies[i].VersieEntry);
+                    c.Data.Versies.Add(ve);
+                }
+
+                var dlg = new SaveFileDialog();
+                dlg.Filter = "TLCGen files|*.tlc|TLCGen gzipped files|*.tlcgz";
+                dlg.CheckFileExists = false;
+                dlg.CheckPathExists = true;
+                dlg.OverwritePrompt = true;
+                dlg.FileName = c.Data.Naam + "_" + SelectedVersie.Versie + ".tlc";
+                dlg.DefaultExt = ".tlc";
+                if(!string.IsNullOrWhiteSpace(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
+                {
+                    dlg.InitialDirectory = System.IO.Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);
+                }
+                dlg.Title = "Selecteer het bestand om de regeling in op te slaan";
+                if (dlg.ShowDialog() == true)
+                {
+                    try
+                    {
+                        var cDoc = TLCGenSerialization.SerializeToXmlDocument(c);
+                        if(pluginXmlDoc != null)
+                        {
+                            foreach(XmlNode node in pluginXmlDoc.FirstChild)
                             {
-                                cDoc.Save(gz);
+                                var iNode = cDoc.ImportNode(node, true);
+                                cDoc.DocumentElement.AppendChild(iNode);
                             }
                         }
+
+                        if (File.Exists(dlg.FileName))
+                        {
+                            File.Delete(dlg.FileName);
+                        }
+                        if (dlg.FileName.EndsWith(".tlcgz"))
+                        {
+                            using var fs = File.Create(dlg.FileName);
+                            using var gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Compress);
+                            cDoc.Save(gz);
+                        }
+                        else if (dlg.FileName.EndsWith(".tlc"))
+                        {
+                            cDoc.Save(dlg.FileName);
+                        }
                     }
-                    else if (dlg.FileName.EndsWith(".tlc"))
+                    catch (Exception e)
                     {
-                        cDoc.Save(dlg.FileName);
+                        Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox("Fout bij terugzetten van regeling:\n\n" + e.ToString(), "Fout bij opslaan", System.Windows.MessageBoxButton.OK);
                     }
+                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Versie {SelectedVersie.Versie} is hier opgeslagen:{dlg.FileName}\n\nLET OP! Dit bestand bevat uitsluitend de data tot en met die versie.", $"Data van versie {SelectedVersie.Versie} opgeslagen", System.Windows.MessageBoxButton.OK);
                 }
-                catch (Exception e)
-                {
-                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox("Fout bij terugzetten van regeling:\n\n" + e.ToString(), "Fout bij opslaan", System.Windows.MessageBoxButton.OK);
-                }
-                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Versie {SelectedVersie.Versie} is hier opgeslagen:{dlg.FileName}\n\nLET OP! Dit bestand bevat uitsluitend de data tot en met die versie.", $"Data van versie {SelectedVersie.Versie} opgeslagen", System.Windows.MessageBoxButton.OK);
-            }
-        }
+            }, 
+            () => Versies.Count > 0 && SelectedVersie?.VersieEntry.Controller != null);
 
-        bool RestoreVersieCommand_CanExecute()
-        {
-            return Versies != null && Versies.Count > 0 && SelectedVersie != null && SelectedVersie.VersieEntry.Controller != null;
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region TabItem Overrides
 
@@ -334,13 +267,13 @@ namespace TLCGen.ViewModels
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;
-                    RaisePropertyChanged("");
+                    OnPropertyChanged("");
                 }
                 else
                 {
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
-                    RaisePropertyChanged("");
+                    OnPropertyChanged("");
                 }
             }
         }
@@ -365,7 +298,9 @@ namespace TLCGen.ViewModels
                     _Controller.Data.Versies.Remove(vvm.VersieEntry);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            _RemoveVersieCommand?.NotifyCanExecuteChanged();
+            _RestoreVersieCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // Collection Changed

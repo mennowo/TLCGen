@@ -1,7 +1,7 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -21,13 +21,12 @@ namespace TLCGen.ViewModels
         
         private DetectorViewModel _SelectedDetector;
         private IList _SelectedDetectoren = new ArrayList();
-        private ObservableCollection<DetectorViewModel> _Detectoren;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<DetectorViewModel> Detectoren => _Detectoren ?? (_Detectoren = new ObservableCollection<DetectorViewModel>());
+        public ObservableCollection<DetectorViewModel> Detectoren { get; } = [];
 
         public DetectorViewModel SelectedDetector
         {
@@ -35,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -45,7 +44,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -100,7 +99,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             UpdateDetectoren();
         }
@@ -129,7 +128,7 @@ namespace TLCGen.ViewModels
 
         public DetectorenAllesTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
         #endregion // Constructor

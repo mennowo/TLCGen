@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
-using TLCGen.DataAccess;
+﻿using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class GelijkstartViewModel : ViewModelBase
+    public class GelijkstartViewModel : ObservableObjectEx
 	{
         #region Fields
 
@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
                 {
                     MirroredViewModel.DeelConflictNoMessaging = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
                 {
                     MirroredViewModel.OntruimingstijdFaseNaarNoMessaging = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 
@@ -67,7 +67,7 @@ namespace TLCGen.ViewModels
                 {
                     MirroredViewModel.OntruimingstijdFaseVanNoMessaging = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
 		}
 
@@ -87,7 +87,7 @@ namespace TLCGen.ViewModels
                 {
                     MirroredViewModel.SchakelbaarNoMessaging = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

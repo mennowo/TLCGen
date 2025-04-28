@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleFaseCyclusAlternatiefViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class ModuleFaseCyclusAlternatiefViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -24,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Alternatief.AlternatieveGroenTijd = value; 
-                RaisePropertyChanged<object>(nameof(AlternatieveGroenTijd), true);
+                OnPropertyChanged(nameof(AlternatieveGroenTijd), true);
                 foreach (var o in Others)
                 {
                     o.AlternatieveGroenTijd = value;

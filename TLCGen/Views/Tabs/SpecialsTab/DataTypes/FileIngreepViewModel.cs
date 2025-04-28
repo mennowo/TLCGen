@@ -4,8 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Interop;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -13,9 +14,10 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
+
 namespace TLCGen.ViewModels
 {
-    public class FileIngreepViewModel : ViewModelBase, IViewModelWithItem
+    public class FileIngreepViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -66,7 +68,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseNaam = value;
-                RaisePropertyChanged("SelectedFaseNaam");
+                OnPropertyChanged("SelectedFaseNaam");
+                _AddTeDoserenSignaalGroepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -76,7 +79,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTeDoserenFase = value;
-                RaisePropertyChanged("SelectedTeDoserenFase");
+                OnPropertyChanged("SelectedTeDoserenFase");
+                _RemoveTeDoserenSignaalGroepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -86,7 +90,7 @@ namespace TLCGen.ViewModels
             set
             {
                 DetectorManager.SelectedItem = value;
-                RaisePropertyChanged("SelectedFileDetector");
+                OnPropertyChanged("SelectedFileDetector");
             }
         }
 
@@ -103,8 +107,8 @@ namespace TLCGen.ViewModels
 			            _FileIngreep.Naam = value;
 
 						// Notify the messenger
-						Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.FileIngreep, oldname, value));
-						RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.FileIngreep, oldname, value));
+						OnPropertyChanged(nameof(Naam), broadcast: true);
 		            }
 				}
             }
@@ -116,7 +120,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.AanUit = value;
-                RaisePropertyChanged("AanUit");
+                OnPropertyChanged("AanUit");
             }
         }
 
@@ -126,7 +130,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.MetingPerLus = value;
-                RaisePropertyChanged<object>(nameof(MetingPerLus), broadcast: true);
+                OnPropertyChanged(nameof(MetingPerLus), broadcast: true);
             }
         }
 
@@ -161,7 +165,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.MetingPerStrook = value;
-                RaisePropertyChanged<object>(nameof(MetingPerStrook), broadcast: true);
+                OnPropertyChanged(nameof(MetingPerStrook), broadcast: true);
             }
         }
 
@@ -171,7 +175,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.AfvalVertraging = value;
-                RaisePropertyChanged<object>(nameof(AfvalVertraging), broadcast: true);
+                OnPropertyChanged(nameof(AfvalVertraging), broadcast: true);
             }
         }
 
@@ -192,7 +196,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                RaisePropertyChanged<object>(nameof(EerlijkDoseren), broadcast: true);
+                OnPropertyChanged(nameof(EerlijkDoseren), broadcast: true);
             }
         }
 
@@ -202,8 +206,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.ToepassenDoseren = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasToepassenDoseren));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasToepassenDoseren));
             }
         }
 
@@ -219,8 +223,8 @@ namespace TLCGen.ViewModels
                 {
                     _FileIngreep.AlternatieveGroentijdenSet = "NG";
                 }
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasToepassenAlternatieveGroentijdenSet));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasToepassenAlternatieveGroentijdenSet));
             }
         }
 
@@ -232,7 +236,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.AlternatieveGroentijdenSet = value ?? "NG";
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -242,7 +246,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.FileMetingLocatie = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -265,8 +269,8 @@ namespace TLCGen.ViewModels
                     },
                     x => FileDetectoren.All(y => y.Detector != x),
                     null,
-                    () => RaisePropertyChanged<object>(nameof(SelectedFileDetector), broadcast: true),
-                    () => RaisePropertyChanged<object>(nameof(SelectedFileDetector), broadcast: true));
+                    () => OnPropertyChanged(nameof(SelectedFileDetector), broadcast: true),
+                    () => OnPropertyChanged(nameof(SelectedFileDetector), broadcast: true));
                 return _detectorManager;
             }
         }
@@ -275,47 +279,25 @@ namespace TLCGen.ViewModels
 
         #region Commands
         
-        public ICommand AddTeDoserenSignaalGroepCommand =>
-            _AddTeDoserenSignaalGroepCommand ?? (_AddTeDoserenSignaalGroepCommand =
-                new RelayCommand(AddNewTeDoserenSignaalGroepCommand_Executed,
-                    AddNewTeDoserenSignaalGroepCommand_CanExecute));
+        public ICommand AddTeDoserenSignaalGroepCommand => _AddTeDoserenSignaalGroepCommand ??= new RelayCommand(() =>
+            {
+                var dos = new FileIngreepTeDoserenSignaalGroepModel();
+                DefaultsProvider.Default.SetDefaultsOnModel(dos);
+                dos.FaseCyclus = SelectedFaseNaam;
+                TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
+                UpdateSelectables();
+            },
+            () => !string.IsNullOrWhiteSpace(SelectedFaseNaam));
 
-        public ICommand RemoveTeDoserenSignaalGroepCommand =>
-            _RemoveTeDoserenSignaalGroepCommand ?? (_RemoveTeDoserenSignaalGroepCommand =
-                new RelayCommand(RemoveTeDoserenSignaalGroepCommand_Executed,
-                    RemoveTeDoserenSignaalGroepCommand_CanExecute));
+        public ICommand RemoveTeDoserenSignaalGroepCommand => _RemoveTeDoserenSignaalGroepCommand ??= new RelayCommand(() =>
+            {
+                TeDoserenSignaalGroepen.Remove(SelectedTeDoserenFase);
+                SelectedTeDoserenFase = null;
+                UpdateSelectables();
+            },
+            () => SelectedTeDoserenFase != null);
 
         #endregion // Commands
-
-        #region Command Functionality
-
-        private void AddNewTeDoserenSignaalGroepCommand_Executed(object prm)
-        {
-            var dos = new FileIngreepTeDoserenSignaalGroepModel();
-            DefaultsProvider.Default.SetDefaultsOnModel(dos);
-            dos.FaseCyclus = SelectedFaseNaam;
-            TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
-            UpdateSelectables();
-        }
-
-        private bool AddNewTeDoserenSignaalGroepCommand_CanExecute(object prm)
-        {
-            return !string.IsNullOrWhiteSpace(SelectedFaseNaam);
-        }
-
-        private void RemoveTeDoserenSignaalGroepCommand_Executed(object prm)
-        {
-            TeDoserenSignaalGroepen.Remove(SelectedTeDoserenFase);
-            SelectedTeDoserenFase = null;
-            UpdateSelectables();
-        }
-
-        private bool RemoveTeDoserenSignaalGroepCommand_CanExecute(object prm)
-        {
-            return SelectedTeDoserenFase != null;
-        }
-
-        #endregion // Command Functionality
 
         #region Private methods
 
@@ -339,7 +321,7 @@ namespace TLCGen.ViewModels
         {
             _ControllerFasen = controllerfasen;
             UpdateSelectables();
-            RaisePropertyChanged("MetingPerStrookAvailable");
+            OnPropertyChanged("MetingPerStrookAvailable");
         }
 
         #endregion // Public methods
@@ -355,7 +337,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Messenging
 
-        public void OnDetectorenChanged(DetectorenChangedMessage message)
+        public void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             if (message.RemovedDetectoren?.Any(x => x.Type == DetectorTypeEnum.File) == true ||
                 message.AddedDetectoren?.Any(x => x.Type == DetectorTypeEnum.File) == true)
@@ -364,13 +346,13 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void OnNameChanged(NameChangedMessage message)
+        public void OnNameChanged(object sender, NameChangedMessage message)
         {
             if (message.ObjectType != TLCGenObjectTypeEnum.Detector) return;
             _detectorManager?.Refresh();
         }
 
-        public void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
+        public void OnFaseDetectorTypeChanged(object sender, FaseDetectorTypeChangedMessage message)
         {
             if (message.OldType == DetectorTypeEnum.File || message.NewType == DetectorTypeEnum.File)
             {
@@ -394,14 +376,14 @@ namespace TLCGen.ViewModels
         {
             _FileIngreep = fileingreep;
 
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
 
             FileDetectoren = new ObservableCollectionAroundList<FileIngreepDetectorViewModel, FileIngreepDetectorModel>(_FileIngreep.FileDetectoren);
             FileDetectoren.CollectionChanged += (o, e) =>
             {
-                RaisePropertyChanged("MetingPerLusAvailable");
+                OnPropertyChanged("MetingPerLusAvailable");
             };
             TeDoserenSignaalGroepen = new ObservableCollectionAroundList<FileIngreepTeDoserenSignaalGroepViewModel, FileIngreepTeDoserenSignaalGroepModel>(_FileIngreep.TeDoserenSignaalGroepen);
         }

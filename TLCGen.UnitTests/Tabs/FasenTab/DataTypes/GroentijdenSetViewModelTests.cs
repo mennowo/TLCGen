@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GalaSoft.MvvmLight.Messaging;
 using NUnit.Framework;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -13,7 +12,6 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
         [Test]
         public void GronetijdSetViewModel_TypeChangedFormMGToVG_NameChangedCorrectly()
         {
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
             model.GroentijdenSets.Add(new GroentijdenSetModel
@@ -33,7 +31,6 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
         [Test]
         public void GronetijdSetViewModel_TypeChangedFormVGToMG_NameChangedCorrectly()
         {
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
             model.GroentijdenSets.Add(new GroentijdenSetModel

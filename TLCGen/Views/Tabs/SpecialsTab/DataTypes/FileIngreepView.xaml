@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -20,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ag:AutoGrid Columns="Auto,*" RowCount="16">
+    <ct:AutoGrid Columns="Auto,*" RowCount="16">
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
@@ -185,5 +184,5 @@
                 <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
             </Button>
         </StackPanel>
-    </ag:AutoGrid>
+    </ct:AutoGrid>
 </UserControl>

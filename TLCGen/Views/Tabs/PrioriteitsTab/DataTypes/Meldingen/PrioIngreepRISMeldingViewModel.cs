@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepRISMeldingViewModel : ViewModelBase
+    public class PrioIngreepRISMeldingViewModel : ObservableObjectEx
     {
         #region Fields
         #endregion // Fields
@@ -25,7 +26,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisStart = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -35,7 +36,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisEnd = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -45,7 +46,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.RisEta = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -130,7 +131,7 @@ namespace TLCGen.ViewModels
             {
                 if (subrole.IsSelected) Parent.PrioIngreepInUitMelding.RisSubrole |= subrole.Subrole;
             }
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
         private void RvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -140,7 +141,7 @@ namespace TLCGen.ViewModels
             {
                 if (role.IsSelected) Parent.PrioIngreepInUitMelding.RisRole |= role.Role;
             }
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
         private void IvmOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -150,13 +151,13 @@ namespace TLCGen.ViewModels
             {
                 if (impt.IsSelected) Parent.PrioIngreepInUitMelding.RisImportance |= impt.Importance;
             }
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
         #endregion // Constructor
     }
 
-    public class RISVehicleRoleViewModel : ViewModelBase
+    public class RISVehicleRoleViewModel : ObservableObject
     {
         private bool _isSelected;
         
@@ -168,12 +169,12 @@ namespace TLCGen.ViewModels
             set
             {
                 _isSelected = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
     }
     
-    public class RISVehicleSubroleViewModel : ViewModelBase
+    public class RISVehicleSubroleViewModel : ObservableObject
     {
         private bool _isSelected;
         
@@ -185,12 +186,12 @@ namespace TLCGen.ViewModels
             set
             {
                 _isSelected = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
     }
 
-    public class RISVehicleImportanceViewModel : ViewModelBase
+    public class RISVehicleImportanceViewModel : ObservableObject
     {
         private bool _isSelected;
         private RISVehicleImportance importance;
@@ -202,8 +203,8 @@ namespace TLCGen.ViewModels
             {
                 importance = value;
                 ImportanceDescription = importance.GetDescription();
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ImportanceDescription));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ImportanceDescription));
             }
         }
 
@@ -215,7 +216,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _isSelected = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
     }

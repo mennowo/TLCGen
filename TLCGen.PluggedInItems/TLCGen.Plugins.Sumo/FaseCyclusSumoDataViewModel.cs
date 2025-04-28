@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.Sumo
 {
-    public class FaseCyclusSumoDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class FaseCyclusSumoDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         public FaseCyclusSumoDataModel FaseCyclus { get; }
 
@@ -14,7 +14,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 FaseCyclus.Naam = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -24,7 +24,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 FaseCyclus.SumoIds = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -44,7 +44,7 @@ namespace TLCGen.Plugins.Sumo
         }
     }
 
-    public class DetectorSumoDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class DetectorSumoDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         public DetectorSumoDataModel Detector { get; }
 
@@ -54,7 +54,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 Detector.Naam = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -64,7 +64,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 Detector.SumoNaam1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 Detector.SumoNaam2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -84,7 +84,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 Detector.SumoNaam3 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -94,7 +94,7 @@ namespace TLCGen.Plugins.Sumo
             set
             {
                 Detector.Selectief = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

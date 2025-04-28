@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class StarPeriodeDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class StarPeriodeDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Properties
 
@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
             set
             {
                 StarPeriode.StarProgramma = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

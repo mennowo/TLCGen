@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 
 namespace TLCGen.Specificator
 {
-    public class SpecificatorSpecialsParagraafViewModel : ViewModelBase, IViewModelWithItem
+    public class SpecificatorSpecialsParagraafViewModel : ObservableObjectEx, IViewModelWithItem
     {
         public SpecificatorSpecialsParagraaf Paragraaf { get; }
 
@@ -13,7 +13,7 @@ namespace TLCGen.Specificator
             set
             {
                 Paragraaf.Titel = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -23,7 +23,7 @@ namespace TLCGen.Specificator
             set
             {
                 Paragraaf.Text = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

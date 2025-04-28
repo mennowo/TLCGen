@@ -1,5 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -8,7 +9,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class IngangViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class IngangViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         public IngangModel Ingang { get; }
 
@@ -21,9 +22,9 @@ namespace TLCGen.ViewModels
                 {
                     var oldname = Ingang.Naam;
                     Ingang.Naam = value;
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Input, oldname, value));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Input, oldname, value));
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -33,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Ingang.Omschrijving = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -43,7 +44,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Ingang.Type = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,9 +6,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -29,23 +31,14 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _Templates;
         private DetectorViewModel _SelectedDetector;
         private IList _SelectedDetectoren = new ArrayList();
+        private RelayCommand _AddDetectorCommand;
+        private RelayCommand _RemoveDetectorCommand;
 
         #endregion // Fields
 
         #region Properties
 
-        private ObservableCollection<DetectorViewModel> _Detectoren;
-        public ObservableCollection<DetectorViewModel> Detectoren
-        {
-            get
-            {
-                if(_Detectoren == null)
-                {
-                    _Detectoren = new ObservableCollection<DetectorViewModel>();
-                }
-                return _Detectoren;
-            }
-        }
+        public ObservableCollection<DetectorViewModel> Detectoren { get; } = [];
 
         public ObservableCollection<string> Templates
         {
@@ -66,8 +59,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged("SelectedDetector");
+                OnPropertyChanged("SelectedDetector");
                 if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
+                _RemoveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -77,7 +71,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                RaisePropertyChanged("SelectedDetectoren");
+                OnPropertyChanged("SelectedDetectoren");
                 if (value != null)
                 {
                     var sl = new List<DetectorModel>();
@@ -87,6 +81,7 @@ namespace TLCGen.ViewModels
                     }
                     TemplatesProviderVM.SetSelectedApplyToItems(sl);
                 }
+                _RemoveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -107,38 +102,75 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddDetectorCommand;
-        public ICommand AddDetectorCommand
-        {
-            get
+        public ICommand AddDetectorCommand => _AddDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_AddDetectorCommand == null)
+                var dm = new DetectorModel();
+                var newname = "001";
+                var inewname = 1;
+                foreach (var dvm in Detectoren)
                 {
-                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
+                    if (Regex.IsMatch(dvm.Naam, @"[0-9]+"))
+                    {
+                        var m = Regex.Match(dvm.Naam, @"[0-9]+");
+                        var next = m.Value;
+                        if (Int32.TryParse(next, out inewname))
+                        {
+                            newname = inewname.ToString("000");
+                            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, newname))
+                            {
+                                inewname++;
+                                newname = inewname.ToString("000");
+                            }
+                        }
+                    }
                 }
-                return _AddDetectorCommand;
-            }
-        }
+                dm.Naam = newname;
+                DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
+                dm.AanvraagDirectSch = NooitAltijdAanUitEnum.Nooit; // Not possible / allowed on loose detector
+                var dvm1 = new DetectorViewModel(dm);
+                Detectoren.Add(dvm1);
+                WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel>
+                {
+                    dm
+                }, null));
+                Detectoren.BubbleSort();
+            });
 
-
-        RelayCommand _RemoveDetectorCommand;
-        public ICommand RemoveDetectorCommand
-        {
-            get
+        public ICommand RemoveDetectorCommand => _RemoveDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_RemoveDetectorCommand == null)
+                var changed = false;
+                var remDets = new List<DetectorModel>();
+                if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
                 {
-                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
+                    changed = true;
+                    foreach (DetectorViewModel dvm in SelectedDetectoren)
+                    {
+                        remDets.Add(dvm.Detector);
+                        Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(dvm.Naam, TLCGenObjectTypeEnum.Detector);
+                    }
                 }
-                return _RemoveDetectorCommand;
-            }
-        }
+                else if (SelectedDetector != null)
+                {
+                    changed = true;
+                    remDets.Add(SelectedDetector.Detector);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedDetector.Naam, TLCGenObjectTypeEnum.Detector);
+                }
+                RebuildDetectorenList();
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+
+                if (changed)
+                {
+                    WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+                    Detectoren.BubbleSort();
+                }
+            }, 
+            () => SelectedDetector != null || SelectedDetectoren != null && SelectedDetectoren.Count > 0);
 
         #endregion // Commands
 
         #region Command functionality
 
-        void AddDetectorCommand_Executed(object prm)
+        void AddDetectorCommand_Executed()
         {
             var dm = new DetectorModel();
             var newname = "001";
@@ -165,16 +197,16 @@ namespace TLCGen.ViewModels
             dm.AanvraagDirectSch = NooitAltijdAanUitEnum.Nooit; // Not possible / allowed on loose detector
             var dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
-            Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
+            WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
             Detectoren.BubbleSort();
         }
 
-        bool AddDetectorCommand_CanExecute(object prm)
+        bool AddDetectorCommand_CanExecute()
         {
             return Detectoren != null;
         }
 
-        void RemoveDetectorCommand_Executed(object prm)
+        void RemoveDetectorCommand_Executed()
         {
             var changed = false;
             var remDets = new List<DetectorModel>();
@@ -194,16 +226,16 @@ namespace TLCGen.ViewModels
                 Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedDetector.Naam, TLCGenObjectTypeEnum.Detector);
             }
             RebuildDetectorenList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+                WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
                 Detectoren.BubbleSort();
             }
         }
 
-        bool RemoveDetectorCommand_CanExecute(object prm)
+        bool RemoveDetectorCommand_CanExecute()
         {
             return Detectoren != null &&
                 (SelectedDetector != null ||
@@ -225,7 +257,7 @@ namespace TLCGen.ViewModels
                 Detectoren.Add(dvm);
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // Private Methods
@@ -291,8 +323,8 @@ namespace TLCGen.ViewModels
         public void UpdateAfterApplyTemplate(DetectorModel item)
         {
             var d = Detectoren.First(x => x.Detector == item);
-            d.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
+            d.OnPropertyChanged("");
+			WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates
@@ -334,8 +366,8 @@ namespace TLCGen.ViewModels
                     _Controller.Detectoren.Remove(dvm.Detector);
                 }
             };
-            Messenger.Default.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -344,15 +376,18 @@ namespace TLCGen.ViewModels
 
         public DetectorenExtraTabViewModel() : base()
         {
-            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
-            {
-                Detectoren.BubbleSort();
-            });
-            MessengerInstance.Register<Messaging.Messages.NameChangedMessage>(this, (msg) =>
-            {
-                if(msg.ObjectType == TLCGenObjectTypeEnum.Detector)
-                    Detectoren.BubbleSort();
-            });
+            WeakReferenceMessengerEx.Default.Register<Messaging.Requests.PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChangedMessage);
+        }
+
+        private void OnPrepareForGenerationRequest(object recipient, PrepareForGenerationRequest message)
+        {
+             Detectoren.BubbleSort();
+        }
+
+        private void OnNameChangedMessage(object recipient, NameChangedMessage message)
+        {
+            if (message.ObjectType == TLCGenObjectTypeEnum.Detector) Detectoren.BubbleSort();
         }
 
         #endregion // Constructor

@@ -1,10 +1,12 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -13,6 +15,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -26,23 +29,14 @@ namespace TLCGen.ViewModels
         
         private IngangViewModel _SelectedIngang;
         private IList _SelectedIngangen = new ArrayList();
+        private RelayCommand _AddIngangCommand;
+        private RelayCommand _RemoveIngangCommand;
 
         #endregion // Fields
 
         #region Properties
 
-        private ObservableCollection<IngangViewModel> _Ingangen;
-        public ObservableCollection<IngangViewModel> Ingangen
-        {
-            get
-            {
-                if(_Ingangen == null)
-                {
-                    _Ingangen = new ObservableCollection<IngangViewModel>();
-                }
-                return _Ingangen;
-            }
-        }
+        public ObservableCollection<IngangViewModel> Ingangen { get; } = [];
 
         public IngangViewModel SelectedIngang
         {
@@ -50,7 +44,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedIngang = value;
-                RaisePropertyChanged("SelectedIngang");
+                OnPropertyChanged();
+                _RemoveIngangCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -60,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedIngangen = value;
-                RaisePropertyChanged("SelectedIngangen");
+                OnPropertyChanged();
                 if (value != null)
                 {
                     var sl = new List<IngangModel>();
@@ -69,6 +64,7 @@ namespace TLCGen.ViewModels
                         sl.Add((s as IngangViewModel).Ingang);
                     }
                 }
+                _RemoveIngangCommand?.NotifyCanExecuteChanged();
             }
         }
         
@@ -76,38 +72,68 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddIngangCommand;
-        public ICommand AddIngangCommand
-        {
-            get
+        public ICommand AddIngangCommand => _AddIngangCommand ??= new RelayCommand(() =>
             {
-                if (_AddIngangCommand == null)
+                var dm = new IngangModel();
+                var newname = "i001";
+                var inewname = 1;
+                foreach (var ivm in Ingangen)
                 {
-                    _AddIngangCommand = new RelayCommand(AddIngangCommand_Executed, AddIngangCommand_CanExecute);
+                    if (Regex.IsMatch(ivm.Naam, @"[0-9]+"))
+                    {
+                        var m = Regex.Match(ivm.Naam, @"[0-9]+");
+                        var next = m.Value;
+                        if (Int32.TryParse(next, out inewname))
+                        {
+                            newname = "i" + inewname.ToString("000");
+                            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Input, newname))
+                            {
+                                inewname++;
+                                newname = "i" + inewname.ToString("000");
+                            }
+                        }
+                    }
                 }
-                return _AddIngangCommand;
-            }
-        }
+                dm.Naam = newname;
+                DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
+                var dvm1 = new IngangViewModel(dm);
+                Ingangen.Add(dvm1);
+                WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(null, new List<IngangModel> { dm }));
+            });
 
-
-        RelayCommand _RemoveIngangCommand;
-        public ICommand RemoveIngangCommand
-        {
-            get
+        public ICommand RemoveIngangCommand => _RemoveIngangCommand ??= new RelayCommand(() =>
             {
-                if (_RemoveIngangCommand == null)
+                var changed = false;
+                var rems = new List<IngangModel>();
+                if (SelectedIngangen != null && SelectedIngangen.Count > 0)
                 {
-                    _RemoveIngangCommand = new RelayCommand(RemoveIngangCommand_Executed, RemoveIngangCommand_CanExecute);
+                    changed = true;
+                    foreach (IngangViewModel ivm in SelectedIngangen)
+                    {
+                        rems.Add(ivm.Ingang);
+                        Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam, TLCGenObjectTypeEnum.Input);
+                    }
                 }
-                return _RemoveIngangCommand;
-            }
-        }
+                else if (SelectedIngang != null)
+                {
+                    changed = true;
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedIngang.Naam, TLCGenObjectTypeEnum.Input);
+                    rems.Add(SelectedIngang.Ingang);
+                }
+                RebuildIngangenList();
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+
+                if (changed)
+                {
+                    WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(rems, null));
+                }
+            }, () => (SelectedIngang != null || SelectedIngangen is { Count: > 0 }));
 
         #endregion // Commands
 
         #region Command functionality
 
-        void AddIngangCommand_Executed(object prm)
+        void AddIngangCommand_Executed()
         {
             var dm = new IngangModel();
             var newname = "i001";
@@ -133,15 +159,15 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             var dvm1 = new IngangViewModel(dm);
             Ingangen.Add(dvm1);
-            Messenger.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
+            WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(null, new List<IngangModel>{dm}));
         }
 
-        bool AddIngangCommand_CanExecute(object prm)
+        bool AddIngangCommand_CanExecute()
         {
             return Ingangen != null;
         }
 
-        void RemoveIngangCommand_Executed(object prm)
+        void RemoveIngangCommand_Executed()
         {
             var changed = false;
             var rems = new List<IngangModel>();
@@ -161,15 +187,15 @@ namespace TLCGen.ViewModels
                 rems.Add(SelectedIngang.Ingang);
             }
             RebuildIngangenList();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
-                Messenger.Default.Send(new IngangenChangedMessage(rems, null));
+WeakReferenceMessengerEx.Default.Send(new IngangenChangedMessage(rems, null));
             }
         }
 
-        bool RemoveIngangCommand_CanExecute(object prm)
+        bool RemoveIngangCommand_CanExecute()
         {
             return Ingangen != null &&
                 (SelectedIngang != null ||
@@ -191,7 +217,7 @@ namespace TLCGen.ViewModels
                 Ingangen.Add(dvm);
             }
             Ingangen.CollectionChanged += Ingangen_CollectionChanged;
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // Private Methods

@@ -1,12 +1,14 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -44,9 +46,9 @@ namespace TLCGen.ViewModels
                 {
                     SelectedVAOntruimenFase = null;
                 }
-                RaisePropertyChanged("SelectedVAOntruimenFase");
-                RaisePropertyChanged("SelectedFaseHasVAOntruimen");
-                RaisePropertyChanged("SelectedFaseNaam");
+                OnPropertyChanged("SelectedVAOntruimenFase");
+                OnPropertyChanged("SelectedFaseHasVAOntruimen");
+                OnPropertyChanged("SelectedFaseNaam");
             }
         }
 
@@ -84,7 +86,7 @@ namespace TLCGen.ViewModels
                         MessageBox.Show("Error in VA ontruimen: " + e.ToString());
                     }
                 }
-                RaisePropertyChanged("SelectedVAOntruimenFase");
+                OnPropertyChanged("SelectedVAOntruimenFase");
             }
         }
 
@@ -110,7 +112,7 @@ namespace TLCGen.ViewModels
                     VAOntruimenFasen.Remove(SelectedVAOntruimenFase);
                     SelectedVAOntruimenFase = null;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
             get => SelectedVAOntruimenFase != null;
         }
@@ -134,14 +136,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 
@@ -193,7 +187,7 @@ namespace TLCGen.ViewModels
                 {
                     VAOntruimenFasen = null;
                 }
-                RaisePropertyChanged("VAOntruimenFasen");
+                OnPropertyChanged("VAOntruimenFasen");
             }
         }
 
@@ -201,18 +195,18 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             UpdateFasen();
             VAOntruimenFasen.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             VAOntruimenFasen.Rebuild();
         }
 
-        private void OnConflictsChanged(ConflictsChangedMessage message)
+        private void OnConflictsChanged(object sender, ConflictsChangedMessage message)
         {
             VAOntruimenFasen.Rebuild();
         }
@@ -223,9 +217,9 @@ namespace TLCGen.ViewModels
 
         public VAOntruimenTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

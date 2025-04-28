@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HalfstarFaseCyclusInstellingenViewModel : ViewModelBase, IViewModelWithItem, IComparable<HalfstarFaseCyclusInstellingenViewModel>, IComparable
+    public class HalfstarFaseCyclusInstellingenViewModel : ObservableObjectEx, IViewModelWithItem, IComparable<HalfstarFaseCyclusInstellingenViewModel>, IComparable
     {
         #region Properties
 
@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.AlternatiefToestaan = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.AlternatieveRuimte = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.AanvraagOpTxB = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.PrivilegePeriodeOpzetten = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

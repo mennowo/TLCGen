@@ -29,14 +29,6 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
-
         #region TabItem Overrides
 
         public override string DisplayName => "Modulen";

@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.ViewModels
 {
@@ -6,7 +6,7 @@ namespace TLCGen.ViewModels
     /// ViewModel for the statusbar of the application.
     /// The statusbar is held in a seperate View.
     /// </summary>
-    public class TLCGenStatusBarViewModel : ViewModelBase
+    public class TLCGenStatusBarViewModel : ObservableObject
     {
         #region Fields
 
@@ -23,7 +23,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _statusText = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _alertText = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

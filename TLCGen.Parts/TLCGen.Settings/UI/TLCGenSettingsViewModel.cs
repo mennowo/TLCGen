@@ -1,14 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Dialogs;
 using TLCGen.Helpers;
 
 namespace TLCGen.Settings
 {
-    public class TLCGenSettingsViewModel : ViewModelBase
+    public class TLCGenSettingsViewModel : ObservableObject
     {
         #region Fields
 
@@ -29,7 +30,7 @@ namespace TLCGen.Settings
                 _FasenTemplatesEditorTabVM = null;
                 _DetectorenTemplatesEditorTabVM = null;
                 _PeriodenTemplatesEditorTabVM = null;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -55,7 +56,8 @@ namespace TLCGen.Settings
                 _FasenTemplatesEditorTabVM = null;
                 _DetectorenTemplatesEditorTabVM = null;
                 _PeriodenTemplatesEditorTabVM = null;
-                RaisePropertyChanged("");
+                _CreateTemplateFileCommand?.NotifyCanExecuteChanged();
+                OnPropertyChanged("");
             }
         }
 
@@ -71,7 +73,7 @@ namespace TLCGen.Settings
                 }
                 DefaultsProvider.Default.LoadSettings();
 				_DefaultsTabVM = null;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -144,14 +146,14 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        GalaSoft.MvvmLight.CommandWpf.RelayCommand _CreateTemplateFileCommand;
+        RelayCommand _CreateTemplateFileCommand;
         public ICommand CreateTemplateFileCommand
         {
             get
             {
                 if (_CreateTemplateFileCommand == null)
                 {
-                    _CreateTemplateFileCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(CreateTemplateFileCommand_Executed, CreateTemplateFileCommand_CanExecute);
+                    _CreateTemplateFileCommand = new RelayCommand(CreateTemplateFileCommand_Executed, CreateTemplateFileCommand_CanExecute);
                 }
                 return _CreateTemplateFileCommand;
             }

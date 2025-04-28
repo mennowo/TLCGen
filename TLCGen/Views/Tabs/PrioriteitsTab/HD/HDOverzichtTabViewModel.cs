@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _SelectedFaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
 			{
 				_SelectedFaseCycli = value;
 				_settingMultiple = false;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 

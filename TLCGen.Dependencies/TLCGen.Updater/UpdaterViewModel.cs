@@ -8,12 +8,12 @@ using System.Net;
 using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 
 namespace TLCGen.Updater
 {
-	class UpdaterViewModel : ViewModelBase
+	class UpdaterViewModel : ObservableObject
 	{
 		#region Fields
 
@@ -37,8 +37,8 @@ namespace TLCGen.Updater
 			set
 			{
 				_tlcGenInstanceRunning = value; 
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(TLCGenMayUpdate));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(TLCGenMayUpdate));
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace TLCGen.Updater
 			set
 			{
 				_tlcGenDownloaded = value; 
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -60,7 +60,7 @@ namespace TLCGen.Updater
 			set
 			{
 				_tlcGenDownloadProgress = value; 
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 

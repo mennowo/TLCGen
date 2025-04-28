@@ -1,13 +1,14 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class VAOntruimenDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class VAOntruimenDetectorViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -23,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenDetector.Detector = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                OnPropertyChanged("FaseCyclus", broadcast: true);
             }
         }
 
@@ -34,14 +35,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 
@@ -62,7 +55,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             ConflicterendeFasen.Rebuild();
         }
@@ -75,7 +68,7 @@ namespace TLCGen.ViewModels
         {
             _VAOntruimenDetector = vaontruimend;
             ConflicterendeFasen = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ConflicterendeFasen);
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

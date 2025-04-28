@@ -1,7 +1,7 @@
 ﻿using ICSharpCode.AvalonEdit;
 using System;
 using System.Windows;
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 
 namespace TLCGen.Plugins.Tools
 {

@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class NaloopTijdViewModel : ViewModelBase, IViewModelWithItem
+    public class NaloopTijdViewModel : ObservableObjectEx, IViewModelWithItem
     {
         private NaloopTijdModel _model;
 
@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _model.Type = value;
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                OnPropertyChanged(nameof(Type), broadcast: true);
             }
         }
         public int Waarde
@@ -24,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _model.Waarde = value;
-                RaisePropertyChanged<object>(nameof(Waarde), broadcast: true);
+                OnPropertyChanged(nameof(Waarde), broadcast: true);
             }
         }
 

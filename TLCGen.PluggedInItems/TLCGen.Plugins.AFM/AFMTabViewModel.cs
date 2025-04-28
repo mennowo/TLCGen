@@ -1,19 +1,19 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Plugins.AFM.Models;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 using System;
 using TLCGen.Messaging.Messages;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
 
 namespace TLCGen.Plugins.AFM
 {
-    public class AFMTabViewModel : ViewModelBase
+    public class AFMTabViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -34,7 +34,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _selectedAFMFase = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -55,7 +55,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _afmModel.AFMToepassen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -77,13 +77,9 @@ namespace TLCGen.Plugins.AFM
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region TLCGen messaging
 
-        private void OnFasenChanged(FasenChangedMessage msg)
+        private void OnFasenChanged(object sender, FasenChangedMessage msg)
         {
             if(msg.RemovedFasen != null && msg.RemovedFasen.Any())
             {
@@ -103,7 +99,7 @@ namespace TLCGen.Plugins.AFM
             }
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
             {
@@ -119,8 +115,8 @@ namespace TLCGen.Plugins.AFM
 
         public void UpdateMessaging()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         public void UpdateSelectableFasen(IEnumerable<string> allFasen)

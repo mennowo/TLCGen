@@ -57,7 +57,7 @@ namespace TLCGen.ViewModels
                 {
                     _SelectedTab = value;
                     _SelectedTab.OnSelected();
-                    RaisePropertyChanged("SelectedTab");
+                    OnPropertyChanged("SelectedTab");
                 }
             }
         }

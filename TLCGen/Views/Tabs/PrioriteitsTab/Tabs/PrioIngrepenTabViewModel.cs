@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+
 
 namespace TLCGen.ViewModels
 {
@@ -74,7 +71,7 @@ namespace TLCGen.ViewModels
                         SelectedMelding = null;
                         break;
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -84,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedFaseCyclus = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -94,7 +91,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedIngreep = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -104,7 +101,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedMeldingenList = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -114,7 +111,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedMelding = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
         
@@ -169,7 +166,7 @@ namespace TLCGen.ViewModels
             }
         }
         
-        private void OnFasenChanged(FasenChangedMessage obj)
+        private void OnFasenChanged(object sender, FasenChangedMessage obj)
         {
             if (obj.RemovedFasen?.Any() == true)
             {
@@ -194,7 +191,7 @@ namespace TLCGen.ViewModels
             Fasen.BubbleSort();
         }
 
-        private void OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived(PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage obj)
+        private void OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived(object sender, PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage obj)
         {
             foreach (var sg in Fasen)
             {
@@ -213,7 +210,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             if (obj.ObjectType != TLCGenObjectTypeEnum.Fase) return;
             foreach (var faseWithPrio in Fasen)
@@ -228,13 +225,13 @@ namespace TLCGen.ViewModels
 
         public PrioIngrepenTabViewModel() : base()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
-            MessengerInstance.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessageReceived);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage>(this, OnPrioIngreepMassaDetectieObjectNeedsFaseCyclusMessageReceived);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessageReceived);
         }
 
-        private void OnPrioIngrepenChangedMessageReceived(PrioIngrepenChangedMessage obj)
+        private void OnPrioIngrepenChangedMessageReceived(object sender, PrioIngrepenChangedMessage obj)
         {
             RefreshIngrepen();
         }
@@ -255,12 +252,12 @@ namespace TLCGen.ViewModels
                 // needed to regulate KAR dummies
                 var inM = prio.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
                 var uitM = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding); 
-                if (inM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
-                if (uitM != null) MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
+                if (inM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, inM));
+                if (uitM != null) WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(prio.FaseCyclus, uitM));
                 SelectedFaseCyclus.Ingrepen.Add(new PrioIngreepViewModel(prio, SelectedFaseCyclus));
             }
             
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         public void UpdateAfterApplyTemplate(PrioIngreepModel item)

@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
 using TLCGen.Helpers;
@@ -13,7 +15,6 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -67,11 +68,11 @@ namespace TLCGen.ViewModels
                     SetRisRoles(melding);
                 }
                 
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                RaisePropertyChanged(nameof(IsTypeBus));
-                RaisePropertyChanged(nameof(IsTypeBicycle));
-                RaisePropertyChanged(nameof(IsTypeTram));
-                RaisePropertyChanged(nameof(IsTypeTruck));
+                OnPropertyChanged(nameof(Type), broadcast: true);
+                OnPropertyChanged(nameof(IsTypeBus));
+                OnPropertyChanged(nameof(IsTypeBicycle));
+                OnPropertyChanged(nameof(IsTypeTram));
+                OnPropertyChanged(nameof(IsTypeTruck));
             }
         }
 
@@ -110,13 +111,13 @@ namespace TLCGen.ViewModels
                     {
                         melding.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{value}";
                     }
-                    RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                    OnPropertyChanged(nameof(Naam), broadcast: true);
                 }
                 else
                 {
                     PrioIngreep.Naam = oldName;
                 }
-                RaisePropertyChanged(nameof(DisplayName));
+                OnPropertyChanged(nameof(DisplayName));
             }
         }
 
@@ -127,7 +128,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.VersneldeInmeldingKoplus = value;
-                RaisePropertyChanged<object>(nameof(VersneldeInmeldingKoplus), broadcast: true);
+                OnPropertyChanged(nameof(VersneldeInmeldingKoplus), broadcast: true);
             }
         }
 
@@ -147,9 +148,9 @@ namespace TLCGen.ViewModels
 
                 PrioIngreep.Koplus = value;
                 if (value == null) PrioIngreep.Koplus = "NG";
-                RaisePropertyChanged<object>(nameof(Koplus), broadcast: true);
-                RaisePropertyChanged(nameof(HasKoplus));
-                RaisePropertyChanged(nameof(HasWisselstand));
+                OnPropertyChanged(nameof(Koplus), broadcast: true);
+                OnPropertyChanged(nameof(HasKoplus));
+                OnPropertyChanged(nameof(HasWisselstand));
             }
         }
 
@@ -160,7 +161,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.NoodaanvraagKoplus = value;
-                RaisePropertyChanged<object>(nameof(NoodaanvraagKoplus), broadcast: true);
+                OnPropertyChanged(nameof(NoodaanvraagKoplus), broadcast: true);
             }
         }
 
@@ -171,7 +172,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.KoplusKijkNaarWisselstand = value;
-                RaisePropertyChanged<object>(nameof(KoplusKijkNaarWisselstand), broadcast: true);
+                OnPropertyChanged(nameof(KoplusKijkNaarWisselstand), broadcast: true);
             }
         }
 
@@ -189,7 +190,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdOngehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdOngehinderd), broadcast: true);
             }
         }
 
@@ -200,7 +201,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdBeperktgehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdBeperktgehinderd), broadcast: true);
             }
         }
 
@@ -211,7 +212,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdGehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdGehinderd), broadcast: true);
             }
         }
 
@@ -222,7 +223,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.OnderMaximum = value;
-                RaisePropertyChanged<object>(nameof(OnderMaximum), broadcast: true);
+                OnPropertyChanged(nameof(OnderMaximum), broadcast: true);
             }
         }
 
@@ -233,7 +234,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.GroenBewaking = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -244,7 +245,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.BlokkeertijdNaPrioIngreep = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -255,7 +256,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.BezettijdPrioGehinderd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -266,7 +267,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.MinimaleRoodtijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -278,7 +279,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.AfkappenConflicten = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -289,7 +290,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.AfkappenConflictenPrio = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -300,7 +301,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.VasthoudenGroen = value;
-                RaisePropertyChanged<object>(nameof(VasthoudenGroen), broadcast: true);
+                OnPropertyChanged(nameof(VasthoudenGroen), broadcast: true);
             }
         }
 
@@ -311,7 +312,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.TussendoorRealiseren = value;
-                RaisePropertyChanged<object>(nameof(TussendoorRealiseren), broadcast: true);
+                OnPropertyChanged(nameof(TussendoorRealiseren), broadcast: true);
             }
         }
 
@@ -322,7 +323,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.PrioriteitsNiveau = int.Parse(value);
-                RaisePropertyChanged<object>(nameof(PrioriteitsNiveau), broadcast: true);
+                OnPropertyChanged(nameof(PrioriteitsNiveau), broadcast: true);
             }
         }
 
@@ -333,8 +334,8 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.GeconditioneerdePrioriteit = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioriteit), broadcast: true);
-                RaisePropertyChanged(nameof(HasGeconditioneerdePrioriteit));
+                OnPropertyChanged(nameof(GeconditioneerdePrioriteit), broadcast: true);
+                OnPropertyChanged(nameof(HasGeconditioneerdePrioriteit));
             }
         }
         
@@ -348,7 +349,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.GeconditioneerdePrioTeVroeg = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioTeVroeg), broadcast: true);
+                OnPropertyChanged(nameof(GeconditioneerdePrioTeVroeg), broadcast: true);
             }
         }
 
@@ -359,7 +360,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.GeconditioneerdePrioOpTijd = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioOpTijd), broadcast: true);
+                OnPropertyChanged(nameof(GeconditioneerdePrioOpTijd), broadcast: true);
             }
         }
 
@@ -370,7 +371,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.GeconditioneerdePrioTeLaat = value;
-                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioTeLaat), broadcast: true);
+                OnPropertyChanged(nameof(GeconditioneerdePrioTeLaat), broadcast: true);
             }
         }
 
@@ -386,7 +387,7 @@ namespace TLCGen.ViewModels
 				{
 					Add10LijnNummersCommand.Execute(null);
 				}
-                RaisePropertyChanged<object>(nameof(CheckLijnNummer), broadcast: true);
+                OnPropertyChanged(nameof(CheckLijnNummer), broadcast: true);
             }
         }
 
@@ -398,7 +399,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.CheckWagenNummer = value;
-                RaisePropertyChanged<object>(nameof(CheckWagenNummer), broadcast: true);
+                OnPropertyChanged(nameof(CheckWagenNummer), broadcast: true);
                 if (!value) return;
                 PrioIngreep.MeldingenData.AntiJutterVoorAlleInmeldingen = false;
                 PrioIngreep.MeldingenData.AntiJutterVoorAlleUitmeldingen = false;
@@ -415,7 +416,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.CheckRitCategorie = value;
-                RaisePropertyChanged<object>(nameof(CheckRitCategorie), broadcast: true);
+                OnPropertyChanged(nameof(CheckRitCategorie), broadcast: true);
             }
         }
 
@@ -428,7 +429,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.AlleLijnen = value;
-                RaisePropertyChanged<object>(nameof(AlleLijnen), broadcast: true);
+                OnPropertyChanged(nameof(AlleLijnen), broadcast: true);
             }
         }
 
@@ -439,7 +440,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedLijnNummer = value;
-                RaisePropertyChanged(nameof(SelectedLijnNummer));
+                OnPropertyChanged(nameof(SelectedLijnNummer));
             }
         }
 
@@ -450,7 +451,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _newLijnNummer = value;
-                RaisePropertyChanged(nameof(NewLijnNummer));
+                OnPropertyChanged(nameof(NewLijnNummer));
             }
         }
         
@@ -466,7 +467,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PrioIngreep.CheckPeriode = value;
-                RaisePropertyChanged<object>(nameof(CheckPeriode), broadcast: true);
+                OnPropertyChanged(nameof(CheckPeriode), broadcast: true);
             }
         }
 
@@ -477,7 +478,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedPeriode = value;
-                RaisePropertyChanged(nameof(SelectedPeriode));
+                OnPropertyChanged(nameof(SelectedPeriode));
             }
         }
 
@@ -515,87 +516,59 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddLijnNummerCommand
-        {
-            get
+        public ICommand AddLijnNummerCommand => _addLijnNummerCommand ??= new RelayCommand(() => 
             {
-                return _addLijnNummerCommand ??= new RelayCommand(() => 
+                if (!string.IsNullOrWhiteSpace(NewLijnNummer))
                 {
-                    if (!string.IsNullOrWhiteSpace(NewLijnNummer))
+                    var nummer = new OVIngreepLijnNummerModel()
                     {
-                        var nummer = new OVIngreepLijnNummerModel()
-                        {
-                            Nummer = NewLijnNummer, RitCategorie = "999"
-                        };
-                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                    }
-                    else
-                    {
-                        var nummer = new OVIngreepLijnNummerModel()
-                        {
-                            Nummer = "0", RitCategorie = "999"
-                        };
-                        LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
-                    }
-                    NewLijnNummer = "";
-                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-
-                }, () => LijnNummers != null);
-            }
-        }
-
-        public ICommand Add10LijnNummersCommand
-        {
-            get
-            {
-                return _add10LijnNummersCommand ??= new RelayCommand(
-                    () =>
-                    {
-                        for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
-                    }, () => LijnNummers != null);
-            }
-        }
-
-
-
-        public ICommand RemoveLijnNummerCommand
-        {
-            get
-            {
-                return _removeLijnNummerCommand ??= new RelayCommand(() =>
+                        Nummer = NewLijnNummer, RitCategorie = "999"
+                    };
+                    LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                }
+                else
                 {
-                    if (SelectedLijnNummer != null)
+                    var nummer = new OVIngreepLijnNummerModel()
                     {
-                        LijnNummers.Remove(SelectedLijnNummer);
-                        SelectedLijnNummer = null;
-                    }
-                    else
-                    {
-                        LijnNummers.RemoveAt(LijnNummers.Count - 1);
-                    }
+                        Nummer = "0", RitCategorie = "999"
+                    };
+                    LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
+                }
+                NewLijnNummer = "";
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                _removeLijnNummerCommand?.NotifyCanExecuteChanged();
+            });
 
-                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                }, () => LijnNummers != null && LijnNummers.Count > 0);
-            }
-        }
-
-        public ICommand RemoveIngreepCommand
-        {
-            get
+        public ICommand Add10LijnNummersCommand => _add10LijnNummersCommand ??= new RelayCommand(
+            () =>
             {
-                return _removeIngreepCommand ??= new RelayCommand(() =>
+                for (var i = 0; i < 10; ++i) AddLijnNummerCommand.Execute(null);
+            }, () => LijnNummers != null);
+
+
+        public ICommand RemoveLijnNummerCommand => _removeLijnNummerCommand ??= new RelayCommand(() =>
+            {
+                if (SelectedLijnNummer != null)
                 {
-                    _parentIngreep.Ingrepen.Remove(this);
-                    MessengerInstance.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
-                });
-            }
-        }
-        
+                    LijnNummers.Remove(SelectedLijnNummer);
+                    SelectedLijnNummer = null;
+                }
+                else
+                {
+                    LijnNummers.RemoveAt(LijnNummers.Count - 1);
+                }
+
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                _removeLijnNummerCommand?.NotifyCanExecuteChanged();
+            }, () => LijnNummers is { Count: > 0 });
+
+        public ICommand RemoveIngreepCommand => _removeIngreepCommand ??= new RelayCommand(() =>
+            {
+                _parentIngreep.Ingrepen.Remove(this);
+                WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
+            });
+
         #endregion // Commands
-
-        #region Private Methods
-
-        #endregion // Private Methods
 
         #region Public Methods
         
@@ -636,7 +609,7 @@ namespace TLCGen.ViewModels
         
         #region TLCGen Messaging
 
-        private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage dmsg)
         {
             var sd1 = Koplus;
 
@@ -650,12 +623,12 @@ namespace TLCGen.ViewModels
             if (!string.IsNullOrWhiteSpace(sd1) && Detectoren.Contains(sd1))
             {
                 PrioIngreep.Koplus = sd1;
-                RaisePropertyChanged(nameof(Koplus));
+                OnPropertyChanged(nameof(Koplus));
             }
             else
             {
                 PrioIngreep.Koplus = "NG";
-                RaisePropertyChanged(nameof(Koplus));
+                OnPropertyChanged(nameof(Koplus));
             }
         }
 
@@ -668,22 +641,22 @@ namespace TLCGen.ViewModels
             PrioIngreep = ovingreep;
             _parentIngreep = parentIngreep;
             
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
-            MessengerInstance.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
             Detectoren = new ObservableCollection<string>();
-            OnDetectorenChanged(null);
+            OnDetectorenChanged(null, null);
 
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
         }
 
-        private void OnCCOLVersionChanged(CCOLVersionChangedMessage obj)
+        private void OnCCOLVersionChanged(object sender, CCOLVersionChangedMessage obj)
         {
             foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
         }
 
-        private void OnPeriodenChanged(PeriodenChangedMessage obj)
+        private void OnPeriodenChanged(object sender, PeriodenChangedMessage obj)
         {
             GerelateerdePerioden.Rebuild();
             _gerelateerdePeriodenManager?.Refresh();

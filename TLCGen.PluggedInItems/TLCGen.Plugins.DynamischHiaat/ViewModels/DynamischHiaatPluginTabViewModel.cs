@@ -1,7 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Plugins.DynamischHiaat.Models;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -10,7 +11,7 @@ using TLCGen.Models;
 
 namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 {
-    internal class DynamischHiaatPluginTabViewModel : ViewModelBase
+    internal class DynamischHiaatPluginTabViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -30,7 +31,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Model.TypeDynamischHiaat = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 foreach(var msg in DynamischHiaatSignalGroups)
                 {
                     msg.SelectedDefault = _plugin.MyDefaults.Defaults.FirstOrDefault(x => x.Name == TypeDynamischHiaat);
@@ -56,7 +57,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                         _selectedDynamischHiaatSignalGroup.UpdateSelectableDetectoren(fc.Detectoren.Select(x => x.Naam));
                     }
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -90,7 +91,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
                 {
                     _DynamischHiaatSignalGroups = null;
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -100,15 +101,15 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         public void UpdateTLCGenMessaging()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessengerInstance.Register(this, new Action<FaseTypeChangedMessage>(OnFaseTypeChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<FaseTypeChangedMessage>(this, OnFaseTypeChanged);
         }
 
-        private void OnFaseTypeChanged(FaseTypeChangedMessage obj)
+        private void OnFaseTypeChanged(object sender, FaseTypeChangedMessage obj)
         {
             if (obj.NewType == TLCGen.Models.Enumerations.FaseTypeEnum.Auto)
             {
@@ -132,7 +133,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             }
         }
 
-        private void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage obj)
+        private void OnFaseDetectorTypeChanged(object sender, FaseDetectorTypeChangedMessage obj)
         {
             var fc = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.FirstOrDefault(x => x.Detectoren.Any(x2 => x2.Naam == obj.DetectorDefine));
             if (fc != null)
@@ -168,7 +169,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             if(message.AddedDetectoren == null && message.RemovedDetectoren == null)
             {
@@ -218,7 +219,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             }
         }
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             if (message.AddedFasen?.Count > 0)
             {
@@ -250,14 +251,14 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             ModelManagement.TLCGenModelManager.Default.ChangeNameOnObject(_model, message.OldName, message.NewName, message.ObjectType);
             foreach (var mfc in DynamischHiaatSignalGroups) mfc.DynamischHiaatDetectoren.BubbleSort();
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             DynamischHiaatSignalGroups.BubbleSort();
         }

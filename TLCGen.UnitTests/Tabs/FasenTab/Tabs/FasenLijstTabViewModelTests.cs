@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using System.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using NUnit.Framework;
 using TLCGen.ViewModels;
-using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.Models.Enumerations;
@@ -13,13 +15,13 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [NonParallelizable]
     public class FasenLijstTabViewModelTests
     {
         [Test]
         public void AddFaseCommand_Executed_AddsFase()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -34,7 +36,6 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_Adds5Fasen()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -53,7 +54,6 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_Executed5Times_5thFaseCorrectlyNamed()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
@@ -141,7 +141,6 @@ namespace TLCGen.UnitTests
         public void RenameFase_HigherThanOthers_SortsCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -163,8 +162,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_HigherThanOthers_SortsModelCorrectlyAfterTabChange()
         {
+            WeakReferenceMessengerEx.OverrideDefault(Substitute.For<IMessenger>());
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -176,18 +175,17 @@ namespace TLCGen.UnitTests
             vm.Fasen[2].Naam = "07";
             vm.OnDeselectedPreview();
 
-            Assert.That("01" == vm.Fasen[0].Naam);
-            Assert.That("02" == vm.Fasen[1].Naam);
-            Assert.That("04" == vm.Fasen[2].Naam);
-            Assert.That("05" == vm.Fasen[3].Naam);
-            Assert.That("07" == vm.Fasen[4].Naam);
+            Assert.That("01" == model.Fasen[0].Naam);
+            Assert.That("02" == model.Fasen[1].Naam);
+            Assert.That("04" == model.Fasen[2].Naam);
+            Assert.That("05" == model.Fasen[3].Naam);
+            Assert.That("07" == model.Fasen[4].Naam);
         }
 
         [Test]
         public void RenameFase_LowerThanOthers_SortsCorrectlyAfterTabChange()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));

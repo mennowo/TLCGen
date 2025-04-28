@@ -1,13 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 {
-	public class HalfstarHoofdrichtingViewModel : ViewModelBase, IViewModelWithItem, IComparable
+	public class HalfstarHoofdrichtingViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
 	{
-
 		#region Properties
 
 		public HalfstarHoofdrichtingModel Hoofdrichting { get; }
@@ -18,7 +16,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			set
 			{
 				Hoofdrichting.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -28,7 +26,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
             set
             {
                 Hoofdrichting.Tegenhouden = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -38,7 +36,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
             set
             {
                 Hoofdrichting.AfkappenWG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -48,7 +46,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
             set
             {
                 Hoofdrichting.AfkappenVG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

@@ -6,13 +6,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 
 namespace TLCGen.Plugins.AutoBuild
 {
-    public class AutoBuildToolBarViewModel : ViewModelBase
+    public class AutoBuildToolBarViewModel : ObservableObject
     {
         #region Fields
 
@@ -28,7 +30,7 @@ namespace TLCGen.Plugins.AutoBuild
 
         #region Properties
 
-        public ObservableCollection<VCXProjectDataViewModel> VcxProjects => _vcxProjects ?? (_vcxProjects = new ObservableCollection<VCXProjectDataViewModel>());
+        public ObservableCollection<VCXProjectDataViewModel> VcxProjects => _vcxProjects ??= new ObservableCollection<VCXProjectDataViewModel>();
 
         public VCXProjectDataViewModel SelectedVcxProject
         {
@@ -36,7 +38,8 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _selectedVcxProject = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                UpdateCommands();
             }
         }
 
@@ -46,7 +49,7 @@ namespace TLCGen.Plugins.AutoBuild
             set
             {
                 _controllerFileName = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -56,48 +59,32 @@ namespace TLCGen.Plugins.AutoBuild
 
         #region Commands
 
-        public ICommand BuildAndRunCommand => _buildAndRunCommand ?? (_buildAndRunCommand = new RelayCommand(BuildAndRunCommand_Executed, BuildAndRunCommand_CanExecute));
+        public ICommand BuildAndRunCommand => _buildAndRunCommand ??= new RelayCommand(
+            () => BuildAndRun(true), 
+            () => _plugin.Controller != null && SelectedVcxProject != null);
 
-        public ICommand BuildCommand => _buildCommand ?? (_buildCommand = new RelayCommand(BuildCommand_Executed, BuildAndRunCommand_CanExecute));
+        public ICommand BuildCommand => _buildCommand ??= new RelayCommand(
+            () => BuildAndRun(false), 
+            () => _plugin.Controller != null && SelectedVcxProject != null);
 
-	    public ICommand RefreshCommand => _refreshCommand ?? (_refreshCommand = new RelayCommand(RefreshCommand_Executed, RefreshCommand_CanExecute));
+	    public ICommand RefreshCommand => _refreshCommand ??= new RelayCommand(
+            UpdateAvailableProjectsToBuild, 
+            () => _plugin.Controller != null && !string.IsNullOrWhiteSpace(ControllerFileName));
 
         #endregion // Commands
-
-        #region Command Functionality
-
-        private void RefreshCommand_Executed()
-        {
-            UpdateAvailableProjectsToBuild();
-		}
-
-        private bool RefreshCommand_CanExecute()
-        {
-            return _plugin.Controller != null && !string.IsNullOrWhiteSpace(ControllerFileName);
-        }
-
-	    private void BuildCommand_Executed()
-	    {
-			BuildAndRun(false);
-	    }
-
-		private void BuildAndRunCommand_Executed()
-        {
-			BuildAndRun(true);
-        }
-
-        private bool BuildAndRunCommand_CanExecute()
-        {
-            return _plugin.Controller != null && SelectedVcxProject != null;
-        }
-
-        #endregion // Command Functionality
 
         #region Public Methods
 
         public void UpdateTLCGenMessaging()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+        }
+
+        public void UpdateCommands()
+        {
+            _buildAndRunCommand?.NotifyCanExecuteChanged();
+            _buildCommand?.NotifyCanExecuteChanged();
+            _refreshCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // Public Methods
@@ -236,7 +223,7 @@ namespace TLCGen.Plugins.AutoBuild
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
+        private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage message)
         {
             VcxProjects.Clear();
 
@@ -250,11 +237,11 @@ namespace TLCGen.Plugins.AutoBuild
                 ControllerFileName = null;
             }
 
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
 
-            _buildAndRunCommand?.RaiseCanExecuteChanged();
-            _buildCommand?.RaiseCanExecuteChanged();
-			_refreshCommand?.RaiseCanExecuteChanged();
+            _buildAndRunCommand?.NotifyCanExecuteChanged();
+            _buildCommand?.NotifyCanExecuteChanged();
+			_refreshCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // TLCGen Events

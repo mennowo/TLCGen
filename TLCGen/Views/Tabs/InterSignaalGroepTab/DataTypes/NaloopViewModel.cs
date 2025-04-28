@@ -1,9 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -12,7 +11,7 @@ using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class NaloopViewModel : ViewModelBase
+    public class NaloopViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -34,8 +33,8 @@ namespace TLCGen.ViewModels
                 {
                     _naloop.Type = value;
                     SetNaloopTijden();
-                    RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                    RaisePropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
+                    OnPropertyChanged(nameof(Type), broadcast: true);
+                    OnPropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
                 }
             }
         }
@@ -50,7 +49,7 @@ namespace TLCGen.ViewModels
 
                 _naloop.VasteNaloop = value;
                 SetNaloopTijden();
-                RaisePropertyChanged<object>(nameof(VasteNaloop), broadcast: true);
+                OnPropertyChanged(nameof(VasteNaloop), broadcast: true);
             }
         }
 
@@ -60,13 +59,13 @@ namespace TLCGen.ViewModels
             set
             {
                 _naloop.InrijdenTijdensGroen = value;
-                RaisePropertyChanged<object>(nameof(InrijdenTijdensGroen), broadcast: true);
+                OnPropertyChanged(nameof(InrijdenTijdensGroen), broadcast: true);
                 if (value)
                 {
                     MaximaleVoorstart = null;
                 }
-                RaisePropertyChanged(nameof(MaximaleVoorstartAllowed));
-                RaisePropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
+                OnPropertyChanged(nameof(MaximaleVoorstartAllowed));
+                OnPropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
             }
         }
 
@@ -79,7 +78,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detectieAfhankelijkPossible = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -118,7 +117,7 @@ namespace TLCGen.ViewModels
                             throw new ArgumentOutOfRangeException();
                     }
                 }
-                RaisePropertyChanged<object>(nameof(DetectieAfhankelijk), broadcast: true);
+                OnPropertyChanged(nameof(DetectieAfhankelijk), broadcast: true);
             }
         }
 
@@ -128,7 +127,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _naloop.MaximaleVoorstart = value;
-                RaisePropertyChanged<object>(nameof(MaximaleVoorstart), broadcast: true);
+                OnPropertyChanged(nameof(MaximaleVoorstart), broadcast: true);
             }
         }
 
@@ -146,7 +145,7 @@ namespace TLCGen.ViewModels
             {
                 if (DetectorManager == null) return;
                 DetectorManager.SelectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -164,8 +163,8 @@ namespace TLCGen.ViewModels
                         x => new NaloopDetectorModel { Detector = x },
                         x => Detectoren.All(y => y.Detector != x),
                         null,
-                        () => RaisePropertyChanged(nameof(SelectedDetector)),
-                        () => RaisePropertyChanged(nameof(SelectedDetector)));
+                        () => OnPropertyChanged(nameof(SelectedDetector)),
+                        () => OnPropertyChanged(nameof(SelectedDetector)));
                 }
                 return _detectorManager;
             }
@@ -244,7 +243,7 @@ namespace TLCGen.ViewModels
                 }
             }
             _tijden = new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden);
-            RaisePropertyChanged(nameof(Tijden));
+            OnPropertyChanged(nameof(Tijden));
         }
 
         #endregion // Private methods
@@ -267,7 +266,7 @@ namespace TLCGen.ViewModels
                     _naloop.Detectoren.Remove(d);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Tijden_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -286,14 +285,14 @@ namespace TLCGen.ViewModels
                     _naloop.Tijden.Remove(t);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
 
         #region TLCGen Events
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             if (Detectoren != null)
             {
@@ -309,7 +308,7 @@ namespace TLCGen.ViewModels
             _detectorManager?.Refresh();
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             _detectorManager?.Refresh();
         }
@@ -331,8 +330,8 @@ namespace TLCGen.ViewModels
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             Tijden.CollectionChanged += Tijden_CollectionChanged;
 
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

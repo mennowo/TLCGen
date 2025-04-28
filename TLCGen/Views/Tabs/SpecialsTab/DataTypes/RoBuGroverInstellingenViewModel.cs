@@ -1,14 +1,15 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverInstellingenViewModel : ViewModelBase
+    public class RoBuGroverInstellingenViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -25,7 +26,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.RoBuGrover = value;
-                RaisePropertyChanged<object>(nameof(RoBuGrover), broadcast: true);
+                OnPropertyChanged(nameof(RoBuGrover), broadcast: true);
             }
         }
 
@@ -36,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MinimaleCyclustijd = value;
-                RaisePropertyChanged<object>(nameof(MinimaleCyclustijd), broadcast: true);
+                OnPropertyChanged(nameof(MinimaleCyclustijd), broadcast: true);
             }
         }
 
@@ -47,7 +48,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MaximaleCyclustijd = value;
-                RaisePropertyChanged<object>(nameof(MaximaleCyclustijd), broadcast: true);
+                OnPropertyChanged(nameof(MaximaleCyclustijd), broadcast: true);
             }
         }
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroentijdVerschil = value;
-                RaisePropertyChanged<object>(nameof(GroentijdVerschil), broadcast: true);
+                OnPropertyChanged(nameof(GroentijdVerschil), broadcast: true);
             }
         }
 
@@ -69,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MethodeRoBuGrover = value;
-                RaisePropertyChanged<object>(nameof(MethodeRoBuGrover), broadcast: true);
+                OnPropertyChanged(nameof(MethodeRoBuGrover), broadcast: true);
             }
         }
 
@@ -80,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenOphoogFactor = value;
-                RaisePropertyChanged<object>(nameof(GroenOphoogFactor), broadcast: true);
+                OnPropertyChanged(nameof(GroenOphoogFactor), broadcast: true);
             }
         }
 
@@ -91,7 +92,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenVerlaagFactor = value;
-                RaisePropertyChanged<object>(nameof(GroenVerlaagFactor), broadcast: true);
+                OnPropertyChanged(nameof(GroenVerlaagFactor), broadcast: true);
             }
         }
 
@@ -102,7 +103,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenVerlaagFactorNietPrimair = value;
-                RaisePropertyChanged<object>(nameof(GroenVerlaagFactorNietPrimair), broadcast: true);
+                OnPropertyChanged(nameof(GroenVerlaagFactorNietPrimair), broadcast: true);
             }
         }
 
@@ -113,7 +114,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.OphogenTijdensGroen = value;
-                RaisePropertyChanged<object>(nameof(OphogenTijdensGroen), broadcast: true);
+                OnPropertyChanged(nameof(OphogenTijdensGroen), broadcast: true);
             }
         }
 
@@ -124,7 +125,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.RoBuGroverVenster = value;
-                RaisePropertyChanged<object>(nameof(RoBuGroverVenster), broadcast: true);
+                OnPropertyChanged(nameof(RoBuGroverVenster), broadcast: true);
             }
         }
 
@@ -133,30 +134,14 @@ namespace TLCGen.ViewModels
         #region Commands
 
         RelayCommand _SetRoBuGroverDefaultsCommand;
-        public ICommand SetRoBuGroverDefaultsCommand
-        {
-            get
-            {
-                if (_SetRoBuGroverDefaultsCommand == null)
-                {
-                    _SetRoBuGroverDefaultsCommand = new RelayCommand(SetRoBuGroverDefaultsCommand_Executed);
-                }
-                return _SetRoBuGroverDefaultsCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        public void SetRoBuGroverDefaultsCommand_Executed()
+        public ICommand SetRoBuGroverDefaultsCommand => _SetRoBuGroverDefaultsCommand ??= new RelayCommand(() =>
         {
             DefaultsProvider.Default.SetDefaultsOnModel(_RoBuGrover);
-            RaisePropertyChanged("");
-            RaisePropertyChanged<object>(nameof(RoBuGrover), broadcast: true);
-        }
+            OnPropertyChanged("");
+            OnPropertyChanged(nameof(RoBuGrover), broadcast: true);
+        });
 
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Constructor
 

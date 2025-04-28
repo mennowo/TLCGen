@@ -1,10 +1,12 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Models;
 using TLCGen.Helpers;
-using GalaSoft.MvvmLight.Messaging;
+
 using TLCGen.Messaging.Messages;
 using TLCGen.Plugins;
 using TLCGen.Extensions;
+
 
 namespace TLCGen.ViewModels
 {
@@ -30,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                OnPropertyChanged("SelectedFaseCyclus");
             }
         }
 
@@ -58,7 +60,7 @@ namespace TLCGen.ViewModels
             {
                 base.Controller = value;
                 Fasen = base.Controller != null ? new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData) : null;
-                RaisePropertyChanged("Fasen");
+                OnPropertyChanged("Fasen");
             }
         }
 
@@ -66,18 +68,18 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Message Handling
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             Fasen.Rebuild();
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             _Controller.ModuleMolen.FasenModuleData.BubbleSort();
             Fasen.Rebuild();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             _Controller.ModuleMolen.FasenModuleData.BubbleSort();
             Fasen.Rebuild();
@@ -93,9 +95,9 @@ namespace TLCGen.ViewModels
 
         public ModulesVooruitRealisatiesTabViewModel()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

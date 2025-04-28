@@ -1,10 +1,11 @@
 ﻿using System.Windows.Media;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public abstract class TLCGenTabItemViewModel : GalaSoft.MvvmLight.ViewModelBase, ITLCGenTabItem
+    public abstract class TLCGenTabItemViewModel : ObservableObjectEx, ITLCGenTabItem
     {
         #region Fields
 
@@ -22,7 +23,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _IsEnabled = value;
-                RaisePropertyChanged("IsEnabled");
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -36,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                if(value != null) RaisePropertyChanged("");
+                if(value != null) OnPropertyChanged("");
             }
         }
 

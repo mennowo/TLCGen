@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverFileDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class RoBuGroverFileDetectorViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileDetector.Detector = value;
-                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
+                OnPropertyChanged(nameof(Detector), broadcast: true);
             }
         }
         public int FileTijd
@@ -29,19 +29,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileDetector.FileTijd = value;
-                RaisePropertyChanged<object>(nameof(FileTijd), broadcast: true);
+                OnPropertyChanged(nameof(FileTijd), broadcast: true);
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

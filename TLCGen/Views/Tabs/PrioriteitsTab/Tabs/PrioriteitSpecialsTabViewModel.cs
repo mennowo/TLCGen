@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -35,7 +36,7 @@ namespace TLCGen.ViewModels
             private set
             {
                 _nevenMeldingen = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -45,7 +46,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedNevenMelding = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
                 UpdateSelectables();
             }
         }
@@ -56,7 +57,7 @@ namespace TLCGen.ViewModels
             private set
             {
                 _selectableFasen1 = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -66,7 +67,7 @@ namespace TLCGen.ViewModels
             private set
             {
                 _selectableFasen = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -100,7 +101,7 @@ namespace TLCGen.ViewModels
                 else
                 {
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -148,12 +149,12 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        public void OnPrioIngrepenChangedMessage(PrioIngrepenChangedMessage message)
+        public void OnPrioIngrepenChangedMessage(object sender, PrioIngrepenChangedMessage message)
         {
             // TODO
         }
 
-        private void OnFasenChanged(FasenChangedMessage obj)
+        private void OnFasenChanged(object sender, FasenChangedMessage obj)
         {
             UpdateSelectables();
         }
@@ -164,8 +165,8 @@ namespace TLCGen.ViewModels
 
         public PrioriteitSpecialsTabViewModel()
         {
-            MessengerInstance.Register(this, new Action<PrioIngrepenChangedMessage>(OnPrioIngrepenChangedMessage));
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChangedMessage);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

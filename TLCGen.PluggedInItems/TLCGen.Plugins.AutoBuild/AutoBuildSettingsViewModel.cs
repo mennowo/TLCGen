@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TLCGen.Plugins.AutoBuild
 {
-	public class AutoBuildSettingsViewModel : ViewModelBase
+	public class AutoBuildSettingsViewModel : ObservableObject
 	{
 		public AutoBuildSettingsModel Settings { get; }
 
@@ -14,7 +14,7 @@ namespace TLCGen.Plugins.AutoBuild
 				if(Settings != null)
 				{
 					Settings.MSBuildPath = value;
-					RaisePropertyChanged();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -27,7 +27,7 @@ namespace TLCGen.Plugins.AutoBuild
 				if (Settings != null)
 				{
 					Settings.ToolBarVisibility = value;
-					RaisePropertyChanged();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -40,7 +40,7 @@ namespace TLCGen.Plugins.AutoBuild
 				if (Settings != null)
 				{
 					Settings.TabVisibility = value;
-					RaisePropertyChanged();
+					OnPropertyChanged();
 				}
 			}
 		}

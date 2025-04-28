@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
@@ -8,7 +8,7 @@ using TLCGen.Integrity;
 
 namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 {
-    internal class DynamischHiaatDetectorViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    internal class DynamischHiaatDetectorViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
         #endregion // Fields
@@ -27,7 +27,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.Moment1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +37,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.Moment2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -48,7 +48,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             {
 
                 Detector.TDH1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.TDH2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.Maxtijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -78,7 +78,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.SpringStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -88,7 +88,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.VerlengNiet = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -98,7 +98,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.VerlengExtra = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -108,7 +108,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.DirectAftellen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -118,7 +118,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
             set
             {
                 Detector.SpringGroen = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

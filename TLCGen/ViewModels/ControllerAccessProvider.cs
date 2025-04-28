@@ -4,9 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -35,7 +36,6 @@ namespace TLCGen.ViewModels
 
     public class ControllerAccessProvider : IControllerAccessProvider
     {
-        private readonly IMessenger MessengerInstance;
         private ObservableCollection<IngangViewModel> _allIngangen;
         private ObservableCollection<FaseCyclusViewModel> _allSignalGroups;
         private ObservableCollection<DetectorViewModel> _allDetectors;
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
         private bool _detChanging;
         private static IControllerAccessProvider _default;
 
-        public static IControllerAccessProvider Default => _default ??= new ControllerAccessProvider(Messenger.Default);
+        public static IControllerAccessProvider Default => _default ??= new ControllerAccessProvider();
 
         public static void OverrideDefault(IControllerAccessProvider provider)
         {
@@ -127,8 +127,7 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> OVIngangenStrings =>
             _ovIngangenStrings ??= new ObservableCollection<string>();
 
-        public ObservableCollection<FaseCyclusViewModel> AllSignalGroups =>
-            _allSignalGroups ??= new ObservableCollection<FaseCyclusViewModel>();
+        public ObservableCollection<FaseCyclusViewModel> AllSignalGroups { get; } = [];
         
         public ObservableCollection<string> AllSignalGroupStrings =>
             _allSignalGroupStrings ??= new ObservableCollection<string>();
@@ -158,18 +157,18 @@ namespace TLCGen.ViewModels
 
         public void Setup()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnSignalGroupsChanged);
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
-            MessengerInstance.Register<ControllerLoadedMessage>(this, OnControllerLoaded);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnSignalGroupFaseDetectorTypeChanged);
-            MessengerInstance.Register<FaseDetectorVeiligheidsGroenChangedMessage>(this, OnSignalGroupDetectorVeiligheidsGroenChanged);
-            MessengerInstance.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnSignalGroupsChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerLoadedMessage>(this, OnControllerLoaded);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<IngangenChangedMessage>(this, OnIngangenChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnSignalGroupFaseDetectorTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorVeiligheidsGroenChangedMessage>(this, OnSignalGroupDetectorVeiligheidsGroenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
         }
 
-        private void OnPeriodenChanged(PeriodenChangedMessage obj)
+        private void OnPeriodenChanged(object sender, PeriodenChangedMessage obj)
         {
             foreach (var p in Controller.PeriodenData.Perioden.Where(p => AllePerioden.All(x => x.Naam != p.Naam)))
             {
@@ -180,7 +179,7 @@ namespace TLCGen.ViewModels
             foreach (var r in rem) AllePerioden.Remove(r);
         }
 
-        private void OnIngangenChanged(IngangenChangedMessage obj)
+        private void OnIngangenChanged(object sender, IngangenChangedMessage obj)
         {
             if (obj.RemovedIngangen?.Any() == true)
             {
@@ -201,7 +200,7 @@ namespace TLCGen.ViewModels
             AllIngangen.BubbleSort();
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             switch (obj.ObjectType)
             {
@@ -245,7 +244,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnSignalGroupsChanged(FasenChangedMessage obj)
+        private void OnSignalGroupsChanged(object sender, FasenChangedMessage obj)
         {
             if (_fasenChanging) return;
             
@@ -276,7 +275,7 @@ namespace TLCGen.ViewModels
         }
 
         
-        private void OnSignalGroupFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
+        private void OnSignalGroupFaseDetectorTypeChanged(object sender, FaseDetectorTypeChangedMessage message)
         {
             foreach (var fcm in AllSignalGroups)
             {
@@ -288,7 +287,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnSignalGroupDetectorVeiligheidsGroenChanged(FaseDetectorVeiligheidsGroenChangedMessage message)
+        private void OnSignalGroupDetectorVeiligheidsGroenChanged(object sender, FaseDetectorVeiligheidsGroenChangedMessage message)
         {
             foreach (var fcm in AllSignalGroups)
             {
@@ -296,7 +295,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage dmsg)
         {
             if (_detChanging) return;
 
@@ -331,7 +330,7 @@ namespace TLCGen.ViewModels
             _detChanging = false;
         }
 
-        private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
+        private void OnSelectieveDetectorenChanged(object sender, SelectieveDetectorenChangedMessage obj)
         {
             AllSelectiveDetectors.Clear();
             AllSelectiveDetectorStrings.Clear();
@@ -342,7 +341,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnControllerLoaded(ControllerLoadedMessage obj)
+        private void OnControllerLoaded(object sender, ControllerLoadedMessage obj)
         {
             AllIngangen.Clear();
             OVIngangenStrings.Clear();
@@ -396,9 +395,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ControllerAccessProvider(IMessenger messenger)
+        public ControllerAccessProvider()
         {
-            MessengerInstance = messenger;
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RatelTikkerDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class RatelTikkerDetectorViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,19 +20,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Detector = value;
-                RaisePropertyChanged<object>(nameof(Detector), broadcast: true);
+                OnPropertyChanged(nameof(Detector), broadcast: true);
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

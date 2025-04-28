@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using NSubstitute;
 using NUnit.Framework;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
@@ -18,8 +19,9 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
         [Test]
         public void FaseCyclusViewModel_NameChanged_NameChangedMessageSent()
         {
+            NameChangedMessage msg = null;
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, (recipient, message) => msg = message);
             var messengermock = FakesCreator.CreateMessenger();
-            Messenger.OverrideDefault(messengermock);
             var model = new ControllerModel();
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
             TLCGenModelManager.OverrideDefault(new TLCGenModelManager{Controller = model});
@@ -34,14 +36,15 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
                 Naam = "07"
             };
 
-            messengermock.Received().Send(Arg.Is<NameChangingMessage>(x => x.OldName == "03" && x.NewName == "07"));
+            Assert.That(msg != null);
+            Assert.That(msg?.OldName == "03");
+            Assert.That(msg?.NewName == "07");
         }
 
         [Test]
         public void FaseCyclusViewModel_NameChanged_DetectorNamesAlsoChanged()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(new Messenger());
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));

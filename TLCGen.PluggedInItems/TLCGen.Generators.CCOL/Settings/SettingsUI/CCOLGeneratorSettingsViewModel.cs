@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 
 namespace TLCGen.Generators.CCOL
 {
-    public class CCOLGeneratorSettingsViewModel : ViewModelBase
+    public class CCOLGeneratorSettingsViewModel : ObservableObject
     {
         #region Fields
 
@@ -42,7 +42,7 @@ namespace TLCGen.Generators.CCOL
             set
             {
                 _Settings.TabSpace = value;
-                RaisePropertyChanged("TabSpace");
+                OnPropertyChanged("TabSpace");
             }
         }
 
@@ -52,7 +52,7 @@ namespace TLCGen.Generators.CCOL
             set
             {
                 _generatorOrder = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

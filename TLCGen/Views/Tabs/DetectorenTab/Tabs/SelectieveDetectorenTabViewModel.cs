@@ -1,10 +1,12 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -12,6 +14,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -25,23 +28,14 @@ namespace TLCGen.ViewModels
         
         private SelectieveDetectorViewModel _SelectedSelectieveDetector;
         private IList _SelectedSelectieveDetectoren = new ArrayList();
+        private RelayCommand _AddSelectieveDetectorCommand;
+        private RelayCommand _RemoveSelectieveDetectorCommand;
 
         #endregion // Fields
 
         #region Properties
 
-        private ObservableCollection<SelectieveDetectorViewModel> _SelectieveDetectoren;
-        public ObservableCollection<SelectieveDetectorViewModel> SelectieveDetectoren
-        {
-            get
-            {
-                if(_SelectieveDetectoren == null)
-                {
-                    _SelectieveDetectoren = new ObservableCollection<SelectieveDetectorViewModel>();
-                }
-                return _SelectieveDetectoren;
-            }
-        }
+        public ObservableCollection<SelectieveDetectorViewModel> SelectieveDetectoren { get; } = [];
 
         public SelectieveDetectorViewModel SelectedSelectieveDetector
         {
@@ -49,7 +43,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSelectieveDetector = value;
-                RaisePropertyChanged("SelectedSelectieveDetector");
+                OnPropertyChanged();
+                _RemoveSelectieveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -59,7 +54,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSelectieveDetectoren = value;
-                RaisePropertyChanged("SelectedSelectieveDetectoren");
+                OnPropertyChanged();
                 if (value != null)
                 {
                     var sl = new List<SelectieveDetectorModel>();
@@ -68,6 +63,7 @@ namespace TLCGen.ViewModels
                         sl.Add((s as SelectieveDetectorViewModel).SelectieveDetector);
                     }
                 }
+                _RemoveSelectieveDetectorCommand?.NotifyCanExecuteChanged();
             }
         }
         
@@ -75,38 +71,61 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddSelectieveDetectorCommand;
-        public ICommand AddSelectieveDetectorCommand
-        {
-            get
+        public ICommand AddSelectieveDetectorCommand => _AddSelectieveDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_AddSelectieveDetectorCommand == null)
+                var dm = new SelectieveDetectorModel();
+                var inewname = SelectieveDetectoren.Count + 1;
+                var newname = "s" + inewname.ToString("000");
+                while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.SelectieveDetector, newname))
                 {
-                    _AddSelectieveDetectorCommand = new RelayCommand(AddSelectieveDetectorCommand_Executed, AddSelectieveDetectorCommand_CanExecute);
+                    inewname++;
+                    newname = "s" + inewname.ToString("000");
                 }
-                return _AddSelectieveDetectorCommand;
-            }
-        }
+                dm.Naam = newname;
+                var dvm1 = new SelectieveDetectorViewModel(dm);
+                SelectieveDetectoren.Add(dvm1);
+                WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>
+                {
+                    dm
+                }, null));
+                SelectedSelectieveDetectoren.BubbleSort();
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            });
 
-
-        RelayCommand _RemoveSelectieveDetectorCommand;
-        public ICommand RemoveSelectieveDetectorCommand
-        {
-            get
+        public ICommand RemoveSelectieveDetectorCommand => _RemoveSelectieveDetectorCommand ??= new RelayCommand(() =>
             {
-                if (_RemoveSelectieveDetectorCommand == null)
+                var changed = false;
+                var removed = new List<SelectieveDetectorModel>();
+                if (SelectedSelectieveDetectoren != null && SelectedSelectieveDetectoren.Count > 0)
                 {
-                    _RemoveSelectieveDetectorCommand = new RelayCommand(RemoveSelectieveDetectorCommand_Executed, RemoveSelectieveDetectorCommand_CanExecute);
+                    changed = true;
+                    foreach (SelectieveDetectorViewModel ivm in SelectedSelectieveDetectoren)
+                    {
+                        removed.Add(ivm.SelectieveDetector);
+                        Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(ivm.Naam, TLCGenObjectTypeEnum.SelectieveDetector);
+                    }
                 }
-                return _RemoveSelectieveDetectorCommand;
-            }
-        }
+                else if (SelectedSelectieveDetector != null)
+                {
+                    changed = true;
+                    removed.Add(SelectedSelectieveDetector.SelectieveDetector);
+                    Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedSelectieveDetector.Naam, TLCGenObjectTypeEnum.SelectieveDetector);
+                }
+                RebuildSelectieveDetectorenList();
+
+                if (changed)
+                {
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
+                }
+            }, 
+            () => SelectedSelectieveDetector != null || SelectedSelectieveDetectoren is { Count: > 0 });
 
         #endregion // Commands
 
         #region Command functionality
 
-        void AddSelectieveDetectorCommand_Executed(object prm)
+        void AddSelectieveDetectorCommand_Executed()
         {
             var dm = new SelectieveDetectorModel();
             var inewname = SelectieveDetectoren.Count + 1;
@@ -119,17 +138,17 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             var dvm1 = new SelectieveDetectorViewModel(dm);
             SelectieveDetectoren.Add(dvm1);
-            MessengerInstance.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
+            WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(new List<SelectieveDetectorModel>{dm}, null));
             SelectedSelectieveDetectoren.BubbleSort();
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
-        bool AddSelectieveDetectorCommand_CanExecute(object prm)
+        bool AddSelectieveDetectorCommand_CanExecute()
         {
             return SelectieveDetectoren != null;
         }
 
-        void RemoveSelectieveDetectorCommand_Executed(object prm)
+        void RemoveSelectieveDetectorCommand_Executed()
         {
             var changed = false;
             var removed = new List<SelectieveDetectorModel>();
@@ -152,12 +171,12 @@ namespace TLCGen.ViewModels
 
             if (changed)
             {
-                MessengerInstance.Send(new ControllerDataChangedMessage());
-                MessengerInstance.Send(new SelectieveDetectorenChangedMessage(null, removed));
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                WeakReferenceMessengerEx.Default.Send(new SelectieveDetectorenChangedMessage(null, removed));
             }
         }
 
-        bool RemoveSelectieveDetectorCommand_CanExecute(object prm)
+        bool RemoveSelectieveDetectorCommand_CanExecute()
         {
             return SelectieveDetectoren != null &&
                 (SelectedSelectieveDetector != null ||
@@ -179,7 +198,7 @@ namespace TLCGen.ViewModels
                 SelectieveDetectoren.Add(dvm);
             }
             SelectieveDetectoren.CollectionChanged += SelectieveDetectoren_CollectionChanged;
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // Private Methods

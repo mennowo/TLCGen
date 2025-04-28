@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverConflictGroepFaseViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RoBuGroverConflictGroepFaseViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -21,19 +21,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _Fase.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

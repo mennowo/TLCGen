@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Plugins.Additor;
 
 namespace TLCGen.Plugins.Additor
 {
-	public class AdditorSettingsViewModel : ViewModelBase
+	public class AdditorSettingsViewModel : ObservableObject
 	{
 		public AdditorSettingsModel Settings { get; }
 
@@ -15,7 +15,7 @@ namespace TLCGen.Plugins.Additor
 				if (Settings != null)
 				{
 					Settings.TabVisibility = value;
-					RaisePropertyChanged();
+					OnPropertyChanged();
 				}
 			}
 		}

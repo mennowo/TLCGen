@@ -3,10 +3,11 @@ using System.Linq;
 using TLCGen.Models;
 using System.Drawing;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Messaging.Messages;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models.Enumerations;
 
@@ -15,7 +16,7 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// Used to disclose relevant data of items that have bitmap coordinates.
     /// </summary>
-    public class BitmappedItemViewModel : ViewModelBase
+    public class BitmappedItemViewModel : ObservableObject
     {
         #region Fields
 
@@ -36,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Naam = value;
-                RaisePropertyChanged("Naam");
+                OnPropertyChanged("Naam");
             }
         }
 
@@ -71,10 +72,10 @@ namespace TLCGen.ViewModels
                 {
                     if (Coordinates?.Count > 0)
                     {
-                        Messenger.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
+                        WeakReferenceMessengerEx.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
                     }
                     Coordinates.RemoveAll();
-                    RaisePropertyChanged("HasCoordinates");
+                    OnPropertyChanged("HasCoordinates");
                 }
             }
         }
@@ -109,8 +110,8 @@ namespace TLCGen.ViewModels
                 foreach (var bmcm in coords)
                     _IOElement.BitmapCoordinaten.Remove(bmcm);
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
-            RaisePropertyChanged("HasCoordinates");
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            OnPropertyChanged("HasCoordinates");
         }
 
         #region Constructor

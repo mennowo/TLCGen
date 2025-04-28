@@ -1,15 +1,21 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
-    public class DetectorenTemplatesEditorTabViewModel : ViewModelBase
+    public class DetectorenTemplatesEditorTabViewModel : ObservableObject
     {
         #region Fields
+
+        private RelayCommand _AddDetectorTemplateCommand;
+        private RelayCommand _RemoveDetectorTemplateCommand;
 
         #endregion // Fields
 
@@ -33,8 +39,9 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedDetectorTemplate = value;
-                RaisePropertyChanged("SelectedDetectorTemplate");
-                RaisePropertyChanged(nameof(HasDC));
+                OnPropertyChanged("SelectedDetectorTemplate");
+                OnPropertyChanged(nameof(HasDC));
+                _RemoveDetectorTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -42,21 +49,8 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        RelayCommand _AddDetectorTemplateCommand;
-        public ICommand AddDetectorTemplateCommand
-        {
-            get
-            {
-                if (_AddDetectorTemplateCommand == null)
-                {
-                    _AddDetectorTemplateCommand = new RelayCommand(AddDetectorTemplateCommand_Executed, AddDetectorTemplateCommand_CanExecute);
-                }
-                return _AddDetectorTemplateCommand;
-            }
-        }
+        public ICommand AddDetectorTemplateCommand => _AddDetectorTemplateCommand ??= new RelayCommand(AddDetectorTemplateCommand_Executed, AddDetectorTemplateCommand_CanExecute);
 
-
-        RelayCommand _RemoveDetectorTemplateCommand;
         public ICommand RemoveDetectorTemplateCommand
         {
             get
@@ -73,7 +67,7 @@ namespace TLCGen.Settings
 
         #region Command Functionality
 
-        private void AddDetectorTemplateCommand_Executed(object prm)
+        private void AddDetectorTemplateCommand_Executed()
         {
             var dtm = new TLCGenTemplateModel<DetectorModel>
             {
@@ -90,24 +84,24 @@ namespace TLCGen.Settings
             var d = new DetectorTemplateViewModel(dtm);
             DetectorenTemplates.Add(d);
             TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.DetectorenTemplates.Add(dtm);
-            MessengerInstance.Send(new TemplatesChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new TemplatesChangedMessage());
             SelectedDetectorTemplate = d;
         }
 
-        bool AddDetectorTemplateCommand_CanExecute(object prm)
+        bool AddDetectorTemplateCommand_CanExecute()
         {
             return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
-        void RemoveDetectorTemplateCommand_Executed(object prm)
+        void RemoveDetectorTemplateCommand_Executed()
         {
             DetectorenTemplates.Remove(SelectedDetectorTemplate);
             SelectedDetectorTemplate = null;
         }
 
-        bool RemoveDetectorTemplateCommand_CanExecute(object prm)
+        bool RemoveDetectorTemplateCommand_CanExecute()
         {
-            return SelectedDetectorTemplate != null && SelectedDetectorTemplate.Editable;
+            return SelectedDetectorTemplate is { Editable: true };
         }
 
         #endregion // Command Functionality
@@ -120,7 +114,18 @@ namespace TLCGen.Settings
 
         public DetectorenTemplatesEditorTabViewModel()
         {
+            TemplatesProvider.Default.LoadedTemplatesChanged += DefaultOnLoadedTemplatesChanged;
             DetectorenTemplates = new ObservableCollectionAroundList<DetectorTemplateViewModel, TLCGenTemplateModel<DetectorModel>>(TemplatesProvider.Default.Templates.DetectorenTemplates);
+        }
+
+        private void DefaultOnLoadedTemplatesChanged(object sender, EventArgs e)
+        {
+            _AddDetectorTemplateCommand?.NotifyCanExecuteChanged();
+        }
+
+        ~DetectorenTemplatesEditorTabViewModel()
+        {
+            TemplatesProvider.Default.LoadedTemplatesChanged -= DefaultOnLoadedTemplatesChanged;
         }
 
         #endregion // Constructor

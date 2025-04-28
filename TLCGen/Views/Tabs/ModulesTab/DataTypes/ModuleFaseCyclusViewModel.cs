@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleFaseCyclusViewModel : ViewModelBase, IComparable
+    public class ModuleFaseCyclusViewModel : ObservableObjectEx, IComparable
     {
         #region Fields
 

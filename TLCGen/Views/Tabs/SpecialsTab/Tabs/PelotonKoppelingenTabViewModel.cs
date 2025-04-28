@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -59,7 +62,10 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged(); 
+                _removePelotonKoppelingCommand?.NotifyCanExecuteChanged();
+                _moveUpPelotonKoppelingCommand?.NotifyCanExecuteChanged();
+                _moveDownPelotonKoppelingCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -69,64 +75,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_addPelotonKoppelingCommand == null)
-                {
-                    _addPelotonKoppelingCommand = new RelayCommand(AddPelotonKoppelingCommand_Executed, AddPelotonKoppelingCommand_CanExecute);
-                }
-                return _addPelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand RemovePelotonKoppelingCommand
-        {
-            get
-            {
-                if (_removePelotonKoppelingCommand == null)
-                {
-                    _removePelotonKoppelingCommand = new RelayCommand(RemovePelotonKoppelingCommand_Executed, RemovePelotonKoppelingCommand_CanExecute);
-                }
-                return _removePelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand MoveUpPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_moveUpPelotonKoppelingCommand == null)
-                {
-                    _moveUpPelotonKoppelingCommand = new RelayCommand(MoveUpPelotonKoppelingCommand_Executed, MoveUpPelotonKoppelingCommand_CanExecute);
-                }
-                return _moveUpPelotonKoppelingCommand;
-            }
-        }
-
-        public ICommand MoveDownPelotonKoppelingCommand
-        {
-            get
-            {
-                if (_moveDownPelotonKoppelingCommand == null)
-                {
-                    _moveDownPelotonKoppelingCommand = new RelayCommand(MoveDownPelotonKoppelingCommand_Executed, MoveDownPelotonKoppelingCommand_CanExecute);
-                }
-                return _moveDownPelotonKoppelingCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        private bool AddPelotonKoppelingCommand_CanExecute(object obj)
-        {
-            return true;
-        }
-
-        private void AddPelotonKoppelingCommand_Executed(object obj)
+        public ICommand AddPelotonKoppelingCommand => _addPelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             var Peloton = new PelotonKoppelingModel();
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
@@ -141,42 +90,28 @@ namespace TLCGen.ViewModels
             var vm = new PelotonKoppelingViewModel(Peloton);
             PelotonKoppelingen.Add(vm);
             SelectedPelotonKoppeling = vm;
-        }
+        });
 
-        private bool RemovePelotonKoppelingCommand_CanExecute(object obj)
-        {
-            return SelectedPelotonKoppeling != null;
-        }
-
-        private void RemovePelotonKoppelingCommand_Executed(object obj)
+        public ICommand RemovePelotonKoppelingCommand => _removePelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             PelotonKoppelingen.Remove(SelectedPelotonKoppeling);
             SelectedPelotonKoppeling = PelotonKoppelingen.Any() ? PelotonKoppelingen[0] : null;
-        }
+        }, () => SelectedPelotonKoppeling != null);
 
-        private bool MoveUpPelotonKoppelingCommand_CanExecute(object obj)
-        {
-            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0;
-        }
-
-        private void MoveUpPelotonKoppelingCommand_Executed(object obj)
+        public ICommand MoveUpPelotonKoppelingCommand => _moveUpPelotonKoppelingCommand ??= new RelayCommand(() =>
         {
             PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) - 1);
             PelotonKoppelingen.RebuildList();
-        }
+        }, () => SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0);
 
-        private bool MoveDownPelotonKoppelingCommand_CanExecute(object obj)
-        {
-            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1);
-        }
+        public ICommand MoveDownPelotonKoppelingCommand => _moveDownPelotonKoppelingCommand ??= new RelayCommand(() =>
+            {
+                PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
+                PelotonKoppelingen.RebuildList();
+            },
+                () => SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1));
 
-        private void MoveDownPelotonKoppelingCommand_Executed(object obj)
-        {
-            PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
-            PelotonKoppelingen.RebuildList();
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Public methods
 
@@ -237,14 +172,14 @@ namespace TLCGen.ViewModels
 
         private void PelotonKoppelingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
 
         #region TLCGen Events
 
-        private void OnPTPKoppelingenChanged(PTPKoppelingenChangedMessage msg)
+        private void OnPTPKoppelingenChanged(object sender, PTPKoppelingenChangedMessage msg)
         {
             var rems = new List<string>();
             foreach (var ptpk in PTPKruisingenNames)
@@ -276,7 +211,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
 
             if (PTPKruisingenNames.Contains(msg.OldName))
@@ -299,8 +234,8 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingenTabViewModel() : base()
         {
-            MessengerInstance.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

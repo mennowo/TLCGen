@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TLCGen.Settings
 {
@@ -6,6 +7,7 @@ namespace TLCGen.Settings
     {
         TLCGenTemplatesModel Templates { get; }
         List<TLCGenTemplatesModelWithLocation> LoadedTemplates { get; }
+        event EventHandler LoadedTemplatesChanged;
 
         void LoadSettings();
         void SaveSettings();

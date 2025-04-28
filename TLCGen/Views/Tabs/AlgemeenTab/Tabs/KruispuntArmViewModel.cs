@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -7,7 +8,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class KruispuntArmViewModel : ViewModelBase, IViewModelWithItem
+    public class KruispuntArmViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -32,10 +33,10 @@ namespace TLCGen.ViewModels
                         Model.Naam = value;
 
                         // Notify the messenger
-                        MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
+                        WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.KruispuntArm, oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -45,7 +46,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.Omschrijving = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

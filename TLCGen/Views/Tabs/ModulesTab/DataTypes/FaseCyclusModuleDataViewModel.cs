@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class FaseCyclusModuleDataViewModel : ViewModelBase, IViewModelWithItem
+    public class FaseCyclusModuleDataViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.ModulenVooruit = value;
-                RaisePropertyChanged<object>(nameof(ModulenVooruit), broadcast: true);
+                OnPropertyChanged(nameof(ModulenVooruit), broadcast: true);
             }
         }
 
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatiefToestaan = value;
-                RaisePropertyChanged<object>(nameof(AlternatiefToestaan), broadcast: true);
+                OnPropertyChanged(nameof(AlternatiefToestaan), broadcast: true);
             }
         }
 
@@ -50,7 +50,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatieveRuimte = value;
-                RaisePropertyChanged<object>(nameof(AlternatieveRuimte), broadcast: true);
+                OnPropertyChanged(nameof(AlternatieveRuimte), broadcast: true);
             }
         }
 
@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatieveGroenTijd = value;
-                RaisePropertyChanged<object>(nameof(AlternatieveGroenTijd), broadcast: true);
+                OnPropertyChanged(nameof(AlternatieveGroenTijd), broadcast: true);
             }
         }
 

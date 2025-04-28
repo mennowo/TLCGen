@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Controls;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -11,10 +11,13 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using System;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+
 
 namespace TLCGen.ViewModels
 {
-    public class HDIngreepViewModel : ViewModelBase
+    public class HDIngreepViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -54,8 +57,8 @@ namespace TLCGen.ViewModels
                     _HDIngreep.DummyKARInmelding = null;
                     _HDIngreep.DummyKARUitmelding = null;
                 }
-                RaisePropertyChanged<object>(nameof(KAR), broadcast: true);
-                Messenger.Default.Send(new PrioIngrepenChangedMessage());
+                OnPropertyChanged(nameof(KAR), broadcast: true);
+WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
             }
         }
 
@@ -66,7 +69,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.KARToepassenFilterTijden = value;
-                RaisePropertyChanged<object>(nameof(KARToepassenFilterTijden), broadcast: true);
+                OnPropertyChanged(nameof(KARToepassenFilterTijden), broadcast: true);
             }
         }
 
@@ -78,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.KARInmeldingFilterTijd = value;
-                RaisePropertyChanged<object>(nameof(KARInmeldingFilterTijd), broadcast: true);
+                OnPropertyChanged(nameof(KARInmeldingFilterTijd), broadcast: true);
             }
         }
 
@@ -90,7 +93,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.KARUitmeldingFilterTijd = value;
-                RaisePropertyChanged<object>(nameof(KARUitmeldingFilterTijd), broadcast: true);
+                OnPropertyChanged(nameof(KARUitmeldingFilterTijd), broadcast: true);
             }
         }
 
@@ -101,7 +104,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RIS = value;
-                RaisePropertyChanged<object>(nameof(RIS), broadcast: true);
+                OnPropertyChanged(nameof(RIS), broadcast: true);
             }
         }
 
@@ -114,7 +117,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RisStart = value;
-                RaisePropertyChanged<object>(nameof(RisStart), broadcast: true);
+                OnPropertyChanged(nameof(RisStart), broadcast: true);
             }
         }
 
@@ -127,7 +130,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RisEnd = value;
-                RaisePropertyChanged<object>(nameof(RisEnd), broadcast: true);
+                OnPropertyChanged(nameof(RisEnd), broadcast: true);
             }
         }
 
@@ -140,7 +143,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RisEta = value;
-                RaisePropertyChanged<object>(nameof(RisEta), broadcast: true);
+                OnPropertyChanged(nameof(RisEta), broadcast: true);
             }
         }
 
@@ -151,7 +154,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.Sirene = value;
-                RaisePropertyChanged<object>(nameof(Sirene), broadcast: true);
+                OnPropertyChanged(nameof(Sirene), broadcast: true);
             }
         }
 
@@ -168,8 +171,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.Opticom = value;
-                RaisePropertyChanged<object>(nameof(Opticom), broadcast: true);
-                RaisePropertyChanged(nameof(OpticomOn));
+                OnPropertyChanged(nameof(Opticom), broadcast: true);
+                OnPropertyChanged(nameof(OpticomOn));
             }
         }
 
@@ -182,7 +185,7 @@ namespace TLCGen.ViewModels
                 if(value != null)
                 {
                     _HDIngreep.OpticomRelatedInput = value;
-                    RaisePropertyChanged<object>(nameof(OpticomRelatedInput), broadcast: true);
+                    OnPropertyChanged(nameof(OpticomRelatedInput), broadcast: true);
                 }
             }
         }
@@ -196,7 +199,7 @@ namespace TLCGen.ViewModels
                 if (value != null)
                 {
                     _HDIngreep.OpticomInmeldingFilterTijd = value;
-                    RaisePropertyChanged<object>(nameof(OpticomInmeldingFilterTijd), broadcast: true);
+                    OnPropertyChanged(nameof(OpticomInmeldingFilterTijd), broadcast: true);
                 }
             }
         }
@@ -229,7 +232,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                RaisePropertyChanged<object>(nameof(InmeldingOokDoorToepassen), broadcast: true);
+                OnPropertyChanged(nameof(InmeldingOokDoorToepassen), broadcast: true);
             }
         }
 
@@ -240,7 +243,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.InmeldingOokDoorFase = value;
-                RaisePropertyChanged<object>(nameof(InmeldingOokDoorFase), broadcast: true);
+                OnPropertyChanged(nameof(InmeldingOokDoorFase), broadcast: true);
             }
         }
 
@@ -252,7 +255,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdOngehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdOngehinderd), broadcast: true);
             }
         }
 
@@ -263,7 +266,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdBeperktgehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdBeperktgehinderd), broadcast: true);
             }
         }
 
@@ -274,7 +277,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<object>(nameof(RijTijdGehinderd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijdGehinderd), broadcast: true);
             }
         }
 
@@ -285,7 +288,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.GroenBewaking = value;
-                RaisePropertyChanged<object>(nameof(GroenBewaking), broadcast: true);
+                OnPropertyChanged(nameof(GroenBewaking), broadcast: true);
             }
         }
 
@@ -309,7 +312,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFase = value;
-                RaisePropertyChanged("SelectedFase");
+                OnPropertyChanged("SelectedFase");
             }
         }
 
@@ -320,7 +323,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedMeerealiserendeFase = value;
-                RaisePropertyChanged("SelectedMeerealiserendeFase");
+                OnPropertyChanged("SelectedMeerealiserendeFase");
             }
         }
 
@@ -380,7 +383,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewMeerealiserendeFaseCommand_Executed(object prm)
+        void AddNewMeerealiserendeFaseCommand_Executed()
         {
             if (!(MeerealiserendeFasen.Where(x => x.FaseCyclus.FaseCyclus == SelectedFase).Count() > 0))
             {
@@ -397,15 +400,15 @@ namespace TLCGen.ViewModels
             if (MeerealiserendeFasen.Count > 0)
                 SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
 
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
-        bool AddNewMeerealiserendeFaseCommand_CanExecute(object prm)
+        bool AddNewMeerealiserendeFaseCommand_CanExecute()
         {
             return MeerealiserendeFasen != null && SelectedFase != null;
         }
 
-        void RemoveMeerealiserendeFaseCommand_Executed(object prm)
+        void RemoveMeerealiserendeFaseCommand_Executed()
         {
             MeerealiserendeFasen.Remove(SelectedMeerealiserendeFase);
 
@@ -419,10 +422,10 @@ namespace TLCGen.ViewModels
             else
                 SelectedMeerealiserendeFase = null;
 
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
-        bool RemoveMeerealiserendeFaseCommand_CanExecute(object prm)
+        bool RemoveMeerealiserendeFaseCommand_CanExecute()
         {
             return SelectedMeerealiserendeFase != null && MeerealiserendeFasen != null && MeerealiserendeFasen.Count > 0;
         }
@@ -438,7 +441,7 @@ namespace TLCGen.ViewModels
             {
                 if (impt.IsSelected) HDIngreep.RisImportance |= impt.Importance;
             }
-            RaisePropertyChanged<object>(broadcast: true);
+            OnPropertyChanged(broadcast: true);
         }
 
         private void BuildFasenList()
@@ -487,22 +490,22 @@ namespace TLCGen.ViewModels
         
         #region TLCGen Messaging
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             RefreshDetectoren();
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage msg)
         {
             RefreshDetectoren();
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
-        private void OnFaseDetectorTypeChangedChanged(FaseDetectorTypeChangedMessage msg)
+        private void OnFaseDetectorTypeChangedChanged(object sender, FaseDetectorTypeChangedMessage msg)
         {
             RefreshDetectoren();
-            RaisePropertyChanged("");
+            OnPropertyChanged("");
         }
 
         #endregion // TLCGen Messaging
@@ -520,9 +523,9 @@ namespace TLCGen.ViewModels
 
             RefreshDetectoren();
 
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
 
             foreach (RISVehicleImportance importance in Enum.GetValues(typeof(RISVehicleImportance)))
             {

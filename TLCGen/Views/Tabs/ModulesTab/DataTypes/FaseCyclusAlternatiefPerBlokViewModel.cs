@@ -1,11 +1,11 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class FaseCyclusAlternatiefPerBlokViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class FaseCyclusAlternatiefPerBlokViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -27,8 +27,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.BitWiseBlokAlternatief = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged("");
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged("");
             }
         }
 
@@ -39,8 +39,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000000001;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000000001;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -51,8 +51,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000000010;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000000010;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -63,8 +63,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000000100;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000000100;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -75,8 +75,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000001000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000001000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -87,8 +87,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000010000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000010000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -99,8 +99,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b000100000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b000100000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -111,8 +111,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b001000000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b001000000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -123,8 +123,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b010000000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b010000000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 
@@ -135,8 +135,8 @@ namespace TLCGen.ViewModels
             {
                 if (value) _faseCyclus.BitWiseBlokAlternatief |= 0b100000000;
                 else _faseCyclus.BitWiseBlokAlternatief &= ~0b100000000;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(BitWiseBlokAlternatief));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(BitWiseBlokAlternatief));
             }
         }
 

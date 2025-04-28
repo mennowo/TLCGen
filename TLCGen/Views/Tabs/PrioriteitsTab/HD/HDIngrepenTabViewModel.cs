@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -50,7 +52,7 @@ namespace TLCGen.ViewModels
                     }
                 }
 
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -94,10 +96,11 @@ namespace TLCGen.ViewModels
                             SelectedHDIngreep = null;
                         }
                     }
-                    MessengerInstance.Send(new PrioIngrepenChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
-                RaisePropertyChanged<object>(nameof(SelectedFaseCyclusHDIngreep), null, null, true);
+                // TODO Check OK ?  OnPropertyChanged(nameof(SelectedFaseCyclusHDIngreep), null, null, true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -107,7 +110,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedHDIngreep = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

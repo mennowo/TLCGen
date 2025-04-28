@@ -4,12 +4,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -20,6 +23,8 @@ namespace TLCGen.ViewModels
 
         private PTPKoppelingViewModel _SelectedPTPKoppeling;
         private ObservableCollection<PTPKoppelingViewModel> _PTPKoppelingen;
+        private RelayCommand _AddPTPKoppelingCommand;
+        private RelayCommand _RemovePTPKoppelingCommand;
 
         #endregion // Fields
 
@@ -31,7 +36,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.PTPData.PTPInstellingenInParameters = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         public bool PTPAlleenTijdensControl
@@ -40,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.PTPData.PTPAlleenTijdensControl = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -60,7 +65,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPTPKoppeling = value;
-                RaisePropertyChanged("SelectedPTPKoppeling");
+                OnPropertyChanged();
+                _RemovePTPKoppelingCommand?.NotifyCanExecuteChanged();
             }
         }
         
@@ -72,42 +78,39 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddPTPKoppelingCommand;
-        public ICommand AddPTPKoppelingCommand
+        public ICommand AddPTPKoppelingCommand => _AddPTPKoppelingCommand ??= new RelayCommand(() =>
         {
-            get
+            var inewname = 1;
+            var ptp = new PTPKoppelingModel();
+            do
             {
-                if (_AddPTPKoppelingCommand == null)
-                {
-                    _AddPTPKoppelingCommand = new RelayCommand(AddPTPKoppelingCommand_Executed, AddPTPKoppelingCommand_CanExecute);
-                }
-                return _AddPTPKoppelingCommand;
+                inewname++;
+                ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
             }
-        }
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
+            var vm = new PTPKoppelingViewModel(ptp);
+            PTPKoppelingen.Add(vm);
+            SelectedPTPKoppeling = vm;
+            WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
+        });
 
-        RelayCommand _RemovePTPKoppelingCommand;
-        public ICommand RemovePTPKoppelingCommand
+        public ICommand RemovePTPKoppelingCommand => _RemovePTPKoppelingCommand ??= new RelayCommand(() =>
         {
-            get
-            {
-                if (_RemovePTPKoppelingCommand == null)
-                {
-                    _RemovePTPKoppelingCommand = new RelayCommand(RemovePTPKoppelingCommand_Executed, RemovePTPKoppelingCommand_CanExecute);
-                }
-                return _RemovePTPKoppelingCommand;
-            }
-        }
+            PTPKoppelingen.Remove(SelectedPTPKoppeling);
+            SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
+            WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
+        }, () => SelectedPTPKoppeling != null);
 
         #endregion // Commands
 
         #region Command Functionality
 
-        private bool AddPTPKoppelingCommand_CanExecute(object obj)
+        private bool AddPTPKoppelingCommand_CanExecute()
         {
             return true;
         }
 
-        private void AddPTPKoppelingCommand_Executed(object obj)
+        private void AddPTPKoppelingCommand_Executed()
         {
 	        var inewname = 1;
 			var ptp = new PTPKoppelingModel();
@@ -120,19 +123,19 @@ namespace TLCGen.ViewModels
             var vm = new PTPKoppelingViewModel(ptp);
             PTPKoppelingen.Add(vm);
             SelectedPTPKoppeling = vm;
-			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
+			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         }
 
-        private bool RemovePTPKoppelingCommand_CanExecute(object obj)
+        private bool RemovePTPKoppelingCommand_CanExecute()
         {
             return SelectedPTPKoppeling != null;
         }
 
-        private void RemovePTPKoppelingCommand_Executed(object obj)
+        private void RemovePTPKoppelingCommand_Executed()
         {
             PTPKoppelingen.Remove(SelectedPTPKoppeling);
             SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
-			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
+			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         }
 
         #endregion // Command Functionality
@@ -265,7 +268,7 @@ namespace TLCGen.ViewModels
                     _Controller.PTPData.PTPKoppelingen.Remove(ptp.PTPKoppeling);
                 }
             };
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

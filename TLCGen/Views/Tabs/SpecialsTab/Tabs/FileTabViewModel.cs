@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -36,7 +39,8 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFileIngreep = value;
                 _SelectedFileIngreep?.OnSelected(_ControllerFasen);
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _RemoveFileIngreepCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -62,35 +66,7 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddFileIngreepCommand
-        {
-            get
-            {
-                if (_AddFileIngreepCommand == null)
-                {
-                    _AddFileIngreepCommand = new RelayCommand(AddNewFileIngreepCommand_Executed, AddNewFileIngreepCommand_CanExecute);
-                }
-                return _AddFileIngreepCommand;
-            }
-        }
-
-        public ICommand RemoveFileIngreepCommand
-        {
-            get
-            {
-                if (_RemoveFileIngreepCommand == null)
-                {
-                    _RemoveFileIngreepCommand = new RelayCommand(RemoveFileIngreepCommand_Executed, RemoveFileIngreepCommand_CanExecute);
-                }
-                return _RemoveFileIngreepCommand;
-            }
-        }
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        void AddNewFileIngreepCommand_Executed(object prm)
+        public ICommand AddFileIngreepCommand => _AddFileIngreepCommand ??= new RelayCommand(() =>
         {
             var fim = new FileIngreepModel();
             DefaultsProvider.Default.SetDefaultsOnModel(fim);
@@ -104,27 +80,17 @@ namespace TLCGen.ViewModels
             var fivm = new FileIngreepViewModel(fim);
             FileIngrepen.Add(fivm);
 
-            MessengerInstance.Send(new ControllerDataChangedMessage());
-        }
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+        });
 
-        bool AddNewFileIngreepCommand_CanExecute(object prm)
-        {
-            return true;
-        }
-
-        void RemoveFileIngreepCommand_Executed(object prm)
+        public ICommand RemoveFileIngreepCommand => _RemoveFileIngreepCommand ??= new RelayCommand(() =>
         {
             FileIngrepen.Remove(SelectedFileIngreep);
             SelectedFileIngreep = null;
-            MessengerInstance.Send(new ControllerDataChangedMessage());
-        }
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+        }, () => SelectedFileIngreep != null);
 
-        bool RemoveFileIngreepCommand_CanExecute(object prm)
-        {
-            return SelectedFileIngreep != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 
@@ -182,7 +148,7 @@ namespace TLCGen.ViewModels
                 {
                     FileIngrepen = null;
                 }
-                RaisePropertyChanged("FileIngrepen");
+                OnPropertyChanged("FileIngrepen");
             }
         }
 
@@ -190,17 +156,17 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             FileIngrepen?.Rebuild();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             FileIngrepen?.Rebuild();
         }
 
-        public void OnFileIngreepTeDoserenSignaalPercentageChanged(FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)
+        public void OnFileIngreepTeDoserenSignaalPercentageChanged(object sender, FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)
         {
 
             foreach (var fivm in FileIngrepen)
@@ -229,9 +195,9 @@ namespace TLCGen.ViewModels
 
         public FileTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
-            Messenger.Default.Register(this, new Action<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(OnFileIngreepTeDoserenSignaalPercentageChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(this, OnFileIngreepTeDoserenSignaalPercentageChanged);
         }
 
         #endregion // Constructor

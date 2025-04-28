@@ -1,6 +1,8 @@
-﻿namespace TLCGen.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace TLCGen.ViewModels
 {
-    public class GarantieTijdConvertHelper : GalaSoft.MvvmLight.ViewModelBase
+    public class GarantieTijdConvertHelper : ObservableObject
     {
         private int _Van;
         private int _Tot;
@@ -15,7 +17,7 @@
             {
                 if (value >= MinVan && value <= Tot)
                     _Van = value;
-                RaisePropertyChanged("Van");
+                OnPropertyChanged("Van");
 
                 _MainVM.SetGarantieConvertValuesTot();
             }
@@ -28,7 +30,7 @@
             {
                 if (value >= Van)
                     _Tot = value;
-                RaisePropertyChanged("Tot");
+                OnPropertyChanged("Tot");
 
                 _MainVM.SetGarantieConvertValuesVan();
             }
@@ -40,7 +42,7 @@
             set
             {
                 _Verschil = value;
-                RaisePropertyChanged("Verschil");
+                OnPropertyChanged("Verschil");
             }
         }
 
@@ -50,7 +52,7 @@
             set
             {
                 _MinVan = value;
-                RaisePropertyChanged("MinVan");
+                OnPropertyChanged("MinVan");
             }
         }
 

@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
-             xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:views="clr-namespace:TLCGen.Views"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -21,7 +21,7 @@
         </Style>
     </UserControl.Resources>
     <!-- UI for regular in and out: detection, VECOM, SD via input, KAR, etc. -->
-    <wpfAutoGrid:AutoGrid Columns="Auto,*" RowCount="13">
+    <controls:AutoGrid Columns="Auto,*" RowCount="13">
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
@@ -78,5 +78,5 @@
                 Text="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" />
         <CheckBox IsChecked="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Content="Opvang storing"
                   Grid.ColumnSpan="2"  />
-    </wpfAutoGrid:AutoGrid>
+    </controls:AutoGrid>
 </UserControl>

@@ -1,19 +1,19 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Settings
 {
-    public class PrioIngreepTemplateViewModel : ViewModelBase, IViewModelWithItem
+    public class PrioIngreepTemplateViewModel : ObservableObject, IViewModelWithItem
     {
         #region Fields
 
@@ -115,7 +115,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Naam = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -125,7 +125,7 @@ namespace TLCGen.Settings
             set
             {
                 _template.Replace = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -157,7 +157,13 @@ namespace TLCGen.Settings
                 PrioIngreepUitmeldingen.CollectionChanged += PrioIngreepUitmeldingenOnCollectionChanged;
                 PrioIngreepSelectedInmelding = PrioIngreepInmeldingen.FirstOrDefault();
                 PrioIngreepSelectedUitmelding = PrioIngreepUitmeldingen.FirstOrDefault();
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removePrioIngreepCommand?.NotifyCanExecuteChanged();
+                _applyDefaultsCommand?.NotifyCanExecuteChanged();
+                _addPrioIngreepInmeldingCommand?.NotifyCanExecuteChanged();
+                _removePrioIngreepInmeldingCommand?.NotifyCanExecuteChanged();
+                _addPrioIngreepUitmeldingCommand?.NotifyCanExecuteChanged();
+                _removePrioIngreepUitmeldingCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -197,17 +203,7 @@ namespace TLCGen.Settings
             }
         }
 
-        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepInmeldingen
-        {
-            get
-            {
-                if (_prioIngreepInmeldingen == null)
-                {
-                    _prioIngreepInmeldingen = new ObservableCollection<PrioIngreepInUitMeldingModel>();
-                }
-                return _prioIngreepInmeldingen;
-            }
-        }
+        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepInmeldingen => _prioIngreepInmeldingen ??= [];
 
         public PrioIngreepInUitMeldingModel PrioIngreepSelectedInmelding
         {
@@ -215,21 +211,12 @@ namespace TLCGen.Settings
             set
             {
                 _prioIngreepSelectedInmelding = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removePrioIngreepInmeldingCommand?.NotifyCanExecuteChanged();
             }
         }
 
-        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepUitmeldingen
-        {
-            get
-            {
-                if (_prioIngreepUitmeldingen == null)
-                {
-                    _prioIngreepUitmeldingen = new ObservableCollection<PrioIngreepInUitMeldingModel>();
-                }
-                return _prioIngreepUitmeldingen;
-            }
-        }
+        public ObservableCollection<PrioIngreepInUitMeldingModel> PrioIngreepUitmeldingen => _prioIngreepUitmeldingen ??= [];
 
         public PrioIngreepInUitMeldingModel PrioIngreepSelectedUitmelding
         {
@@ -237,7 +224,8 @@ namespace TLCGen.Settings
             set
             {
                 _prioIngreepSelectedUitmelding = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removePrioIngreepUitmeldingCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -245,57 +233,65 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        public ICommand AddPrioIngreepCommand =>
-            _addPrioIngreepCommand ?? (_addPrioIngreepCommand = new RelayCommand(() =>
+        public ICommand AddPrioIngreepCommand => _addPrioIngreepCommand ??= new RelayCommand(() =>
             {
                 var d = new PrioIngreepModel()
                 {
                     FaseCyclus = Replace, Naam = Replace + "_" + (PrioIngrepen.Count + 1)
                 };
                 PrioIngrepen.Add(d);
-            }));
+            });
 
-        public ICommand RemovePrioIngreepCommand =>
-            _removePrioIngreepCommand ?? (_removePrioIngreepCommand = new RelayCommand(() =>
+        public ICommand RemovePrioIngreepCommand => _removePrioIngreepCommand ??= new RelayCommand(() =>
             {
                 PrioIngrepen.Remove(SelectedPrioIngreep);
                 SelectedPrioIngreep = null;
-            }, () => SelectedPrioIngreep != null && PrioIngrepen.Count > 0));
+            }, 
+            () => SelectedPrioIngreep != null);
         
-        public ICommand ApplyDefaultsCommand =>
-            _applyDefaultsCommand ?? (_applyDefaultsCommand = new RelayCommand(() =>
+        public ICommand ApplyDefaultsCommand => _applyDefaultsCommand ??= new RelayCommand(() =>
             {
                 var d = SelectedPrioIngreep;
                 SelectedPrioIngreep = null;
                 DefaultsProvider.Default.SetDefaultsOnModel(d, d.Type.ToString());
                 SelectedPrioIngreep = d;
-            }, () => SelectedPrioIngreep != null && PrioIngrepen.Count > 0));
+            }, () => SelectedPrioIngreep != null);
         
-        public ICommand AddPrioIngreepInmeldingCommand =>
-            _addPrioIngreepInmeldingCommand ?? (_addPrioIngreepInmeldingCommand = new RelayCommand(() =>
+        public ICommand AddPrioIngreepInmeldingCommand => _addPrioIngreepInmeldingCommand ?? (_addPrioIngreepInmeldingCommand = new RelayCommand(() =>
             {
                 var d = new PrioIngreepInUitMeldingModel{Naam = "inmelding", InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding};
-                _prioIngreepInmeldingen.Add(d);
-            }, () => SelectedPrioIngreep != null && PrioIngreepInmeldingen != null));
+                PrioIngreepInmeldingen.Add(d);
+                _removePrioIngreepInmeldingCommand?.NotifyCanExecuteChanged();
+            }, 
+            () => SelectedPrioIngreep != null));
 
         public ICommand RemovePrioIngreepInmeldingCommand =>
-            _removePrioIngreepInmeldingCommand ?? (_removePrioIngreepInmeldingCommand = new RelayCommand(() =>
+            _removePrioIngreepInmeldingCommand ??= new RelayCommand(() =>
             {
-                
-            }, () => SelectedPrioIngreep != null && PrioIngreepSelectedInmelding != null && PrioIngreepInmeldingen.Count > 0));
+                PrioIngreepInmeldingen.Add(PrioIngreepSelectedInmelding);
+                PrioIngreepSelectedInmelding = PrioIngreepInmeldingen.FirstOrDefault();
+                _removePrioIngreepInmeldingCommand?.NotifyCanExecuteChanged();
+            },
+            () => SelectedPrioIngreep != null && PrioIngreepSelectedInmelding != null && PrioIngreepInmeldingen.Count > 0);
         
         public ICommand AddPrioIngreepUitmeldingCommand =>
             _addPrioIngreepUitmeldingCommand ?? (_addPrioIngreepUitmeldingCommand = new RelayCommand(() =>
             {
                 var d = new PrioIngreepInUitMeldingModel{Naam = "uitmelding", InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding};
                 _prioIngreepUitmeldingen.Add(d);
-            }, () => SelectedPrioIngreep != null && PrioIngreepUitmeldingen != null));
+                _removePrioIngreepUitmeldingCommand?.NotifyCanExecuteChanged();
+            }, 
+            () => SelectedPrioIngreep != null && PrioIngreepUitmeldingen != null));
 
         public ICommand RemovePrioIngreepUitmeldingCommand =>
-            _removePrioIngreepUitmeldingCommand ?? (_removePrioIngreepUitmeldingCommand = new RelayCommand(() =>
+            _removePrioIngreepUitmeldingCommand ??= new RelayCommand(() =>
             {
-                
-            }, () => SelectedPrioIngreep != null && PrioIngreepSelectedUitmelding != null && PrioIngreepUitmeldingen.Count > 0));
+                PrioIngreepUitmeldingen.Add(PrioIngreepSelectedUitmelding);
+                PrioIngreepSelectedUitmelding = PrioIngreepUitmeldingen.FirstOrDefault();
+                _removePrioIngreepUitmeldingCommand?.NotifyCanExecuteChanged();
+            },
+            () => SelectedPrioIngreep != null && PrioIngreepSelectedUitmelding != null && PrioIngreepUitmeldingen.Count > 0);
+
         #endregion // Commands
 
         #region IViewModelWithItem

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -7,6 +8,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -30,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.StarData.ToepassenStar = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -40,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.StarData.DefaultProgramma = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -51,7 +53,7 @@ namespace TLCGen.ViewModels
             {
                 Controller.StarData.ProgrammaSturingViaKlok = value;
                 if (!value) ProgrammaSturingViaParameter = true;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -65,7 +67,7 @@ namespace TLCGen.ViewModels
                 {
                     ProgrammaSturingViaKlok = true;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -75,7 +77,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.StarData.IngangAlsVoorwaarde = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -87,7 +89,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Controller.StarData.ProgrammaTijdenInParameters = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -119,10 +121,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
-
-        #region Commands
-
-        #endregion // Commands
 
         #region Private methods
 
@@ -162,7 +160,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             foreach (var programma in Programmas)
             {
@@ -186,19 +184,19 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnPeriodenChanged(PeriodenChangedMessage message)
+        private void OnPeriodenChanged(object sender, PeriodenChangedMessage message)
         { 
             UpdatePeriodenData();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             foreach (var pr in Programmas)
             {
-                pr.RaisePropertyChanged("");
+                pr.OnPropertyChanged("");
                 foreach (var f in pr.Fasen)
                 {
-                    f.RaisePropertyChanged("");
+                    f.OnPropertyChanged("");
                 }
             }
         }
@@ -232,9 +230,9 @@ namespace TLCGen.ViewModels
 
         public StarTabViewModel() : base()
         {
-            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessengerInstance.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

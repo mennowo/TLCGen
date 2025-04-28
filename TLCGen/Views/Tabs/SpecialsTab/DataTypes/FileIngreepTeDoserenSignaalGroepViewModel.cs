@@ -1,12 +1,11 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class FileIngreepTeDoserenSignaalGroepViewModel : ViewModelBase, IViewModelWithItem
+    public class FileIngreepTeDoserenSignaalGroepViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -22,7 +21,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.FaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -32,8 +31,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                Messenger.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
+                OnPropertyChanged(broadcast: true);
+WeakReferenceMessengerEx.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
             }
         }
 
@@ -42,7 +41,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -52,7 +51,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.AfkappenOpStartFile = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -62,7 +61,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.AfkappenOpStartFileMinGroentijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -72,7 +71,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.MinimaleRoodtijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -82,7 +81,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.MinimaleRoodtijdTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -92,7 +91,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.MaximaleGroentijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -102,19 +101,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.MaximaleGroentijdTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
         #endregion // Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

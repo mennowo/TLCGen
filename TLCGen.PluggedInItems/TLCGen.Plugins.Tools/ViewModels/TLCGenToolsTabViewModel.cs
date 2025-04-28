@@ -1,16 +1,17 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
 {
-    public class TLCGenToolsTabViewModel : ViewModelBase
+    public class TLCGenToolsTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -44,7 +45,7 @@ namespace TLCGen.Plugins.Tools
             private set
             {
                 _fasen = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -70,8 +71,9 @@ namespace TLCGen.Plugins.Tools
                         }
                     }
                 }
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasNoSelectedItem));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasNoSelectedItem));
+                _applyTemplateCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -79,7 +81,7 @@ namespace TLCGen.Plugins.Tools
 
         #region Private Methods
 
-        private void OnFasenChanged(Messaging.Messages.FasenChangedMessage msg)
+        private void OnFasenChanged(object sender, FasenChangedMessage msg)
         {
             UpdateFasen();
             foreach (var c in CombinatieTemplates)
@@ -94,7 +96,7 @@ namespace TLCGen.Plugins.Tools
             }
         }
 
-        private void OnNameChanged(NameChangedMessage obj)
+        private void OnNameChanged(object sender, NameChangedMessage obj)
         {
             UpdateFasen();
         }
@@ -112,44 +114,44 @@ namespace TLCGen.Plugins.Tools
                 fasen.Add(f.Naam);
             }
             Fasen = fasen;
-            RaisePropertyChanged(nameof(Fasen));
+            OnPropertyChanged(nameof(Fasen));
         }
 
         #endregion // Private Methods
 
         #region Commands
 
-        public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new RelayCommand(() =>
-        {
-            var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
-            if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
+        public ICommand ApplyTemplateCommand => _applyTemplateCommand ??= new RelayCommand(() =>
             {
-                var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
-                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
-                if (alert.Item1)
+                var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
+                if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
                 {
-                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+                    var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
+                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
+                    if (alert.Item1)
+                    {
+                        GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+                    }
+                    else
+                    {
+                        GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
+                    }
                 }
                 else
                 {
-                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
+                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
                 }
-            }
-            else
-            {
-                GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
-            }
-        },
-        () => SelectedTemplate != null));
+            },
+            () => SelectedTemplate != null);
 
-        public ICommand SettingsWindowCommand => _settingsWindowCommand ?? (_settingsWindowCommand = new RelayCommand(() => 
+        public ICommand SettingsWindowCommand => _settingsWindowCommand ??= new RelayCommand(() => 
         {
             var window = new CombinatieTemplatesSettingsWindow
             {
                 DataContext = new CombinatieTemplatesSettingsWindowViewModel(CombinatieTemplates, _plugin)
             };
             window.ShowDialog();
-        }));
+        });
 
         #endregion // Commands
 
@@ -159,8 +161,8 @@ namespace TLCGen.Plugins.Tools
         {
             _plugin = plugin;
             CombinatieTemplates = combinatieTemplates;
-            MessengerInstance.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

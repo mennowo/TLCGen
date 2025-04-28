@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Windows;
 using System.Xml;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -29,6 +29,7 @@ namespace TLCGen.DataAccess
         private XmlDocument _ControllerXml;
 
 	    private Action<object> _setDefaultsAction;
+        private bool _controllerHasChanged;
 
         #endregion // Fields
 
@@ -62,7 +63,7 @@ namespace TLCGen.DataAccess
 	        private set
             {
                 _Controller = value;
-                Messenger.Default.Send(new ControllerLoadedMessage(Controller));
+                WeakReferenceMessengerEx.Default.Send(new ControllerLoadedMessage(Controller));
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
                 {
                     pl.Item2.Controller = value;
@@ -81,7 +82,15 @@ namespace TLCGen.DataAccess
         /// </summary>
         public string ControllerFileName { get; set; }
 
-        public bool ControllerHasChanged { get; set; }
+        public bool ControllerHasChanged
+        {
+            get => _controllerHasChanged;
+            set
+            {
+                _controllerHasChanged = value;
+                WeakReferenceMessenger.Default.Send(new ControllerDataChangedMessage());
+            }
+        }
 
         public ITLCGenGenerator CurrentGenerator { get; set; }
 
@@ -226,7 +235,7 @@ namespace TLCGen.DataAccess
             {
                 // Save all changes to model
                 // Request to process all synchronisation data from matrix to model
-                Messenger.Default.Send(new ProcessSynchronisationsRequest());
+                WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
 
                 // Check data integrity: do not save wrong data
                 var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
@@ -280,7 +289,7 @@ namespace TLCGen.DataAccess
         {
             // Save all changes to model
             // Request to process all synchronisation data from matrix to model
-            Messenger.Default.Send(new ProcessSynchronisationsRequest());
+            WeakReferenceMessengerEx.Default.Send(new ProcessSynchronisationsRequest());
 
             // Check data integrity: do not save wrong data
             var s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
@@ -310,7 +319,7 @@ namespace TLCGen.DataAccess
                 SaveController();
                 
                 ControllerHasChanged = false;
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename ?? ""));
+                WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename ?? ""));
 
                 return true;
             }
@@ -336,7 +345,7 @@ namespace TLCGen.DataAccess
         /// </summary>
         public void SetControllerChanged()
         {
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         /// <summary>
@@ -420,7 +429,7 @@ namespace TLCGen.DataAccess
                 }
 
             }
-            Messenger.Default.Send(new ControllerFileNameChangedMessage(Default.ControllerFileName, null));
+            WeakReferenceMessengerEx.Default.Send(new ControllerFileNameChangedMessage(Default.ControllerFileName, null));
             return true;
         }
 #endif

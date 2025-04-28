@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -15,6 +17,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -26,6 +29,8 @@ namespace TLCGen.ViewModels
         private FaseCyclusViewModel _selectedFaseCyclus;
         private IList _selectedFaseCycli = new ArrayList();
         private TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> _templatesProviderVm;
+        private RelayCommand _AddFaseCommand;
+        private RelayCommand _RemoveFaseCommand;
 
         #endregion // Fields
 
@@ -39,8 +44,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                OnPropertyChanged("SelectedFaseCyclus");
                 if (value != null) TemplatesProviderVm.SetSelectedApplyToItem(value.FaseCyclus);
+                _RemoveFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -51,7 +57,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedFaseCycli = value;
                 _SettingMultiple = false;
-                RaisePropertyChanged("SelectedFaseCycli");
+                OnPropertyChanged("SelectedFaseCycli");
                 if (value != null)
                 {
                     var sl = new List<FaseCyclusModel>();
@@ -61,6 +67,7 @@ namespace TLCGen.ViewModels
                     }
                     TemplatesProviderVm.SetSelectedApplyToItems(sl);
                 }
+                _RemoveFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -70,112 +77,73 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddFaseCommand;
-        public ICommand AddFaseCommand
-        {
-            get
+        public ICommand AddFaseCommand => _AddFaseCommand ??= new RelayCommand(() =>
             {
-                if (_AddFaseCommand == null)
+                var fcm = new FaseCyclusModel();
+
+                string newname;
+                var inext = 0;
+                foreach (var fcvm in Fasen)
                 {
-                    _AddFaseCommand = new RelayCommand(AddNewFaseCommand_Executed, AddNewFaseCommand_CanExecute);
+                    if (int.TryParse(fcvm.Naam, out var inewname))
+                    {
+                        inext = inewname > inext ? inewname : inext;
+                    }
                 }
-                return _AddFaseCommand;
-            }
-        }
+                do
+                {
+                    inext++;
+                    newname = (inext < 10 ? "0" : "") + inext;
+                }
+                while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, newname));
 
+                fcm.Naam = newname;
+                fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
+                DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
+                
+                // This will cause the model to be updated
+                WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel> { fcm }, null));
+            });
 
-        RelayCommand _RemoveFaseCommand;
-        public ICommand RemoveFaseCommand
-        {
-            get
+        public ICommand RemoveFaseCommand => _RemoveFaseCommand ??= new RelayCommand(() =>
             {
-                if (_RemoveFaseCommand == null)
+                var changed = false;
+                var remfcs = new List<FaseCyclusModel>();
+                if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 0)
                 {
-                    _RemoveFaseCommand = new RelayCommand(RemoveFaseCommand_Executed, RemoveFaseCommand_CanExecute);
+                    changed = true;
+                    foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
+                    {
+                        TLCGenControllerModifier.Default.RemoveModelItemFromController(fcvm.Naam, TLCGenObjectTypeEnum.Fase);
+                        remfcs.Add(fcvm.FaseCyclus);
+                    }
+
+                    SelectedFaseCycli = null;
                 }
-                return _RemoveFaseCommand;
-            }
-        }
+                else if (SelectedFaseCyclus != null)
+                {
+                    changed = true;
+                    remfcs.Add(SelectedFaseCyclus.FaseCyclus);
+                    TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedFaseCyclus.Naam, TLCGenObjectTypeEnum.Fase);
+                    SelectedFaseCyclus = null;
+                }
+
+                if(changed)
+                {
+                    Fasen.CollectionChanged -= Fasen_CollectionChanged;
+                    Fasen.Clear();
+                    foreach (var fc in _Controller.Fasen)
+                    {
+                        Fasen.Add(new FaseCyclusViewModel(fc));
+                    }
+                    Fasen.CollectionChanged += Fasen_CollectionChanged;
+                    WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(null, remfcs));
+                }
+
+            }, 
+            () => SelectedFaseCyclus != null || SelectedFaseCycli is { Count: > 0 });
 
         #endregion // Commands
-
-        #region Command functionality
-
-        void AddNewFaseCommand_Executed(object prm)
-        {
-            var fcm = new FaseCyclusModel();
-
-            string newname;
-            var inext = 0;
-            foreach (var fcvm in Fasen)
-            {
-                if (int.TryParse(fcvm.Naam, out var inewname))
-                {
-                    inext = inewname > inext ? inewname : inext;
-                }
-            }
-            do
-            {
-                inext++;
-                newname = (inext < 10 ? "0" : "") + inext;
-            }
-            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, newname));
-
-            fcm.Naam = newname;
-            fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
-            DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
-            
-            // This will cause the model to be updated
-            Messenger.Default.Send(new FasenChangingMessage(new List<FaseCyclusModel>{fcm}, null));
-        }
-
-        bool AddNewFaseCommand_CanExecute(object prm) => Fasen != null;
-
-        void RemoveFaseCommand_Executed(object prm)
-        {
-            var changed = false;
-            var remfcs = new List<FaseCyclusModel>();
-            if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 0)
-            {
-                changed = true;
-                foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
-                {
-                    TLCGenControllerModifier.Default.RemoveModelItemFromController(fcvm.Naam, TLCGenObjectTypeEnum.Fase);
-                    remfcs.Add(fcvm.FaseCyclus);
-                }
-
-                SelectedFaseCycli = null;
-            }
-            else if (SelectedFaseCyclus != null)
-            {
-                changed = true;
-                remfcs.Add(SelectedFaseCyclus.FaseCyclus);
-                TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedFaseCyclus.Naam, TLCGenObjectTypeEnum.Fase);
-                SelectedFaseCyclus = null;
-            }
-
-            if(changed)
-            {
-                Fasen.CollectionChanged -= Fasen_CollectionChanged;
-                Fasen.Clear();
-                foreach (var fc in _Controller.Fasen)
-                {
-                    Fasen.Add(new FaseCyclusViewModel(fc));
-                }
-                Fasen.CollectionChanged += Fasen_CollectionChanged;
-                Messenger.Default.Send(new FasenChangingMessage(null, remfcs));
-            }
-
-        }
-
-        bool RemoveFaseCommand_CanExecute(object prm)
-        {
-            return Fasen != null &&
-                (SelectedFaseCyclus != null ||
-                 SelectedFaseCycli != null && SelectedFaseCycli.Count > 0);
-        }
-
-        #endregion // Command functionality
 
         #region TabItem Overrides
 
@@ -202,7 +170,7 @@ namespace TLCGen.ViewModels
                 {
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
                 }
-                Messenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
+WeakReferenceMessengerEx.Default.Send(new FasenSortedMessage(_Controller.Fasen));
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
             }
             return true;
@@ -292,14 +260,14 @@ namespace TLCGen.ViewModels
                     return;
                 }
             }
-            Messenger.Default.Send(new FasenChangingMessage(items, null));
+WeakReferenceMessengerEx.Default.Send(new FasenChangingMessage(items, null));
         }
 
         public void UpdateAfterApplyTemplate(FaseCyclusModel item)
         {
             var fc = Fasen.First(x => x.FaseCyclus == item);
-            fc.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
+            fc.OnPropertyChanged("");
+WeakReferenceMessengerEx.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
         }
 
         #endregion // IAllowTemplates

@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Linq;
 using TLCGen.Helpers;
@@ -6,7 +6,7 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RISFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISFaseCyclusDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         private RISFaseCyclusDataModel _faseCyclus;
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedLane = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.FaseCyclus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.ApproachID = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

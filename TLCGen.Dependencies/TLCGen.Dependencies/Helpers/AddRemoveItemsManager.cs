@@ -1,50 +1,106 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
-using RelayCommandWpf = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.Helpers
 {
-    public class AddRemoveItemsManager<T1, T2, T3> : ViewModelBase where T1 : IViewModelWithItem
+    public class WeakReferenceMessengerEx : IMessenger
     {
-        public ObservableCollectionAroundList<T1, T2> ItemsSource { get; }
-        public ObservableCollection<T3> AllSelectableItems { get; } = new ObservableCollection<T3>();
-        public ObservableCollection<T3> SelectableItems { get; } = new ObservableCollection<T3>();
-        
+        private static IMessenger _default;
+        public static IMessenger Default => _default ??= WeakReferenceMessenger.Default;
+
+        public static void OverrideDefault(IMessenger messenger)
+        {
+            _default = messenger;
+        }
+
+        public bool IsRegistered<TMessage, TToken>(object recipient, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            return _default.IsRegistered<TMessage, TToken>(recipient, token);
+        }
+
+        public void Register<TRecipient, TMessage, TToken>(TRecipient recipient, TToken token, MessageHandler<TRecipient, TMessage> handler) where TRecipient : class where TMessage : class where TToken : IEquatable<TToken>
+        {
+            _default.Register(recipient, token, handler);
+        }
+
+        public void UnregisterAll(object recipient)
+        {
+            _default.UnregisterAll(recipient);
+        }
+
+        public void UnregisterAll<TToken>(object recipient, TToken token) where TToken : IEquatable<TToken>
+        {
+            _default.UnregisterAll(recipient, token);
+        }
+
+        public void Unregister<TMessage, TToken>(object recipient, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            _default.Unregister<TMessage, TToken>(recipient, token);
+        }
+
+        public TMessage Send<TMessage, TToken>(TMessage message, TToken token) where TMessage : class where TToken : IEquatable<TToken>
+        {
+            return _default.Send(message, token);
+        }
+
+        public void Cleanup()
+        {
+            _default.Cleanup();
+        }
+
+        public void Reset()
+        {
+            _default.Reset();
+        }
+    }
+
+    public class AddRemoveItemsManager<T1, T2, T3> : ObservableObject where T1 : IViewModelWithItem
+    {
+        private T1 _selectedItem;
         private T3 _selectedItemToAdd;
+        private RelayCommand _addItemCommand;
+        private RelayCommand _removeItemCommand;
+
+        public ObservableCollectionAroundList<T1, T2> ItemsSource { get; }
+        public ObservableCollection<T3> AllSelectableItems { get; } = [];
+        public ObservableCollection<T3> SelectableItems { get; } = [];
+
         public T3 SelectedItemToAdd
         {
             get => _selectedItemToAdd;
             set
             {
                 _selectedItemToAdd = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _addItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
-        private T1 _selectedItem;
         public T1 SelectedItem
         {
             get => _selectedItem;
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removeItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
         public Func<T3, T1> GetNewItem { get; }
+        
         public Func<T1, T3, bool> SelectableEqualsItem { get; }
+        
         public Action OnCollectionChanged { get; }
 
-        RelayCommandWpf _addItemCommand;
-        public ICommand AddItemCommand => _addItemCommand ?? (_addItemCommand = new RelayCommandWpf(AddItemCommand_executed, AddItemCommand_canExecute));
+        public ICommand AddItemCommand => _addItemCommand ??= new RelayCommand(AddItemCommand_executed, AddItemCommand_canExecute);
 
         private bool AddItemCommand_canExecute()
         {
@@ -69,8 +125,7 @@ namespace TLCGen.Helpers
             }
         }
 
-        RelayCommandWpf _removeItemCommand;
-        public ICommand RemoveItemCommand => _removeItemCommand ?? (_removeItemCommand = new RelayCommandWpf(RemoveItemCommand_executed, RemoveItemCommand_canExecute));
+        public ICommand RemoveItemCommand => _removeItemCommand ??= new RelayCommand(RemoveItemCommand_executed, RemoveItemCommand_canExecute);
 
         private bool RemoveItemCommand_canExecute()
         {
@@ -131,6 +186,7 @@ namespace TLCGen.Helpers
                 }
             }
             if (SelectableItems.Any()) SelectedItemToAdd = SelectableItems[0];
+            _addItemCommand?.NotifyCanExecuteChanged();
         }
 
         public AddRemoveItemsManager(ObservableCollectionAroundList<T1, T2> itemsSource, Func<T3, T1> getNewItem, Func<T1, T3, bool> selectableEqualsItem, Action onCollectionChanged = null)

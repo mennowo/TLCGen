@@ -3,6 +3,7 @@ using System;
 using TLCGen.Messaging.Messages;
 using System.Linq;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
@@ -34,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedTimingsFase = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -49,7 +50,7 @@ namespace TLCGen.ViewModels
                     TimingsFasen = new ObservableCollectionAroundList<TimingsFaseCyclusDataViewModel, TimingsFaseCyclusDataModel>(_controller.TimingsData.TimingsFasen);
                     UpdateTimingsFasen();
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -88,8 +89,8 @@ namespace TLCGen.ViewModels
                 {
                     UpdateTimingsFasen();
                 }
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(TimingsToepassenOK));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(TimingsToepassenOK));
             }
         }
         
@@ -99,7 +100,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _controller.TimingsData.TimingsUsePredictions = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 if (value)
                 {
                     _betaMsgId = Guid.NewGuid().ToString();
@@ -127,13 +128,9 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
-        #region Commands
-
-        #endregion // Commands
-
         #region TLCGen messaging
 
-        private void OnFasenChanged(FasenChangedMessage msg)
+        private void OnFasenChanged(object sender, FasenChangedMessage msg)
         {
             if(msg.RemovedFasen != null && msg.RemovedFasen.Any())
             {
@@ -168,7 +165,7 @@ namespace TLCGen.ViewModels
 
         public FasenTimingsTabViewModel()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
         #endregion // Constructor

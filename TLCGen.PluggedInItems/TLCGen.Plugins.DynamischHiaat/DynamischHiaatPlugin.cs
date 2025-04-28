@@ -159,7 +159,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                 _myModel = new DynamischHiaatModel();
             }
             _myTabViewModel.Model = _myModel;
-            _myTabViewModel.RaisePropertyChanged("");
+            _myTabViewModel.OnPropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)
@@ -424,7 +424,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     _myTabViewModel.DynamischHiaatSignalGroups.Remove(sg);
                 }
                 _myTabViewModel.DynamischHiaatSignalGroups.BubbleSort();
-                _myTabViewModel.RaisePropertyChanged("");
+                _myTabViewModel.OnPropertyChanged("");
             }
         }
 

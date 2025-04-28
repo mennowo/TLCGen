@@ -1,14 +1,17 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -26,15 +29,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ObservableCollection<DetectorViewModel> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                    _Detectoren = new ObservableCollection<DetectorViewModel>();
-                return _Detectoren;
-            }
-        }
+        public ObservableCollection<DetectorViewModel> Detectoren { get; } = [];
 
         public DetectorViewModel SelectedDetector
         {
@@ -42,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -52,28 +47,125 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand GenerateSimulationValuesCommand
-        {
-            get
+        public ICommand GenerateSimulationValuesCommand => _GenerateSimulationValuesCommand ??= new RelayCommand(() =>
             {
-                if (_GenerateSimulationValuesCommand == null)
+                var rd = new Random();
+            
+                foreach (var fcm in _Controller.Fasen)
                 {
-                    _GenerateSimulationValuesCommand = new RelayCommand(GenerateSimulationValuesCommand_Executed, GenerateSimulationValuesCommand_CanExecute);
+                    var max = 3;
+                    var numbers = new List<int> { 200, 100, 50 };
+                    var n = rd.Next(numbers.Count);
+                    var numbersLow = new List<int> { 2, 4 };
+                    var q1 = numbers[n];
+                    var r = numbers[n];
+                    numbers.Remove(r);
+                    --max;
+                    n = rd.Next(numbers.Count);
+                    var q2 = numbers[n];
+                    r = numbers[n];
+                    numbers.Remove(r);
+                    var q3 = numbers[0];
+                    n = rd.Next(2);
+                    var q4 = numbersLow[n];
+
+                    foreach (var dm in fcm.Detectoren)
+                    {
+                        dm.Simulatie.Q1 = q1;
+                        dm.Simulatie.Q2 = q2;
+                        dm.Simulatie.Q3 = q3;
+                        dm.Simulatie.Q4 = q4;
+
+                        switch (fcm.Type)
+                        {
+                            case Models.Enumerations.FaseTypeEnum.Auto:
+                                dm.Simulatie.Stopline = 1800;
+                                break;
+                            case Models.Enumerations.FaseTypeEnum.Fiets:
+                                dm.Simulatie.Stopline = 5000;
+                                break;
+                            case Models.Enumerations.FaseTypeEnum.Voetganger:
+                                dm.Simulatie.Stopline = 10000;
+                                break;
+                        }
+                        if (dm.Simulatie.FCNr?.ToUpper() != "NG")
+                            dm.Simulatie.FCNr = fcm.Naam;
+                    }
                 }
-                return _GenerateSimulationValuesCommand;
-            }
-        }
+                foreach (var dm in _Controller.Detectoren)
+                {
+                    var max = 3;
+                    var numbers = new List<int> { 200, 100, 50 };
+                    var n = rd.Next(numbers.Count);
+                    var numbersLow = new List<int> { 2, 4 };
+                    var q1 = numbers[n];
+                    var r = numbers[n];
+                    numbers.Remove(r);
+                    --max;
+                    n = rd.Next(numbers.Count);
+                    var q2 = numbers[n];
+                    r = numbers[n];
+                    numbers.Remove(r);
+                    var q3 = numbers[0];
+                    n = rd.Next(2);
+                    var q4 = numbersLow[n];
+
+                    dm.Simulatie.Q1 = q1;
+                    dm.Simulatie.Q2 = q2;
+                    dm.Simulatie.Q3 = q3;
+                    dm.Simulatie.Q4 = q4;
+
+                    dm.Simulatie.Stopline = 1800;
+                    if (dm.Simulatie.FCNr != "NG" && Controller.Fasen.All(x => x.Naam != dm.Simulatie.FCNr))
+                        dm.Simulatie.FCNr = "NG";
+                }
+                foreach (var dm in _Controller.SelectieveDetectoren)
+                {
+                    var max = 3;
+                    var numbers = new List<int> { 200, 100, 50 };
+                    var n = rd.Next(numbers.Count);
+                    var numbersLow = new List<int> { 2, 4 };
+                    var q1 = numbers[n];
+                    var r = numbers[n];
+                    numbers.Remove(r);
+                    --max;
+                    n = rd.Next(numbers.Count);
+                    var q2 = numbers[n];
+                    r = numbers[n];
+                    numbers.Remove(r);
+                    var q3 = numbers[0];
+                    n = rd.Next(2);
+                    var q4 = numbersLow[n];
+
+                    dm.Simulatie.Q1 = q1;
+                    dm.Simulatie.Q2 = q2;
+                    dm.Simulatie.Q3 = q3;
+                    dm.Simulatie.Q4 = q4;
+
+                    dm.Simulatie.Stopline = 1800;
+                    if (dm.Simulatie.FCNr != "NG" && Controller.Fasen.All(x => x.Naam != dm.Simulatie.FCNr))
+                        dm.Simulatie.FCNr = "NG";
+                }
+
+                OnPropertyChanged("");
+                WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+                foreach(var d in Detectoren)
+                {
+                    d.OnPropertyChanged("");
+                }
+            },
+            () => Detectoren.Count > 0);
 
         #endregion // Commands
 
         #region Command functionality
 
-        private bool GenerateSimulationValuesCommand_CanExecute(object obj)
+        private bool GenerateSimulationValuesCommand_CanExecute()
         {
             return Detectoren != null && Detectoren.Count > 0;
         }
 
-        private void GenerateSimulationValuesCommand_Executed(object obj)
+        private void GenerateSimulationValuesCommand_Executed()
         {
             var rd = new Random();
             
@@ -173,11 +265,11 @@ namespace TLCGen.ViewModels
                     dm.Simulatie.FCNr = "NG";
             }
 
-            RaisePropertyChanged("");
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            OnPropertyChanged("");
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             foreach(var d in Detectoren)
             {
-                d.RaisePropertyChanged("");
+                d.OnPropertyChanged("");
             }
         }
 
@@ -237,9 +329,10 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
         
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        private void OnDetectorenChanged(object sender, DetectorenChangedMessage message)
         {
             UpdateDetectoren();
+            _GenerateSimulationValuesCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // TLCGen Events
@@ -265,7 +358,7 @@ namespace TLCGen.ViewModels
 
         public DetectorenSimulatieTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
         }
 
         #endregion // Constructor

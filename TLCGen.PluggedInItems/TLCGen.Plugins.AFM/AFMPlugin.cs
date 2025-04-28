@@ -135,7 +135,7 @@ namespace TLCGen.Plugins.AFM
                 _afmModel = new AFMDataModel();
             }
             _afmVM.AfmModel = _afmModel;
-            _afmVM.RaisePropertyChanged("");
+            _afmVM.OnPropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)

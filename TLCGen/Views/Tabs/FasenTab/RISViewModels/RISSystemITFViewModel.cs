@@ -1,11 +1,12 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RISSystemITFViewModel : ViewModelBase, IViewModelWithItem
+    public class RISSystemITFViewModel : ObservableObjectEx, IViewModelWithItem
     {
         private readonly RISSystemITFModel _model;
 
@@ -16,8 +17,8 @@ namespace TLCGen.ViewModels
             {
                 var old = _model.SystemITF;
                 _model.SystemITF = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                MessengerInstance.Send(new SystemITFChangedMessage(old, _model.SystemITF));
+                OnPropertyChanged(broadcast: true);
+                WeakReferenceMessengerEx.Default.Send(new SystemITFChangedMessage(old, _model.SystemITF));
             }
         }
 

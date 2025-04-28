@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Plugins.AFM.Models;
 
 namespace TLCGen.Plugins.AFM
 {
-    public class AFMFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class AFMFaseCyclusDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         private AFMFaseCyclusDataModel _faseCyclus;
 
@@ -16,7 +16,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _faseCyclus.FaseCyclus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -27,7 +27,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _faseCyclus.DummyFaseCyclus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +37,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _faseCyclus.MinimaleGroentijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -47,7 +47,7 @@ namespace TLCGen.Plugins.AFM
             set
             {
                 _faseCyclus.MaximaleGroentijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

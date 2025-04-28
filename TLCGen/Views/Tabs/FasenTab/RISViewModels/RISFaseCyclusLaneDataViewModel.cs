@@ -1,16 +1,18 @@
 ﻿
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
+
 namespace TLCGen.ViewModels
 {
-    public class RISFaseCyclusLaneDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISFaseCyclusLaneDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         private RISFaseCyclusLaneDataModel _laneData;
         private RISFaseCyclusLaneSimulatedStationViewModel _selectedStation;
@@ -23,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedStation = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -33,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.LaneID = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 foreach (var s in SimulatedStations)
                 {
                     s.StationData.LaneID = value;
@@ -47,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.SystemITF = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 foreach (var s in SimulatedStations)
                 {
                     s.StationData.SystemITF = value;
@@ -61,7 +63,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.UseHeading = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -71,7 +73,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.Heading = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -81,7 +83,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _laneData.HeadingMarge = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -101,7 +103,7 @@ namespace TLCGen.ViewModels
                     return FasenRISTabViewModel.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
                 },
                 (x, y) => false,
-                () => MessengerInstance.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         public object GetItem()

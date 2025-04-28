@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -26,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleMolenVM = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -57,7 +60,7 @@ namespace TLCGen.ViewModels
                     ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
                     FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
                 }
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -78,7 +81,7 @@ namespace TLCGen.ViewModels
                 if (_Controller?.Data != null)
                 {
                     _Controller.Data.ModulenInParameters = value;
-                    RaisePropertyChanged<object>(nameof(ModulenInParameters), broadcast: true);
+                    OnPropertyChanged(nameof(ModulenInParameters), broadcast: true);
                 }
             }
         }
@@ -91,8 +94,8 @@ namespace TLCGen.ViewModels
                 if (_Controller?.ModuleMolen != null)
                 {
                     _Controller.ModuleMolen.LangstWachtendeAlternatief = value;
-                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
-                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                    OnPropertyChanged(nameof(LangstWachtendeAlternatief), broadcast: true);
+                    WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
                     _ModuleMolenVM.LangstWachtendeAlternatief = value;
                 }
             }
@@ -114,7 +117,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            RaisePropertyChanged(nameof(HasMultiML));
+            OnPropertyChanged(nameof(HasMultiML));
             if (_Controller.Data.MultiModuleReeksen && SelectedModuleReeks == "ML")
             {
                 SelectedModuleReeks = "MLA";

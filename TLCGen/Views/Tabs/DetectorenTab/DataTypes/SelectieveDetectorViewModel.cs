@@ -1,5 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -8,7 +10,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class SelectieveDetectorViewModel : ViewModelBase, IComparable
+    public class SelectieveDetectorViewModel : ObservableObjectEx, IComparable
     {
         public SelectieveDetectorModel SelectieveDetector { get; }
 
@@ -21,9 +23,9 @@ namespace TLCGen.ViewModels
                 if (TLCGenModelManager.Default.IsElementIdentifierUnique(Models.Enumerations.TLCGenObjectTypeEnum.Input, value))
                 {
                     SelectieveDetector.Naam = value;
-                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.SelectieveDetector, old, value));
+                    WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.SelectieveDetector, old, value));
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -33,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.Omschrijving = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -43,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.SdType = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -53,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.TOG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -63,7 +65,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.TBG = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -74,7 +76,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.TFL = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -84,7 +86,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.CFL = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -94,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.Dummy = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

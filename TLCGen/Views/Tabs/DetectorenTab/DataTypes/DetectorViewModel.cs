@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 using TLCGen.DataAccess;
 using TLCGen.Settings;
 using TLCGen.Messaging.Messages;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.ModelManagement;
-using System.Text.RegularExpressions;
 using TLCGen.Integrity;
 
 namespace TLCGen.ViewModels
 {
-    public class DetectorViewModel : ViewModelBase, IComparable
+    public class DetectorViewModel : ObservableObjectEx, IComparable
     {
         #region Fields
 
@@ -35,7 +34,7 @@ namespace TLCGen.ViewModels
 		    set
             {
                 _detector.Rijstrook = value;
-                RaisePropertyChanged<object>(nameof(Rijstrook), broadcast: true);
+                OnPropertyChanged(nameof(Rijstrook), broadcast: true);
             }
         }
 
@@ -76,10 +75,10 @@ namespace TLCGen.ViewModels
                         _detector.Naam = value;
                         
                         // Notify the messenger
-                        MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldname, _detector.Naam));
+                        WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldname, _detector.Naam));
                     }
                 }
-                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+                OnPropertyChanged(nameof(Naam), broadcast: true);
             }
         }
 
@@ -95,7 +94,7 @@ namespace TLCGen.ViewModels
                         _detector.VissimNaam = value;
                     }
                 }
-                RaisePropertyChanged<object>(nameof(VissimNaam), broadcast: true);
+                OnPropertyChanged(nameof(VissimNaam), broadcast: true);
             }
         }
 
@@ -115,9 +114,9 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_detector, Type.ToString());
                 }
-                RaisePropertyChanged(string.Empty); // Update all properties
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(TLCGenControllerDataProvider.Default.Controller, Naam, old, value));
+                OnPropertyChanged(string.Empty); // Update all properties
+                OnPropertyChanged(nameof(Type), broadcast: true);
+                WeakReferenceMessengerEx.Default.Send(new FaseDetectorTypeChangedMessage(TLCGenControllerDataProvider.Default.Controller, Naam, old, value));
             }
         }
 
@@ -132,7 +131,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.TDB = value;
-                RaisePropertyChanged<object>(nameof(TDB), broadcast: true);
+                OnPropertyChanged(nameof(TDB), broadcast: true);
             }
         }
 
@@ -143,7 +142,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.TDH = value;
-                RaisePropertyChanged<object>(nameof(TDH), broadcast: true);
+                OnPropertyChanged(nameof(TDH), broadcast: true);
             }
         }
 
@@ -154,7 +153,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.TOG = value;
-                RaisePropertyChanged<object>(nameof(TOG), broadcast: true);
+                OnPropertyChanged(nameof(TOG), broadcast: true);
             }
         }
 
@@ -165,7 +164,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.TBG = value;
-                RaisePropertyChanged<object>(nameof(TBG), broadcast: true);
+                OnPropertyChanged(nameof(TBG), broadcast: true);
             }
         }
 
@@ -176,7 +175,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.TFL = value;
-                RaisePropertyChanged<object>(nameof(TFL), broadcast: true);
+                OnPropertyChanged(nameof(TFL), broadcast: true);
             }
         }
 
@@ -187,7 +186,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _detector.CFL = value;
-                RaisePropertyChanged<object>(nameof(CFL), broadcast: true);
+                OnPropertyChanged(nameof(CFL), broadcast: true);
             }
         }
 
@@ -197,7 +196,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Aanvraag = value;
-                RaisePropertyChanged<object>(nameof(Aanvraag), broadcast: true);
+                OnPropertyChanged(nameof(Aanvraag), broadcast: true);
             }
         }
 
@@ -207,7 +206,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Verlengen = value;
-                RaisePropertyChanged<object>(nameof(Verlengen), broadcast: true);
+                OnPropertyChanged(nameof(Verlengen), broadcast: true);
             }
         }
 
@@ -217,7 +216,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.AanvraagHardOpStraat = value;
-                RaisePropertyChanged<object>(nameof(AanvraagHardOpStraat), broadcast: true);
+                OnPropertyChanged(nameof(AanvraagHardOpStraat), broadcast: true);
             }
         }
 
@@ -227,7 +226,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.VerlengenHardOpStraat = value;
-                RaisePropertyChanged<object>(nameof(VerlengenHardOpStraat), broadcast: true);
+                OnPropertyChanged(nameof(VerlengenHardOpStraat), broadcast: true);
             }
         }
 
@@ -237,7 +236,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.AanvraagBijStoring = value;
-                RaisePropertyChanged<object>(nameof(AanvraagBijStoring), broadcast: true);
+                OnPropertyChanged(nameof(AanvraagBijStoring), broadcast: true);
             }
         }
 
@@ -247,7 +246,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.AanvraagDirectSch = value;
-                RaisePropertyChanged<object>(nameof(AanvraagDirect), broadcast: true);
+                OnPropertyChanged(nameof(AanvraagDirect), broadcast: true);
             }
         }
 
@@ -257,7 +256,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Wachtlicht = value;
-                RaisePropertyChanged<object>(nameof(Wachtlicht), broadcast: true);
+                OnPropertyChanged(nameof(Wachtlicht), broadcast: true);
             }
         }
 
@@ -272,8 +271,8 @@ namespace TLCGen.ViewModels
                     if (VeiligheidsGroenHiaat == 0) VeiligheidsGroenHiaat = 20;
                     if (VeiligheidsGroenVolgtijd == 0) VeiligheidsGroenVolgtijd = 25;
                 }
-                MessengerInstance.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
-                RaisePropertyChanged<object>(nameof(VeiligheidsGroen), broadcast: true);
+                WeakReferenceMessengerEx.Default.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
+                OnPropertyChanged(nameof(VeiligheidsGroen), broadcast: true);
             }
         }
 
@@ -283,7 +282,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.VeiligheidsGroenHiaat = value;
-                RaisePropertyChanged<object>(nameof(VeiligheidsGroenHiaat), broadcast: true);
+                OnPropertyChanged(nameof(VeiligheidsGroenHiaat), broadcast: true);
             }
         }
 
@@ -293,7 +292,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.VeiligheidsGroenVolgtijd = value;
-                RaisePropertyChanged<object>(nameof(VeiligheidsGroenVolgtijd), broadcast: true);
+                OnPropertyChanged(nameof(VeiligheidsGroenVolgtijd), broadcast: true);
             }
         }
 
@@ -303,7 +302,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.ResetAanvraag = value;
-                RaisePropertyChanged<object>(nameof(ResetAanvraag), broadcast: true);
+                OnPropertyChanged(nameof(ResetAanvraag), broadcast: true);
             }
         }
 
@@ -313,7 +312,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _detector.ResetAanvraagTijdsduur = value;
-                RaisePropertyChanged<object>(nameof(ResetAanvraagTijdsduur), broadcast: true);
+                OnPropertyChanged(nameof(ResetAanvraagTijdsduur), broadcast: true);
             }
         }
 
@@ -323,7 +322,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.Q1 = value;
-                RaisePropertyChanged<object>(nameof(Q1), broadcast: true);
+                OnPropertyChanged(nameof(Q1), broadcast: true);
             }
         }
 
@@ -333,7 +332,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.Q2 = value;
-                RaisePropertyChanged<object>(nameof(Q2), broadcast: true);
+                OnPropertyChanged(nameof(Q2), broadcast: true);
             }
         }
 
@@ -343,7 +342,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.Q3 = value;
-                RaisePropertyChanged<object>(nameof(Q3), broadcast: true);
+                OnPropertyChanged(nameof(Q3), broadcast: true);
             }
         }
 
@@ -353,7 +352,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.Q4 = value;
-                RaisePropertyChanged<object>(nameof(Q4), broadcast: true);
+                OnPropertyChanged(nameof(Q4), broadcast: true);
             }
         }
 
@@ -363,7 +362,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.Stopline = value;
-                RaisePropertyChanged<object>(nameof(Stopline), broadcast: true);
+                OnPropertyChanged(nameof(Stopline), broadcast: true);
             }
         }
 
@@ -373,7 +372,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.Simulatie.FCNr = value;
-                RaisePropertyChanged<object>(nameof(FCNr), broadcast: true);
+                OnPropertyChanged(nameof(FCNr), broadcast: true);
             }
         }
 

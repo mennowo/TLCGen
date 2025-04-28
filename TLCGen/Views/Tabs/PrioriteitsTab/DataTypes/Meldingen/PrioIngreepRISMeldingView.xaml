@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
-             xmlns:wpfAutoGrid="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:views="clr-namespace:TLCGen.Views"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -63,7 +63,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!-- UI for RIS -->
-        <wpfAutoGrid:AutoGrid Grid.Row="1" Columns="Auto,*" RowCount="12">
+        <controls:AutoGrid Grid.Row="1" Columns="Auto,*" RowCount="12">
             <Label Content="RIS instellingen" FontStyle="Italic" Grid.ColumnSpan="2" />
             <Label Content="Start (dichtbij ss)" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
             <TextBox Text="{Binding RisStart,UpdateSourceTrigger=PropertyChanged}" Margin="2" Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}" />
@@ -138,6 +138,6 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
-        </wpfAutoGrid:AutoGrid>            
+        </controls:AutoGrid>            
     </Grid>
 </UserControl>

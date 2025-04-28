@@ -5,11 +5,14 @@ using System.Windows.Input;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Windows;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.Additor
 {
-    internal class AdditorTabViewModel : ViewModelBase
+    internal class AdditorTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -19,8 +22,8 @@ namespace TLCGen.Plugins.Additor
         private AddFileViewModel _selectedAddFile;
         private bool _selectedAddFileChanged;
         private TextEditor _viewEditor;
-        private GalaSoft.MvvmLight.Command.RelayCommand _refreshFilesListCommand;
-        private GalaSoft.MvvmLight.Command.RelayCommand _saveAddFileCommand;
+        private RelayCommand _refreshFilesListCommand;
+        private RelayCommand _saveAddFileCommand;
 
         #endregion // Fields
 
@@ -56,7 +59,7 @@ namespace TLCGen.Plugins.Additor
 	        set
             {
                 _controllerFileName = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -89,7 +92,8 @@ namespace TLCGen.Plugins.Additor
                     ResetViewEditorText();
                 }
                 _selectedAddFileChanged = false;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _saveAddFileCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -97,15 +101,7 @@ namespace TLCGen.Plugins.Additor
 
         #region Commands
 
-        public ICommand RefreshFilesListCommand => _refreshFilesListCommand ??= new GalaSoft.MvvmLight.Command.RelayCommand(RefreshFilesListCommand_Executed, RefreshFilesListCommand_CanExecute);
-
-	    public ICommand SaveAddFileCommand => _saveAddFileCommand ??= new GalaSoft.MvvmLight.Command.RelayCommand(SaveAddFileCommand_Executed, SaveAddFileCommand_CanExecute);
-
-        #endregion // Commands
-
-        #region Command Functionality
-
-        private void RefreshFilesListCommand_Executed()
+        public ICommand RefreshFilesListCommand => _refreshFilesListCommand ??= new RelayCommand(() =>
         {
             if (!string.IsNullOrWhiteSpace(ControllerFileName) && File.Exists(ControllerFileName))
             {
@@ -135,14 +131,9 @@ namespace TLCGen.Plugins.Additor
                     SelectedAddFile = AddFiles[0];
                 }
             }
-        }
+        }, () => !string.IsNullOrWhiteSpace(ControllerFileName));
 
-        private bool RefreshFilesListCommand_CanExecute()
-        {
-            return !string.IsNullOrWhiteSpace(ControllerFileName);
-        }
-
-        private void SaveAddFileCommand_Executed()
+	    public ICommand SaveAddFileCommand => _saveAddFileCommand ??= new RelayCommand(() =>
         {
             try
             {
@@ -150,22 +141,17 @@ namespace TLCGen.Plugins.Additor
             }
             catch (Exception e)
             {
-	            MessageBox.Show("Error bij schrijven van add file: \n" + e);
+                MessageBox.Show("Error bij schrijven van add file: \n" + e);
             }
-        }
+        }, () => SelectedAddFile != null);
 
-        private bool SaveAddFileCommand_CanExecute()
-        {
-            return SelectedAddFile != null;
-        }
-
-        #endregion // Command Functionality
+        #endregion // Commands
 
         #region Public Methods
 
         public void UpdateTLCGenMessaging()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
         }
 
         #endregion // Public Methods
@@ -206,25 +192,27 @@ namespace TLCGen.Plugins.Additor
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
+        private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage message)
         {
             ControllerFileName = message.NewFileName;
-            if(RefreshFilesListCommand_CanExecute())
+            if (RefreshFilesListCommand?.CanExecute(null) == true)
             {
-                RefreshFilesListCommand_Executed();
+                RefreshFilesListCommand.Execute(null);
             }
 
-            if(string.IsNullOrWhiteSpace(message.NewFileName))
+            if (string.IsNullOrWhiteSpace(message.NewFileName))
             {
                 SelectedAddFile = null;
             }
+
+            _refreshFilesListCommand?.NotifyCanExecuteChanged();
         }
 
         #endregion // TLCGen Events
 
         #region Constructor
 
-	    public AdditorTabViewModel(AdditorPlugin plugin)
+        public AdditorTabViewModel(AdditorPlugin plugin)
 	    {
             _plugin = plugin;
 	    }

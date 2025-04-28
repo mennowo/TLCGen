@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class VAOntruimenNaarFaseViewModel : ViewModelBase, IViewModelWithItem
+    public class VAOntruimenNaarFaseViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenNaarFase.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -33,19 +33,11 @@ namespace TLCGen.ViewModels
                 {
                     _VAOntruimenNaarFase.VAOntruimingsTijd = value;
                 }
-                RaisePropertyChanged<object>(nameof(VAOntruimingsTijd), broadcast: true);
+                OnPropertyChanged(nameof(VAOntruimingsTijd), broadcast: true);
             }
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

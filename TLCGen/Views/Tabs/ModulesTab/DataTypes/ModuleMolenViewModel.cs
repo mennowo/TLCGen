@@ -1,17 +1,16 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleMolenViewModel : ViewModelBase
+    public class ModuleMolenViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -21,6 +20,10 @@ namespace TLCGen.ViewModels
         private ModuleViewModel _SelectedModule;
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
         private volatile bool _reloading;
+        private RelayCommand _AddModuleCommand;
+        private RelayCommand _RemoveModuleCommand;
+        private RelayCommand _MoveModuleUpCommand;
+        private RelayCommand _MoveModuleDownCommand;
 
         #endregion // Fields
 
@@ -28,17 +31,8 @@ namespace TLCGen.ViewModels
 
         public string Reeks => _ModuleMolen.Reeks;
 
-        public ObservableCollection<ModuleViewModel> Modules
-        {
-            get
-            {
-                if (_Modules == null)
-                {
-                    _Modules = new ObservableCollection<ModuleViewModel>();
-                }
-                return _Modules;
-            }
-        }
+        public ObservableCollection<ModuleViewModel> Modules { get; } = [];
+        
         public ModuleViewModel SelectedModule
         {
             get => _SelectedModule;
@@ -55,7 +49,10 @@ namespace TLCGen.ViewModels
                     _ModulesTabVM.SetSelectedModule(value);
                 }
 
-                RaisePropertyChanged("SelectedModule");
+                OnPropertyChanged();
+                _RemoveModuleCommand?.NotifyCanExecuteChanged();
+                _MoveModuleUpCommand?.NotifyCanExecuteChanged();
+                _MoveModuleDownCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -65,7 +62,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedModuleFase = null;
-                RaisePropertyChanged("SelectedModuleFase");
+                OnPropertyChanged("SelectedModuleFase");
                 _SelectedModuleFase = value;
                 if (_ModulesTabVM != null)
                 {
@@ -87,8 +84,8 @@ namespace TLCGen.ViewModels
                 if (_ModuleMolen != null)
                 {
                     _ModuleMolen.LangstWachtendeAlternatief = value;
-                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
-                    RaisePropertyChanged("NotLangstWachtendeAlternatief");
+                    OnPropertyChanged(nameof(LangstWachtendeAlternatief), broadcast: true);
+                    OnPropertyChanged("NotLangstWachtendeAlternatief");
                 }
             }
         }
@@ -104,12 +101,12 @@ namespace TLCGen.ViewModels
                 if (_ModuleMolen != null && value != null)
                 {
                     _ModuleMolen.WachtModule = value;
-                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                    OnPropertyChanged(nameof(WachtModule), broadcast: true);
                 }
                 else if (!_Modules.Any())
                 {
                     _ModuleMolen.WachtModule = null;
-                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                    OnPropertyChanged(nameof(WachtModule), broadcast: true);
                 }
             }
         }
@@ -117,64 +114,38 @@ namespace TLCGen.ViewModels
         #endregion // Properties
 
         #region Commands
-
-        RelayCommand _AddModuleCommand;
-        public ICommand AddModuleCommand
+        public ICommand AddModuleCommand => _AddModuleCommand ??= new RelayCommand(() =>
         {
-            get
+            var mm = new ModuleModel
             {
-                if (_AddModuleCommand == null)
-                {
-                    _AddModuleCommand = new RelayCommand(AddNewModuleCommand_Executed, AddNewModuleCommand_CanExecute);
-                }
-                return _AddModuleCommand;
-            }
-        }
+                Naam = Reeks + (Modules.Count + 1).ToString()
+            };
+            var mvm = new ModuleViewModel(mm);
+            Modules.Add(mvm);
+            SelectedModule = mvm;
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
+        });
 
-
-        RelayCommand _RemoveModuleCommand;
-        public ICommand RemoveModuleCommand
+        public ICommand RemoveModuleCommand => _RemoveModuleCommand ??= new RelayCommand(() =>
         {
-            get
+            var index = Modules.IndexOf(SelectedModule);
+            Modules.Remove(SelectedModule);
+            SelectedModule = null;
+            if (Modules.Count > 0)
             {
-                if (_RemoveModuleCommand == null)
+                if (index >= Modules.Count)
                 {
-                    _RemoveModuleCommand = new RelayCommand(RemoveModuleCommand_Executed, ChangeModuleCommand_CanExecute);
+                    SelectedModule = Modules[Modules.Count - 1];
                 }
-                return _RemoveModuleCommand;
-            }
-        }
-
-        RelayCommand _MoveModuleUpCommand;
-        public ICommand MoveModuleUpCommand
-        {
-            get
-            {
-                if (_MoveModuleUpCommand == null)
+                else
                 {
-                    _MoveModuleUpCommand = new RelayCommand(MoveModuleUpCommand_Executed, ChangeModuleCommand_CanExecute);
+                    SelectedModule = Modules[index];
                 }
-                return _MoveModuleUpCommand;
             }
-        }
+            WeakReferenceMessengerEx.Default.Send(new ModulesChangedMessage());
+        }, () => SelectedModule != null);
 
-        RelayCommand _MoveModuleDownCommand;
-        public ICommand MoveModuleDownCommand
-        {
-            get
-            {
-                if (_MoveModuleDownCommand == null)
-                {
-                    _MoveModuleDownCommand = new RelayCommand(MoveModuleDownCommand_Executed, ChangeModuleCommand_CanExecute);
-                }
-                return _MoveModuleDownCommand;
-            }
-        }
-        #endregion // Commands
-
-        #region Command functionality
-
-        private void MoveModuleUpCommand_Executed(object obj)
+        public ICommand MoveModuleUpCommand => _MoveModuleUpCommand ??= new RelayCommand(() =>
         {
             var index = -1;
             foreach(var mvm in Modules)
@@ -193,10 +164,9 @@ namespace TLCGen.ViewModels
                 Modules.Insert(index - 1, mvm);
                 SelectedModule = mvm;
             }
-        }
+        }, () => SelectedModule != null);
 
-
-        private void MoveModuleDownCommand_Executed(object obj)
+        public ICommand MoveModuleDownCommand => _MoveModuleDownCommand ??= new RelayCommand(() =>
         {
             var index = -1;
             foreach (var mvm in Modules)
@@ -215,50 +185,9 @@ namespace TLCGen.ViewModels
                 Modules.Insert(index + 1, mvm);
                 SelectedModule = mvm;
             }
-        }
+        }, () => SelectedModule != null);
 
-        void AddNewModuleCommand_Executed(object prm)
-        {
-            var mm = new ModuleModel
-            {
-                Naam = Reeks + (Modules.Count + 1).ToString()
-            };
-            var mvm = new ModuleViewModel(mm);
-            Modules.Add(mvm);
-            SelectedModule = mvm;
-            MessengerInstance.Send(new ModulesChangedMessage());
-        }
-
-        bool AddNewModuleCommand_CanExecute(object prm)
-        {
-            return Modules != null;
-        }
-
-        void RemoveModuleCommand_Executed(object prm)
-        {
-            var index = Modules.IndexOf(SelectedModule);
-            Modules.Remove(SelectedModule);
-            SelectedModule = null;
-            if (Modules.Count > 0)
-            {
-                if (index >= Modules.Count)
-                {
-                    SelectedModule = Modules[Modules.Count - 1];
-                }
-                else
-                {
-                    SelectedModule = Modules[index];
-                }
-            }
-            MessengerInstance.Send(new ModulesChangedMessage());
-        }
-
-        bool ChangeModuleCommand_CanExecute(object prm)
-        {
-            return SelectedModule != null;
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private Methods
 
@@ -280,12 +209,12 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             ReloadModules();
         }
 
-        private void OnConflictsChanged(ConflictsChangedMessage message)
+        private void OnConflictsChanged(object sender, ConflictsChangedMessage message)
         {
             ReloadModules();
         }
@@ -319,8 +248,8 @@ namespace TLCGen.ViewModels
                 {
                     WachtModule = Modules[0].Naam;
                 }
-                RaisePropertyChanged(nameof(WachtModule));
-                Messenger.Default.Send(new ControllerDataChangedMessage());
+                OnPropertyChanged(nameof(WachtModule));
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
@@ -333,8 +262,8 @@ namespace TLCGen.ViewModels
             _ModuleMolen = moduleMolen;
             ReloadModules();
             _ModulesTabVM = mltab;
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<ConflictsChangedMessage>(this, OnConflictsChanged);
         }
 
         #endregion // Constructor

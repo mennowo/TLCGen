@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using NSubstitute;
 using NUnit.Framework;
 using TLCGen.Integrity;
@@ -54,7 +54,6 @@ namespace TLCGen.UnitTests
 	    {
 		    var model = ControllerCreator.GetSmallControllerWithDetection();
 		    var vm = new DetectorenFasenTabViewModel {Controller = model};
-		    Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
 		    DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             TLCGenModelManager.OverrideDefault(FakesCreator.CreateModelManager(model));
 
@@ -76,8 +75,6 @@ namespace TLCGen.UnitTests
 		    model.Fasen[1].Type = FaseTypeEnum.Fiets;
 		    model.Fasen[2].Type = FaseTypeEnum.Voetganger;
 		    var vm = new DetectorenFasenTabViewModel {Controller = model};
-		    var messengermock = FakesCreator.CreateMessenger(model);
-		    Messenger.OverrideDefault(messengermock);
 		    var defaultsprovidermock = FakesCreator.CreateDefaultsProvider();
 		    DefaultsProvider.OverrideDefault(defaultsprovidermock);
 

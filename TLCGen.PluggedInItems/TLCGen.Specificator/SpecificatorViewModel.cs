@@ -1,12 +1,12 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
 using System.Windows.Input;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.Specificator
 {
-    public class SpecificatorViewModel : ViewModelBase
+    public class SpecificatorViewModel : ObservableObject
     {
         #region Fields
 
@@ -24,7 +24,7 @@ namespace TLCGen.Specificator
             set
             {
                 _data = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -32,38 +32,19 @@ namespace TLCGen.Specificator
 
         #region Commands
 
-        public ICommand GenerateCommand
-        {
-            get
-            {
-                if (_generateCommand == null)
-                {
-                    _generateCommand = new RelayCommand(GenerateCommand_Executed, GenerateCommand_CanExecute);
-                }
-                return _generateCommand;
-            }
-        }
+        public ICommand GenerateCommand => _generateCommand ??= new RelayCommand(
+            GenerateSpecification, 
+            () => _plugin.Controller is { Fasen.Count: > 0 } &&
+                  !string.IsNullOrWhiteSpace(_plugin.ControllerFileName));
 
         #endregion // Commands
 
-        #region Command Functionality
-
-        private void GenerateCommand_Executed()
-        {
-            GenerateSpecification();
-        }
-
-        private bool GenerateCommand_CanExecute()
-        {
-            return _plugin.Controller != null &&
-                   _plugin.Controller.Fasen != null &&
-                   _plugin.Controller.Fasen.Count > 0 &&
-                   !string.IsNullOrWhiteSpace(_plugin.ControllerFileName);
-        }
-
-        #endregion // Command Functionality
-
         #region Public Methods
+
+        public void UpdateCommands()
+        {
+            _generateCommand?.NotifyCanExecuteChanged();
+        }
 
         public void GenerateSpecification()
         {

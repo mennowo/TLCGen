@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Models;
 using TLCGen.Helpers;
-using GalaSoft.MvvmLight.Messaging;
+
 using TLCGen.Messaging.Messages;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 using TLCGen.Extensions;
+
 
 namespace TLCGen.ViewModels
 {
@@ -32,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                OnPropertyChanged("SelectedFaseCyclus");
             }
         }
 
@@ -75,7 +77,7 @@ namespace TLCGen.ViewModels
 		            }
 	            }
 
-	            RaisePropertyChanged("Fasen");
+	            OnPropertyChanged("Fasen");
             }
         }
 
@@ -83,18 +85,18 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Message Handling
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             Fasen.Rebuild();
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             _Controller.ModuleMolen.FasenModuleData.BubbleSort();
             Fasen.Rebuild();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        private void OnNameChanged(object sender, NameChangedMessage message)
         {
             _Controller.ModuleMolen.FasenModuleData.BubbleSort();
             Fasen.Rebuild();
@@ -110,10 +112,10 @@ namespace TLCGen.ViewModels
 
         public ModulesLangstwachtendeInstellingenTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(x => RaisePropertyChanged(string.Empty)));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<UpdateTabsEnabledMessage>(this, (o, x) => OnPropertyChanged(string.Empty));
         }
 
         #endregion // Constructor

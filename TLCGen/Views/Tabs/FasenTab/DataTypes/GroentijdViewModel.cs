@@ -1,12 +1,13 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class GroentijdViewModel : ViewModelBase, IComparable, IViewModelWithItem
+    public class GroentijdViewModel : ObservableObjectEx, IComparable, IViewModelWithItem
     {
         #region Fields
         
@@ -30,8 +31,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Groentijd.Waarde = value;
-                RaisePropertyChanged<object>(nameof(Waarde), broadcast: true);
-                MessengerInstance.Send(new GroentijdChangedMessage());
+                OnPropertyChanged(nameof(Waarde), broadcast: true);
+                WeakReferenceMessengerEx.Default.Send(new GroentijdChangedMessage());
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -6,7 +6,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 {
-    public class HalfstarGekoppeldeKruisingViewModel : ViewModelBase, IViewModelWithItem
+    public class HalfstarGekoppeldeKruisingViewModel : ObservableObjectEx, IViewModelWithItem
 	{
 		#region Fields
 
@@ -30,7 +30,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				{
 					u.Kruising = value;
 				}
-                RaisePropertyChanged<object>(nameof(KruisingNaam), broadcast: true);
+                OnPropertyChanged(nameof(KruisingNaam), broadcast: true);
 			}
 		}
 		
@@ -45,7 +45,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				{
 					u.Type = value;
 				}
-                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                OnPropertyChanged(nameof(Type), broadcast: true);
             }
         }
 
@@ -55,9 +55,9 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			set
 			{
 				_gekoppeldeKruising.KoppelWijze = value;
-                RaisePropertyChanged<object>(nameof(KoppelWijze), broadcast: true);
-                RaisePropertyChanged(nameof(ShowPTPOptions));
-				RaisePropertyChanged(nameof(ShowKoppelsignalenOpties));
+                OnPropertyChanged(nameof(KoppelWijze), broadcast: true);
+                OnPropertyChanged(nameof(ShowPTPOptions));
+				OnPropertyChanged(nameof(ShowKoppelsignalenOpties));
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				if (value != null)
 				{
 					_gekoppeldeKruising.PTPKruising = value;
-                    RaisePropertyChanged<object>(nameof(PTPKruising), broadcast: true);
+                    OnPropertyChanged(nameof(PTPKruising), broadcast: true);
                 }
             }
 		}
@@ -79,14 +79,6 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 		public bool ShowKoppelsignalenOpties => _gekoppeldeKruising.KoppelWijze == HalfstarGekoppeldWijzeEnum.Koppelsignalen;
 
 		#endregion // Properties
-		
-		#region Commands
-
-		#endregion // Commands
-
-		#region Command functionality
-
-		#endregion // Command functionality
 
 		#region Private methods
 

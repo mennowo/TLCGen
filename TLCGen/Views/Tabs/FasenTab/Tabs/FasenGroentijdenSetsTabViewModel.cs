@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,12 +6,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+
 
 namespace TLCGen.ViewModels
 {
@@ -25,9 +28,10 @@ namespace TLCGen.ViewModels
         
         private ObservableCollection<string> _SetNames;
         private ObservableCollection<string> _FasenNames;
-        RelayCommand _addGroentijdenSetCommand;
-        RelayCommand _removeGroentijdenSetCommand;
-        RelayCommand _importGroentijdenDataCommand;
+        private RelayCommand _addGroentijdenSetCommand;
+        private RelayCommand _removeGroentijdenSetCommand;
+        private RelayCommand _importGroentijdenDataCommand;
+        private GroentijdenSetViewModel _selectedSet;
 
         #endregion // Fields
 
@@ -41,24 +45,12 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedSet = value; 
-                RaisePropertyChanged();
+                OnPropertyChanged(); 
+                _removeGroentijdenSetCommand?.NotifyCanExecuteChanged();
             }
         }
 
-        private ObservableCollection<GroentijdenSetViewModel> _GroentijdenSets;
-        private GroentijdenSetViewModel _selectedSet;
-
-        public ObservableCollection<GroentijdenSetViewModel> GroentijdenSets
-        {
-            get
-            {
-                if(_GroentijdenSets == null)
-                {
-                    _GroentijdenSets = new ObservableCollection<GroentijdenSetViewModel>();
-                }
-                return _GroentijdenSets;
-            }
-        }
+        public ObservableCollection<GroentijdenSetViewModel> GroentijdenSets { get; } = [];
 
         public ObservableCollection<string> SetNames
         {
@@ -91,48 +83,121 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddGroentijdenSetCommand
-        {
-            get
+        public ICommand AddGroentijdenSetCommand => _addGroentijdenSetCommand ??= new RelayCommand(() =>
             {
-                if (_addGroentijdenSetCommand == null)
+                // Build model
+                var mgsm = new GroentijdenSetModel();
+                switch(_Controller.Data.TypeGroentijden)
                 {
-                    _addGroentijdenSetCommand = new RelayCommand(AddNewGroentijdenSetCommand_Executed, AddNewGroentijdenSetCommand_CanExecute);
+                    case GroentijdenTypeEnum.VerlengGroentijden:
+                        mgsm.Naam = "VG" + (GroentijdenSets.Count + 1);
+                        break;
+                    default:
+                        mgsm.Naam = "MG" + (GroentijdenSets.Count + 1);
+                        break;
+
                 }
-                return _addGroentijdenSetCommand;
-            }
-        }
+                foreach(var fcvm in _Controller.Fasen)
+                {
+                    var mgm = new GroentijdModel();
+                    mgm.FaseCyclus = fcvm.Naam;
+                    mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fcvm.Type);
+                    mgsm.Groentijden.Add(mgm);
+                }
 
+                // Create ViewModel around the model, add to list
+                var mgsvm = new GroentijdenSetViewModel(mgsm);
+                GroentijdenSets.Add(mgsvm);
 
-        public ICommand RemoveGroentijdenSetCommand
-        {
-            get
+                if (string.IsNullOrWhiteSpace(_Controller.PeriodenData.DefaultPeriodeGroentijdenSet))
+                {
+                    _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = mgsm.Naam;
+                }
+
+                // Rebuild matrix
+                BuildGroentijdenMatrix();
+                CheckGroentijdenSetsWithDefaultPeriode();
+            });
+
+        public ICommand RemoveGroentijdenSetCommand => _removeGroentijdenSetCommand ??= new RelayCommand(() =>
             {
-                if (_removeGroentijdenSetCommand == null)
+                var changed = false;
+                foreach(var p in _Controller.PeriodenData.Perioden)
                 {
-                    _removeGroentijdenSetCommand = new RelayCommand(RemoveGroentijdenSetCommand_Executed, RemoveGroentijdenSetCommand_CanExecute);
+                    if(p.Type == PeriodeTypeEnum.Groentijden && GroentijdenSets.All(x => p.GroentijdenSet != x.Naam))
+                    {
+                        p.GroentijdenSet = null;
+                        changed = true;
+                    }
                 }
-                return _removeGroentijdenSetCommand;
-            }
-        }
+                if(_Controller.PeriodenData.DefaultPeriodeGroentijdenSet == SelectedSet.Naam)
+                {
+                    if(_Controller.GroentijdenSets.Count > 0)
+                    {
+                        _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = _Controller.GroentijdenSets[0].Naam;
+                    }
+                    else
+                    {
+                        _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = null;
+                    }
+                    changed = true;
+                }
+                if(changed)
+                {
+                    WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
+                }
 
-        public ICommand ImportGroentijdenDataCommand
-        {
-            get
-            {
-                if (_importGroentijdenDataCommand == null)
+                GroentijdenSets.Remove(SelectedSet);
+                var i = 1;
+
+                foreach(var mgsvm in GroentijdenSets)
                 {
-                    _importGroentijdenDataCommand = new RelayCommand(ImportGroentijdenDataCommand_Executed, ImportGroentijdenDataCommand_CanExecute);
+                    if (Regex.IsMatch(mgsvm.Naam, @"(M|V)G[0-9]+"))
+                    {
+                        switch (_Controller.Data.TypeGroentijden)
+                        {
+                            case GroentijdenTypeEnum.VerlengGroentijden:
+                                mgsvm.Naam = "VG" + i;
+                                break;
+                            default:
+                                mgsvm.Naam = "MG" + i;
+                                break;
+
+                        }
+                    }
+                    i++;
                 }
-                return _importGroentijdenDataCommand;
-            }
-        }
+                SelectedSet = null;
+
+                if (!GroentijdenSets.Any())
+                {
+                    _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = "";
+                }
+
+                BuildGroentijdenMatrix();
+                CheckGroentijdenSetsWithDefaultPeriode();
+            }, 
+            () => SelectedSet != null);
+
+        public ICommand ImportGroentijdenDataCommand => _importGroentijdenDataCommand ??= new RelayCommand(() =>
+            {
+                var importWindow = new Dialogs.ImportGroentijdenDataWindow(_Controller)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                var result = importWindow.ShowDialog();
+                if (result == true)
+                {
+                    OnPropertyChanged(broadcast: true);
+                    BuildGroentijdenMatrix();
+                }
+            });
 
         #endregion // Commands
 
         #region Command functionality
 
-        void AddNewGroentijdenSetCommand_Executed(object prm)
+        void AddNewGroentijdenSetCommand_Executed()
         {
             // Build model
             var mgsm = new GroentijdenSetModel();
@@ -168,12 +233,12 @@ namespace TLCGen.ViewModels
             CheckGroentijdenSetsWithDefaultPeriode();
         }
 
-        bool AddNewGroentijdenSetCommand_CanExecute(object prm)
+        bool AddNewGroentijdenSetCommand_CanExecute()
         {
             return GroentijdenSets != null;
         }
 
-        void RemoveGroentijdenSetCommand_Executed(object prm)
+        void RemoveGroentijdenSetCommand_Executed()
         {
             var changed = false;
             foreach(var p in _Controller.PeriodenData.Perioden)
@@ -198,7 +263,7 @@ namespace TLCGen.ViewModels
             }
             if(changed)
             {
-                Messenger.Default.Send(new PeriodenChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new PeriodenChangedMessage());
             }
 
             GroentijdenSets.Remove(SelectedSet);
@@ -232,12 +297,12 @@ namespace TLCGen.ViewModels
             CheckGroentijdenSetsWithDefaultPeriode();
         }
 
-        bool RemoveGroentijdenSetCommand_CanExecute(object prm)
+        bool RemoveGroentijdenSetCommand_CanExecute()
         {
             return SelectedSet != null;
         }
 
-        void ImportGroentijdenDataCommand_Executed(object prm)
+        void ImportGroentijdenDataCommand_Executed()
         {
             var importWindow = new Dialogs.ImportGroentijdenDataWindow(_Controller)
             {
@@ -246,12 +311,12 @@ namespace TLCGen.ViewModels
             var result = importWindow.ShowDialog();
             if (result == true)
             {
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 BuildGroentijdenMatrix();
             }
         }
 
-        bool ImportGroentijdenDataCommand_CanExecute(object prm)
+        bool ImportGroentijdenDataCommand_CanExecute()
         {
             return true;
         }
@@ -271,9 +336,9 @@ namespace TLCGen.ViewModels
                 SetNames.Clear();
                 FasenNames.Clear();
                 GroentijdenMatrix = new GroentijdViewModel[0,0];
-				RaisePropertyChanged(nameof(SetNames));
-	            RaisePropertyChanged(nameof(FasenNames));
-	            RaisePropertyChanged(nameof(GroentijdenMatrix));
+				OnPropertyChanged(nameof(SetNames));
+	            OnPropertyChanged(nameof(FasenNames));
+	            OnPropertyChanged(nameof(GroentijdenMatrix));
 			}
 
             foreach (var mgsvm in GroentijdenSets)
@@ -313,9 +378,9 @@ namespace TLCGen.ViewModels
                 }
                 i++;
             }
-            RaisePropertyChanged(nameof(SetNames));
-            RaisePropertyChanged(nameof(FasenNames));
-            RaisePropertyChanged(nameof(GroentijdenMatrix));
+            OnPropertyChanged(nameof(SetNames));
+            OnPropertyChanged(nameof(FasenNames));
+            OnPropertyChanged(nameof(GroentijdenMatrix));
         }
 
         private void CheckGroentijdenSetsWithDefaultPeriode()
@@ -429,7 +494,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        public void OnFasenChanged(FasenChangedMessage message)
+        public void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             foreach (var set in GroentijdenSets)
             {
@@ -438,19 +503,19 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        public void OnFasenSorted(FasenSortedMessage message)
+        public void OnFasenSorted(object sender, FasenSortedMessage message)
         {
             BuildGroentijdenMatrix();
         }
 
-        public void OnNameChanged(NameChangedMessage message)
+        public void OnNameChanged(object sender, NameChangedMessage message)
         {
             BuildGroentijdenMatrix();
         }
 
-        public void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
+        public void OnGroentijdenTypeChanged(object sender, GroentijdenTypeChangedMessage message)
         {
-            RaisePropertyChanged(nameof(DisplayName));
+            OnPropertyChanged(nameof(DisplayName));
             var isdef = false;
             foreach (var setvm in GroentijdenSets)
             {
@@ -468,7 +533,7 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        private void OnGroentijdChanged(GroentijdChangedMessage msg)
+        private void OnGroentijdChanged(object sender, GroentijdChangedMessage msg)
         {
             CheckGroentijdenSetsWithDefaultPeriode();
         }
@@ -496,7 +561,7 @@ namespace TLCGen.ViewModels
                     _Controller.GroentijdenSets.Remove(mgsvm.GroentijdenSet);
                 }
             }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -505,11 +570,11 @@ namespace TLCGen.ViewModels
 
         public FasenGroentijdenSetsTabViewModel()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
-            Messenger.Default.Register(this, new Action<GroentijdChangedMessage>(OnGroentijdChanged));
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<GroentijdenTypeChangedMessage>(this, OnGroentijdenTypeChanged);
+            WeakReferenceMessengerEx.Default.Register<GroentijdChangedMessage>(this, OnGroentijdChanged);
         }
 
 

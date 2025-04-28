@@ -1,14 +1,14 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.ViewModels
 {
-    public class ItemsManagerViewModel<T1, T2> : ViewModelBase where T1 : class where T2 : class
+    public class ItemsManagerViewModel<T1, T2> : ObservableObject where T1 : class where T2 : class
     {
         #region Fields
 
@@ -21,6 +21,7 @@ namespace TLCGen.ViewModels
         private T2 _selectedItemToRemove;
         private T2 _selectedItemToAdd;
         private RelayCommand _addItemCommand;
+        private RelayCommand _removeItemCommand;
 
         #endregion // Fields
 
@@ -37,7 +38,8 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItemToAdd = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _addItemCommand?.NotifyCanExecuteChanged();
             }
         }
         public T2 SelectedItemToRemove
@@ -46,7 +48,8 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItemToRemove = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removeItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -56,7 +59,8 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
+                _removeItemCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -65,30 +69,42 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddItemCommand
+        public ICommand AddItemCommand => _addItemCommand ??= new RelayCommand(() =>
         {
-            get
-            {
-                if (_addItemCommand == null)
-                {
-                    _addItemCommand = new RelayCommand(AddItemCommand_Executed, AddItemCommand_CanExecute);
-                }
-                return _addItemCommand;
-            }
-        }
+            var d = _getItemToAdd(SelectedItemToAdd);
+            ItemsInCollection.Add(d);
+            SelectedItem = d;
+            Refresh();
+            _afterItemAddedAction?.Invoke();
+        }, () => SelectedItemToAdd != null);
 
-        private RelayCommand _removeItemCommand;
-        public ICommand RemoveItemCommand
+        public ICommand RemoveItemCommand => _removeItemCommand ??= new RelayCommand(() =>
         {
-            get
+            if(_selectedItem != null)
             {
-                if (_removeItemCommand == null)
+                var i = ItemsInCollection.IndexOf(_selectedItem);
+                ItemsInCollection.Remove(_selectedItem);
+                if(i < (ItemsInCollection.Count - 1))
                 {
-                    _removeItemCommand = new RelayCommand(RemoveItemCommand_Executed, RemoveItemCommand_CanExecute);
+                    SelectedItem = ItemsInCollection[i];
                 }
-                return _removeItemCommand;
+                else if (ItemsInCollection.Count > 0)
+                {
+                    SelectedItem = ItemsInCollection[ItemsInCollection.Count - 1];
+                }
+                else
+                {
+                    SelectedItem = null;
+                }
             }
-        }
+            else if (SelectedItemToRemove != null && _getItemToRemove != null)
+            {
+                var d = _getItemToRemove(SelectedItemToRemove);
+                ItemsInCollection.Remove(d);
+            }
+            Refresh();
+            _afterItemRemovedAction?.Invoke();
+        }, () => SelectedItemToRemove != null || _selectedItem != null);
 
         #endregion // Commands
 

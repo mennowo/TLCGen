@@ -19,6 +19,8 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public event EventHandler LoadedTemplatesChanged;
+
         public List<TLCGenTemplatesModelWithLocation> LoadedTemplates => _loadedTemplates;
 
         public TLCGenTemplatesModel Templates { get; set; }
@@ -171,6 +173,7 @@ namespace TLCGen.Settings
                         }
                     }
                 }
+                LoadedTemplatesChanged?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception e)
             {

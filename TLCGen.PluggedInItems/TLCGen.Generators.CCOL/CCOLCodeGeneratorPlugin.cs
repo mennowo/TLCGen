@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -8,9 +7,12 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -75,8 +77,8 @@ namespace TLCGen.Generators.CCOL
 
         public void UpdateTLCGenMessaging()
         {
-            Messenger.Default.Register(this, new Action<Messaging.Messages.ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
-            Messenger.Default.Register(this, new Action<Messaging.Messages.ControllerDataChangedMessage>(OnControllerDataChanged));
+            WeakReferenceMessengerEx.Default.Register<ControllerFileNameChangedMessage>(this, OnControllerFileNameChanged);
+            WeakReferenceMessengerEx.Default.Register<ControllerDataChangedMessage>(this, OnControllerDataChanged);
         }
 
         #endregion // ITLCGenPlugMessaging
@@ -197,6 +199,8 @@ namespace TLCGen.Generators.CCOL
                 _replaceRepeatingCommentsTextWithPeriodsMenuItem.IsChecked =
                     CCOLGeneratorSettingsProvider.Default.Settings.ReplaceRepeatingCommentsTextWithPeriods;
             }
+
+            _myVm.UpdateCommands();
         }
 
         public void SaveSettings()
@@ -397,7 +401,15 @@ namespace TLCGen.Generators.CCOL
         #region Properties
 
         [Browsable(false)]
-        public string ControllerFileName { get; set; }
+        public string ControllerFileName
+        {
+            get => _controllerFileName;
+            set
+            {
+                _controllerFileName = value; 
+                _myVm.UpdateCommands();
+            }
+        }
 
         #endregion // Properties
 
@@ -410,23 +422,31 @@ namespace TLCGen.Generators.CCOL
         #region Commands
 
         RelayCommand _showSettingsCommand;
-        public ICommand ShowSettingsCommand
-        {
-            get
+        private string _controllerFileName;
+
+        public ICommand ShowSettingsCommand => _showSettingsCommand ??= new RelayCommand(() =>
             {
-                if (_showSettingsCommand == null)
+                var w = new CCOLGeneratorSettingsView
                 {
-                    _showSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
-                }
-                return _showSettingsCommand;
-            }
-        }
+                    DataContext =
+                        new CCOLGeneratorSettingsViewModel(CCOLGeneratorSettingsProvider.Default.Settings, _generator)
+                };
+                var window = new Window
+                {
+                    Title = "CCOL Code Generator instellingen",
+                    Content = w,
+                    Width = 560,
+                    Height = 450
+                };
+                window.ShowDialog();
+                _myVm.UpdateCommands();
+            });
 
         #endregion // Commands
 
         #region Command Functionality
 
-        private void ShowSettingsCommand_Executed(object obj)
+        private void ShowSettingsCommand_Executed()
         {
             var w = new CCOLGeneratorSettingsView
             {
@@ -444,7 +464,7 @@ namespace TLCGen.Generators.CCOL
             window.ShowDialog();
         }
 
-        private bool ShowSettingsCommand_CanExecute(object obj)
+        private bool ShowSettingsCommand_CanExecute()
         {
             return true;
         }
@@ -462,15 +482,16 @@ namespace TLCGen.Generators.CCOL
 
         #region TLCGen Events
 
-        private void OnControllerFileNameChanged(Messaging.Messages.ControllerFileNameChangedMessage msg)
+        private void OnControllerFileNameChanged(object sender, ControllerFileNameChangedMessage msg)
         {
             if (msg.NewFileName == null) return;
 
             ControllerFileName = msg.NewFileName;
         }
 
-        private void OnControllerDataChanged(Messaging.Messages.ControllerDataChangedMessage msg)
+        private void OnControllerDataChanged(object sender, ControllerDataChangedMessage msg)
         {
+            _myVm.UpdateCommands();
         }
 
         #endregion // TLCGen Events

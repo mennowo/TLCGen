@@ -8,7 +8,7 @@
         xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
         xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
         xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Combinatie templates instellingen" Height="450" Width="800">
     <Grid>
@@ -115,9 +115,9 @@
                                     </DataTemplate>
                                 </TabItem.HeaderTemplate>
                                 <ae:TextEditor Name="Editor" FontFamily="Consolas" FontSize="10pt" Margin="2" Background="#F8F8F8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                    <i:Interaction.Behaviors>
+                                    <b:Interaction.Behaviors>
                                         <local:AvalonEditBehaviour GiveMeTheText="{Binding Path=ObjectJson,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                    </i:Interaction.Behaviors>
+                                    </b:Interaction.Behaviors>
                                 </ae:TextEditor>
                             </TabItem>
                             <TabItem Header="Import">

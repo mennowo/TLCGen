@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 
 namespace TLCGen.Plugins.MultiSim
 {
-    public class MultiSimEntryViewModel : ViewModelBase, IViewModelWithItem
+    public class MultiSimEntryViewModel : ObservableObjectEx, IViewModelWithItem
     {
         public MultiSimEntryModel MultiSimEntry { get; }
 
@@ -13,7 +13,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntry.DetectorName = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -23,7 +23,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntry.SimulationModel.Q1 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -33,7 +33,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntry.SimulationModel.Q2 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -43,7 +43,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntry.SimulationModel.Q3 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -53,7 +53,7 @@ namespace TLCGen.Plugins.MultiSim
             set
             {
                 MultiSimEntry.SimulationModel.Q4 = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

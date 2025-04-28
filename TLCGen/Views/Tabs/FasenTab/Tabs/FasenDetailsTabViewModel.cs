@@ -3,6 +3,7 @@ using System.Linq;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
+
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 1, type: TabItemTypeEnum.FasenTab)]
@@ -24,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedFaseCyclus = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

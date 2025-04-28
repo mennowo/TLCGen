@@ -1,15 +1,15 @@
 ﻿using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.Linq;
 using System;
 using System.Text.RegularExpressions;
+using CommunityToolkit.Mvvm.Input;
 
 namespace TLCGen.GebruikersOpties
 {
-    public class GebruikersOptiesImportExportTabViewModel : ViewModelBase
+    public class GebruikersOptiesImportExportTabViewModel : ObservableObject
     {
         #region Fields
 
@@ -41,7 +41,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _dataModel = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -51,7 +51,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _replaceInImportFind = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -61,7 +61,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _replaceInImportReplace = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -71,7 +71,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _replaceInImportRegex = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

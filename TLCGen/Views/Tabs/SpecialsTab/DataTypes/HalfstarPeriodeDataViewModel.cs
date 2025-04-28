@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-	public class HalfstarPeriodeDataViewModel : ViewModelBase, IViewModelWithItem
+	public class HalfstarPeriodeDataViewModel : ObservableObjectEx, IViewModelWithItem
 	{
 		#region Properties
 
@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				PeriodeData.Signaalplan = value;
-                RaisePropertyChanged<object>(nameof(Signaalplan), broadcast: true);
+                OnPropertyChanged(nameof(Signaalplan), broadcast: true);
             }
         }
 
@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				PeriodeData.VARegelen = value;
-                RaisePropertyChanged<object>(nameof(VARegelen), broadcast: true);
+                OnPropertyChanged(nameof(VARegelen), broadcast: true);
             }
         }
 
@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 PeriodeData.AlternatievenVoorHoofdrichtingen = value;
-                RaisePropertyChanged<object>(nameof(AlternatievenVoorHoofdrichtingen), broadcast: true);
+                OnPropertyChanged(nameof(AlternatievenVoorHoofdrichtingen), broadcast: true);
             }
         }
 

@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
                         _VLOGSettingsData = null;
                     }
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 

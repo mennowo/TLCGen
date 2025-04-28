@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
-using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 using TLCGen.Messaging.Messages;
 using System.Linq;
 using TLCGen.Extensions;
@@ -11,8 +10,11 @@ using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dependencies.Messaging.Messages;
 using TLCGen.Settings;
+
 
 namespace TLCGen.ViewModels
 {
@@ -56,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedRISFase = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -82,7 +84,7 @@ namespace TLCGen.ViewModels
 
         private void MultiSystemITF_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            MessengerInstance.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
@@ -99,7 +101,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedSystemITF = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -110,7 +112,7 @@ namespace TLCGen.ViewModels
             {
                 _risModel.RISToepassen = value;
                 TLCGenModelManager.Default.UpdateControllerAlerts();
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 if (string.IsNullOrWhiteSpace(SystemITF)) SystemITF = Controller.Data.Naam;
                 foreach (var fc in RISFasen)
                 {
@@ -156,8 +158,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _risModel.HasMultipleSystemITF = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(NoHasMultipleSystemITF));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(NoHasMultipleSystemITF));
             }
         }
 
@@ -176,7 +178,7 @@ namespace TLCGen.ViewModels
                         l.SystemITF = value;
                     }
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -195,7 +197,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => MessengerInstance.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
@@ -213,7 +215,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => MessengerInstance.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
         
         public AddRemoveItemsManager<RISLanePelotonDataViewModel, RISLanePelotonDataModel, string> LanesPelotonManager =>
@@ -231,7 +233,7 @@ namespace TLCGen.ViewModels
                     return lre;
                 },
                 (_, _) => false,
-                () => MessengerInstance.Send(new ControllerDataChangedMessage())
+                () => WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage())
             );
 
         #endregion // Properties
@@ -538,7 +540,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen messaging
 
-        private void OnFasenChanged(FasenChangedMessage msg)
+        private void OnFasenChanged(object sender, FasenChangedMessage msg)
         {
             if (msg.RemovedFasen != null && msg.RemovedFasen.Any())
             {
@@ -580,7 +582,7 @@ namespace TLCGen.ViewModels
                         RijstrookIndex = 1,
                         Type = GetTypeForFase(fc)
                     }));
-                    MessengerInstance.Send(new ControllerDataChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
                 }
             }
             RISFasen.BubbleSort();
@@ -590,7 +592,7 @@ namespace TLCGen.ViewModels
             UpdateRISLanes();
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanged(object sender, NameChangedMessage msg)
         {
             if (msg.ObjectType == TLCGenObjectTypeEnum.Fase)
             {
@@ -605,7 +607,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnAantalRijstrokenChanged(FaseAantalRijstrokenChangedMessage obj)
+        private void OnAantalRijstrokenChanged(object sender, FaseAantalRijstrokenChangedMessage obj)
         {
             var risfc = RISFasen.FirstOrDefault(x => x.FaseCyclus == obj.Fase.Naam);
             if (risfc != null)
@@ -648,7 +650,7 @@ namespace TLCGen.ViewModels
             UpdateRISLanes();
         }
 
-        private void OnSystemITFChanged(SystemITFChangedMessage msg)
+        private void OnSystemITFChanged(object sender, SystemITFChangedMessage msg)
         {
             foreach (var l in RISLanes)
             {
@@ -741,7 +743,7 @@ namespace TLCGen.ViewModels
                 RISExtendLanes.BubbleSort();
                 RISPelotonLanes.BubbleSort();
                 UpdateRISLanes();
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
 
@@ -795,10 +797,10 @@ namespace TLCGen.ViewModels
 
         public FasenRISTabViewModel()
         {
-            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
-            MessengerInstance.Register<SystemITFChangedMessage>(this, OnSystemITFChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+            WeakReferenceMessengerEx.Default.Register<FaseAantalRijstrokenChangedMessage>(this, OnAantalRijstrokenChanged);
+            WeakReferenceMessengerEx.Default.Register<SystemITFChangedMessage>(this, OnSystemITFChanged);
         }
 
         #endregion // Constructor

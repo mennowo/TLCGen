@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class TimingsFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class TimingsFaseCyclusDataViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         #region Properties
         
@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
             set
             {
                 TimingsFase.FaseCyclus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
             set
             {
                 TimingsFase.ConflictType = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

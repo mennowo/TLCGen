@@ -1,6 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -9,6 +7,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
@@ -16,7 +17,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class KoppelSignaalViewModel : ViewModelBase
+    public class KoppelSignaalViewModel : ObservableObjectEx
     {
         public KoppelSignaalModel KoppelSignaal { get; }
 
@@ -29,8 +30,8 @@ namespace TLCGen.ViewModels
             set
             {
                 KoppelSignaal.Count = value;
-                RaisePropertyChanged("");
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged("");
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -41,7 +42,7 @@ namespace TLCGen.ViewModels
         }
     }
 
-    public class PTPKoppelSignaalViewModel : ViewModelBase
+    public class PTPKoppelSignaalViewModel : ObservableObjectEx
     {
         private KoppelSignaalViewModel _koppelSignaal;
 
@@ -58,15 +59,15 @@ namespace TLCGen.ViewModels
                 if (_koppelSignaal != null && _koppelSignaal.Count != Count)
                 {
                     _koppelSignaal.Count = Count;
-                    RaisePropertyChanged<object>(broadcast: true);
+                    OnPropertyChanged(broadcast: true);
                 }
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
             }
         }
     }
 
 
-    public class PTPKoppelingViewModel : ViewModelBase, IDropTarget
+    public class PTPKoppelingViewModel : ObservableObjectEx, IDropTarget
     {
         #region IDropTarget
 
@@ -304,8 +305,8 @@ namespace TLCGen.ViewModels
                 {
                     var oldname = _PTPKoppeling.TeKoppelenKruispunt;
                     _PTPKoppeling.TeKoppelenKruispunt = value;
-                    RaisePropertyChanged<object>(nameof(TeKoppelenKruispunt), broadcast: true);
-                    Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PTPKruising, oldname, value));
+                    OnPropertyChanged(nameof(TeKoppelenKruispunt), broadcast: true);
+WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PTPKruising, oldname, value));
                 }
             }
         }
@@ -322,7 +323,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedKoppelSignaalIn = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -332,7 +333,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedKoppelSignaalUit = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -343,7 +344,7 @@ namespace TLCGen.ViewModels
             {
                 _PTPKoppeling.AantalsignalenIn = value;
                 UpdateIO();
-                RaisePropertyChanged<object>(nameof(AantalsignalenIn), broadcast: true);
+                OnPropertyChanged(nameof(AantalsignalenIn), broadcast: true);
                 UpdateSignalen();
 
             }
@@ -356,7 +357,7 @@ namespace TLCGen.ViewModels
             {
                 _PTPKoppeling.AantalsignalenUit = value;
                 UpdateIO();
-                RaisePropertyChanged<object>(nameof(AantalsignalenUit), broadcast: true);
+                OnPropertyChanged(nameof(AantalsignalenUit), broadcast: true);
                 UpdateSignalen();
             }
         }
@@ -371,7 +372,7 @@ namespace TLCGen.ViewModels
                 {
                     _PTPKoppeling.AantalsignalenMultivalentIn = _PTPKoppeling.AantalsignalenIn;
                 }
-                RaisePropertyChanged<object>(nameof(AantalsignalenMultivalentIn), broadcast: true);
+                OnPropertyChanged(nameof(AantalsignalenMultivalentIn), broadcast: true);
                 UpdateSignalen();
 
             }
@@ -387,7 +388,7 @@ namespace TLCGen.ViewModels
                 {
                     _PTPKoppeling.AantalsignalenMultivalentUit = _PTPKoppeling.AantalsignalenUit;
                 }
-                RaisePropertyChanged<object>(nameof(AantalsignalenMultivalentUit), broadcast: true);
+                OnPropertyChanged(nameof(AantalsignalenMultivalentUit), broadcast: true);
                 UpdateSignalen();
             }
         }
@@ -440,7 +441,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortnummerSimuatieOmgeving = value;
-                RaisePropertyChanged<object>(nameof(PortnummerSimuatieOmgeving), broadcast: true);
+                OnPropertyChanged(nameof(PortnummerSimuatieOmgeving), broadcast: true);
             }
         }
 
@@ -450,7 +451,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortnummerAutomaatOmgeving = value;
-                RaisePropertyChanged<object>(nameof(PortnummerAutomaatOmgeving), broadcast: true);
+                OnPropertyChanged(nameof(PortnummerAutomaatOmgeving), broadcast: true);
             }
         }
 
@@ -460,7 +461,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortNaarBackupRegeling = value;
-                RaisePropertyChanged<object>(nameof(PortNaarBackupRegeling), broadcast: true);
+                OnPropertyChanged(nameof(PortNaarBackupRegeling), broadcast: true);
             }
         }
 
@@ -470,7 +471,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.NummerSource = value;
-                RaisePropertyChanged<object>(nameof(NummerSource), broadcast: true);
+                OnPropertyChanged(nameof(NummerSource), broadcast: true);
             }
         }
 
@@ -480,7 +481,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.NummerDestination = value;
-                RaisePropertyChanged<object>(nameof(NummerDestination), broadcast: true);
+                OnPropertyChanged(nameof(NummerDestination), broadcast: true);
             }
         }
 
@@ -490,7 +491,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.Dummy = value;
-                RaisePropertyChanged<object>(nameof(Dummy), broadcast: true);
+                OnPropertyChanged(nameof(Dummy), broadcast: true);
             }
         }
 
@@ -501,7 +502,7 @@ namespace TLCGen.ViewModels
             {
                 _PTPKoppeling.MaakIO = value;
                 UpdateIO();
-                RaisePropertyChanged<object>(nameof(MaakIO), broadcast: true);
+                OnPropertyChanged(nameof(MaakIO), broadcast: true);
             }
         }
 

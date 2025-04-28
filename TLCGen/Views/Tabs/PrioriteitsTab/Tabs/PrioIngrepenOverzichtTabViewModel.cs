@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedPrioIngreep = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedIngrepen = value;
                 _settingMultiple = false;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class KruispuntArmFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
+    public class KruispuntArmFaseCyclusViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Properties
 
@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.FaseCyclus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.KruispuntArm = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -36,9 +36,9 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.KruispuntArmVolg = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasVolgArm));
-                RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasVolgArm));
+                OnPropertyChanged(nameof(HasVolgArmAndUseTime));
             }
         }
 
@@ -48,8 +48,8 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.HasKruispuntArmVolgTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasVolgArmAndUseTime));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasVolgArmAndUseTime));
             }
         }
 
@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Model.KruispuntArmVolgTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

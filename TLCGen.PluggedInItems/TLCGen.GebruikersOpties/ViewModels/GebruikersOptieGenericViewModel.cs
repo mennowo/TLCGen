@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -17,7 +17,7 @@ namespace TLCGen.GebruikersOpties
         }
     }
 
-    public class GebruikersOptieGenericViewModel : ViewModelBase
+    public class GebruikersOptieGenericViewModel : ObservableObject
     {
         #region Fields
 
@@ -41,7 +41,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _objectType = value;
                 _relatedObject = null;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -52,7 +52,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _naam = value;
                 _relatedObject = null;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -63,7 +63,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _commentaar = value;
                 _relatedObject = null;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _instelling = value;
                 _relatedObject = null;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -85,7 +85,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _timeType = value;
                 _relatedObject = null;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -95,7 +95,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _dummy = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -106,7 +106,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _selected = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

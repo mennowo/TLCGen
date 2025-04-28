@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -30,9 +31,17 @@ namespace TLCGen.Plugins.AutoBuild
 
 		public AutoBuildConsoleTabViewModel ConsoleVM { get; }
 
-		public ControllerModel Controller { get; set; }
+        public ControllerModel Controller
+        {
+            get => _controller;
+            set
+            {
+                _controller = value;
+				_myVm?.UpdateCommands();
+            }
+        }
 
-		public string DisplayName => "AutoBuild console";
+        public string DisplayName => "AutoBuild console";
 
 		public string GetPluginName() => "AutoBuild";
 
@@ -121,8 +130,9 @@ namespace TLCGen.Plugins.AutoBuild
 
 		private MenuItem _pluginMenuItem;
 		private bool _visibility;
+        private ControllerModel _controller;
 
-		public MenuItem Menu
+        public MenuItem Menu
 		{
 			get
 			{
@@ -197,46 +207,25 @@ namespace TLCGen.Plugins.AutoBuild
 
 		#region Commands
 
-		public ICommand ShowSettingsCommand
-		{
-			get
-			{
-				if (_showSettingsCommand == null)
-				{
-					_showSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
-				}
-				return _showSettingsCommand;
-			}
-		}
+		public ICommand ShowSettingsCommand => _showSettingsCommand ??= new RelayCommand(() =>
+        {
+            var w = new AutoBuildSettingsView
+            {
+                DataContext = new AutoBuildSettingsViewModel(_settings)
+            };
+            var window = new Window
+            {
+                Title = "AutoBuild instellingen",
+                Content = w,
+                Width = 560,
+                Height = 450
+            };
 
-		#endregion // Commands
+            window.ShowDialog();
+        });
+
+        #endregion // Commands
 		
-		#region Command Functionality
-
-		private void ShowSettingsCommand_Executed(object obj)
-		{
-			var w = new AutoBuildSettingsView
-			{
-				DataContext = new AutoBuildSettingsViewModel(_settings)
-			};
-			var window = new Window
-			{
-				Title = "AutoBuild instellingen",
-				Content = w,
-				Width = 560,
-				Height = 450
-			};
-
-			window.ShowDialog();
-		}
-
-		private bool ShowSettingsCommand_CanExecute(object obj)
-		{
-			return true;
-		}
-
-		#endregion // Command Functionality
-
 		#region Constructor
 
 		public AutoBuildPlugin()

@@ -1,11 +1,11 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class PelotonKoppelingDetectorViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class PelotonKoppelingDetectorViewModel : ObservableObjectEx, IViewModelWithItem, IComparable
     {
         public PelotonKoppelingDetectorModel Detector { get; }
 
@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Detector.DetectorNaam = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         

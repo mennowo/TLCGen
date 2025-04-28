@@ -1,17 +1,18 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
+
 namespace TLCGen.ViewModels
 {
-    public class TLCGenTabItemWithSelectionViewModel<T> : TLCGenTabItemViewModel where T : ViewModelBase
+    public class TLCGenTabItemWithSelectionViewModel<T> : TLCGenTabItemViewModel where T : ObservableObject
     {
         private T _selectedItem;
         private volatile bool _settingMultiple = false;
@@ -23,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _selectedItem = value;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -34,7 +35,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedItems = value;
                 _settingMultiple = false;
-                RaisePropertyChanged();
+                OnPropertyChanged();
             }
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Dialogs;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -13,6 +15,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Views.Tabs.SpecialsTab.DataTypes;
+
 
 namespace TLCGen.ViewModels
 {
@@ -25,12 +28,24 @@ namespace TLCGen.ViewModels
 		private HalfstarGekoppeldeKruisingViewModel _selectedHalfstarGekoppeldeKruising;
 		private string _selectedHoofdRichtingToAdd;
 		private HalfstarHoofdrichtingViewModel _selectedHoofdRichtingToRemove;
+		private RelayCommand _addSignaalPlanCommand;
+		private RelayCommand _removeSignaalPlanCommand;
+		private RelayCommand _duplicateSignaalPlanCommand;
+		private RelayCommand _importSignaalPlanCommand;
+        private RelayCommand _importManySignaalPlanCommand;
+        private RelayCommand _TLCImportSignaalPlannenCommand;
+        private RelayCommand _TLCExportSignaalPlannenCommand;
+        private RelayCommand _copyPlanToPlanCommand;
+        private RelayCommand _removeGekoppeldeKruisingCommand;
+        private RelayCommand _addHoofdRichtingCommand;
+        private RelayCommand _removeHoofdRichtingCommand;
+        private RelayCommand _addGekoppeldeKruisingCommand;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Properties
+        #region Properties
 
-		private HalfstarDataModel HalfstarData;
+        private HalfstarDataModel HalfstarData;
 
 		public ObservableCollection<string> PTPKruisingenNames { get; } = new ObservableCollection<string>();
 		public ObservableCollection<string> SignaalPlannenNames { get; } = new ObservableCollection<string>();
@@ -58,8 +73,12 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_selectedSignaalPlan = value; 
-				RaisePropertyChanged();
-			}
+				OnPropertyChanged();
+				_removeSignaalPlanCommand?.NotifyCanExecuteChanged();
+                _duplicateSignaalPlanCommand?.NotifyCanExecuteChanged();
+                _importSignaalPlanCommand?.NotifyCanExecuteChanged();
+                _copyPlanToPlanCommand?.NotifyCanExecuteChanged();
+            }
 		}
 
 		public string SelectedHoofdRichtingToAdd
@@ -68,8 +87,10 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_selectedHoofdRichtingToAdd = value; 
-				RaisePropertyChanged();
-			}
+				OnPropertyChanged();
+                _addHoofdRichtingCommand?.NotifyCanExecuteChanged();
+
+            }
 		}
 
 		public HalfstarHoofdrichtingViewModel SelectedHoofdRichtingToRemove
@@ -78,8 +99,9 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_selectedHoofdRichtingToRemove = value;
-				RaisePropertyChanged();
-			}
+				OnPropertyChanged();
+                _removeHoofdRichtingCommand?.NotifyCanExecuteChanged();
+            }
 		}
 
 		public HalfstarGekoppeldeKruisingViewModel SelectedHalfstarGekoppeldeKruising
@@ -87,8 +109,9 @@ namespace TLCGen.ViewModels
 			get => _selectedHalfstarGekoppeldeKruising; set
 			{
 				_selectedHalfstarGekoppeldeKruising = value; 
-				RaisePropertyChanged();
-			}
+				OnPropertyChanged();
+                _removeGekoppeldeKruisingCommand?.NotifyCanExecuteChanged();
+            }
 		}
 
         public bool IsHalfstarWithAltenatieven => IsHalfstar && _Controller?.ModuleMolen.LangstWachtendeAlternatief == true;
@@ -137,8 +160,8 @@ namespace TLCGen.ViewModels
                     ClearHalfstar();
                 }
 
-				RaisePropertyChanged<object>(broadcast: true);
-				RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
+				OnPropertyChanged(broadcast: true);
+				OnPropertyChanged(nameof(IsHalfstarWithAltenatieven));
 			}
 		}
 
@@ -172,8 +195,9 @@ namespace TLCGen.ViewModels
 						}
 						break;
 				}
-				RaisePropertyChanged<object>(broadcast: true);
-			}
+				OnPropertyChanged(broadcast: true);
+                _addGekoppeldeKruisingCommand?.NotifyCanExecuteChanged();
+            }
 		}
 
 		public string DefaultSignaalplanText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") plan";
@@ -186,7 +210,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.TypeVARegelen = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -196,7 +220,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.VARegelen = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -206,7 +230,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.OVPrioriteitPL = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -216,7 +240,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.AlternatievenVoorHoofdrichtingen = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -226,7 +250,7 @@ namespace TLCGen.ViewModels
             set
             {
                 HalfstarData.PlantijdenInParameters = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -236,7 +260,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeSignaalplan = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -246,7 +270,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeVARegelen = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -256,7 +280,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen = value;
-				RaisePropertyChanged<object>(broadcast: true);
+				OnPropertyChanged(broadcast: true);
 			}
 		}
 
@@ -264,401 +288,137 @@ namespace TLCGen.ViewModels
 
 		#region Commands
 
-		private RelayCommand _addSignaalPlanCommand;
-		public ICommand AddSignaalPlanCommand
-		{
-			get
-			{
-				if (_addSignaalPlanCommand == null)
-				{
-					_addSignaalPlanCommand = new RelayCommand(AddSignaalPlanCommand_Executed, AddSignaalPlanCommand_CanExecute);
-				}
-				return _addSignaalPlanCommand;
-			}
-		}
-
-		private RelayCommand _removeSignaalPlanCommand;
-		public ICommand RemoveSignaalPlanCommand
-		{
-			get
-			{
-				if (_removeSignaalPlanCommand == null)
-				{
-					_removeSignaalPlanCommand = new RelayCommand(RemoveSignaalPlanCommand_Executed, RemoveSignaalPlanCommand_CanExecute);
-				}
-				return _removeSignaalPlanCommand;
-			}
-		}
-		
-		private RelayCommand _duplicateSignaalPlanCommand;
-		public ICommand DuplicateSignaalPlanCommand
-		{
-			get
-			{
-				if (_duplicateSignaalPlanCommand == null)
-				{
-					_duplicateSignaalPlanCommand = new RelayCommand(DuplicateSignaalPlanCommand_Executed, DuplicateSignaalPlanCommand_CanExecute);
-				}
-				return _duplicateSignaalPlanCommand;
-			}
-		}
-
-		private RelayCommand _importSignaalPlanCommand;
-		public ICommand ImportSignaalPlanCommand
-		{
-			get
-			{
-				if (_importSignaalPlanCommand == null)
-				{
-					_importSignaalPlanCommand = new RelayCommand(ImportSignaalPlanCommand_Executed, ImportSignaalPlanCommand_CanExecute);
-				}
-				return _importSignaalPlanCommand;
-			}
-        }
-
-        private RelayCommand _importManySignaalPlanCommand;
-        public ICommand ImportManySignaalPlanCommand
+		public ICommand AddSignaalPlanCommand => _addSignaalPlanCommand ??= new RelayCommand(() =>
         {
-            get
+            var spl = new SignaalPlanModel
             {
-                if (_importManySignaalPlanCommand == null)
-                {
-                    _importManySignaalPlanCommand = new RelayCommand(ImportManySignaalPlanCommand_Executed, ImportManySignaalPlanCommand_CanExecute);
-                }
-                return _importManySignaalPlanCommand;
-            }
-        }
-
-        private RelayCommand _TLCImportSignaalPlannenCommand;
-        public ICommand TLCImportSignaalPlannenCommand
-        {
-            get
-            {
-                if (_TLCImportSignaalPlannenCommand == null)
-                {
-                    _TLCImportSignaalPlannenCommand = new RelayCommand(TLCImportSignaalPlannenCommand_Executed, TLCImportSignaalPlannenCommand_CanExecute);
-                }
-                return _TLCImportSignaalPlannenCommand;
-            }
-        }
-
-        private bool TLCImportSignaalPlannenCommand_CanExecute(object obj)
-        {
-            return SignaalPlannen != null && SignaalPlannen.Any();
-        }
-
-        private void TLCImportSignaalPlannenCommand_Executed(object obj)
-        {
-            var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, true)
-            {
-                Owner = Application.Current.MainWindow
+                Naam = "PL" + (SignaalPlannen.Count + 1),
+                StartMoment = 1, SwitchMoment = 1
             };
-            importWindow.ShowDialog();
-            SignaalPlannen.Rebuild();
-            foreach(var pl in SignaalPlannen)
+            foreach (var fc in Controller.Fasen)
             {
-                pl.RaisePropertyChanged("");
-                foreach(var fc in pl.Fasen)
+                spl.Fasen.Add(new SignaalPlanFaseModel
                 {
-                    fc.RaisePropertyChanged("");
-                }
+                    FaseCyclus = fc.Naam
+                });
             }
-        }
-
-        private RelayCommand _TLCExportSignaalPlannenCommand;
-        public ICommand TLCExportSignaalPlannenCommand
-        {
-            get
+            SignaalPlannen.Add(new SignaalPlanViewModel(spl));
+            foreach (var gk in GekoppeldeKruisingen)
             {
-                if (_TLCExportSignaalPlannenCommand == null)
+                gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
                 {
-                    _TLCExportSignaalPlannenCommand = new RelayCommand(TLCExportSignaalPlannenCommand_Executed, TLCExportSignaalPlannenCommand_CanExecute);
-                }
-                return _TLCExportSignaalPlannenCommand;
-            }
-        }
-
-        private bool TLCExportSignaalPlannenCommand_CanExecute(object obj)
-        {
-            return SignaalPlannen != null && SignaalPlannen.Any();
-        }
-
-        private void TLCExportSignaalPlannenCommand_Executed(object obj)
-        {
-            var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, false)
-            {
-                Owner = Application.Current.MainWindow
-            };
-            importWindow.ShowDialog();
-            SignaalPlannen.Rebuild();
-        }
-
-
-        private RelayCommand _copyPlanToPlanCommand;
-        public ICommand CopyPlanToPlanCommand
-        {
-            get
-            {
-                if (_copyPlanToPlanCommand == null)
+                    Kruising = gk.KruisingNaam,
+                    Plan = spl.Naam,
+                    Type = gk.Type
+                });
+                gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+                gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
                 {
-                    _copyPlanToPlanCommand = new RelayCommand(
-                        x => 
-                        {
-                            var dlg = new InputBoxWindow
-                            {
-                                Owner = Application.Current.MainWindow,
-                                Title = "Kopieëren naar plan naar ander plan",
-                                Explanation = $"Geef de naam van het plan op om de tijden " +
-                                              $"van {SelectedSignaalPlan.Naam} naar toe te kopieëren:"
-                            };
-                            dlg.ShowDialog();
-                            if(dlg.DialogResult == true)
-                            {
-                                var pl = SignaalPlannen.FirstOrDefault(x2 => x2.Naam == dlg.Text);
-                                if (pl != null)
-                                {
-                                    pl.Commentaar = SelectedSignaalPlan.Commentaar;
-                                    pl.Cyclustijd = SelectedSignaalPlan.Cyclustijd;
-                                    pl.StartMoment = SelectedSignaalPlan.StartMoment;
-                                    pl.SwitchMoment = SelectedSignaalPlan.SwitchMoment;
-                                    foreach(var fc in pl.Fasen)
-                                    {
-                                        var fc2 = SelectedSignaalPlan.Fasen.FirstOrDefault(x2 => x2.FaseCyclus == fc.FaseCyclus);
-                                        if (fc2 != null)
-                                        {
-                                            fc.A1 = fc2.A1;
-                                            fc.B1 = fc2.B1;
-                                            fc.C1 = fc2.C1;
-                                            fc.D1 = fc2.D1;
-                                            fc.E1 = fc2.E1;
-                                            fc.A2 = fc2.A2;
-                                            fc.B2 = fc2.B2;
-                                            fc.C2 = fc2.C2;
-                                            fc.D2 = fc2.D2;
-                                            fc.E2 = fc2.E2;
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        x => SelectedSignaalPlan != null);
-                }
-                return _copyPlanToPlanCommand;
+                    Kruising = gk.KruisingNaam,
+                    Plan = spl.Naam,
+                    Type = gk.Type
+                });
+                gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
             }
-        }
-
-        private RelayCommand _addHoofdRichtingCommand;
-		public ICommand AddHoofdRichtingCommand
-		{
-			get
-			{
-				if (_addHoofdRichtingCommand == null)
-				{
-					_addHoofdRichtingCommand = new RelayCommand(AddHoofdRichtingCommand_Executed, AddHoofdRichtingCommand_CanExecute);
-				}
-				return _addHoofdRichtingCommand;
-			}
-		}
-
-		private RelayCommand _removeHoofdRichtingCommand;
-		public ICommand RemoveHoofdRichtingCommand
-		{
-			get
-			{
-				if (_removeHoofdRichtingCommand == null)
-				{
-					_removeHoofdRichtingCommand = new RelayCommand(RemoveHoofdRichtingCommand_Executed, RemoveHoofdRichtingCommand_CanExecute);
-				}
-				return _removeHoofdRichtingCommand;
-			}
-		}
-
-		private RelayCommand _addGekoppeldeKruisingCommand;
-		public ICommand AddGekoppeldeKruisingCommand
-		{
-			get
-			{
-				if (_addGekoppeldeKruisingCommand == null)
-				{
-					_addGekoppeldeKruisingCommand = new RelayCommand(AddGekoppeldeKruisingCommand_Executed, AddGekoppeldeKruisingCommand_CanExecute);
-				}
-				return _addGekoppeldeKruisingCommand;
-			}
-		}
-
-		private RelayCommand _removeGekoppeldeKruisingCommand;
-		public ICommand RemoveGekoppeldeKruisingCommand
-		{
-			get
-			{
-				if (_removeGekoppeldeKruisingCommand == null)
-				{
-					_removeGekoppeldeKruisingCommand = new RelayCommand(RemoveGekoppeldeKruisingCommand_Executed, RemoveGekoppeldeKruisingCommand_CanExecute);
-				}
-				return _removeGekoppeldeKruisingCommand;
-			}
-		}
-
-		#endregion // Commands
-
-		#region Command functionality
-
-		private bool AddSignaalPlanCommand_CanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void AddSignaalPlanCommand_Executed(object obj)
-		{
-			var spl = new SignaalPlanModel
-			{
-				Naam = "PL" + (SignaalPlannen.Count + 1),
-				StartMoment = 1, SwitchMoment = 1
-			};
-			foreach (var fc in Controller.Fasen)
-			{
-				spl.Fasen.Add(new SignaalPlanFaseModel
-				{
-					FaseCyclus = fc.Naam
-				});
-			}
-			SignaalPlannen.Add(new SignaalPlanViewModel(spl));
-			foreach (var gk in GekoppeldeKruisingen)
-			{
-				gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
-				{
-					Kruising = gk.KruisingNaam,
-					Plan = spl.Naam,
-					Type = gk.Type
-				});
-				gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
-				gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
-				{
-					Kruising = gk.KruisingNaam,
-					Plan = spl.Naam,
-					Type = gk.Type
-				});
-				gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
-			}
             if (SelectedSignaalPlan == null) SelectedSignaalPlan = SignaalPlannen[0];
-		}
+        });
 
-		private bool RemoveSignaalPlanCommand_CanExecute(object obj)
-		{
-			return SelectedSignaalPlan != null;
-		}
+        public ICommand RemoveSignaalPlanCommand => _removeSignaalPlanCommand ??= new RelayCommand(() =>
+        {
+            var i = SignaalPlannen.IndexOf(SelectedSignaalPlan);
+            SignaalPlannen.Remove(SelectedSignaalPlan);
+            SelectedSignaalPlan = null;
+            if ((i - 1) <= (SignaalPlannen.Count - 1))
+            {
+                if (i - 1 >= 0)
+                {
+                    SelectedSignaalPlan = SignaalPlannen[i - 1];
+                }
+                else if (SignaalPlannen.Any())
+                {
+                    SelectedSignaalPlan = SignaalPlannen[0];
+                }
+            }
 
-		private void RemoveSignaalPlanCommand_Executed(object obj)
-		{
-			var i = SignaalPlannen.IndexOf(SelectedSignaalPlan);
-			SignaalPlannen.Remove(SelectedSignaalPlan);
-			SelectedSignaalPlan = null;
-			if ((i - 1) <= (SignaalPlannen.Count - 1))
-			{
-				if (i - 1 >= 0)
-				{
-					SelectedSignaalPlan = SignaalPlannen[i - 1];
-				}
-				else if (SignaalPlannen.Any())
-				{
-					SelectedSignaalPlan = SignaalPlannen[0];
-				}
-			}
+            var j = 1;
+            foreach (var pl in SignaalPlannen)
+            {
+                pl.Naam = "PL" + j;
+                ++j;
+            }
 
-			var j = 1;
-			foreach (var pl in SignaalPlannen)
-			{
-				pl.Naam = "PL" + j;
-				++j;
-			}
+            foreach (var per in HalfstarPeriodenData)
+            {
+                if (SignaalPlannen.Count == 0)
+                {
+                    per.Signaalplan = null;
+                }
 
-			foreach (var per in HalfstarPeriodenData)
-			{
-				if (SignaalPlannen.Count == 0)
-				{
-					per.Signaalplan = null;
-				}
+                else
+                {
+                    if (SignaalPlannen.All(x => x.Naam != per.Signaalplan))
+                    {
+                        per.Signaalplan = SignaalPlannen[0].Naam;
+                    }
+                }
+            }
 
-				else
-				{
-					if (SignaalPlannen.All(x => x.Naam != per.Signaalplan))
-					{
-						per.Signaalplan = SignaalPlannen[0].Naam;
-					}
-				}
-			}
+            foreach (var gk in GekoppeldeKruisingen)
+            {
+                var plu = gk.GekoppeldeKruising.PlanUitgangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
+                if (plu != null)
+                {
+                    gk.GekoppeldeKruising.PlanUitgangen.Remove(plu);
+                    gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+                }
+                var pli = gk.GekoppeldeKruising.PlanIngangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
+                if (pli != null)
+                {
+                    gk.GekoppeldeKruising.PlanIngangen.Remove(pli);
+                    gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
+                }
+            }
+        }, () => SelectedSignaalPlan != null);
 
-			foreach (var gk in GekoppeldeKruisingen)
-			{
-				var plu = gk.GekoppeldeKruising.PlanUitgangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
-				if (plu != null)
-				{
-					gk.GekoppeldeKruising.PlanUitgangen.Remove(plu);
-					gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
-				}
-				var pli = gk.GekoppeldeKruising.PlanIngangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
-				if (pli != null)
-				{
-					gk.GekoppeldeKruising.PlanIngangen.Remove(pli);
-					gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
-				}
-			}
-		}
-		
-		private bool DuplicateSignaalPlanCommand_CanExecute(object obj)
-		{
-			return SelectedSignaalPlan != null;
-		}
+        public ICommand DuplicateSignaalPlanCommand => _duplicateSignaalPlanCommand ??= new RelayCommand(() =>
+        {
+            var newpl = DeepCloner.DeepClone(SelectedSignaalPlan.SignaalPlan);
+            newpl.Naam = "PL" + (SignaalPlannen.Count + 1);
+            SignaalPlannen.Add(new SignaalPlanViewModel(newpl));
+            foreach (var gk in GekoppeldeKruisingen)
+            {
+                gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+                {
+                    Kruising = gk.KruisingNaam,
+                    Plan = newpl.Naam,
+                    Type = gk.Type
+                });
+                gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+                gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
+                {
+                    Kruising = gk.KruisingNaam,
+                    Plan = newpl.Naam,
+                    Type = gk.Type
+                });
+                gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
+            }
+        }, () => SelectedSignaalPlan != null);
 
-		private void DuplicateSignaalPlanCommand_Executed(object obj)
-		{
-			var newpl = DeepCloner.DeepClone(SelectedSignaalPlan.SignaalPlan);
-			newpl.Naam = "PL" + (SignaalPlannen.Count + 1);
-			SignaalPlannen.Add(new SignaalPlanViewModel(newpl));
-			foreach (var gk in GekoppeldeKruisingen)
-			{
-				gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
-				{
-					Kruising = gk.KruisingNaam,
-					Plan = newpl.Naam,
-					Type = gk.Type
-				});
-				gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
-				gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
-				{
-					Kruising = gk.KruisingNaam,
-					Plan = newpl.Naam,
-					Type = gk.Type
-				});
-				gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
-			}
-		}
-		
-		private bool ImportSignaalPlanCommand_CanExecute(object obj)
-		{
-			return SelectedSignaalPlan != null;
-		}
-
-		private void ImportSignaalPlanCommand_Executed(object obj)
-		{
+        public ICommand ImportSignaalPlanCommand => _importSignaalPlanCommand ??= new RelayCommand(() =>
+        {
             var importWindow = new ImportSignalPlanWindow(SelectedSignaalPlan.SignaalPlan)
             {
                 Owner = Application.Current.MainWindow
             };
             importWindow.ShowDialog();
-			SelectedSignaalPlan.RaisePropertyChanged("");
-			foreach (var fc in SelectedSignaalPlan.Fasen)
-			{
-				fc.RaisePropertyChanged("");
-			}
-        }
+            SelectedSignaalPlan.OnPropertyChanged("");
+            foreach (var fc in SelectedSignaalPlan.Fasen)
+            {
+                fc.OnPropertyChanged("");
+            }
+        }, () => SelectedSignaalPlan != null);
 
-        private bool ImportManySignaalPlanCommand_CanExecute(object obj)
-        {
-            return true;
-        }
-
-        private void ImportManySignaalPlanCommand_Executed(object obj)
+        public ICommand ImportManySignaalPlanCommand => _importManySignaalPlanCommand ??= new RelayCommand(() =>
         {
             var importWindow = new ImportManySignalPlanWindow(HalfstarData)
             {
@@ -666,117 +426,170 @@ namespace TLCGen.ViewModels
             };
             importWindow.ShowDialog();
             SignaalPlannen.Rebuild();
-        }
+        });
 
-        private bool AddHoofdRichtingCommand_CanExecute(object obj)
-		{
-			return SelectedHoofdRichtingToAdd != null;
-		}
+        public ICommand TLCImportSignaalPlannenCommand => _TLCImportSignaalPlannenCommand ??= new RelayCommand(() =>
+            {
+                var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, true)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                importWindow.ShowDialog();
+                SignaalPlannen.Rebuild();
+                foreach(var pl in SignaalPlannen)
+                {
+                    pl.OnPropertyChanged("");
+                    foreach(var fc in pl.Fasen)
+                    {
+                        fc.OnPropertyChanged("");
+                    }
+                }
+            },
+                () => SignaalPlannen?.Any() == true);
 
-		private void AddHoofdRichtingCommand_Executed(object obj)
-		{
-			HoofdRichtingen.Add(new HalfstarHoofdrichtingViewModel(new HalfstarHoofdrichtingModel
-			{
-				FaseCyclus = SelectedHoofdRichtingToAdd
-			}));
-			HoofdRichtingen.BubbleSort();
-			UpdateSelectables();
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
+        public ICommand TLCExportSignaalPlannenCommand => _TLCExportSignaalPlannenCommand ??= new RelayCommand(() =>
+            {
+                var importWindow = new TLCImportSignalPlannenWindow(HalfstarData, false)
+                {
+                    Owner = Application.Current.MainWindow
+                };
+                importWindow.ShowDialog();
+                SignaalPlannen.Rebuild();
+            }, () => SignaalPlannen?.Any() == true);
 
-        private bool RemoveHoofdRichtingCommand_CanExecute(object obj)
-		{
-			return SelectedHoofdRichtingToRemove != null;
-		}
+        public ICommand CopyPlanToPlanCommand => _copyPlanToPlanCommand ??= new RelayCommand(
+            () =>
+            {
+                var dlg = new InputBoxWindow
+                {
+                    Owner = Application.Current.MainWindow,
+                    Title = "Kopieëren naar plan naar ander plan",
+                    Explanation = $"Geef de naam van het plan op om de tijden " +
+                                  $"van {SelectedSignaalPlan.Naam} naar toe te kopieëren:"
+                };
+                dlg.ShowDialog();
+                if (dlg.DialogResult == true)
+                {
+                    var pl = SignaalPlannen.FirstOrDefault(x2 => x2.Naam == dlg.Text);
+                    if (pl != null)
+                    {
+                        pl.Commentaar = SelectedSignaalPlan.Commentaar;
+                        pl.Cyclustijd = SelectedSignaalPlan.Cyclustijd;
+                        pl.StartMoment = SelectedSignaalPlan.StartMoment;
+                        pl.SwitchMoment = SelectedSignaalPlan.SwitchMoment;
+                        foreach (var fc in pl.Fasen)
+                        {
+                            var fc2 = SelectedSignaalPlan.Fasen.FirstOrDefault(x2 =>
+                                x2.FaseCyclus == fc.FaseCyclus);
+                            if (fc2 != null)
+                            {
+                                fc.A1 = fc2.A1;
+                                fc.B1 = fc2.B1;
+                                fc.C1 = fc2.C1;
+                                fc.D1 = fc2.D1;
+                                fc.E1 = fc2.E1;
+                                fc.A2 = fc2.A2;
+                                fc.B2 = fc2.B2;
+                                fc.C2 = fc2.C2;
+                                fc.D2 = fc2.D2;
+                                fc.E2 = fc2.E2;
+                            }
+                        }
+                    }
+                }
+            },
+            () => SelectedSignaalPlan != null);
 
-		private void RemoveHoofdRichtingCommand_Executed(object obj)
-		{
-			HoofdRichtingen.Remove(SelectedHoofdRichtingToRemove);
-			HoofdRichtingen.BubbleSort();
-			UpdateSelectables();
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
+        public ICommand AddHoofdRichtingCommand => _addHoofdRichtingCommand ??= new RelayCommand(() =>
+        {
+            HoofdRichtingen.Add(new HalfstarHoofdrichtingViewModel(new HalfstarHoofdrichtingModel
+            {
+                FaseCyclus = SelectedHoofdRichtingToAdd
+            }));
+            HoofdRichtingen.BubbleSort();
+            UpdateSelectables();
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }, () => SelectedHoofdRichtingToAdd != null);
 
-        private bool AddGekoppeldeKruisingCommand_CanExecute(object obj)
-		{
-			return Type == HalfstarTypeEnum.Master ||
-				   Type == HalfstarTypeEnum.FallbackMaster ||
-				   Type == HalfstarTypeEnum.Slave && GekoppeldeKruisingen.Count == 0;
-		}
+        public ICommand RemoveHoofdRichtingCommand => _removeHoofdRichtingCommand ??= new RelayCommand(() =>
+        {
+            HoofdRichtingen.Remove(SelectedHoofdRichtingToRemove);
+            HoofdRichtingen.BubbleSort();
+            UpdateSelectables();
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }, () => SelectedHoofdRichtingToRemove != null);
 
-		private void AddGekoppeldeKruisingCommand_Executed(object obj)
-		{
-			var gkk = new HalfstarGekoppeldeKruisingModel();
-			switch (Type)
-			{
-				case HalfstarTypeEnum.Master:
-					gkk.Type = HalfstarGekoppeldTypeEnum.Slave;
-					break;
-				case HalfstarTypeEnum.FallbackMaster:
-					gkk.Type = GekoppeldeKruisingen.Count == 0 ? HalfstarGekoppeldTypeEnum.Master : HalfstarGekoppeldTypeEnum.Slave;
-					break;
-				case HalfstarTypeEnum.Slave:
-					gkk.Type = HalfstarGekoppeldTypeEnum.Master;
-					break;
-			}
+        public ICommand AddGekoppeldeKruisingCommand => _addGekoppeldeKruisingCommand ??= new RelayCommand(() =>
+        {
+            var gkk = new HalfstarGekoppeldeKruisingModel();
+            switch (Type)
+            {
+                case HalfstarTypeEnum.Master:
+                    gkk.Type = HalfstarGekoppeldTypeEnum.Slave;
+                    break;
+                case HalfstarTypeEnum.FallbackMaster:
+                    gkk.Type = GekoppeldeKruisingen.Count == 0 ? HalfstarGekoppeldTypeEnum.Master : HalfstarGekoppeldTypeEnum.Slave;
+                    break;
+                case HalfstarTypeEnum.Slave:
+                    gkk.Type = HalfstarGekoppeldTypeEnum.Master;
+                    break;
+            }
 
-			if (PTPKruisingenNames.Any())
-			{
-				gkk.PTPKruising = PTPKruisingenNames[0];
-			}
+            if (PTPKruisingenNames.Any())
+            {
+                gkk.PTPKruising = PTPKruisingenNames[0];
+            }
 
-			foreach (var pl in SignaalPlannen)
-			{
-				gkk.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
-				{
-					Kruising = gkk.KruisingNaam,
-					Plan = pl.Naam,
-					Type = gkk.Type
-				});
-				gkk.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
-				{
-					Kruising = gkk.KruisingNaam,
-					Plan = pl.Naam,
-					Type = gkk.Type
-				});
-			}
-			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
+            foreach (var pl in SignaalPlannen)
+            {
+                gkk.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+                {
+                    Kruising = gkk.KruisingNaam,
+                    Plan = pl.Naam,
+                    Type = gkk.Type
+                });
+                gkk.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
+                {
+                    Kruising = gkk.KruisingNaam,
+                    Plan = pl.Naam,
+                    Type = gkk.Type
+                });
+            }
+            GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
+            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }, () => Type == HalfstarTypeEnum.Master ||
+                 Type == HalfstarTypeEnum.FallbackMaster ||
+                 Type == HalfstarTypeEnum.Slave && GekoppeldeKruisingen.Count == 0);
 
-        private bool RemoveGekoppeldeKruisingCommand_CanExecute(object obj)
-		{
-			return SelectedHalfstarGekoppeldeKruising != null;
-		}
+        public ICommand RemoveGekoppeldeKruisingCommand => _removeGekoppeldeKruisingCommand ??= new RelayCommand(() =>
+            {
+                var i = GekoppeldeKruisingen.IndexOf(SelectedHalfstarGekoppeldeKruising);
+                GekoppeldeKruisingen.Remove(SelectedHalfstarGekoppeldeKruising);
+                SelectedHalfstarGekoppeldeKruising = null;
+                if (i - 1 <= GekoppeldeKruisingen.Count - 1)
+                {
+                    if (i - 1 >= 0)
+                    {
+                        SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[i - 1];
+                    }
+                    else if (GekoppeldeKruisingen.Any())
+                    {
+                        SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[0];
+                    }
+                }
 
-		private void RemoveGekoppeldeKruisingCommand_Executed(object obj)
-		{
-			var i = GekoppeldeKruisingen.IndexOf(SelectedHalfstarGekoppeldeKruising);
-			GekoppeldeKruisingen.Remove(SelectedHalfstarGekoppeldeKruising);
-			SelectedHalfstarGekoppeldeKruising = null;
-			if (i - 1 <= GekoppeldeKruisingen.Count - 1)
-			{
-				if (i - 1 >= 0)
-				{
-					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[i - 1];
-				}
-				else if (GekoppeldeKruisingen.Any())
-				{
-					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[0];
-				}
-			}
+                if (Type == HalfstarTypeEnum.FallbackMaster && GekoppeldeKruisingen.Any())
+                {
+                    if (GekoppeldeKruisingen.All(x => x.Type != HalfstarGekoppeldTypeEnum.Master))
+                    {
+                        GekoppeldeKruisingen[0].Type = HalfstarGekoppeldTypeEnum.Master;
+                    }
+                }
+                WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            },
+                () => SelectedHalfstarGekoppeldeKruising != null);
 
-			if (Type == HalfstarTypeEnum.FallbackMaster && GekoppeldeKruisingen.Any())
-			{
-				if (GekoppeldeKruisingen.All(x => x.Type != HalfstarGekoppeldTypeEnum.Master))
-				{
-					GekoppeldeKruisingen[0].Type = HalfstarGekoppeldTypeEnum.Master;
-				}
-			}
-            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
-
-        #endregion // Command functionality
+        #endregion // Commands
 
         #region Private methods
 
@@ -867,7 +680,7 @@ namespace TLCGen.ViewModels
 
 		public override void OnSelected()
 		{
-            RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
+            OnPropertyChanged(nameof(IsHalfstarWithAltenatieven));
         }
 
         public override ControllerModel Controller
@@ -876,10 +689,12 @@ namespace TLCGen.ViewModels
 			set
 			{
 				base.Controller = value;
+                if (SignaalPlannen != null) SignaalPlannen.CollectionChanged -= SignaalPlannenOnCollectionChanged;
 				if (base.Controller != null)
 				{
 					HalfstarData = Controller.HalfstarData;
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
+					SignaalPlannen.CollectionChanged += SignaalPlannenOnCollectionChanged;
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
 					UpdatePeriodenData();
                     if (GekoppeldeKruisingen != null)
@@ -949,12 +764,20 @@ namespace TLCGen.ViewModels
 					HalfstarData = null;
 					SignaalPlannen = null;
 				}
-			}
+                _TLCImportSignaalPlannenCommand?.NotifyCanExecuteChanged();
+                _TLCExportSignaalPlannenCommand?.NotifyCanExecuteChanged();
+            }
 		}
+
+        private void SignaalPlannenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            _TLCImportSignaalPlannenCommand?.NotifyCanExecuteChanged();
+            _TLCExportSignaalPlannenCommand?.NotifyCanExecuteChanged();
+        }
 
         private void GekoppeldeKruising_TypeChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged(nameof(ShowHalfstarAlert));
+            OnPropertyChanged(nameof(ShowHalfstarAlert));
         }
 
         private void GekoppeldeKruisingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -973,14 +796,14 @@ namespace TLCGen.ViewModels
                     k.TypeChanged += GekoppeldeKruising_TypeChanged;
                 }
             }
-            RaisePropertyChanged(nameof(ShowHalfstarAlert));
+            OnPropertyChanged(nameof(ShowHalfstarAlert));
         }
 
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(object sender, FasenChangedMessage message)
 		{
 			if (message.AddedFasen != null && message.AddedFasen.Count > 0)
 			{
@@ -1026,14 +849,14 @@ namespace TLCGen.ViewModels
             UpdateSelectables();
 		}
 
-		private void OnNameChanged(NameChangedMessage msg)
+		private void OnNameChanged(object sender, NameChangedMessage msg)
 		{
 			foreach (var pl in SignaalPlannen)
 			{
 				pl.Fasen.BubbleSort();
 			}
-			RaisePropertyChanged(nameof(DefaultSignaalplanText));
-			RaisePropertyChanged(nameof(DefaultVARegelenText));
+			OnPropertyChanged(nameof(DefaultSignaalplanText));
+			OnPropertyChanged(nameof(DefaultVARegelenText));
 			
 			if (PTPKruisingenNames.Contains(msg.OldName))
 			{
@@ -1054,7 +877,7 @@ namespace TLCGen.ViewModels
             UpdateSelectables();
 		}
 
-		private void OnFasenSorted(FasenSortedMessage msg)
+		private void OnFasenSorted(object sender, FasenSortedMessage msg)
 		{
 			foreach (var pl in SignaalPlannen)
 			{
@@ -1064,12 +887,12 @@ namespace TLCGen.ViewModels
             Alternatieven.BubbleSort();
 		}
 
-		private void OnPeriodenChanged(PeriodenChangedMessage msg)
+		private void OnPeriodenChanged(object sender, PeriodenChangedMessage msg)
 		{
 			UpdatePeriodenData();
 		}
 
-		private void OnPTPKoppelingenChanged(PTPKoppelingenChangedMessage msg)
+		private void OnPTPKoppelingenChanged(object sender, PTPKoppelingenChangedMessage msg)
 		{
 			var rems = new List<string>();
 			foreach (var ptpk in PTPKruisingenNames)
@@ -1101,7 +924,7 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-        private void OnOVIngrepenChanged(PrioIngrepenChangedMessage msg)
+        private void OnOVIngrepenChanged(object sender, PrioIngrepenChangedMessage msg)
         {
             var rems = OVIngrepenHalfstar.Where(x => Controller.PrioData.PrioIngrepen.All(x2 => !ReferenceEquals(x.OvIngreep, x2.HalfstarIngreepData))).ToList();
             foreach(var rem in rems)
@@ -1124,12 +947,12 @@ namespace TLCGen.ViewModels
 
 		public HalfstarTabViewModel() : base()
 		{
-			Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-			Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
-			Messenger.Default.Register(this, new Action<PTPKoppelingenChangedMessage>(OnPTPKoppelingenChanged));
-			Messenger.Default.Register(this, new Action<PrioIngrepenChangedMessage>(OnOVIngrepenChanged));
+			WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+			WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
+			WeakReferenceMessengerEx.Default.Register<FasenSortedMessage>(this, OnFasenSorted);
+			WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
+			WeakReferenceMessengerEx.Default.Register<PTPKoppelingenChangedMessage>(this, OnPTPKoppelingenChanged);
+			WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnOVIngrepenChanged);
 
             if (SignaalPlannen?.Any() == true)
             {

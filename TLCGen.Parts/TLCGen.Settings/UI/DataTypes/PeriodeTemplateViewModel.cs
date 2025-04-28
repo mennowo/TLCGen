@@ -1,18 +1,22 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
-    public class PeriodeTemplateViewModel : ViewModelBase, IViewModelWithItem
+    public class PeriodeTemplateViewModel : ObservableObject, IViewModelWithItem
     {
         #region Fields
 
         private TLCGenTemplateModel<PeriodeModel> _Template;
+
+        private RelayCommand _AddPeriodeCommand;
+        private RelayCommand _RemovePeriodeCommand;
 
         #endregion // Fields
 
@@ -97,7 +101,7 @@ namespace TLCGen.Settings
             set
             {
                 _Template.Naam = value;
-                RaisePropertyChanged("Naam");
+                OnPropertyChanged("Naam");
             }
         }
         
@@ -108,7 +112,8 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedPeriode = value;
-                RaisePropertyChanged("");
+                OnPropertyChanged("");
+                _RemovePeriodeCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -143,56 +148,43 @@ namespace TLCGen.Settings
 
         #region Commands
 
-        RelayCommand _AddPeriodeCommand;
-        public ICommand AddPeriodeCommand
-        {
-            get
+        public ICommand AddPeriodeCommand => _AddPeriodeCommand ??= new RelayCommand(() =>
             {
-                if (_AddPeriodeCommand == null)
-                {
-                    _AddPeriodeCommand = new RelayCommand(new Action<object>(AddPeriodeCommand_Executed), new Predicate<object>(AddPeriodeCommand_CanExecute));
-                }
-                return _AddPeriodeCommand;
-            }
-        }
+                var d = new PeriodeModel();
+                d.Naam = "per" + (Perioden.Count + 1);
+                Perioden.Add(d);
+            });
 
-
-        RelayCommand _RemovePeriodeCommand;
-        public ICommand RemovePeriodeCommand
-        {
-            get
+        public ICommand RemovePeriodeCommand => _RemovePeriodeCommand ??= new RelayCommand(() =>
             {
-                if (_RemovePeriodeCommand == null)
-                {
-                    _RemovePeriodeCommand = new RelayCommand(new Action<object>(RemovePeriodeCommand_Executed), new Predicate<object>(RemovePeriodeCommand_CanExecute));
-                }
-                return _RemovePeriodeCommand;
-            }
-        }
+                Perioden.Remove(SelectedPeriode);
+                SelectedPeriode = null;
+            }, 
+            () => SelectedPeriode != null);
 
         #endregion // Commands
 
         #region Command Functionality
         
-        private void AddPeriodeCommand_Executed(object prm)
+        private void AddPeriodeCommand_Executed()
         {
             var d = new PeriodeModel();
             d.Naam = "per" + (Perioden.Count + 1);
             Perioden.Add(d);
         }
 
-        bool AddPeriodeCommand_CanExecute(object prm)
+        bool AddPeriodeCommand_CanExecute()
         {
             return true;
         }
 
-        void RemovePeriodeCommand_Executed(object prm)
+        void RemovePeriodeCommand_Executed()
         {
             Perioden.Remove(SelectedPeriode);
             SelectedPeriode = null;
         }
 
-        bool RemovePeriodeCommand_CanExecute(object prm)
+        bool RemovePeriodeCommand_CanExecute()
         {
             return SelectedPeriode != null && Perioden.Count > 0;
         }

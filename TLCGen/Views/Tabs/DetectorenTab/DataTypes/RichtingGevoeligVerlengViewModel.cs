@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class RichtingGevoeligVerlengViewModel : ViewModelBase, IComparable, IViewModelWithItem
+    public class RichtingGevoeligVerlengViewModel : ObservableObjectEx, IComparable, IViewModelWithItem
     {
         #region Fields
 
@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.FaseCyclus = value;
-                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+                OnPropertyChanged(nameof(FaseCyclus), broadcast: true);
             }
         }
 
@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.VanDetector = value;
-                RaisePropertyChanged<object>(nameof(VanDetector), broadcast: true);
+                OnPropertyChanged(nameof(VanDetector), broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.NaarDetector = value;
-                RaisePropertyChanged<object>(nameof(NaarDetector), broadcast: true);
+                OnPropertyChanged(nameof(NaarDetector), broadcast: true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.MaxTijdsVerschil = value;
-                RaisePropertyChanged<object>(nameof(MaxTijdsVerschil), broadcast: true);
+                OnPropertyChanged(nameof(MaxTijdsVerschil), broadcast: true);
             }
         }
 
@@ -78,7 +78,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.VerlengTijd = value;
-                RaisePropertyChanged<object>(nameof(VerlengTijd), broadcast: true);
+                OnPropertyChanged(nameof(VerlengTijd), broadcast: true);
             }
         }
 
@@ -88,7 +88,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.TypeVerlengen = value;
-                RaisePropertyChanged<object>(nameof(TypeVerlengen), broadcast: true);
+                OnPropertyChanged(nameof(TypeVerlengen), broadcast: true);
             }
         }
 
@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.AltijdAanUit = value;
-                RaisePropertyChanged<object>(nameof(AltijdAanUit), broadcast: true);
+                OnPropertyChanged(nameof(AltijdAanUit), broadcast: true);
             }
         }
 

@@ -1,6 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 
@@ -10,7 +12,7 @@ namespace TLCGen.ViewModels
     /// Used to disclose relevant information about a PhaseCyclus to the of the application
     /// that deals with modules.
     /// </summary>
-    public class FaseCyclusModuleViewModel : ViewModelBase, IComparable
+    public class FaseCyclusModuleViewModel : ObservableObjectEx, IComparable
     {
         #region Fields
 
@@ -33,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleVM = value;
-                RaisePropertyChanged("ModuleVM");
+                OnPropertyChanged("ModuleVM");
                 UpdateModuleInfo();
             }
         }
@@ -44,7 +46,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseVM = value;
-                RaisePropertyChanged("ModuleFaseVM");
+                OnPropertyChanged("ModuleFaseVM");
                 UpdateModuleInfo();
             }
         }
@@ -66,7 +68,7 @@ namespace TLCGen.ViewModels
                     foreach (var mfcvm in _ModuleVM.Fasen)
                     {
                         var request = new IsFasenConflictingRequest(this.Naam, mfcvm.FaseCyclusNaam);
-                        Messenger.Default.Send(request);
+WeakReferenceMessengerEx.Default.Send(request);
                         if (request.Handled && request.IsConflicting)
                             return false;
                     }
@@ -75,7 +77,7 @@ namespace TLCGen.ViewModels
                 {
                     if (_ModuleFaseVM.FaseCyclusNaam == Naam) return false;
                     var request = new IsFasenConflictingRequest(this.Naam, _ModuleFaseVM.FaseCyclusNaam);
-                    Messenger.Default.Send(request);
+WeakReferenceMessengerEx.Default.Send(request);
                     if (request.Handled && request.IsConflicting)
                         return false;
                 }
@@ -146,10 +148,10 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void UpdateModuleInfo()
         {
-            RaisePropertyChanged("CanBeAdded");
-            RaisePropertyChanged("IsIn");
-            RaisePropertyChanged("NothingAvailable"); 
-            RaisePropertyChanged("HasModule");
+            OnPropertyChanged("CanBeAdded");
+            OnPropertyChanged("IsIn");
+            OnPropertyChanged("NothingAvailable"); 
+            OnPropertyChanged("HasModule");
         }
 
         #endregion // Public methods

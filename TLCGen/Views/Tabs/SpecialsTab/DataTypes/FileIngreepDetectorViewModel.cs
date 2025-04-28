@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class FileIngreepDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class FileIngreepDetectorViewModel : ObservableObjectEx, IViewModelWithItem
     {
         #region Fields
 
@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Detector = value;
-                RaisePropertyChanged("Detector");
+                OnPropertyChanged("Detector");
             }
         }
 
@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.BezetTijd = value;
-                RaisePropertyChanged<object>(nameof(BezetTijd), broadcast: true);
+                OnPropertyChanged(nameof(BezetTijd), broadcast: true);
             }
         }
 
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.RijTijd = value;
-                RaisePropertyChanged<object>(nameof(RijTijd), broadcast: true);
+                OnPropertyChanged(nameof(RijTijd), broadcast: true);
             }
         }
 
@@ -50,19 +50,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.AfvalVertraging = value;
-                RaisePropertyChanged<object>(nameof(AfvalVertraging), broadcast: true);
+                OnPropertyChanged(nameof(AfvalVertraging), broadcast: true);
             }
         }
 
         #endregion // Properties
-
-        #region Commands
-
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
 
         #region Private methods
 

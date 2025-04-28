@@ -12,10 +12,10 @@ namespace TLCGen.Dialogs
     /// </summary>
     public partial class VersionInfoWindow : Window
     {
-        private List<Tuple<Version, string>> _versionData;
+        private List<(Version, string)> _versionData;
         private int _index;
 
-        public VersionInfoWindow(string cVer, List<Tuple<Version, string>> versionData)
+        public VersionInfoWindow(string cVer, List<(Version, string)> versionData)
         {
             InitializeComponent();
 

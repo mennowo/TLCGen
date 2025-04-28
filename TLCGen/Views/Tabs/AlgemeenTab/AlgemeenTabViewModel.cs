@@ -20,14 +20,6 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
-        #region Commands
-        
-        #endregion // Commands
-
-        #region Command Functionality
-        
-        #endregion // Command Functionality
-
         #region TabItem Overrides
 
         public override ImageSource Icon

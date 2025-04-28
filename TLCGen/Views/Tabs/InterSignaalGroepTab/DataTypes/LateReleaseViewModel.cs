@@ -1,10 +1,11 @@
-﻿using GalaSoft.MvvmLight;
-using TLCGen.DataAccess;
+﻿using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
+
 
 namespace TLCGen.ViewModels
 {
-    public class LateReleaseViewModel : ViewModelBase
+    public class LateReleaseViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -20,7 +21,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _lateRelease.LateReleaseTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -30,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _lateRelease.LateReleaseOntruimingstijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 

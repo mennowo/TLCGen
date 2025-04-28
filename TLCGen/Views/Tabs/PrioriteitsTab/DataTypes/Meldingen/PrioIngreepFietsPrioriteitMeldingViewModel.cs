@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
-using TLCGen.Models;
+﻿using System.Collections.ObjectModel;
+using TLCGen.Helpers;
 using TLCGen.Models.Enumerations;
-using TLCGen.ViewModels;
+
 
 namespace TLCGen.ViewModels
 {
-    public class PrioIngreepFietsPrioriteitMeldingViewModel : ViewModelBase
+    public class PrioIngreepFietsPrioriteitMeldingViewModel : ObservableObjectEx
     {
         #region Fields
         #endregion // Fields
@@ -27,7 +25,7 @@ namespace TLCGen.ViewModels
                 {
                     Parent.PrioIngreepInUitMelding.RelatedInput1 = value;
                 }
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -37,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitGebruikLus = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -49,7 +47,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitBlok = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -59,7 +57,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitAantalKeerPerCyclus = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -69,7 +67,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitMinimumAantalVoertuigen = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -79,7 +77,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitMinimumWachttijdVoorPrioriteit = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -89,8 +87,8 @@ namespace TLCGen.ViewModels
             set
             {
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitGebruikRIS = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                RaisePropertyChanged(nameof(HasAndUsesRIS));
+                OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(HasAndUsesRIS));
             }
         }
 
@@ -100,7 +98,7 @@ namespace TLCGen.ViewModels
             set 
             { 
                 Parent.PrioIngreepInUitMelding.FietsPrioriteitMinimumAantalVoertuigenRIS = value; 
-                RaisePropertyChanged<object>(broadcast: true);
+                OnPropertyChanged(broadcast: true);
             }
         }
         
