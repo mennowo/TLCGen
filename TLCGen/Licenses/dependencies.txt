@@ -1,0 +1,58 @@
+﻿TLCGen depends on a number of external libraries. For each relevant library, a link to the 
+source and the applicable license is listed below. The licenses can be found in the same 
+folder as this text document.
+A lot of care has been taken to be complete and correct with regards to attribution. If you
+feel something is ommited below that should be included, please contact us.
+
+ClosedXML
+mit
+https://github.com/ClosedXML/ClosedXML
+
+CodingConnected.Topology
+mit
+
+CommunityToolkit.Mvvm
+mit
+https://github.com/CommunityToolkit
+
+DocumentFormat.OpenXml
+mit
+https://github.com/dotnet/Open-XML-SDK 
+
+DotNetProjects.Wpf.Extended.Toolkit
+ms-pl
+https://github.com/dotnetprojects/WpfExtendedToolkit 
+
+GongSolutions.WPF.DragDrop
+bsd clause 3
+https://github.com/punker76/gong-wpf-dragdrop 
+
+Gu.Wpf.DataGrid2D
+mit
+https://github.com/GuOrg/Gu.Wpf.DataGrid2D
+
+ICSharpCode.AvalonEdit
+mit
+https://github.com/icsharpcode/AvalonEdit
+
+MdXaml
+mit
+https://github.com/whistyun/MdXaml
+
+Microsoft.Xaml.Behaviors
+mit
+https://github.com/microsoft/XamlBehaviorsWpf
+
+Newtonsoft.Json
+mit
+https://github.com/JamesNK/Newtonsoft.Json
+
+System.*
+Microsoft.* (except xaml.behaviours, see above)
+mit
+copyright (c) .NET Foundation and Contributors
+https://github.com/dotnet/runtime
+
+WindowsInput
+mit
+https://github.com/MediatedCommunications/WindowsInput
