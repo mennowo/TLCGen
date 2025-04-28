@@ -40,6 +40,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var sb = new StringBuilder();
             var backup = "bak"; // instelbare 'suffix' 
+            var cifptperr = 0;  // tbv CIF_PTP#_FOUT
 
             sb.AppendLine("/* APPLICATIE PTP-KOPPELINGEN */");
             sb.AppendLine("/* ========================== */");
@@ -51,7 +52,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
             {
                 sb.AppendLine("#define AUTSTATUS    5 /* status automaat */");
-                sb.AppendLine("#define CIFA_COMF 2048 /* communicatiefout PTP-protocol */");
+              //sb.AppendLine("#define CIFA_COMF 2048 /* communicatiefout PTP-protocol */");
                 sb.AppendLine();
             }
             sb.AppendLine("/* koppelingen via PTP */");
@@ -293,15 +294,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}communicatieprogramma(GEEN_INIT);");
             sb.AppendLine($"#endif");
             sb.AppendLine();
-            if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
-            {
-                sb.AppendLine($"{ts}{ts}/* afzetten van statusbit in CIF_GPS[5] */");
-                sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
-                sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~CIFA_COMF;");
-                sb.AppendLine();
-            }
+            
             foreach (var k in c.PTPData.PTPKoppelingen.Where(x => x.Dummy != true))
             {
+                ++cifptperr;
+                if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL110)
+                {
+                    sb.AppendLine($"{ts}{ts}/* afzetten van statusbit in CIF_GPS[5] */");
+                    sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
+                    sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~CIF_PTP{cifptperr}_FOUT;");
+                    sb.AppendLine();
+                }
+
                 sb.AppendLine($"{ts}{ts}/* opzetten signalen van en naar {k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine();
@@ -562,7 +566,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}{ts}if (!PTP_{k.TeKoppelenKruispunt}KS.OKE)");
                     }
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= CIFA_COMF;");
+                    sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= CIF_PTP{cifptperr}_FOUT;");
                     sb.AppendLine($"{ts}{ts}}}");
                 }
                 sb.AppendLine("#endif");
