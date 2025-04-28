@@ -9,10 +9,24 @@
     <NukeScriptDirectory>..</NukeScriptDirectory>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
     <IsPackable>false</IsPackable>
+    <Platforms>AnyCPU;x64</Platforms>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Rebex.Common">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\net-8.0\Rebex.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Networking">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\net-8.0\Rebex.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Sftp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\net-8.0\Rebex.Sftp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

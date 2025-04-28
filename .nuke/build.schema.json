@@ -26,6 +26,9 @@
       "enum": [
         "Clean",
         "Compile",
+        "CompileSetup",
+        "Deploy",
+        "PackPortable",
         "Restore"
       ]
     },

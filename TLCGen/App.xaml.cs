@@ -65,9 +65,9 @@ namespace TLCGen
                 details += "Oorspronkelijke fout:" + Environment.NewLine + Environment.NewLine + exception;
             }
 
-            if (GalaSoft.MvvmLight.Threading.DispatcherHelper.UIDispatcher != null)
+            if (DispatcherHelper.UIDispatcher != null)
             {
-                GalaSoft.MvvmLight.Threading.DispatcherHelper.UIDispatcher.Invoke(() =>
+                DispatcherHelper.UIDispatcher.Invoke(() =>
                 {
                     var win = new UnhandledExceptionWindow
                     {

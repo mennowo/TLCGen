@@ -25,6 +25,21 @@
     <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.7.0.0.rtf" />
+    <None Update="Licenses\BSD-3-CLAUSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Licenses\dependencies.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Licenses\LGPL.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Licenses\MIT.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Licenses\MS-PL.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="tlcgenversioning_oldvers">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -40,7 +55,7 @@
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj" />
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj" />
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj" />
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.TLCCC.csproj" />
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.TLCCC\TLCGen.Generators.TLCCC.csproj" />
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.Itf\TLCGen.Importers.Itf\TLCGen.Importers.Itf.csproj" />
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj" />
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Additor\TLCGen.Plugins.Additor.csproj" />
@@ -76,31 +91,26 @@
     </Reference>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)
-ELSE (
-mkdir "$(TargetDir)Plugins"
-mkdir "$(TargetDir)Updater"
-mkdir "$(TargetDir)Deps"
-mkdir "$(TargetDir)Libs"
-::copy "C:\GIT\TLCGen.Plugins.Utrecht\TLCGen.Plugins.Utrecht\bin\Debug\TLCGen.Plugins.Utrecht.dll" "$(TargetDir)"
-copy "$(TargetDir)CommonServiceLocator.dll" "$(TargetDir)Updater"
-copy "$(TargetDir)GalaSoft.MvvmLight.dll" "$(TargetDir)Updater"
-copy "$(TargetDir)GalaSoft.MvvmLight.Platform.dll" "$(TargetDir)Updater"
-copy "$(TargetDir)System.Windows.Interactivity.dll" "$(TargetDir)Updater"
-move "$(TargetDir)TLCGen.Updater.exe" "$(TargetDir)Updater"
-move "$(TargetDir)TLCGen.Updater.exe.config" "$(TargetDir)Updater"
-move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"
-)</PostBuildEvent>
+    <PostBuildEvent>
+		IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)
+		ELSE (
+		mkdir "$(TargetDir)Plugins"
+		mkdir "$(TargetDir)Updater"
+		copy "$(TargetDir)CommunityToolkit.Mvvm.dll" "$(TargetDir)Updater"
+		move "$(TargetDir)TLCGen.Updater.*" "$(TargetDir)Updater"
+		move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
+		move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"
+		)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>rmdir "$(TargetDir)" /s /q
-del /q "$(TargetDir)"
+    <PreBuildEvent>
+	    rmdir "$(TargetDir)" /s /q
+		del /q "$(TargetDir)"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />

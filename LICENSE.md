@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2016-2022 Gemeente Rotterdam, Gemeente Den Haag, Gemeente 
+Copyright (c) 2016-2025 Gemeente Rotterdam, Gemeente Den Haag, Gemeente 
 Amsterdam, Gemeente Utrecht, Gemeente Delft, Gemeente Dordrecht, CodingConnected e.U., Menno van der Woude
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
