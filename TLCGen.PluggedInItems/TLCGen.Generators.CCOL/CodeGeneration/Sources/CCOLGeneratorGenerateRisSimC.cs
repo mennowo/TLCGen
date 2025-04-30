@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmrislaneid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneid");
             var _prmrisapproachid = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrisapproachid");
             var _prmlijn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlijn");
+            var _prmrislaneheading = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrislaneheading");
 
             var sb = new StringBuilder();
 
@@ -157,7 +158,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 $"0, " +
                                 $"{(s.Prioriteit ? "1" : "0")}, " +
                                 (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120 
-                                    ? "NG, "
+                                    ? l.UseHeading 
+                                        ? $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " 
+                                        : "NG, "
                                     : "") +
                                 $"{s.Snelheid}, " +
                                 $"{s.Afstand}, " +
@@ -179,7 +182,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     $"0, " +
                                     $"{(s.Prioriteit ? "1" : "0")}, " +
                                     (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
-                                        ? "NG, "
+                                        ? l.UseHeading
+                                            ? $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], "
+                                            : "NG, "
                                         : "") +
                                     $"{s.Snelheid}, " +
                                     $"{s.Afstand}, " +
@@ -207,7 +212,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                           $"{lijn}, " +
                                           $"{(s.Prioriteit ? "1" : "0")}, " +
                                           (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
-                                              ? "NG, "
+                                              ? l.UseHeading
+                                                  ? $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], "
+                                                  : "NG, "
                                               : "") +
                                           $"{s.Snelheid}, " +
                                           $"{s.Afstand}, " +
@@ -235,7 +242,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     $"0, " +
                                     $"{(s.Prioriteit ? "1" : "0")}, " +
                                     (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
-                                        ? "NG, "
+                                        ? l.UseHeading
+                                            ? $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], "
+                                            : "NG, "
                                         : "") +
                                     $"{s.Snelheid}, " +
                                     $"{s.Afstand}, " +
@@ -252,7 +261,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                           $"-1, " +
                                           $"{(s.Prioriteit ? "1" : "0")}, " +
                                           (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL120
-                                              ? "NG, "
+                                              ? l.UseHeading
+                                                  ? $"PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], "
+                                                  : "NG, "
                                               : "") +
                                           $"{s.Snelheid}, " +
                                           $"{s.Afstand}, " +
