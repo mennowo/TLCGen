@@ -1,5 +1,12 @@
-TLCGen=12.4.0.12
+TLCGen=12.4.0.14
 RN==TLCGen
+TLCGen versie: 12.4.0.14
+- Upgrade TLCGen naar .NET8
+- Toevoegen ontbrekende heading in rissim.c
+- Mogelijkheid keuze type wachtgroen met of zonder aanvraag
+- Fix Visual project generatie voor CCOL 12.1
+- Fix voor code halfstart bij nalopen enkel zonder inloop
+- Diverse keinere fixes en verbeteringen
 TLCGen versie: 12.4.0.11 / 12.4.0.12
 - Fixes voor herstart fasebewakingsteller bij start en einde hulpdiensten
 TLCGen versie: 12.4.0.10

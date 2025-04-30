@@ -5,6 +5,7 @@
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <langVersion>latest</langVersion>
+	<Version>12.4.0.14</Version>
 	<Platforms>AnyCPU;x64;x86</Platforms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
