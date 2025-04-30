@@ -560,8 +560,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							}
 							++k;
 						}
-						foreach (var nl in c.InterSignaalGroep.Nalopen)
-						{
+
+                        var maxVs = false;
+						foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue))
+                        {
+                            maxVs = true;
 							if (k != 0)
 							{
 								sb.AppendLine(" &&");
@@ -591,7 +594,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							}
 							++k;
 						}
-						sb.AppendLine($"{ts}{ts})");
+
+                        if (maxVs) sb.AppendLine($"{ts}{ts}");
+                        sb.AppendLine($")");
 						sb.AppendLine($"{ts}{ts}{{");
 						sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
 						sb.AppendLine($"{ts}{ts}}}");
