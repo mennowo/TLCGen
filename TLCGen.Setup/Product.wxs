@@ -1,6 +1,5 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" 
-	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
-	 xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
+	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
 	
 	<?include "Config.wxi"?>
 	
@@ -47,7 +46,7 @@
 		<ui:WixUI Id="WixUI_FeatureTree" />
 		<UIRef Id="WixUI_ErrorProgressText" />
 
-		<Property Id="ARPPRODUCTICON" Value="TCLGen.exe" />
+		<Property Id="ARPPRODUCTICON" Value="TLCGen.exe" />
 
 		<WixVariable Id="WixUIBannerBmp" Value=".\images\setup_banner.bmp" />
 		<WixVariable Id="WixUIDialogBmp" Value=".\images\setup_start.bmp" />
@@ -57,7 +56,7 @@
 	</Package>
 
 	<Fragment>
-		<StandardDirectory Id="ProgramFilesFolder">
+		<StandardDirectory Id="ProgramFiles64Folder">
 			<Directory Id="INSTALLFOLDER" Name="TLCGen">
 				<Directory Id="UPDATERFOLDER" Name="Updater" />
 				<Directory Id="PLUGINSFOLDER" Name="Plugins" />
@@ -95,6 +94,8 @@
 				</File>
 				<File Id="TLCGenDLL" Name="TLCGen.dll" Source="$(var.ReleaseDir)/TLCGen.dll" KeyPath="no" />
 				<File Id="TLCGenDLLConfig" Name="TLCGen.dll.config" Source="$(var.ReleaseDir)/TLCGen.dll.config" KeyPath="no" />
+				<File Id="TLCGenDepsJson" Name="TLCGen.deps.json" Source="$(var.ReleaseDir)/TLCGen.deps.json" KeyPath="no" />
+				<File Id="TLCGenRuntimeconfigJson" Name="TLCGen.runtimeconfig.json" Source="$(var.ReleaseDir)/TLCGen.runtimeconfig.json" KeyPath="no" />
 				<ProgId Id="TLCGen.tlc" Description="TLCGen file" Icon="TLCGenEXE">
 					<Extension Id="tlc" ContentType="application/tlc">
 						<Verb Id="open" Command="Open" TargetFile="TLCGenEXE" Argument="&quot;%1&quot;" />
@@ -195,6 +196,9 @@
 				<!-- mit // https://github.com/MediatedCommunications/WindowsInput -->
 				<File Id="WindowsInput" Name="WindowsInput.dll" Source="$(var.ReleaseDir)/WindowsInput.dll" KeyPath="no" />
 
+				<!-- mit // https://github.com/icsharpcode/AvalonEdit -->
+				<File Id="ICSharpCode.AvalonEdit.dll" Name="ICSharpCode.AvalonEdit.dll" Source="$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll" KeyPath="no" />
+			
 			</Component>
 		</ComponentGroup>
 
@@ -319,7 +323,6 @@
 		<ComponentGroup Id="TLCGenAutoBuildPlugin" Directory="PLUGINSFOLDER">
 			<Component Id="AutoBuildPlugin" Guid="0CA0C7F0-7CCD-49EA-A3B1-F3DDA339491E">
 				<File Id="TLCGen.Plugins.AutoBuild.dll" Name="TLCGen.Plugins.AutoBuild.dll" Source="$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AutoBuild.dll" KeyPath="no" />
-				<File Id="ICSharpCode.AvalonEdit.dll" Name="ICSharpCode.AvalonEdit.dll" Source="$(var.ReleaseDir)/ICSharpCode.AvalonEdit.dll" KeyPath="no" />
 			</Component>
 		</ComponentGroup>
 
