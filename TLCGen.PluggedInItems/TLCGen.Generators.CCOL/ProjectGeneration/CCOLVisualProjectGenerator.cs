@@ -28,6 +28,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 CCOLVersieEnum.CCOL100 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100,
                 CCOLVersieEnum.CCOL110 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL110,
                 CCOLVersieEnum.CCOL120 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL120,
+                CCOLVersieEnum.CCOL121 => CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL121,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
