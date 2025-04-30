@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel;
 using TLCGen.Helpers;
 
-namespace TLCGen.Models.Enumerations
+namespace TLCGen.Models.Enumerations;
+
+[TypeConverter(typeof(EnumDescriptionTypeConverter))]
+public enum NooitAltijdAanUitEnum
 {
-    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum NooitAltijdAanUitEnum
-    {
-        [Description("Nooit")]
-        Nooit,
-        [Description("Altijd")]
-        Altijd,
-        [Description("Aan")]
-        SchAan,
-        [Description("Uit")]
-        SchUit,
-    }
+    [Description("Nooit")]
+    Nooit,
+    [Description("Altijd")]
+    Altijd,
+    [Description("Aan")]
+    SchAan,
+    [Description("Uit")]
+    SchUit,
 }

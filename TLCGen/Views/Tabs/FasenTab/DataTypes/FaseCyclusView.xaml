@@ -181,6 +181,14 @@
                 </StackPanel>
             </GroupBox>
             <StackPanel>
+                <GroupBox Header="Wachtgroen opties">
+                    <StackPanel>
+                        <ComboBox 
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:WachtgroenTypeEnum}}}" 
+                            IsEnabled="{Binding Path=HasWachtgroen}"
+                            SelectedValue="{Binding Path=WachtgroenType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                    </StackPanel>
+                </GroupBox>
                 <GroupBox Header="Vaste aanvraag opties">
                     <StackPanel>
                         <CheckBox Content="Uitgestelde aanvraag" IsChecked="{Binding Path=UitgesteldeVasteAanvraag,UpdateSourceTrigger=PropertyChanged}"

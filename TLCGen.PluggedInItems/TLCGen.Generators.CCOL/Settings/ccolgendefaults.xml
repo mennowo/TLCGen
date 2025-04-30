@@ -3487,6 +3487,14 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Wachtgroen</SubCategorie>
           </Setting>
+	        <Setting>
+		        <Default>wg</Default>
+		        <Setting>wg</Setting>
+		        <Type>Parameter</Type>
+		        <Description>Type wachtstand groen fase _E1_ (1 = groen vasthouden, 2 = groen vasth. + aanvr)</Description>
+		        <Categorie>CAT_Basisfuncties</Categorie>
+		        <SubCategorie>SUBCAT_Wachtgroen</SubCategorie>
+	        </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

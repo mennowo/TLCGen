@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schwg;
+        private CCOLGeneratorCodeStringSettingModel _prmwg;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -29,6 +30,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_schwg}{fcm.Naam}", fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schwg, fcm.Naam));
+                }
+                if (fcm.Wachtgroen != NooitAltijdAanUitEnum.Nooit)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmwg}{fcm.Naam}", (int)fcm.WachtgroenType, CCOLElementTimeTypeEnum.None, _prmwg, fcm.Naam));
                 }
             }
         }
@@ -67,9 +74,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, ({c.GetBoolV()}) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
+                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, ({c.GetBoolV()}) (SCH[{_schpf}{_schwg}{fcm.Naam}] && (PRM[{_prmpf}{_prmwg}{fcm.Naam}] >= 2)));");
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
+                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, (PRM[{_prmpf}{_prmwg}{fcm.Naam}] >= 2));");
                     }
                     return sb.ToString();
 
@@ -88,11 +95,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"(MK[{fcm.GetDefine()}] & ~BIT5) ||");
                                 sb.Append("".PadLeft($"{ts}RW[{fcm.GetDefine()}] |= (".Length));
                             }
-                            sb.AppendLine($"SCH[{_schpf}{_schwg}{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                            sb.AppendLine($"SCH[{_schpf}{_schwg}{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && (PRM[{_prmpf}{_prmwg}{fcm.Naam}] >= 1) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                            sb.AppendLine($"{ts}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && (PRM[{_prmpf}{_prmwg}{fcm.Naam}] >= 1) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                     }
                     sb.AppendLine();

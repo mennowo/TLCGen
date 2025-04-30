@@ -45,6 +45,7 @@ namespace TLCGen.Models
         public bool HDIngreep { get; set; }
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
+        public WachtgroenTypeEnum WachtgroenType { get; set; }
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
         public AlternatieveRuimteTypeEnum AlternatieveRuimteType { get; set; }
