@@ -296,8 +296,15 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
             get => FaseCyclus.Wachtgroen;
             set
             {
+                if (FaseCyclus.WachtgroenType == WachtgroenTypeEnum.Geen &&
+                    FaseCyclus.Wachtgroen == NooitAltijdAanUitEnum.Nooit &&
+                    value != NooitAltijdAanUitEnum.Nooit)
+                {
+                    FaseCyclus.WachtgroenType = WachtgroenTypeEnum.GroenVasthoudenEnAanvragen;
+                    OnPropertyChanged(nameof(WachtgroenType));
+                }
                 FaseCyclus.Wachtgroen = value;
-                OnPropertyChanged(nameof(Wachtgroen), broadcast: true);
+                OnPropertyChanged(broadcast: true);
                 OnPropertyChanged(nameof(HasWachtgroen));
             }
         }

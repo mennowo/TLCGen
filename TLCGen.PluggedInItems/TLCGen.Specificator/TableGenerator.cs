@@ -518,7 +518,7 @@ namespace TLCGen.Specificator
                     "OT verschil"
                 }
             };
-            foreach (var mvfc in c.Fasen.Where(x => x.Meeverlengen != NooitAltijdAanUitEnum.Nooit || x.Meeverlengen == NooitAltijdAanUitEnum.Nooit))
+            foreach (var mvfc in c.Fasen.Where(x => x.Meeverlengen != NooitAltijdAanUitEnum.Nooit))
             {
                 var mvmet = "-";
                 var schmvmet = "-";
@@ -546,18 +546,18 @@ namespace TLCGen.Specificator
                     mvfc.Naam,
                     mvfc.Meeverlengen.GetDescription(),
 
-                   (mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default         ? " 1: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To              ? " 2: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo            ? " 3: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger      ? " 4: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.DefaultCCOL     ? " 5: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.ToCCOL          ? " 6: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKToCCOL        ? " 7: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MaatgevendGroen ? " 8: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Default2        ? " 9: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.To2             ? "10: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.MKTo2           ? "11: " :
-                    mvfc.MeeverlengenType == Models.Enumerations.MeeVerlengenTypeEnum.Voetganger2     ? "12: " :
+                   (mvfc.MeeverlengenType == MeeVerlengenTypeEnum.Default         ? " 1: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.To              ? " 2: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.MKTo            ? " 3: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.Voetganger      ? " 4: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.DefaultCCOL     ? " 5: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.ToCCOL          ? " 6: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.MKToCCOL        ? " 7: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.MaatgevendGroen ? " 8: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.Default2        ? " 9: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.To2             ? "10: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.MKTo2           ? "11: " :
+                    mvfc.MeeverlengenType == MeeVerlengenTypeEnum.Voetganger2     ? "12: " :
                                                                                                         " 0: " ) + mvfc.MeeverlengenType.GetDescription(),
                     mvfc.MeeverlengenTypeInstelbaarOpStraat.ToCustomString(),
                     mvmet,
@@ -569,6 +569,42 @@ namespace TLCGen.Specificator
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
             
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Wachtgroen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Wachtstand");
+
+            items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: " + (string)Texts["Table_Wachtgroen"], styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new()
+                {
+                    "Fase (##)",
+                    "Wachtgroen                                         SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schwg") + "##",
+                    "Type wachtgroen                                    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmwg") + "##",
+                }
+            };
+            foreach (var mvfc in c.Fasen.Where(x => x.Wachtgroen != NooitAltijdAanUitEnum.Nooit))
+            {
+                l.Add([
+                    mvfc.Naam,
+                    mvfc.Wachtgroen.GetDescription(),
+
+                    (mvfc.WachtgroenType == WachtgroenTypeEnum.Geen ? " 0: " :
+                        mvfc.WachtgroenType == WachtgroenTypeEnum.GroenVasthouden ? " 1: " :
+                        mvfc.WachtgroenType == WachtgroenTypeEnum.GroenVasthoudenEnAanvragen ? " 2: " :
+                        " 0: ") + mvfc.WachtgroenType.GetDescription()
+                ]);
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
             return items;
         }
 

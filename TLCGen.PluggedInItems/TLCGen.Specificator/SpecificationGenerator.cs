@@ -129,6 +129,7 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetChapter_Modulestructuur(doc, c));
                 body.Append(FunctionalityGenerator.GetChapter_VasteAanvragen(c));
                 body.Append(FunctionalityGenerator.GetChapter_Meeverlengen(c));
+                body.Append(FunctionalityGenerator.GetChapter_Wachtgroen(c));
                 body.Append(FunctionalityGenerator.GetChapter_Veiligheidsgroen(c));
                 body.Append(FunctionalityGenerator.GetChapter_Senioreningreep(c));
                 body.Append(FunctionalityGenerator.GetChapter_Schoolingreep(c));

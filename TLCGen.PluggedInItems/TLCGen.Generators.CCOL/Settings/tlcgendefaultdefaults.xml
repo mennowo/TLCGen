@@ -22,7 +22,8 @@
         <OVIngreep>false</OVIngreep>
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
-        <Wachtgroen>SchUit</Wachtgroen>
+		<Wachtgroen>SchUit</Wachtgroen>
+		<WachtgroenType>GroenVasthoudenEnAanvragen</WachtgroenType>
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
@@ -50,6 +51,7 @@
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
+        <WachtgroenType>GroenVasthoudenEnAanvragen</WachtgroenType>
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
@@ -77,6 +79,7 @@
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
+        <WachtgroenType>GroenVasthoudenEnAanvragen</WachtgroenType>
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>Voetganger</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
@@ -104,6 +107,7 @@
         <HDIngreep>false</HDIngreep>
         <VasteAanvraag>SchUit</VasteAanvraag>
         <Wachtgroen>SchUit</Wachtgroen>
+        <WachtgroenType>GroenVasthoudenEnAanvragen</WachtgroenType>
         <Meeverlengen>SchUit</Meeverlengen>
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
@@ -471,7 +475,7 @@
         <Straat2 />
         <BitmapNaam />
         <Fasebewaking>240</Fasebewaking>
-        <CCOLVersie>CCOL8</CCOLVersie>
+        <CCOLVersie>CCOL120</CCOLVersie>
         <KWCType>Geen</KWCType>
         <VLOGType>Filebased</VLOGType>
         <VLOGInTestOmgeving>false</VLOGInTestOmgeving>

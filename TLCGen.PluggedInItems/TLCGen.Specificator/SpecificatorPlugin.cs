@@ -84,6 +84,7 @@ namespace TLCGen.Specificator
                     SpecificatorTabVM.SelectedSpecialsParagraaf = SpecificatorTabVM.SpecialsParagrafen.FirstOrDefault();
                 }
                 _controller = value;
+                SpecificatorVM.UpdateCommands();
             }
         }
 
@@ -97,7 +98,7 @@ namespace TLCGen.Specificator
 
         public bool CanGenerateController()
         {
-            return false;
+            return SpecificatorVM.GenerateCommand.CanExecute(null);
         }
 
         #endregion // ITLCGenGenerator

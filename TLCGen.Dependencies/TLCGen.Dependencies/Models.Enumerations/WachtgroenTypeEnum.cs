@@ -6,8 +6,10 @@ namespace TLCGen.Models.Enumerations;
 [TypeConverter(typeof(EnumDescriptionTypeConverter))]
 public enum WachtgroenTypeEnum
 {
+    [Description("Geen wachtgroen")]
+    Geen = 0,
     [Description("Groen vasthouden")]
-    GroenVasthouden,
+    GroenVasthouden = 1,
     [Description("Groen vasthouden en aanvragen")]
-    GroenVasthoudenEnAanvragen,
+    GroenVasthoudenEnAanvragen = 2,
 }

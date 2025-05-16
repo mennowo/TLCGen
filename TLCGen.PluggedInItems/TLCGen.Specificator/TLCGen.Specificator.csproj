@@ -11,7 +11,11 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Page Remove="Resources\SpecificatorTexts.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\specification_template.docx" />
+    <EmbeddedResource Include="Resources\SpecificatorTexts.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.DataAccess\TLCGen.DataAccess.csproj" />

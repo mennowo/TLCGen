@@ -372,6 +372,18 @@ namespace TLCGen.ModelManagement
                     if (hd.RisEta.HasValue) hd.RisEta *= 10;
                 }
             }
+
+            checkVer = Version.Parse("12.4.0.14");
+            if (v < checkVer)
+            {
+                foreach (var s in controller.Fasen)
+                {
+                    if (s.Wachtgroen != NooitAltijdAanUitEnum.Nooit)
+                    {
+                        s.WachtgroenType = WachtgroenTypeEnum.GroenVasthoudenEnAanvragen;
+                    }
+                }
+            }
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)

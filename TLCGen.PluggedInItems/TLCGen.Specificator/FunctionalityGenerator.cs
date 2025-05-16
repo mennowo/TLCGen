@@ -394,67 +394,69 @@ namespace TLCGen.Specificator
 
         public static List<OpenXmlCompositeElement> GetChapter_SignaalGroepAfhandeling(WordprocessingDocument doc, ControllerModel c)  // hfdst 2.1 Signaalgroepafhandeling  
         {
-            var items = new List<OpenXmlCompositeElement>();
-            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_SignaalgroepAfhandeling"]}", 2));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "De signaalgroepen worden volgens een vaste procedure afgehandeld (standaard CCOL afhandeling). " +
-                "De signaalgroepafhandeling is verdeeld in een aantal toestanden die alle doorlopen (moeten) worden. " +
-                "Een aantal van deze toestanden " +
-                "is tijdsafhankelijk. In het navolgende worden de belangrijkste signaalgroeptoestanden en " +
-                "signaalgroeptijden in chronologische volgorde besproken. "));
-            items.Add(OpenXmlHelper.GetTextParagraph("Garantierood(tijd)", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "De garantieroodtijd is de tijd dat een signaalgroep minimaal rood is. Deze tijd is bedoeld om " +
-                "een onrustig beeld voor weggebruikers te voorkomen (‘flitsrood’)."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Garantiegroen(tijd)", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Garantiegroentijden hebben een relatie met de veiligheid van de verkeerslichtenregeling. Na begin groen " +
-                "kijken weggebruikers vaak een aantal seconden niet naar het verkeerslicht. Bij te korte " +
-                "garantiegroentijden bestaat het gevaar dat weggebruikers ongemerkt door rood rijden."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Vastgroen(tijd)", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "De vastgroentijd is afhankelijk van het detectieveld. De vastgroentijd moet voldoende zijn, " +
-                "om ervoor te zorgen dat (auto)verkeer dat tussen de stopstreep en de eerste velenglus staat, tijdens de " +
-                "vastgroentijd weg kan rijden. Bij het gebruik van een (beperkte) verlengfunctie op de koplus " +
-                "hoeft hier geen rekening mee gehouden te worden en kan de vastgroentijd gelijk zijn aan de " +
-                "garantiegroentijd."));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Bij fiets- en voetgangersrichtingen wordt vaak een vastgroentijd aangehouden die hoger ligt dan de garantiegroentijd."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Wachtgroen", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Wanneer er op een signaalgroep verkeer aanwezig is en er geen conflictaanvragen zijn, kan de " +
-                "betreffende signaalgroep in wachtgroen worden vastgehouden. Dit is een instelling die vast in TLCCGen moet worden opgegeven." +
-                "In dat geval gaat een signaalgroep pas na een conflictaanvraag " +
-                "daadwerkelijk verlengen.Op deze manier wordt voorkomen dat het groen van een drukke signaalgroep " +
-                "plotseling wordt beëindigd door één voertuig op een rustige conflicterende signaalgroep. " +
-                "Ook wordt in dat geval een signaalgroep die aan het meeverlengen is weer teruggezet naar wachtgroen op het " +
-                "moment dat er weer verkeer in het detectieveld aanwezig is en er geen conflictaanvragen zijn."));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Daarnaast kan de toestand wachtgroen worden gebruikt om een richting in wachtstand groen te houden of om een richting " +
-                "groen te houden die een naalooprichting is van een voedende richting die groen (of bijna groen) is."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Verlenggroen", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Gedurende de verlenggroenfase kan een signaalgroep bij continu verkeersaanbod (d.w.z. zolang het meetkriterium op staat) groen blijven tot " +
-                "het primaire groengebied is verstreken. De primaire groengebieden kunnen afhankelijk van de " +
-                $"klokperiode variëren. Er zijn in deze regeling {c.GroentijdenSets.Count.ToString()} verschillende klokperioden opgenomen."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Meeverlenggroen", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Signaalgroepen die groen zijn en dit kunnen blijven zonder dat hierdoor andere signaalgroepen " +
-                "worden tegengehouden, kunnen meeverlenggroen krijgen na het verlopen van hun hiaattijden of maximum " +
-                "groentijd. Door het gebruik van meeverlenggroen wordt de restruimte in de verkeerslichtenregeling benut " +
-                "en verbetert de logica en acceptatie van de regeling. Hierbij wordt rekening gehouden " +
-                "met het verschil in geel- en ontruimingstijden of intergroentijden."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Garantiegeel(tijd)", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "De garantiegeeltijd is de tijd dat een signaalgroep minimaal geel is. Deze tijd is bedoeld om een " +
-                "onrustig beeld voor weggebruikers te voorkomen (‘flitsgeel’) en dient tevens om weggebruikers te 'garanderen' dat zij " +
-                "tijdig tot stilstand te komen. De garantiegeeltijd is daarmee mede afhankelijk van de maximale snelheid op de richitng."));
-            items.Add(OpenXmlHelper.GetTextParagraph("Geel(tijd)", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "De geeltijd moet niet te laag en niet te hoog worden ingesteld. Een te lage waarde kan voertuigen " +
-                "die niet meer tijdig kunnen stoppen in onveilige situaties brengen. Bij te hoge waarden blijven " +
-                "bestuurders, die eigenlijk hadden kunnen stoppen, doorrijden."));
-            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+            var items = new List<OpenXmlCompositeElement>
+            {
+                OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_SignaalgroepAfhandeling"]}", 2),
+                OpenXmlHelper.GetTextParagraph(
+                    "De signaalgroepen worden volgens een vaste procedure afgehandeld (standaard CCOL afhandeling). " +
+                    "De signaalgroepafhandeling is verdeeld in een aantal toestanden die alle doorlopen (moeten) worden. " +
+                    "Een aantal van deze toestanden " +
+                    "is tijdsafhankelijk. In het navolgende worden de belangrijkste signaalgroeptoestanden en " +
+                    "signaalgroeptijden in chronologische volgorde besproken. "),
+                OpenXmlHelper.GetTextParagraph("Garantierood(tijd)", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "De garantieroodtijd is de tijd dat een signaalgroep minimaal rood is. Deze tijd is bedoeld om " +
+                    "een onrustig beeld voor weggebruikers te voorkomen (‘flitsrood’)."),
+                OpenXmlHelper.GetTextParagraph("Garantiegroen(tijd)", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "Garantiegroentijden hebben een relatie met de veiligheid van de verkeerslichtenregeling. Na begin groen " +
+                    "kijken weggebruikers vaak een aantal seconden niet naar het verkeerslicht. Bij te korte " +
+                    "garantiegroentijden bestaat het gevaar dat weggebruikers ongemerkt door rood rijden."),
+                OpenXmlHelper.GetTextParagraph("Vastgroen(tijd)", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "De vastgroentijd is afhankelijk van het detectieveld. De vastgroentijd moet voldoende zijn, " +
+                    "om ervoor te zorgen dat (auto)verkeer dat tussen de stopstreep en de eerste velenglus staat, tijdens de " +
+                    "vastgroentijd weg kan rijden. Bij het gebruik van een (beperkte) verlengfunctie op de koplus " +
+                    "hoeft hier geen rekening mee gehouden te worden en kan de vastgroentijd gelijk zijn aan de " +
+                    "garantiegroentijd."),
+                OpenXmlHelper.GetTextParagraph(
+                    "Bij fiets- en voetgangersrichtingen wordt vaak een vastgroentijd aangehouden die hoger ligt dan de garantiegroentijd."),
+                OpenXmlHelper.GetTextParagraph("Wachtgroen", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "Wanneer er op een signaalgroep verkeer aanwezig is en er geen conflictaanvragen zijn, kan de " +
+                    "betreffende signaalgroep in wachtgroen worden vastgehouden. Dit is een instelling die vast in TLCCGen moet worden opgegeven." +
+                    "In dat geval gaat een signaalgroep pas na een conflictaanvraag " +
+                    "daadwerkelijk verlengen.Op deze manier wordt voorkomen dat het groen van een drukke signaalgroep " +
+                    "plotseling wordt beëindigd door één voertuig op een rustige conflicterende signaalgroep. " +
+                    "Ook wordt in dat geval een signaalgroep die aan het meeverlengen is weer teruggezet naar wachtgroen op het " +
+                    "moment dat er weer verkeer in het detectieveld aanwezig is en er geen conflictaanvragen zijn."),
+                OpenXmlHelper.GetTextParagraph(
+                    "Daarnaast kan de toestand wachtgroen worden gebruikt om een richting in wachtstand groen te houden of om een richting " +
+                    "groen te houden die een naalooprichting is van een voedende richting die groen (of bijna groen) is."),
+                OpenXmlHelper.GetTextParagraph("Verlenggroen", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "Gedurende de verlenggroenfase kan een signaalgroep bij continu verkeersaanbod (d.w.z. zolang het meetkriterium op staat) groen blijven tot " +
+                    "het primaire groengebied is verstreken. De primaire groengebieden kunnen afhankelijk van de " +
+                    $"klokperiode variëren. Er zijn in deze regeling {c.GroentijdenSets.Count.ToString()} verschillende klokperioden opgenomen."),
+                OpenXmlHelper.GetTextParagraph("Meeverlenggroen", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "Signaalgroepen die groen zijn en dit kunnen blijven zonder dat hierdoor andere signaalgroepen " +
+                    "worden tegengehouden, kunnen meeverlenggroen krijgen na het verlopen van hun hiaattijden of maximum " +
+                    "groentijd. Door het gebruik van meeverlenggroen wordt de restruimte in de verkeerslichtenregeling benut " +
+                    "en verbetert de logica en acceptatie van de regeling. Hierbij wordt rekening gehouden " +
+                    "met het verschil in geel- en ontruimingstijden of intergroentijden."),
+                OpenXmlHelper.GetTextParagraph("Garantiegeel(tijd)", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "De garantiegeeltijd is de tijd dat een signaalgroep minimaal geel is. Deze tijd is bedoeld om een " +
+                    "onrustig beeld voor weggebruikers te voorkomen (‘flitsgeel’) en dient tevens om weggebruikers te 'garanderen' dat zij " +
+                    "tijdig tot stilstand te komen. De garantiegeeltijd is daarmee mede afhankelijk van de maximale snelheid op de richitng."),
+                OpenXmlHelper.GetTextParagraph("Geel(tijd)", bold: true),
+                OpenXmlHelper.GetTextParagraph(
+                    "De geeltijd moet niet te laag en niet te hoog worden ingesteld. Een te lage waarde kan voertuigen " +
+                    "die niet meer tijdig kunnen stoppen in onveilige situaties brengen. Bij te hoge waarden blijven " +
+                    "bestuurders, die eigenlijk hadden kunnen stoppen, doorrijden."),
+                OpenXmlHelper.GetTextParagraph("", "Footer")
+            };
             return items;
         }
 
@@ -660,6 +662,24 @@ namespace TLCGen.Specificator
                 $"en eventuele instellingen van hard meeverlengen weergegeven:"));
 
           items.AddRange(TableGenerator.GetTable_Meeverlengen(c));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetChapter_Wachtgroen(ControllerModel c)                                         // hfdst 2.7 Meeverlengen  
+        {
+            var items = new List<OpenXmlCompositeElement>
+            {
+                OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Wachtgroen"]}", 2),
+                OpenXmlHelper.GetTextParagraph(
+                    $"Voor de {Texts["Generic_fasen"]} kan het type wachtstand worden ingesteld per richting. " +
+                    $"De algemene instelling per fase staat weergegeven in tabel {TableGenerator.Tables["Table_Fasen_Functies"]}; " +
+                    $"Hieronder wordt het type wachtstand per fase weergegeven:")
+            };
+
+            items.AddRange(TableGenerator.GetTable_Wachtgroen(c));
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
 

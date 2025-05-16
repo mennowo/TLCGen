@@ -106,7 +106,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT4;  /* reset BIT-sturing */");
-                    sb.AppendLine($"{ts}{ts}WS[fc] |= (RW[fc] & BIT4) ? BIT4 : 0;");
+                    sb.AppendLine($"{ts}{ts}WS[fc] |= (G[fc] && (RW[fc] & BIT4)) ? BIT4 : 0;");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     if (c.Data.ExtraMeeverlengenInWG)

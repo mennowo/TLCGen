@@ -86,6 +86,8 @@
     <system:String x:Key="Table_VasteAanvragen">Instellingen cyclische aanvragen</system:String>
     <system:String x:Key="Title_Meeverlengen">Meeverlengen</system:String>
     <system:String x:Key="Table_Meeverlengen">Instellingen meeverlengen</system:String>
+    <system:String x:Key="Title_Wachtgroen">Wachtgroen</system:String>
+    <system:String x:Key="Table_Wachtgroen">Instellingen Wachtgroen</system:String>
     <system:String x:Key="Title_Veiligheidsgroen">Veiligheidsgroen</system:String>
     <system:String x:Key="Table_Veiligheidsgroen">Instellingen veiligheidsgroen</system:String>
 
