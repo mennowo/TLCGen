@@ -6,7 +6,6 @@ nuget CodingConnected.Topology
 nuget CommunityToolkit.Mvvm
 nuget DocumentFormat.OpenXml
 nuget DotNetProjects.Extended.Wpf.Toolkit
-nuget GitVersionTask
 nuget gong-wpf-dragdrop
 nuget Gu.Wpf.DataGrid2D
 nuget InputSimulator

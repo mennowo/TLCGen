@@ -8,7 +8,6 @@ NUGET
       DocumentFormat.OpenXml.Framework (>= 3.3)
     DocumentFormat.OpenXml.Framework (3.3)
     DotNetProjects.Extended.Wpf.Toolkit (5.0.124)
-    GitVersionTask (5.5.1)
     gong-wpf-dragdrop (4.0)
     Gu.Wpf.DataGrid2D (0.2.4)
     InputSimulator (1.0.4)

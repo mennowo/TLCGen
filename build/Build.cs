@@ -31,7 +31,7 @@ class Build : NukeBuild
     
     const bool Dev = true;
 
-    const bool DoClean = false;
+    const bool DoClean = true;
     const bool DoSign = true;
     const bool DoDeploy = true;
 
@@ -199,7 +199,7 @@ class Build : NukeBuild
             Console.WriteLine("Now connected via sftp...");
             
             // Setup
-            Console.WriteLine($"Uploading YAVV Seyup to {client.GetCurrentDirectory() + '/' + remoteFileNameSetup}");
+            Console.WriteLine($"Uploading TLCGen Setup to {client.GetCurrentDirectory() + '/' + remoteFileNameSetup}");
             try
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameSetup))
@@ -216,7 +216,7 @@ class Build : NukeBuild
             client.Rename(Path.GetFileName(outputNameSetup), remoteFileNameSetup);
 
             // Portable
-            Console.WriteLine($"Uploading YAVV Portable to {client.GetCurrentDirectory() + '/' + remoteFileNamePortable}");
+            Console.WriteLine($"Uploading TLCGen Portable to {client.GetCurrentDirectory() + '/' + remoteFileNamePortable}");
             try
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNamePortable))
