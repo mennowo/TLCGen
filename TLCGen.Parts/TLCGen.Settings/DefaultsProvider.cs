@@ -340,9 +340,9 @@ namespace TLCGen.Settings
                 if (x == null) continue;
 			    var t = x.InnerText;
                 // correct old files
-			    if (t.EndsWith(",TLCGen.Model"))
+			    if (t.EndsWith(",TLCGen.Models"))
 			    {
-				    t = t.Replace(",TLCGen.Model", ",TLCGen.Dependencies");
+				    t = t.Replace(",TLCGen.Models", ",TLCGen.Dependencies");
 			    }
 			    var type = Type.GetType(t);
 			    var xRoot = new XmlRootAttribute
@@ -357,7 +357,7 @@ namespace TLCGen.Settings
 			    var item = new TLCGenDefaultModel
 			    {
 				    DefaultName = def.SelectSingleNode("DefaultName")?.InnerText,
-				    DataType = def.SelectSingleNode("DataType")?.InnerText,
+				    DataType = t,
 				    Category = def.SelectSingleNode("Category")?.InnerText
 			    };
 			    var n1 = def.SelectSingleNode("Selector1");
