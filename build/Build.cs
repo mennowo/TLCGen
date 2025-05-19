@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Nuke.Common;
 using Nuke.Common.IO;
@@ -29,11 +30,13 @@ class Build : NukeBuild
 
     const string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
     
-    const bool Dev = true;
+    const bool Dev = false;
 
-    const bool DoClean = true;
+    const bool DoClean = false;
     const bool DoSign = true;
     const bool DoDeploy = true;
+    const bool DoArchiveOld = true;
+    const string ArchiveOldVersion = "12.4.0.12";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -62,6 +65,7 @@ class Build : NukeBuild
         {
             MSBuildTasks.MSBuild(_ => _
                 .SetProcessToolPath(MsBuildPath)
+                .SetProcessEnvironmentVariable("DevEnvDir", @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\")
                 .SetProjectFile(Solution.GetProject("TLCGen"))
                 .SetConfiguration("Release")
                 .SetTargetPlatform(MSBuildTargetPlatform.x64)
@@ -188,8 +192,9 @@ class Build : NukeBuild
             var outputNameSetup = OutputDirectory / $"{DateTime.Now:yyyy-MM-dd}-Setup_TLCGen_V{version.ToString(3).Replace('.', '_')}.msi";
             var outputNamePortable = OutputDirectory / $"{DateTime.Now:yyyy-MM-dd}-TLCGen_V{version.ToString(3).Replace('.', '_')}.zip";
 
-            var remoteFileNameSetup = "TLCGen.setup.msi";
+            var remoteFileNameSetup = "TLCGen.Setup.msi";
             var remoteFileNamePortable = "TLCGen_portable_latest.zip";
+            var remoteFileNameVersioning = "tlcgenversioning";
 
             var s = new CodingConnectedLocalSettings();
             using var client = new Sftp();
@@ -204,8 +209,17 @@ class Build : NukeBuild
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameSetup))
                 {
-                    Console.WriteLine("Found existing setup file, will try removing...");
-                    client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNameSetup);
+                    if (DoArchiveOld &&
+                        !client.FileExists(client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNameSetup))
+                    {
+                        Console.WriteLine("Found existing ZIP file, will archive...");
+                        client.Rename(client.GetCurrentDirectory() + '/' + remoteFileNameSetup, client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNameSetup);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Found existing setup file, will try removing...");
+                        client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNameSetup);
+                    }
                 }
             }
             catch
@@ -221,8 +235,17 @@ class Build : NukeBuild
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNamePortable))
                 {
-                    Console.WriteLine("Found existing setup file, will try removing...");
-                    client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNamePortable);
+                    if (DoArchiveOld &&
+                        !client.FileExists(client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNamePortable))
+                    {
+                        Console.WriteLine("Found existing ZIP file, will archive...");
+                        client.Rename(client.GetCurrentDirectory() + '/' + remoteFileNamePortable, client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNamePortable);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Found existing ZIP file, will try removing...");
+                        client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNamePortable);
+                    }
                 }
             }
             catch
@@ -231,6 +254,23 @@ class Build : NukeBuild
             }
             client.Upload(outputNamePortable, client.GetCurrentDirectory());
             client.Rename(Path.GetFileName(outputNamePortable), remoteFileNamePortable);
+
+            // Versioning
+            client.ChangeDirectory("/var/www/html/codingconnected.eu/tlcgen/deploy/");
+            Console.WriteLine($"Uploading TLCGen VERSIONING file to {client.GetCurrentDirectory() + '/' + remoteFileNameVersioning}");
+            try
+            {
+                if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning))
+                {
+                    Console.WriteLine("Found existing VERSIONING file, will try removing...");
+                    client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning);
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+            client.Upload(project.Directory / remoteFileNameVersioning, client.GetCurrentDirectory());
 
             client.Disconnect();
         });

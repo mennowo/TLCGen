@@ -222,3 +222,4 @@ ModelManifest.xml
 /Tools
 /local.cake
 *.ods#
+/TLCGen.Parts/TLCGen.Dialogs/BuildConstants.cs
