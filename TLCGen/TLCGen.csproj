@@ -83,6 +83,9 @@
       <HintPath>..\Libs\CodingConnected.WriteableBitmapEx.Wpf.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
 		IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)
