@@ -29,10 +29,12 @@ clone_folder: c:\projects\TLCGen
 
 # scripts that run after cloning repository
 install:
+- cmd: dotnet new tool-manifest
+- cmd: dotnet tool install paket
+- cmd: dotnet tool restore
+- cmd: dotnet paket restore
+- cmd: dotnet restore
 - cmd: nuget restore
-- cmd: 'dotnet tool restore'
-- cmd: 'dotnet paket restore'
-- cmd: 'dotnet restore'
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
