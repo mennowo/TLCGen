@@ -16,5 +16,24 @@
     <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" />
     <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="BuildConstants.tt">
+      <LastGenOutput>BuildConstants.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	<Exec Command="&quot;$(DevEnvDir)TextTransformCore.exe&quot; &quot;$(ProjectDir)BuildConstants.tt&quot;" />
+  </Target>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="BuildConstants.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BuildConstants.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

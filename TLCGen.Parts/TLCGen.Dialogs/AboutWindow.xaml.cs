@@ -15,7 +15,11 @@ namespace TLCGen.Dialogs
             InitializeComponent();
 
             VersionTB.Text = Assembly.GetCallingAssembly().GetName().Version.ToString();
-            DateTB.Text = Assembly.GetCallingAssembly().GetLinkerTime().ToLongDateString();
+#if DEBUG
+            DateTB.Text = BuildConstants.CompilationTimestampLocal.ToString("dd-MM-yyyy HH:mm:ss.fff");
+#else
+            DateTB.Text = BuildConstants.CompilationTimestampLocal.ToString("ddd dd MMM yyyy");
+#endif
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
