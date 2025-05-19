@@ -29,6 +29,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Net.Http;
 
 
 namespace TLCGen.ViewModels
@@ -510,6 +511,75 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private async void CheckUpdate()
+        {
+            try
+            {
+                // clean potential old data
+                var key = Registry.CurrentUser.OpenSubKey("Software", true);
+                var sk1 = key?.OpenSubKey("CodingConnected e.U.", true);
+                var sk2 = sk1?.OpenSubKey("TLCGen", true);
+                var tempFile = (string)sk2?.GetValue("TempInstallFile", null);
+                if (tempFile != null)
+                {
+                    if (File.Exists(tempFile))
+                    {
+                        File.Delete(tempFile);
+                    }
+
+                    sk2?.DeleteValue("TempInstallFile");
+                }
+
+                using var client = new HttpClient();
+                using var content =
+                    await client.GetAsync("https://www.codingconnected.eu/tlcgen/deploy/tlcgenversioning");
+                if (!content.IsSuccessStatusCode) return;
+
+                var data = await content.Content.ReadAsStringAsync();
+
+                var all = data.Split('\r');
+                var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+                if (tlcgenVer == null) return;
+                var oldvers = Assembly.GetEntryAssembly()?.GetName().Version.ToString().Split('.');
+                var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+                var newer = false;
+                if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+                {
+                    for (var i = 0; i < newvers.Length; i++)
+                    {
+                        var o = int.Parse(oldvers[i]);
+                        var n = int.Parse(newvers[i]);
+                        if (o > n)
+                        {
+                            break;
+                        }
+
+                        if (n > o)
+                        {
+                            newer = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (newer)
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""))
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        w.ShowDialog();
+                    });
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -761,76 +831,8 @@ namespace TLCGen.ViewModels
                 _hideAllAlertMessagesCommand?.NotifyCanExecuteChanged();
             };
 
-#if !DEBUG
             // Find out if there is a newer version available via online check
-            Task.Run(() =>
-            {
-				// clean potential old data
-	            var key = Registry.CurrentUser.OpenSubKey("Software", true);
-	            var sk1 = key?.OpenSubKey("CodingConnected e.U.", true);
-	            var sk2 = sk1?.OpenSubKey("TLCGen", true);
-	            var tempFile = (string) sk2?.GetValue("TempInstallFile", null);
-	            if (tempFile != null)
-	            {
-		            if (File.Exists(tempFile))
-		            {
-			            File.Delete(tempFile);
-		            }
-					sk2?.DeleteValue("TempInstallFile");
-	            }
-
-                try
-                {
-                    var webRequest = WebRequest.Create(@"https://www.codingconnected.eu/tlcgen/deploy/tlcgenversioning");
-                    webRequest.UseDefaultCredentials = true;
-                    using var response = webRequest.GetResponse();
-                    using var content = response.GetResponseStream();
-                    if (content == null) return;
-                    using var reader = new StreamReader(content);
-                    var data = reader.ReadToEnd();
-                    var all = data.Split('\r');
-                    var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-                    if (tlcgenVer == null) return;
-                    var oldvers = Assembly.GetEntryAssembly()?.GetName().Version.ToString().Split('.');
-                    var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-                    var newer = false;
-                    if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-                    {
-                        for (var i = 0; i < newvers.Length; i++)
-                        {
-                            var o = int.Parse(oldvers[i]);
-                            var n = int.Parse(newvers[i]);
-                            if (o > n)
-                            {
-                                break;
-                            }
-
-                            if (n > o)
-                            {
-                                newer = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (newer)
-                    {
-                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""))
-                            {
-                                Owner = Application.Current.MainWindow
-                            };
-                            w.ShowDialog();
-                        });
-                    }
-                }
-                catch
-                {
-                    // ignored
-                }
-            });
-#endif
+            CheckUpdate();
         }
 
         #endregion // Constructor
