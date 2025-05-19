@@ -18,7 +18,7 @@ skip_commits:
 max_jobs: 1
 
 # Build worker image (VM template)
-image: Visual Studio 2019
+image: Visual Studio 2022
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -30,6 +30,9 @@ clone_folder: c:\projects\TLCGen
 # scripts that run after cloning repository
 install:
 - cmd: nuget restore
+- cmd: 'dotnet tool restore'
+- cmd: 'dotnet paket restore'
+- cmd: 'dotnet restore'
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -40,7 +43,7 @@ assembly_info:
   assembly_informational_version: '{version}'
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform: x86
+platform: x64
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
@@ -65,15 +68,11 @@ before_build: []
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-  - '%APPVEYOR_BUILD_FOLDER%\.paket\paket.bootstrapper.exe'
-  - '%APPVEYOR_BUILD_FOLDER%\.paket\paket.exe restore'
-  - msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.sln" /p:Configuration=Release,Platform="Any CPU",OutputPath=bin\Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  - msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.sln" /p:Configuration=Release,Platform="x64",OutputPath=bin\Release /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 # scripts to run after build (working directory and environment changes are persisted from the previous steps)
 after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\TLCGen\bin\Release\
-  - del .\Xceed.Wpf.AvalonDock*.*
-  - del .\Xceed.Wpf.DataGrid*.*
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.exe
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.dll
   - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.xml
