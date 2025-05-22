@@ -12,18 +12,18 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Settings\tlcgendefaultdefaults.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Settings\tlcgendefaulttemplates.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" />
     <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj" />
     <ProjectReference Include="..\TLCGen.Dialogs\TLCGen.Dialogs.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Settings\tlcgendefaultdefaults.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="Settings\tlcgendefaulttemplates.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
