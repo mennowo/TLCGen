@@ -1,6 +1,9 @@
-TLCGen=12.4.0.14
-RD=2025-05-19
+TLCGen=12.4.0.15
 RN==TLCGen
+TLCGen versie: 12.4.0.15
+- Fix voor juiste defaults en templates
+- Fix voor verwijderen/ordenen van items bij gebruikersopties
+- Fix voor klikken van coordinaten op de bitmap
 TLCGen versie: 12.4.0.14
 - Upgrade TLCGen naar .NET8
 - Toevoegen parameter type wachtgroen

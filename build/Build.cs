@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Nuke.Common;
 using Nuke.Common.IO;
@@ -35,8 +34,8 @@ class Build : NukeBuild
     const bool DoClean = false;
     const bool DoSign = true;
     const bool DoDeploy = true;
-    const bool DoArchiveOld = true;
-    const string ArchiveOldVersion = "12.4.0.12";
+    const bool DoArchiveOld = false;
+    const string ArchiveOldVersion = "12.4.0.14";
 
     Target Clean => _ => _
         .Before(Restore)
