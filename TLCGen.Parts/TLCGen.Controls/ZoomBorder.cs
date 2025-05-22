@@ -30,15 +30,15 @@ namespace TLCGen.Controls
         public static readonly DependencyProperty SetResetProperty =
             DependencyProperty.Register(nameof(SetReset), typeof(bool), typeof(ZoomViewbox), new PropertyMetadata(false));
 
-        public RelayCommand ClickedCommand
+        public ICommand ClickedCommand
         {
-            get => (RelayCommand)GetValue(ClickedCommandProperty);
+            get => (ICommand)GetValue(ClickedCommandProperty);
             set => SetValue(ClickedCommandProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ClickedCommandProperty =
-            DependencyProperty.Register(nameof(ClickedCommand), typeof(RelayCommand), typeof(ZoomViewbox), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ClickedCommand), typeof(ICommand), typeof(ZoomViewbox), new PropertyMetadata(null));
 
         private TranslateTransform GetTranslateTransform(UIElement element)
         {
