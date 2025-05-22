@@ -35,17 +35,17 @@ namespace TLCGen.GebruikersOpties
         const int ParametersConst = 7;
         const int OptiesMax = 8;
 
-        readonly string[] OptiesNames = { "us", "is", "h", "t", "c", "sch", "m", "prm" };
+        readonly string[] _optiesNames = { "us", "is", "h", "t", "c", "sch", "m", "prm" };
 
         #endregion // Constants
 
         #region Fields
 
-        private GebruikersOptiesModel _MyGebruikersOpties;
-        private int _SelectedTabIndex;
+        private GebruikersOptiesModel _myGebruikersOpties;
+        private int _selectedTabIndex;
 
-        private object[] _SelectedOptie = new object[OptiesMax];
-        private IList[] _SelectedOpties = new IList[OptiesMax]
+        private object[] _selectedOptie = new object[OptiesMax];
+        private IList[] _selectedOpties = new IList[OptiesMax]
         {
             new ArrayList(),
             new ArrayList(),
@@ -57,12 +57,15 @@ namespace TLCGen.GebruikersOpties
             new ArrayList()
         };
 
-        private RelayCommand _AddGebruikersOptieCommand;
-        private RelayCommand _RemoveGebruikersOptieCommand;
-        private RelayCommand _OmhoogCommand;
-        private RelayCommand _OmlaagCommand;
+        private RelayCommand _addGebruikersOptieCommand;
+        private RelayCommand _removeGebruikersOptieCommand;
+        private RelayCommand _omhoogCommand;
+        private RelayCommand _omlaagCommand;
 
-        object[] _AlleOpties;
+        object[] _alleOpties;
+        private volatile bool _settingMultiple = false;
+        private ControllerModel _controller;
+        private DataTemplate _contentDataTemplate;
 
         #endregion // Fields
 
@@ -81,10 +84,10 @@ namespace TLCGen.GebruikersOpties
 
         public GebruikersOptiesModel MyGebruikersOpties
         {
-            get => _MyGebruikersOpties;
+            get => _myGebruikersOpties;
             set
             {
-                _MyGebruikersOpties = value;
+                _myGebruikersOpties = value;
                 ImportExportVM.DataModel = value;
                 OnPropertyChanged("");
             }
@@ -104,10 +107,10 @@ namespace TLCGen.GebruikersOpties
 
         public int SelectedTabIndex
         {
-            get => _SelectedTabIndex;
+            get => _selectedTabIndex;
             set
             {
-                _SelectedTabIndex = value;
+                _selectedTabIndex = value;
                 OnPropertyChanged(nameof(SelectedOptie));
                 OnPropertyChanged();
             }
@@ -118,7 +121,7 @@ namespace TLCGen.GebruikersOpties
             get
             {
                 if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
-                    return _SelectedOptie[SelectedTabIndex];
+                    return _selectedOptie[SelectedTabIndex];
                 else
                     return null;
             }
@@ -126,8 +129,11 @@ namespace TLCGen.GebruikersOpties
             {
                 if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
                 {
-                    _SelectedOptie[SelectedTabIndex] = value;
+                    _selectedOptie[SelectedTabIndex] = value;
                 }
+                _removeGebruikersOptieCommand?.NotifyCanExecuteChanged();
+                _omhoogCommand?.NotifyCanExecuteChanged();
+                _omlaagCommand?.NotifyCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
@@ -138,7 +144,7 @@ namespace TLCGen.GebruikersOpties
             {
                 if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
                 {
-                    return _SelectedOpties[SelectedTabIndex];
+                    return _selectedOpties[SelectedTabIndex];
                 }
                 else
                     return null;
@@ -147,7 +153,7 @@ namespace TLCGen.GebruikersOpties
             {
                 if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
                 {
-                    _SelectedOpties[SelectedTabIndex] = value;
+                    _selectedOpties[SelectedTabIndex] = value;
                 }
                 OnPropertyChanged();
             }
@@ -157,53 +163,10 @@ namespace TLCGen.GebruikersOpties
 
         #region Commands
 
-        public ICommand AddGebruikersOptieCommand
-        {
-            get
-            {
-                if (_AddGebruikersOptieCommand == null)
-                {
-                    _AddGebruikersOptieCommand = new RelayCommand(AddNewGebruikersOptieCommand_Executed, AddNewGebruikersOptieCommand_CanExecute);
-                }
-                return _AddGebruikersOptieCommand;
-            }
-        }
-
-        public ICommand RemoveGebruikersOptieCommand
-        {
-            get
-            {
-                if (_RemoveGebruikersOptieCommand == null)
-                {
-                    _RemoveGebruikersOptieCommand = new RelayCommand(RemoveGebruikersOptieCommand_Executed, RemoveGebruikersOptieCommand_CanExecute);
-                }
-                return _RemoveGebruikersOptieCommand;
-            }
-        }
-
-        public ICommand OmhoogCommand
-        {
-            get
-            {
-                if (_OmhoogCommand == null)
-                {
-                    _OmhoogCommand = new RelayCommand(OmhoogCommand_Executed, OmhoogCommand_CanExecute);
-                }
-                return _OmhoogCommand;
-            }
-        }
-
-        public ICommand OmlaagCommand
-        {
-            get
-            {
-                if (_OmlaagCommand == null)
-                {
-                    _OmlaagCommand = new RelayCommand(OmlaagCommand_Executed, OmlaagCommand_CanExecute);
-                }
-                return _OmlaagCommand;
-            }
-        }
+        public ICommand AddGebruikersOptieCommand => _addGebruikersOptieCommand ??= new RelayCommand(AddNewGebruikersOptieCommand_Executed);
+        public ICommand RemoveGebruikersOptieCommand => _removeGebruikersOptieCommand ??= new RelayCommand(RemoveGebruikersOptieCommand_Executed, RemoveGebruikersOptieCommand_CanExecute);
+        public ICommand OmhoogCommand => _omhoogCommand ??= new RelayCommand(OmhoogCommand_Executed, OmhoogCommand_CanExecute);
+        public ICommand OmlaagCommand => _omlaagCommand ??= new RelayCommand(OmlaagCommand_Executed, OmlaagCommand_CanExecute);
 
         #endregion // Commands
 
@@ -216,7 +179,7 @@ namespace TLCGen.GebruikersOpties
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
                 if (SelectedOptie != null)
-                    index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).IndexOf(
                         SelectedOptie as GebruikersOptieWithIOViewModel) + 1;
 
                 var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
@@ -224,25 +187,25 @@ namespace TLCGen.GebruikersOpties
                 var i = 1;
                 while (string.IsNullOrEmpty(o.Naam))
                 {
-                    o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count + i);
+                    o.Naam = _optiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).Count + i);
                     ++i;
                 }
 
-                switch (OptiesNames[SelectedTabIndex])
+                switch (_optiesNames[SelectedTabIndex])
                 {
                     case "us": o.ObjectType = TLCGenObjectTypeEnum.Output; break;
                     case "is": o.ObjectType = TLCGenObjectTypeEnum.Input; break;
                 }
 
-                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count)
-                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
+                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).Count)
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).Insert(index, o);
                 else
-                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Add(o);
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).Add(o);
             }
             else
             {
                 if (SelectedOptie != null)
-                    index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).IndexOf(
                         SelectedOptie as GebruikersOptieViewModel) + 1;
 
                 var o = new GebruikersOptieViewModel(new GebruikersOptieModel());
@@ -250,26 +213,26 @@ namespace TLCGen.GebruikersOpties
                 var i = 1;
                 while (string.IsNullOrEmpty(o.Naam))
                 {
-                    o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count + i);
+                    o.Naam = _optiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).Count + i);
                     ++i;
                 }
-                if (OptiesNames[SelectedTabIndex] == "sch" ||
-                    OptiesNames[SelectedTabIndex] == "t" ||
-                    OptiesNames[SelectedTabIndex] == "prm" ||
-                    OptiesNames[SelectedTabIndex] == "c")
+                if (_optiesNames[SelectedTabIndex] == "sch" ||
+                    _optiesNames[SelectedTabIndex] == "t" ||
+                    _optiesNames[SelectedTabIndex] == "prm" ||
+                    _optiesNames[SelectedTabIndex] == "c")
                 {
                     o.Instelling = 0;
                 }
-                if (OptiesNames[SelectedTabIndex] == "t")
+                if (_optiesNames[SelectedTabIndex] == "t")
                 {
                     o.Type = CCOLElementTypeEnum.TE_type;
                 }
-                if (OptiesNames[SelectedTabIndex] == "prm")
+                if (_optiesNames[SelectedTabIndex] == "prm")
                 {
                     o.Type = CCOLElementTypeEnum.Geen;
                 }
 
-                switch (OptiesNames[SelectedTabIndex])
+                switch (_optiesNames[SelectedTabIndex])
                 {
                     case "h": o.ObjectType = TLCGenObjectTypeEnum.CCOLHelpElement; break;
                     case "t": o.ObjectType = TLCGenObjectTypeEnum.CCOLTimer; break;
@@ -279,23 +242,18 @@ namespace TLCGen.GebruikersOpties
                     case "prm": o.ObjectType = TLCGenObjectTypeEnum.CCOLParameter; break;
                 }
 
-                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count)
-                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
+                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).Count)
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).Insert(index, o);
                 else
-                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Add(o);
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).Add(o);
             }
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]).RebuildList();
             else
-                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]).RebuildList();
 
             WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
-
-        bool AddNewGebruikersOptieCommand_CanExecute()
-        {
-            return true;
         }
 
         void RemoveGebruikersOptieCommand_Executed()
@@ -305,7 +263,7 @@ namespace TLCGen.GebruikersOpties
             {
                 if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
                 {
-                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOpties[0] as GebruikersOptieWithIOViewModel);
                     var rlist = new List<GebruikersOptieWithIOViewModel>();
                     foreach (var o in SelectedOpties)
@@ -320,7 +278,7 @@ namespace TLCGen.GebruikersOpties
                 }
                 else
                 {
-                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOpties[0] as GebruikersOptieViewModel);
                     var rlist = new List<GebruikersOptieViewModel>();
                     foreach (var o in SelectedOpties)
@@ -337,25 +295,26 @@ namespace TLCGen.GebruikersOpties
             else
             if (SelectedOptie != null)
             {
-                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                if ((SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst) &&
+                    SelectedOptie is GebruikersOptieWithIOViewModel goIo)
                 {
-                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
                     list.Remove(SelectedOptie as GebruikersOptieWithIOViewModel);
-                    (SelectedOptie as GebruikersOptieWithIOViewModel).PropertyChanged -= Optie_PropertyChanged;
+                    goIo.PropertyChanged -= Optie_PropertyChanged;
                 }
-                else
+                else if (SelectedOptie is GebruikersOptieViewModel begrO)
                 {
-                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOptie as GebruikersOptieViewModel);
                     list.Remove(SelectedOptie as GebruikersOptieViewModel);
-                    (SelectedOptie as GebruikersOptieViewModel).PropertyChanged -= Optie_PropertyChanged;
+                    begrO.PropertyChanged -= Optie_PropertyChanged;
                 }
             }
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]);
                 var c = list.Count;
                 if (index >= c) index = c - 1;
                 if (index >= 0)
@@ -365,7 +324,7 @@ namespace TLCGen.GebruikersOpties
             }
             else
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]);
                 var c = list.Count;
                 if (index >= c) index = c - 1;
                 if (index >= 0)
@@ -390,8 +349,8 @@ namespace TLCGen.GebruikersOpties
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
-                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]);
+                if (SelectedOpties is { Count: > 0 })
                 {
                     foreach (var o in SelectedOpties)
                     {
@@ -418,8 +377,8 @@ namespace TLCGen.GebruikersOpties
             }
             else
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
-                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex]);
+                if (SelectedOpties is { Count: > 0 })
                 {
                     foreach (var o in SelectedOpties)
                     {
@@ -461,9 +420,9 @@ namespace TLCGen.GebruikersOpties
             var index = -1;
             var max = -1;
 
-            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+            if (SelectedTabIndex is UitgangenConst or IngangenConst)
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_alleOpties[SelectedTabIndex]);
                 max = list.Count - 1;
                 if (SelectedOpties != null && SelectedOpties.Count > 0)
                 {
@@ -492,9 +451,9 @@ namespace TLCGen.GebruikersOpties
             }
             else
             {
-                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                var list = (ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_alleOpties[SelectedTabIndex];
                 max = list.Count - 1;
-                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                if (SelectedOpties is { Count: > 0 })
                 {
                     for (var i = SelectedOpties.Count - 1; i >= 0; --i)
                     {
@@ -521,7 +480,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             SelectedOptie = optie;
-            WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool OmlaagCommand_CanExecute()
@@ -542,11 +501,11 @@ namespace TLCGen.GebruikersOpties
             var o = SelectedOptie as GebruikersOptieViewModel;
             if (oio != null)
             {
-                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam, oio.ObjectType);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_controller, oio.Naam, oio.ObjectType);
             }
             else
             {
-                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, o.Naam, o.ObjectType);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_controller, o.Naam, o.ObjectType);
             }
         }
 
@@ -572,24 +531,24 @@ namespace TLCGen.GebruikersOpties
             if (GeheugenElementen != null) GeheugenElementen.CollectionChanged -= GeheugenElementen_CollectionChanged;
             if (Parameters != null) Parameters.CollectionChanged -= Parameters_CollectionChanged;
 
-            Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
-            Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Ingangen);
-            HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.HulpElementen);
-            Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Timers);
-            Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Counters);
-            Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Schakelaars);
-            GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.GeheugenElementen);
-            Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Parameters);
+            Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_myGebruikersOpties.Uitgangen);
+            Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_myGebruikersOpties.Ingangen);
+            HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.HulpElementen);
+            Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Timers);
+            Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Counters);
+            Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Schakelaars);
+            GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.GeheugenElementen);
+            Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Parameters);
 
-            _AlleOpties = new object[8];
-            _AlleOpties[UitgangenConst] = Uitgangen;
-            _AlleOpties[IngangenConst] = Ingangen;
-            _AlleOpties[HulpElementenConst] = HulpElementen;
-            _AlleOpties[TimersConst] = Timers;
-            _AlleOpties[CountersConst] = Counters;
-            _AlleOpties[SchakelaarsConst] = Schakelaars;
-            _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
-            _AlleOpties[ParametersConst] = Parameters;
+            _alleOpties = new object[8];
+            _alleOpties[UitgangenConst] = Uitgangen;
+            _alleOpties[IngangenConst] = Ingangen;
+            _alleOpties[HulpElementenConst] = HulpElementen;
+            _alleOpties[TimersConst] = Timers;
+            _alleOpties[CountersConst] = Counters;
+            _alleOpties[SchakelaarsConst] = Schakelaars;
+            _alleOpties[GeheugenElementenConst] = GeheugenElementen;
+            _alleOpties[ParametersConst] = Parameters;
 
             foreach (var op in Uitgangen) { op.PropertyChanged += Optie_PropertyChanged; op.ObjectType = TLCGenObjectTypeEnum.Output; }
             foreach (var ip in Ingangen) { ip.PropertyChanged += Optie_PropertyChanged; ip.ObjectType = TLCGenObjectTypeEnum.Input; }
@@ -663,31 +622,29 @@ namespace TLCGen.GebruikersOpties
 
         #region Event Handling
 
-        private volatile bool _SettingMultiple = false;
         private void Optie_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+            if (_settingMultiple || string.IsNullOrEmpty(e.PropertyName))
                 return;
 
             if (SelectedOpties != null && SelectedOpties.Count > 1)
             {
-                _SettingMultiple = true;
+                _settingMultiple = true;
                 MultiPropertySetter.SetPropertyForAllItems<GebruikersOptieViewModel>(sender, e.PropertyName, SelectedOpties);
             }
-            _SettingMultiple = false;
+            _settingMultiple = false;
         }
 
         #endregion // Event Handling
 
         #region ITLCGenTabItem
 
-        private ControllerModel _Controller;
         public ControllerModel Controller
         {
-            get => _Controller;
+            get => _controller;
             set
             {
-                _Controller = value;
+                _controller = value;
                 if (value == null)
                 {
                     ResetMyGebruikersOpties();
@@ -696,17 +653,16 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
-        DataTemplate _ContentDataTemplate;
         public DataTemplate ContentDataTemplate
         {
             get
             {
-                if (_ContentDataTemplate == null)
+                if (_contentDataTemplate == null)
                 {
-                    _ContentDataTemplate = new DataTemplate();
-                    _ContentDataTemplate.VisualTree = new FrameworkElementFactory(typeof(GebruikersOptiesTabView));
+                    _contentDataTemplate = new DataTemplate();
+                    _contentDataTemplate.VisualTree = new FrameworkElementFactory(typeof(GebruikersOptiesTabView));
                 }
-                return _ContentDataTemplate;
+                return _contentDataTemplate;
             }
         }
 
@@ -795,24 +751,24 @@ namespace TLCGen.GebruikersOpties
 
             if (found)
             {
-                Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
-                Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Ingangen);
-                HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.HulpElementen);
-                Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Timers);
-                Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Counters);
-                Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Schakelaars);
-                GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.GeheugenElementen);
-                Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Parameters);
+                Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_myGebruikersOpties.Uitgangen);
+                Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_myGebruikersOpties.Ingangen);
+                HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.HulpElementen);
+                Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Timers);
+                Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Counters);
+                Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Schakelaars);
+                GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.GeheugenElementen);
+                Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_myGebruikersOpties.Parameters);
 
-                _AlleOpties = new object[8];
-                _AlleOpties[UitgangenConst] = Uitgangen;
-                _AlleOpties[IngangenConst] = Ingangen;
-                _AlleOpties[HulpElementenConst] = HulpElementen;
-                _AlleOpties[TimersConst] = Timers;
-                _AlleOpties[CountersConst] = Counters;
-                _AlleOpties[SchakelaarsConst] = Schakelaars;
-                _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
-                _AlleOpties[ParametersConst] = Parameters;
+                _alleOpties = new object[8];
+                _alleOpties[UitgangenConst] = Uitgangen;
+                _alleOpties[IngangenConst] = Ingangen;
+                _alleOpties[HulpElementenConst] = HulpElementen;
+                _alleOpties[TimersConst] = Timers;
+                _alleOpties[CountersConst] = Counters;
+                _alleOpties[SchakelaarsConst] = Schakelaars;
+                _alleOpties[GeheugenElementenConst] = GeheugenElementen;
+                _alleOpties[ParametersConst] = Parameters;
 
                 foreach (var el in Uitgangen) el.ObjectType = TLCGenObjectTypeEnum.Output;
                 foreach (var el in Ingangen) el.ObjectType = TLCGenObjectTypeEnum.Input;
@@ -850,15 +806,14 @@ namespace TLCGen.GebruikersOpties
 
         public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
         {
-            foreach (var o in Uitgangen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in Ingangen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in HulpElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in Timers) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in Counters) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in Schakelaars) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in GeheugenElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach (var o in Parameters) { if (o.Naam == name && o.ObjectType == type) return false; }
-            return true;
+            if (Uitgangen.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (Ingangen.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (HulpElementen.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (Timers.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (Counters.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (Schakelaars.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            if (GeheugenElementen.Any(o => o.Naam == name && o.ObjectType == type)) return false;
+            return Parameters.All(o => o.Naam != name || o.ObjectType != type);
         }
 
         public Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum ConvertType(CCOLElementTypeEnum type)
