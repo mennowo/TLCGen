@@ -82,7 +82,13 @@ namespace TLCGen.Updater
 		{
 			if (TLCGenDownloaded)
 			{
-				var p = Process.Start(_tempfile);
+                var pi = new ProcessStartInfo
+                {
+                    WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    FileName = "msiexec",
+                    Arguments = $"/i {_tempfile}"
+                };
+                var p = Process.Start(pi);
 			}
 		}
 
