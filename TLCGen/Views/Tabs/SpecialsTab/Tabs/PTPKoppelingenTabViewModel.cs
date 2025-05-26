@@ -74,6 +74,8 @@ namespace TLCGen.ViewModels
 
         public bool ShowTest => System.DateTime.Now.Year == Controller.Data.Fasebewaking; // tbv test ptp naar backup verbergen/tonen in GUI (indien TFB == huidig jaar)
 
+        public bool MoreThan4PTPKoppelingen => PTPKoppelingen.Count > 4;
+
         #endregion // Properties
 
         #region Commands
@@ -91,6 +93,7 @@ namespace TLCGen.ViewModels
             var vm = new PTPKoppelingViewModel(ptp);
             PTPKoppelingen.Add(vm);
             SelectedPTPKoppeling = vm;
+            OnPropertyChanged(nameof(MoreThan4PTPKoppelingen));
             WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         });
 
@@ -98,47 +101,11 @@ namespace TLCGen.ViewModels
         {
             PTPKoppelingen.Remove(SelectedPTPKoppeling);
             SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
+            OnPropertyChanged(nameof(MoreThan4PTPKoppelingen));
             WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
         }, () => SelectedPTPKoppeling != null);
 
         #endregion // Commands
-
-        #region Command Functionality
-
-        private bool AddPTPKoppelingCommand_CanExecute()
-        {
-            return true;
-        }
-
-        private void AddPTPKoppelingCommand_Executed()
-        {
-	        var inewname = 1;
-			var ptp = new PTPKoppelingModel();
-	        do
-	        {
-		        inewname++;
-		        ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
-	        }
-	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
-            var vm = new PTPKoppelingViewModel(ptp);
-            PTPKoppelingen.Add(vm);
-            SelectedPTPKoppeling = vm;
-			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
-        }
-
-        private bool RemovePTPKoppelingCommand_CanExecute()
-        {
-            return SelectedPTPKoppeling != null;
-        }
-
-        private void RemovePTPKoppelingCommand_Executed()
-        {
-            PTPKoppelingen.Remove(SelectedPTPKoppeling);
-            SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
-			WeakReferenceMessengerEx.Default.Send(new PTPKoppelingenChangedMessage());
-        }
-
-        #endregion // Command Functionality
 
         #region Public methods
 
@@ -199,6 +166,7 @@ namespace TLCGen.ViewModels
                     PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
                     PTPKoppelingen.Clear();
                 }
+                OnPropertyChanged(nameof(MoreThan4PTPKoppelingen));
             }
         }
 
