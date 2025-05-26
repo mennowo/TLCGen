@@ -79,7 +79,6 @@ namespace TLCGen.ViewModels
                 dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel>)
             {
                 dropInfo.Effects = System.Windows.DragDropEffects.Move;
-                DragDrop.DefaultDropHandler.DragOver(dropInfo);
             }
             // Van PTP lijst terug naar beschikbaar
             else if ((dropInfo.Data is List<PTPKoppelSignaalViewModel> ||
@@ -87,7 +86,7 @@ namespace TLCGen.ViewModels
                 dropInfo.TargetCollection is ObservableCollection<KoppelSignaalViewModel>)
             {
                 dropInfo.Effects = System.Windows.DragDropEffects.Move;
-                DragDrop.DefaultDropHandler.DragOver(dropInfo);
+                dropInfo.NotHandled = false;
             }
             // Van beschikbaar naar PTP lijst
             else if ((dropInfo.Data is List<KoppelSignaalViewModel> ||
@@ -95,7 +94,6 @@ namespace TLCGen.ViewModels
                 dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel>)
             {
                 dropInfo.Effects = System.Windows.DragDropEffects.Move;
-                DragDrop.DefaultDropHandler.DragOver(dropInfo);
             }
         }
 
@@ -324,6 +322,7 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
             {
                 _selectedKoppelSignaalIn = value;
                 OnPropertyChanged();
+                _removeKoppelSignaalInCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -334,6 +333,7 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
             {
                 _selectedKoppelSignaalUit = value;
                 OnPropertyChanged();
+                _removeKoppelSignaalUitCommand?.NotifyCanExecuteChanged();
             }
         }
 
