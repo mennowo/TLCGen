@@ -114,13 +114,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_trealil}{m1.FaseVan}{m1.FaseNaar}",
-                        m1.Waarde < 0 ? m1.Waarde * -1 : m1.Waarde,
+                        m2.Waarde < 0 ? m2.Waarde * -1 : m2.Waarde,
                         CCOLElementTimeTypeEnum.TE_type,
                         _trealil, m1.FaseVan, m1.FaseNaar));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_trealil}{m2.FaseVan}{m2.FaseNaar}",
-                        m2.Waarde < 0 ? m2.Waarde * -1 : m2.Waarde,
+                        m1.Waarde < 0 ? m1.Waarde * -1 : m1.Waarde,
                         CCOLElementTimeTypeEnum.TE_type,
                         _trealil, m2.FaseVan, m2.FaseNaar));
 
