@@ -643,11 +643,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (addLnkMax)
                         {
-                            sb.AppendLine("#define LNKMAX (LNKMAX1+0) /* Totaal aantal gebruikte simulatie elementen */");
+                            sb.AppendLine("#define LNKMAX (LNKMAX1 + 0) /* Totaal aantal gebruikte simulatie elementen */");
                         }
                         if (addPlMax)
                         {
-                            sb.AppendLine("#define PLMAX (PLMAX1+0) /* Totaal aantal gebruikte signaalplannen */");
+                            sb.AppendLine("#define PLMAX (PLMAX1 + 0) /* Totaal aantal gebruikte signaalplannen */");
                         }
                     }
 
