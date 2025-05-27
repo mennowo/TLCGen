@@ -34,8 +34,8 @@ class Build : NukeBuild
     const bool DoClean = false;
     const bool DoSign = true;
     const bool DoDeploy = true;
-    const bool DoArchiveOld = false;
-    const string ArchiveOldVersion = "12.4.0.14";
+    const bool DoArchiveOld = true;
+    const string ArchiveOldVersion = "12.4.0.15";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -95,6 +95,7 @@ class Build : NukeBuild
                 SignToolTasks.SignTool(_ => _
                     .SetFile("C:\\Users\\menno\\CodingConnected\\Various\\CodeCert\\cert-cc-2023-2026.cer")
                     .SetDescription("TLCGen")
+                    .SetFileDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
                     .SetFiles(setupPublishDirectory / "TLCGen.Setup.msi"));
             }
 

@@ -1,5 +1,11 @@
-TLCGen=12.4.0.15
+TLCGen=12.4.0.16
 RN==TLCGen
+TLCGen versie: 12.4.0.16
+- Weergeven waarschuwing bij toevoegen van meer dan 4 PTP koppelingen ivm. ontbrekende #define in CCOL
+- Correctie aanroep naloopSG_halstar bij naloop startgroen zonder detectie
+- Fix voor verwisselde parameters inlooptijd bij dubbelzijdige voetgangersoversteek
+- Fix voor foutmelding van verouderde compilers bij #define statements
+- Fix voor toedeling PTP signalen via drag+drop
 TLCGen versie: 12.4.0.15
 - Fix voor juiste defaults en templates
 - Fix voor verwijderen/ordenen van items bij gebruikersopties
