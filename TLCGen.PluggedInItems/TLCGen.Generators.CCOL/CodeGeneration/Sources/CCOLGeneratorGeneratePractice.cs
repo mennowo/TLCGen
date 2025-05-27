@@ -34,15 +34,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine($"#include \"ccol_mon.c\"");
             }
-            sb.AppendLine();
-            if (controller.Data.SynchronisatiesType == Models.Enumerations.SynchronisatiesTypeEnum.SyncFunc &&
-                (controller.InterSignaalGroep.Gelijkstarten.Any() ||
-                 controller.InterSignaalGroep.Voorstarten.Any()))
-            {
-                sb.AppendLine($"#include \"syncfunc.c\"");
-            }
             if (controller.HasDSI())
             {
+                sb.AppendLine();
                 sb.AppendLine($"#include \"dsifunc.c\"");
             }
             return sb.ToString();

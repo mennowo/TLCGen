@@ -599,19 +599,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                         if (matrix[i, k] > -2) matrix[i, k] = -2;
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
-                                    else if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
-                                    {
-                                        if (nl.InrijdenTijdensGroen)
-                                        {
-                                            if (matrix[i, k] > -2) matrix[i, k] = -2;
-                                            if (matrix[k, i] > -2) matrix[k, i] = -2;
-                                        }
-                                        else
-                                        {
-                                            if (matrix[i, k] > -3) matrix[i, k] = -3;
-                                            if (matrix[k, i] > -3) matrix[k, i] = -3;
-                                        }
-                                    }
                                     break;
                                 case NaloopTypeEnum.CyclischVerlengGroen:
                                     if (matrix[i, k] > -2) matrix[i, k] = -2;

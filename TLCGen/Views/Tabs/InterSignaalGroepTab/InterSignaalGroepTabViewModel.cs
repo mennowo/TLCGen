@@ -210,7 +210,7 @@ namespace TLCGen.ViewModels
 
         public SynchronisatiesTypeEnum SynchronisatiesType
         {
-            get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.SyncFunc;
+            get => _Controller?.Data?.SynchronisatiesType ?? SynchronisatiesTypeEnum.RealFunc;
             set
             {
                 _Controller.Data.SynchronisatiesType = value;

@@ -629,6 +629,12 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
+            checkVer = Version.Parse("12.4.0.17");
+            if (v < checkVer)
+            {
+                var syncT = doc.SelectSingleNode("//Data//SynchronisatiesType");
+                if (syncT.InnerText == "SyncFunc") syncT.InnerText = "RealFunc";
+            }
         }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)

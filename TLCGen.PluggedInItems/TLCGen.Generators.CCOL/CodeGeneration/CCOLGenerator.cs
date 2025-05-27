@@ -297,11 +297,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     switch (c.Data.SynchronisatiesType)
                     {
-                        case SynchronisatiesTypeEnum.SyncFunc when (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any()):
-                            CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
-                            CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
-                            CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
-                            break;
                         case SynchronisatiesTypeEnum.RealFunc when (c.InterSignaalGroep.Voorstarten.Any() 
                                                                     || c.InterSignaalGroep.Gelijkstarten.Any()
                                                                     || c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue)
