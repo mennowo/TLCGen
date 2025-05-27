@@ -7,6 +7,8 @@ namespace TLCGen.ViewModels
 {
     public class IOElementViewModel : ObservableObjectEx, IComparable
     {
+        private IOElementRangeerDataModel _savedData;
+
         public IOElementViewModel(IOElementModel element)
         {
             Element = element;
@@ -29,15 +31,12 @@ namespace TLCGen.ViewModels
         
         public string ManualNaam
         {
-            get => Element.ManualNaam;
+            get => SavedData.ManualNaam;
             set
             {
+                SavedData.ManualNaam = value;
                 Element.ManualNaam = value;
-                if (SavedData != null)
-                {
-                    SavedData.ManualNaam = value;
-                }
-                OnPropertyChanged();
+                OnPropertyChanged(broadcast: true);
             }
         }
 
@@ -51,7 +50,7 @@ namespace TLCGen.ViewModels
                 {
                     ManualNaam = SavedData.Naam;
                 }
-                OnPropertyChanged();
+                OnPropertyChanged(broadcast: true);
             }
         }
         
@@ -59,7 +58,17 @@ namespace TLCGen.ViewModels
 
         public IOElementModel Element { get; }
 
-        public IOElementRangeerDataModel SavedData { get; set; }
+        public IOElementRangeerDataModel SavedData
+        {
+            get => _savedData;
+            set
+            {
+                _savedData = value;
+                OnPropertyChanged(nameof(HasManualName));
+                OnPropertyChanged(nameof(ManualNaam));
+                OnPropertyChanged(nameof(ManualNaam));
+            }
+        }
 
         public int CompareTo(object obj)
         {

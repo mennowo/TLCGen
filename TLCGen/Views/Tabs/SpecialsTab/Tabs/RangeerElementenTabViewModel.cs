@@ -284,6 +284,7 @@ namespace TLCGen.ViewModels
                         }
 
                         vm.SavedData = model;
+                        if (string.IsNullOrEmpty(vm.Element.ManualNaam)) vm.Element.ManualNaam = vm.ManualNaam;
                     }
                     else
                     {
