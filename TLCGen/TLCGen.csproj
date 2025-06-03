@@ -88,7 +88,7 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
-		IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat $(TargetDir)
+		IF EXIST $(SolutionDir)..\post-build.bat $(SolutionDir)..\post-build.bat "$(TargetDir)" $(Version)
 		ELSE (
 		mkdir "$(TargetDir)Plugins"
 		mkdir "$(TargetDir)Updater"
