@@ -54,6 +54,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool IngreepNaamPerLus
+        {
+            get => _Detector.IngreepNaamPerLus;
+            set
+            {
+                _Detector.IngreepNaamPerLus = value;
+                OnPropertyChanged(nameof(IngreepNaamPerLus), broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Private methods

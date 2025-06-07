@@ -24,6 +24,8 @@ namespace TLCGen.Models
         public bool MetingPerStrook { get; set; }
         public int AfvalVertraging { get; set; }
         [HasDefault(false)]
+        public bool IngreepNaamPerLus { get; set; }
+        [HasDefault(false)]
         public bool EerlijkDoseren { get; set; }
         [HasDefault(false)]
         public NooitAltijdAanUitEnum ToepassenDoseren { get; set; }

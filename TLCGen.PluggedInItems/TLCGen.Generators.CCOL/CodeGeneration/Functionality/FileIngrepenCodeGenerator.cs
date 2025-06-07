@@ -136,28 +136,56 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 foreach (var fd in fm.FileDetectoren)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tafv}{fd.Detector}",
-                            fd.AfvalVertraging,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tafv, fd.Detector));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tbz}{fd.Detector}",
-                            fd.BezetTijd,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tbz, fd.Detector));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_trij}{fd.Detector}",
-                            fd.RijTijd,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _trij, fd.Detector));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_hfile}{fd.Detector}",
-                            _hfile, fd.Detector));
+                    if (fd.IngreepNaamPerLus)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tafv}{fd.Detector}_{fm.Naam}",
+                                fd.AfvalVertraging,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _tafv, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tbz}{fd.Detector}_{fm.Naam}",
+                                fd.BezetTijd,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _tbz, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_trij}{fd.Detector}_{fm.Naam}",
+                                fd.RijTijd,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _trij, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_hfile}{fd.Detector}_{fm.Naam}",
+                                _hfile, fd.Detector));
+                    }
+                    else
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tafv}{fd.Detector}",
+                                fd.AfvalVertraging,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _tafv, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tbz}{fd.Detector}",
+                                fd.BezetTijd,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _tbz, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_trij}{fd.Detector}",
+                                fd.RijTijd,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _trij, fd.Detector));
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_hfile}{fd.Detector}",
+                                _hfile, fd.Detector));
+                    }
                 }
                 if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                 {
@@ -366,18 +394,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var fc in fi.TeDoserenSignaalGroepen)
                             {
                                 sb.Append($"{ts}");
-                                var defmg = c.GroentijdenSets.FirstOrDefault(
-                                    x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
-                                var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
-                                if (defmgfc?.Waarde != null)
+                                if (!c.Data.TVGAMaxAlsDefaultGroentijdSet)
                                 {
-                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][0] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
+                                    var defmg = c.GroentijdenSets.FirstOrDefault(
+                                    x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                                    var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                                    if (defmgfc?.Waarde != null)
+                                    {
+                                        sb.Append($"filefc{gtt}_{fi.Naam}[{i}][0] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
+                                    }
                                 }
                                 var j = 1;
                                 foreach (var per in c.PeriodenData.Perioden)
                                 {
-
-                                
                                     if (per.Type == PeriodeTypeEnum.Groentijden)
                                     {
                                         foreach (var mgsm in c.GroentijdenSets)
@@ -388,7 +417,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 {
                                                     if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
                                                     {
-                                                        sb.Append($" filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus};");
+                                                        sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus};");
                                                     }
                                                 }
                                             }
@@ -481,9 +510,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* File ingreep {fm.Naam} */");
                         sb.AppendLine();
 
+                        //string tbz, trij, tafv, hfile;
                         foreach (var fd in fm.FileDetectoren)
                         {
-                            sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_tafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector});");
+                            if (fd.IngreepNaamPerLus)
+                                sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}_{fm.Naam}, {_tpf}{_trij}{fd.Detector}_{fm.Naam}, {_tpf}{_tafv}{fd.Detector}_{fm.Naam}, {_hpf}{_hfile}{fd.Detector}_{fm.Naam});");
+                            else
+                                sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_tafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector});");
                         }
 
                         sb.Append($"{ts}RT[{_tpf}{_tafv}{fm.Naam}] = ");
@@ -503,7 +536,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var fd in fm.FileDetectoren)
                         {
-                            sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hfile}{fd.Detector}] = FALSE;");
+                            if (fd.IngreepNaamPerLus)
+                                sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}] = FALSE;");
+                            else
+                                sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hfile}{fd.Detector}] = FALSE;");
                         }
                         sb.AppendLine($"{ts}}}");
                         
@@ -540,7 +576,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (id > 0) sb.Append(" || ");
                                     ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    if (fd.IngreepNaamPerLus)
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                    else
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 }
                                 sb.AppendLine($";");
                                 sb.AppendLine($"{ts}{ts}}}");
@@ -598,7 +637,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (id > 0) sb.Append(" && ");
                                     ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    if (fd.IngreepNaamPerLus)
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                    else
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 }
                                 sb.AppendLine($";");
                                 sb.AppendLine($"{ts}{ts}}}");
@@ -615,7 +657,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (id > 0) sb.Append(" || ");
                                     ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    if (fd.IngreepNaamPerLus)
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                    else
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 }
                                 sb.AppendLine($";");
                                 sb.AppendLine($"{ts}}}");
@@ -628,7 +673,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (id > 0) sb.Append(" && ");
                                     ++id;
-                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                    if (fd.IngreepNaamPerLus)
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                    else
+                                        sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 }
                                 sb.AppendLine($";");
                                 sb.AppendLine($"{ts}}}");
@@ -645,7 +693,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (id > 0) sb.Append(" || ");
                                 ++id;
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                if (fd.IngreepNaamPerLus)
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                else
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                             }
                             sb.AppendLine(";");
                             sb.AppendLine($"{ts}}}");
@@ -658,7 +709,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (id > 0) sb.Append(" && ");
                                 ++id;
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                if (fd.IngreepNaamPerLus)
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                else
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                             }
                             sb.AppendLine($";");
                             sb.AppendLine($"{ts}}}");
@@ -673,7 +727,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.Append(" || ");
                                 }
-                                sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                if (fd.IngreepNaamPerLus)
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}_{fm.Naam}]");
+                                else
+                                    sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
                                 ++i;
                             }
                             sb.AppendLine($";");

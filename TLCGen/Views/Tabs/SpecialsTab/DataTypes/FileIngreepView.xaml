@@ -86,6 +86,22 @@
                     <DataGridTextColumn Binding="{Binding Path=BezetTijd}" Header="Bezettijd" />
                     <DataGridTextColumn Binding="{Binding Path=RijTijd}" Header="Rijtijd" />
                     <DataGridTextColumn Binding="{Binding Path=AfvalVertraging}" Header="Afval vertraging" />
+
+                    <DataGridCheckBoxColumn Binding="{Binding Path=IngreepNaamPerLus,UpdateSourceTrigger=PropertyChanged}" Width="100">
+                        <DataGridCheckBoxColumn.Header>
+                            <DockPanel>
+                                <TextBlock Text="Ingreepnaam "  DockPanel.Dock="Left" />
+                                <ct:InfoElement DockPanel.Dock="Right">
+                                    <ct:InfoElement.InfoPopup>
+                                        <TextBlock>
+                                            Door toevoegen van de naam van de file ingreep kan<LineBreak />
+                                            dezelfde lus bij meerdere ingrepen gebruikt worden.
+                                        </TextBlock>
+                                    </ct:InfoElement.InfoPopup>
+                                </ct:InfoElement>
+                            </DockPanel>
+                        </DataGridCheckBoxColumn.Header>
+                    </DataGridCheckBoxColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
