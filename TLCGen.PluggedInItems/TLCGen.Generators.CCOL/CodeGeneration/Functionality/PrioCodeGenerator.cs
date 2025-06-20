@@ -690,8 +690,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (!int.TryParse(sg.Naam, out var iFc)) continue;
                         if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
                         var ingr = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == sg.Naam && x.HasPrioIngreepKAR());
-                        var iFcm = ingr.KARSignaalGroepNummer;
-                        iFc = (iFcm > 0) ? iFcm : iFc;
+                        var iFcm = ingr?.KARSignaalGroepNummer;
+                        iFc = (int)((iFcm > 0) ? iFcm : iFc);
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmkarsg}{sg.Naam}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsg, sg.Naam));
                     }
@@ -701,8 +701,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!int.TryParse(hd.FaseCyclus, out var iFc)) continue;
                     if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
                     var ingr = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == hd.FaseCyclus && x.KAR);
-                    var iFcm = ingr.KARSignaalGroepNummerHD;
-                    iFc = (iFcm > 0) ? iFcm : iFc;
+                    var iFcm = ingr?.KARSignaalGroepNummerHD;
+                    iFc = (int)((iFcm > 0) ? iFcm : iFc);
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmkarsghd}{hd.FaseCyclus}", iFc, CCOLElementTimeTypeEnum.None, _prmkarsghd, hd.FaseCyclus));
 
