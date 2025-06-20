@@ -1100,10 +1100,14 @@ namespace TLCGen.ModelManagement
         {
             WeakReferenceMessengerEx.Default.Register<FasenChangingMessage>(this, OnFasenChanging);
             WeakReferenceMessengerEx.Default.Register<NameChangingMessage>(this, OnNameChanging);
-            WeakReferenceMessengerEx.Default.Register<ModelManagerMessageBase>(this, OnModelManagerMessage);
             WeakReferenceMessengerEx.Default.Register<PrepareForGenerationRequest>(this, OnPrepareForGenerationRequest);
             WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChangedMessage);
             WeakReferenceMessengerEx.Default.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedMessage);
+
+            WeakReferenceMessengerEx.Default.Register<ModulesChangedMessage>(this, OnModelManagerMessage);
+            WeakReferenceMessengerEx.Default.Register<PrioIngreepMeldingChangedMessage>(this, OnModelManagerMessage);
+            WeakReferenceMessengerEx.Default.Register<OVIngreepMeldingChangingMessage>(this, OnModelManagerMessage);
+            WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnModelManagerMessage);
         }
 
         #endregion // Constructor
