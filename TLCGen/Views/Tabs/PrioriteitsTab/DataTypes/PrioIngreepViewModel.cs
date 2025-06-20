@@ -409,6 +409,42 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
+        public static bool KARSignaalGroepNummersInParameters => 
+            ControllerAccessProvider.Default.Controller.PrioData.KARSignaalGroepNummersInParameters;
+
+        [Browsable(false)]
+        public static bool VerlaagHogeSG =>
+            ControllerAccessProvider.Default.Controller.PrioData.VerlaagHogeSignaalGroepNummers;
+
+        [Browsable(false)]
+        public bool HasKAROV => PrioIngreep.HasPrioIngreepKAR();
+        
+        [Browsable(false)]
+        public int KARSignaalGroepNummer
+        {
+            get
+            {
+                if ((PrioIngreep.KARSignaalGroepNummer == 0) && (int.TryParse(PrioIngreep.FaseCyclus, out var iFc)))
+                    if ((iFc > 200) && VerlaagHogeSG)
+                        return iFc - 200;
+                    else
+                        return iFc;
+                else if ((PrioIngreep.KARSignaalGroepNummer > 0) && (PrioIngreep.KARSignaalGroepNummer <= 200))
+                    return PrioIngreep.KARSignaalGroepNummer;
+                else if (VerlaagHogeSG && (PrioIngreep.KARSignaalGroepNummer > 200) && (PrioIngreep.KARSignaalGroepNummer <= 400))
+                    return PrioIngreep.KARSignaalGroepNummer - 200;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (VerlaagHogeSG && (value > 200) && (value <= 400)) value = value - 200;
+                PrioIngreep.KARSignaalGroepNummer = value;
+                OnPropertyChanged(nameof(KARSignaalGroepNummer), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
         [Description("Check op ritcategorie")]
         public bool CheckRitCategorie
         {
