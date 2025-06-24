@@ -629,7 +629,7 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-            checkVer = Version.Parse("12.4.0.17");
+            checkVer = Version.Parse("12.4.0.18");
             if (v < checkVer)
             {
                 var syncT = doc.SelectSingleNode("//Data//SynchronisatiesType");
