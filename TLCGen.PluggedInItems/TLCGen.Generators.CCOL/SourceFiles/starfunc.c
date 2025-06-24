@@ -140,8 +140,6 @@ void star_bepaal_omschakelen(count mgewenst, count mwerkelijk, count mprogwissel
     /* stuur alles rood tbv programmawisseling     */
     if (MM[mprogwissel])
     {
-       int fc;
-
         /* stuur alle signaalgroepen naar rood */
         for (fc = 0; fc < FCMAX; fc++)
         {

@@ -1,5 +1,11 @@
-TLCGen=12.4.0.16
+TLCGen=12.4.0.17
 RN==TLCGen
+TLCGen versie: 12.4.0.17
+- Fix voor niet aanmaken dummy detectoren bij toevoegen KAR ingreep
+- Fix voor toevoegen/verwijderen kruispunt armen
+- Fix alternatieven onder dekking van openbaar vervoer
+- Fix voor kunnen kiezen XML defaults/templates via openfile dialoog
+- Fix voor include gebruik realfunc functies in extra_func.c
 TLCGen versie: 12.4.0.16
 - Weergeven waarschuwing bij toevoegen van meer dan 4 PTP koppelingen ivm. ontbrekende #define in CCOL
 - Correctie aanroep naloopSG_halstar bij naloop startgroen zonder detectie
