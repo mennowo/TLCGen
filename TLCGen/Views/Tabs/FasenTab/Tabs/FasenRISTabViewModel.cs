@@ -102,6 +102,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedSystemITF = value;
                 OnPropertyChanged();
+                _removeSystemITFCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -160,6 +161,8 @@ namespace TLCGen.ViewModels
                 _risModel.HasMultipleSystemITF = value;
                 OnPropertyChanged(broadcast: true);
                 OnPropertyChanged(nameof(NoHasMultipleSystemITF));
+                _addSystemITFCommand?.NotifyCanExecuteChanged();
+                _removeSystemITFCommand?.NotifyCanExecuteChanged();
             }
         }
 
