@@ -1,5 +1,9 @@
 #include "extra_func.h"
 
+#ifdef REALFUNC
+#include "realfunc.h"
+#endif
+
 mulv Knipper_1Hz = 0;
 mulv Knipper_2Hz = 0;
 

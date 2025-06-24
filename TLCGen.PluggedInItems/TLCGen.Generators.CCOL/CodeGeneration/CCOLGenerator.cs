@@ -309,6 +309,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                                     || c.Data.RealFuncBepaalRealisatieTijdenAltijd
                                                                     || c.TimingsData.TimingsUsePredictions):
                             CopySourceIfNeeded(c, "realfunc.c", sourcefilepath);
+                            CopySourceIfNeeded(c, "realfunc.h", sourcefilepath);
                             break;
                     }
 

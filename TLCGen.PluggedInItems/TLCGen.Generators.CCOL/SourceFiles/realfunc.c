@@ -1,3 +1,5 @@
+#include "realfunc.h"
+
 /*
 BESTAND:   realfunc.c
 */
