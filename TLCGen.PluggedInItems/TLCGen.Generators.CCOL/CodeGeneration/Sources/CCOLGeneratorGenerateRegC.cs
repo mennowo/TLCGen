@@ -210,12 +210,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#include \"fixatie.c\"");
             }
             
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
-                (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any()))
-            {
-                sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
-            }
-
 	        if (c.HalfstarData.IsHalfstar)
 	        {
 		        sb.AppendLine($"{ts}#include \"{c.Data.Naam}hst.c\"");
@@ -676,14 +670,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");
             sb.AppendLine();
-            if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
-                (controller.InterSignaalGroep.Voorstarten.Count > 0 ||
-                 controller.InterSignaalGroep.Gelijkstarten.Count > 0))
-            {
-                sb.AppendLine($"{ts}init_realisation_timers();");
-                sb.AppendLine();
-            }
-
+            
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCInitApplication, false, true, false, true);
 
             sb.AppendLine($"{ts}post_init_application();");

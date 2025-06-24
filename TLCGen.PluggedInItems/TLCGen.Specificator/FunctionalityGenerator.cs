@@ -1094,18 +1094,9 @@ namespace TLCGen.Specificator
                 sl.Add(new Tuple<string, int>("Naloop tijdens cyclisch verlengroen:  T nlcv(d)<FCvan><FCnaar>.", 0));
                 sl.Add(new Tuple<string, int>("Naloop op einde groen:                         T nleg(d)<FCvan><FCnaar>.", 0));
                 items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
-
-                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc) 
-                {
-                    items.Add(OpenXmlHelper.GetTextParagraph(
-                        "Daarnaast is het mogelijk om verkeer al te laten inrijden/inlopen tijdens het rood van de nalooprichting (T xnl<FCvan><FCnaar>)."));
-                }
-                else
-                {
-                    items.Add(OpenXmlHelper.GetTextParagraph(
+                items.Add(OpenXmlHelper.GetTextParagraph(
                         "Daarnaast is het mogelijk om verkeer al te laten inrijden/inlopen tijdens het rood van de nalooprichting. Voor inlopen geldt daarbij " +
                         "T inl<FCvan><FCnaar>; voor inrijden wordt hierbij de late release toegepast: T lr<FCnaar><FCvan> (waarbij de fasen dus zijn verwisseld)."));
-                }
                 items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Een naloop kan als detectie afhankelijke naloop worden geconfigureerd, zodat enkel bij een melding " +
                     $"op een bepaalde detector, de naloop actief wordt. Bij detectieafhankelijke nalopen kan ervoor worden " +

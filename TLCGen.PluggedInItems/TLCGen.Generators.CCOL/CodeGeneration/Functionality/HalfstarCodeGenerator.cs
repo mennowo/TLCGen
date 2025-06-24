@@ -630,13 +630,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
 					    sb.AppendLine($"{ts}{ts}init_modules(ML_MAX, PRML, YML, &ML, &SML);");
                     }
-					if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
-						(c.InterSignaalGroep.Gelijkstarten.Any() ||
-					     c.InterSignaalGroep.Voorstarten.Any()))
-					{
-						sb.AppendLine($"{ts}{ts}init_realisation_timers();");
-						sb.AppendLine($"{ts}{ts}reset_realisation_timers();");
-                    }
 					sb.AppendLine($"{ts}{ts}sync_pg();");
 					sb.AppendLine($"{ts}{ts}reset_fc_halfstar();");
 					sb.AppendLine($"{ts}}}");
@@ -1085,12 +1078,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1 | YV_KOP_HALFSTAR);");
 					sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3 | YM_KOP_HALFSTAR);");
 					sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | X_GELIJK_HALFSTAR | X_VOOR_HALFSTAR | X_DEELC_HALFSTAR);");
-                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
-					    (c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any()))
-                    {
-					    sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
-                    }
-					sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
 					
 					foreach (var nl in c.InterSignaalGroep.Nalopen)
@@ -1107,14 +1095,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var vsTijdNl = "NG";
                             if (nl.MaximaleVoorstart.HasValue)
                             {
-	                            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc)
-	                            {
-		                            vsTijdNl = $"PRM[{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}]";
-	                            }
-	                            else
-	                            {
-		                            vsTijdNl = $"T_max[{_tpf}{_treallr}{nl.FaseNaar}{nl.FaseVan}]";
-	                            }
+	                            vsTijdNl = $"T_max[{_tpf}{_treallr}{nl.FaseNaar}{nl.FaseVan}]";
                             }
 
                             var nlv = "NG";
@@ -1147,40 +1128,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}inloopSG_halfstar({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{tinl2}{nl:vannaar});");
 						}
 					}
-
-                    sb.AppendLine();
-
-                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc && 
-						c.InterSignaalGroep.Gelijkstarten.Any())
-                    {
-                        var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
-                        foreach (var gs in gelijkstarttuples)
-                        {
-                            var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
-                            sb.Append($"{ts}gelijkstart_va_arg_halfstar({_hpf}{hxpl}, NG, FALSE, ");
-                            foreach(var fc in gs.Item2)
-                            {
-                                sb.Append($"{_fcpf}{fc}, ");
-                            }
-                            sb.AppendLine("END);");
-                            sb.AppendLine($"{ts}if (IH[{_hpf}{hxpl}])");
-                            sb.AppendLine($"{ts}{{");
-                            foreach(var fc in gs.Item2)
-                            {
-                                sb.Append($"{ts}{ts}if ((");
-                                var first = true;
-                                foreach (var fc2 in gs.Item2)
-                                {
-                                    if (fc == fc2) continue;
-                                    if (!first) sb.Append(" || ");
-                                    sb.Append($"A[{_fcpf}{fc2}]");
-                                    first = false;
-                                }
-                                sb.AppendLine($") && !G[{_fcpf}{fc}]) X[{_fcpf}{fc}] |= X_GELIJK_HALFSTAR;");
-                            }
-                            sb.AppendLine($"{ts}}}");
-                        }
-                    }
 
                     return sb.ToString();
 				

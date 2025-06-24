@@ -80,11 +80,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#include \"{c.Data.Naam}prio.c\"");
             }
             sb.AppendLine($"#include \"{c.Data.Naam}tab.c\"");
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.SyncFunc &&
-                (c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any()))
-            {
-                sb.AppendLine("#include \"syncfunc.c\"");
-            }
             sb.AppendLine("#ifndef AUTOMAAT");
             if (!c.Data.NietGebruikenBitmap)
             {

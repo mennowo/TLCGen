@@ -25,53 +25,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-
-            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return;
-
-            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
-            {
-                if (gs.DeelConflict)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tgsot}{gs.FaseVan}{gs.FaseNaar}",
-                            gs.GelijkstartOntruimingstijdFaseVan,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tgsot, gs.FaseVan, gs.FaseNaar));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tgsot}{gs.FaseNaar}{gs.FaseVan}",
-                            gs.GelijkstartOntruimingstijdFaseNaar,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tgsot, gs.FaseNaar, gs.FaseVan));
-                }
-
-                if (gs.Schakelbaar != AltijdAanUitEnum.Altijd)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schgs}{gs.FaseVan}{gs.FaseNaar}",
-                            gs.Schakelbaar == AltijdAanUitEnum.SchAan ? 1 : 0,
-                            CCOLElementTimeTypeEnum.SCH_type,
-                            _schgs, gs.FaseNaar, gs.FaseVan));
-                }
-            }
-
-            foreach (var vs in c.InterSignaalGroep.Voorstarten)
-            {
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
-                        vs.VoorstartTijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        _tvs, vs.FaseVan, vs.FaseNaar));
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
-                        vs.VoorstartOntruimingstijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        _tvsot, vs.FaseVan, vs.FaseNaar));
-            }
         }
 
         public override bool HasCCOLElements() => true;
@@ -81,10 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc ||
-                        c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
-                        return base.GetFunctionLocalVariables(c, type);
-                    return new List<CCOLLocalVariable> { new("int", "fc") };
+                    return base.GetFunctionLocalVariables(c, type);
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -94,10 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCSynchronisaties => new []{10},
-                CCOLCodeTypeEnum.RegCAlternatieven => new []{30},
-                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new []{40},
-                CCOLCodeTypeEnum.PrioCIncludes => new []{10},
+                CCOLCodeTypeEnum.RegCAlternatieven => [30],
                 _ => null
             };
         }
@@ -112,105 +59,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return null;
-                    
-                    // bits reset
-                    sb.AppendLine($"{ts}/* reset synchronisatiebits. */");
-                    sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
-                    sb.AppendLine($"{ts}{{   RR[fc]&= ~(BIT1|BIT2|BIT3);");
-                    sb.AppendLine($"{ts}{ts}RW[fc]&= ~(BIT3);");
-                    sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1);");
-                    sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3);");
-                    sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1|BIT2|BIT3);");
-                    if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
-                    {
-                        sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0|BIT1|BIT2|BIT3|BIT4|BIT5|BIT6|BIT7);");
-                    }
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}control_realisation_timers();");
-                    sb.AppendLine();
-
-                    // fictitious intergreen
-                    if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.DeelConflict) ||
-                        c.InterSignaalGroep.Voorstarten?.Count > 0)
-                    {
-                        sb.AppendLine($"{ts}/* (Her)start fictieve ontruimingstijden */");
-                        sb.AppendLine($"{ts}/* ------------------------------------- */");
-                        foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
-                        {
-                            if (gs.DeelConflict)
-                            {
-                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                                sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                            }
-                        }
-                        foreach (var vs in c.InterSignaalGroep.Voorstarten)
-                        {
-                            sb.AppendLine($"{ts}FictiefOntruimen(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, BIT3, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                        }
-                        sb.AppendLine();
-
-                        sb.AppendLine($"{ts}/* Corrigeer o.b.v. fictieve ontruimingstijden */");
-                        sb.AppendLine($"{ts}/* ------------------------------------------- */");
-                        foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
-                        {
-                            if (gs.DeelConflict)
-                            {
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, {_tpf}{_tgsot}{gs.FaseNaar}{gs.FaseVan}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                                sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, {_tpf}{_tgsot}{gs.FaseVan}{gs.FaseNaar}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                            }
-                        }
-                        foreach (var vs in c.InterSignaalGroep.Voorstarten)
-                        {
-                            sb.AppendLine($"{ts}FictiefOntruimen_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseNaar}, {_fcpf}{vs.FaseVan}, {_tpf}{_tvsot}{vs.FaseNaar}{vs.FaseVan}, {(c.Data.Intergroen ? "TRUE" : "FALSE")});");
-                        }
-                        sb.AppendLine();
-                    }
-                    // timers
-                    sb.AppendLine($"{ts}/* Correcties op realisatietimers */");
-                    sb.AppendLine($"{ts}/* ------------------------------ */");
-                    foreach(var gs in c.InterSignaalGroep.Gelijkstarten)
-                    {
-                        if(gs.Schakelbaar == AltijdAanUitEnum.Altijd)
-                        {
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR(({c.GetBoolV()}) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
-                        }
-                    }
-                    foreach (var vs in c.InterSignaalGroep.Voorstarten)
-                    {
-                        sb.AppendLine($"{ts}VoorStarten_correctionKR(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar});");
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Gelijk Starten */");
-                    sb.AppendLine($"{ts}/* -------------- */");
-                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
-                    {
-                        if (gs.Schakelbaar == AltijdAanUitEnum.Altijd)
-                        {
-                            sb.AppendLine($"{ts}GelijkStarten(({c.GetBoolV()}) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, ({c.GetBoolV()}) FALSE);");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}GelijkStarten(({c.GetBoolV()}) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, ({c.GetBoolV()}) FALSE);");
-                        }
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Voorstarten */");
-                    sb.AppendLine($"{ts}/* ----------- */");
-                    foreach (var vs in c.InterSignaalGroep.Voorstarten)
-                    {
-                        sb.AppendLine($"{ts}VoorStarten(({c.GetBoolV()}) TRUE, {_fcpf}{vs.FaseVan}, {_fcpf}{vs.FaseNaar}, {_tpf}{_tvs}{vs.FaseVan}{vs.FaseNaar}, BIT3);");
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}realisation_timers(BIT4);");
-                    return sb.ToString();
-
                 case CCOLCodeTypeEnum.RegCAlternatieven:
 					sb.AppendLine($"{ts}/* set meerealisatie voor gelijk- of voorstartende richtingen */");
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
@@ -232,11 +80,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
-
-				case CCOLCodeTypeEnum.PrioCIncludes:
-                    if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.SyncFunc) return null;
-					sb.AppendLine("#include \"syncvar.h\"");
-					return sb.ToString();
 
 				default:
                     return null;
