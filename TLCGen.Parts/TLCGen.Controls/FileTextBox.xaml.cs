@@ -28,7 +28,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for ChooseDialogTitle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ChooseDialogTitleProperty =
-            DependencyProperty.Register("ChooseDialogTitle", typeof(string), typeof(FileTextBox), new PropertyMetadata("Choose file"));
+            DependencyProperty.Register("ChooseDialogTitle", typeof(string), typeof(FileTextBox), new PropertyMetadata("Kies een bestand"));
 
 	    public string ChooseDialogFilter
 	    {
@@ -38,7 +38,7 @@ namespace TLCGen.Controls
 
 	    // Using a DependencyProperty as the backing store for ChooseDialogTitle.  This enables animation, styling, binding, etc...
 	    public static readonly DependencyProperty ChooseDialogFilterProperty =
-		    DependencyProperty.Register("ChooseDialogFilter", typeof(string), typeof(FileTextBox), new PropertyMetadata("*.*|All files"));
+		    DependencyProperty.Register("ChooseDialogFilter", typeof(string), typeof(FileTextBox), new PropertyMetadata("Alle bestanden|*.*"));
 
         public bool EnsurePathExists
         {
