@@ -64,6 +64,7 @@ namespace TLCGen.ViewModels
                     KruispuntArmen.CollectionChanged -= KruispuntArmen_CollectionChanged;
                     KruispuntArmen.Clear();
                 }
+                _addKruispuntArmCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -87,14 +88,28 @@ namespace TLCGen.ViewModels
                 Naam = name,
                 Omschrijving = ""
             }));
+            UpdateSelectables();
         }, () => Controller != null);
 
         public ICommand RemoveKruispuntArmCommand => _removeKruispuntArmCommand ??= new RelayCommand(() =>
         {
+            // Remove kruispunt arm from relevant fasen
+            foreach (var fase in FasenMetKruispuntArmen)
+            {
+                if (fase.KruispuntArm == SelectedKruispuntArm.Naam)
+                {
+                    fase.KruispuntArm = "NG";
+                }
+                if (fase.HasVolgArm && fase.KruispuntArmVolg == SelectedKruispuntArm.Naam)
+                {
+                    fase.KruispuntArmVolg = "NG";
+                }
+            }
             var k = KruispuntArmen.IndexOf(SelectedKruispuntArm);
             KruispuntArmen.Remove(SelectedKruispuntArm);
             if (KruispuntArmen.Count > 0 && k < KruispuntArmen.Count) SelectedKruispuntArm = KruispuntArmen[k];
             else SelectedKruispuntArm = null;
+            UpdateSelectables();
         }, () => SelectedKruispuntArm != null);
 
         public KruispuntArmViewModel SelectedKruispuntArm
@@ -104,6 +119,7 @@ namespace TLCGen.ViewModels
             {
                 _selectedKruispuntArm = value;
                 OnPropertyChanged();
+                _removeKruispuntArmCommand?.NotifyCanExecuteChanged();
             }
         }
 
