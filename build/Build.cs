@@ -34,7 +34,7 @@ class Build : NukeBuild
     const bool DoClean = false;
     const bool DoSign = true;
     const bool DoDeploy = true;
-    const bool DoArchiveOld = true;
+    const bool DoArchiveOld = false;
     const string ArchiveOldVersion = "12.4.0.15";
 
     Target Clean => _ => _
