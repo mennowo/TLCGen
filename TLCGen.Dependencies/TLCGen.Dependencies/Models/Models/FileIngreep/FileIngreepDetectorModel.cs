@@ -13,5 +13,6 @@ namespace TLCGen.Models
         public int BezetTijd { get; set; }
         public int RijTijd { get; set; }
         public int AfvalVertraging { get; set; }
+        public bool IngreepNaamPerLus { get; set; }
     }
 }
