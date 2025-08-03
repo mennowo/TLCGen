@@ -1311,14 +1311,14 @@ void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
 /* -------------------------------------------------------------------------------------------------------- */
 /* Procedure inkomende pelotonkoppeling                                                                     */
 /* -------------------------------------------------------------------------------------------------------- */
-bool proc_pel_in_V1(                       /* Dh20130124                                                    */
-	 count hfc,                            /* fasecyclus                                                   */
+bool proc_pel_in_V1(                      /* Dh20130124                                                    */
+	 count hfc,                            /* VS en FG van voedende fasecyclus                              */
 	 count tmeet,                          /* T meetperiode                                                 */
 	 count tmaxth,                         /* T max.hiaat                                                   */
 	 count grens,                          /* PRM grenswaarde                                               */
 	 count mvtg,                           /* MM aantal vtg                                                 */
 	 count muit,                           /* MM uitsturing aktief                                          */
-	 ...)                                  /* va arg list: inkomende signalen koplussen                     */
+	 ...)                                  /* va arg list: inkomende signalen detectie (via hulpelementen)  */
 {
 	va_list argpt;     /* variabele argumentenlijst                                 */
 	count hdp;

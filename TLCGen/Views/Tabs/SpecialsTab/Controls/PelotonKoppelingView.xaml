@@ -93,6 +93,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <!--
                 <Label Content="Ingangssignalen detectoren" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
@@ -102,6 +103,7 @@
                 </DataGrid>
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
                                      AddItemCommand="{Binding Path=AddInkomendeDetectorCommand}" RemoveItemCommand="{Binding Path=RemoveInkomendeDetectorCommand}" />
+                -->
             </Grid>
         </ct:AutoGrid>
         <ct:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="10">
