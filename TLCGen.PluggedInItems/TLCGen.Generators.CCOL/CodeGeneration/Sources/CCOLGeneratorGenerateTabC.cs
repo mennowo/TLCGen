@@ -776,7 +776,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}{totigmax}[{ff}][{ft}] = {conflict.SerializedWaarde};");
                 }
 
-                if (controller.Data.GarantieOntruimingsTijden)
+                if (c.Data.GarantieOntruimingsTijden)
                 {
                     if (c.InterSignaalGroep.Conflicten?.Count > 0)
                     {

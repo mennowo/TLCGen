@@ -555,30 +555,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append(GetInterFuncPARCorrecties(c, ts));
                         }
 
-                        yes = false;
-                        foreach (var fcm in c.Fasen)
-                        {
-                            foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
-                            {
-                                if (fm is { FileMetingLocatie: FileMetingLocatieEnum.NaStopstreep })
-                                {
-                                    if (!yes)
-                                    {
-                                        yes = true;
-                                        sb.AppendLine();
-                                        sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
-                                    }
-
-                                    sb.AppendLine(
-                                        $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
-                                }
-                            }
-                        }
-                        if (yes)
-                        {
-                            sb.AppendLine();
-                        }
-
                         foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
                         {
                             sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts, order));

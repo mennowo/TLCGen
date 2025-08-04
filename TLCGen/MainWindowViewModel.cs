@@ -886,6 +886,16 @@ namespace TLCGen.ViewModels
             throw new NotImplementedException();
         }
 
+        public void DragEnter(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DragLeave(IDropInfo dropInfo)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion // IDropTarget
     }
 

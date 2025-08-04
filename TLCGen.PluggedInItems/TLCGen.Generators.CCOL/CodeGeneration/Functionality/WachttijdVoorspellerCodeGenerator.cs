@@ -533,7 +533,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] &= ~BIT8;");
                                     sb.AppendLine(
-                                        $"{ts}if (CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && " +
+                                        $"{ts}if (CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && {(c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc ? "(RR[{_fcpf}{fc.Naam}] & BIT6) && " : "")}" +
                                         $"rr_twacht{reeks}[{_fcpf}{fc.Naam}] && IH[{_hpf}{_hwtv}{fc.Naam}] && " +
                                         $"(SCH[{_schpf}{_schwtvbusbijhd}] || !(bHDAanwezig)))");
                                     sb.AppendLine($"{ts}{{");

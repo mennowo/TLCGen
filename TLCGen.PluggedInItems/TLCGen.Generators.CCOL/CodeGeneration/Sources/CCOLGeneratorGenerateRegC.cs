@@ -692,6 +692,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
 
+            sb.AppendLine("void DetectieStoring_Aanvraag(void)");
+            sb.AppendLine("{");
+            
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringAanvraag, true, true, false, true);
+
+            sb.AppendLine($"{ts}DetectieStoring_Aanvraag_Add();");
+	        sb.AppendLine("}");
+
+            sb.AppendLine();
+
             sb.AppendLine("void DetectieStoring_Meetkriterium(void)");
             sb.AppendLine("{");
 
