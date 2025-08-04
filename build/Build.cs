@@ -58,7 +58,7 @@ class Build : NukeBuild
             DotNetRestore(_ => _.SetProjectFile(Solution.GetProject("TLCGen")));
         });
 
-    Target Compile => _ => _
+    Target CompileAndSign => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
@@ -69,10 +69,23 @@ class Build : NukeBuild
                 .SetConfiguration("Release")
                 .SetTargetPlatform(MSBuildTargetPlatform.x64)
                 .SetMSBuildPlatform(MSBuildPlatform.x64));
+
+            var project = Solution.GetProject("TLCGen");
+            if (DoSign && project != null)
+            {
+                // get publish folder
+                var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net8.0-windows";
+
+                SignToolTasks.SignTool(_ => _
+                    .SetFile("C:\\Users\\menno\\CodingConnected\\Various\\CodeCert\\cert-cc-2023-2026.cer")
+                    .SetDescription("TLCGen")
+                    .SetFileDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
+                    .SetFiles(publishDirectory / "TLCGen.exe"));
+            }
         });
 
     Target CompileSetup => _ => _
-        .DependsOn(Compile)
+        .DependsOn(CompileAndSign)
         .Executes(() =>
         {
             MSBuildTasks.MSBuild(_ => _

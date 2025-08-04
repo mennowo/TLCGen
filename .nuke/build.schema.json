@@ -25,7 +25,7 @@
       "type": "string",
       "enum": [
         "Clean",
-        "Compile",
+        "CompileAndSign",
         "CompileSetup",
         "Deploy",
         "PackPortable",
