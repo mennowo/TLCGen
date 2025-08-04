@@ -49,6 +49,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc) return;
+
             foreach (var fc in c.Fasen)
             {
                 _myElements.Add(
@@ -227,6 +229,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var sb = new StringBuilder();
             var f = true;
 
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc) return "";
+
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
@@ -380,10 +384,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.TabCIncludes:
-                    sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
                     return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCIncludes:
-                    sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroen functies */");
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroen functies */");
                     
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -528,29 +535,41 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
+
                     sb.AppendLine($"{ts}/* TIGR */");
                     sb.AppendLine($"{ts}/* Correctie tijdens omdat bv fc22 hard meeverlengt met fc05 en dus bij naloop fc22-->fc21 deze maatgevend kan worden. */");
                     sb.AppendLine($"{ts}BepaalIntergroenTijden(); /* initialisatie TIGR[][] */");
                     sb.AppendLine();
 
-                    f = true;
-                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                     {
-                        if (f)
+                        f = true;
+                        foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                                     x.Type == NaloopTypeEnum.EindeGroen ||
+                                     x.Type == NaloopTypeEnum.CyclischVerlengGroen))
                         {
-                            sb.AppendLine($"{ts}/* Neem EG-naloopconflicten ook mee in TIGR[][] */");
-                            f = false;
+                            if (f)
+                            {
+                                sb.AppendLine($"{ts}/* Neem EG-naloopconflicten ook mee in TIGR[][] */");
+                                f = false;
+                            }
+
+                            var nleg = nl.Type == NaloopTypeEnum.EindeGroen
+                                ? nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG"
+                                : nl.VasteNaloop
+                                    ? $"{_tpf}{_tnlcv}{nl:vannaar}"
+                                    : "NG";
+                            var nlegd = nl.Type == NaloopTypeEnum.EindeGroen
+                                ? nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG"
+                                : nl.DetectieAfhankelijk
+                                    ? $"{_tpf}{_tnlcvd}{nl:vannaar}"
+                                    : "NG";
+                            sb.AppendLine(
+                                $"{ts}corrigeerTIGRvoorNalopen({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
                         }
 
-                        var nleg = nl.Type == NaloopTypeEnum.EindeGroen 
-                            ? nl.VasteNaloop ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG"
-                            : nl.VasteNaloop ? $"{_tpf}{_tnlcv}{nl:vannaar}" : "NG";
-                        var nlegd = nl.Type == NaloopTypeEnum.EindeGroen
-                            ? nl.DetectieAfhankelijk ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG"
-                            : nl.DetectieAfhankelijk ? $"{_tpf}{_tnlcvd}{nl:vannaar}" : "NG";
-                        sb.AppendLine($"{ts}corrigeerTIGRvoorNalopen({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {nleg}, {nlegd}, {_tpf}vgnaloop{nl:vannaar});");
+                        sb.AppendLine();
                     }
-                    sb.AppendLine();
 
                     sb.AppendLine($"{ts}/* Realisatietijden */");
                     sb.AppendLine($"{ts}InitRealisatieTijden(); /* initialisatie REALISATIETIJD[][] */");

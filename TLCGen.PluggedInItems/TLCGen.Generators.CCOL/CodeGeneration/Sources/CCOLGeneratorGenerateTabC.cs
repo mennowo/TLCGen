@@ -495,11 +495,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             var totigmax = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "TIG_max" : "TO_max";
             var totigmin = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "TIG_min" : "TO_min";
+            var matrix = new int[c.Fasen.Count, c.Fasen.Count];
+            var matrixFk = new int[c.Fasen.Count, c.Fasen.Count];
 
-            if(controller.Fasen.Count > 0)
+            if(c.Fasen.Count > 0)
             { 
-                var matrix = new int[c.Fasen.Count, c.Fasen.Count];
-                var matrixFk = new int[c.Fasen.Count, c.Fasen.Count];
                 for (var i = 0; i < c.Fasen.Count; ++i)
                 {
                     for (var j = 0; j < c.Fasen.Count; ++j)
@@ -754,10 +754,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if (controller.InterSignaalGroep.Conflicten?.Count > 0)
+            if (c.InterSignaalGroep.Conflicten?.Count > 0)
             {
                 var prevfasefrom = "";
-                foreach (var conflict in controller.InterSignaalGroep.Conflicten)
+                foreach (var conflict in c.InterSignaalGroep.Conflicten)
                 {
                     var ff = conflict.GetFaseFromDefine();
                     var ft = conflict.GetFaseToDefine();
@@ -791,7 +791,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
 
                         prevfasefrom = "";
-                        foreach (var conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
+                        foreach (var conflict in c.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
                         {
                             var ff = conflict.GetFaseFromDefine();
                             var ft = conflict.GetFaseToDefine();

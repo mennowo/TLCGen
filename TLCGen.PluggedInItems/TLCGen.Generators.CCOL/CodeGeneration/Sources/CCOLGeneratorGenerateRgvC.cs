@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows.Documents;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -71,9 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("mulv TO_ontwerp[FCMAX][FCMAX];");
             }
-            sb.AppendLine("mulv TISG_rgv[FCMAX][FCMAX];");
-            sb.AppendLine("mulv TISG_basis[FCMAX][FCMAX];");
-            sb.AppendLine("");
+
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}mulv TC_rgv[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine($"{ts}char * TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
@@ -83,108 +82,144 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#include \"rgvfunc.c\"");
             sb.AppendLine("#include \"rgv_overslag.c\"");
             sb.AppendLine("");
-            if (c.RoBuGrover.RoBuGroverVenster)
+            if (c.Data.SynchronisatiesType == Models.Enumerations.SynchronisatiesTypeEnum.InterFunc)
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
-                sb.AppendLine($"{ts}#include \"winmg.c\"");
-                sb.AppendLine("#endif");
-            }
-            
-            sb.AppendLine();
-            sb.AppendLine($"{c.GetBoolV()} Correctie_TISG_rgv_add(void)");
-            sb.AppendLine("{");
-            sb.AppendLine($"{ts}return FALSE;");
-            sb.AppendLine("}");
-            sb.AppendLine();
-            sb.AppendLine("void BepaalInterStartGroenTijden_rgv_Add(void)");
-            sb.AppendLine("{");
-            sb.AppendLine("}");
-            sb.AppendLine();
-            sb.AppendLine("void BepaalInterStartGroenTijden_rgv(void)");
-            sb.AppendLine("{");
-            sb.AppendLine($"{ts}{c.GetBoolV()} wijziging = TRUE;");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}InitInterStartGroenTijden_rgv();");
-            sb.AppendLine($"{ts}InterStartGroenTijden_VulHaldeConflictenIn_rgv();");
-            sb.AppendLine($"{ts}InterStartGroenTijden_VulGroenGroenConflictenIn_rgv();");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* Pas interstartgroentijden aan a.g.v. nalopen */");
-            foreach (var nl in c.InterSignaalGroep.Nalopen)
-            {
-                var tnlsg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroen) ? $"{_tpf}{_tnlsg}{nl:vannaar}" : "NG";
-                var tnlsgd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroenDetectie) ? $"{_tpf}{_tnlsgd}{nl:vannaar}" : "NG";
-                if (tnlsg != "NG" || tnlsgd != "NG")
+                sb.AppendLine("mulv TISG_rgv[FCMAX][FCMAX];");
+                sb.AppendLine("mulv TISG_basis[FCMAX][FCMAX];");
+                sb.AppendLine("");
+                if (c.RoBuGrover.RoBuGroverVenster)
                 {
-                    sb.AppendLine($"{ts}InterStartGroenTijd_NLSG_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlsg}, {tnlsgd});");
-                    continue;
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
+                    sb.AppendLine($"{ts}#include \"winmg.c\"");
+                    sb.AppendLine("#endif");
                 }
-                var tnlfg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroen) ? $"{_tpf}{_tnlfg}{nl:vannaar}" : "NG";
-                var tnlfgd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroenDetectie) ? $"{_tpf}{_tnlfgd}{nl:vannaar}" : "NG";
-                var tnleg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroen) ? $"{_tpf}{_tnleg}{nl:vannaar}" : "NG";
-                var tnlegd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroenDetectie) ? $"{_tpf}{_tnlegd}{nl:vannaar}" : "NG";
-                sb.AppendLine($"{ts}InterStartGroenTijd_NLEG_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar});");
-            }
 
-            foreach (var gs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
-            {
-                sb.AppendLine($"{ts}InterStartGroentijd_MeeverlengenDeelconflict_rgv({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
-            }
-
-            sb.AppendLine($"{ts}do");
-            sb.AppendLine($"{ts}{{");
-            sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
-            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
-            {
-                sb.Append($"{ts}{ts}");
-                if (gs.Schakelbaar != Models.Enumerations.AltijdAanUitEnum.Altijd)
+                sb.AppendLine();
+                sb.AppendLine($"{c.GetBoolV()} Correctie_TISG_rgv_add(void)");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}return FALSE;");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void BepaalInterStartGroenTijden_rgv_Add(void)");
+                sb.AppendLine("{");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void BepaalInterStartGroenTijden_rgv(void)");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}{c.GetBoolV()} wijziging = TRUE;");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}InitInterStartGroenTijden_rgv();");
+                sb.AppendLine($"{ts}InterStartGroenTijden_VulHaldeConflictenIn_rgv();");
+                sb.AppendLine($"{ts}InterStartGroenTijden_VulGroenGroenConflictenIn_rgv();");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Pas interstartgroentijden aan a.g.v. nalopen */");
+                foreach (var nl in c.InterSignaalGroep.Nalopen)
                 {
-                    sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                    var tnlsg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroen)
+                        ? $"{_tpf}{_tnlsg}{nl:vannaar}"
+                        : "NG";
+                    var tnlsgd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroenDetectie)
+                        ? $"{_tpf}{_tnlsgd}{nl:vannaar}"
+                        : "NG";
+                    if (tnlsg != "NG" || tnlsgd != "NG")
+                    {
+                        sb.AppendLine(
+                            $"{ts}InterStartGroenTijd_NLSG_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlsg}, {tnlsgd});");
+                        continue;
+                    }
+
+                    var tnlfg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroen)
+                        ? $"{_tpf}{_tnlfg}{nl:vannaar}"
+                        : "NG";
+                    var tnlfgd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroenDetectie)
+                        ? $"{_tpf}{_tnlfgd}{nl:vannaar}"
+                        : "NG";
+                    var tnleg = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroen)
+                        ? $"{_tpf}{_tnleg}{nl:vannaar}"
+                        : "NG";
+                    var tnlegd = nl.Tijden.Any(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroenDetectie)
+                        ? $"{_tpf}{_tnlegd}{nl:vannaar}"
+                        : "NG";
+                    sb.AppendLine(
+                        $"{ts}InterStartGroenTijd_NLEG_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {tnlfg}, {tnlfgd}, {tnleg}, {tnlegd}, {_tpf}{_tvgnaloop}{nl:vannaar});");
                 }
-                sb.AppendLine($"wijziging |= Correctie_TISG_Gelijkstart_rgv({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
-            }
-            foreach (var vs in c.InterSignaalGroep.Voorstarten)
-            {
-                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_Voorstart_rgv({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tvs}{vs:vannaar});");
-            }
-            foreach (var vs in c.InterSignaalGroep.LateReleases)
-            {
-                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tlr}{vs:vannaar});");
+
+                foreach (var gs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
+                {
+                    sb.AppendLine(
+                        $"{ts}InterStartGroentijd_MeeverlengenDeelconflict_rgv({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
+                }
+
+                sb.AppendLine($"{ts}do");
+                sb.AppendLine($"{ts}{{");
+                sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}{ts}/* Gelijkstart / voorstart / late release */");
+                foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                {
+                    sb.Append($"{ts}{ts}");
+                    if (gs.Schakelbaar != Models.Enumerations.AltijdAanUitEnum.Altijd)
+                    {
+                        sb.Append($"if (SCH[{_schpf}{_schgs}{gs:vannaar}]) ");
+                    }
+
+                    sb.AppendLine($"wijziging |= Correctie_TISG_Gelijkstart_rgv({_fcpf}{gs:van}, {_fcpf}{gs:naar});");
+                }
+
+                foreach (var vs in c.InterSignaalGroep.Voorstarten)
+                {
+                    sb.AppendLine(
+                        $"{ts}{ts}wijziging |= Correctie_TISG_Voorstart_rgv({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tvs}{vs:vannaar});");
+                }
+
+                foreach (var vs in c.InterSignaalGroep.LateReleases)
+                {
+                    sb.AppendLine(
+                        $"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tlr}{vs:vannaar});");
+                }
+
+                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue))
+                {
+                    sb.AppendLine(
+                        $"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:vannaar});");
+                }
+
+                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_rgv_add();");
+                sb.AppendLine($"{ts}}} while (wijziging);");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}BepaalInterStartGroenTijden_rgv_Add();");
+                sb.AppendLine("}");
             }
 
-            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue))
-            {
-                sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:vannaar});");
-            }
-
-            sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_rgv_add();");
-            sb.AppendLine($"{ts}}} while (wijziging);");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}BepaalInterStartGroenTijden_rgv_Add();");
-            sb.AppendLine("}");
             sb.AppendLine();
             sb.AppendLine("void rgv_add(void)");
 
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}static {c.GetBoolV()} DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
+            sb.AppendLine(
+                $"{ts}static {c.GetBoolV()} DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
             sb.AppendLine($"{ts}static {c.GetBoolV()} MK1[FCMAX];           /* Meetkriterium op rijstrook 1 */");
-            if(c.RoBuGrover.SignaalGroepInstellingen.Any())
+            if (c.RoBuGrover.SignaalGroepInstellingen.Any())
             {
                 var rijstrookMax = fasenMetRgv.Max(x => x.AantalRijstroken);
-                if(rijstrookMax > 1)
+                if (rijstrookMax > 1)
                 {
-                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
+                    sb.AppendLine(
+                        $"{ts}static {c.GetBoolV()} MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
                 }
+
                 if (rijstrookMax > 2)
                 {
-                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
+                    sb.AppendLine(
+                        $"{ts}static {c.GetBoolV()} MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
                 }
+
                 if (rijstrookMax > 3)
                 {
-                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK4[FCMAX];           /* Meetkriterium op rijstrook 4 */");
+                    sb.AppendLine(
+                        $"{ts}static {c.GetBoolV()} MK4[FCMAX];           /* Meetkriterium op rijstrook 4 */");
                 }
             }
+
             sb.AppendLine($"{ts}static mulv TVG_rgv_old[FCMAX];   /* Opslag 'old' TVG tijden */");
             sb.AppendLine($"{ts}static mulv TVG_rgv_older[FCMAX]; /* Opslag 'older' TVG tijden */");
             sb.AppendLine($"{ts}static mulv rgvinit = 1;          /* Onthouden initialisatie */");
@@ -193,6 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}int fc;");
             sb.AppendLine("#endif");
             sb.AppendLine($"{ts}int i, j;");
+
 
             if (c.Data.SynchronisatiesType != Models.Enumerations.SynchronisatiesTypeEnum.InterFunc)
             {
@@ -503,7 +539,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb2.AppendLine($"END);");
             }
             sb2.AppendLine($"{ts}#else");
-            sb2.AppendLine($"{ts}{ts}BepaalInterStartGroenTijden_rgv();");
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb2.AppendLine($"{ts}{ts}BepaalInterStartGroenTijden_rgv();");
+            }
             sb2.AppendLine($"{ts}{ts}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller) TC_rgv[teller] = 0;");
             sb2.AppendLine($"{ts}{ts}teller = 0;");
             foreach (var gr in c.RoBuGrover.ConflictGroepen)

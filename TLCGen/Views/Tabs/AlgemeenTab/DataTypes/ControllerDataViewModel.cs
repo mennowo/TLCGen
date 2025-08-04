@@ -606,7 +606,7 @@ WeakReferenceMessengerEx.Default.Send(new GroentijdenTypeChangedMessage(value));
                 OnPropertyChanged(nameof(GenererenIncludesLijst), broadcast: true);
             }
         }
-        
+
         [Description("Compileren met één bestand")]
         public bool GenererenEnkelCompilatieBestand
         {
@@ -617,7 +617,18 @@ WeakReferenceMessengerEx.Default.Send(new GroentijdenTypeChangedMessage(value));
                 OnPropertyChanged(nameof(GenererenEnkelCompilatieBestand), broadcast: true);
             }
         }
-        
+
+        [Description("Compileren afzonderlijke bronbestanden")]
+        public bool LosseBrondbestanden
+        {
+            get => _Controller?.Data?.LosseBrondbestanden ?? false;
+            set
+            {
+                _Controller.Data.LosseBrondbestanden = value;
+                OnPropertyChanged(nameof(LosseBrondbestanden), broadcast: true);
+            }
+        }
+
         [Description("Code in tab.c kleine/hoofd letters")]
         public CCOLCodeCaseEnum CCOLCodeCase
         {

@@ -138,7 +138,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _naloop.MaxUitverlengenVolgrichting = value;
-                RaisePropertyChanged<object>(nameof(MaxUitverlengenVolgrichting), broadcast: true);
+                OnPropertyChanged(nameof(MaxUitverlengenVolgrichting), broadcast: true);
             }
         }
 

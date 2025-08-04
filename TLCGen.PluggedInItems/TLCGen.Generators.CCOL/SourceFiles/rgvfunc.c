@@ -221,6 +221,8 @@ void rgv_verlenggroentijd2(
  *
  */
 
+#ifdef INTERFUNC
+
 mulv rgv_verlenggroentijd_correctie_ISG_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va_mulv PRM_tcmin, va_mulv PRM_tcmax, ...)
 {
    #define MAX_KGROEP 10    /* maximum aantal fasecycli in de conflictgroep  */
@@ -420,7 +422,391 @@ mulv berekencyclustijd_ISG_va_arg(va_count fcnr_first, ...)
    return (mulv) (TISG_basis_som);
 }
 
+#else
 
+
+/* rgv_verlenggroentijd_correctie_va_arg() */
+/* --------------------------------------- */
+/* de functie rgv_verlenggroentijd_correctie_va_arg() past de verlenggroentijden van een
+ * maatgevende conflictgroep aan, indien de cyclustijd groter is dan de maximum opgegeven
+ * cyclustijd.
+ * de functie maakt gebruik van een variabele argumentenreeks. het eerste argument is de
+ * maximum gewenste cyclustijd daarna volgende fasecyclusnummers van de maatgevende
+ * conflicten in volgorde van realisatie.
+ * de functie moet worden afgesloten met het argument END (-3).
+ * de functie rgv_verlenggroentijd_correctie_va_arg() geeft als return-waarde de
+ * berekende cyclustijd van de maatgvende conflictgroep.
+ *
+ * voorbeeld:
+ * rgv_verlenggroentijd_correctie_va_arg(1200, fc02, fc09, fc12, END);
+ *
+ */
+
+mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va_mulv PRM_tcmin, va_mulv PRM_tcmax, ...)
+{
+#define MAX_KGROEP 10    /* maximum aantal fasecycli in de conflictgroep  */
+#define TVG_STEP  10     /* stapgrootte voor verlagen in tienden seconden */
+
+    va_list argpt;          /* variabele argumentenlijst     */
+    count fcnr[MAX_KGROEP]; /* arraynummers fasecycli        */
+    register count i, j;    /* tellers                       */
+    count lastnr;           /* laatste arraynr fasecyclus    */
+    mulv TFG_som;           /* som van de vastgroentijden    */
+    mulv TVG_rgv_som;       /* som van de verlenggroentijden */
+    mulv TVG_basis_som;     /* som van de verlenggroentijden */
+    mulv TGL_som;           /* som van de geeltijden         */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+    mulv TIG_som;           /* som van de intergroentijden   */
+#else
+    mulv TO_som;            /* som van de ontruimingstijden  */
+#endif
+    mulv TC_rgv_max;        /* totale rgv cyclustijd         */
+    mulv TC_basis_max;      /* totale basis cyclustijd       */
+    /* mulv TVG_basis[FCMAX]; */     /* basis waarde van de verlenggroentijd               */
+    /* mulv TVG_rgv[FCMAX];   */     /* rgv (actuele) waarde van de verlenggroentijd       */
+    mulv TVG_absoluut[FCMAX];     /* abolute verschil verlenggroentijd actueel en basis */
+    mulv TVG_procentueel[FCMAX];  /* procentueel verlenggroentijd actueel en basis      */
+    count fcnr_temp;              /* tijdelijke fcnr t.b.v. swap fcnr's                 */
+
+
+    /* lees de arraynummers van de fasecycli en plaats ze in de array fcnr[] */
+    /* --------------------------------------------------------------------- */
+    i = 0;
+    va_start(argpt, PRM_tcmax);          /* start variabele argumentenlijst           */
+
+    do {
+        fcnr[i] = va_arg(argpt, va_count); /* lees arraynummers fasecycli van conflictgroep */
+        lastnr = i;
+    } while ((fcnr[i++] >= 0) && (i < MAX_KGROEP));
+    lastnr = i - 2;                         /* bepaal laatste argrument   */
+
+    /* bereken som van de vastgroen-, verlenggroen- en geeltijden */
+    /* ---------------------------------------------------------- */
+    j = 0;
+    TFG_som = TVG_basis_som = TVG_rgv_som = TGL_som = 0;   /* zet sommaties op 0         */
+
+    while (fcnr[j] >= 0) {
+        i = fcnr[j];
+        TFG_som += TFG_max[i];           /* sommeer vastgroentijden    */
+        if (TVG_rgv[i] > 0)
+            TVG_rgv_som += TVG_rgv[i];    /* sommeer verlenggroentijden */
+        if (TVG_basis[i] > 0)
+            TVG_basis_som += TVG_basis[i];/* sommeer verlenggroentijden */
+        TGL_som += TGL_max[i];           /* sommeer geeltijden         */
+        j++;
+    }
+
+    /* bereken som van de ontruimingstijden */
+    /* ------------------------------------ */
+    j = 1;
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+    if (TIG_max[fcnr[lastnr]][fcnr[0]] < 0)
+    {
+        TIG_som = TIG_ontwerp[fcnr[lastnr]][fcnr[0]];  /* van laatste naar eerste fasecyclus */
+    }
+    else
+    {
+        TIG_som = TIG_max[fcnr[lastnr]][fcnr[0]];      /* van laatste naar eerste fasecyclus */
+    }
+    while (fcnr[j] >= 0)
+    {
+        if (TIG_max[fcnr[j - 1]][fcnr[j]] < 0)
+        {
+            TIG_som += TIG_ontwerp[fcnr[j - 1]][fcnr[j]]; /* naar volgende fasecyclus           */
+        }
+        else
+        {
+            TIG_som += TIG_max[fcnr[j - 1]][fcnr[j]];     /* naar volgende fasecyclus           */
+        }
+        j++;
+    }
+    /* bereken de totale cyclustijd */
+    /* ---------------------------- */
+    TC_rgv_max = TFG_som + TVG_rgv_som + TIG_som;     /* bereken totale cyclustijd     */
+    TC_basis_max = TFG_som + TVG_basis_som + TIG_som; /* bereken totale cyclustijd     */
+#else
+    if (TO_max[fcnr[lastnr]][fcnr[0]] < 0)
+    {
+        TO_som = TO_ontwerp[fcnr[lastnr]][fcnr[0]];  /* van laatste naar eerste fasecyclus */
+    }
+    else
+    {
+        TO_som = TO_max[fcnr[lastnr]][fcnr[0]];      /* van laatste naar eerste fasecyclus */
+    }
+    while (fcnr[j] >= 0)
+    {
+        if (TO_max[fcnr[j - 1]][fcnr[j]] < 0)
+        {
+            TO_som += TO_ontwerp[fcnr[j - 1]][fcnr[j]]; /* naar volgende fasecyclus           */
+        }
+        else
+        {
+            TO_som += TO_max[fcnr[j - 1]][fcnr[j]];     /* naar volgende fasecyclus           */
+        }
+        j++;
+    }
+    /* bereken de totale cyclustijd */
+    /* ---------------------------- */
+    TC_rgv_max = TFG_som + TVG_rgv_som + TGL_som + TO_som;     /* bereken totale cyclustijd     */
+    TC_basis_max = TFG_som + TVG_basis_som + TGL_som + TO_som; /* bereken totale cyclustijd     */
+#endif
+
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
+    /* display resultaten in xyprintf-scherm */
+    /* ------------------------------------- */
+ //   xyprintf (0, 15,"TC_basis_max=  %d   ", TC_basis_max);
+ //   xyprintf (0, 16,"TFG_som= %d  TVG_som= %d TGL_som= %d TO_som=%d lastnr= %d",
+ //                    TFG_som, TVG_rgv_som, TGL_som, TO_som, lastnr);
+#endif
+
+   /* correctie maximum verlenggroentijden bij een te hoge cyclustijd */
+   /* --------------------------------------------------------------- */
+    if (((TC_rgv_max > PRM_tcmax) || (TC_rgv_max > TC_max) && (PRM_rgv == 1) || (TC_rgv_max > TC_basis_max) && (PRM_rgv == 2)) && !((TC_rgv_max < PRM_tcmin) && (DD_anyfc == 0)))
+    {  /* test of de berekende cyclustijd te hoog is */
+
+/* bereken verlenggroentijden - absolute verschil */
+/* ---------------------------------------------- */
+        j = 0;
+        while (fcnr[j] >= 0) {
+            i = fcnr[j];
+            if (TVG_basis[i] >= 0) {
+                TVG_absoluut[i] = TVG_rgv[i] - TVG_basis[i];
+            }
+            else {
+                TVG_absoluut[i] = 0;
+            }
+            j++;
+        }
+
+        /* bereken verlenggroentijden - procentuele verschil */
+        /* ------------------------------------------------- */
+        j = 0;
+        while (fcnr[j] >= 0) {
+            i = fcnr[j];
+            if (TVG_basis[i] > 0) {
+                TVG_procentueel[i] = ((long_mulv)(TVG_rgv[i]) * 100L) / TVG_basis[i];
+            }
+            else {
+                TVG_procentueel[i] = 0;
+            }
+            j++;
+        }
+
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
+        /* display resultaten in xyprintf-scherm */
+        /* ------------------------------------- */
+        j = 0;
+        while (fcnr[j] >= 0) {
+            i = fcnr[j];
+            //          xyprintf (0, 25+j,"fc= %s TVG_rgv=%4d  TVG_basis=%4d  TVG_abs=%4d  TVG_proc=%3d ",
+            //                    FC_code[i], TVG_rgv[i], TVG_basis[i], TVG_absoluut[i], TVG_procentueel[i]);
+            j++;
+        }
+#endif
+        /* correctie verlenggroentijden t.o.v. maximum gewenste cyclustijd */
+        /* --------------------------------------------------------------- */
+        while (((TC_rgv_max > PRM_tcmax) || (TC_rgv_max > TC_max) && (PRM_rgv == 1) || (TC_rgv_max > TC_basis_max) && (PRM_rgv == 2)) && !((TC_rgv_max < PRM_tcmin) && (DD_anyfc == 0))) {
+
+            /* sorteer de fasecyclusnummers op grootste verlenggroentijd correctie */
+            /* ------------------------------------------------------------------- */
+            for (j = 1; j <= lastnr; j++) {
+                for (i = j; i <= lastnr; i++) {
+                    /*             if (TVG_absoluut[fcnr[i-1]] < TVG_absoluut[fcnr[i]] ) { */  /* abs. volgorde  */
+                    if (TVG_procentueel[fcnr[j - 1]] < TVG_procentueel[fcnr[i]]) {/* proc. volgorde */
+                        fcnr_temp = fcnr[j - 1];      /* swap fcnr's  */
+                        fcnr[j - 1] = fcnr[i];
+                        fcnr[i] = fcnr_temp;
+                    }
+                }
+            }
+
+            /* verlaag de verlenggroentijd van de fasecyclus zolang de hoogste waarde */
+            /* ---------------------------------------------------------------------- */
+            while (((TVG_rgv[fcnr[0]] >= TVG_STEP) && ((TC_rgv_max > PRM_tcmax) || (TC_rgv_max > TC_max) && (PRM_rgv == 1) || (TC_rgv_max > TC_basis_max) && (PRM_rgv == 2)) && !((TC_rgv_max < PRM_tcmin) && (DD_anyfc == 0)))
+                && (TVG_procentueel[fcnr[0]] >= TVG_procentueel[fcnr[1]])) {
+
+                /* verlaag de verlenggroentijd en de cyclustijd */
+                /* -------------------------------------------- */
+                TVG_rgv[fcnr[0]] -= TVG_STEP;
+                TC_rgv_max -= TVG_STEP;
+
+                /* bereken nieuw absoluut verschil */
+                /* ------------------------------- */
+                if (TVG_basis[fcnr[0]] >= 0) {
+                    TVG_absoluut[fcnr[0]] = TVG_rgv[fcnr[0]] - TVG_basis[fcnr[0]];
+                }
+                else {
+                    TVG_absoluut[0] = 0;
+                }
+
+                /* bereken nieuw procentueel verschil */
+                /* ---------------------------------- */
+                if (TVG_basis[fcnr[0]] > 0) {
+                    TVG_procentueel[fcnr[0]] =
+                        ((long_mulv)(TVG_rgv[fcnr[0]]) * 100L) / TVG_basis[fcnr[0]];
+                }
+                else {
+                    TVG_procentueel[0] = 0;
+                }
+            }
+
+            /* stop de while-loop indien de verlenggroentijd niet langer kan worden verlaagd */
+            /* ----------------------------------------------------------------------------- */
+            if (TVG_rgv[fcnr[0]] < TVG_STEP) {
+                break;   /* verlenggroentijd kan niet langer worden verlaagd */
+            }
+        }
+
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
+        /* display resultaten in xyprintf-scherm */
+        /* ------------------------------------- */
+        j = 0;
+        while (fcnr[j] >= 0) {
+            i = fcnr[j];
+            //         xyprintf (0, 30+j,"fc= %s TVG_rgv=%4d  TVG_basis=%4d  TVG_abs=%4d  TVG_proc=%3d ",
+            //                    FC_code[i], TVG_rgv[i], TVG_basis[i], TVG_absoluut[i], TVG_procentueel[i]);
+            j++;
+        }
+#endif
+    }
+
+    /* maak variabele argumentenlijst leeg */
+    /* ----------------------------------- */
+    va_end(argpt);           /* maak var. arg-lijst leeg  */
+
+    return TC_rgv_max;
+}
+
+
+
+/* berekencyclustijd_va_arg() */
+/* -------------------------- */
+/* de functie berekencyclustijd_va_arg() berekent de cyclustijd van een maatgevende
+ * conflictgroep.
+ * de functie maakt gebruik van een variabele argumentenreeks. het eerste argument is
+ * het fasecyclusnummer van de erste fasecyclus daarna volgen de overige fasecyclusnummers
+ * van de maatgevende conflicten in volgorde van realisatie.
+ * de functie moet worden afgesloten met het argument END (-3).
+ *
+ * voorbeeld:
+ * berekencyclustijd_va_arg(fc02, fc09, fc12, END);
+ *
+ */
+
+mulv berekencyclustijd_va_arg(va_count fcnr_first, ...)
+{
+#define MAX_KGROEP 10    /* maximum aantal fasecycli in de conflictgroep  */
+
+    va_list argpt;          /* variabele argumentenlijst     */
+    count fcnr[MAX_KGROEP]; /* arraynummers fasecycli        */
+    register count i, j;    /* tellers                       */
+    count lastnr;           /* laatste arraynr fasecyclus    */
+    mulv TFG_som;           /* som van de vastgroentijden    */
+    mulv TVG_som;           /* som van de verlenggroentijden  */
+    mulv TGL_som;           /* som van de geeltijden         */
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+    mulv TIG_som;           /* som van de intergroentijden   */
+#else
+    mulv TO_som;            /* som van de ontruimingstijden  */
+#endif
+    mulv TC_temp;           /* totale cyclustijd             */
+
+
+    /* lees de arraynummers van de fasecycli en plaats ze in de array fcnr[] */
+    /* --------------------------------------------------------------------- */
+    i = 0;
+    va_start(argpt, fcnr_first);         /* start variabele argumentenlijst           */
+    fcnr[i] = fcnr_first;                 /* eerste fasecyclusnummer van de conflictgroep  */
+    i++;
+
+    do {
+        fcnr[i] = va_arg(argpt, va_count); /* lees arraynummers fasecycli van conflictgroep */
+        lastnr = i;
+    } while ((fcnr[i++] >= 0) && (i < MAX_KGROEP));
+    lastnr = i - 2;                         /* bepaal laatste argument   */
+
+    /* bereken som van de vastgroen-, verlenggroen- en geeltijden */
+    /* ---------------------------------------------------------- */
+    j = 0;
+    TFG_som = TVG_som = TGL_som = 0;   /* zet sommaties op 0         */
+
+    while (fcnr[j] >= 0) {
+        i = fcnr[j];
+        TFG_som += TFG_max[i];     /* sommeer vastgroentijden    */
+        if (TVG_max[i] > 0)
+            TVG_som += TVG_max[i];  /* sommeer verlenggroentijden */
+        TGL_som += TGL_max[i];     /* sommeer geeltijden         */
+        j++;
+    }
+
+#if (CCOL_V >= 95) && !defined NO_TIGMAX
+    /* bereken som van de ontruimingstijden */
+    /* ------------------------------------ */
+    j = 1;
+    if (TIG_max[fcnr[lastnr]][fcnr[0]] < 0)
+    {
+        TIG_som = TIG_ontwerp[fcnr[lastnr]][fcnr[0]];   /* van laatste naar eerste fasecyclus */
+    }
+    else
+    {
+        TIG_som = TIG_max[fcnr[lastnr]][fcnr[0]];   /* van laatste naar eerste fasecyclus */
+    }
+
+    while (fcnr[j] >= 0)
+    {
+        if (TIG_max[fcnr[j - 1]][fcnr[j]] < 0)
+        {
+            TIG_som += TIG_ontwerp[fcnr[j - 1]][fcnr[j]]; /* naar volgende fasecyclus           */
+        }
+        else
+        {
+            TIG_som += TIG_max[fcnr[j - 1]][fcnr[j]];     /* naar volgende fasecyclus           */
+        }
+        j++;
+    }
+    /* bereken de totale cyclustijd */
+    /* ---------------------------- */
+    TC_temp = TFG_som + TVG_som + TIG_som; /* bereken totale cyclustijd     */
+#else
+    /* bereken som van de ontruimingstijden */
+ /* ------------------------------------ */
+    j = 1;
+    if (TO_max[fcnr[lastnr]][fcnr[0]] < 0)
+    {
+        TO_som = TO_ontwerp[fcnr[lastnr]][fcnr[0]];   /* van laatste naar eerste fasecyclus */
+    }
+    else
+    {
+        TO_som = TO_max[fcnr[lastnr]][fcnr[0]];   /* van laatste naar eerste fasecyclus */
+    }
+
+    while (fcnr[j] >= 0)
+    {
+        if (TO_max[fcnr[j - 1]][fcnr[j]] < 0)
+        {
+            TO_som += TO_ontwerp[fcnr[j - 1]][fcnr[j]]; /* naar volgende fasecyclus           */
+        }
+        else
+        {
+            TO_som += TO_max[fcnr[j - 1]][fcnr[j]];     /* naar volgende fasecyclus           */
+        }
+        j++;
+    }
+    /* bereken de totale cyclustijd */
+    /* ---------------------------- */
+    TC_temp = TFG_som + TVG_som + TGL_som + TO_som; /* bereken totale cyclustijd     */
+#endif
+
+    /* maak variabele argumentenlijst leeg */
+    /* ----------------------------------- */
+    va_end(argpt);           /* maak var. arg-lijst leeg  */
+
+    return (mulv)(TC_temp);
+}
+
+
+
+#endif /* INTERFUNC */
 
 
 /* kopieer de verlenggroentijd TVG_rgv[] naar TVG_max[] */

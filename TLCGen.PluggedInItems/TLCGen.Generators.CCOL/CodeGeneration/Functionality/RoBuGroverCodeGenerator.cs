@@ -121,18 +121,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
                         sb.AppendLine($"{ts}{ts}for (i = 0; i < FCMAX; ++i) TVG_basis[i] = TVG_max[i] > 0 ? TVG_max[i] : 1;");
                         sb.AppendLine($"{ts}{ts}BepaalInterStartGroenTijden_rgv();");
-                    }
-                    sb.AppendLine();
-                    foreach(var cg in c.RoBuGrover.ConflictGroepen)
-                    {
-                        sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_ISG_va_arg(");
-                        foreach(var fc in cg.Fasen)
+                        sb.AppendLine();
+                        foreach(var cg in c.RoBuGrover.ConflictGroepen)
                         {
-                            sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
+                            sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_ISG_va_arg(");
+                            foreach(var fc in cg.Fasen)
+                            {
+                                sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
+                            }
+                            sb.AppendLine($"END);");
                         }
-                        sb.AppendLine($"END);");
+                        sb.AppendLine();
                     }
-                    sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}TC_max = TC[0];");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}for (teller = 1; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");

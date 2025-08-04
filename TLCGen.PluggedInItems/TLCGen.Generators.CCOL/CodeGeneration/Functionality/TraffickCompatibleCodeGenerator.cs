@@ -70,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCWachtgroen => new []{40},
                 CCOLCodeTypeEnum.RegCMeetkriterium => new []{130},
                 CCOLCodeTypeEnum.RegCMeeverlengen => new []{30},
-                CCOLCodeTypeEnum.RegCDetectieStoring => new []{130},
+                CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium => new []{130},
                 CCOLCodeTypeEnum.RegCFileVerwerking => new []{130},
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{40},
                 CCOLCodeTypeEnum.RegCAlternatieven => new []{130},
@@ -253,7 +253,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) traffick_file_afhandeling();");
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.RegCDetectieStoring:
+                case CCOLCodeTypeEnum.RegCDetectieStoringMeetkriterium:
                     sb.AppendLine($"{ts}/* Traffick2TLCGen */");
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schtraffick2tlcgen}]) maatregelen_bij_detectie_storing();");
                     return sb.ToString();

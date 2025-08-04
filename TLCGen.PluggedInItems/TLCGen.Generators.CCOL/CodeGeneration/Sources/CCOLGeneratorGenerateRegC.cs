@@ -295,8 +295,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCPreApplication(ControllerModel controller)
         {
-            var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
-
             var sb = new StringBuilder();
             var _prmfb = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfb");
 
@@ -681,17 +679,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
             var storingsopvang = false;
-
-            sb.AppendLine("void DetectieStoring_Aanvraag(void)");
-            sb.AppendLine("{");
             
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoringAanvraag, true, true, false, true);
-
-            sb.AppendLine($"{ts}DetectieStoring_Aanvraag_Add();");
-	        sb.AppendLine("}");
-
-            sb.AppendLine();
-
             sb.AppendLine("void DetectieStoring_Aanvraag(void)");
             sb.AppendLine("{");
             
@@ -827,7 +815,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{tsts}FileVerwerking_halfstar();");
                 if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
                 {
-                    sb.AppendLine($"{tsts}DetectieStoring();");
                     sb.AppendLine($"{tsts}DetectieStoring_halfstar();");
                 }
                 sb.AppendLine($"{ts}}}");
@@ -865,11 +852,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine($"{tsts}RealisatieAfhandeling();");
             sb.AppendLine($"{tsts}FileVerwerking();");
-            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
-            {
-                sb.AppendLine($"{tsts}DetectieStoring();");
-            }
-
+            
             if (c.HalfstarData.IsHalfstar || c.StarData.ToepassenStar)
             {
                 sb.AppendLine($"{ts}}}");
