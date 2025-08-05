@@ -15,6 +15,7 @@ namespace TLCGen.Plugins
         Structure,
         DynHiaat,
         AFM,
+        AFTeller,
         GebruikersPlugin1,
         GebruikersPlugin2
     }
