@@ -219,7 +219,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     sb.AppendLine($"int iOldRW{pk.KoppelingNaam};");
-                                    sb.AppendLine($"{c.GetBoolV()} bSingleRW{pk.KoppelingNaam};");
+                                    sb.AppendLine($"{c.GetBoolV()} bSingleRW{pk.KoppelingNaam} = TRUE;");
                                 }
                             }
                         }
