@@ -132,7 +132,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GetCoordinatesString(IOElementModel item, string itemdefine, string itemtype)
         {
             var sb = new StringBuilder();
-            if (item != null && item.BitmapCoordinaten?.Count > 0)
+            if (item != null && item.BitmapCoordinaten?.Count > 0 && 
+                (itemtype != "us" ? true : !_uitgangen.Elements.Any(x => x.IOMultivalent && x.Naam == item.Naam)))
             {
                 sb.Append($"{ts}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
                 sb.AppendLine($"Y_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].Y};");
