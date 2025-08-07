@@ -13,6 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tpelmeet;
         private CCOLGeneratorCodeStringSettingModel _tpelmaxhiaat;
+        private CCOLGeneratorCodeStringSettingModel _tpeldTDHmax;
         private CCOLGeneratorCodeStringSettingModel _prmpelgrens;
         private CCOLGeneratorCodeStringSettingModel _mpelvtg;
         private CCOLGeneratorCodeStringSettingModel _mpelin;
@@ -129,6 +130,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 foreach (var sg in sgWithD)
                                 {
                                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpku}{pk.KoppelingNaam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schpku, pk.KoppelingNaam, sg.Key.Naam));
+                                    foreach (var d in pk.Detectoren)
+                                    {
+                                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{d.DetectorNaam}", d.MaxDetectieHiaat,
+                                            CCOLElementTimeTypeEnum.TE_type, _tpeldTDHmax, d.DetectorNaam, pk.KoppelingNaam, pk.GekoppeldeSignaalGroep));
+                                    }
                                 }
                                 break;
                             case PelotonKoppelingRichtingEnum.Inkomend:
@@ -246,6 +252,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Detectoren.Any()))
                     {
+                        if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Detectoren.Any()
+                                                                                               && x.Type == PelotonKoppelingTypeEnum.RHDHV))
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* Herstarten detectie hiaten tbv peloton koppeling (type 2) */");
+                        }
+                        foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Detectoren.Any()
+                                                                                               && x.Type == PelotonKoppelingTypeEnum.RHDHV))
+                        {
+                            foreach (var det in pk.Detectoren)
+                            {
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{det.DetectorNaam}] = D[{_dpf}{det.DetectorNaam}] && !(CIF_IS[{_dpf}{det.DetectorNaam}] >= CIF_DET_STORING);");
+                            }
+                        }
+                        sb.AppendLine();
+
                         foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Detectoren.Any()))
                         {
                             var sgWithD = new Dictionary<FaseCyclusModel, List<string>>();
@@ -326,7 +348,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     {
                                         if (!firstd) sb.Append(" || ");
                                         firstd = false;
-                                        sb.Append($"TDH[{_dpf}{d}] && (CIF_IS[{_dpf}{d}] < CIF_DET_STORING)");
+                                        //sb.Append($"TDH[{_dpf}{d}] && (CIF_IS[{_dpf}{d}] < CIF_DET_STORING)");
+                                        sb.Append($"RT[{_tpf}{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{d}] || T[{_tpf}{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{d}]");
                                     }
                                     sb.Append(")");
                                 }
