@@ -3145,7 +3145,7 @@ namespace TLCGen.Specificator
 
             items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
            
-            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Type == Models.Enumerations.PelotonKoppelingTypeEnum.DenHaag))
+            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Type == PelotonKoppelingTypeEnum.DenHaag))
             {
                 UpdateTables("Table_Pelotonkoppelingen_Inkomend_DenHaag");
 
@@ -3169,7 +3169,7 @@ namespace TLCGen.Specificator
                         "Toepassen MK                 SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpelmk") + "###",
                     }
                 };
-                foreach (var koppi in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => (x.Richting == Models.Enumerations.PelotonKoppelingRichtingEnum.Inkomend) && (x.Type == Models.Enumerations.PelotonKoppelingTypeEnum.DenHaag)))
+                foreach (var koppi in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => (x.Richting == PelotonKoppelingRichtingEnum.Inkomend) && (x.Type == PelotonKoppelingTypeEnum.DenHaag)))
                 {
                     l.Add(new List<string>
                     {
@@ -3192,7 +3192,7 @@ namespace TLCGen.Specificator
                 items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
             }
 
-            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Type == Models.Enumerations.PelotonKoppelingTypeEnum.RHDHV))
+            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Type == PelotonKoppelingTypeEnum.RHDHV))
             {
                 UpdateTables("Table_Pelotonkoppelingen_Inkomend_RHDHV");
 
@@ -3212,7 +3212,7 @@ namespace TLCGen.Specificator
                         "Toepassen MK                 SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpelmk") + "###",
                     }
                 };
-                foreach (var koppi in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => (x.Richting == Models.Enumerations.PelotonKoppelingRichtingEnum.Inkomend) && (x.Type == Models.Enumerations.PelotonKoppelingTypeEnum.RHDHV)))
+                foreach (var koppi in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => (x.Richting == PelotonKoppelingRichtingEnum.Inkomend) && (x.Type == PelotonKoppelingTypeEnum.RHDHV)))
                 {
                     l.Add(new List<string>
                     {
@@ -3231,7 +3231,7 @@ namespace TLCGen.Specificator
                 items.Add(OpenXmlHelper.GetTextParagraph("", "Footer"));
             }
 
-            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == Models.Enumerations.PelotonKoppelingRichtingEnum.Uitgaand))
+            if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand))
             {
                 UpdateTables("Table_Pelotonkoppelingen_Uitgaand");
 
@@ -3243,18 +3243,21 @@ namespace TLCGen.Specificator
                     {
                         "Naam (###)",
                         "Fase ($$)",
-                        "Detectie",
-                        "Schakelaar                   SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpku") + "###$$"
+                        "Detector(en) (@@)",
+                        "Hiaat instelling(en)           T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tpeldTDHmax") + "##_d@",
+                        "Schakelaar                   SCH " + CCOLGeneratorSettingsProvider.Default.GetElementName("schpku") + "###$$",
                     }
                 };
-                foreach (var koppu in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == Models.Enumerations.PelotonKoppelingRichtingEnum.Uitgaand))
+                foreach (var koppu in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand))
                 {
                     l.Add(new List<string>
                     {
                         koppu.KoppelingNaam.ToString(),
                         koppu.GekoppeldeSignaalGroep.ToString(),
                         koppu.Detectoren.Select(x => x.DetectorNaam).Any() ? koppu.Detectoren.Select(x => x.DetectorNaam).Aggregate((y, z) => y + ", " + z).ToString() : "-",
-                        "Aan"
+                        koppu.Type != PelotonKoppelingTypeEnum.RHDHV ? "-" :
+                          koppu.Detectoren.Select(x => x.MaxDetectieHiaat).Any() ? koppu.Detectoren.Select(x => x.MaxDetectieHiaat.ToString()).Aggregate((y, z) => y + ", " + z).ToString() : "-",
+                        "Aan",
                     });
                 }
                 items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
