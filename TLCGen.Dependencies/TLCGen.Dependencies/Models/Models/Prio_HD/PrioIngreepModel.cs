@@ -63,6 +63,8 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioOpTijd { get; set; }
         public int GeconditioneerdePrioTeLaat { get; set; }
 
+        public int KARSignaalGroepNummer { get; set; }
+
         public HalfstarPrioIngreepModel HalfstarIngreepData { get; set; }
 
         [HasDefault(false)]

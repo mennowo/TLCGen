@@ -159,6 +159,40 @@ WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
         }
 
         [Browsable(false)]
+        public static bool KARSignaalGroepNummersInParameters =>
+            ControllerAccessProvider.Default.Controller.PrioData.KARSignaalGroepNummersInParameters;
+
+        [Browsable(false)]
+        public static bool VerlaagHogeSG =>
+            ControllerAccessProvider.Default.Controller.PrioData.VerlaagHogeSignaalGroepNummers;
+
+        [Description("KAR richtingnummer HD")]
+        [BrowsableCondition(nameof(KARSignaalGroepNummersInParameters))]
+        public int KARSignaalGroepNummerHD
+        {
+            get
+            {
+                if ((_HDIngreep.KARSignaalGroepNummerHD == 0) && (int.TryParse(_HDIngreep.FaseCyclus, out var iFc)))
+                    if ((iFc > 200) && VerlaagHogeSG)
+                        return iFc - 200;
+                    else
+                        return iFc;
+                else if ((_HDIngreep.KARSignaalGroepNummerHD > 0) && (_HDIngreep.KARSignaalGroepNummerHD <= 200))
+                    return _HDIngreep.KARSignaalGroepNummerHD;
+                else if ((_HDIngreep.KARSignaalGroepNummerHD > 200) && (_HDIngreep.KARSignaalGroepNummerHD <= 400))
+                    return HDIngreep.KARSignaalGroepNummerHD - 200;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (VerlaagHogeSG && (value > 200) && (value <= 400)) value = value - 200;
+                _HDIngreep.KARSignaalGroepNummerHD = value;
+                OnPropertyChanged(nameof(KARSignaalGroepNummerHD), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
         public bool OpticomAvailable => OpticomIngangen != null && OpticomIngangen.Any();
 
         [Browsable(false)]
