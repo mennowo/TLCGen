@@ -302,7 +302,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.AppendLine($"{ts}{ts}/* afzetten van statusbit in CIF_GPS[5] */");
                     sb.AppendLine($"{ts}{ts}/* ------------------------------------ */");
-                    sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~CIF_PTP{cifptperr}_FOUT;");
+                    if (!(cifptperr > 4))
+                        sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~CIF_PTP{cifptperr}_FOUT;");
+                    else
+                        sb.AppendLine($"{ts}{ts}CIF_GPS[AUTSTATUS] &= ~BIT{cifptperr};");
                     sb.AppendLine();
                 }
 
@@ -566,7 +569,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}{ts}if (!PTP_{k.TeKoppelenKruispunt}KS.OKE)");
                     }
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= CIF_PTP{cifptperr}_FOUT;");
+                    if (!(cifptperr > 4))
+                        sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= CIF_PTP{cifptperr}_FOUT;");
+                    else
+                        sb.AppendLine($"{ts}{ts}{ts}CIF_GPS[AUTSTATUS] |= BIT{cifptperr};");
+                    sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}}}");
                 }
                 sb.AppendLine("#endif");

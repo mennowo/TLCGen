@@ -52,6 +52,8 @@ namespace TLCGen.ViewModels
         public Visibility IsInkomendDenHaag => Type == PelotonKoppelingTypeEnum.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsInkomendRHDHV => Type == PelotonKoppelingTypeEnum.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsUitgaand => Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsUitgaandRHDHV => Type == PelotonKoppelingTypeEnum.RHDHV && Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsUitgaandNietRHDHV => Type != PelotonKoppelingTypeEnum.RHDHV && Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
 
         public string GekoppeldeSignaalGroepNull
         {

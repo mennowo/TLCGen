@@ -18,7 +18,17 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(broadcast: true);
             }
         }
-        
+
+        public int MaxDetectieHiaat
+        {
+            get => Detector.MaxDetectieHiaat;
+            set
+            {
+                Detector.MaxDetectieHiaat = value;
+                OnPropertyChanged(broadcast: true);
+            }
+        }
+
         public PelotonKoppelingDetectorViewModel(PelotonKoppelingDetectorModel detector)
         {
             Detector = detector;

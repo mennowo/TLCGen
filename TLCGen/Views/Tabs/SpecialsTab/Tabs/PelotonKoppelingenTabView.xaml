@@ -49,6 +49,7 @@
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingTypeEnum}}}" />
                     <DataGridTemplateColumn Header="Fase" Width="Auto" MinWidth="35">
+                        <!--
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
@@ -60,6 +61,7 @@
                                 </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.CellStyle>
+                        -->
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=GekoppeldeSignaalGroep,Mode=OneWay}" Margin="2" />

@@ -43,6 +43,7 @@ namespace TLCGen.Specificator
 
             foreach (var specData in pluginData.Where(x => (x.Subject == SpecificationSubject.DynHiaat)
                                                         || (x.Subject == SpecificationSubject.AFM)
+                                                        || (x.Subject == SpecificationSubject.AFTeller)
                                                         || (x.Subject == SpecificationSubject.GebruikersPlugin1)
                                                         || (x.Subject == SpecificationSubject.GebruikersPlugin2)
                                                         ))
@@ -177,7 +178,10 @@ namespace TLCGen.Specificator
                     body.Append(FunctionalityGenerator.GetChapter_HalfstarIntro(c, doc));
                 }
 
-                // Chap 7: Gegenererde specials
+                // Chap 7: AFT
+                AppendGenericSpecificationData(doc, pluginData.Where(x => x.Subject == SpecificationSubject.AFTeller));
+
+                // Chap 8: Gegenererde specials
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_TLCGen_Specials"]}", 1));
                 body.Append(OpenXmlHelper.GetTextParagraph("", "Footer"));
                 body.Append(FunctionalityGenerator.GetChapter_PTP(c));
@@ -201,10 +205,10 @@ namespace TLCGen.Specificator
                     }
                 }
 
-                // Chap 8: AFM
+                // Chap 9: AFM
                 AppendGenericSpecificationData(doc, pluginData.Where(x => x.Subject == SpecificationSubject.AFM));
 
-                // Chap 9: TalkingTraffic
+                // Chap 10: TalkingTraffic
                 if (c.RISData.RISToepassen)
                 {
                     body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_TalkingTraffic"]}", 1));

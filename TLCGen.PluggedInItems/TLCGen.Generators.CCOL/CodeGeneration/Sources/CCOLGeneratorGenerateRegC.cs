@@ -832,7 +832,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 else
                 {
-                    foreach(var r in c.MultiModuleMolens)
+                    foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                     {
                         sb.AppendLine($"{ts}Fixatie({_ispf}{_isfix}, 0, FCMAX-1, SCH[{_schpf}{_schbmfix}], IH[{_hpf}{_hfixatietegenh}], PR{r.Reeks}, {r.Reeks});");
                     }

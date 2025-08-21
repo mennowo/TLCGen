@@ -1315,11 +1315,19 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
+		  <Setting>
+		    <Default>peldTDHmax</Default>
+		    <Setting>peldTDHmax</Setting>
+		    <Type>Timer</Type>
+		    <Description>Maximaal hiaat d_E1_ tbv pelotonmeting koppeling _E2_ vanaf fase _E3_</Description>
+		    <Categorie>CAT_Basisfuncties</Categorie>
+		    <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
+		  </Setting>
           <Setting>
             <Default>pelgrens</Default>
             <Setting>pelgrens</Setting>
             <Type>Parameter</Type>
-            <Description>Minimaal aantal voertuigen tbv peloton koppeling _E1_ fase _E2_</Description>
+            <Description>Minimaal aantal mvt of hiaattijd tbv peloton koppeling _E1_ fase _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
