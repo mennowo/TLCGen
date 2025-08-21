@@ -1327,7 +1327,7 @@
             <Default>pelgrens</Default>
             <Setting>pelgrens</Setting>
             <Type>Parameter</Type>
-            <Description>Minimale aanwezigheid hiaattijd tbv peloton koppeling _E1_ fase _E2_</Description>
+            <Description>Minimaal aantal mvt of hiaattijd tbv peloton koppeling _E1_ fase _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>

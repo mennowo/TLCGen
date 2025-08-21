@@ -263,7 +263,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach (var det in pk.Detectoren)
                             {
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{det.DetectorNaam}] = D[{_dpf}{det.DetectorNaam}] && !(CIF_IS[{_dpf}{det.DetectorNaam}] >= CIF_DET_STORING);");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tpeldTDHmax}{pk.KoppelingNaam}_{_dpf}{det.DetectorNaam}] = G[{_fcpf}{pk.GekoppeldeSignaalGroep}] && D[{_dpf}{det.DetectorNaam}] && !(CIF_IS[{_dpf}{det.DetectorNaam}] >= CIF_DET_STORING);");
                             }
                         }
                         sb.AppendLine();
