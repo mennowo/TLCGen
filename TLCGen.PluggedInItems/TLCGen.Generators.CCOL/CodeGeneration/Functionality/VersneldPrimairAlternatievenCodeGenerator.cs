@@ -411,10 +411,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
-                        {
-                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
-                        }
+                        AppendNalopenEG_RRFMCorrection(c, sb, ts);
 
                         var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
                         
@@ -646,10 +643,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ++mlidx;
                             }
 
-                            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
-                            {
-                                AppendNalopenEG_RRFMCorrection(c, sb, ts);
-                            }
+                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
                         }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
