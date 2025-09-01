@@ -87,14 +87,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("mulv TISG_rgv[FCMAX][FCMAX];");
                 sb.AppendLine("mulv TISG_basis[FCMAX][FCMAX];");
                 sb.AppendLine("");
-                if (c.RoBuGrover.RoBuGroverVenster)
-                {
-                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
-                    sb.AppendLine($"{ts}#include \"winmg.c\"");
-                    sb.AppendLine("#endif");
-                }
+            }
 
+            if (c.RoBuGrover.RoBuGroverVenster)
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
+                sb.AppendLine($"{ts}#include \"winmg.c\"");
+                sb.AppendLine("#endif");
                 sb.AppendLine();
+            }
+
+            if (c.Data.SynchronisatiesType == Models.Enumerations.SynchronisatiesTypeEnum.InterFunc)
+            {
                 sb.AppendLine($"{c.GetBoolV()} Correctie_TISG_rgv_add(void)");
                 sb.AppendLine("{");
                 sb.AppendLine($"{ts}return FALSE;");

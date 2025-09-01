@@ -133,6 +133,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         sb.AppendLine();
                     }
+                    else
+                    {
+                        foreach (var cg in c.RoBuGrover.ConflictGroepen)
+                        {
+                            sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_va_arg(");
+                            foreach (var fc in cg.Fasen)
+                            {
+                                sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
+                            }
+                            sb.AppendLine($"END);");
+                        }
+                        sb.AppendLine();
+                    }
                     sb.AppendLine($"{ts}{ts}TC_max = TC[0];");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}for (teller = 1; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");

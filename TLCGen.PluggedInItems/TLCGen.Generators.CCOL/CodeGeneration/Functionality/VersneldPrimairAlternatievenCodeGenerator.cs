@@ -330,31 +330,62 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* zet richtingen die alternatief gaan realiseren         */");
                         sb.AppendLine($"{ts}/* terug naar RV als er geen alternatieve ruimte meer is. */");
-                        foreach (var fc in c.ModuleMolen.FasenModuleData)
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller && molens.Any(x2 => x2.FasenModuleData.Any(x3 => x3.FaseCyclus == x.Naam))))
                         {
-                            // find signalgroup instance
-                            var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
-                            
-                            // find a potential feeding sg
-                            var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
-                            // if there is a feeding sg, set the sg instance to that sg
-                            if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
-                            
-                            if (ffc is {WachttijdVoorspeller: true })
+                            sb.AppendLine($"{ts}/* Dit gebeurt niet voor fasen met een wachttijd voorspeller, */");
+                            sb.AppendLine($"{ts}/* of fasen waarvan de voedende richting die heeft. */");
+                        }
+
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                        {
+                            foreach (var fc in c.ModuleMolen.FasenModuleData)
                             {
-                                sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
+                                // find signalgroup instance
+                                var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
+
+                                // find a potential feeding sg
+                                var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
+                                // if there is a feeding sg, set the sg instance to that sg
+                                if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
+
+                                if (ffc is { WachttijdVoorspeller: true })
+                                {
+                                    sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
                                                   $"R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && " +
                                                   $"(!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) && " +
                                                   $"MM[{_mpf}{_mwtvm}{fc.FaseCyclus}] > PRM[{_prmpf}{_prmwtvnhaltmin}] " +
                                                   $"? BIT5 : 0;");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= " +
                                                   $"R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && " +
                                                   $"(!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                                }
                             }
                         }
+                        // bij REALfunc nooit opzetten RR in geval van wtv bij richting of voedende richting van richting
+                        else
+                        {
+                            foreach (var fc in c.ModuleMolen.FasenModuleData)
+                            {
+                                // find signalgroup instance
+                                var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
+                                // if the sg has no predictor
+                                if (ffc is { WachttijdVoorspeller: false })
+                                {
+                                    // find a potential feeding sg
+                                    var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
+                                    // if there is a feeding sg, set the sg instance to that sg
+                                    if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
+                                }
+                                // if the instance is not null, and it has a predictor, skip setting RR
+                                if (ffc is { WachttijdVoorspeller: true }) continue;
+                                sb.AppendLine(
+                                    $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                            }
+                        }
+
                         sb.AppendLine();
 
                         if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
@@ -984,19 +1015,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AppendNalopenEG_RRFMCorrection(ControllerModel c, StringBuilder sb, string ts)
         {
-            if (c.InterSignaalGroep.Nalopen.Count > 0)
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
-                sb.AppendLine($"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
-                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                if (c.InterSignaalGroep.Nalopen.Count > 0)
                 {
-                    var t = nl.Type == NaloopTypeEnum.StartGroen 
-                        ? nl.DetectieAfhankelijk 
-                            ? _tnlsgd 
-                            : _tnlsg 
-                        : _tvgnaloop;
-                    sb.AppendLine($"{ts}if (RT[{_tpf}{t}{nl:vannaar}] || T[{_tpf}{t}{nl:vannaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
+                    sb.AppendLine(
+                        $"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        var t = nl.Type == NaloopTypeEnum.StartGroen
+                            ? nl.DetectieAfhankelijk
+                                ? _tnlsgd
+                                : _tnlsg
+                            : _tvgnaloop;
+                        sb.AppendLine(
+                            $"{ts}if (RT[{_tpf}{t}{nl:vannaar}] || T[{_tpf}{t}{nl:vannaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
+                    }
+
+                    sb.AppendLine();
                 }
-                sb.AppendLine();
+            }
+
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            {
+                if (c.InterSignaalGroep.Nalopen.Any(x =>
+                        x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                {
+                    sb.AppendLine($"{ts}/* Bij nalopen op EG mag de volgrichting niet RR en FM");
+                    sb.AppendLine($"{ts}   gestuurd worden indien de voedende richting groen is */");
+                    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
+                                 x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+                    {
+                        sb.AppendLine(
+                            $"{ts}if (!R[{_fcpf}{nl.FaseVan}] || TNL[{_fcpf}{nl.FaseNaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
+                    }
+
+                    sb.AppendLine();
+                }
             }
         }
 
