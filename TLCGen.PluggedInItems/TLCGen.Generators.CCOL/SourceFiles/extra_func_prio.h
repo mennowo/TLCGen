@@ -4,7 +4,6 @@
 #define MAX_AANTAL_INMELDINGEN 10
 
 extern mulv C_counter_old[CTMAX];
-extern mulv C_counter_old[CTMAX];
 #ifndef NO_PRIO
     extern boolv vertraag_kar_uitm[prioFCMAX];
     extern mulv PRIOFC[FCMAX];
