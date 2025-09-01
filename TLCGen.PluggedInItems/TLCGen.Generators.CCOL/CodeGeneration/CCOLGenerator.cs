@@ -547,25 +547,73 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var addlines = File.ReadAllLines(filename);
 
+                    // Wachttijdvoorspellers incl. spelfout corrigeren
                     var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachttijdvoorspellersWachttijd_Add"));
-                    // check of regel met spelfout erin zit
                     var wtvAddOld = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.Any(x => x.Contains("WachtijdvoorspellersWachttijd_Add"));
+
                     var realAdd = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
+                    
                     var postSys2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
+                    
                     var corrrealAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc && addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
+                    
                     var preMsgFcTimingAdd = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL110 && c.TimingsData.TimingsToepassen && addlines.All(x => !x.Contains("pre_msg_fctiming"));
+                    
+                    // Aanvragen nieuwe stijl
+                    var detStorAanvr = addlines.All(x => !x.Contains("DetectieStoring_Aanvraag_Add"));
+                    var detStorMk = addlines.All(x => !x.Contains("DetectieStoring_Meetkriterium_Add"));
+                    var detStopVerlenggroen = addlines.All(x => !x.Contains("DetectieStoring_VerlengGroen_Add"));
+                    var detStorMaxgroen = addlines.All(x => !x.Contains("DetectieStoring_MaxGroen_Add"));
+                    var detStorMelding = addlines.All(x => !Regex.IsMatch(x, @"DetectieStoring_Add.*VERWIJDEREN"));
 
                     var sb = new StringBuilder();
 
                     foreach (var l in addlines)
                     {
-                        if (wtvAddOld && l.Contains("WachtijdvoorspellersWachttijd_Add"))
+                        var line = l;
+                        if (wtvAddOld && line.Contains("WachtijdvoorspellersWachttijd_Add"))
                         {
-                            var l2 = l.Replace("WachtijdvoorspellersWachttijd_Add", "WachttijdvoorspellersWachttijd_Add");
+                            var l2 = line.Replace("WachtijdvoorspellersWachttijd_Add", "WachttijdvoorspellersWachttijd_Add");
                             sb.AppendLine(l2);
                             continue;
                         }
-                        if (wtvAdd && !wtvAddOld && l.Contains("pre_system_application"))
+                        if (detStorAanvr && line.Contains("DetectieStoring_Add"))
+                        {
+                            sb.AppendLine("void DetectieStoring_Aanvraag_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (detStorMk && line.Contains("DetectieStoring_Add"))
+                        {
+                            sb.AppendLine("void DetectieStoring_Meetkriterium_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (c.Data.TypeGroentijden == GroentijdenTypeEnum.VerlengGroentijden && detStopVerlenggroen && line.Contains("DetectieStoring_Add"))
+                        {
+                            sb.AppendLine("void DetectieStoring_VerlengGroen_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden && detStorMaxgroen && line.Contains("DetectieStoring_Add"))
+                        {
+                            sb.AppendLine("void DetectieStoring_MaxGroen_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (detStorMelding && line.Contains("DetectieStoring_Add"))
+                        {
+                            line = line + " !!! VERWIJDEREN - verplaats code naar opgesplitste functies !!!";
+                        }
+                        if (wtvAdd && !wtvAddOld && line.Contains("pre_system_application"))
                         {
                             sb.AppendLine("void WachttijdvoorspellersWachttijd_Add()");
                             sb.AppendLine("{");
@@ -573,7 +621,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        if (corrrealAdd && l.Contains("Maxgroen_Add"))
+                        if (corrrealAdd && line.Contains("Maxgroen_Add"))
                         {
                             sb.AppendLine($"{c.GetBoolV()} CorrectieRealisatieTijd_Add(void)");
                             sb.AppendLine("{");
@@ -589,7 +637,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        if (realAdd && l.Contains("Maxgroen_Add"))
+                        if (realAdd && line.Contains("Maxgroen_Add"))
                         {
                             sb.AppendLine("void BepaalRealisatieTijden_Add()");
                             sb.AppendLine("{");
@@ -597,7 +645,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        if (preMsgFcTimingAdd && l.Contains("post_dump_application"))
+                        if (preMsgFcTimingAdd && line.Contains("post_dump_application"))
                         {
                             sb.AppendLine("void pre_msg_fctiming()");
                             sb.AppendLine("{");
@@ -605,7 +653,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        if (postSys2 && l.Contains("post_dump_application"))
+                        if (postSys2 && line.Contains("post_dump_application"))
                         {
                             sb.AppendLine("void post_system_application2()");
                             sb.AppendLine("{");
@@ -613,7 +661,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
-                        sb.AppendLine(l);
+                        sb.AppendLine(line);
                     }
                     File.Delete(filename);
                     File.WriteAllText(filename, sb.ToString(), encoding);

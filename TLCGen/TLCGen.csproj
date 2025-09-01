@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Resources\VersionInfo\12.4.0.18.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.7.0.0.rtf" />
