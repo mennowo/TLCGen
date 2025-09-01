@@ -57,34 +57,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         fc.FaseCyclus));
             }
 
-            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
-            {
-                var groenSyncData = GroenSyncDataModel.ConvertSyncFuncToRealFunc(c);
-                var sortedSyncs = GroenSyncDataModel.OrderSyncs(c, groenSyncData);
-                foreach (var nl in c.InterSignaalGroep.Nalopen)
-                {
-                    // Only do this for pedestrians with sync
-                    var sync = sortedSyncs.twoWayPedestrians?.FirstOrDefault(x =>
-                        x.m1.FaseVan == nl.FaseVan && x.m1.FaseNaar == nl.FaseNaar
-                        || x.m1.FaseVan == nl.FaseNaar && x.m1.FaseNaar == nl.FaseVan);
-                    if (sync == null) continue;
-
-                    var hnl = nl.Type switch
-                    {
-                        NaloopTypeEnum.StartGroen => _tnlsg,
-                        NaloopTypeEnum.EindeGroen => _tnleg,
-                        NaloopTypeEnum.CyclischVerlengGroen => _tnlcv,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{hnl}{nl.FaseVan}{nl.FaseNaar}", 0, CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.HulpElement, "",
-                            null, null));
-                }
-            }
-
             // Alternatieven
             if (c.ModuleMolen.LangstWachtendeAlternatief)
             {
@@ -172,47 +144,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     ++mlidx;
                 }
-
-                /* not supported yet
-                foreach (var r in c.MultiModuleMolens)
-                {
-                    foreach (var ml in r.Modules)
-                    {
-                        var altdict =
-                            new Dictionary<string, List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>>();
-                        foreach (var mlfc in ml.Fasen)
-                        {
-                            foreach (var amlfc in mlfc.Alternatieven)
-                            {
-                                if (!altdict.ContainsKey(amlfc.FaseCyclus))
-                                {
-                                    altdict.Add(
-                                        amlfc.FaseCyclus,
-                                        new List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>
-                                        {
-                                        new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc)
-                                        });
-                                }
-                            }
-                        }
-                        altsdict.Add(altdict);
-                    }
-                    var mlidx2 = 1;
-                    foreach (var alts in altsdict)
-                    {
-                        foreach (var altg in alts)
-                        {
-                            _myElements.Add(
-                                CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                    $"{_prmaltg}{mlidx}{altg.Key}",
-                                    altg.Value.First().Item1.AlternatieveGroenTijd,
-                                    CCOLElementTimeTypeEnum.TE_type,
-                                    _prmaltg, altg.Key, r.Reeks + mlidx));
-                        }
-                        ++mlidx2;
-                    }
-                }
-                */
             }
         }
 
