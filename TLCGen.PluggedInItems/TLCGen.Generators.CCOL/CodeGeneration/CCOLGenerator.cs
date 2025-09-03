@@ -312,6 +312,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (c.HasPTorHD())
                             {
                                 CopySourceIfNeeded(c, "isgfunc_prio.c", sourcefilepath);
+                                CopySourceIfNeeded(c, "isgfunc_prio.h", sourcefilepath);
                             }
                             break;
                     }

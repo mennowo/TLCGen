@@ -512,3 +512,20 @@ bool fietsprio_inmelding(
 			/* voldoende voertuigen RIS */
 			me_priocount > NG && prm_priocountris > NG && (MM[me_priocount] >= PRM[prm_priocountris]));
 }
+
+
+#ifdef INTERFUNC
+
+void BeeindigenWachtgroenPrioConflicten() {
+	int fc, fc1;
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		for (fc1 = 0; fc1 < FCMAX; ++fc1)
+		{
+			/* Op tijd beeindingen wachtgroen (bv voor TWL's of andere wachtstand richtingen */
+			if ((TIG_max[fc][fc1] >= 0) && PRIOFC[fc]) RW[fc1] &= ~BIT4;  /* reset BIT-sturing */
+		}
+	}
+}
+
+#endif

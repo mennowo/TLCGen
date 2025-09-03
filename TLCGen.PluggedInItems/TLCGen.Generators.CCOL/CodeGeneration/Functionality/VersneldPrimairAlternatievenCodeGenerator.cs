@@ -790,8 +790,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (first) sb.AppendLine($"{ts}/* PAR correcties gelijkstart synchronisaties */");
                 first = false;
 
-                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && PAR[{_fcpf}{gs:van}];");
-                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schgs}{gs:vannaar}]) PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && PAR[{_fcpf}{gs:naar}];");
+                var front = gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"{ts}if (SCH[{_schpf}{_schrealgs}{gs:vannaar}]) " : $"{ts}";
+                sb.AppendLine($"{front}PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && PAR[{_fcpf}{gs:van}];");
+                sb.AppendLine($"{front}PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && PAR[{_fcpf}{gs:naar}];");
             }
 
             return sb.ToString();

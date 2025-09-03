@@ -1,5 +1,7 @@
 ﻿/* merk op: deze file heeft _geen_ bijbehorende header */
 
+#include "isgfunc_prio.h"
+
 #define    PRIO_AA_BIT      BIT6
 
 mulv TVG_BR[FCMAX];
@@ -9,22 +11,24 @@ mulv TISG_BR[FCMAX][FCMAX];
 mulv TVG_max_voor_afkap[FCMAX];
 mulv TVG_AR_voor_afkap[FCMAX];
 
-boolv TVG_max_opgehoogd[FCMAX];
-boolv TVG_AR_opgehoogd[FCMAX];
-boolv RW_OV[FCMAX] = { 0 };
-void BepaalInterStartGroenTijden_PRIO(void);
+bool TVG_max_opgehoogd[FCMAX];
+bool TVG_AR_opgehoogd[FCMAX];
+bool RW_OV[FCMAX] = { 0 };
+
+void BepaalInterStartGroenTijden_PRIO(void); // komt uit ###prio.c
+
 void InterStartGroenTijd_NLEG_PRIO(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
 void InterStartGroenTijd_NLSG_PRIO(count i, count j, count tnlsg, count tnlsgd);
-boolv TISG_Voorstart_PRIO_Correctie(count fcvs, count fcns, count tvs);
-boolv TISG_Gelijkstart_PRIO_Correctie(count fc1, count fc2);
-boolv TISG_LateRelease_PRIO_Correctie(count fclr, count fcvs, count tlr);
+bool TISG_Voorstart_PRIO_Correctie(count fcvs, count fcns, count tvs);
+bool TISG_Gelijkstart_PRIO_Correctie(count fc1, count fc2);
+bool TISG_LateRelease_PRIO_Correctie(count fclr, count fcvs, count tlr);
 void BepaalTVG_BR(void);
 void VerhoogTVG_maxDoorPrio(void);
 void VerlaagTVG_maxDoorConfPrio(void);
 void PrioMeetKriteriumISG(void);
 void BepaalStartGroenMomentenPrioIngrepen(void);
 void PasTVG_maxAanStartGroenMomentenPrioIngrepen(void);
-void TegenHoudenStartGroenISG(int fc, int iStartGroenFC, boolv Afkappen);
+void TegenHoudenStartGroenISG(int fc, int iStartGroenFC, bool Afkappen);
 void PrioBijzonderRealiserenISG(void);
 void PrioTegenhoudenISG(void);
 void MeeverlengenUitDoorPrio(void);
@@ -211,10 +215,10 @@ void InterStartGroenTijd_NLSG_PRIO(count i, count j, count tnlsg, count tnlsgd)
         }
     }
 }
-boolv TISG_Voorstart_PRIO_Correctie(count fcvs, count fcns, count tvs)
+bool TISG_Voorstart_PRIO_Correctie(count fcvs, count fcns, count tvs)
 {
     count n;
-    boolv result;
+    bool result;
     result = FALSE;
     for (n = 0; n < FCMAX; ++n)
     {
@@ -231,10 +235,10 @@ boolv TISG_Voorstart_PRIO_Correctie(count fcvs, count fcns, count tvs)
     }
     return result;
 }
-boolv TISG_Gelijkstart_PRIO_Correctie(count fc1, count fc2)
+bool TISG_Gelijkstart_PRIO_Correctie(count fc1, count fc2)
 {
     count n;
-    boolv result;
+    bool result;
     result = FALSE;
     for (n = 0; n < FCMAX; ++n)
     {
@@ -267,10 +271,10 @@ boolv TISG_Gelijkstart_PRIO_Correctie(count fc1, count fc2)
     }
     return result;
 }
-boolv TISG_LateRelease_PRIO_Correctie(count fclr, count fcvs, count tlr)
+bool TISG_LateRelease_PRIO_Correctie(count fclr, count fcvs, count tlr)
 {
     count n;
-    boolv result;
+    bool result;
     result = FALSE;
     for (n = 0; n < FCMAX; ++n)
     {
@@ -530,7 +534,7 @@ void PrioTegenhoudenISG(void)
     }
     TegenhoudenConflictenExtra();
 }
-void TegenHoudenStartGroenISG(int fc, int iStartGroenFC, boolv Afkappen)
+void TegenHoudenStartGroenISG(int fc, int iStartGroenFC, bool Afkappen)
 {
     int i, k;
     for (i = 0; i < FKFC_MAX[fc]; ++i)
@@ -836,7 +840,7 @@ void PrioriteitsToekenning_ISG_Add(void) {
                }
        */
 }
-boolv fkra(count i)
+bool fkra(count i)
 {
     register count n, k;
 
@@ -850,7 +854,7 @@ boolv fkra(count i)
 }
 
 
-PrioMeerealisatieDeelconflictVoorstart(mulv fc1, mulv fc2, mulv tvs)
+void PrioMeerealisatieDeelconflictVoorstart(mulv fc1, mulv fc2, mulv tvs)
 {
     count prio;
     for (prio = 0; prio < prioFCMAX; ++prio)
@@ -871,7 +875,8 @@ PrioMeerealisatieDeelconflictVoorstart(mulv fc1, mulv fc2, mulv tvs)
         }
     }
 }
-PrioMeerealisatieDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr)
+
+void PrioMeerealisatieDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr)
 {
     count prio;
     for (prio = 0; prio < prioFCMAX; ++prio)
@@ -891,6 +896,7 @@ PrioMeerealisatieDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr)
         }
     }
 }
+
 void InterStartGroentijd_MeeverlengenDeelconflict_PRIO(mulv fc1, mulv fc2)
 {
     count fc;

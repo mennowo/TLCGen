@@ -3601,6 +3601,12 @@
 					<Description>Wel/niet toestaan losse realisatie _E1_</Description>
 				</Setting>
 				<Setting>
+					<Default>isggs</Default>
+					<Setting>gs</Setting>
+					<Type>Schakelaar</Type>
+					<Description>Wel/niet toepassen gelijkstart tussen _E1_ en _E2_</Description>
+				</Setting>
+				<Setting>
 					<Default>isgtijd</Default>
 					<Setting>isgtijd</Setting>
 					<Type>Uitgang</Type>

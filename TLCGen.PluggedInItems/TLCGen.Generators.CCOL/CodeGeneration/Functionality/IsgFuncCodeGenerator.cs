@@ -23,6 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
+        private CCOLGeneratorCodeStringSettingModel _schisggs;
         private CCOLGeneratorCodeStringSettingModel _hisgmad; // obsolete ?
         private CCOLGeneratorCodeStringSettingModel _usisgtijd;
 #pragma warning restore 0649
@@ -56,6 +57,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_misgar}{fc.Naam}", _misgar, fc.Naam));
+            }
+
+            foreach (var gs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.Schakelbaar != AltijdAanUitEnum.Altijd))
+            {
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_schisggs}{gs:vannaar}",
+                        gs.Schakelbaar == AltijdAanUitEnum.SchAan ? 1 : 0,
+                        CCOLElementTimeTypeEnum.SCH_type,
+                        _schisggs, gs.FaseNaar, gs.FaseVan));
             }
 
             foreach (var vs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
@@ -214,6 +225,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
                 CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
                 
+                CCOLCodeTypeEnum.PrioCIncludes => new[] { 140 },
+                
                 CCOLCodeTypeEnum.RegCPreApplication => new[] { 140 },
                 CCOLCodeTypeEnum.RegCAanvragen => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => new[] { 140 },
@@ -233,6 +246,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCIncludes:
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                    {
+                        sb.AppendLine($"#include \"isgfunc_prio.h\" /* voor prioriteitsingrepen */");
+                        sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroen functies */");
+                    }
+
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.PrioCIncludes:
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+                    {
+                        sb.AppendLine($"#include \"isgfunc_prio.h\" /* voor prioriteitsingrepen */");
+                    }
+
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     if (!c.HasPTorHD()) return "";
                     sb.AppendLine($"{ts}BepaalVolgrichtingen();");
@@ -388,11 +418,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine("#include \"isgfunc.h\" /* Interstartgroenfuncties */");
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.RegCIncludes:
-                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
-                        sb.AppendLine("#include \"isgfunc.c\" /* Interstartgroen functies */");
-                    
-                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     if (!c.HasPTorHD()) return "";
 
@@ -404,7 +429,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{c.GetBoolV()} init_tvg;");
-                    sb.AppendLine($"{c.GetBoolV()} PAR_los[FCMAX] = {{ 0 }};");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:

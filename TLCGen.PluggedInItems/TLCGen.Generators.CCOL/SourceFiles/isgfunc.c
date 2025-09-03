@@ -29,7 +29,8 @@ extern mulv TISG_basis[FCMAX][FCMAX];
 extern mulv TVG_rgv[FCMAX];
 extern mulv init_tvg;
 extern mulv TISG_afkap[FCMAX][FCMAX];
-extern bool PAR_los[FCMAX];
+
+bool PAR_los[FCMAX];
 
 void BepaalIntergroenTijden(void)
 {
@@ -1134,7 +1135,7 @@ void set_PG_Deelconflict_Voorstart(mulv fc1, mulv fc2)
     }
 }
 
-set_PG_Deelconflict_LateRelease(mulv fc1, mulv fc2, mulv tlr)
+void set_PG_Deelconflict_LateRelease(mulv fc1, mulv fc2, mulv tlr)
 {
     if (G[fc2] && !G[fc1] && (TG_timer[fc2] > T_max[tlr]) && !PG[fc1])
     {

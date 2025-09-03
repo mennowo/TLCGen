@@ -128,10 +128,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("#define MAX_AANTAL_INMELDINGEN           10");
-            sb.AppendLine("#define DEFAULT_MAX_WACHTTIJD           120");
-            sb.AppendLine("#define NO_REALISEREN_TOEGESTAAN");
-
             if (c.HalfstarData.IsHalfstar)
             {
                 sb.AppendLine();

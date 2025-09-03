@@ -1,8 +1,6 @@
 /* OVPROGRAMMA */
 /* ----------- */
 
-#define MAX_INT                       32767L
-
 #include "prio.h"
 
 VLOG_MON5_STRUCT VLOG_mon5[FCMAX];

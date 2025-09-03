@@ -110,6 +110,9 @@
     <None Update="Docs\BITSturing.ods">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SourceFiles\isgfunc_prio.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="SourceFiles\MirakelMonitor.lib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

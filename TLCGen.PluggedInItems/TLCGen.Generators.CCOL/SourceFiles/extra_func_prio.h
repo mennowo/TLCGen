@@ -6,7 +6,9 @@
 extern mulv C_counter_old[CTMAX];
 #ifndef NO_PRIO
     extern boolv vertraag_kar_uitm[prioFCMAX];
-    extern mulv PRIOFC[FCMAX];
+    #ifdef INTERFUNC
+        extern mulv PRIOFC[FCMAX];
+    #endif
 #endif 
 
 bool DSIMeldingPRIO_V1(count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
