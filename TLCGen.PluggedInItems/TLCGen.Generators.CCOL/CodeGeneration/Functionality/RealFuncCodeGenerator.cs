@@ -643,7 +643,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
 
                             sb.AppendLine($"{ts}{ts}wijziging |= VTG2_Real_Los({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{_trealil}{grsync}], T_max[{_tpf}{_trealil}{grsync:naarvan}], {_hpf}{_hinl}{grsync:van}, {_hpf}{_hinl}{grsync:naar}, {_hpf}{_hlos}{grsync:van}, {_hpf}{_hlos}{grsync:naar}, " +
-                                          $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "FALSE")});");
+                                          $"{(grsync.AanUit != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schrealgs}{grsync}]" : "TRUE")});");
                         }
                         sb.AppendLine();
                     }
