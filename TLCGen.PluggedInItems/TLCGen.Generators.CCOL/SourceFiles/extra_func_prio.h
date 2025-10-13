@@ -8,8 +8,8 @@ extern mulv C_counter_old[CTMAX];
     extern boolv vertraag_kar_uitm[prioFCMAX];
     #ifdef INTERFUNC
         extern mulv PRIOFC[FCMAX];
-    #endif
-#endif 
+    #endif /* INTERFUNC */
+#endif /* NO_PRIO */
 
 bool DSIMeldingPRIO_V1(count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
 bool DSIMeldingPRIO_V2(count fc, count prio_fc, count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
@@ -22,16 +22,20 @@ void PRIO_teller(count cov, count scov);
 #ifdef CCOL_IS_SPECIAL
 void reset_DSI_message(void);
 void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, s_int16 type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio);
-#endif
+#endif /* CCOL_IS_SPECIAL */
 
 #ifdef PRIO_CHECK_WAGENNMR
 void WDNST_cleanup(void);
 bool WDNST_check_in(count fc);
 bool WDNST_check_uit(count fc);
-#endif
-#endif
+#endif /* PRIO_CHECK_WAGENNMR */
 
 void NevenMelding(count ov1, count ov2, count ov3, count d, count prmrtbl, count prmrtbh, count hovss1, count hovss2, count hovss3, count hneven1, count hneven2, count hneven3);
 bool fietsprio_inmelding(count fc, count dvw, count c_priocount, count c_priocyc, count prm_prioblok, count prm_priocyc, count prm_priocount, count prm_priowt, count ml, count me_priocount, count prm_priocountris);
 void fietsprio_update(count fc, count dvw, count c_priocount, count c_priocyc, bool prioin, count ml);  
+
+#ifdef INTERFUNC
 void BeeindigenWachtgroenPrioConflicten();
+#endif /* INTERFUNC */
+
+#endif /* EXTRA_FUNC_OV */

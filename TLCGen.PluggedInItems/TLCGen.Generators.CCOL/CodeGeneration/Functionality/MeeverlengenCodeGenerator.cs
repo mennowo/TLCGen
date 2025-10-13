@@ -167,10 +167,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     else if (c.Data.MultiModuleReeksen)
                                     {
-                                        hfWsg = "hf_wsg_nlISG";
-                                    }
-                                    else if (c.Data.MultiModuleReeksen)
-                                    {
                                         hfWsg = "hf_wsg_nl_fcfc";
                                     }
                                     
