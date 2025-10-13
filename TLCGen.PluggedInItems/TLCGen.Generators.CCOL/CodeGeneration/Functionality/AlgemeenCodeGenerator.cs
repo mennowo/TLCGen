@@ -318,7 +318,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}if (SAPPLPROG) MirakelMonitor_init(SYSTEM);");
                         sb.AppendLine($"#endif /* MIRMON */");
                     }
-                    if (c.Data.GeenDetectorGedragInAutomaatOmgeving)
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9 &&
+                        c.Data.GeenDetectorGedragInAutomaatOmgeving)
                     {
                         sb.AppendLine("#if defined AUTOMAAT || defined AUTOMAAT_TEST");
                         sb.AppendLine($"{ts}/* verwijderen BG, OG en FL tijden in ITSAPP */");

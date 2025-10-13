@@ -292,7 +292,6 @@ WeakReferenceMessengerEx.Default.Send(new UpdateTabsEnabledMessage());
         [Browsable(false)]
         public bool IsCCOLVersieHigherThanOrEqualTo9 => CCOLVersie >= CCOLVersieEnum.CCOL9;
         
-        
         [Browsable(false)]
         public bool IsCCOLVersieHigherThanOrEqualTo110 => CCOLVersie >= CCOLVersieEnum.CCOL110;
 
