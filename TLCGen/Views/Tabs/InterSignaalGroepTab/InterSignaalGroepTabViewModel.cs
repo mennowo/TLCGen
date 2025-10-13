@@ -534,7 +534,7 @@ namespace TLCGen.ViewModels
                 if (_MatrixChanged == true)
                 {
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
-WeakReferenceMessengerEx.Default.Send(new ConflictsChangedMessage());
+                    WeakReferenceMessengerEx.Default.Send(new ConflictsChangedMessage());
                 }
                 _MatrixChanged = false;
                 return true;

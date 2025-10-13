@@ -220,6 +220,9 @@ namespace TLCGen.ViewModels
                         }
                         foreach(var pp in coords)
                             SelectedItem.Coordinates.Remove(pp);
+
+                        // Broadcast model change
+                        WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(null));
                     }
                 }
                 else if (!c.ToArgb().Equals(Color.Black.ToArgb()) &&
@@ -231,6 +234,8 @@ namespace TLCGen.ViewModels
 
                     FillMyBitmap(p, GetFillColor(true));
 
+                    // Broadcast model change
+                    WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(null));
                 }
                 RefreshMyBitmapImage();
             }, 
@@ -261,6 +266,9 @@ namespace TLCGen.ViewModels
                     io.Coordinates.RemoveAll();
                 }
 
+                // Broadcast model change
+                WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(null));
+
                 LoadBitmap();
             });
 
@@ -275,6 +283,9 @@ namespace TLCGen.ViewModels
                 var dlg = new ImportDplCWindow(_Controller) {Owner = Application.Current.MainWindow};
                 dlg.ShowDialog();
                 LoadBitmap();
+
+                // Broadcast model change
+                WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(null));
             }, 
             () => BitmapFileName != null);
 

@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// Used to disclose relevant data of items that have bitmap coordinates.
     /// </summary>
-    public class BitmappedItemViewModel : ObservableObject
+    public class BitmappedItemViewModel : ObservableObjectEx
     {
         #region Fields
 
@@ -75,7 +75,7 @@ namespace TLCGen.ViewModels
                         WeakReferenceMessengerEx.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
                     }
                     Coordinates.RemoveAll();
-                    OnPropertyChanged("HasCoordinates");
+                    OnPropertyChanged(broadcast: true);
                 }
             }
         }

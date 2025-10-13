@@ -1290,15 +1290,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCWachtgroen:
-                    sb.AppendLine($"{ts}/* Op tijd beeindingen wachtgroen (bv voor TWL's of andere wachtstand richtingen  */");
-                    sb.AppendLine($"#ifndef NO_PRIO");
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                     {
+                        sb.AppendLine($"{ts}/* Op tijd beeindingen wachtgroen (bv voor TWL's of andere wachtstand richtingen  */");
+                        sb.AppendLine($"#ifndef NO_PRIO");
                         sb.AppendLine($"{ts}PrioAanwezig();");
                         sb.AppendLine($"{ts}BeeindigenWachtgroenPrioConflicten();");
+                        sb.AppendLine($"#endif /* NO_PRIO */");
                     }
-
-                    sb.AppendLine($"#endif /* NO_PRIO */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCInUitMelden:

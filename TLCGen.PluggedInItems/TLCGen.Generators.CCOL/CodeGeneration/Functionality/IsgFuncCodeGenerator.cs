@@ -180,6 +180,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLLocalVariable> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc) return Enumerable.Empty<CCOLLocalVariable>();
+
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
