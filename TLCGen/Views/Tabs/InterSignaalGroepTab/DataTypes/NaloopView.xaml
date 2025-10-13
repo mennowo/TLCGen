@@ -27,12 +27,14 @@
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
                     SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Maximale tijd inrijden/inlopen:" />
-            <xctk:WatermarkTextBox 
+            <xctk:WatermarkTextBox Padding="0"
                         Watermark="NG" IsEnabled="{Binding Path=MaximaleVoorstartAllowed}"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
-            <Label Content="Maximale tijd uitverlengen volgrichting:" />
+            <Label Content="Maximale tijd uitverlengen volgrichting:"
+                   Visibility="{Binding CanHaveMaxUitverlengenVolgrichting,Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBox IsEnabled="{Binding Path=CanHaveMaxUitverlengenVolgrichting}"
-                        Text="{Binding Path=MaxUitverlengenVolgrichting}" Margin="2" />
+                     Visibility="{Binding CanHaveMaxUitverlengenVolgrichting,Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Text="{Binding Path=MaxUitverlengenVolgrichting}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InrijdenTijdensGroenPossible,Converter={StaticResource BooleanToVisibilityConverter}}">
