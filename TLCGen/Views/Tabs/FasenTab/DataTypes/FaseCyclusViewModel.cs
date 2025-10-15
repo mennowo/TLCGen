@@ -565,6 +565,7 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
         private ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> _hardMeeverlengenFaseCycli;
         private ObservableCollection<string> _alternatieveRuimteOpties;
         private string _alternatieveRuimteTypeString;
+        
         public ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli => _hardMeeverlengenFaseCycli ??= new ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel>(FaseCyclus.HardMeeverlengenFaseCycli);
 
         public HardMeeverlengenFaseCyclusViewModel SelectedHardMeeverlengenFase
@@ -599,6 +600,8 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
         public bool HasHardMeeverlengenFasen => HardMeeverlengenFaseCycli.Any();
 
         public ObservableCollection<string> MeeverlengenOpties => _meeverlengenOpties ??= new ObservableCollection<string>();
+
+        public bool IsNotInterfunc {get;set; }
 
         public string MeeverlengenTypeString
         {
@@ -869,6 +872,8 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
         {
             SetMeeverlengenOpties();
             SetAlternatieveRuimteTypeOpties();
+            IsNotInterfunc = TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc;
+            OnPropertyChanged(nameof(IsNotInterfunc));
         }
 
         #endregion // TLCGen events

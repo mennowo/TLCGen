@@ -97,18 +97,16 @@
                                     ymmax_vtg - meeverleng functie voor voetgangers<LineBreak/>
                                     ymmax - de default CCOL meeverleng functie<LineBreak />
                                     ymmax_to - idem als eerder, nu met default CCOL functies<LineBreak />
-                                    ymmaxV1 || MK[fc] &amp;&amp; ymmax_toV1 - idem als eerder, nu met default CCOL functies
+                                    ymmaxV1 || MK[fc] &amp;&amp; ymmax_toV1 - idem als eerder, nu met default CCOL functies<LineBreak />
+                                    <Span FontStyle="Italic">Merk op:</Span> bij gebruik van synchronisatie type interfunc wordt altijd ym_max_tig_Realisatietijd gebruikt
                                 </TextBlock>
                             </ct:InfoElement.InfoPopup>
                         </ct:InfoElement>
                     </DockPanel>
                     <ComboBox 
                         ItemsSource="{Binding Path=MeeverlengenOpties}"
+                        IsEnabled="{Binding Path=IsNotInterfunc}"
                         SelectedValue="{Binding Path=MeeverlengenTypeString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                    <!--<RadioButton GroupName="MeeverlengenTypeGroup" Content="Default" 
-                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Default}}" />
-                    <RadioButton GroupName="MeeverlengenTypeGroup" Content="Voetganger" 
-                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Voetganger}}" />-->
                     <StackPanel>
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
