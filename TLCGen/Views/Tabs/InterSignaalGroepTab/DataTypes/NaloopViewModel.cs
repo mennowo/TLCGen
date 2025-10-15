@@ -83,6 +83,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool LosseRealisatieVoedendeRichting
+        {
+            get => _naloop.LosseRealisatieVoedendeRichting;
+            set
+            {
+                _naloop.LosseRealisatieVoedendeRichting = value;
+                OnPropertyChanged(nameof(LosseRealisatieVoedendeRichting), broadcast: true);
+            }
+        }
+
+        public bool LosseRealisatieVoorwaardeGeenAanvraagNaloop
+        {
+            get => _naloop.LosseRealisatieVoorwaardeGeenAanvraagNaloop;
+            set
+            {
+                _naloop.LosseRealisatieVoorwaardeGeenAanvraagNaloop = value;
+                OnPropertyChanged(nameof(LosseRealisatieVoorwaardeGeenAanvraagNaloop), broadcast: true);
+            }
+        }
+
         public bool DetectieAfhankelijk
         {
             get => _naloop.DetectieAfhankelijk;

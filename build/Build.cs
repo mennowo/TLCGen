@@ -31,7 +31,7 @@ class Build : NukeBuild
     
     const bool Dev = false;
 
-    const bool DoClean = false;
+    const bool DoClean = true;
     const bool DoSign = true;
     const bool DoDeploy = false;
     const bool DoArchiveOld = false;

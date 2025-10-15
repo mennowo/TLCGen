@@ -22,6 +22,8 @@ namespace TLCGen.Models
         public bool DetectieAfhankelijk { get; set; }
         public int? MaximaleVoorstart { get; set; }
         public int MaxUitverlengenVolgrichting { get; set; }
+        public bool LosseRealisatieVoedendeRichting { get; set; }
+        public bool LosseRealisatieVoorwaardeGeenAanvraagNaloop { get;set; }
 
         [XmlArrayItem(ElementName = "NaloopDetector")]
         public List<NaloopDetectorModel> Detectoren { get; set; }
@@ -32,7 +34,7 @@ namespace TLCGen.Models
         #endregion // Properties
 
         #region ToString
-        
+
         public string ToString(string format, IFormatProvider formatProvider)
         {
             switch (format)

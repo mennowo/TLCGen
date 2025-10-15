@@ -93,8 +93,10 @@
                             <Button Content="Toepassen" Command="{Binding Path=SetGarantieValuesCommand}" Margin="2" />
                         </StackPanel>
                     </Grid>
-                    
-                    <local:SynchronisatieView DataContext="{Binding Path=SelectedSynchronisatie}" />
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <local:SynchronisatieView DataContext="{Binding Path=SelectedSynchronisatie}" />
+                    </ScrollViewer>
 
                 </Grid>
             </Grid>

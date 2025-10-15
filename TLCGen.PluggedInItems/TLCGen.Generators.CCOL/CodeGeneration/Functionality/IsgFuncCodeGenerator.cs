@@ -23,6 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
+        private CCOLGeneratorCodeStringSettingModel _schisglosgeennla;
         private CCOLGeneratorCodeStringSettingModel _schisggs;
         private CCOLGeneratorCodeStringSettingModel _hisgmad; // obsolete ?
         private CCOLGeneratorCodeStringSettingModel _usisgtijd;
@@ -132,33 +133,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _tisgxnl, nl.FaseVan, nl.FaseNaar));
             }
 
-            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x =>
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
-                        c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger) &&
-                        (x.MaximaleVoorstart.HasValue || x.InrijdenTijdensGroen)))
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
             {
                 var fc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                 if (fc == null) continue;
-                //var dBinnen = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                //if (dBinnen != null)
-                //{
-                //    _myElements.Add(
-                //    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                //        $"{_hisgmad}{dBinnen.Naam}",
-                //        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
-                //        _hisgmad, dBinnen.Naam));
-                //}
 
-                if (!helps.Contains($"s{_schisglos}{nl.FaseVan}_1"))
-                {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schisglos}{nl.FaseVan}_1", 0, CCOLElementTimeTypeEnum.SCH_type, _schisglos, nl.FaseVan));
-                    helps.Add($"s{_schisglos}{nl.FaseVan}_1");
-                }
-                if (!helps.Contains($"s{_schisglos}{nl.FaseVan}_2"))
-                {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schisglos}{nl.FaseVan}_2", 0, CCOLElementTimeTypeEnum.SCH_type, _schisglos, nl.FaseVan));
-                    helps.Add($"s{_schisglos}{nl.FaseVan}_2");
-                }
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schisglos}{nl:vannaar}", 
+                    nl.LosseRealisatieVoedendeRichting ? 1 : 0, 
+                    CCOLElementTimeTypeEnum.SCH_type, 
+                    _schisglos, 
+                    nl.FaseVan, nl.FaseNaar));
+                
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schisglosgeennla}{nl:vannaar}_2", 
+                    nl.LosseRealisatieVoorwaardeGeenAanvraagNaloop ? 1 : 0, 
+                    CCOLElementTimeTypeEnum.SCH_type, 
+                    _schisglos, 
+                    nl.FaseVan));
             }
 
             if (c.HasPTorHD())
@@ -694,9 +686,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     {
                                         var dk1 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
                                         var dk2 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                                        if (dk1 != null)
+                                        if (dk1 != null && dk2 != null)
                                         { 
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hisglos}{nl:van}] = RA[{_fcpf}{nl:van}] && (!H[{_hpf}{_hmad}{dk1}] || SCH[{_schpf}{_schisglos}{nl:van}_1] && H[{_hpf}{_hmad}{dk2}]) || H[{_hpf}{_hisglos}{nl:van}] && !SG[{_fcpf}{nl:van}];");
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hisglos}{nl:van}] = RA[{_fcpf}{nl:van}] && (!H[{_hpf}{_hmad}{dk1}] || SCH[{_schpf}{_schisglos}{nl:vannaar}] && H[{_hpf}{_hmad}{dk2}]) || H[{_hpf}{_hisglos}{nl:van}] && !SG[{_fcpf}{nl:van}];");
                                         }
                                     }
                                     
