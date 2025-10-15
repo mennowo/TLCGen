@@ -1017,6 +1017,14 @@
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Meeverlengen</SubCategorie>
           </Setting>
+	      <Setting>
+            <Default>mvverschil</Default>
+            <Setting>mvverschil</Setting>
+            <Type>Parameter</Type>
+            <Description>Tijd dat fase _E1_ niet meer mag meeverlengen ondanks ruimte in maximale groentijd van conflicten</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_Meeverlengen</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

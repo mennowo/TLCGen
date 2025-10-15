@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schmv;
         private CCOLGeneratorCodeStringSettingModel _schhardmv;
         private CCOLGeneratorCodeStringSettingModel _prmmv;
+        private CCOLGeneratorCodeStringSettingModel _prmmvverschil;
 #pragma warning restore 0649
         private string _hfile;
         private string _hplact;
@@ -42,8 +43,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 CCOLElementTimeTypeEnum.None,
                                 _prmmv, fcm.Naam));
                     }
+                    // meeverleng verschil
+                    if (fcm.MeeverlengenVerschil.HasValue)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmmvverschil}{fcm.Naam}",
+                                fcm.MeeverlengenVerschil.Value,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                _prmmvverschil, fcm.Naam));
+                    }
                     // indien meeverlengen niet hard aan
-                    if(fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                    if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -122,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
-                            var verschil = fcm.MeeverlengenVerschil?.ToString() ?? "NG";
+                            var verschil = fcm.MeeverlengenVerschil.HasValue ? $"PRM[{_prmpf}{_prmmvverschil}{fcm.Naam}]" : "NG";
                             var hfWsgArgs = "";
                             var extraConditions = "hf_wsg()";
                             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
@@ -231,7 +242,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"ym_max_tig_Realisatietijd({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}) && {extraConditions} ? BIT4 : 0;");
+                                    sb.AppendLine($"ym_max_tig_Realisatietijd({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                 }
                                 else
                                 {
