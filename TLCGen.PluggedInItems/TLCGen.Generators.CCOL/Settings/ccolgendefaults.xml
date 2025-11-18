@@ -2741,7 +2741,7 @@
             <Default>fo</Default>
             <Setting>fo</Setting>
             <Type>Timer</Type>
-            <Description>Fictieve ontruimingstijd van _E1_ naar fase _E2_</Description>
+            <Description>Fictieve ontruimingstijd/intergroentijd van _E1_ naar fase _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
           </Setting>
@@ -3548,7 +3548,7 @@
 					<Default>isgfo</Default>
 					<Setting>fo</Setting>
 					<Type>Timer</Type>
-					<Description>Fictieve ontruimingstijd van _E1_ naar fase _E2_</Description>
+					<Description>Fictieve ontruimingstijd/intergroentijd van _E1_ naar fase _E2_</Description>
 					<Categorie>CAT_Basisfuncties</Categorie>
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
 				</Setting>
@@ -3585,7 +3585,7 @@
 				<Setting>
 					<Default>isglosgeennla</Default>
 					<Setting>losgeennla</Setting>
-					<Type>HulpElement</Type>
+					<Type>Schakelaar</Type>
 					<Description>Toestaan los realiseren fase _E1_ (naloop naar _E2_) mits geen aanvraag naloop</Description>
 					<Categorie>CAT_Basisfuncties</Categorie>
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
