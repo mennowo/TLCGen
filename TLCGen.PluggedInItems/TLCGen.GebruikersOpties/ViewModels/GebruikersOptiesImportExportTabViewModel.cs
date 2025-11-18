@@ -28,12 +28,9 @@ namespace TLCGen.GebruikersOpties
 
         #region Properties
 
-        public ObservableCollection<GebruikersOptieGenericViewModel> ItemsAllPresent { get; } = new ObservableCollection<GebruikersOptieGenericViewModel>();
-        public ObservableCollection<GebruikersOptieGenericViewModel> ItemsToImport { get; } = new ObservableCollection<GebruikersOptieGenericViewModel>();
-
-        #endregion // Properties
-
-        #region Commands
+        public ObservableCollection<GebruikersOptieGenericViewModel> ItemsAllPresent { get; } = [];
+       
+        public ObservableCollection<GebruikersOptieGenericViewModel> ItemsToImport { get; } = [];
 
         public GebruikersOptiesModel DataModel
         {
@@ -52,6 +49,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _replaceInImportFind = value;
                 OnPropertyChanged();
+                _replaceInImportCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -62,6 +60,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _replaceInImportReplace = value;
                 OnPropertyChanged();
+                _replaceInImportCommand?.NotifyCanExecuteChanged();
             }
         }
 
@@ -75,7 +74,11 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
-        public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new RelayCommand(
+        #endregion // Properties
+
+        #region Commands
+
+        public ICommand SelectAllCommand => _selectAllCommand ??= new RelayCommand(
             () =>
             {
                 foreach (var i in ItemsAllPresent)
@@ -83,47 +86,44 @@ namespace TLCGen.GebruikersOpties
                     i.Selected = true;
                 }
             },
-            () => ItemsAllPresent.Any()));
+            () => ItemsAllPresent.Any());
 
         public ICommand ExportCommand
         {
             get
             {
-                if (_exportCommand == null)
-                {
-                    _exportCommand = new RelayCommand(
-                        () =>
+                _exportCommand ??= new RelayCommand(
+                    () =>
+                    {
+                        var dlg = new SaveFileDialog
                         {
-                            var dlg = new SaveFileDialog
+                            FileName = "gebruikersopties.xml",
+                            Filter = "XML data|*.xml",
+                            Title = "Kies XML bestand voor opslag gebruikersopties",
+                            DefaultExt = ".xml",
+                            CheckFileExists = false
+                        };
+                        var r = dlg.ShowDialog();
+                        if (r == true)
+                        {
+                            var exp = new GebruikersOptiesExportModel();
+                            foreach (var o in ItemsAllPresent.Where(x => x.Selected))
                             {
-                                FileName = "gebruikersopties.xml",
-                                Filter = "XML data|*.xml",
-                                Title = "Kies XML bestand voor opslag gebruikersopties",
-                                DefaultExt = ".xml",
-                                CheckFileExists = false
-                            };
-                            var r = dlg.ShowDialog();
-                            if (r == true)
-                            {
-                                var exp = new GebruikersOptiesExportModel();
-                                foreach (var o in ItemsAllPresent.Where(x => x.Selected))
-                                {
-                                    exp.Items.Add(o);
-                                }
-                                try
-                                {
-                                    Helpers.TLCGenSerialization.Serialize(dlg.FileName, exp);
-                                }
-                                catch (Exception e)
-                                {
-                                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
-                                        $"Kon gebruikersopties niet exporteren:\n\n{e}",
-                                        "Fout bij exporteren gebruikersopties", System.Windows.MessageBoxButton.OK);
-                                }
+                                exp.Items.Add(o);
                             }
-                        },
-                        () => ItemsAllPresent.Any(x => x.Selected));
-                }
+                            try
+                            {
+                                Helpers.TLCGenSerialization.Serialize(dlg.FileName, exp);
+                            }
+                            catch (Exception e)
+                            {
+                                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
+                                    $"Kon gebruikersopties niet exporteren:\n\n{e}",
+                                    "Fout bij exporteren gebruikersopties", System.Windows.MessageBoxButton.OK);
+                            }
+                        }
+                    },
+                    () => ItemsAllPresent.Any(x => x.Selected));
                 return _exportCommand;
             }
         }
@@ -132,42 +132,39 @@ namespace TLCGen.GebruikersOpties
         {
             get
             {
-                if (_openExternalDataCommand == null)
-                {
-                    _openExternalDataCommand = new RelayCommand(
-                        () =>
+                _openExternalDataCommand ??= new RelayCommand(
+                    () =>
+                    {
+                        var dlg = new OpenFileDialog
                         {
-                            var dlg = new OpenFileDialog
+                            FileName = "gebruikersopties.xml",
+                            Filter = "XML data|*.xml",
+                            Title = "Kies XML bestand met opgeslagen gebruikersopties",
+                            DefaultExt = ".xml",
+                            CheckFileExists = true
+                        };
+                        var r = dlg.ShowDialog();
+                        if (r == true)
+                        {
+                            try
                             {
-                                FileName = "gebruikersopties.xml",
-                                Filter = "XML data|*.xml",
-                                Title = "Kies XML bestand met opgeslagen gebruikersopties",
-                                DefaultExt = ".xml",
-                                CheckFileExists = true
-                            };
-                            var r = dlg.ShowDialog();
-                            if (r == true)
-                            {
-                                try
+                                var imp = Helpers.TLCGenSerialization.DeSerialize<GebruikersOptiesExportModel>(dlg.FileName);
+                                ItemsToImport.Clear();
+                                foreach (var o in imp.Items)
                                 {
-                                    var imp = Helpers.TLCGenSerialization.DeSerialize<GebruikersOptiesExportModel>(dlg.FileName);
-                                    ItemsToImport.Clear();
-                                    foreach (var o in imp.Items)
-                                    {
-                                        o.Selected = true;
-                                        ItemsToImport.Add(o);
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
-                                        $"Kon gebruikersopties niet importeren:\n\n{e.ToString()}",
-                                        "Fout bij importeren gebruikersopties", System.Windows.MessageBoxButton.OK);
+                                    o.Selected = true;
+                                    ItemsToImport.Add(o);
                                 }
                             }
-                        },
-                        () => true);
-                }
+                            catch (Exception e)
+                            {
+                                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(
+                                    $"Kon gebruikersopties niet importeren:\n\n{e.ToString()}",
+                                    "Fout bij importeren gebruikersopties", System.Windows.MessageBoxButton.OK);
+                            }
+                        }
+                    },
+                    () => true);
                 return _openExternalDataCommand;
             }
         }
@@ -253,7 +250,7 @@ namespace TLCGen.GebruikersOpties
 
         #endregion // Commands
 
-        #region Public Methods
+        #region Methods
 
         public void RebuildAllItems(GebruikersOptiesTabViewModel vm)
         {
@@ -268,13 +265,64 @@ namespace TLCGen.GebruikersOpties
             foreach (var o in vm.Parameters) ItemsAllPresent.Add(new GebruikersOptieGenericViewModel(o));
         }
 
-        #endregion // Public Methods
+        private void ItemsToImport_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            _replaceInImportCommand?.NotifyCanExecuteChanged();
+            _importCommand?.NotifyCanExecuteChanged();
+            if (e.OldItems?.Count > 0)
+            {
+                foreach (GebruikersOptieGenericViewModel item in e.OldItems)
+                {
+                    item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+            if (e.NewItems?.Count > 0)
+            {
+                foreach (GebruikersOptieGenericViewModel item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+        }
+
+        private void ItemsAllPresent_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            _selectAllCommand?.NotifyCanExecuteChanged();
+            _exportCommand?.NotifyCanExecuteChanged();
+            if (e.OldItems?.Count > 0)
+            {
+                foreach (GebruikersOptieGenericViewModel item in e.OldItems)
+                {
+                    item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+            if (e.NewItems?.Count > 0)
+            {
+                foreach (GebruikersOptieGenericViewModel item in e.NewItems)
+                {
+                    item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+        }
+
+        private void Item_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(GebruikersOptieGenericViewModel.Selected))
+            {
+                _exportCommand?.NotifyCanExecuteChanged();
+                _importCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
+        #endregion // Methods
 
         #region Constructor
 
         public GebruikersOptiesImportExportTabViewModel(GebruikersOptiesTabViewModel plugin)
         {
             _plugin = plugin;
+            ItemsAllPresent.CollectionChanged += ItemsAllPresent_CollectionChanged;
+            ItemsToImport.CollectionChanged += ItemsToImport_CollectionChanged;
         }
 
         #endregion // Constructor
