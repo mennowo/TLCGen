@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="WixToolset.Sdk/5.0.2">
+<Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug</DefineConstants>
     <SuppressValidation>True</SuppressValidation>
@@ -19,7 +19,7 @@
     <Content Include="license.rtf" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
+	  <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
