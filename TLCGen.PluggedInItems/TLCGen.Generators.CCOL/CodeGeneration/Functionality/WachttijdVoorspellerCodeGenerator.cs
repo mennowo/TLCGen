@@ -37,6 +37,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _hplact;
         private string _hpeltegenh;
+        private string _schgs;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -452,8 +453,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var start = false;
                             foreach (var fc in c.Fasen)
                             {
-                                var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam);
-                                if (gss.Any())
+                                var faseGelijkstarts = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam);
+                                if (faseGelijkstarts.Any())
                                 {
                                     if (!start)
                                     {
@@ -461,10 +462,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         sb.AppendLine($"{ts}/* corrigeer waarde i.v.m. gelijkstart fietsers */");
                                     }
 
-                                    foreach (var gs in gss)
+                                    foreach (var gelijkStart in faseGelijkstarts)
                                     {
+                                        sb.Append($"{ts}");
+                                        if (gelijkStart.Schakelbaar != AltijdAanUitEnum.Altijd)
+                                        {
+                                            sb.Append($"if (SCH[{_schpf}{_schgs}{gelijkStart:vannaar}]) ");
+                                        }
                                         sb.AppendLine(
-                                            $"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht{GetFaseReeks(c, fc.Naam)});");
+                                            $"wachttijd_correctie_gelijkstart({_fcpf}{gelijkStart.FaseVan}, {_fcpf}{gelijkStart.FaseNaar}, t_wacht{GetFaseReeks(c, fc.Naam)});");
                                     }
                                 }
                             }
@@ -711,6 +717,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _hpeltegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("hpeltegenh");
+            _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
 
             return base.SetSettings(settings);
         }
