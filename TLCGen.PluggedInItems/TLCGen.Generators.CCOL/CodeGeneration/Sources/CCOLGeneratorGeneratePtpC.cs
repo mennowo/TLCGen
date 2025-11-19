@@ -29,8 +29,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var prmptperr0 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr0");
             var prmptperr1 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr1");
             var prmptperr2 = CCOLGeneratorSettingsProvider.Default.GetElementName("prmerr2");
-            var prmportnr = CCOLGeneratorSettingsProvider.Default.GetElementName("prmportnr");
-            var prmbakportnr = CCOLGeneratorSettingsProvider.Default.GetElementName("prmbakportnr");
             var prmsrc = CCOLGeneratorSettingsProvider.Default.GetElementName("prmsrc");
             var prmdest = CCOLGeneratorSettingsProvider.Default.GetElementName("prmdest");
             var prmtmsgw = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtmsgw");
@@ -161,13 +159,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}/* ptp-parameters t.b.v. koppeling met PTP_{k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"{ts}/* --------------------------------------------- */");
+                sb.AppendLine($"  #if (defined AUTOMAAT)");
+                sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerAutomaatOmgeving};        /* poortnummer in het regeltoestel    */ /* @ af te stemmen tussen fabrikant met programmerende partij. PTP ID in de VRA of ITSApp (bij PTP over serieel is dit het COMpoort nummer). */");
+                sb.AppendLine($"  #else");
+                sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
+                sb.AppendLine($"  #endif");
                 if (c.PTPData.PTPInstellingenInParameters)
                 {
-                    sb.AppendLine($"  #if (defined AUTOMAAT)");
-                    sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = PRM[{_prmpf}{prmportnr}{k.TeKoppelenKruispunt}];        /* poortnummer in het regeltoestel     */  /* @ door fabrikant aanpassen */");
-                    sb.AppendLine($"  #else");
-                    sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");
-                    sb.AppendLine($"  #endif");
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = (byte)PRM[{_prmpf}{prmsrc}{k.TeKoppelenKruispunt}];        /* nummer van source                   */ /* @ maximaal 255 */");
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.DEST = (byte)PRM[{_prmpf}{prmdest}{k.TeKoppelenKruispunt}];       /* nummer van destination              */ /* @ maximaal 255 */");
                     sb.AppendLine();
@@ -177,12 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.CMSG_max=  PRM[{_prmpf}{prmcmsg}{k.TeKoppelenKruispunt}];    /* max. berichtenteller tbv. herhaling */");
                 }
                 else
-                {
-                    sb.AppendLine($"  #if (defined AUTOMAAT)");
-                    sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerAutomaatOmgeving};       /* poortnummer in het regeltoestel    */ /* @ door fabrikant aanpassen */");
-                    sb.AppendLine($"  #else");
-                    sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};       /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer     */");
-                    sb.AppendLine($"  #endif");
+                {   
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.SRC  = {k.NummerSource};        /* nummer van source                  */ /* @ maximaal 255 */");
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}.DEST = {k.NummerDestination};        /* nummer van destination             */ /* @ maximaal 255 */");
                     sb.AppendLine();
@@ -205,14 +198,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Gegevens voor verbinding naar backup */");
                     sb.AppendLine($"  #if defined PTP_{k.TeKoppelenKruispunt}{backup}PORT && defined AUTOMAAT");
-                    if (c.PTPData.PTPInstellingenInParameters)
-                    {
-                        sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.PORTNR     = PRM[{_prmpf}{prmbakportnr}{k.TeKoppelenKruispunt}{backup}];");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.PORTNR     = {k.PortNaarBackupRegeling};");
-                    }
+                    sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.PORTNR     = {k.PortNaarBackupRegeling};");
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.SRC        = PTP_{k.TeKoppelenKruispunt}.SRC;");
                     sb.AppendLine($"{ts}PTP_{k.TeKoppelenKruispunt}{backup}.DEST       = PTP_{k.TeKoppelenKruispunt}.DEST;");
 

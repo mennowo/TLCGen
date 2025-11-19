@@ -35,8 +35,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmerr1;
         private CCOLGeneratorCodeStringSettingModel _prmerr2;
 
-        private CCOLGeneratorCodeStringSettingModel _prmportnr;
-        private CCOLGeneratorCodeStringSettingModel _prmbakportnr;
         private CCOLGeneratorCodeStringSettingModel _prmsrc;
         private CCOLGeneratorCodeStringSettingModel _prmdest;
         private CCOLGeneratorCodeStringSettingModel _prmtmsgw;
@@ -152,21 +150,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.PTPData.PTPInstellingenInParameters)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmportnr}{k.TeKoppelenKruispunt}",
-                            k.PortnummerAutomaatOmgeving,
-                            CCOLElementTimeTypeEnum.None,
-                            _prmportnr, k.TeKoppelenKruispunt));
-                    if (int.TryParse(k.PortNaarBackupRegeling, out int bakpoort) && Enumerable.Range(0, 10).Contains(bakpoort))
-                    {
-                        _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_prmbakportnr}{k.TeKoppelenKruispunt}bak",
-                                bakpoort,
-                                CCOLElementTimeTypeEnum.None,
-                                _prmbakportnr, k.TeKoppelenKruispunt));
-                    }
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmsrc}{k.TeKoppelenKruispunt}",
