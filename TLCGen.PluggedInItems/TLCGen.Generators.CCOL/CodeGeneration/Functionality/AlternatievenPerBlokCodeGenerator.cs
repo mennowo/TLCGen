@@ -26,8 +26,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (plfc != null)
                     {
                         var bits = 0;
+                        // bepaal max aantal modules
                         var mlCount = c.Data.MultiModuleReeksen ? c.MultiModuleMolens.Max(x => x.Modules.Count) : c.ModuleMolen.Modules.Count;
+                        // bits voor max aantal modules
                         bits = bits | (int)(Math.Pow(2, mlCount) - 1);
+                        // bitwise AND tbv afzetten BITs hoger dan nodig/nuttig
                         var bitWiseBlokAlt = plfc.BitWiseBlokAlternatief & bits; 
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
