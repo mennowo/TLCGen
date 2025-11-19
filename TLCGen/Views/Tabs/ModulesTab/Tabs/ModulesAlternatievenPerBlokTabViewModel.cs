@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
                 {
                     AlternatievenPerBlok.Add(
                         new FaseCyclusAlternatiefPerBlokViewModel(
-                            new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 1023 }));
+                            new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 511 }));
                 }
             }
             if (message.RemovedFasen?.Count > 0)

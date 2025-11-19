@@ -25,10 +25,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var plfc = c.AlternatievenPerBlokData.AlternatievenPerBlok.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
                     if (plfc != null)
                     {
+                        var bits = 0;
+                        var mlCount = c.Data.MultiModuleReeksen ? c.MultiModuleMolens.Max(x => x.Modules.Count) : c.ModuleMolen.Modules.Count;
+                        bits = bits | (int)(Math.Pow(2, mlCount) - 1);
+                        var bitWiseBlokAlt = plfc.BitWiseBlokAlternatief & bits; 
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_prmaltb}{fc.Naam}",
-                                plfc.BitWiseBlokAlternatief,
+                                bitWiseBlokAlt,
                                 CCOLElementTimeTypeEnum.None,
                                 _prmaltb, fc.Naam));
                     }
