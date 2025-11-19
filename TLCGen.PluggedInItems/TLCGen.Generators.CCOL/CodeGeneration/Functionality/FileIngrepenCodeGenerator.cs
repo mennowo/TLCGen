@@ -35,6 +35,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _mperiod;
         private string _hplact;
         private string _hhd;
+        private string _hhdin;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -1148,7 +1149,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                             {
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}])");
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hhd}{fc.FaseCyclus}] || IH[{_hpf}{_hhdin}{fc.FaseCyclus}])");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
                                 sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.FaseCyclus}] &= ~BIT5;");
@@ -1252,6 +1253,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
 
             return base.SetSettings(settings);
         }
