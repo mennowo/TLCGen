@@ -544,23 +544,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         #region aansturing wachttijd lantaarns
                         sb.AppendLine($"{ts}/* aansturing wachttijd lantaarns (niet tijdens fixatie of prio ingreep) */");
                         var tts = ts;
-                        if (c.Data.FixatieMogelijk)
-                        {
-                            sb.AppendLine($"{ts}if (!CIF_IS[{_ispf}{_isfix}])");
-                            sb.AppendLine($"{ts}{{");
-                            tts = ts + ts;
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+                        { 
+                            if (c.Data.FixatieMogelijk)
+                            {
+                                sb.AppendLine($"{ts}if (!CIF_IS[{_ispf}{_isfix}])");
+                                sb.AppendLine($"{ts}{{");
+                                tts = ts + ts;
+                            }
+                            foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                            {
+                                sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
+                            }
+                            foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                            {
+                                sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1 || G[{_fcpf}{fc.Naam}]) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                            }
+                            if (c.Data.FixatieMogelijk)
+                            {
+                                sb.AppendLine($"{ts}}}");
+                            }
                         }
-                        foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        else
                         {
-                            sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
-                        }
-                        foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
-                        {
-                            sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1 || G[{_fcpf}{fc.Naam}]) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
-                        }
-                        if (c.Data.FixatieMogelijk)
-                        {
-                            sb.AppendLine($"{ts}}}");
+                            foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                            { 
+                                sb.AppendLine($"{ts}t_wacht_old[{_fcpf}{fc.Naam}] = t_wacht[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}t_wacht[{_fcpf}{fc.Naam}] = (AR[{_fcpf}{fc.Naam}] && (twacht_AR[{_fcpf}{fc.Naam}] < twacht[{_fcpf}{fc.Naam}]) || (twacht[{_fcpf}{fc.Naam}] < 0)) ? twacht_AR[{_fcpf}{fc.Naam}] : twacht[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}if ((t_wacht_old[{_fcpf}{fc.Naam}] < t_wacht[{_fcpf}{fc.Naam}]) && CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (t_wacht_old[{_fcpf}{fc.Naam}] > 0))");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}t_wacht_halt[{_fcpf}{fc.Naam}] = t_wacht_old[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}{ts}rr_twacht[{_fcpf}{fc.Naam}] = TRUE;");
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}else");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}if (t_wacht[{_fcpf}{fc.Naam}] <= t_wacht_halt[{_fcpf}{fc.Naam}])");
+                                sb.AppendLine($"{ts}{ts}{{");
+                                sb.AppendLine($"{ts}{ts}{ts}rr_twacht[{_fcpf}{fc.Naam}] = FALSE;");
+                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}if (rr_twacht[{_fcpf}{fc.Naam}])");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht_halt[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                                sb.AppendLine($"{ts}{ts}RT[{_tpf}{_twtv}{fc.Naam}] = TRUE;");
+                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{ts}else");
+                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{ts}{ts}wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                                sb.AppendLine($"{ts}}}");
+                            }
                         }
                         sb.AppendLine();
 

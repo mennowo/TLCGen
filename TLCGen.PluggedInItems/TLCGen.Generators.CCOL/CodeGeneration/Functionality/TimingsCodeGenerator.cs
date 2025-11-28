@@ -609,7 +609,8 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                     sb.AppendLine("#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    if (!c.TimingsData.TimingsUsePredictions) return null;
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc ||
+                        !c.TimingsData.TimingsUsePredictions) return null;
 
                     sb.AppendLine($"{ts}#ifndef NO_TIMETOX");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)

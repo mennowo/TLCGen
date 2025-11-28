@@ -116,5 +116,6 @@ void InterStartGroentijd_MeeverlengenDeelconflict_rgv(mulv fc1, mulv fc2);
 bool Correctie_TISG_Voorstart_rgv(count fcvs, count fcns, count tvs);
 bool Correctie_TISG_Gelijkstart_rgv(count fc1, count fc2);
 bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count prmlr);
+void ResetNaloopBits();
 
 #endif /* ISGFUNC_H */

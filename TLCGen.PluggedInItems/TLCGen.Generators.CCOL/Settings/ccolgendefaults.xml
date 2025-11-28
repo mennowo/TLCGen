@@ -1132,7 +1132,7 @@
           <Setting>
             <Default>xnl</Default>
             <Setting>xnl</Setting>
-            <Type>Parameter</Type>
+            <Type>Timer</Type>
             <Description>Tijd tegenhouden voedende richting naloop van _E1_ naar _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
@@ -1142,6 +1142,14 @@
             <Setting>nlsg</Setting>
             <Type>HulpElement</Type>
             <Description>Hulpelement naloop SG van _E1_ naar _E2_</Description>
+            <Categorie>CAT_Basisfuncties</Categorie>
+            <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
+          </Setting>
+          <Setting>
+            <Default>nleg</Default>
+            <Setting>nleg</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement naloop EG van _E1_ naar _E2_</Description>
             <Categorie>CAT_Basisfuncties</Categorie>
             <SubCategorie>SUBCAT_HardeKoppeling</SubCategorie>
           </Setting>
@@ -3544,6 +3552,14 @@
 			<Description>Intersignaalgroep tijden</Description>
 			<ElementGenerationOrder>360</ElementGenerationOrder>
 			<Settings>
+				<Setting>
+					<Default>isgdebug</Default>
+					<Setting>isgdebug</Setting>
+					<Type>Schakelaar</Type>
+					<Description>Debug aan/uit voor ISG func (testomgeving)</Description>
+					<Categorie>CAT_Basisfuncties</Categorie>
+					<SubCategorie>SUBCAT_Wachtgroen</SubCategorie>
+				</Setting>
 				<Setting>
 					<Default>isgfo</Default>
 					<Setting>fo</Setting>

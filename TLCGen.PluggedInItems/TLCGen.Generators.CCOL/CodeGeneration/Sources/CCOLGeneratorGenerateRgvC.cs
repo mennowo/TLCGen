@@ -42,7 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             var _tvs = CCOLGeneratorSettingsProvider.Default.GetElementName("tvs");
             var _tlr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
-            var _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
+            var _txnl = CCOLGeneratorSettingsProvider.Default.GetElementName("txnl");
 
             var _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
 
@@ -185,7 +185,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue))
                 {
                     sb.AppendLine(
-                        $"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_prmpf}{_prmxnl}{nl:vannaar});");
+                        $"{ts}{ts}wijziging |= Correctie_TISG_LateRelease_rgv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_txnl}{nl:vannaar});");
                 }
 
                 sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_rgv_add();");

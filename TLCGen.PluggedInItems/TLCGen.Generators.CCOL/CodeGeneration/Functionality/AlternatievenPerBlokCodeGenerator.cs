@@ -66,7 +66,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
-                    if (c.AlternatievenPerBlokData?.ToepassenAlternatievenPerBlok == true)
+                    if (c.Data.SynchronisatiesType != Models.Enumerations.SynchronisatiesTypeEnum.InterFunc &&
+                        c.AlternatievenPerBlokData?.ToepassenAlternatievenPerBlok == true)
                     {
                         sb.AppendLine($"{ts}/* BLOKGEBONDEN ALTERNATIEF */");
                         sb.AppendLine($"{ts}/* ======================== */");

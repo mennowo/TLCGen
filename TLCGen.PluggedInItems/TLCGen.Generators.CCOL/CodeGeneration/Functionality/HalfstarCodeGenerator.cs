@@ -28,13 +28,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _tnlegd;
 		private string _huks;
 		private string _hiks;
-        private string _prmxnl;
         private string _hnla;
         private string _hprioin;
         private string _hpriouit;
         private string _treallr;
-        private string _tinl;
         private string _trealil;
+        private string _txnl;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -465,7 +464,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* set voor alle richtingen waar een richting al inloopt of inrijdt */");
                     sb.AppendLine($"{ts}if (IH[homschtegenh]) /* tegenhouden inschakelen naar PL */");
                     sb.AppendLine($"{ts}{{");
-                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl;
                     foreach (var nl in c.InterSignaalGroep.Nalopen)
 					{
 						if (nl.Type == NaloopTypeEnum.StartGroen && nl.MaximaleVoorstart.HasValue)
@@ -586,17 +585,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							{
 								if (nl.MaximaleVoorstart.HasValue)
 								{
-									var tt = sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
-										? tinl
-										: _treallr;
-									sb.Append($"!T[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}] && !RT[{_tpf}{tt}{nl.FaseNaar}{nl.FaseVan}]");
+									var tt = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc
+										? _txnl
+										:
+											sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
+											? tinl
+											: _treallr;
+									var vannaar = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc
+										? $"{nl.FaseVan}{nl.FaseNaar}"
+										: $"{nl.FaseNaar}{nl.FaseVan}";
+
+                                    sb.Append($"!T[{_tpf}{tt}{vannaar}] && !RT[{_tpf}{tt}{vannaar}]");
 								}
 							}
 							++k;
 						}
 
                         if (maxVs) sb.AppendLine($"{ts}{ts}");
-                        sb.AppendLine($")");
+                        sb.Append($")");
 						sb.AppendLine($"{ts}{ts}{{");
 						sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
 						sb.AppendLine($"{ts}{ts}}}");
@@ -1095,7 +1101,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var vsTijdNl = "NG";
                             if (nl.MaximaleVoorstart.HasValue)
                             {
-	                            vsTijdNl = $"T_max[{_tpf}{_treallr}{nl.FaseNaar}{nl.FaseVan}]";
+								vsTijdNl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc
+									? $"T_max[{_tpf}{_txnl}{nl:vannaar}]"
+									: $"T_max[{_tpf}{_treallr}{nl:naarvan}]";
                             }
 
                             var nlv = "NG";
@@ -1118,7 +1126,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 					}
-                    var tinl2 = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                    var tinl2 = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl;
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.StartGroen && x.MaximaleVoorstart.HasValue))
                     {
                         var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
@@ -1823,15 +1831,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			_tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
 			_huks = CCOLGeneratorSettingsProvider.Default.GetElementName("huks");
             _hiks = CCOLGeneratorSettingsProvider.Default.GetElementName("hiks");
-            _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
 
             _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
-            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
             _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
+            _txnl = CCOLGeneratorSettingsProvider.Default.GetElementName("txnl");
 
             return base.SetSettings(settings);
 		}

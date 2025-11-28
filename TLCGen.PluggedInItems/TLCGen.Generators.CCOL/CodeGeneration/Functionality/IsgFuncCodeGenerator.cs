@@ -19,7 +19,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgfo;
         private CCOLGeneratorCodeStringSettingModel _tisgvs;
         private CCOLGeneratorCodeStringSettingModel _tisglr;
-        private CCOLGeneratorCodeStringSettingModel _tisginl;
         private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
@@ -27,6 +26,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schisggs;
         private CCOLGeneratorCodeStringSettingModel _hisgmad; // obsolete ?
         private CCOLGeneratorCodeStringSettingModel _usisgtijd;
+        private CCOLGeneratorCodeStringSettingModel _schisgdebug;
 #pragma warning restore 0649
         private string _prmaltg;
         private string _tnlfg;
@@ -39,11 +39,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlsgd;
         private string _hfile;
         private string _prmfperc;
-        private string _prmxnl;
         private string _hmad;
         private string _tvgnaloop;
         private string _schgs;
         private string _hnlsg;
+        private string _txnl;
 
         #endregion // Fields
 
@@ -52,6 +52,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements = new List<CCOLElement>();
 
             if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc) return;
+
+            _myElements.Add(
+                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    _schisgdebug.ToString(), 0, CCOLElementTimeTypeEnum.SCH_type, _schisgdebug));
 
             foreach (var fc in c.Fasen)
             {
@@ -113,12 +117,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_hisglos}{fc1.Naam}", _hisglos, fc1.Naam));
-
-                    _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tisginl}{fc1.Naam}{fc2.Naam}",
-                        nl.MaximaleVoorstart ?? 0, CCOLElementTimeTypeEnum.TE_type,
-                        _tisginl, fc1.Naam));
                 }
             }
 
@@ -221,7 +219,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 
                 CCOLCodeTypeEnum.PrioCIncludes => new[] { 140 },
                 
-                CCOLCodeTypeEnum.RegCPreApplication => new[] { 140 },
+                CCOLCodeTypeEnum.RegCPreApplication => new[] { 140, 240 },
                 CCOLCodeTypeEnum.RegCAanvragen => new[] { 140 },
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => new[] { 140 },
                 CCOLCodeTypeEnum.RegCMeetkriterium => new[] { 140 },
@@ -263,28 +261,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}PrioMeetKriteriumISG();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    sb.AppendLine($"{ts}ResetIsgVars(); /* zet alle interstartgroentijden op -1 @@ niet isgfunc_prio.c maar isgfunc.c @@ @@ aanroepen net voor bepalen isg tijden en niet hier @@ */");
-                    if (!c.HasPTorHD()) return "";
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen */");
-                    sb.AppendLine($"{ts}RijTijdScenario();");
-                    sb.AppendLine($"{ts}RijTijdScenario_Add();");
-                    sb.AppendLine($"{ts}InUitMelden();");
-                    sb.AppendLine($"{ts}InUitMelden_Add();");
-                    sb.AppendLine($"{ts}PrioInstellingen();");
-                    sb.AppendLine($"{ts}PrioInstellingen_Add();");
-                    sb.AppendLine($"{ts}PrioTimers();");
-                    sb.AppendLine($"{ts}WachtTijdBewaking();");
-                    sb.AppendLine($"{ts}WachtTijdBewaking_Add();");
-                    sb.AppendLine($"{ts}OnderMaximum();");
-                    sb.AppendLine($"{ts}OnderMaximumExtra();");
-                    sb.AppendLine($"{ts}OnderMaximum_Add();");
-                    sb.AppendLine($"{ts}BlokkeringsTijd();");
-                    sb.AppendLine($"{ts}BlokkeringsTijd_Add();");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen ISG */");
-                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG(); /* prioGKFC_MAX *gewijzigd naar prioFKFC_MAX tov functie in prio.c */");
-                    sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add(); /*@@ deze functie aanroep laten staan maar de functie zelf moet in moet in de 123456prio_add file @@ */");
+                    if (order == 140)
+                    { 
+                        sb.AppendLine($"{ts}ResetIsgVars(); /* zet alle interstartgroentijden op -1 @@ niet isgfunc_prio.c maar isgfunc.c @@ @@ aanroepen net voor bepalen isg tijden en niet hier @@ */");
+                        if (!c.HasPTorHD()) return "";
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen */");
+                        sb.AppendLine($"{ts}RijTijdScenario();");
+                        sb.AppendLine($"{ts}RijTijdScenario_Add();");
+                        sb.AppendLine($"{ts}InUitMelden();");
+                        sb.AppendLine($"{ts}InUitMelden_Add();");
+                        sb.AppendLine($"{ts}PrioInstellingen();");
+                        sb.AppendLine($"{ts}PrioInstellingen_Add();");
+                        sb.AppendLine($"{ts}PrioTimers();");
+                        sb.AppendLine($"{ts}WachtTijdBewaking();");
+                        sb.AppendLine($"{ts}WachtTijdBewaking_Add();");
+                        sb.AppendLine($"{ts}OnderMaximum();");
+                        sb.AppendLine($"{ts}OnderMaximumExtra();");
+                        sb.AppendLine($"{ts}OnderMaximum_Add();");
+                        sb.AppendLine($"{ts}BlokkeringsTijd();");
+                        sb.AppendLine($"{ts}BlokkeringsTijd_Add();");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Aanroepen tbv prioriteitsingrepen ISG */");
+                        sb.AppendLine($"{ts}PrioriteitsToekenning_ISG(); /* prioGKFC_MAX *gewijzigd naar prioFKFC_MAX tov functie in prio.c */");
+                        sb.AppendLine($"{ts}PrioriteitsToekenning_ISG_Add(); /*@@ deze functie aanroep laten staan maar de functie zelf moet in moet in de 123456prio_add file @@ */");
+                    }
+                    if (order == 240)
+                    {
+                        sb.AppendLine($"{ts}ResetNaloopBits();");
+                    }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     if (!c.HasPTorHD()) return "";
@@ -397,7 +402,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                         if (fc1 == null) continue;
-                        sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisginl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_txnl}{nl:vannaar});");
                     }
 
                     sb.AppendLine();
@@ -824,10 +829,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
-            _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
+            _txnl = CCOLGeneratorSettingsProvider.Default.GetElementName("txnl");
 
             return base.SetSettings(settings);
         }

@@ -763,6 +763,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
             var _schstar = CCOLGeneratorSettingsProvider.Default.GetElementName("schstar");
             var _mstarprog = CCOLGeneratorSettingsProvider.Default.GetElementName("mstarprog");
+            var _schisgdebug = CCOLGeneratorSettingsProvider.Default.GetElementName("schisgdebug");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
@@ -826,6 +827,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{{");
             }
 
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine($"{tsts}Meetkriterium();");
+            }
+
             switch (c.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.MaxGroentijden:
@@ -842,7 +848,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{tsts}Wachtgroen();");
-            sb.AppendLine($"{tsts}Meetkriterium();");
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+            { 
+                sb.AppendLine($"{tsts}Meetkriterium();");
+            }
             sb.AppendLine($"{tsts}Meeverlengen();");
             sb.AppendLine($"{tsts}Synchronisaties();");
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
@@ -924,7 +933,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if(c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
-                sb.AppendLine($"{ts}IsgDebug();");
+                sb.AppendLine($"{ts}if (SCH[{_schpf}{_schisgdebug}]) IsgDebug();");
             }
 
             sb.AppendLine("");

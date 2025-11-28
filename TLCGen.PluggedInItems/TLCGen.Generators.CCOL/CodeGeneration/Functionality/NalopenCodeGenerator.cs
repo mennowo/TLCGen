@@ -26,12 +26,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tnlcvd;
         private CCOLGeneratorCodeStringSettingModel _tnleg;
         private CCOLGeneratorCodeStringSettingModel _tnlegd;
-        private CCOLGeneratorCodeStringSettingModel _prmxnl;
+        private CCOLGeneratorCodeStringSettingModel _txnl;
         private CCOLGeneratorCodeStringSettingModel _hnlsg;
+        private CCOLGeneratorCodeStringSettingModel _hnleg;
         private CCOLGeneratorCodeStringSettingModel _tvgnaloop;
 #pragma warning restore 0649
 	    private string _homschtegenh;
-	    private string _tinl;
 	    private string _trealil;
 	    private string _treallr;
 	    private string _hmad;
@@ -65,6 +65,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type, 
                             _tnl, nl.FaseVan, nl.FaseNaar));
                 }
+                if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
+                    nl.Type == NaloopTypeEnum.EindeGroen)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_hnleg}{nl.FaseVan}{nl.FaseNaar}",
+                            _hnleg, nl.FaseVan, nl.FaseNaar));
+                }
                 if (nl.Type == NaloopTypeEnum.StartGroen)
                 {
                     _myElements.Add(
@@ -96,10 +104,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmxnl}{nl.FaseVan}{nl.FaseNaar}",
+                            $"{_txnl}{nl.FaseVan}{nl.FaseNaar}",
                             nl.MaximaleVoorstart.Value,
                             CCOLElementTimeTypeEnum.TE_type, 
-                            _prmxnl, nl.FaseVan, nl.FaseNaar));
+                            _txnl, nl.FaseVan, nl.FaseNaar));
                 }
             }
         }
@@ -124,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCInitApplication => new []{30},
+                CCOLCodeTypeEnum.RegCInitApplication => new[] { 30 },
                 CCOLCodeTypeEnum.RegCPreApplication => new []{30},
                 CCOLCodeTypeEnum.RegCSynchronisaties => new []{20},
                 CCOLCodeTypeEnum.RegCMaxgroenNaAdd => new []{10},
@@ -177,18 +185,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
-                        sb.AppendLine($"{ts}/* Nalopen */");
-                        sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine();
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT2;");
-                        sb.AppendLine($"{ts}{ts}YV[fc] &= ~BIT2;");
-                        sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT2;");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
                         if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc)
                         {
+                            sb.AppendLine($"{ts}/* Nalopen */");
+                            sb.AppendLine($"{ts}/* ------- */");
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT2;");
+                            sb.AppendLine($"{ts}{ts}YV[fc] &= ~BIT2;");
+                            sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT2;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
                                 var vn = nl.FaseVan + nl.FaseNaar;
@@ -382,7 +390,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                             var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
-                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tinl;
+                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl.ToString();
                             if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
                                 sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                             {
@@ -407,7 +415,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()})(G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()})(G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}] && IH[{_hpf}{_hnleg}{nl:vannaar}]));");
                                 }
                                 else if (nl.MaximaleVoorstart.HasValue)
                                 {
@@ -447,7 +455,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings) 
         { 
             _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
-            _tinl = CCOLGeneratorSettingsProvider.Default.GetElementName("tinl");
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
             _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");

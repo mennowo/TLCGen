@@ -1172,6 +1172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc) return "";
                     if (!c.FileIngrepen.Any()) return "";
 
                     var yes = false;
