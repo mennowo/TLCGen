@@ -569,6 +569,80 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     var sb = new StringBuilder();
 
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+                    {
+                        var bepaalIsg = addlines.All(x => !x.Contains("BepaalInterStartGroenTijden_Add"));
+                        var correctieTisg = addlines.All(x => !x.Contains("Correctie_TISG_add"));
+                        var correctieIsgtPrio = addlines.All(x => !x.Contains("Correctie_InterStartGroentijdTijd_PRIO_Add"));
+                        var maxWtModPrimIsg = addlines.All(x => !x.Contains("max_wachttijd_modulen_primair_ISG_Add"));
+                        var altOngecoor = addlines.All(x => !x.Contains("AlternatiefOngecoordineerd_Add"));
+                        var corrRealtijd = addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
+                        var bepaalRealTijd = addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
+
+                        foreach (var l in addlines)
+                        {
+                            var line = l;
+                            if (bepaalIsg && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void BepaalInterStartGroenTijden_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (correctieTisg && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void Correctie_TISG_add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (correctieIsgtPrio && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void Correctie_InterStartGroentijdTijd_PRIO_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (maxWtModPrimIsg && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void max_wachttijd_modulen_primair_ISG_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (altOngecoor && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void AlternatiefOngecoordineerd_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (corrRealtijd && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void CorrectieRealisatieTijd_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (bepaalRealTijd && line.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void BepaalRealisatieTijden_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+
+                            sb.AppendLine(line);
+                        }
+                    }
+
                     foreach (var l in addlines)
                     {
                         var line = l;
@@ -664,6 +738,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         sb.AppendLine(line);
                     }
+
+
                     File.Delete(filename);
                     File.WriteAllText(filename, sb.ToString(), encoding);
                 }

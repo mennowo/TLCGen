@@ -43,7 +43,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tvgnaloop;
         private string _schgs;
         private string _hnlsg;
-        private string _txnl;
 
         #endregion // Fields
 
@@ -206,24 +205,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCIncludes => new[] { 140 },
-                CCOLCodeTypeEnum.RegCTop=> new[] { 140 },
-                CCOLCodeTypeEnum.RegCVerlenggroen => new[] { 25, 90, 130, 140 },
-                CCOLCodeTypeEnum.RegCMaxgroen => new[] { 90, 130, 140 },
-                CCOLCodeTypeEnum.RegCInitApplication => new[] { 140 },
-                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => new[] { 10 },
-                CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => new[] { 10 },
-                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => new[] { 150 },
-                CCOLCodeTypeEnum.RegCMeeverlengen => new[] { 40 },
-                CCOLCodeTypeEnum.TabCIncludes => new[] { 140 },
+                CCOLCodeTypeEnum.RegCBeforeIncludes => [140],
+                CCOLCodeTypeEnum.RegCIncludes => [140],
+                CCOLCodeTypeEnum.RegCTop => [140],
+                CCOLCodeTypeEnum.RegCVerlenggroen => [25, 90, 130, 140],
+                CCOLCodeTypeEnum.RegCMaxgroen => [90, 130, 140],
+                CCOLCodeTypeEnum.RegCInitApplication => [140],
+                CCOLCodeTypeEnum.RegCBepaalRealisatieTijden => [10],
+                CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden => [10],
+                CCOLCodeTypeEnum.RegCRealisatieAfhandeling => [150],
+                CCOLCodeTypeEnum.RegCMeeverlengen => [40],
+                CCOLCodeTypeEnum.TabCIncludes => [140],
                 
-                CCOLCodeTypeEnum.PrioCIncludes => new[] { 140 },
+                CCOLCodeTypeEnum.PrioCIncludes => [140],
                 
-                CCOLCodeTypeEnum.RegCPreApplication => new[] { 140, 240 },
-                CCOLCodeTypeEnum.RegCAanvragen => new[] { 140 },
-                CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => new[] { 140 },
-                CCOLCodeTypeEnum.RegCMeetkriterium => new[] { 140 },
-                CCOLCodeTypeEnum.RegCPostApplication => new[] { 140 },
+                CCOLCodeTypeEnum.RegCPreApplication => [140, 240],
+                CCOLCodeTypeEnum.RegCAanvragen => [140],
+                CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => [140],
+                CCOLCodeTypeEnum.RegCMeetkriterium => [140],
+                CCOLCodeTypeEnum.RegCPostApplication => [140],
                 
                 _ => null
             };
@@ -238,6 +238,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCBeforeIncludes:
+                    sb.AppendLine($"#define INTERFUNC");
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCIncludes:
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                     {
@@ -402,7 +405,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var fc1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                         if (fc1 == null) continue;
-                        sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_txnl}{nl:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= TISG_LateRelease_PRIO_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
                     }
 
                     sb.AppendLine();
@@ -832,7 +835,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
-            _txnl = CCOLGeneratorSettingsProvider.Default.GetElementName("txnl");
 
             return base.SetSettings(settings);
         }

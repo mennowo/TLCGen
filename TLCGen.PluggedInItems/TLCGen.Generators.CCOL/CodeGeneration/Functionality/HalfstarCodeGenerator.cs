@@ -33,7 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hpriouit;
         private string _treallr;
         private string _trealil;
-        private string _txnl;
+        private string _tisgxnl;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -464,7 +464,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* set voor alle richtingen waar een richting al inloopt of inrijdt */");
                     sb.AppendLine($"{ts}if (IH[homschtegenh]) /* tegenhouden inschakelen naar PL */");
                     sb.AppendLine($"{ts}{{");
-                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl;
+                    var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tisgxnl;
                     foreach (var nl in c.InterSignaalGroep.Nalopen)
 					{
 						if (nl.Type == NaloopTypeEnum.StartGroen && nl.MaximaleVoorstart.HasValue)
@@ -586,7 +586,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								if (nl.MaximaleVoorstart.HasValue)
 								{
 									var tt = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc
-										? _txnl
+										? _tisgxnl
 										:
 											sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger }
 											? tinl
@@ -1102,7 +1102,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (nl.MaximaleVoorstart.HasValue)
                             {
 								vsTijdNl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc
-									? $"T_max[{_tpf}{_txnl}{nl:vannaar}]"
+									? $"T_max[{_tpf}{_tisgxnl}{nl:vannaar}]"
 									: $"T_max[{_tpf}{_treallr}{nl:naarvan}]";
                             }
 
@@ -1126,7 +1126,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
 					}
-                    var tinl2 = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl;
+                    var tinl2 = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tisgxnl;
                     foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.StartGroen && x.MaximaleVoorstart.HasValue))
                     {
                         var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
@@ -1838,7 +1838,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
             _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
-            _txnl = CCOLGeneratorSettingsProvider.Default.GetElementName("txnl");
+            _tisgxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("tisgxnl");
 
             return base.SetSettings(settings);
 		}

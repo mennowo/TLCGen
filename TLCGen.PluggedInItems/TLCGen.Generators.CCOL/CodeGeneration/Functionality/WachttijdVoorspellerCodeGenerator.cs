@@ -725,8 +725,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}if (RR[{_fcpf}{gs:van}] & PRIO_RR_BIT) RR[{_fcpf}{gs:naar}] |= PRIO_RR_BIT;");
-                        sb.AppendLine($"{ts}if (RR[{_fcpf}{gs:naar}] & PRIO_RR_BIT) RR[{_fcpf}{gs:van}] |= PRIO_RR_BIT;");
+                        sb.AppendLine($"{ts}if (" +
+                            $"{(gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schgs}{gs:vannaar}] && (" : "")}" +
+                            $"RR[{_fcpf}{gs:van}] & PRIO_RR_BIT{(gs.Schakelbaar != AltijdAanUitEnum.Altijd ? ")" : "")}) " +
+                                $"RR[{_fcpf}{gs:naar}] |= PRIO_RR_BIT;");
+                        sb.AppendLine($"{ts}if (" +
+                            $"{(gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"SCH[{_schpf}{_schgs}{gs:vannaar}] && (" : "")}" +
+                            $"RR[{_fcpf}{gs:naar}] & PRIO_RR_BIT{(gs.Schakelbaar != AltijdAanUitEnum.Altijd ? ")" : "")}) " +
+                                $"RR[{_fcpf}{gs:van}] |= PRIO_RR_BIT;");
                     }
 
                     return sb.ToString();

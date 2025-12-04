@@ -913,7 +913,7 @@ void InterStartGroentijd_MeeverlengenDeelconflict_PRIO(mulv fc1, mulv fc2)
 }
 void PasRealisatieTijdenAanVanwegeBRLateRelease(count fc)
 {
-    if ((RA[fc] || AA[fc]) && BR[fc])
+    if ((RA[fc] || AA[fc] && !G[fc]) && BR[fc]) 
     {
         int n, i;
         for (n = 0; n < FKFC_MAX[fc]; n++)

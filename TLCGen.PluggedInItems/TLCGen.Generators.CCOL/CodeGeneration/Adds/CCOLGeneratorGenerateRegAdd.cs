@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Shapes;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -143,6 +144,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
+            if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
+            {
+                sb.AppendLine("void BepaalInterStartGroenTijden_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void Correctie_TISG_add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void Correctie_InterStartGroentijdTijd_PRIO_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void max_wachttijd_modulen_primair_ISG_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void AlternatiefOngecoordineerd_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void CorrectieRealisatieTijd_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine("void BepaalRealisatieTijden_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine($"{ts}");
+                sb.AppendLine("}");
+                sb.AppendLine();
+            }
             sb.AppendLine("void PostApplication_Add(void)");
             sb.AppendLine("{");
             sb.AppendLine("");

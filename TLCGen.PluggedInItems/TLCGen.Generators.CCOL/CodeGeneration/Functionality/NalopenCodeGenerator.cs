@@ -26,14 +26,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tnlcvd;
         private CCOLGeneratorCodeStringSettingModel _tnleg;
         private CCOLGeneratorCodeStringSettingModel _tnlegd;
-        private CCOLGeneratorCodeStringSettingModel _txnl;
         private CCOLGeneratorCodeStringSettingModel _hnlsg;
         private CCOLGeneratorCodeStringSettingModel _hnleg;
         private CCOLGeneratorCodeStringSettingModel _tvgnaloop;
 #pragma warning restore 0649
 	    private string _homschtegenh;
 	    private string _trealil;
-	    private string _treallr;
+        private string _treallr;
+        private string _tisgxnl;
 	    private string _hmad;
 
         #endregion // Fields
@@ -99,15 +99,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _myElements.Add(elem);
                         }
                     }
-                }
-                if (c.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc && nl.MaximaleVoorstart.HasValue)
-                {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_txnl}{nl.FaseVan}{nl.FaseNaar}",
-                            nl.MaximaleVoorstart.Value,
-                            CCOLElementTimeTypeEnum.TE_type, 
-                            _txnl, nl.FaseVan, nl.FaseNaar));
                 }
             }
         }
@@ -390,7 +381,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                             var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
-                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _txnl.ToString();
+                            var tinl = c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc ? _trealil : _tisgxnl.ToString();
                             if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
                                 sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                             {
@@ -458,6 +449,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _treallr = CCOLGeneratorSettingsProvider.Default.GetElementName("treallr");
             _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
+            _tisgxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("tisgxnl");
             return base.SetSettings(settings);
 	    }
     }
