@@ -8,6 +8,7 @@ namespace TLCGen.Models.Enumerations
     {
         [Description("Realfunc")]
         RealFunc,
+        [Browsable(false)]
         [Description("Interfunc")]
         InterFunc
     }

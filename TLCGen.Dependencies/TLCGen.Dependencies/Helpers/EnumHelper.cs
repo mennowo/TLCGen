@@ -97,7 +97,35 @@ namespace TLCGen.Helpers
                 throw new InvalidOperationException("The EnumType must be specified.");
 
             var actualEnumType = Nullable.GetUnderlyingType(this._enumType) ?? this._enumType;
-            var enumValues = Enum.GetValues(actualEnumType);
+            var allEnumValues = Enum.GetValues(actualEnumType);
+            
+            // Filter out enum values with [Browsable(false)]
+            var filteredValues = new List<object>();
+            foreach (var enumValue in allEnumValues)
+            {
+                var fieldInfo = actualEnumType.GetField(enumValue.ToString());
+                if (fieldInfo != null)
+                {
+                    var browsableAttr = fieldInfo.GetCustomAttributes(typeof(BrowsableAttribute), true);
+                    if (browsableAttr != null && browsableAttr.Length == 1)
+                    {
+                        if (((BrowsableAttribute)browsableAttr[0]).Browsable)
+                        {
+                            filteredValues.Add(enumValue);
+                        }
+                    }
+                    else
+                    {
+                        filteredValues.Add(enumValue);
+                    }
+                }
+                else
+                {
+                    filteredValues.Add(enumValue);
+                }
+            }
+
+            var enumValues = filteredValues.ToArray();
 
             if (actualEnumType == this._enumType)
                 return enumValues;

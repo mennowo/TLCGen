@@ -229,7 +229,26 @@ namespace TLCGen.Controls
                         var _items = prop.PropertyType.GetEnumValues();
                         foreach(var s in _items)
                         {
-                            items.Add(s);
+                            var fieldInfo = prop.PropertyType.GetField(s.ToString());
+                            if (fieldInfo != null)
+                            {
+                                var browsableAttr = fieldInfo.GetCustomAttributes(typeof(BrowsableAttribute), true);
+                                if (browsableAttr != null && browsableAttr.Length == 1)
+                                {
+                                    if (((BrowsableAttribute)browsableAttr[0]).Browsable)
+                                    {
+                                        items.Add(s);
+                                    }
+                                }
+                                else
+                                {
+                                    items.Add(s);
+                                }
+                            }
+                            else
+                            {
+                                items.Add(s);
+                            }
                         }
                         ((ComboBox)editor).ItemsSource = items;
                         var binding = new Binding();
