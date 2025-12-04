@@ -1,5 +1,12 @@
-TLCGen=12.4.0.17
+TLCGen=12.4.0.18
 RN==TLCGen
+TLCGen versie: 12.4.0.18
+- Geen parameter voor PTP poortnummers
+- Voorbereiding toevoegen 'interstartgroen func' incl. aanpassingen detectiestoring in CCOL reg.c
+- Fix beschikbaarheid gebruikersopties import/export
+- Fix voor data gewijzigd vlag bij wijzigingen in bitmap
+- Fix voor gelijkstart van voetgangers bij optie 'altijd'
+- Talrijke kleine fixes en verbeteringen
 TLCGen versie: 12.4.0.17
 - Fix voor niet aanmaken dummy detectoren bij toevoegen KAR ingreep
 - Fix voor toevoegen/verwijderen kruispunt armen

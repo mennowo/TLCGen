@@ -33,9 +33,9 @@ class Build : NukeBuild
 
     const bool DoClean = true;
     const bool DoSign = true;
-    const bool DoDeploy = false;
-    const bool DoArchiveOld = false;
-    const string ArchiveOldVersion = "12.4.0.15";
+    const bool DoDeploy = true;
+    const bool DoArchiveOld = true;
+    const string ArchiveOldVersion = "12.4.0.17";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -43,12 +43,13 @@ class Build : NukeBuild
         {
             OutputDirectory.CreateOrCleanDirectory();
 
-            if (!DoClean) return;
-
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(x =>
-            {
-                Directory.EnumerateFiles(x).ForEach(File.Delete);
-            });
+            if (DoClean) 
+            { 
+                SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(x =>
+                {
+                    Directory.EnumerateFiles(x).ForEach(File.Delete);
+                });
+            }
         });
 
     Target Restore => _ => _
