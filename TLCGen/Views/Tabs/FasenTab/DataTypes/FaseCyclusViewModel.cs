@@ -601,7 +601,7 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
 
         public ObservableCollection<string> MeeverlengenOpties => _meeverlengenOpties ??= new ObservableCollection<string>();
 
-        public bool IsNotInterfunc {get;set; }
+        public bool IsNotInterfunc => TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc;
 
         public string MeeverlengenTypeString
         {
