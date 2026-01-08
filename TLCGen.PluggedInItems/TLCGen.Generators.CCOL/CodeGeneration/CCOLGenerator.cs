@@ -567,81 +567,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var detStorMaxgroen = addlines.All(x => !x.Contains("DetectieStoring_MaxGroen_Add"));
                     var detStorMelding = addlines.All(x => !Regex.IsMatch(x, @"DetectieStoring_Add.*VERWIJDEREN"));
 
-                    var sb = new StringBuilder();
+                    var bepaalIsg = false;
+                    var correctieTisg = false;
+                    var correctieIsgtPrio = false;
+                    var maxWtModPrimIsg = false;
+                    var altOngecoor = false;
+                    var corrRealtijd = false;
+                    var bepaalRealTijd = false;
 
-                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc)
+                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                     {
-                        var bepaalIsg = addlines.All(x => !x.Contains("BepaalInterStartGroenTijden_Add"));
-                        var correctieTisg = addlines.All(x => !x.Contains("Correctie_TISG_add"));
-                        var correctieIsgtPrio = addlines.All(x => !x.Contains("Correctie_InterStartGroentijdTijd_PRIO_Add"));
-                        var maxWtModPrimIsg = addlines.All(x => !x.Contains("max_wachttijd_modulen_primair_ISG_Add"));
-                        var altOngecoor = addlines.All(x => !x.Contains("AlternatiefOngecoordineerd_Add"));
-                        var corrRealtijd = addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
-                        var bepaalRealTijd = addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
-
-                        foreach (var l in addlines)
-                        {
-                            var line = l;
-                            if (bepaalIsg && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void BepaalInterStartGroenTijden_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (correctieTisg && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void Correctie_TISG_add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (correctieIsgtPrio && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void Correctie_InterStartGroentijdTijd_PRIO_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (maxWtModPrimIsg && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void max_wachttijd_modulen_primair_ISG_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (altOngecoor && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void AlternatiefOngecoordineerd_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (corrRealtijd && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void CorrectieRealisatieTijd_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-                            if (bepaalRealTijd && line.Contains("post_dump_application"))
-                            {
-                                sb.AppendLine("void BepaalRealisatieTijden_Add()");
-                                sb.AppendLine("{");
-                                sb.AppendLine($"{ts}");
-                                sb.AppendLine("}");
-                                sb.AppendLine();
-                            }
-
-                            sb.AppendLine(line);
-                        }
+                        bepaalIsg = addlines.All(x => !x.Contains("BepaalInterStartGroenTijden_Add"));
+                        correctieTisg = addlines.All(x => !x.Contains("Correctie_TISG_add"));
+                        correctieIsgtPrio = addlines.All(x => !x.Contains("Correctie_InterStartGroentijdTijd_PRIO_Add"));
+                        maxWtModPrimIsg = addlines.All(x => !x.Contains("max_wachttijd_modulen_primair_ISG_Add"));
+                        altOngecoor = addlines.All(x => !x.Contains("AlternatiefOngecoordineerd_Add"));
+                        corrRealtijd = addlines.All(x => !x.Contains("CorrectieRealisatieTijd_Add"));
+                        bepaalRealTijd = addlines.All(x => !x.Contains("BepaalRealisatieTijden_Add"));
                     }
+
+                    var sb = new StringBuilder();
 
                     foreach (var l in addlines)
                     {
@@ -733,6 +678,62 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("void post_system_application2()");
                             sb.AppendLine("{");
                             sb.AppendLine();
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (bepaalIsg && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void BepaalInterStartGroenTijden_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (correctieTisg && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void Correctie_TISG_add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (correctieIsgtPrio && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void Correctie_InterStartGroentijdTijd_PRIO_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (maxWtModPrimIsg && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void max_wachttijd_modulen_primair_ISG_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (altOngecoor && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void AlternatiefOngecoordineerd_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (corrRealtijd && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void CorrectieRealisatieTijd_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
+                            sb.AppendLine("}");
+                            sb.AppendLine();
+                        }
+                        if (bepaalRealTijd && line.Contains("post_dump_application"))
+                        {
+                            sb.AppendLine("void BepaalRealisatieTijden_Add()");
+                            sb.AppendLine("{");
+                            sb.AppendLine($"{ts}");
                             sb.AppendLine("}");
                             sb.AppendLine();
                         }
