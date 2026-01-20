@@ -227,6 +227,7 @@ namespace TLCGen.Specificator
             if (msg.NewFileName == null) return;
 
             ControllerFileName = msg.NewFileName;
+            SpecificatorVM.UpdateCommands();
         }
 
         #endregion // TLCGen Events

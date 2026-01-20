@@ -525,23 +525,27 @@ namespace TLCGen.ViewModels
                 }
             }
             
-            foreach(var i in TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(_Controller))
+            var ioElements = TLCGenControllerDataProvider.Default.CurrentGenerator.GetAllIOElements(_Controller);
+            if (ioElements != null) 
             {
-                switch(i.ElementType)
+                foreach (var i in ioElements)
                 {
-                    case IOElementTypeEnum.FaseCyclus:
-                        Fasen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Fase));
-                        break;
-                    case IOElementTypeEnum.Detector:
-                    case IOElementTypeEnum.SelectiveDetector:
-                        Detectoren.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Detector));
-                        break;
-                    case IOElementTypeEnum.Output:
-                        OverigeUitgangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Uitgang));
-                        break;
-                    case IOElementTypeEnum.Input:
-                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
-                        break;
+                    switch(i.ElementType)
+                    {
+                        case IOElementTypeEnum.FaseCyclus:
+                            Fasen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Fase));
+                            break;
+                        case IOElementTypeEnum.Detector:
+                        case IOElementTypeEnum.SelectiveDetector:
+                            Detectoren.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Detector));
+                            break;
+                        case IOElementTypeEnum.Output:
+                            OverigeUitgangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Uitgang));
+                            break;
+                        case IOElementTypeEnum.Input:
+                            OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
+                            break;
+                    }
                 }
             }
         }
