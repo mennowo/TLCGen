@@ -744,7 +744,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (matrix[i, j] >= -1) continue;
                         var k = "FK";
-                        string fkType = null;
                         if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
                         if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
                         sb.AppendLine($"{ts}{totigmax}[{_fcpf}{c.Fasen[i].Naam}][{_fcpf}{c.Fasen[j].Naam}] = {k};");

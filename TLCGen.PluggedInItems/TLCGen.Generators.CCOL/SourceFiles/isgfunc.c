@@ -351,11 +351,11 @@ void Realisatietijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2)
             {
                 if (!AR[fc1])
                 {
-                    REALISATIETIJD[fc1][fc] = max(REALISATIETIJD[fc1][fc], TFG_max[fc1] - TFG_timer[fc1] + ((((TVG_max[fc1] - TVG_timer[fc1]) && !MG[fc1]) > 0) ? (TVG_max[fc1] - TVG_timer[fc1]) : 0) + TIGR[fc2][fc] - TIGR[fc1][fc]);
+                    REALISATIETIJD[fc1][fc] = max(REALISATIETIJD[fc1][fc], TFG_max[fc1] - TFG_timer[fc1] + ((((TVG_max[fc1] - TVG_timer[fc1]) && !MG[fc1]) > 0) ? (TVG_max[fc1] - TVG_timer[fc1]) : 0) + TIGR[fc2][fc]);
                 }
                 else
                 {
-                    REALISATIETIJD[fc1][fc] = max(REALISATIETIJD[fc1][fc], TFG_max[fc1] - TFG_timer[fc1] + TVG_AR[fc1] - (((TVG_AR[fc1] > TVG_timer[fc1]) && !MG[fc1]) ? TVG_timer[fc1] : 0) + TIGR[fc2][fc] - TIGR[fc1][fc]);
+                    REALISATIETIJD[fc1][fc] = max(REALISATIETIJD[fc1][fc], TFG_max[fc1] - TFG_timer[fc1] + TVG_AR[fc1] - (((TVG_AR[fc1] > TVG_timer[fc1]) && !MG[fc1]) ? TVG_timer[fc1] : 0) + TIGR[fc2][fc]);
                 }
             }
         }

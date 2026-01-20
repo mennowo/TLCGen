@@ -872,7 +872,6 @@ WeakReferenceMessengerEx.Default.Send(new NameChangingMessage(TLCGenObjectTypeEn
         {
             SetMeeverlengenOpties();
             SetAlternatieveRuimteTypeOpties();
-            IsNotInterfunc = TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc;
             OnPropertyChanged(nameof(IsNotInterfunc));
         }
 

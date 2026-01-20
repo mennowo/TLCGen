@@ -678,7 +678,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCDetectieStoring(ControllerModel controller)
         {
             var sb = new StringBuilder();
-            var storingsopvang = false;
             
             sb.AppendLine("void DetectieStoring_Aanvraag(void)");
             sb.AppendLine("{");

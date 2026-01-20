@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
@@ -154,10 +155,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return type switch
             {
-                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules => new List<CCOLLocalVariable>{new("int", "fc")},
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules =>
+                [
+                    new("int", "fc"),
+                    new(c.GetBoolV(), "wijziging", "TRUE"),
+                    new("mulv", "PAR_old[FCMAX]"),
+                    new("mulv", "PAR_los_old[FCMAX]", "{0}"),
+                ],
                 CCOLCodeTypeEnum.PrioCPARCorrecties => 
                     c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Nalopen.Any()
-                        ? new List<CCOLLocalVariable>{new("int", "fc")}
+                        ?
+                        [
+                            new("int", "fc")
+                        ]
                         : base.GetFunctionLocalVariables(c, type),
                 _ => base.GetFunctionLocalVariables(c, type)
             };
@@ -189,7 +199,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.PrioCPARCorrecties:
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc) sb.Append(GetRealFuncPARCorrections(c, ts, false));
-                    if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc) sb.Append(GetInterFuncPARCorrecties(c, ts));
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
@@ -316,7 +325,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         List<Tuple<string, List<string>>> gelijkstarttuples = null;
                         gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
-                        var yes = false;
                         
                         if (c.InterSignaalGroep.Nalopen.Any())
                         {
@@ -483,6 +491,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                         {
+                            sb.AppendLine($"{ts}/* PAR correcties */");
                             sb.Append(GetInterFuncPARCorrecties(c, ts));
                         }
 
@@ -675,9 +684,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private string GetInterFuncPARCorrecties(ControllerModel c, string ts)
         {
-            return ""; // has been disabled for now
-
             var sb = new StringBuilder();
+
+            sb.AppendLine($"{ts}do");
+            sb.AppendLine($"{ts}{{");
+
+            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; fc++)");
+            sb.AppendLine($"{ts}{ts}{{");
+            sb.AppendLine($"{ts}{ts}{ts}PAR_old[fc] = PAR[fc];");
+            sb.AppendLine($"{ts}{ts}{ts}PAR_los_old[fc] = PAR_los[fc];");
+            sb.AppendLine($"{ts}{ts}}}");
+            sb.AppendLine($"{ts}{ts}wijziging = FALSE;");
 
             var first = true;
             foreach (var nl in c.InterSignaalGroep.Nalopen)
@@ -688,35 +705,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
                     sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                 {
-                    if (first) sb.AppendLine($"{ts}/* Tegenrichting moet ook kunnen koppelen bij koppelaanvraag */");
+                    if (first) sb.AppendLine($"{ts}{ts}/* Tegenrichting moet ook kunnen koppelen bij koppelaanvraag */");
                     first = false;
                     var d = nl.Detectoren.First();
-                    sb.AppendLine($"{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:naar}] && PAR[{_fcpf}{nl:van}];");
+                    sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:naar}] && PAR[{_fcpf}{nl:van}];");
                 }
             }
             if (!first) sb.AppendLine();
             first = true;
 
-            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            foreach (var nl in c.InterSignaalGroep.Voorstarten)
             {
                 var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                 var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 
-                if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
-                    sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
-                {
-                    if (first) sb.AppendLine($"{ts}/* Bepaal naloop voetgangers wel/niet toegestaan */");
-                    first = false;
-                    var d = nl.Detectoren.First();
-                    sb.AppendLine($"{ts}IH[{_hpf}{_hnlsg}{nl:vannaar}] = (PR[{_fcpf}{nl:van}] || AR[{_fcpf}{nl:van}] && PAR[{_fcpf}{nl:van}]);");
-                }
-                else
-                {
-                    var tnl = nl.Type == NaloopTypeEnum.EindeGroen
-                        ? _tnleg
-                        : _tnlcv;
-                    sb.AppendLine($"{ts}IH[{_hpf}{tnl}{nl:vannaar}] = !SCH[{_schpf}{_schlos}{nl:vannaar}];");
-                }
+                if (first) sb.AppendLine($"{ts}{ts}/* Voorstart richting moet ook kunnen komen bij aanvraag voorstartende richting */");
+                first = false;
+                sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{nl:naar}] = PAR[{_fcpf}{nl:naar}] && PAR[{_fcpf}{nl:van}];");
             }
             if (!first) sb.AppendLine();
             first = true;
@@ -740,7 +745,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     opp.DetectieAfhankelijk && opp.Detectoren?.Count > 0 &&
                     sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                 {
-                    if (first) sb.AppendLine($"{ts}/* PAR-ongecoordineerd */");
+
+                    if (first) sb.AppendLine($"{ts}{ts}/* PAR-ongecoordineerd */");
                     first = false;
                     var d1 = mav.Detectoren.First();
                     var d2 = opp.Detectoren.First();
@@ -750,27 +756,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (dBinnen1 == null || dBinnen2 == null) continue;
 
-                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:van}] && " +
-                                          $"SCH[{_schpf}{_schlos}{mav:vannaar}] && " +
-                                          $"max_par_los({_fcpf}{mav:van}) && " +
-                                         $"(!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || " +
-                                          $"!SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]) || " +
-                                         $"PAR_los[{_fcpf}{mav:van}] && " +
-                                         $"RA[{_fcpf}{mav:van}]) " +
-                                            $"PAR_los[{_fcpf}{mav:van}] = TRUE; " +
-                                         $"else PAR_los[{_fcpf}{mav:van}] = FALSE;");
-                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{mav:naar}] && " +
-                                          $"SCH[{_schpf}{_schlos}{mav:naarvan}] && " +
-                                          $"max_par_los({_fcpf}{mav:naar}) && " +
-                                          $"(!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || " +
-                                           $"!SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]) || " +
-                                          $"PAR_los[{_fcpf}{mav:naar}] && " +
-                                          $"RA[{_fcpf}{mav:naar}]) " +
-                                             $"PAR_los[{_fcpf}{mav:naar}] = TRUE; " +
-                                          $"else PAR_los[{_fcpf}{mav:naar}] = FALSE;");
-
-                    setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:van}] = PAR[{_fcpf}{mav:van}] || PAR_los[{_fcpf}{mav:van}];");
-                    setPARma.AppendLine($"{ts}PAR[{_fcpf}{mav:naar}] = PAR[{_fcpf}{mav:naar}] || PAR_los[{_fcpf}{mav:naar}];");
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
                 }
             }
             if (setPARma.Length > 0) 
@@ -784,13 +771,50 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
-                if (first) sb.AppendLine($"{ts}/* PAR correcties gelijkstart synchronisaties */");
+                if (first) sb.AppendLine($"{ts}{ts}/* PAR correcties gelijkstart synchronisaties */");
                 first = false;
 
-                var front = gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"{ts}if (SCH[{_schpf}{_schrealgs}{gs:vannaar}]) " : $"{ts}";
+                var front = gs.Schakelbaar != AltijdAanUitEnum.Altijd ? $"{ts}{ts}if (SCH[{_schpf}{_schrealgs}{gs:vannaar}]) " : $"{ts}";
                 sb.AppendLine($"{front}PAR[{_fcpf}{gs:naar}] = PAR[{_fcpf}{gs:naar}] && PAR[{_fcpf}{gs:van}];");
                 sb.AppendLine($"{front}PAR[{_fcpf}{gs:van}] = PAR[{_fcpf}{gs:van}] && PAR[{_fcpf}{gs:naar}];");
             }
+            if (!first) sb.AppendLine();
+
+            sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX && !wijziging; fc++)");
+            sb.AppendLine($"{ts}{ts}{{");
+            sb.AppendLine($"{ts}{ts}{ts}if ((PAR_old[fc] != PAR[fc]) || (PAR_los_old[fc] != PAR_los[fc])) wijziging = TRUE;");
+            sb.AppendLine($"{ts}{ts}}}");
+
+            sb.AppendLine($"{ts}}} while (wijziging);");
+            sb.AppendLine();
+
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (first) sb.AppendLine($"{ts}/* Bepaal naloop wel/niet toegestaan */");
+                first = false;
+
+                if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
+                    sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                {
+                    var d = nl.Detectoren.First();
+                    sb.AppendLine($"{ts}IH[{_hpf}{_hnlsg}{nl:vannaar}] = PR[{_fcpf}{nl:van}] || PAR[{_fcpf}{nl:van}];");
+                }
+                else
+                {
+                    var tnl = nl.Type == NaloopTypeEnum.EindeGroen
+                        ? _tnleg
+                        : _tnlcv;
+                    sb.AppendLine($"{ts}IH[{_hpf}{tnl}{nl:vannaar}] = TRUE;");
+                }
+            }
+            if (!first) sb.AppendLine();
+            first = true;
+
+            sb.AppendLine($"{ts}AlternatiefOngecoordineerd_Add();");
+            sb.AppendLine();
 
             return sb.ToString();
         }
