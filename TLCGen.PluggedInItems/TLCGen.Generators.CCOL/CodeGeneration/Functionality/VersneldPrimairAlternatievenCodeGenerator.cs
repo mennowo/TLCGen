@@ -763,8 +763,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (dBinnen1 == null || dBinnen2 == null) continue;
 
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
+                    var vss = c.GetVoorstartenNaar(mav.FaseVan);
+                    var vs = "";
+                    foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]{vs}) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
+                    vss = c.GetVoorstartenNaar(mav.FaseNaar);
+                    vs = "";
+                    foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]{vs}) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
                 }
             }
             if (setPARma.Length > 0) 
@@ -815,6 +821,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         ? _tnleg
                         : _tnlcv;
                     sb.AppendLine($"{ts}IH[{_hpf}{tnl}{nl:vannaar}] = TRUE;");
+                }
+            }
+
+            first = true;
+            foreach (var nl in c.InterSignaalGroep.Nalopen)
+            {
+                var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+
+                if (first)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Alternatief realiseren primair+alteratief gecoordineerd of alternatief los */");
+                }
+                first = false;
+
+                if (sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
+                {
+                    sb.AppendLine($"{ts}PAR[{_fcpf}{sgv}] = PAR[{_fcpf}{sgv}] || PAR_los[{_fcpf}{sgv}];");
                 }
             }
             if (!first) sb.AppendLine();
