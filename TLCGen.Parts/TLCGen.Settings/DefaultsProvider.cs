@@ -353,6 +353,18 @@ namespace TLCGen.Settings
 			    if (type == null) continue;
 			    var ser = new XmlSerializer(type, xRoot);
 			    // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
+                foreach (XmlNode dCn in def.ChildNodes)
+                {
+                    // correct old sync enum option
+                    if (dCn.InnerText.Contains("SyncFunc"))
+                    {
+                        MessageBox.Show(
+                            "De defaults XML bevat SyncFunc als default synchronisatie type; dit wordt intern " +
+                            "gewijzigd in RealFunc. SyncFunc wordt door TLCGen niet langer ondersteund.", 
+                            "SyncFunc niet langer ondersteund");
+                        dCn.InnerText = x.InnerText.Replace("SyncFunc", "RealFunc");
+                    }
+                }
 			    var o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
 			    var item = new TLCGenDefaultModel
 			    {
