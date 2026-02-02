@@ -124,6 +124,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var totigfunc2 = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV2" : "ym_max_toV2";
                     var totigfuncCCOL = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_to";
 
+                    var first = true;
+
                     foreach (var fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
@@ -242,6 +244,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
+                                    if (first)
+                                    {
+                                        first = false;
+                                        sb.AppendLine($"{ts}/* Richtingen mogen bij ISG meeverlengen op basis van de maxmiale realisatietijden. De realisatietijd kan");
+                                        sb.AppendLine($"{ts} * middels een instelbaere waarde (verschil$$) worden beperkt zodat richtingen minder vaak maatgevend zijn.");
+                                        sb.AppendLine($"{ts} */");
+                                    }
+
                                     sb.AppendLine($"ym_max_tig_Realisatietijd({fcm.GetDefine()}, {verschil}) && {extraConditions} ? BIT4 : 0;");
                                 }
                                 else

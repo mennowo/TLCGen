@@ -746,7 +746,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                 {
 
-                    if (first) sb.AppendLine($"{ts}{ts}/* PAR-ongecoordineerd */");
+                    if (first)
+                    {
+                        sb.AppendLine($"{ts}{ts}/* PAR-ongecoordineerd */");
+                        sb.AppendLine($"{ts}{ts}/* PAR_los bepaalt of een gecoordineerde richting (schakelbaar) los mag realiseren.");
+                        sb.AppendLine($"{ts}{ts} * Bij eventuele parallelle deelconflicten mag de riching alleen komen als zijn meerealiserende richting ook alternatief mag komen. ");
+                        sb.AppendLine($"{ts}{ts} * Als bepaald is dat een richting moet komen mag hij niet meer worden teruggenomen.");
+                        sb.AppendLine($"{ts}{ts} */");
+                    }
                     first = false;
                     var d1 = mav.Detectoren.First();
                     var d2 = opp.Detectoren.First();
@@ -793,7 +800,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                 var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
 
-                if (first) sb.AppendLine($"{ts}/* Bepaal naloop wel/niet toegestaan */");
+                if (first) sb.AppendLine($"{ts}/* Bepaal naloop wel/niet toegestaan op basis van primair+alternatief gecoordineerd */");
                 first = false;
 
                 if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 &&
