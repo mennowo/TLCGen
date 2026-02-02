@@ -29,13 +29,13 @@ class Build : NukeBuild
 
     const string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
     
-    const bool Dev = false;
+    const bool Dev = true;
 
     const bool DoClean = true;
     const bool DoSign = true;
     const bool DoDeploy = false;
     const bool DoArchiveOld = false;
-    const string ArchiveOldVersion = "12.4.0.17";
+    const string ArchiveOldVersion = "12.4.0.18";
 
     Target Clean => _ => _
         .Before(Restore)

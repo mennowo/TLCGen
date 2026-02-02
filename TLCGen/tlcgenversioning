@@ -1,5 +1,9 @@
-TLCGen=12.4.0.18
+TLCGen=12.4.0.19
 RN==TLCGen
+TLCGen versie: 12.4.0.19
+- Diverse fixes voor 'interstartgroen func'
+- Fix voor issues met TLCGen defaults xml file
+- Fix voor verdubbeling code reg.add
 TLCGen versie: 12.4.0.18
 - Geen parameter voor PTP poortnummers
 - Voorbereiding toevoegen 'interstartgroen func' incl. aanpassingen detectiestoring in CCOL reg.c
