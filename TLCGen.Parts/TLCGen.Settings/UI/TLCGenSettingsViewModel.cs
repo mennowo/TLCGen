@@ -39,18 +39,28 @@ namespace TLCGen.Settings
             get => SettingsProvider.Default.Settings.TemplatesLocation;
             set
             {
-                if(!UseFolderForTemplates)
+                var old = SettingsProvider.Default.Settings.TemplatesLocation;
+                if (!UseFolderForTemplates)
                 {
-                    SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
+                    SettingsProvider.Default.Settings.TemplatesLocation = !string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "";
                 }
                 else
                 {
-                    SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? value : "");
+                    SettingsProvider.Default.Settings.TemplatesLocation = !string.IsNullOrWhiteSpace(value) ? value : "";
                 }
                 if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
                     !UseFolderForTemplates && !File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
-                    TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, new TLCGenTemplatesModel());
+                    if (MessageBox.Show("Templates file bestaat niet, nu aanmaken?", "Aanmaken templates file?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, new TLCGenTemplatesModel());
+                    }
+                    else
+                    {
+                        SettingsProvider.Default.Settings.TemplatesLocation = old;
+                        OnPropertyChanged("");
+                        return;
+                    }
                 }
                 TemplatesProvider.Default.LoadSettings();
                 _FasenTemplatesEditorTabVM = null;
@@ -66,10 +76,25 @@ namespace TLCGen.Settings
             get => SettingsProvider.Default.Settings.DefaultsFileLocation;
             set
             {
-                SettingsProvider.Default.Settings.DefaultsFileLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
+                var old = SettingsProvider.Default.Settings.DefaultsFileLocation;
+                SettingsProvider.Default.Settings.DefaultsFileLocation = !string.IsNullOrWhiteSpace(value)
+                    ? (value.ToLower().EndsWith(".xml")
+                        ? value
+                        : value + ".xml")
+                    : "";
+
                 if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) && !File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
                 {
-                    TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.DefaultsFileLocation, new TLCGenDefaultsModel());
+                    if (MessageBox.Show("Defaults file bestaat niet, nu aanmaken?", "Aanmaken defaults file?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.DefaultsFileLocation, new TLCGenDefaultsModel());
+                    }
+                    else
+                    {
+                        SettingsProvider.Default.Settings.DefaultsFileLocation = old;
+                        OnPropertyChanged("");
+                        return;
+                    }
                 }
                 DefaultsProvider.Default.LoadSettings();
 				_DefaultsTabVM = null;
