@@ -165,7 +165,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
-                        c.InterSignaalGroep?.Nalopen?.Count > 0)
+                        c.GetAllSynchronisations().Any())
                     {
                         sb.AppendLine($"{ts}TegenhoudenDoorRealisatietijden();");
                     }
