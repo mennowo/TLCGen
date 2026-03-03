@@ -462,7 +462,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ");
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"max_par({_fcpf}{fc.FaseCyclus}, PRML, ML) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                    sb.AppendLine($"max_par({_fcpf}{fc.FaseCyclus}, twacht) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
                                 else
                                 {
@@ -766,11 +766,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var vss = c.GetVoorstartenNaar(mav.FaseVan);
                     var vs = "";
                     foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]{vs}) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}, twacht) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]{vs}) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
                     vss = c.GetVoorstartenNaar(mav.FaseNaar);
                     vs = "";
                     foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]{vs}) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}, twacht) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]{vs}) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
                 }
             }
             if (setPARma.Length > 0) 

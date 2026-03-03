@@ -561,12 +561,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}BepaalInterStartGroenTijden_PRIO();");
                             sb.AppendLine($"{ts}PrioTegenhoudenISG(); /* Houdt richtingen die conflicterend zijn met priorealisatie als er niet meer genoeg ruimte voor realisatie is  */");
                             sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeRRPrio(); /* Pas realisatietijden aan voor richtingen conflicterend met prioriteitsrealisatie*/");
-                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
+                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_alle_richtingen();");
                             foreach (var lr in c.InterSignaalGroep.LateReleases)
                             {
                                 sb.AppendLine($"{ts}PasRealisatieTijdenAanVanwegeBRLateRelease({_fcpf}{lr:van});");
                             }
-                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting();");
+                            sb.AppendLine($"{ts}Bepaal_Realisatietijd_alle_richtingen();");
                         }
                     }
 
@@ -737,7 +737,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}wijziging |= CorrectieRealisatieTijd_Add();");
                     sb.AppendLine($"{ts}}} while (wijziging);");
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}Bepaal_Realisatietijd_per_richting(); /* bepaal de maximale realisatietijd voor een richting */");
+                    sb.AppendLine($"{ts}Bepaal_Realisatietijd_alle_richtingen(); /* bepaal de maximale realisatietijd */");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden:
 
