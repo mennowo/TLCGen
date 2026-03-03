@@ -44,6 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _schgs;
         private string _hnlsg;
         private string _mwtv;
+        private string _prmwtvnhaltmin;
 
         #endregion // Fields
 
@@ -619,6 +620,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}RealisatieTijden_VulHardeConflictenIn();");
                     sb.AppendLine($"{ts}RealisatieTijden_VulGroenGroenConflictenIn(); /* @@ in principe zijn er geen groen groen conflicten @@*/");
                     sb.AppendLine($"{ts}CorrigeerRealisatieTijdenObvGarantieTijden(); /* een richting mag na groen niet direct weer realiseren (eerst GL en TRG) */");
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}Realisatietijd_wtv_correctie({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_prmwtvnhaltmin});");
+                    }
                     sb.AppendLine();
 
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. nalopen */");
@@ -853,6 +858,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
             _mwtv = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtv");
+            _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
 
             return base.SetSettings(settings);
         }
