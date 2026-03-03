@@ -43,6 +43,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tvgnaloop;
         private string _schgs;
         private string _hnlsg;
+        private string _mwtv;
 
         #endregion // Fields
 
@@ -218,7 +219,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.TabCIncludes => [140],
                 
                 CCOLCodeTypeEnum.PrioCIncludes => [140],
-                
+                CCOLCodeTypeEnum.PrioCOnderMaximum => [140],
+
                 CCOLCodeTypeEnum.RegCPreApplication => [140, 240],
                 CCOLCodeTypeEnum.RegCAanvragen => [140],
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => [140],
@@ -256,6 +258,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"#include \"isgfunc_prio.h\" /* voor prioriteitsingrepen */");
                     }
 
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.PrioCOnderMaximum:
+                    if (!c.HasPTorHD()) return "";
+
+                    var first = true;
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        if (first)
+                        {
+                            sb.AppendLine($"{ts}/* geen prioriteit als de voorspeller een hoge waarde heeft */");
+                            first = false;
+                        }
+                        sb.AppendLine($"{ts}no_prio_door_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam});");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
@@ -835,6 +852,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tvgnaloop = CCOLGeneratorSettingsProvider.Default.GetElementName("tvgnaloop");
             _schgs = CCOLGeneratorSettingsProvider.Default.GetElementName("schgs");
             _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
+            _mwtv = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtv");
 
             return base.SetSettings(settings);
         }
