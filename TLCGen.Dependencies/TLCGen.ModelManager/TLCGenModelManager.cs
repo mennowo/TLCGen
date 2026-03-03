@@ -633,7 +633,7 @@ namespace TLCGen.ModelManagement
             if (v < checkVer)
             {
                 var syncT = doc.SelectSingleNode("//Data//SynchronisatiesType");
-                if (syncT.InnerText == "SyncFunc") syncT.InnerText = "RealFunc";
+                if (syncT?.InnerText == "SyncFunc") syncT.InnerText = "RealFunc";
             }
         }
 
