@@ -162,8 +162,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     new("mulv", "PAR_old[FCMAX]"),
                     new("mulv", "PAR_los_old[FCMAX]", "{0}"),
                 ],
-                CCOLCodeTypeEnum.PrioCPARCorrecties => 
-                    c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Nalopen.Any()
+                CCOLCodeTypeEnum.PrioCPARCorrecties =>
+                    c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.RealFunc &&
+                    (c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Nalopen.Any())
                         ?
                         [
                             new("int", "fc")

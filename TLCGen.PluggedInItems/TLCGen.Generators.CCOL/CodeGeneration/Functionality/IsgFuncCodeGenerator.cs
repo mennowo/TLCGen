@@ -194,8 +194,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCBepaalRealisatieTijden:
                     return new List<CCOLLocalVariable>
                     {
-                        new("count", "i"),
-                        new("count", "j"),
                         new(c.GetBoolV(), "wijziging", "TRUE"),
                     };
                 default:
@@ -270,7 +268,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (first)
                         {
-                            sb.AppendLine($"{ts}/* geen prioriteit als de voorspeller een hoge waarde heeft */");
+                            sb.AppendLine($"{ts}/* geen prioritiet als de leds van de wachttijd een lage waarde hebben */");
                             first = false;
                         }
                         sb.AppendLine($"{ts}no_prio_door_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam});");
@@ -623,7 +621,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}CorrigeerRealisatieTijdenObvGarantieTijden(); /* een richting mag na groen niet direct weer realiseren (eerst GL en TRG) */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}Realisatietijd_wtv_correctie({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_prmwtvnhaltmin});");
+                        sb.AppendLine($"{ts}Realisatietijd_wtv_correctie({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_prmpf}{_prmwtvnhaltmin});");
                     }
                     sb.AppendLine();
 
@@ -841,7 +839,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine($"{ts}/* De berekening voor startgroen gaat uit van primaire en alternatieve realisaties.");
                     sb.AppendLine($"{ts} * Als de wachttijedvoorspeller actief is en de richting groen moet worden,");
-                    sb.AppendLine($"{ts}`* wordt toegestaan om de richting versneld te laten realiseren zodat net voor groen het aantal ledjes goed aftelt. */'");
+                    sb.AppendLine($"{ts}`* wordt toegestaan om de richting versneld te laten realiseren zodat net voor groen het aantal ledjes goed aftelt. */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         sb.AppendLine($"{ts}if ((MM[{_mpf}{_mwtv}{fc.Naam}] < PRM[prmwtvnhaltmin]) && (MM[{_mpf}{_mwtv}{fc.Naam}] > 0)) PFPR[{_fcpf}{fc.Naam}] = ml_fpr({fc.Naam}, MLMAX - 1, PRML, ML, MLMAX);");

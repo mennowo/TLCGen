@@ -120,6 +120,34 @@ void TegenHoudenStartGroen(int fc, int iStartGroenFC);
 void AfkappenStartGroen(int fc, int iStartGr);
 void VLOG_mon5_buffer(void);
 
+void PrioTimers(void);
+void WachtTijdBewaking(void);
+void BlokkeringsTijd(void);
+void OnderMaximum(void);
+void TerugKomGroen(void);
+void PrioriteitsToekenning(void);
+void AfkapGroen(void);
+int  BepaalRestGroen(int fc, int iPrioriteitsOptiesFC);
+void PrioAanvragen(void);
+void RealisatieTijden(int fc, int iPrioriteitsOptiesFC);
+void PrioTegenhouden(void);
+void AfkappenMG(int fc, int iStartGr);
+void PrioAfkappen(void);
+void PrioBijzonderRealiseren(void);
+void PrioGroenVasthouden(void);
+void PrioMeetKriterium(void);
+void PrioAlternatieven(void);
+
+void mag_eerst(void);
+int  moet_wachten(int ov);
+
+void StelInTimer(int iIndex, int iActueleWaarde, int iInstelling);
+void StelInCounter(int iIndex, int iActueleWaarde, int iInstelling);
+
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
+int PrioriteitsOpties2PRM(int iPO);
+#endif
+
 #ifdef PRIO_ADDFILE
 
 void RijTijdScenario_Add(void);

@@ -1920,7 +1920,7 @@ bool max_par_los(count fc, mulv t_wacht[])
 /* MAXIMALE WACHTTIJD VAN ALLE PRIMAIRE FASECYCLI */
 /* ============================================== */
 
-/* void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[])
+/* void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv t_wacht[])
  * berekent de wachttijden van de primaire fasecycli van de modulenreeks. eerst worden de wachttijden berekent van de primaire
  * fasecycli van de actieve module. daarna van de primaire fasecycli van de daarna volgende modulen.
  * de functie max_wachttijd_modulen_primair_ISG() berekent de wachttijden in een systeemronde.
@@ -1940,7 +1940,7 @@ bool max_par_los(count fc, mulv t_wacht[])
  */
 
 
-void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[])
+void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv t_wacht[])
 {
     register count i, j, m, n, hml;
     mulv twacht_tmp = NG;
@@ -1950,7 +1950,7 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mul
     /* ------------------------------------ */
     for (i = 0; i < FC_MAX; i++)
     {
-        twacht[i] = NG;
+        t_wacht[i] = NG;
         twacht_AR[i] = NG;
     }
     /* bereken wachttijden van de primaire fasecycli van de actieve module */
@@ -1958,7 +1958,7 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mul
     for (i = 0; i < FC_MAX; i++) {
         if ((prml[ml][i] & PRIMAIR_VERSNELD) && !PG[i] && R[i])
         {
-            twacht[i] = REALISATIETIJD_max[i];
+            t_wacht[i] = REALISATIETIJD_max[i];
             for (j = 0; j < FC_MAX; j++)
             {
                 if (RA[j] && AR[j])
@@ -1968,14 +1968,14 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mul
                     {
                         if (TISG_AR_los[j][i] >= 0)
                         {
-                            twacht[i] = max(twacht[i], REALISATIETIJD_max[j] + TISG_AR_los[j][i]);
+                            t_wacht[i] = max(t_wacht[i], REALISATIETIJD_max[j] + TISG_AR_los[j][i]);
                         }
                     }
                     else
                     {
                         if (TISG_AR[j][i] >= 0)
                         {
-                            twacht[i] = max(twacht[i], REALISATIETIJD_max[j] + TISG_AR[j][i]);
+                            t_wacht[i] = max(t_wacht[i], REALISATIETIJD_max[j] + TISG_AR[j][i]);
                         }
                     }
 
@@ -2001,7 +2001,7 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mul
                 {
 
                     if (RA[j] && AR[j])
-                        /*                    if ((RA[j] && prml[ml][j] & ALTERNATIEF_VERSNELD)) */
+                        /* @PSN                   if ((RA[j] && prml[ml][j] & ALTERNATIEF_VERSNELD)) */
                     {
                         if (PAR_los[j])
                         {

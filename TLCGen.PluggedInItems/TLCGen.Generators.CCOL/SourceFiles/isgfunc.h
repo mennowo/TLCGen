@@ -1,5 +1,3 @@
-/* isgfunc.h - gegenereerd met TLCGen 12.4.0.19 */
-
 #ifndef ISGFUNC_H
 #define ISGFUNC_H
 
@@ -25,7 +23,7 @@ extern bool NietGroentijdOphogen[FCMAX];
 extern mulv twacht[FCMAX];
 extern mulv twacht_AR[FCMAX];
 extern mulv twacht_afkap[FCMAX];
-extern count REALISATIETIJD[FCMAX][FCMAX];
+extern mulv REALISATIETIJD[FCMAX][FCMAX];
 
 extern bool Volgrichting[FCMAX];
 extern bool AfslaandDeelconflict[FCMAX];
@@ -91,7 +89,7 @@ void NaloopVtg_TVG_Correctie(count fc1, count fc2, count hnlsg, count tnlsg, cou
 void NaloopVtg(count fc1, count fc2, count dk, count hdk, bool hnlsg, count tnlsg, count tnlsgd);
 void NaloopEG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop, ...);
 void NaloopEVG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop, ...);
-bool max_par(count fc, bool* prml[], count ml);
+bool max_par(count fc, mulv t_wacht[]);
 bool max_par_los(count fc, mulv t_wacht[]);
 void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[]);
 bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max);
@@ -102,7 +100,7 @@ void MeeverlengenUitDoorDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr);
 void MeeverlengenUitDoorVoetgangerLos(count fcvtg, count hmadk);
 void PercentageVerlengGroenTijdenISG(count fc, mulv percentage);
 bool hf_wsg_nlISG(void);
-bool afsluiten_aanvraaggebied_prISG(bool* prml[], count ml);
+void afsluiten_aanvraaggebied_prISG(bool* prml[], count ml);
 void BepaalVolgrichtingen(void);
 void PrioAanwezig(void);
 void InitInterfunc(void);

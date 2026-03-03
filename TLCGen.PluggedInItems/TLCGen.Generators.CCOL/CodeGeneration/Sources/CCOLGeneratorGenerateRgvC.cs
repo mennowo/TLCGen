@@ -113,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{c.GetBoolV()} wijziging = TRUE;");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}InitInterStartGroenTijden_rgv();");
-                sb.AppendLine($"{ts}InterStartGroenTijden_VulHaldeConflictenIn_rgv();");
+                sb.AppendLine($"{ts}InterStartGroenTijden_VulHardeConflictenIn_rgv();");
                 sb.AppendLine($"{ts}InterStartGroenTijden_VulGroenGroenConflictenIn_rgv();");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Pas interstartgroentijden aan a.g.v. nalopen */");
