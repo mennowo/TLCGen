@@ -1,3 +1,5 @@
+/* isgfunc.h - gegenereerd met TLCGen 12.4.0.19 */
+
 #ifndef ISGFUNC_H
 #define ISGFUNC_H
 
@@ -50,7 +52,7 @@ extern mulv TISG_basis[FCMAX][FCMAX];
 extern mulv TVG_rgv[FCMAX];
 extern mulv init_tvg;
 extern mulv TISG_afkap[FCMAX][FCMAX];
-extern boolv PAR_los[FCMAX];
+extern bool PAR_los[FCMAX];
 
 /* Function prototypes */
 void BepaalIntergroenTijden(void);
@@ -69,7 +71,8 @@ void Realisatietijd_Ontruiming_LateRelease(count fcvs, count fclr, count tlr, co
 bool Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
 bool Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2);
 bool Realisatietijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
-void Bepaal_Realisatietijd_per_richting(void);
+void Bepaal_Realisatietijd_voor_richting(count i);
+void Bepaal_Realisatietijd_alle_richtingen();
 bool ym_max_tig_Realisatietijd(count i, count prmomx);
 void TegenhoudenDoorRealisatietijden(void);
 void InitInterStartGroenTijden(void);
@@ -85,13 +88,13 @@ bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr
 void NaloopEG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
 void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlcv, count tnlcvd, count tvgnaloop);
 void NaloopVtg_TVG_Correctie(count fc1, count fc2, count hnlsg, count tnlsg, count tnlsgd);
-void NaloopVtg(count fc1, count fc2, count dk, count hdk, boolv hnlsg, count tnlsg, count tnlsgd);
+void NaloopVtg(count fc1, count fc2, count dk, count hdk, bool hnlsg, count tnlsg, count tnlsgd);
 void NaloopEG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop, ...);
 void NaloopEVG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop, ...);
-bool max_par(count fc, boolv* prml[], count ml);
-bool max_par_los(count fc);
-void max_wachttijd_modulen_primair_ISG(boolv* prml[], count ml, count ml_max, mulv twacht[]);
-bool yml_cv_pr_nl_ISG(boolv* prml[], count ml, count ml_max);
+bool max_par(count fc, bool* prml[], count ml);
+bool max_par_los(count fc, mulv t_wacht[]);
+void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[]);
+bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max);
 void set_PG_Deelconflict_Voorstart(mulv fc1, mulv fc2);
 void set_PG_Deelconflict_LateRelease(mulv fc1, mulv fc2, mulv tlr);
 void MeeverlengenUitDoorDeelconflictVoorstart(mulv fc1, mulv fc2);
@@ -99,7 +102,7 @@ void MeeverlengenUitDoorDeelconflictLateRelease(mulv fc1, mulv fc2, mulv tlr);
 void MeeverlengenUitDoorVoetgangerLos(count fcvtg, count hmadk);
 void PercentageVerlengGroenTijdenISG(count fc, mulv percentage);
 bool hf_wsg_nlISG(void);
-bool afsluiten_aanvraaggebied_prISG(boolv* prml[], count ml);
+bool afsluiten_aanvraaggebied_prISG(bool* prml[], count ml);
 void BepaalVolgrichtingen(void);
 void PrioAanwezig(void);
 void InitInterfunc(void);
@@ -107,7 +110,7 @@ void IsgDebug(void);
 void IsgCorrectieTvgPrTvgMax(void);
 void IsgCorrectieTvgTimerTvgMax(void);
 void InitInterStartGroenTijden_rgv(void);
-void InterStartGroenTijden_VulHaldeConflictenIn_rgv(void);
+void InterStartGroenTijden_VulHardeConflictenIn_rgv(void);
 void InterStartGroenTijden_VulGroenGroenConflictenIn_rgv(void);
 void InterStartGroenTijd_NLEG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
 void InterStartGroenTijd_NLEVG_rgv(count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop);
@@ -115,7 +118,7 @@ void InterStartGroenTijd_NLSG_rgv(count i, count j, count tnlsg, count tnlsgd);
 void InterStartGroentijd_MeeverlengenDeelconflict_rgv(mulv fc1, mulv fc2);
 bool Correctie_TISG_Voorstart_rgv(count fcvs, count fcns, count tvs);
 bool Correctie_TISG_Gelijkstart_rgv(count fc1, count fc2);
-bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count prmlr);
+bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count tlr);
 void ResetNaloopBits();
 
 #endif /* ISGFUNC_H */
