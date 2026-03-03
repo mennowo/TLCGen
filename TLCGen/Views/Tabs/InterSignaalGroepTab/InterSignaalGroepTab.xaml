@@ -66,6 +66,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <local:SynchronisatieView DataContext="{Binding Path=SelectedSynchronisatie}" />
+                    </ScrollViewer>
+
                     <Grid Grid.Row="0"
                           Visibility="{Binding Path=ShowGarantieTijdenConverter,Converter={StaticResource BooleanToVisibilityConverter}}" >
                         <Grid.RowDefinitions>
@@ -93,10 +97,6 @@
                             <Button Content="Toepassen" Command="{Binding Path=SetGarantieValuesCommand}" Margin="2" />
                         </StackPanel>
                     </Grid>
-
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:SynchronisatieView DataContext="{Binding Path=SelectedSynchronisatie}" />
-                    </ScrollViewer>
 
                 </Grid>
             </Grid>
