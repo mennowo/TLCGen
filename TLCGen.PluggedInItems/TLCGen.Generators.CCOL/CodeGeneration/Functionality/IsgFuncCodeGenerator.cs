@@ -227,7 +227,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio => [140],
                 CCOLCodeTypeEnum.RegCMeetkriterium => [140],
                 CCOLCodeTypeEnum.RegCPostApplication => [140],
-                
+                CCOLCodeTypeEnum.RegCRealisatieAfhandelingVersneldPrimair => [140],
+
                 _ => null
             };
         }
@@ -834,6 +835,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}MeeverlengenUitDoorVoetgangerLos({_fcpf}{nl:van}, {_hpf}{_hmad}{insideDp.Naam});");
                     }
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingVersneldPrimair:
+                    if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return null;
+
+                    sb.AppendLine($"{ts}/* De berekening voor startgroen gaat uit van primaire en alternatieve realisaties.");
+                    sb.AppendLine($"{ts} * Als de wachttijedvoorspeller actief is en de richting groen moet worden,");
+                    sb.AppendLine($"{ts}`* wordt toegestaan om de richting versneld te laten realiseren zodat net voor groen het aantal ledjes goed aftelt. */'");
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}if ((MM[{_mpf}{_mwtv}{fc.Naam}] < PRM[prmwtvnhaltmin]) && (MM[{_mpf}{_mwtv}{fc.Naam}] > 0)) PFPR[{_fcpf}{fc.Naam}] = ml_fpr({fc.Naam}, MLMAX - 1, PRML, ML, MLMAX);");
+                    }
+                    return sb.ToString();
+
 
                 default:
                     return null;
