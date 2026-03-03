@@ -491,7 +491,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"");
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = ((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0; /* Vullen groentijd die gemaakt mag worden als er een prioriteitsingreep is */");
+                        sb.AppendLine($"{ts}{ts}TVG_afkap[fc] = (mulv)(((iAfkapGroenTijd[fc] - TFG_max[fc]) > 0) ? iAfkapGroenTijd[fc] - TFG_max[fc] : 0); /* Vullen groentijd die gemaakt mag worden als er een prioriteitsingreep is */");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine($"{ts}BepaalTVG_BR(); /* Maximale verlenggroentijd bijzondere realisatie als deze nog niet groen is */");
                         sb.AppendLine($"{ts}VerhoogTVG_maxDoorPrio(); /* Voldoende verlenggroentijd om prioriteitsrealisatie te faciliteren */");
