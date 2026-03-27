@@ -22,11 +22,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tisgxnl;
         private CCOLGeneratorCodeStringSettingModel _hisglos;
         private CCOLGeneratorCodeStringSettingModel _schisglos;
-        private CCOLGeneratorCodeStringSettingModel _schisglosgeennla;
+        private CCOLGeneratorCodeStringSettingModel _schisggeennla;
         private CCOLGeneratorCodeStringSettingModel _schisggs;
         private CCOLGeneratorCodeStringSettingModel _hisgmad; // obsolete ?
         private CCOLGeneratorCodeStringSettingModel _usisgtijd;
         private CCOLGeneratorCodeStringSettingModel _schisgdebug;
+        private CCOLGeneratorCodeStringSettingModel _schgeenlokgroen;
 #pragma warning restore 0649
         private string _prmaltg;
         private string _tnlfg;
@@ -37,14 +38,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlcvd;
         private string _tnlsg;
         private string _tnlsgd;
-        private string _hfile;
-        private string _prmfperc;
         private string _hmad;
         private string _tvgnaloop;
         private string _schgs;
         private string _hnlsg;
         private string _mwtv;
         private string _prmwtvnhaltmin;
+        private string _prmminwtv;
 
         #endregion // Fields
 
@@ -138,6 +138,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (fc == null) continue;
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                    $"{_schgeenlokgroen}{nl:vannaar}", 
+                    nl.TegenhoudenLokgroen ? 1 : 0, 
+                    CCOLElementTimeTypeEnum.SCH_type,
+                    _schgeenlokgroen, nl.FaseVan));
+
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                     $"{_schisglos}{nl:vannaar}", 
                     nl.LosseRealisatieVoedendeRichting ? 1 : 0, 
                     CCOLElementTimeTypeEnum.SCH_type, 
@@ -145,10 +151,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     nl.FaseVan, nl.FaseNaar));
                 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                    $"{_schisglosgeennla}{nl:vannaar}_2", 
+                    $"{_schisggeennla}{nl:vannaar}", 
                     nl.LosseRealisatieVoorwaardeGeenAanvraagNaloop ? 1 : 0, 
-                    CCOLElementTimeTypeEnum.SCH_type, 
-                    _schisglos, 
+                    CCOLElementTimeTypeEnum.SCH_type,
+                    _schisggeennla, 
                     nl.FaseVan));
             }
 
@@ -271,7 +277,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* geen prioritiet als de leds van de wachttijd een lage waarde hebben */");
                             first = false;
                         }
-                        sb.AppendLine($"{ts}no_prio_door_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam});");
+                        sb.AppendLine($"{ts}no_prio_door_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_prmpf}{_prmminwtv});");
                     }
                     return sb.ToString();
 
@@ -443,7 +449,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}PrioCcol();");
                     foreach (var sg in c.Fasen)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usisgtijd}{sg.Naam}] = ((twacht[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) >= 0) ? (twacht[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) : 0;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usisgtijd}{sg.Naam}] = ((twacht_wtv[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) >= 0) ? (twacht[{_fcpf}{sg.Naam}] * (A[{_fcpf}{sg.Naam}] || PRIOFC[{_fcpf}{sg.Naam}]) * R[{_fcpf}{sg.Naam}]) : 0;");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCTop:
@@ -675,6 +681,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}Realisatietijd_Ontruiming_LateRelease({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisglr}{vs:vannaar}, {_tpf}{_tisgfo}{vs:vannaar});");
                     }
+                    if (c.HasWachttijdVoorspeller())
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}InitRealisatieTijdenWtv();");
+                    }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Pas realisatietijden aan a.g.v. deelconflicten/voorstarts die nog groen moeten worden */");
                     sb.AppendLine($"{ts}do");
@@ -717,11 +728,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         var dk2 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
                                         if (dk1 != null && dk2 != null)
                                         { 
-                                            sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hisglos}{nl:van}] = RA[{_fcpf}{nl:van}] && (!H[{_hpf}{_hmad}{dk1}] || SCH[{_schpf}{_schisglos}{nl:vannaar}] && H[{_hpf}{_hmad}{dk2}]) || H[{_hpf}{_hisglos}{nl:van}] && !SG[{_fcpf}{nl:van}];");
+                                            sb.AppendLine($"{ts}{ts}wijziging |= (IH[{_hpf}{_hmad}{dk1}] && (!H[{_hpf}{_hmad}{dk2}] || SCH[{_schpf}{_schisggeennla}{nl:vannaar}]) || !SCH[{_schpf}{_schisglos}{nl:vannaar}]) ? Realisatietijd_LateRelease_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar}) : 0;");
                                         }
                                     }
                                     
-                                    sb.AppendLine($"{ts}{ts}wijziging |= (!IH[{_hpf}{_hisglos}{nl:van}]) ? Realisatietijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar}) : 0;");
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie_wtv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar});");
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
                                 case NaloopTypeEnum.CyclischVerlengGroen:
@@ -814,6 +825,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine();
 
+                    if (c.HasNalopen())
+                    {
+                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        {
+                            sb.AppendLine($"{ts}{ts}wijziging |= TISG_Lokgroen_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar});");
+                        }
+                        sb.AppendLine();
+                    }
+
                     sb.AppendLine($"{ts}{ts}wijziging |= Correctie_TISG_add();");
                     sb.AppendLine($"{ts}}} while (wijziging);");
 
@@ -855,8 +875,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
-            _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
-            _prmfperc = CCOLGeneratorSettingsProvider.Default.GetElementName("prmfperc");
             _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
             _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
@@ -871,6 +889,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("hnlsg");
             _mwtv = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtv");
             _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
+            _prmminwtv = CCOLGeneratorSettingsProvider.Default.GetElementName("prmminwtv");
 
             return base.SetSettings(settings);
         }

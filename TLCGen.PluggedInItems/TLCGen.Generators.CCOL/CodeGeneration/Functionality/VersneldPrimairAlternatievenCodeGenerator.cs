@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
@@ -39,7 +38,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _mar;
         private string _mwtvm;
         private string _prmwtvnhaltmin;
-        private string _schisglosgeennla;
+        private string _schisggeennla;
+        private object _schgeenlokgroen;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -327,8 +327,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         List<Tuple<string, List<string>>> gelijkstarttuples = null;
                         gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                         
-                        if (c.InterSignaalGroep.Nalopen.Any())
+                        if (c.HasNalopen())
                         {
+                            if (c.IsInterFunc())
+                            {
+                                sb.AppendLine($"{ts}/* als de PAR niet meer waar is, kan je hem naar RR sturen voor gekoppelde realisaties */");
+                                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                                {
+                                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{nl:van}] && RA[{_fcpf}{nl:van}] && AR[{_fcpf}{nl:van}]) RR[{_fcpf}{nl:van}] |= BIT5;");
+                                }
+                            }
+
                             sb.AppendLine();
                             sb.AppendLine($"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
                             foreach (var fc in c.Fasen)
@@ -727,26 +736,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!first) sb.AppendLine();
             first = true;
 
-            var doneMeeAanvragen = new List<MeeaanvraagModel>();
             var setPARma = new StringBuilder();
             foreach (var mav in c.InterSignaalGroep.Meeaanvragen)
             {
-                if (doneMeeAanvragen.Any(x => ReferenceEquals(x, mav))) continue;
-                doneMeeAanvragen.Add(mav);
+                // Only generate for meeaanvragen that have an opposite meeaanvraag
+                if (!c.InterSignaalGroep.Meeaanvragen.Any(x => x.FaseNaar == mav.FaseVan && x.FaseVan == mav.FaseNaar)) continue;
 
-                var opp = c.InterSignaalGroep.Meeaanvragen.FirstOrDefault(x => x.FaseNaar == mav.FaseVan && x.FaseVan == mav.FaseNaar);
-                if (opp == null) continue;
-                
-                doneMeeAanvragen.Add(opp);
+                // Only generate for meeaanvragen that have a naloop *and* an opposite naloop
+                var nlvn = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == mav.FaseVan && x.FaseNaar == mav.FaseNaar);
+                var nlnv = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == mav.FaseNaar && x.FaseNaar == mav.FaseVan);
+                if (nlvn == null || nlnv == null) continue;
 
                 var sgv = c.Fasen.FirstOrDefault(x => x.Naam == mav.FaseVan);
                 var sgn = c.Fasen.FirstOrDefault(x => x.Naam == mav.FaseNaar);
 
                 if (mav.DetectieAfhankelijk && mav.Detectoren?.Count > 0 &&
-                    opp.DetectieAfhankelijk && opp.Detectoren?.Count > 0 &&
                     sgv is { Type: FaseTypeEnum.Voetganger } && sgn is { Type: FaseTypeEnum.Voetganger })
                 {
-
                     if (first)
                     {
                         sb.AppendLine($"{ts}{ts}/* PAR-ongecoordineerd */");
@@ -756,22 +762,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts} */");
                     }
                     first = false;
+                
                     var d1 = mav.Detectoren.First();
-                    var d2 = opp.Detectoren.First();
-                    
-                    var dBinnen1 = sgv.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                    var dBinnen2 = sgn.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
 
-                    if (dBinnen1 == null || dBinnen2 == null) continue;
+                    var dBinnen1 = sgv.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+                    var dBuiten1 = sgv.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+                    var dBuiten2 = sgn.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+
+                    if (dBinnen1 == null || dBuiten1 == null || dBuiten2 == null) continue;
 
                     var vss = c.GetVoorstartenNaar(mav.FaseVan);
                     var vs = "";
                     foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}, twacht) && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{d1.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:vannaar}_2]{vs}) || RA[{_fcpf}{mav:van}] && PAR_los[{_fcpf}{mav:van}];");
-                    vss = c.GetVoorstartenNaar(mav.FaseNaar);
-                    vs = "";
-                    foreach (var v in vss) vs += $" && PAR[{_fcpf}{v:van}]";
-                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:naar}] = max_par_los({_fcpf}{mav:naar}, twacht) && SCH[{_schpf}{_schlos}{mav:naarvan}] && (!IH[{_hpf}{_hmad}{d2.MeeaanvraagDetector}] || SCH[{_schpf}{_schisglosgeennla}{mav:naarvan}_2]{vs}) || RA[{_fcpf}{mav:naar}] && PAR_los[{_fcpf}{mav:naar}];");
+                    sb.AppendLine($"{ts}{ts}PAR_los[{_fcpf}{mav:van}] = max_par_los({_fcpf}{mav:van}, twacht) && !PAR[{_fcpf}{mav:van}] && SCH[{_schpf}{_schlos}{mav:vannaar}] && (!IH[{_hpf}{_hmad}{dBuiten1.Naam}] || IH[{_hpf}{_hmad}{dBinnen1.Naam}] && !SCH[{_schpf}{_schisggeennla}{mav:vannaar}]) && (!IH[{_hpf}{_hmad}{dBuiten2.Naam}] || !SCH[{_schpf}{_schgeenlokgroen}{mav:vannaar}]);");
                 }
             }
             if (setPARma.Length > 0) 
@@ -1057,7 +1060,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _schlos = CCOLGeneratorSettingsProvider.Default.GetElementName("schlos");
             _mwtvm = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtvm");
             _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
-            _schisglosgeennla = CCOLGeneratorSettingsProvider.Default.GetElementName("schisglosgeennla");
+            _schisggeennla = CCOLGeneratorSettingsProvider.Default.GetElementName("schisggeennla");
+            _schgeenlokgroen = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenlokgroen");
 
             return base.SetSettings(settings);
         }

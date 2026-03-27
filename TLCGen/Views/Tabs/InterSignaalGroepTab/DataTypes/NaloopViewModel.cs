@@ -70,7 +70,7 @@ namespace TLCGen.ViewModels
         }
 
         public bool InrijdenTijdensGroenPossible => 
-            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc ||
+            TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.RealFunc &&
             TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType != SynchronisatiesTypeEnum.InterFunc;
 
         public bool DetectieAfhankelijkPossible
@@ -142,6 +142,15 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool TegenhoudenLokgroen
+        {
+            get => _naloop.TegenhoudenLokgroen;
+            set
+            {
+                _naloop.TegenhoudenLokgroen = value;
+                OnPropertyChanged(nameof(TegenhoudenLokgroen), broadcast: true);
+            }
+        }
         public int? MaximaleVoorstart
         {
             get => _naloop.MaximaleVoorstart;
@@ -162,7 +171,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool CanHaveMaxUitverlengenVolgrichting => 
+        public bool IsIsgFunc => 
             TLCGenControllerDataProvider.Default.Controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc;
 
         public bool MaximaleVoorstartAllowed => 

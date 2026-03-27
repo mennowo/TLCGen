@@ -855,7 +855,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tsts}Synchronisaties();");
             if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
-                sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG(PRML, ML, MLMAX, twacht);");
+                sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG(PRML, ML, MLMAX);");
                 sb.AppendLine($"{tsts}max_wachttijd_modulen_primair_ISG_Add();");
             }
             sb.AppendLine($"{tsts}RealisatieAfhandeling();");

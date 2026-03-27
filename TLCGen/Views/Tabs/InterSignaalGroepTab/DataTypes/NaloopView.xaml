@@ -31,14 +31,17 @@
                         Watermark="NG" IsEnabled="{Binding Path=MaximaleVoorstartAllowed}"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <Label Content="Maximale tijd uitverlengen volgrichting:"
-                   Visibility="{Binding CanHaveMaxUitverlengenVolgrichting,Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <TextBox IsEnabled="{Binding Path=CanHaveMaxUitverlengenVolgrichting}"
-                     Visibility="{Binding CanHaveMaxUitverlengenVolgrichting,Converter={StaticResource BooleanToVisibilityConverter}}"
+                   Visibility="{Binding IsIsgFunc,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBox IsEnabled="{Binding Path=IsIsgFunc}"
+                     Visibility="{Binding IsIsgFunc,Converter={StaticResource BooleanToVisibilityConverter}}"
                      Text="{Binding Path=MaxUitverlengenVolgrichting}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
+            <CheckBox Content="Tegenhouden lokgroen" 
+                      Visibility="{Binding Path=IsIsgFunc,Converter={StaticResource BooleanToVisibilityConverter}}"
+                      IsChecked="{Binding Path=TegenhoudenLokgroen}" Margin="5" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InrijdenTijdensGroenPossible,Converter={StaticResource BooleanToVisibilityConverter}}">
-                <CheckBox Content="Inrijden/lopen tijdens groen" 
+                <CheckBox Content="Inrijden/lopen tijdens groen"
                           IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />
                     <ct:InfoElement>
                         <ct:InfoElement.InfoPopup>

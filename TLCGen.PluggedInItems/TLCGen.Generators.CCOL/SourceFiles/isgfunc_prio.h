@@ -57,6 +57,7 @@ void VulHardEnGroenConflictenInPrioVars(void);
 void ResetNietGroentijdOphogen(void);
 void VerhoogGroentijdNietTijdensInrijden(count fc1, count fc2, count txnlfc1fc2);
 
-void no_prio_door_wtv(count fc, count mwtv);
+bool TISG_Lokgroen_PRIO_Correctie(count fc1, count fc2);
+void no_prio_door_wtv(count fc, count mwtv, mulv mwtvnhaltmin);
 
 #endif /* ISGFUNC_PRIO_H */

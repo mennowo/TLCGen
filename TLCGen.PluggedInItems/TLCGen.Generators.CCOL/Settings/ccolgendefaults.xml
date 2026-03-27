@@ -3552,6 +3552,14 @@
 			<Description>Intersignaalgroep tijden</Description>
 			<ElementGenerationOrder>360</ElementGenerationOrder>
 			<Settings>
+        <Setting>
+          <Default>geenlokgroen</Default>
+          <Setting>geenlokgroen</Setting>
+          <Type>Schakelaar</Type>
+          <Description>Tegenhouden lokgroen (tegenhouden naloop bij aanvraag voedende richting)</Description>
+          <Categorie>CAT_Basisfuncties</Categorie>
+          <SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
+        </Setting>
 				<Setting>
 					<Default>isgdebug</Default>
 					<Setting>isgdebug</Setting>
@@ -3599,10 +3607,10 @@
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
 				</Setting>
 				<Setting>
-					<Default>isglosgeennla</Default>
-					<Setting>losgeennla</Setting>
+					<Default>isggeennla</Default>
+					<Setting>geennla</Setting>
 					<Type>Schakelaar</Type>
-					<Description>Toestaan los realiseren fase _E1_ (naloop naar _E2_) mits geen aanvraag naloop</Description>
+					<Description>Toestaan realiseren fase _E1_ (naloop naar _E2_) mits geen aanvraag naloop</Description>
 					<Categorie>CAT_Basisfuncties</Categorie>
 					<SubCategorie>SUBCAT_Deelconflicten</SubCategorie>
 				</Setting>

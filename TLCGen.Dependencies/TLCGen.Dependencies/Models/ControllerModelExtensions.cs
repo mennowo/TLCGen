@@ -187,7 +187,22 @@ namespace TLCGen.Models
                    c.InterSignaalGroep.Voorstarten.Any() ||
                    c.InterSignaalGroep.LateReleases.Any();
         }
-        
+
+        public static bool HasWachttijdVoorspeller(this ControllerModel c)
+        {
+            return c.Fasen.Any(x => x.WachttijdVoorspeller);
+        }
+
+        public static bool HasNalopen(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Nalopen.Count > 0;
+        }
+
+        public static bool IsInterFunc(this ControllerModel c)
+        {
+            return c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc;
+        }
+
         public static bool HasVecomIO(this ControllerModel c)
         {
             return c.GetAllDetectors(x => x.Type == DetectorTypeEnum.VecomDetector).Any() &&

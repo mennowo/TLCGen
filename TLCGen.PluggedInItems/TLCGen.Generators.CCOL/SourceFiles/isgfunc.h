@@ -21,9 +21,12 @@ extern mulv PRIOFC[FCMAX];
 
 extern bool NietGroentijdOphogen[FCMAX];
 extern mulv twacht[FCMAX];
+extern mulv twacht_wtv[FCMAX];
 extern mulv twacht_AR[FCMAX];
+extern mulv twacht_AR_wtv[FCMAX];
 extern mulv twacht_afkap[FCMAX];
 extern mulv REALISATIETIJD[FCMAX][FCMAX];
+extern mulv REALISATIETIJD_wtv[FCMAX][FCMAX];
 
 extern bool Volgrichting[FCMAX];
 extern bool AfslaandDeelconflict[FCMAX];
@@ -69,11 +72,13 @@ void Realisatietijd_Ontruiming_LateRelease(count fcvs, count fclr, count tlr, co
 bool Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs);
 bool Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2);
 bool Realisatietijd_LateRelease_Correctie(count fclr, count fcvs, count tlr);
+bool Realisatietijd_LateRelease_Correctie_wtv(count fclr, count fcvs, count tlr);
 void Bepaal_Realisatietijd_voor_richting(count i);
 void Bepaal_Realisatietijd_alle_richtingen();
 bool ym_max_tig_Realisatietijd(count i, count prmomx);
 void TegenhoudenDoorRealisatietijden(void);
 void InitInterStartGroenTijden(void);
+void InitRealisatieTijdenWtv(void);
 void InterStartGroenTijden_VulHardeConflictenIn(void);
 void InterStartGroenTijden_VulGroenGroenConflictenIn(void);
 void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop);
@@ -91,7 +96,7 @@ void NaloopEG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, coun
 void NaloopEVG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop, ...);
 bool max_par(count fc, mulv t_wacht[]);
 bool max_par_los(count fc, mulv t_wacht[]);
-void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max, mulv twacht[]);
+void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max);
 bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max);
 void set_PG_Deelconflict_Voorstart(mulv fc1, mulv fc2);
 void set_PG_Deelconflict_LateRelease(mulv fc1, mulv fc2, mulv tlr);
@@ -118,5 +123,7 @@ bool Correctie_TISG_Voorstart_rgv(count fcvs, count fcns, count tvs);
 bool Correctie_TISG_Gelijkstart_rgv(count fc1, count fc2);
 bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count tlr);
 void ResetNaloopBits();
+bool Realisatietijd_Lokgroen_Correctie(count fc1, count fc2);
+bool Realisatietijd_Lokgroen_Correctie_wtv(count fc1, count fc2);
 
 #endif /* ISGFUNC_H */
