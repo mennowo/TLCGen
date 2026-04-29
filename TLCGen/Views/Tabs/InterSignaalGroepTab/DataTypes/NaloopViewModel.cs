@@ -142,7 +142,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool TegenhoudenLokgroen
+        public NooitAanUitEnum TegenhoudenLokgroen
         {
             get => _naloop.TegenhoudenLokgroen;
             set

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using TLCGen.Generators.CCOL.CodeGeneration.HelperClasses;
 using TLCGen.Generators.CCOL.Settings;
@@ -137,11 +138,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var fc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
                 if (fc == null) continue;
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                    $"{_schgeenlokgroen}{nl:vannaar}", 
-                    nl.TegenhoudenLokgroen ? 1 : 0, 
-                    CCOLElementTimeTypeEnum.SCH_type,
-                    _schgeenlokgroen, nl.FaseVan));
+                if (nl.TegenhoudenLokgroen != NooitAanUitEnum.Nooit)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_schgeenlokgroen}{nl:vannaar}", 
+                        nl.TegenhoudenLokgroen == NooitAanUitEnum.SchAan ? 1 : 0, 
+                        CCOLElementTimeTypeEnum.SCH_type,
+                        _schgeenlokgroen, nl.FaseVan));
+                }
 
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                     $"{_schisglos}{nl:vannaar}", 
@@ -708,7 +712,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var vs in c.InterSignaalGroep.LateReleases)
                     {
-                        sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{vs:van}, {_fcpf}{vs:naar}, {_tpf}{_tisglr}{vs:vannaar});");
+                        sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{vs:naar}, {_fcpf}{vs:van}, {_tpf}{_tisglr}{vs:vannaar});");
                     }
                     sb.AppendLine();
 
@@ -720,23 +724,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch (nl.Type)
                             {
                                 case NaloopTypeEnum.StartGroen:
-                                    var sg1 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
-                                    var sg2 = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
-                                    if (sg1?.Type == FaseTypeEnum.Voetganger && sg2?.Type == FaseTypeEnum.Voetganger)
-                                    {
-                                        var dk1 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
-                                        var dk2 = sg1.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
-                                        if (dk1 != null && dk2 != null)
-                                        { 
-                                            sb.AppendLine($"{ts}{ts}wijziging |= (IH[{_hpf}{_hmad}{dk1}] && (!H[{_hpf}{_hmad}{dk2}] || SCH[{_schpf}{_schisggeennla}{nl:vannaar}]) || !SCH[{_schpf}{_schisglos}{nl:vannaar}]) ? Realisatietijd_LateRelease_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar}) : 0;");
-                                        }
+                                    var crossing = c.GetVoetgangersDubbelzijdigeOversteek(nl.FaseVan, nl.FaseNaar);
+                                    if (crossing.Knop1Buiten != null && crossing.Knop1Binnen != null)
+                                    { 
+                                        sb.AppendLine($"{ts}{ts}wijziging |= (IH[{_hpf}{_hmad}{crossing.Knop1Buiten}] && (!H[{_hpf}{_hmad}{crossing.Knop1Binnen}] || SCH[{_schpf}{_schisggeennla}{nl:vannaar}]) || !SCH[{_schpf}{_schisglos}{nl:vannaar}]) ? Realisatietijd_LateRelease_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar}) : 0;");
                                     }
                                     
                                     sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie_wtv({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                                    if (crossing.Knop2Buiten != null && nl.TegenhoudenLokgroen != NooitAanUitEnum.Nooit)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}wijziging |= (IH[{_hpf}{_hmad}{crossing.Knop2Buiten}] && SCH[{_schpf}{_schgeenlokgroen}{nl:vannaar}] || !SCH[{_schpf}{_schisglos}{nl:vannaar}]) ? Realisatietijd_Lokgroen_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}) : 0;");
+                                        sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_Lokgroen_Correctie_wtv({_fcpf}{nl:van}, {_fcpf}{nl:naar});");
+                                    }
                                     break;
                                 case NaloopTypeEnum.EindeGroen:
                                 case NaloopTypeEnum.CyclischVerlengGroen:
-                                    sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{nl:naar}, {_fcpf}{nl:van}, {_tpf}{_tisgxnl}{nl:vannaar});");
+                                    sb.AppendLine($"{ts}{ts}wijziging |= Realisatietijd_LateRelease_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar}, {_tpf}{_tisgxnl}{nl:vannaar});");
                                     break;
                             }
                         }
@@ -827,7 +830,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (c.HasNalopen())
                     {
-                        foreach (var nl in c.InterSignaalGroep.Nalopen)
+                        foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
                         {
                             sb.AppendLine($"{ts}{ts}wijziging |= TISG_Lokgroen_Correctie({_fcpf}{nl:van}, {_fcpf}{nl:naar});");
                         }

@@ -4,10 +4,10 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum AltijdAanUitEnum
+    public enum NooitAanUitEnum
     {
-        [Description("Altijd")]
-        Altijd,
+        [Description("Nooit")]
+        Nooit,
         [Description("Aan")]
         SchAan,
         [Description("Uit")]

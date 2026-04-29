@@ -23,7 +23,7 @@ namespace TLCGen.Models
         public int? MaximaleVoorstart { get; set; }
         public int MaxUitverlengenVolgrichting { get; set; }
         public bool LosseRealisatieVoedendeRichting { get; set; }
-        public bool TegenhoudenLokgroen { get; set; }
+        public NooitAanUitEnum TegenhoudenLokgroen { get; set; }
         public bool LosseRealisatieVoorwaardeGeenAanvraagNaloop { get; set; }
 
         [XmlArrayItem(ElementName = "NaloopDetector")]

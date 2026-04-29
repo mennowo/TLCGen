@@ -223,3 +223,4 @@ ModelManifest.xml
 /local.cake
 *.ods#
 /TLCGen.Parts/TLCGen.Dialogs/BuildConstants.cs
+/CLAUDE.md

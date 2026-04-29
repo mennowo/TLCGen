@@ -7,6 +7,18 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    public class PedestrianCrossingModel
+    {
+        public FaseCyclusModel Fase1 { get; set; }
+        public FaseCyclusModel Fase2 { get; set; }
+        public NaloopModel Naloop12 { get; set; }
+        public NaloopModel Naloop21 { get; set; }
+        public DetectorModel Knop1Buiten { get; set; }
+        public DetectorModel Knop1Binnen { get; set; }
+        public DetectorModel Knop2Buiten { get; set; }
+        public DetectorModel Knop2Binnen { get; set; }
+    }
+
     public static class ControllerModelExtensions
     {
         #region Detectors
@@ -78,7 +90,42 @@ namespace TLCGen.Models
                 c.Fasen.Any(x2 => x2.Naam == x.FaseVan && x2.Type == FaseTypeEnum.Voetganger) &&
                 c.Fasen.Any(x2 => x2.Naam == x.FaseNaar && x2.Type == FaseTypeEnum.Voetganger));
         }
-        
+
+        public static PedestrianCrossingModel GetVoetgangersDubbelzijdigeOversteek(this ControllerModel c, string fcFrom, string fcTo)
+        {
+            var fc1 = c.Fasen.FirstOrDefault(x => x.Type == FaseTypeEnum.Voetganger && x.Naam == fcFrom);
+            var fc2 = c.Fasen.FirstOrDefault(x => x.Type == FaseTypeEnum.Voetganger && x.Naam == fcTo);
+            if (fc1 == null || fc2 == null)
+            {
+                return null;
+            }
+
+            var nl1 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x =>
+                x.FaseVan == fcFrom && x.FaseNaar == fcTo);
+            var nl2 = c.InterSignaalGroep.Nalopen.FirstOrDefault(x =>
+                x.FaseVan == fcTo && x.FaseNaar == fcFrom);
+            if (nl1 == null || nl2 == null)
+            {
+                return null;
+            }
+
+            var vandk1 = fc1?.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+            var vandk2 = fc1?.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+            var naardk1 = fc2?.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBuiten);
+            var naardk2 = fc2?.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.KnopBinnen);
+            return new PedestrianCrossingModel
+            {
+                Fase1 = fc1,
+                Fase2 = fc2,
+                Naloop12 = nl1,
+                Naloop21 = nl2,
+                Knop1Buiten = nl1?.DetectieAfhankelijk == true ? vandk1 : null,
+                Knop1Binnen = nl1?.DetectieAfhankelijk == true ? vandk2 : null,
+                Knop2Buiten = nl2?.DetectieAfhankelijk == true ? naardk1 : null,
+                Knop2Binnen = nl2?.DetectieAfhankelijk == true ? naardk2 : null
+            };
+        }
+
         public static IEnumerable<GelijkstartModel> GetGelijkstarten(this ControllerModel c, string fc)
         {
             return c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc || x.FaseNaar == fc);
@@ -196,6 +243,21 @@ namespace TLCGen.Models
         public static bool HasNalopen(this ControllerModel c)
         {
             return c.InterSignaalGroep.Nalopen.Count > 0;
+        }
+
+        public static bool HasGelijkstarten(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Gelijkstarten.Count > 0;
+        }
+
+        public static bool HasVoorstarten(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.Voorstarten.Count > 0;
+        }
+
+        public static bool HasLateReleases(this ControllerModel c)
+        {
+            return c.InterSignaalGroep.LateReleases.Count > 0;
         }
 
         public static bool IsInterFunc(this ControllerModel c)

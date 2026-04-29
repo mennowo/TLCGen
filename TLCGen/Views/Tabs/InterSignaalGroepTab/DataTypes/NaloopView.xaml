@@ -37,9 +37,10 @@
                      Text="{Binding Path=MaxUitverlengenVolgrichting}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
-            <CheckBox Content="Tegenhouden lokgroen" 
-                      Visibility="{Binding Path=IsIsgFunc,Converter={StaticResource BooleanToVisibilityConverter}}"
-                      IsChecked="{Binding Path=TegenhoudenLokgroen}" Margin="5" />
+            <Label Content="Tegenhouden lokgroen:" />
+            <ComboBox 
+                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAanUitEnum}}}"
+                SelectedItem="{Binding Path=TegenhoudenLokgroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding Path=InrijdenTijdensGroenPossible,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <CheckBox Content="Inrijden/lopen tijdens groen"
                           IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />

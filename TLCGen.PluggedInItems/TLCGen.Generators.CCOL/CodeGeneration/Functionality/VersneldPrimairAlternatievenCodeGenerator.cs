@@ -332,13 +332,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (c.IsInterFunc())
                             {
                                 sb.AppendLine($"{ts}/* als de PAR niet meer waar is, kan je hem naar RR sturen voor gekoppelde realisaties */");
-                                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
                                 {
                                     sb.AppendLine($"{ts}if (!PAR[{_fcpf}{nl:van}] && RA[{_fcpf}{nl:van}] && AR[{_fcpf}{nl:van}]) RR[{_fcpf}{nl:van}] |= BIT5;");
                                 }
+                                sb.AppendLine();
                             }
-
+                        }
+                        if (c.HasVoorstarten() || c.HasLateReleases())
+                        {
+                            sb.AppendLine($"{ts}/* Niet intrekken alternatief tijden RA nastartrichting bij voorstart of voorstartrichting bij laterealease */");
+                            foreach (var fs in c.InterSignaalGroep.Voorstarten)
+                            {
+                                sb.AppendLine($"{ts}if (RA[{_fcpf}{fs:naar}]) RR[{_fcpf}{fs:van}] &= ~BIT5;");
+                            }
+                            foreach (var lr in c.InterSignaalGroep.LateReleases)
+                            {
+                                sb.AppendLine($"{ts}if (RA[{_fcpf}{lr:naar}]) RR[{_fcpf}{lr:van}] &= ~BIT5;");
+                            }
                             sb.AppendLine();
+                        }
+
+                        if (c.HasNalopen())
+                        {
                             sb.AppendLine($"{ts}/* Niet intrekken alternatief nalooprichting tijdens inlopen voedende richting */");
                             foreach (var fc in c.Fasen)
                             {

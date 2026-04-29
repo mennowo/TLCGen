@@ -35,6 +35,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _treallr;
         private string _tisgxnl;
 	    private string _hmad;
+        private string _schisglos;
+        private string _schgeenlokgroen;
 
         #endregion // Fields
 
@@ -376,7 +378,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");
-                        sb.AppendLine($"{ts}/* --------------------------------------------- */");
                         foreach (var nl in c.InterSignaalGroep.Nalopen)
                         {
                             var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
@@ -422,6 +423,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
+                        if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc &&
+                            c.InterSignaalGroep.Nalopen.Any(x => x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* set meerealsiatie om tegenhouden voedende richting vanwege lokgroen te voorkomen */");
+                            foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.DetectieAfhankelijk && x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
+                            {
+                                var dk = nl.Detectoren.FirstOrDefault();
+                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl:van}, {_fcpf}{nl:naar}, (boolv)(RA[{_fcpf}{nl:naar}] && !K[{_fcpf}{nl:naar}] && (SCH[{_schpf}{_schisglos}{nl:naarvan}] && SCH[{_schpf}{_schgeenlokgroen}{nl:naarvan}] && IH[{_hpf}{_hnla}{dk.Detector}] || !SCH[{_schpf}{_schisglos}{nl:naarvan}])));");
+                            }
+                        }
                     }
                     return sb.ToString();
                 
@@ -450,6 +462,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _trealil = CCOLGeneratorSettingsProvider.Default.GetElementName("trealil");
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
             _tisgxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("tisgxnl");
+            _schisglos = CCOLGeneratorSettingsProvider.Default.GetElementName("schisglos");
+            _schgeenlokgroen = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenlokgroen");
             return base.SetSettings(settings);
 	    }
     }
