@@ -1,5 +1,8 @@
 TLCGen=12.4.0.19
 RN==TLCGen
+TLCGen versie: 12.4.0.20
+- Voorkomen lege naam van prio ingreep
+- Diverse fixes voor 'interstartgroen func'
 TLCGen versie: 12.4.0.19
 - Diverse fixes voor 'interstartgroen func'
 - Fix voor issues met TLCGen defaults xml file
