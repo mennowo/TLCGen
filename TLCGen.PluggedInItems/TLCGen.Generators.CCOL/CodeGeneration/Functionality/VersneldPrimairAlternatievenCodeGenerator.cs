@@ -444,7 +444,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = max_par({_fcpf}{fc.FaseCyclus}, PRML, ML)");
+                                    sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = max_par({_fcpf}{fc.FaseCyclus}, twacht)");
                                     sb.Append($" && SCH[{_schpf}{_schaltg}");
                                     foreach (var ofc in hasgs.Item2)
                                     {
