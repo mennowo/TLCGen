@@ -593,8 +593,7 @@ namespace TLCGen.Specificator
             {
                 l.Add([
                     mvfc.Naam,
-                    mvfc.Wachtgroen.GetDescription(),
-
+                    mvfc.Wachtgroen != NooitAltijdAanUitEnum.Altijd ? mvfc.Wachtgroen.GetDescription() : "-",
                     (mvfc.WachtgroenType == WachtgroenTypeEnum.Geen ? " 0: " :
                         mvfc.WachtgroenType == WachtgroenTypeEnum.GroenVasthouden ? " 1: " :
                         mvfc.WachtgroenType == WachtgroenTypeEnum.GroenVasthoudenEnAanvragen ? " 2: " :
@@ -2112,91 +2111,206 @@ namespace TLCGen.Specificator
             List<List<string>> l;
             if (c.PrioData.PrioIngrepen.Any(x => x.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
             {
-                l = new List<List<string>>
+                if (c.PrioData.KARSignaalGroepNummersInParameters)
                 {
-                    new List<string>
+                    l = new List<List<string>>
                     {
-                        "Signaalgroep (##)",
-                        "Geconditioneerde prio",
-                        "Gec. Te vroeg    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttevroeg") + "##bus",
-                        "Gec. Op tijd       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstiptoptijd") + "##bus",
-                        "Gec. Te laat       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttelaat") + "##bus",
-                        "Ongecond.                        PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio") + "##bus",
-                        "Rijtijd ongeh.                   PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto") + "##bus",
-                        "Rijtijd bep. geh.                PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg") + "##bus",
-                        "Rijtijd geh.                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg") + "##bus",
-                        "Bezettijd geh.                   T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg") + "##bus",
-                        "Blokkeringstijd                  T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tblk") + "##bus",
-                        "Groenbewaking                    T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tgb") + "##bus",
-                        "Ondermaximum                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx") + "##bus"
+                        new List<string>
+                        {
+                            "Signaalgroep (##)",
+                            "KAR richtingnummer    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsg") + "##",
+                            "Geconditioneerde prio",
+                            "Gec. Te vroeg    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttevroeg") + "##bus",
+                            "Gec. Op tijd       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstiptoptijd") + "##bus",
+                            "Gec. Te laat       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttelaat") + "##bus",
+                            "Ongecond.                        PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio") + "##bus",
+                            "Rijtijd ongeh.                   PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto") + "##bus",
+                            "Rijtijd bep. geh.                PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg") + "##bus",
+                            "Rijtijd geh.                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg") + "##bus",
+                            "Bezettijd geh.                   T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg") + "##bus",
+                            "Blokkeringstijd                  T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tblk") + "##bus",
+                            "Groenbewaking                    T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tgb") + "##bus",
+                            "Ondermaximum                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx") + "##bus"
+                        }
+                    };
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepDSI() || x.HasOVIngreepVecom() ||
+                                                                          x.HasOVIngreepVecomIO() || x.HasOVIngreepWissel() || x.HasPrioIngreepKAR()))
+                    {
+                        int iFc = 0;
+                        if (int.TryParse(ov.FaseCyclus, out iFc))
+                        {
+                            if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                            var ingr = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus && x.HasPrioIngreepKAR());
+                            var iFcm = ingr.KARSignaalGroepNummer;
+                            iFc = (iFcm > 0) ? iFcm : iFc;
+                        }
+                        var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                        var opties = 0;
+                        if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                        if (ov.AfkappenConflictenPrio) opties += 300;
+                        if (ov.TussendoorRealiseren) opties += 3;
+                        if (ov.VasthoudenGroen) opties += 20;
+                        var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                        l.Add(new List<string>
+                        {
+                            ov.FaseCyclus,
+                            iFc.ToString(),
+                            ov.GeconditioneerdePrioriteit.GetDescription(),
+                            cp ? ov.GeconditioneerdePrioTeVroeg.ToString() : "-",
+                            cp ? ov.GeconditioneerdePrioOpTijd.ToString() : "-",
+                            cp ? ov.GeconditioneerdePrioTeLaat.ToString() : "-",
+                            sopties,
+                            ov.RijTijdOngehinderd.ToString(),
+                            ov.RijTijdBeperktgehinderd.ToString(),
+                            ov.RijTijdGehinderd.ToString(),
+                            ov.BezettijdPrioGehinderd.ToString(),
+                            ov.BlokkeertijdNaPrioIngreep.ToString(),
+                            ov.GroenBewaking.ToString(),
+                            ov.OnderMaximum.ToString()
+                        });
                     }
-                };
-                foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepDSI() || x.HasOVIngreepVecom() ||
-                                                                      x.HasOVIngreepVecomIO() || x.HasOVIngreepWissel() || x.HasPrioIngreepKAR() ))
+                }
+                else
                 {
-                    var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
-                    var opties = 0;
-                    if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
-                    if (ov.AfkappenConflictenPrio) opties += 300;
-                    if (ov.TussendoorRealiseren) opties += 3;
-                    if (ov.VasthoudenGroen) opties += 20;
-                    var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
-                    l.Add(new List<string>
+                    l = new List<List<string>>
                     {
-                        ov.FaseCyclus,
-                        ov.GeconditioneerdePrioriteit.GetDescription(),
-                        cp ? ov.GeconditioneerdePrioTeVroeg.ToString() : "-",
-                        cp ? ov.GeconditioneerdePrioOpTijd.ToString() : "-",
-                        cp ? ov.GeconditioneerdePrioTeLaat.ToString() : "-",
-                        sopties,
-                        ov.RijTijdOngehinderd.ToString(),
-                        ov.RijTijdBeperktgehinderd.ToString(),
-                        ov.RijTijdGehinderd.ToString(),
-                        ov.BezettijdPrioGehinderd.ToString(),
-                        ov.BlokkeertijdNaPrioIngreep.ToString(),
-                        ov.GroenBewaking.ToString(),
-                        ov.OnderMaximum.ToString()
-                    });
+                        new List<string>
+                        {
+                            "Signaalgroep (##)",
+                            "Geconditioneerde prio",
+                            "Gec. Te vroeg    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttevroeg") + "##bus",
+                            "Gec. Op tijd       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstiptoptijd") + "##bus",
+                            "Gec. Te laat       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttelaat") + "##bus",
+                            "Ongecond.                        PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio") + "##bus",
+                            "Rijtijd ongeh.                   PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto") + "##bus",
+                            "Rijtijd bep. geh.                PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg") + "##bus",
+                            "Rijtijd geh.                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg") + "##bus",
+                            "Bezettijd geh.                   T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg") + "##bus",
+                            "Blokkeringstijd                  T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tblk") + "##bus",
+                            "Groenbewaking                    T " + CCOLGeneratorSettingsProvider.Default.GetElementName("tgb") + "##bus",
+                            "Ondermaximum                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx") + "##bus"
+                        }
+                    };
+                    foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepDSI() || x.HasOVIngreepVecom() ||
+                                                                          x.HasOVIngreepVecomIO() || x.HasOVIngreepWissel() || x.HasPrioIngreepKAR()))
+                    {
+                        var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                        var opties = 0;
+                        if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                        if (ov.AfkappenConflictenPrio) opties += 300;
+                        if (ov.TussendoorRealiseren) opties += 3;
+                        if (ov.VasthoudenGroen) opties += 20;
+                        var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                        l.Add(new List<string>
+                        {
+                            ov.FaseCyclus,
+                            ov.GeconditioneerdePrioriteit.GetDescription(),
+                            cp ? ov.GeconditioneerdePrioTeVroeg.ToString() : "-",
+                            cp ? ov.GeconditioneerdePrioOpTijd.ToString() : "-",
+                            cp ? ov.GeconditioneerdePrioTeLaat.ToString() : "-",
+                            sopties,
+                            ov.RijTijdOngehinderd.ToString(),
+                            ov.RijTijdBeperktgehinderd.ToString(),
+                            ov.RijTijdGehinderd.ToString(),
+                            ov.BezettijdPrioGehinderd.ToString(),
+                            ov.BlokkeertijdNaPrioIngreep.ToString(),
+                            ov.GroenBewaking.ToString(),
+                            ov.OnderMaximum.ToString()
+                        });
+                    }
                 }
             }
             else
             {
-                l = new List<List<string>>
+                if (c.PrioData.KARSignaalGroepNummersInParameters)
                 {
-                    new List<string>
+                    l = new List<List<string>>
                     {
-                        "Signaalgroep",
-                        "Prioriteitsopties",
-                        "Ongehinderde rijtijd",
-                        "Beperkt rijtijd",
-                        "Gehinderde rijtijd",
-                        "Bezettijd OV gehinderd",
-                        "Blokkeringstijd",
-                        "Groenbewaking",
-                        "Ondermaximum"
+                        new List<string>
+                        {
+                            "Signaalgroep",
+                            "KAR richtingnummer    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsg") + "##",
+                            "Prioriteitsopties",
+                            "Ongehinderde rijtijd",
+                            "Beperkt rijtijd",
+                            "Gehinderde rijtijd",
+                            "Bezettijd OV gehinderd",
+                            "Blokkeringstijd",
+                            "Groenbewaking",
+                            "Ondermaximum"
+                        }
+                    };
+                    foreach (var ov in c.PrioData.PrioIngrepen)
+                    {
+                        int iFc = 0;
+                        if (int.TryParse(ov.FaseCyclus, out iFc))
+                        {
+                            if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                            var ingr = c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus && x.HasPrioIngreepKAR());
+                            var iFcm = ingr.KARSignaalGroepNummer;
+                            iFc = (iFcm > 0) ? iFcm : iFc;
+                        }
+                        var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                        var opties = 0;
+                        if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                        if (ov.AfkappenConflictenPrio) opties += 300;
+                        if (ov.TussendoorRealiseren) opties += 3;
+                        if (ov.VasthoudenGroen) opties += 20;
+                        var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                        l.Add(new List<string>
+                        {
+                            ov.FaseCyclus,
+                            iFc.ToString(),
+                            sopties,
+                            ov.RijTijdOngehinderd.ToString(),
+                            ov.RijTijdBeperktgehinderd.ToString(),
+                            ov.RijTijdGehinderd.ToString(),
+                            ov.BezettijdPrioGehinderd.ToString(),
+                            ov.BlokkeertijdNaPrioIngreep.ToString(),
+                            ov.GroenBewaking.ToString(),
+                            ov.OnderMaximum.ToString()
+                        });
                     }
-                };
-                foreach (var ov in c.PrioData.PrioIngrepen)
+                }
+                else
                 {
-                    var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
-                    var opties = 0;
-                    if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
-                    if (ov.AfkappenConflictenPrio) opties += 300;
-                    if (ov.TussendoorRealiseren) opties += 3;
-                    if (ov.VasthoudenGroen) opties += 20;
-                    var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
-                    l.Add(new List<string>
+                    l = new List<List<string>>
                     {
-                        ov.FaseCyclus,
-                        sopties,
-                        ov.RijTijdOngehinderd.ToString(),
-                        ov.RijTijdBeperktgehinderd.ToString(),
-                        ov.RijTijdGehinderd.ToString(),
-                        ov.BezettijdPrioGehinderd.ToString(),
-                        ov.BlokkeertijdNaPrioIngreep.ToString(),
-                        ov.GroenBewaking.ToString(),
-                        ov.OnderMaximum.ToString()
-                    });
+                        new List<string>
+                        {
+                            "Signaalgroep",
+                            "Prioriteitsopties",
+                            "Ongehinderde rijtijd",
+                            "Beperkt rijtijd",
+                            "Gehinderde rijtijd",
+                            "Bezettijd OV gehinderd",
+                            "Blokkeringstijd",
+                            "Groenbewaking",
+                            "Ondermaximum"
+                        }
+                    };
+                    foreach (var ov in c.PrioData.PrioIngrepen)
+                    {
+                        var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                        var opties = 0;
+                        if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
+                        if (ov.AfkappenConflictenPrio) opties += 300;
+                        if (ov.TussendoorRealiseren) opties += 3;
+                        if (ov.VasthoudenGroen) opties += 20;
+                        var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                        l.Add(new List<string>
+                        {
+                            ov.FaseCyclus,
+                            sopties,
+                            ov.RijTijdOngehinderd.ToString(),
+                            ov.RijTijdBeperktgehinderd.ToString(),
+                            ov.RijTijdGehinderd.ToString(),
+                            ov.BezettijdPrioGehinderd.ToString(),
+                            ov.BlokkeertijdNaPrioIngreep.ToString(),
+                            ov.GroenBewaking.ToString(),
+                            ov.OnderMaximum.ToString()
+                        });
+                    }
                 }
             }
 
@@ -2259,6 +2373,10 @@ namespace TLCGen.Specificator
             if (c.HasHDKAR())
             {
                 ll.Add("HD via KAR");
+                if (c.PrioData.KARSignaalGroepNummersInParameters)
+                {
+                    ll.Add("KAR richtingnummer    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmkarsghd") + "##");
+                }
                 ll.Add("KAR inmeld filtertijd                T " + CCOLGeneratorSettingsProvider.Default.GetElementName("thdin") + "##kar");
                 ll.Add("KAR uitmeld filtertijd               T " + CCOLGeneratorSettingsProvider.Default.GetElementName("thduit") + "##kar");
                 if (c.PrioData.HDIngrepen.Any(x => x.InmeldingOokDoorToepassen))
@@ -2287,7 +2405,19 @@ namespace TLCGen.Specificator
                 ll = new List<string> { ovcf.FaseCyclus };
                 if (c.HasHDKAR())
                 {
+                    int iFc = 0;
+                    if (int.TryParse(ovcf.FaseCyclus, out iFc))
+                    {
+                        if (c.PrioData.VerlaagHogeSignaalGroepNummers && iFc > 200) iFc -= 200;
+                        var ingr = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ovcf.FaseCyclus && x.KAR);
+                        var iFcm = ingr.KARSignaalGroepNummerHD;
+                        iFc = (iFcm > 0) ? iFcm : iFc;
+                    }
                     ll.Add(ovcf.KAR.ToCustomString());
+                    if (c.PrioData.KARSignaalGroepNummersInParameters)
+                    {
+                        ll.Add(iFc.ToString());
+                    }
                     ll.Add(ovcf.KARInmeldingFilterTijd.ToString());
                     ll.Add(ovcf.KARUitmeldingFilterTijd.ToString());
                     if (c.PrioData.HDIngrepen.Any(x => x.InmeldingOokDoorToepassen))
