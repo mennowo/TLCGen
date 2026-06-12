@@ -14,11 +14,11 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-	        if (!(obj is HDIngreepMeerealiserendeFaseCyclusModel they))
-	        {
-		        throw new InvalidCastException();
-	        }
-	        return string.Compare(FaseCyclus, they.FaseCyclus, StringComparison.Ordinal);
+            if (!(obj is HDIngreepMeerealiserendeFaseCyclusModel they))
+            {
+                throw new InvalidCastException();
+            }
+            return string.Compare(FaseCyclus, they.FaseCyclus, StringComparison.Ordinal);
         }
     }
 }

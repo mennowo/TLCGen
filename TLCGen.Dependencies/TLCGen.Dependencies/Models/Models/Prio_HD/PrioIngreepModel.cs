@@ -55,6 +55,13 @@ namespace TLCGen.Models
         public bool AlleLijnen { get; set; }
         public bool AlleRitCategorien { get; set; }
         public bool CheckPeriode { get; set; }
+        public bool CheckOpSirene { get; set; }
+        public bool InmeldingOokDoorToepassen { get; set; }
+        public int InmeldingOokDoorFase { get; set; }
+
+        [Browsable(false)]
+        [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
+        public List<PrioIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; } = [];
 
         public bool GeenEigenVerklikking { get; set; }
 

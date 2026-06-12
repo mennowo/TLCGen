@@ -1,5 +1,4 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -100,6 +99,7 @@ namespace TLCGen.ViewModels
         public bool HasDet => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector;
         public bool HasRis => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
         public bool HasInp => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang;
+        public bool HasOpticom => Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom;
 
         public ObservableObjectEx ActualViewModel
         {
@@ -118,6 +118,8 @@ namespace TLCGen.ViewModels
         public PrioIngreepPelotonMeldingViewModel PelotonViewModel { get; }
 
         public PrioIngreepFietsPrioriteitMeldingViewModel FietsPrioriteitViewModel { get; set; }
+
+        public PrioIngreepOpticomMeldingViewModel OpticomViewModel { get; }
 
         public bool OpvangStoring
         {
@@ -222,6 +224,14 @@ namespace TLCGen.ViewModels
                         MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
                     }
                     break;
+                case PrioIngreepVoertuigTypeEnum.Hulpdienst:
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
+                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));                    
+                    break;
                 case PrioIngreepVoertuigTypeEnum.NG:
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
                     MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
@@ -259,9 +269,6 @@ namespace TLCGen.ViewModels
                     ActualViewModel = ViewModel;
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VrachtRIS:
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsRISPeloton:
-                //case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoRISPeloton:
                     TLCGenModelManager.Default.UpdateControllerAlerts();
                     ActualViewModel = RISViewModel;
                     break;
@@ -270,6 +277,9 @@ namespace TLCGen.ViewModels
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton:
                     ActualViewModel = PelotonViewModel;
+                    break;
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom:
+                    ActualViewModel = OpticomViewModel;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -293,6 +303,7 @@ namespace TLCGen.ViewModels
             RISViewModel = new PrioIngreepRISMeldingViewModel(this);
             PelotonViewModel = new PrioIngreepPelotonMeldingViewModel(this);
             FietsPrioriteitViewModel = new PrioIngreepFietsPrioriteitMeldingViewModel(this);
+            OpticomViewModel = new PrioIngreepOpticomMeldingViewModel(this);
 
             if (PrioIngreepInUitMelding.MeldingBijstoring != null)
             {

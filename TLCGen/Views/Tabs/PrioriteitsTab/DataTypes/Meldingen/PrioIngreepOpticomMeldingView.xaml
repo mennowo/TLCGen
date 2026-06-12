@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="TLCGen.Views.PrioIngreepOpticomMeldingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:meldingen="clr-namespace:TLCGen.Views.Tabs.PrioriteitsTab.DataTypes.Meldingen"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
+             xmlns:views="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepOpticomMeldingViewModel}">
+    <UserControl.Resources>
+        <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="HD in/uitmelding obv Opticom" FontWeight="Bold" Grid.ColumnSpan="2" />
+            <Label Grid.Row="1" Grid.Column="0" Content="Opticom ingang" />
+            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=AvailableDetectors}" Margin="2"
+                      SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            <Label Grid.Row="2" Grid.Column="0" Content="Toepassen anti jutter tijd" />
+            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=AntiJutterTijdToepassen,UpdateSourceTrigger=PropertyChanged}"
+                      VerticalAlignment="Center" />
+            <Label Grid.Row="3" Grid.Column="0" Content="Anti jutter tijd"
+                   Visibility="{Binding Path=AntiJutterTijdToepassen,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="2" Text="{Binding Path=AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding Path=AntiJutterTijdToepassen,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </Grid>
+    </Grid>
+</UserControl>

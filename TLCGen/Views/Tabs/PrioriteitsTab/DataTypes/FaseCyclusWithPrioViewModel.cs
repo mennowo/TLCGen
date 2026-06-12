@@ -37,6 +37,8 @@ namespace TLCGen.ViewModels
         public bool HasBicycle => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Fiets);
         [Browsable(false)]
         public bool HasTruck => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen);
+        [Browsable(false)]
+        public bool HasHulpdienst => Ingrepen.Any(x => x.FaseCyclus == Naam && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst);
 
         [Browsable(false)]
         public string Naam

@@ -96,6 +96,8 @@ namespace TLCGen.Settings
                     return "aut";
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
                     return "inp";
+                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom:
+                    return "opti";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -311,6 +313,9 @@ namespace TLCGen.Settings
                             break;
                         case PrioIngreepVoertuigTypeEnum.Auto:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "aut", Setting = "aut"});
+                            break;
+                        case PrioIngreepVoertuigTypeEnum.Hulpdienst:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "hpd", Setting = "hpd"});
                             break;
                         case PrioIngreepVoertuigTypeEnum.NG:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "alg", Setting = "alg"});

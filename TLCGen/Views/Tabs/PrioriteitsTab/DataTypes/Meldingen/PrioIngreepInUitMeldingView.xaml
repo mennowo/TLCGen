@@ -12,25 +12,20 @@
     <UserControl.Resources>
         <local:MeldingTemplateSelector x:Key="MeldingTemplateSelector">
             <local:MeldingTemplateSelector.RegularTemplate>
-                <DataTemplate>
-                    <meldingen:PrioIngreepRegularMeldingView />
-                </DataTemplate>
+                <DataTemplate><meldingen:PrioIngreepRegularMeldingView /></DataTemplate>
             </local:MeldingTemplateSelector.RegularTemplate>
             <local:MeldingTemplateSelector.RISTemplate>
-                <DataTemplate>
-                    <meldingen:PrioIngreepRISMeldingView />
-                </DataTemplate>
+                <DataTemplate><meldingen:PrioIngreepRISMeldingView /></DataTemplate>
             </local:MeldingTemplateSelector.RISTemplate>
             <local:MeldingTemplateSelector.PelotonTemplate>
-                <DataTemplate>
-                    <meldingen:PrioIngreepPelotonMeldingView />
-                </DataTemplate>
+                <DataTemplate><meldingen:PrioIngreepPelotonMeldingView /></DataTemplate>
             </local:MeldingTemplateSelector.PelotonTemplate>
             <local:MeldingTemplateSelector.FietsPrioriteitTemplate>
-                <DataTemplate>
-                    <local:PrioIngreepFietsPrioriteitMeldingView />
-                </DataTemplate>
+                <DataTemplate><local:PrioIngreepFietsPrioriteitMeldingView /></DataTemplate>
             </local:MeldingTemplateSelector.FietsPrioriteitTemplate>
+            <local:MeldingTemplateSelector.OpticomTemplate>
+                <DataTemplate><local:PrioIngreepOpticomMeldingView /></DataTemplate>
+            </local:MeldingTemplateSelector.OpticomTemplate>
         </local:MeldingTemplateSelector>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="2" />

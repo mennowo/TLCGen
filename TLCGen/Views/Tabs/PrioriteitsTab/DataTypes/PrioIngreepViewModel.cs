@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -31,7 +32,10 @@ namespace TLCGen.ViewModels
         private readonly FaseCyclusWithPrioViewModel _parentIngreep;
         private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
         private PrioIngreepWisselDataViewModel _wisselData;
-
+        private PrioIngreepMeerealiserendeFaseCyclusViewModel _SelectedMeerealiserendeFase;
+        private ObservableCollection<string> _Fasen;
+        private string _SelectedFase;
+        
         #endregion // Fields
 
         #region Properties
@@ -73,6 +77,8 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(nameof(IsTypeBicycle));
                 OnPropertyChanged(nameof(IsTypeTram));
                 OnPropertyChanged(nameof(IsTypeTruck));
+                OnPropertyChanged(nameof(IsTypeHulpdienst));
+                OnPropertyChanged(nameof(ShowLijnnummer));
             }
         }
 
@@ -84,6 +90,12 @@ namespace TLCGen.ViewModels
         public bool IsTypeTram => Type == PrioIngreepVoertuigTypeEnum.Tram;
         [Browsable(false)]
         public bool IsTypeTruck => Type == PrioIngreepVoertuigTypeEnum.Vrachtwagen;
+        [Browsable(false)]
+        public bool IsTypeHulpdienst => Type == PrioIngreepVoertuigTypeEnum.Hulpdienst;
+        [Browsable(false)]
+        public bool ShowLijnnummer => Type != PrioIngreepVoertuigTypeEnum.Hulpdienst &&
+                                      Type != PrioIngreepVoertuigTypeEnum.Fiets &&
+                                      Type != PrioIngreepVoertuigTypeEnum.Vrachtwagen;
 
         [Browsable(false)]
         public string DisplayName => PrioIngreep.DisplayName;
@@ -416,6 +428,105 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
+        [Description("Check op sirene")]
+        public bool CheckOpSirene
+        {
+            get => PrioIngreep.CheckOpSirene;
+            set
+            {
+                PrioIngreep.CheckOpSirene = value;
+                OnPropertyChanged(nameof(CheckOpSirene), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool InmeldingOokDoorToepassen
+        {
+            get => PrioIngreep.InmeldingOokDoorToepassen;
+            set
+            {
+                PrioIngreep.InmeldingOokDoorToepassen = value;
+                if (value)
+                {
+                    if(InmeldingOokDoorFase == 0)
+                    {
+                        if (int.TryParse(PrioIngreep.FaseCyclus, out var i))
+                        {
+                            if (PrioIngreep.FaseCyclus.EndsWith("1") || PrioIngreep.FaseCyclus.EndsWith("4") || PrioIngreep.FaseCyclus.EndsWith("7") || PrioIngreep.FaseCyclus.EndsWith("10"))
+                            {
+                                InmeldingOokDoorFase = i + 1;
+                            }
+                            else if (PrioIngreep.FaseCyclus.EndsWith("3") || PrioIngreep.FaseCyclus.EndsWith("6") || PrioIngreep.FaseCyclus.EndsWith("9") || PrioIngreep.FaseCyclus.EndsWith("12"))
+                            {
+                                InmeldingOokDoorFase = i - 1;
+                            }
+                            else
+                            {
+                                InmeldingOokDoorFase = i;
+                            }
+                        }
+                    }
+                }
+                OnPropertyChanged(nameof(InmeldingOokDoorToepassen), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public int InmeldingOokDoorFase
+        {
+            get => PrioIngreep.InmeldingOokDoorFase;
+            set
+            {
+                PrioIngreep.InmeldingOokDoorFase = value;
+                OnPropertyChanged(nameof(InmeldingOokDoorFase), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public ObservableCollection<string> Fasen
+        {
+            get
+            {
+                if(_Fasen == null)
+                {
+                    _Fasen = new ObservableCollection<string>();
+                }
+                return _Fasen;
+            }
+        }
+
+        [Browsable(false)]
+        public string SelectedFase
+        {
+            get => _SelectedFase;
+            set
+            {
+                _SelectedFase = value;
+                OnPropertyChanged("SelectedFase");
+                _AddMeerealiserendeFaseCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
+        [Browsable(false)]
+        public PrioIngreepMeerealiserendeFaseCyclusViewModel SelectedMeerealiserendeFase
+        {
+            get => _SelectedMeerealiserendeFase;
+            set
+            {
+                _SelectedMeerealiserendeFase = value;
+                OnPropertyChanged("SelectedMeerealiserendeFase");
+                _RemoveMeerealiserendeFaseCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
+        [Browsable(false)]
+        public ObservableCollectionAroundList<PrioIngreepMeerealiserendeFaseCyclusViewModel, PrioIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFasen
+        {
+            get;
+            private set;
+        }
+
+        [Browsable(false)]
         [Description("Check op ritcategorie")]
         public bool CheckRitCategorie
         {
@@ -575,10 +686,92 @@ namespace TLCGen.ViewModels
                 WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(PrioIngreep.FaseCyclus, null, true));
             });
 
+        #region Commands
+
+        RelayCommand _AddMeerealiserendeFaseCommand;
+        RelayCommand _RemoveMeerealiserendeFaseCommand;
+        public ICommand AddMeerealiserendeFaseCommand
+        {
+            get
+            {
+                if (_AddMeerealiserendeFaseCommand == null)
+                {
+                    _AddMeerealiserendeFaseCommand = new RelayCommand(AddNewMeerealiserendeFaseCommand_Executed, AddNewMeerealiserendeFaseCommand_CanExecute);
+                }
+                return _AddMeerealiserendeFaseCommand;
+            }
+        }
+
+
+        public ICommand RemoveMeerealiserendeFaseCommand
+        {
+            get
+            {
+                if (_RemoveMeerealiserendeFaseCommand == null)
+                {
+                    _RemoveMeerealiserendeFaseCommand = new RelayCommand(RemoveMeerealiserendeFaseCommand_Executed, RemoveMeerealiserendeFaseCommand_CanExecute);
+                }
+                return _RemoveMeerealiserendeFaseCommand;
+            }
+        }
+
+        #endregion // Commands
+
+        #region Command functionality
+
+        void AddNewMeerealiserendeFaseCommand_Executed()
+        {
+            if (!(MeerealiserendeFasen.Where(x => x.FaseCyclus.FaseCyclus == SelectedFase).Count() > 0))
+            {
+                MeerealiserendeFasen.Add(
+                    new PrioIngreepMeerealiserendeFaseCyclusViewModel(
+                        new PrioIngreepMeerealiserendeFaseCyclusModel() { FaseCyclus = SelectedFase }));
+            }
+
+            BuildFasenList();
+
+            PrioIngreep.MeerealiserendeFaseCycli.BubbleSort();
+            MeerealiserendeFasen.Rebuild();
+
+            if (MeerealiserendeFasen.Count > 0)
+                SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
+
+            OnPropertyChanged(broadcast: true);
+        }
+
+        bool AddNewMeerealiserendeFaseCommand_CanExecute()
+        {
+            return MeerealiserendeFasen != null && SelectedFase != null;
+        }
+
+        void RemoveMeerealiserendeFaseCommand_Executed()
+        {
+            MeerealiserendeFasen.Remove(SelectedMeerealiserendeFase);
+
+            BuildFasenList();
+
+            PrioIngreep.MeerealiserendeFaseCycli.BubbleSort();
+            MeerealiserendeFasen.Rebuild();
+
+            if (MeerealiserendeFasen.Count > 0)
+                SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
+            else
+                SelectedMeerealiserendeFase = null;
+
+            OnPropertyChanged(broadcast: true);
+        }
+
+        bool RemoveMeerealiserendeFaseCommand_CanExecute()
+        {
+            return SelectedMeerealiserendeFase != null && MeerealiserendeFasen != null && MeerealiserendeFasen.Count > 0;
+        }
+
+        #endregion // Command functionality
+
         #endregion // Commands
 
         #region Public Methods
-        
+
         public void SetRisRoles(PrioIngreepInUitMeldingViewModel ingreepMelding)
         {
             switch (Type)
@@ -602,6 +795,10 @@ namespace TLCGen.ViewModels
                 case PrioIngreepVoertuigTypeEnum.Auto:
                     ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.DEFAULT;
                     ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
+                    break;
+                case PrioIngreepVoertuigTypeEnum.Hulpdienst:
+                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.EMERGENCY;
+                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.EMERGENCY;
                     break;
                 case PrioIngreepVoertuigTypeEnum.NG:
                     break;
@@ -639,6 +836,25 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void OnFasenChanged(object sender, FasenChangedMessage fmsg)
+        {
+            BuildFasenList();
+        }
+
+        private void OnNameChanged(object sender, NameChangedMessage nmsg)
+        {
+            OnPropertyChanged(nameof(Naam));
+        }
+
+        private void BuildFasenList()
+        {
+            Fasen.Clear();
+            foreach (var f in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen)
+            {
+                Fasen.Add(f.Naam);
+            }
+        }
+        
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -647,8 +863,10 @@ namespace TLCGen.ViewModels
         {
             PrioIngreep = ovingreep;
             _parentIngreep = parentIngreep;
-            
+
             WeakReferenceMessengerEx.Default.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
+            WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
             WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
             WeakReferenceMessengerEx.Default.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
             Detectoren = new ObservableCollection<string>();
@@ -656,6 +874,10 @@ namespace TLCGen.ViewModels
 
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
+
+            MeerealiserendeFasen = new ObservableCollectionAroundList<PrioIngreepMeerealiserendeFaseCyclusViewModel, PrioIngreepMeerealiserendeFaseCyclusModel>(ovingreep.MeerealiserendeFaseCycli);
+
+            BuildFasenList();
         }
 
         private void OnCCOLVersionChanged(object sender, CCOLVersionChangedMessage obj)

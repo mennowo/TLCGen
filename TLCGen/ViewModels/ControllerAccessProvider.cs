@@ -23,10 +23,12 @@ namespace TLCGen.ViewModels
         ObservableCollection<PeriodeViewModel> AllePerioden { get; }
         ObservableCollection<DetectorViewModel> AllDetectors { get; }
         ObservableCollection<DetectorViewModel> AllVecomDetectors { get; }
+        ObservableCollection<DetectorViewModel> AllOpticomDetectors { get; }
         ObservableCollection<SelectieveDetectorViewModel> AllSelectiveDetectors { get; }
         ObservableCollection<string> AllSignalGroupStrings { get; }
         ObservableCollection<string> AllDetectorStrings { get; }
         ObservableCollection<string> AllVecomDetectorStrings { get; }
+        ObservableCollection<string> AllOpticomDetectorStrings { get; }
         ObservableCollection<string> AllSelectiveDetectorStrings { get; }
         ObservableCollection<string> OVIngangenStrings { get; }
 
@@ -40,11 +42,13 @@ namespace TLCGen.ViewModels
         private ObservableCollection<FaseCyclusViewModel> _allSignalGroups;
         private ObservableCollection<DetectorViewModel> _allDetectors;
         private ObservableCollection<DetectorViewModel> _allVecomDetectors;
+        private ObservableCollection<DetectorViewModel> _allOpticomDetectors;
         private ObservableCollection<SelectieveDetectorViewModel> _allSelectiveDetectors;
         private ObservableCollection<PeriodeViewModel> _allePerioden;
         private ObservableCollection<string> _allSignalGroupStrings;
         private ObservableCollection<string> _allDetectorStrings;
         private ObservableCollection<string> _allVecomDetectorStrings;
+        private ObservableCollection<string> _allOpticomDetectorStrings;
         private ObservableCollection<string> _allSelectiveDetectorStrings;
         private ObservableCollection<string> _ovIngangenStrings;
         private readonly Dictionary<object, ICollectionView> _detectorsCollectionViews = new Dictionary<object, ICollectionView>();
@@ -141,8 +145,14 @@ namespace TLCGen.ViewModels
         public ObservableCollection<DetectorViewModel> AllVecomDetectors =>
             _allVecomDetectors ??= new ObservableCollection<DetectorViewModel>();
 
+        public ObservableCollection<DetectorViewModel> AllOpticomDetectors =>
+            _allOpticomDetectors ??= new ObservableCollection<DetectorViewModel>();
+
         public ObservableCollection<string> AllVecomDetectorStrings =>
             _allVecomDetectorStrings ??= new ObservableCollection<string>();
+
+        public ObservableCollection<string> AllOpticomDetectorStrings =>
+            _allOpticomDetectorStrings ??= new ObservableCollection<string>();
 
         public ObservableCollection<SelectieveDetectorViewModel> AllSelectiveDetectors =>
             _allSelectiveDetectors ??= new ObservableCollection<SelectieveDetectorViewModel>();
@@ -216,6 +226,7 @@ namespace TLCGen.ViewModels
                     AllDetectors.BubbleSort();
                     AllDetectorStrings.BubbleSort();
                     RefreshVecomDetectors();
+                    RefreshOpticomDetectors();
                     break;
                 case TLCGenObjectTypeEnum.Input:
                     AllIngangen.BubbleSort();
@@ -238,9 +249,22 @@ namespace TLCGen.ViewModels
         private void RefreshVecomDetectors()
         {
             AllVecomDetectors.Clear();
+            AllVecomDetectorStrings.Clear();
             foreach (var d in AllDetectors.Where(x2 => x2.Type == DetectorTypeEnum.VecomDetector))
             {
                 AllVecomDetectors.Add(d);
+                AllVecomDetectorStrings.Add(d.Naam);
+            }
+        }
+
+        private void RefreshOpticomDetectors()
+        {
+            AllOpticomDetectors.Clear();
+            AllOpticomDetectorStrings.Clear();
+            foreach (var d in AllDetectors.Where(x2 => x2.Type == DetectorTypeEnum.OpticomIngang))
+            {
+                AllOpticomDetectors.Add(d);
+                AllOpticomDetectorStrings.Add(d.Naam);
             }
         }
 
@@ -326,6 +350,7 @@ namespace TLCGen.ViewModels
                 detectorsCollectionView.Value.Refresh();
             }
             RefreshVecomDetectors();
+            RefreshOpticomDetectors();
 
             _detChanging = false;
         }
@@ -353,6 +378,8 @@ namespace TLCGen.ViewModels
             AllSelectiveDetectorStrings.Clear();
             AllVecomDetectors.Clear();
             AllVecomDetectorStrings.Clear();
+            AllOpticomDetectors.Clear();
+            AllOpticomDetectorStrings.Clear();
             AllePerioden.Clear();
             
             Controller = obj.Controller;
@@ -393,6 +420,9 @@ namespace TLCGen.ViewModels
             {
                 AllePerioden.Add(new PeriodeViewModel(periode));;
             }
+
+            RefreshVecomDetectors();
+            RefreshOpticomDetectors();
         }
 
         public ControllerAccessProvider()

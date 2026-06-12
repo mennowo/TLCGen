@@ -28,5 +28,7 @@ namespace TLCGen.Models.Enumerations
         AutoMassaPeloton,
         [Description("Ingang")]
         Ingang,
+        [Description("Opticom")]
+        Opticom,
     }
 }

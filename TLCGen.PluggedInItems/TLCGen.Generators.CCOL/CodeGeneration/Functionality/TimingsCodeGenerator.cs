@@ -227,6 +227,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                             PrioIngreepVoertuigTypeEnum.Fiets => "CIF_FC_RWT_FIETS_PELOTON_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Vrachtwagen => "CIF_FC_RWT_VRACHTVERKEER_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Auto => "CIF_FC_RWT_VOERTUIG_PELOTON_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.Hulpdienst => "CIF_FC_RWT_HULPDIENST_INGREEP",
                             PrioIngreepVoertuigTypeEnum.NG => "CIF_FC_RWT_ONBEKEND",
                             _ => throw new NotImplementedException(),
                         };
