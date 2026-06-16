@@ -138,6 +138,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var sbc = new StringBuilder();
                         sbc.Append($"{tsts}IH[{_hpf}{_hstp}{CCOLCodeHelper.GetPriorityName(c, ov)}] = ");
                         var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
+
                         if (hd != null)
                         {
                             sbc.Append($"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
@@ -147,9 +148,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             hasconditions = true;
                         }
-						if (ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
+                        var hasPrioHd = false;
+                        foreach (var prioHd in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == ov.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                        {
+                            if (hasPrioHd || hd != null) sbc.Append(" && ");
+                            hasPrioHd = true;
+                            sbc.Append($"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prioHd)}]");
+                            foreach (var mfc in prioHd.MeerealiserendeFaseCycli)
+                            {
+                                var meerealFc = c.Fasen.FirstOrDefault(x => x.Naam == mfc.FaseCyclus);
+                                var meereas = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == mfc.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst);
+                                foreach (var mrprio in meereas)
+                                {
+                                    sbc.Append($" && !C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, mrprio)}]");
+                                }
+                            }
+                            hasconditions = true;
+                        }
+
+                        if (ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
 						{
-							if (hd != null) sbc.Append(" && ");
+							if (hd != null || hasPrioHd) sbc.Append(" && ");
 							sbc.Append($"SCH[{_schpf}{_schovstipt}{CCOLCodeHelper.GetPriorityName(c, ov)}]");
                             hasconditions = true;
                         }

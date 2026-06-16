@@ -330,20 +330,41 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine($"{ts}{ts}if (!PRM[{_prmpf}AFM_Test] && !IS[{_ispf}fix])");
                     sb.AppendLine($"{ts}{ts}{{");
                     var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+                    var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
                     foreach (var fc in _afmModel.AFMFasen)
                     {
                         var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
                         var dummy = (fc.DummyFaseCyclus == "NG" ? "NG" : _fcpf + fc.DummyFaseCyclus);
-                        if (hd == null)
+                        sb.Append($"{ts}{ts}");
+                        if (hd != null || c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
                         {
-                            sb.AppendLine(
-                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}, verwerken_fcs);");
+                            sb.Append("if (");
+                            if (hd != null)
+                            {
+                                sb.Append($"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
+                                foreach (var mfc in hd.MeerealiserendeFaseCycli)
+                                {
+                                    sb.Append($" && !C[{_ctpf}{_cvchd}{mfc.FaseCyclus}]");
+                                }
+                            }
+                            if (c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == fc.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                            {
+                                if (hd != null) sb.Append(" && ");
+                                var first = true;
+                                foreach (var prioHd in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == fc.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                {
+                                    if (first) sb.Append(" && ");
+                                    first = false;
+                                    sb.Append($"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prioHd)}]");
+                                    foreach (var mfc in prioHd.MeerealiserendeFaseCycli)
+                                    {
+                                        sb.Append($" && !C[{_ctpf}{_cvc}{mfc.FaseCyclus}]");
+                                    }
+                                }
+                            }
+                            sb.Append(") ");
                         }
-                        else
-                        {
-                            sb.AppendLine(
-                                $"{ts}{ts}if (!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]) AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}, verwerken_fcs);");
-                        }
+                        sb.AppendLine($"AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}, verwerken_fcs);");
                     }
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine();

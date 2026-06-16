@@ -293,6 +293,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    if (c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
+                    {
+                        sb.AppendLine();
+                        foreach (var prioHd in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
+                        {
+                            if (prioHd.MeerealiserendeFaseCycli.Any())
+                            {
+                                foreach (var fc in prioHd.MeerealiserendeFaseCycli)
+                                {
+                                    sb.AppendLine($"{ts}if (granted_verstrekt[{_fcpf}{fc.FaseCyclus}] == 2) granted_verstrekt[{_fcpf}{prioHd.FaseCyclus}] = 2;");
+                                }
+                            }
+                        }
+                    }
                     sb.AppendLine($"#endif /* NO_RIS */");
 
                     return sb.ToString();

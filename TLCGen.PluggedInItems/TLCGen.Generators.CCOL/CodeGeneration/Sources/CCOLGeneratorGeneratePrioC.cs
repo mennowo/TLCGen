@@ -795,6 +795,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
+                if (c.PrioData.PrioIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0))
+                {
+                    sb.AppendLine($"{ts}/* definitie van de meerealisaties voor de hulpdiensten */");
+                    foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.MeerealiserendeFaseCycli.Count > 0))
+                    {
+                        var i = 0;
+                        foreach (var mr in prio.MeerealiserendeFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}iPrioMeeRealisatie[{_fcpf}{prio.FaseCyclus}][{i}] = {_fcpf}{mr.FaseCyclus};");
+                            ++i;
+                        }
+                    }
+                    sb.AppendLine();
+                }
+
                 if (c.HasHD())
                 {
                     sb.AppendLine($"{ts}/* definitie van de meerealisaties voor de hulpdiensten */");

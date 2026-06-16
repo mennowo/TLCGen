@@ -34,7 +34,7 @@ class Build : NukeBuild
     const bool DoClean = true;
     const bool DoSign = true;
     const bool DoDeploy = true;
-    const bool DoArchiveOld = true;
+    const bool DoArchiveOld = false;
     const string ArchiveOldVersion = "12.4.0.19";
 
     Target Clean => _ => _
@@ -223,7 +223,7 @@ class Build : NukeBuild
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameSetup))
                 {
-                    if (DoArchiveOld &&
+                    if (!Dev && DoArchiveOld &&
                         !client.FileExists(client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNameSetup))
                     {
                         Console.WriteLine("Found existing ZIP file, will archive...");
@@ -249,7 +249,7 @@ class Build : NukeBuild
             {
                 if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNamePortable))
                 {
-                    if (DoArchiveOld &&
+                    if (!Dev && DoArchiveOld &&
                         !client.FileExists(client.GetCurrentDirectory() + '/' + ArchiveOldVersion + "_" + remoteFileNamePortable))
                     {
                         Console.WriteLine("Found existing ZIP file, will archive...");
@@ -270,21 +270,24 @@ class Build : NukeBuild
             client.Rename(Path.GetFileName(outputNamePortable), remoteFileNamePortable);
 
             // Versioning
-            client.ChangeDirectory("/var/www/html/codingconnected.eu/tlcgen/deploy/");
-            Console.WriteLine($"Uploading TLCGen VERSIONING file to {client.GetCurrentDirectory() + '/' + remoteFileNameVersioning}");
-            try
-            {
-                if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning))
+            if (!Dev)
+            { 
+                client.ChangeDirectory("/var/www/html/codingconnected.eu/tlcgen/deploy/");
+                Console.WriteLine($"Uploading TLCGen VERSIONING file to {client.GetCurrentDirectory() + '/' + remoteFileNameVersioning}");
+                try
                 {
-                    Console.WriteLine("Found existing VERSIONING file, will try removing...");
-                    client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning);
+                    if (client.FileExists(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning))
+                    {
+                        Console.WriteLine("Found existing VERSIONING file, will try removing...");
+                        client.DeleteFile(client.GetCurrentDirectory() + '/' + remoteFileNameVersioning);
+                    }
                 }
+                catch
+                {
+                    // ignored
+                }
+                client.Upload(project.Directory / remoteFileNameVersioning, client.GetCurrentDirectory());
             }
-            catch
-            {
-                // ignored
-            }
-            client.Upload(project.Directory / remoteFileNameVersioning, client.GetCurrentDirectory());
 
             client.Disconnect();
         });
