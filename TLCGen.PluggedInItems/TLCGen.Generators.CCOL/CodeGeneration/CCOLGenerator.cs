@@ -201,8 +201,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _allFiles.Add($"{c.Data.Naam}ptp.c");
                     }
                     if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.PrioData.PrioIngrepen.Any() ||
-                         c.PrioData.HDIngrepen.Any()))
+                        (c.HasPT() || c.HasHD()))
                     {
                         File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}prio.c"), GeneratePrioC(c), Encoding.Default);
                         _allFiles.Add($"{c.Data.Naam}prio.c");
@@ -318,7 +317,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 
                     if (c.PrioData.PrioIngreepType == PrioIngreepTypeEnum.GeneriekePrioriteit &&
-                        (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any()))
+                        (c.HasPT() || c.HasHD()))
                     {
                         CopySourceIfNeeded(c, "prio.c", sourcefilepath);
                         CopySourceIfNeeded(c, "prio.h", sourcefilepath);

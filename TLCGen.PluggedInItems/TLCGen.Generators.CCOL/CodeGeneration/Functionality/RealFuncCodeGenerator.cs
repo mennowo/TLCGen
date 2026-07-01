@@ -31,6 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _hmad;
         private string _hplact;
         private string _cvchd;
+        private string _cvc;
         private GroenSyncDataModel _groenSyncData;
         private List<string> _fasenMetSync;
         private (List<GroenSyncModel> oneWay, List<(GroenSyncModel m1, GroenSyncModel m2, bool gelijkstart)> twoWay,
@@ -531,6 +532,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
                                 {
                                     var hd = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync.FaseNaar);
+                                    first = true;
                                     if (c.PrioData.BlokkeerNietConflictenBijHDIngreep &&
                                         (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer ||
                                          fc1.Type == FaseTypeEnum.Fiets ||
@@ -540,6 +542,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         hd != null)
                                     {
                                         condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                        first = false;
+                                    }
+                                    if (c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == grsync.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                    {
+                                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == grsync.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                        {
+                                            if (!first) condition += " && ";
+                                            condition += $"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
+                                            first = false;
+                                        }
                                     }
                                 }
                                 sb.AppendLine($"{ts}{ts}wijziging |= Corr_Pls({_fcpf}{grsync:van}, {_fcpf}{grsync:naar}, T_max[{_tpf}{max}{grsync}], {condition});");
@@ -559,10 +571,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                      fc1.Type == FaseTypeEnum.Fiets ||
                                      fc1.Type == FaseTypeEnum.Voetganger ||
                                      fc2.Type == FaseTypeEnum.Fiets ||
-                                     fc2.Type == FaseTypeEnum.Voetganger) && 
-                                    hd != null)
+                                     fc2.Type == FaseTypeEnum.Voetganger))
                                 {
-                                    condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                    if (hd != null) condition = $"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]";
+                                    if (c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == grsync.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                    {
+                                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == grsync.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                        {
+                                            if (!first) condition += " && ";
+                                            condition += $"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
+                                            first = false;
+                                        }
+                                    }
                                 }
 
                                 var nl = c.InterSignaalGroep.Nalopen
@@ -618,13 +638,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                  fc2.Type == FaseTypeEnum.Fiets ||
                                  fc2.Type == FaseTypeEnum.Voetganger))
                             {
+                                first = true;
                                 var hd1 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseVan);
-                                if (hd1 != null) condition = $"!C[{_ctpf}{_cvchd}{hd1.FaseCyclus}]";
+                                if (hd1 != null)
+                                {
+                                    condition = $"!C[{_ctpf}{_cvchd}{hd1.FaseCyclus}]";
+                                    first = false;
+                                }
                                 var hd2 = c.PrioData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == grsync1.FaseNaar);
                                 if (hd2 != null)
-                                    condition = condition == "TRUE"
-                                        ? $"!C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]"
-                                        : condition + $" && !C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]";
+                                {
+                                    if (!first) condition += " && ";
+                                    condition += $"!C[{_ctpf}{_cvchd}{hd2.FaseCyclus}]";
+                                    first = false;
+                                }
+
+                                if (c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == grsync1.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                {
+                                    foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == grsync1.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                    {
+                                        if (!first) condition += " && ";
+                                        condition += $"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
+                                        first = false;
+                                    }
+                                }
+                                if (c.PrioData.PrioIngrepen.Any(x => x.FaseCyclus == grsync2.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                {
+                                    foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == grsync2.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                                    {
+                                        if (!first) condition += " && ";
+                                        condition += $"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
+                                        first = false;
+                                    }
+                                }
                             }
 
                             sb.AppendLine($"wijziging |= Corr_Gel({_fcpf}{grsync1:van}, {_fcpf}{grsync1:naar}, {condition});");
@@ -880,6 +926,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hmad = CCOLGeneratorSettingsProvider.Default.GetElementName("hmad");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+            _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 		    
             return base.SetSettings(settings);
         }

@@ -103,6 +103,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _mftstelris;
         private CCOLGeneratorCodeStringSettingModel _prmftsminvtgris;
         private CCOLGeneratorCodeStringSettingModel _prmrisgrenspriotype;
+        private CCOLGeneratorCodeStringSettingModel _schpriomr;
 
 #pragma warning restore 0649
 
@@ -280,20 +281,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             var opties = 0;
-            if (prio.AfkappenConflicten || prio.AfkappenConflictenPrio) opties += 100;
-            if (prio.AfkappenConflictenPrio) opties += 300;
-            if (prio.TussendoorRealiseren) opties += 3;
-            if (prio.VasthoudenGroen) opties += 20;
-            var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
-            if (prio.PrioriteitsNiveau > 0)
+            string sopties;
+            if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
             {
-                sopties = prio.PrioriteitsNiveau.ToString() +
-                    (sopties.Length == 1 
-                        ? "00" 
-                        : sopties.Length == 2 
-                            ? "0" 
-                            : "") + sopties;
+                opties = 9005;
+                sopties = opties.ToString();
+            }
+            else
+            {
+                if (prio.AfkappenConflicten || prio.AfkappenConflictenPrio) opties += 100;
+                if (prio.AfkappenConflictenPrio) opties += 300;
+                if (prio.TussendoorRealiseren) opties += 3;
+                if (prio.VasthoudenGroen) opties += 20;
+                sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                if (prio.PrioriteitsNiveau > 0)
+                {
+                    sopties = prio.PrioriteitsNiveau.ToString() +
+                        (sopties.Length == 1 
+                            ? "00" 
+                            : sopties.Length == 2 
+                                ? "0" 
+                                : "") + sopties;
 
+                }
             }
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{CCOLCodeHelper.GetPriorityName(c, prio)}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, prio.FaseCyclus, prio.Type.GetDescription()));
 
@@ -386,6 +396,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     PrioCodeGeneratorHelper.CAT_Prioriteren, PrioCodeGeneratorHelper.SUBCAT_OpenbaarVervoer));
                         }
                     }
+                }
+            }
+
+            if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && prio.MeerealiserendeFaseCycli.Any())
+            {
+                foreach (var fc in prio.MeerealiserendeFaseCycli)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}", 1,
+                            CCOLElementTimeTypeEnum.SCH_type, _schpriomr, fc.FaseCyclus, prio.Type.GetDescription()));
                 }
             }
         }
@@ -512,7 +533,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcovuber}", c.PrioData.VerklikkenPrioTellerUber == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcovuber));
             }
 
-            if (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any())
+            if (c.HasPT() || c.HasHD())
             {
                 /* Variables independent of signal groups */
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwta}", c.PrioData.MaxWachttijdAuto, CCOLElementTimeTypeEnum.TS_type, _prmmwta));
@@ -530,7 +551,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarog}", 1440, CCOLElementTimeTypeEnum.TM_type, _tkarog));
                 }
             }
-            if (c.PrioData.PrioIngrepen.Any())
+            if (c.HasPT())
             {
                 /* Variables independent of signal groups */
                 if (c.HasDSI())
@@ -1346,7 +1367,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
                     }
-                    if (c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any())
+                    if (c.HasPT() || c.HasHD())
                     {
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
@@ -1754,6 +1775,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}] && !BL[{_fcpf}{hd.FaseCyclus}]");
                             first = false;
                         }
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                        {
+                            if (!first)
+                            {
+                                sb.Append(" || ");
+                            }
+                            sb.Append($"C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && !BL[{_fcpf}{prio.FaseCyclus}]");
+                            first = false;
+                        }
                         sb.AppendLine(";");
                         sb.AppendLine();
                         if (!c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
@@ -1763,7 +1793,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{{");
                             foreach (var fc in c.Fasen)
                             {
-                                if (c.PrioData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                                if (c.PrioData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam) && 
+                                    c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst).All(x => x.FaseCyclus != fc.Naam))
                                 {
                                     sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
                                 }

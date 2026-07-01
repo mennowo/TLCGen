@@ -115,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
                         sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfbvlog}]);");
-                        if(c.PrioData.PrioIngrepen.Any() || c.PrioData.HDIngrepen.Any())
+                        if(c.HasPT() || c.HasHD())
                         {
                             sb.AppendLine($"{ts}#if !defined NO_VLOG_200 && !defined NO_PRIO");
                             sb.AppendLine($"{ts}{ts}VLOG_mon5_buffer();");

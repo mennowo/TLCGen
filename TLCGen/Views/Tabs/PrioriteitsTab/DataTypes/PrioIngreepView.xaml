@@ -93,22 +93,29 @@
                         <TextBox Text="{Binding Path=MinimaleRoodtijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                         
                         <!-- Prioriteitsopties -->
-                        <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
-                        <Label Content="Afkappen conflicten" />
+                        <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2"
+                                   Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
+                        <Label Content="Afkappen conflicten" Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
                         <CheckBox
+                            Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}"
                             Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
-                        <Label Content="Afkappen conflicterend OV" />
+                        <Label Content="Afkappen conflicterend OV" Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
                         <CheckBox
+                            Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}"
                             Margin="5" IsChecked="{Binding Path=AfkappenConflictenPrio}" />
-                        <Label Content="Vasthouden groen" />
+                        <Label Content="Vasthouden groen" Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
                         <CheckBox
+                            Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}"
                             Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
-                        <Label Content="Tussendoor realiseren" />
+                        <Label Content="Tussendoor realiseren" Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
                         <CheckBox
+                            Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}"
                             Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
-                        <Label Content="Prioriteitsniveau" />
-                        <ComboBox SelectedValue="{Binding Path=PrioriteitsNiveau,UpdateSourceTrigger=PropertyChanged}"
-                                  SelectedValuePath="Content">
+                        <Label Content="Prioriteitsniveau" Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}" />
+                        <ComboBox 
+                            Visibility="{Binding Path=IsNotTypeHulpdienst, Converter={StaticResource Bool2VisConv}}"
+                            SelectedValue="{Binding Path=PrioriteitsNiveau,UpdateSourceTrigger=PropertyChanged}"
+                            SelectedValuePath="Content">
                             <ComboBoxItem>0</ComboBoxItem>
                             <ComboBoxItem>1</ComboBoxItem>
                             <ComboBoxItem>2</ComboBoxItem>
@@ -260,7 +267,7 @@
                                             <Setter Property="ContentTemplate">
                                                 <Setter.Value>
                                                     <DataTemplate>
-                                                        <Border BorderBrush="OrangeRed" BorderThickness="1.0">
+                                                        <Border BorderBrush="CornflowerBlue" BorderThickness="1.0">
                                                             <TextBlock Text="{Binding Path=Fase}" Padding="2" Background="Beige" />
                                                         </Border>
                                                     </DataTemplate>

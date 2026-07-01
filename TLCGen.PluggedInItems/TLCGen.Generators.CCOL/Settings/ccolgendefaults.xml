@@ -2275,6 +2275,14 @@
             <Categorie>CAT_Prioriteren</Categorie>
             <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
           </Setting>
+          <Setting>
+            <Default>priomr</Default>
+            <Setting>priomr</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Meerealisatie fase _E1_ met hulpdienst ingreep _E2_</Description>
+            <Categorie>CAT_Prioriteren</Categorie>
+            <SubCategorie>SUBCAT_OpenbaarVervoer</SubCategorie>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

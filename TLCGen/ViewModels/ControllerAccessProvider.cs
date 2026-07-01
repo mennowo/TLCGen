@@ -309,6 +309,8 @@ namespace TLCGen.ViewModels
             {
                 detectorsCollectionView.Value.Refresh();
             }
+            RefreshVecomDetectors();
+            RefreshOpticomDetectors();
         }
 
         private void OnSignalGroupDetectorVeiligheidsGroenChanged(object sender, FaseDetectorVeiligheidsGroenChangedMessage message)

@@ -284,7 +284,7 @@ namespace TLCGen.Models
 
         public static bool HasHD(this ControllerModel c)
         {
-            return c.PrioData.HDIngrepen.Any();
+            return c.PrioData.HDIngrepen.Any() || c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst);
         }
         
         public static bool HasPrioRis(this ControllerModel c)
@@ -301,12 +301,14 @@ namespace TLCGen.Models
 
         public static bool HasHDKAR(this ControllerModel c)
         {
-            return c.PrioData.HDIngrepen.Any(x => x.KAR);
+            return c.PrioData.HDIngrepen.Any(x => x.KAR) ||
+                   c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
         public static bool HasHDOpticom(this ControllerModel c)
         {
-            return c.PrioData.HDIngrepen.Any(x => x.Opticom && !string.IsNullOrWhiteSpace(x.OpticomRelatedInput));
+            return c.PrioData.HDIngrepen.Any(x => x.Opticom && !string.IsNullOrWhiteSpace(x.OpticomRelatedInput)) ||
+                   c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom && !string.IsNullOrWhiteSpace(x.RelatedInput1)));
         }
 
         public static bool HasPTorHD(this ControllerModel c)

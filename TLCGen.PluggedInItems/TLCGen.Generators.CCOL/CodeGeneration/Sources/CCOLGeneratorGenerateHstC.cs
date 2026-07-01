@@ -413,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            if (!c.PrioData.PrioIngrepen.Any() && !c.PrioData.HDIngrepen.Any()) return "";
+            if (!c.HasPT() && !c.HasHD()) return "";
 
             sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
             sb.AppendLine("void PrioHalfstarSettings(void)");

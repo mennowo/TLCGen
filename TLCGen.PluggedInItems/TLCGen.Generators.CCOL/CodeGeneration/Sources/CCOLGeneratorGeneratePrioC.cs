@@ -1026,6 +1026,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _hprioin = CCOLGeneratorSettingsProvider.Default.GetElementName("hprioin");
             var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
             var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            var _hprio = CCOLGeneratorSettingsProvider.Default.GetElementName("hprio");
             var _hpriouit = CCOLGeneratorSettingsProvider.Default.GetElementName("hpriouit");
             var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
@@ -1112,6 +1113,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     first = false;
                     sb.Append($"IH[{_hpf}{_hhdin}{hd.FaseCyclus}]|| IH[{_hpf}{_hhduit}{hd.FaseCyclus}] || EH[{_hpf}{_hhd}{hd.FaseCyclus}]");
                 }
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                {
+                    if (!first)
+                    {
+                        sb.AppendLine(" ||");
+                        sb.Append(tss);
+                    }
+                    first = false;
+                    sb.Append($"IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}]|| IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] || EH[{_hpf}{_hprio}{CCOLCodeHelper.GetPriorityName(c, prio)}]");
+                }
                 sb.AppendLine(")");
                 sb.AppendLine($"{ts}{{");
                 sb.AppendLine($"{ts}{ts}RTFB |= PRIO_RTFB_BIT;");
@@ -1139,6 +1150,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         foreach (var fc in hd.MeerealiserendeFaseCycli)
                         {
                             sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{fc.FaseCyclus}] |= IH[{_hpf}{_hhdin}{hd.FaseCyclus}]; IH[{_hpf}{_hhduit}{fc.FaseCyclus}] |= IH[{_hpf}{_hhduit}{hd.FaseCyclus}];");
+                        }
+                    }
+                }
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
+                {
+                    if (prio.MeerealiserendeFaseCycli.Any())
+                    {
+                        foreach (var fc in prio.MeerealiserendeFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] |= IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] && SCH[{_hpf}{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}]; IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] |= IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] && SCH[{_hpf}{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}];");
                         }
                     }
                 }
@@ -1457,14 +1478,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
                                 ? (ifc - 200).ToString() 
                                 : ifc.ToString();
-                        var type = prio.Type == PrioIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        var type = prio.Type switch
+                        {
+                            PrioIngreepVoertuigTypeEnum.Bus => "CIF_BUS",
+                            PrioIngreepVoertuigTypeEnum.Tram => "CIF_TRAM",
+                            PrioIngreepVoertuigTypeEnum.Hulpdienst => "CIF_POL",
+                            _ => "CIF_BUS"
+                        };
+                        var sirene = prio.Type switch
+                        {
+                            PrioIngreepVoertuigTypeEnum.Hulpdienst => "CIF_SIR",
+                            _ => "0"
+                        };
                         foreach (var m in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], {sirene});");
                         }
                         foreach (var m in prio.MeldingenData.Uitmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && x.DummyKARMelding != null))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}] && C[{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.DummyKARMelding.Naam}] && C[{_cpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]) set_DSI_message(NG, {type}, {actualIfc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], {sirene});");
                         }
                     }
                 }

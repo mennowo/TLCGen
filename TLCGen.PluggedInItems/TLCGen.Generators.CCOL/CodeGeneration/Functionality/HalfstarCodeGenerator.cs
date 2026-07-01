@@ -155,7 +155,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.HalfstarIngreepData.Prioriteit, CCOLElementTimeTypeEnum.None, _prmpriohst, prio.FaseCyclus, prio.Type.GetDescription()));
                     foreach (var prio in c.PrioData.PrioIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnatxdhst}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.HalfstarIngreepData.GroenNaTXDTijd, CCOLElementTimeTypeEnum.TE_type, _prmnatxdhst, prio.FaseCyclus, prio.Type.GetDescription()));
                 }
-                if (c.PrioData.HDIngrepen.Any())
+                if (c.HasHD())
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhd}", _hplhd));
                 }
@@ -918,7 +918,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
 
-					if (c.PrioData.HDIngrepen.Any())
+					if (c.HasHD())
 					{
 						sb.AppendLine($"{ts}/* Bij hulpdienstingreep, lokaal VA regelen */");
 						sb.AppendLine($"{ts}if (IH[{_hpf}{_hplhd}])");
@@ -1743,7 +1743,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.PrioCPrioriteitsOpties:
-                    if (c.PrioData.HDIngrepen.Any())
+                    if (c.HasHD())
                     {
                         sb.AppendLine($"{ts}/* bijhouden of een hulpdienstingreep plaatsvindt */");
                         sb.AppendLine($"{ts}IH[{_hpf}{_hplhd}] = FALSE;");
