@@ -1034,6 +1034,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tovminrood");
             var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
+            var _schpriomr = CCOLGeneratorSettingsProvider.Default.GetElementName("schpriomr");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");

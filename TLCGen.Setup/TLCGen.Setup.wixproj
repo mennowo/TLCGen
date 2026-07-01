@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="WixToolset.Sdk/6.0.0">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>Debug</DefineConstants>
-    <SuppressValidation>True</SuppressValidation>
+<Project Sdk="WixToolset.Sdk/7.0.0">
+  <PropertyGroup>
+	<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+	<AcceptEula>wix7</AcceptEula>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <SuppressValidation>True</SuppressValidation>
@@ -19,7 +19,6 @@
     <Content Include="license.rtf" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
+	  <PackageReference Include="WixToolset.UI.wixext" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

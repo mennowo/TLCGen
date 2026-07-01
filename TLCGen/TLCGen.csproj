@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <langVersion>latest</langVersion>
@@ -10,6 +10,15 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" />
+    <PackageReference Include="gong-wpf-dragdrop" />
+    <PackageReference Include="Gu.Wpf.DataGrid2D" />
+    <PackageReference Include="MdXaml" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
@@ -110,5 +119,4 @@
 		del /q "$(TargetDir)"
 </PreBuildEvent>
   </PropertyGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

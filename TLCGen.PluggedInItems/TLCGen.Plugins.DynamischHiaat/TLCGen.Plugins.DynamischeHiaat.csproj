@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>TLCGen.Plugins.DynamischHiaat</RootNamespace>
     <AssemblyName>TLCGen.Plugins.DynamischHiaat</AssemblyName>
@@ -29,5 +29,7 @@
     <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj" />
     <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
 </Project>
