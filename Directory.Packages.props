@@ -23,6 +23,6 @@
     <PackageVersion Include="WixToolset.UI.wixext" Version="7.0.0" />
     <PackageVersion Include="NUnit.ConsoleRunner" Version="3.22.0" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
-    <PackageVersion Include="Nuke.Common" Version="10.1.0" />
+    <PackageVersion Include="Fallout.Common" Version="10.3.49" />
   </ItemGroup>
 </Project>

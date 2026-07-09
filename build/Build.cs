@@ -1,18 +1,18 @@
 using System;
 using System.IO;
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.MSBuild;
-using Nuke.Common.Tools.SignTool;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.MSBuild;
+using Fallout.Common.Tools.SignTool;
+using Fallout.Common.Utilities.Collections;
 using Rebex.Net;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using File = System.IO.File;
 
-class Build : NukeBuild
+class Build : FalloutBuild
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -27,7 +27,7 @@ class Build : NukeBuild
     private static AbsolutePath SourceDirectory => RootDirectory;
     private static AbsolutePath OutputDirectory => RootDirectory / "output";
 
-    const string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
+    const string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe";
     
     const bool Dev = true;
 
@@ -57,6 +57,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             DotNetRestore(_ => _.SetProjectFile(Solution.GetProject("TLCGen")));
+            DotNetRestore(_ => _.SetProjectFile(Solution.GetProject("TLCGen.Setup")));
         });
 
     Target CompileAndSign => _ => _
@@ -75,7 +76,7 @@ class Build : NukeBuild
             if (DoSign && project != null)
             {
                 // get publish folder
-                var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net8.0-windows";
+                var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net10.0-windows";
 
                 SignToolTasks.SignTool(_ => _
                     .SetFile("C:\\Users\\menno\\CodingConnected\\Various\\CodeCert\\cert-cc-2023-2026.cer")
@@ -125,7 +126,7 @@ class Build : NukeBuild
             if (project != null)
             {
                 // get publish folder
-                var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net8.0-windows";
+                var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net10.0-windows";
 
                 var packDirectory = OutputDirectory / "PackTLCGen";
                 packDirectory.CreateOrCleanDirectory();
@@ -163,12 +164,8 @@ class Build : NukeBuild
                     "ICSharpCode.AvalonEdit.dll",
                     "MdXaml.dll",
                     "MdXaml.Plugins.dll",
-                    "Microsoft.Win32.SystemEvents.dll",
                     "Microsoft.Xaml.Behaviors.dll",
                     "Newtonsoft.Json.dll",
-                    "System.Drawing.Common.dll",
-                    "System.IO.Packaging.dll",
-                    "System.Private.Windows.Core.dll",
                     "WindowsInput.dll",
                 ];
                 foreach (var f in files)
@@ -180,7 +177,6 @@ class Build : NukeBuild
                 (publishDirectory / "Docs").CopyToDirectory(packDirectory);
                 (publishDirectory / "Licenses").CopyToDirectory(packDirectory);
                 (publishDirectory / "Plugins").CopyToDirectory(packDirectory);
-                (publishDirectory / "runtimes").CopyToDirectory(packDirectory);
                 (publishDirectory / "Settings").CopyToDirectory(packDirectory);
                 (publishDirectory / "SourceFiles").CopyToDirectory(packDirectory);
                 (publishDirectory / "SourceFilesToCopy").CopyToDirectory(packDirectory);

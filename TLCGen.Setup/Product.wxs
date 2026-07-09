@@ -28,7 +28,6 @@
 				<ComponentGroupRef Id="TLCGenCCOLSources" />
 				<ComponentGroupRef Id="TLCGenCCOLSourcesToCopy" />
 				<ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
-				<ComponentGroupRef Id="TLCGenNativeAssets" />
 				<ComponentRef Id="ProgramMenuDir" />
 			</Feature>
 			<Feature Id="TLCGenAutoBuild" Title="AutoBuild plugin" InstallDefault="local" Level="2" AllowAdvertise="no"
@@ -67,13 +66,6 @@
 				<Directory Id="CCOLDOCSFOLDER" Name="Docs" />
 				<Directory Id="LICENSESFOLDER" Name="Licenses" />
 				<Directory Id="CCOLSOURCEFILESTOCOPYFOLDER" Name="SourceFilesToCopy" />
-				<Directory Id="RUNTIMESFOLDER" Name="runtimes">
-					<Directory Id="RTWINFOLDER" Name="win">
-						<Directory Id="RTWINLIBFOLDER" Name="lib">
-							<Directory Id="RTWINLIBNET8FOLDER" Name="net8.0" />
-						</Directory>
-					</Directory>
-				</Directory>
 			</Directory>
 		</StandardDirectory>
 		<StandardDirectory Id="ProgramMenuFolder">
@@ -146,13 +138,6 @@
 				<File Id="dependencies.txt" Name="dependencies.txt" Source="$(var.ReleaseDir)/Licenses/dependencies.txt" KeyPath="no" />
 			</Component>
 		</ComponentGroup>
-
-		<!-- Native assets -->
-		<ComponentGroup Id="TLCGenNativeAssets" Directory="RTWINLIBNET8FOLDER">
-			<Component Id="TLCGenNativeData" Guid="5457D2D5-9BA6-47FC-BE66-C7BCD4F988AF">
-				<File Id="Microsoft.Win32.SystemEvents.dll.native" Name="Microsoft.Win32.SystemEvents.dll" Source="$(var.ReleaseDir)/runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll" KeyPath="no" />
-			</Component>
-		</ComponentGroup>
 		
 		<!-- External dependencies -->
 		<ComponentGroup Id="TLCGenDependencies" Directory="INSTALLFOLDER">
@@ -180,12 +165,6 @@
 				<!-- mit // https://github.com/whistyun/MdXaml-->
 				<File Id="MdXaml.dll" Name="MdXaml.dll" Source="$(var.ReleaseDir)/MdXaml.dll" KeyPath="no" />
 				<File Id="MdXaml.Plugins.dll" Name="MdXaml.Plugins.dll" Source="$(var.ReleaseDir)/MdXaml.Plugins.dll" KeyPath="no" />
-
-				<!-- mit // https://github.com/dotnet/runtime -->
-				<File Id="Microsoft.Win32.SystemEvents" Name="Microsoft.Win32.SystemEvents.dll" Source="$(var.ReleaseDir)/Microsoft.Win32.SystemEvents.dll" KeyPath="no" />
-				<File Id="System.Drawing.Common" Name="System.Drawing.Common.dll" Source="$(var.ReleaseDir)/System.Drawing.Common.dll" KeyPath="no" />
-				<File Id="System.IO.Packaging" Name="System.IO.Packaging.dll" Source="$(var.ReleaseDir)/System.IO.Packaging.dll" KeyPath="no" />
-				<File Id="System.Private.Windows.Core" Name="System.Private.Windows.Core.dll" Source="$(var.ReleaseDir)/System.Private.Windows.Core.dll" KeyPath="no" />
 
 				<!-- mit // https://github.com/microsoft/XamlBehaviorsWpf -->
 				<File Id="Microsoft.Xaml.Behaviors" Name="Microsoft.Xaml.Behaviors.dll" Source="$(var.ReleaseDir)/Microsoft.Xaml.Behaviors.dll" KeyPath="no" />

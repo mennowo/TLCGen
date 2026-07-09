@@ -13,26 +13,26 @@ sources, as may be expected from a stable build.
 
 ## Building TLCGen
 
-To build TLCGen, download and install the latest version of Visual Studio (the 
-Community edition is perfectly OK). Be sure to select the Windows Desktop 
-Applications development tools during installation, since TLCGen is build using
-WPF in NET8.
+To build TLCGen, download and install Visual Studio 2026 (aka. 'Insiders'; the Community 
+edition is perfectly OK). Be sure to select the Windows Desktop Applications development 
+tools during installation, since TLCGen is build using WPF in NET10.
 
-Clone the sources, then install [paket](https://fsprojects.github.io/Paket/get-started.html):
-
-    dotnet new tool-manifest
-    dotnet tool install paket
-    dotnet tool restore
-
-Now do a restore:
+Clone the sources, then do a restore:
 
     dotnet restore
-    dotnet paket restore
 
-This should restore all needed nuget packages for the entire solution. Build 
-the application. If it won't work, try `dotnet paket install` and/or `dotnet paket update`.
+This should restore all needed nuget packages for the entire solution, since we are
+using global package management. After restore completes, build the application.
 
 ## Licensing
 
 TLCGen is provided under the MIT license, please refer to the LICENSE.md file 
 for details. Use at your own risk.
+
+### Licensing for building TLCGen.Setup
+
+Note that with version 7 of WiX, FireGiant changed the licensing conditions for 
+the WiX Toolset. If you want to build the TLCGen.Setup installer, you are obliged
+to contribute to the WiX Toolset project. Please refer to the WiX Toolset repository 
+for details on how to contribute. If you do not want to contribute, you can still 
+build TLCGen, but you are not legally allowed to build and use the installer.

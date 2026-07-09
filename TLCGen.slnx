@@ -1,0 +1,111 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/TLCGen.Dependencies/">
+    <Project Path="TLCGen.Dependencies/TLCGen.DataAccess/TLCGen.DataAccess.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Dependencies/TLCGen.Dependencies/TLCGen.Dependencies.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Dependencies/TLCGen.ModelManager/TLCGen.ModelManagement.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Dependencies/TLCGen.Updater/TLCGen.Updater.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/TLCGen.Parts/">
+    <Project Path="TLCGen.Parts/TLCGen.Controls/TLCGen.Controls.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Parts/TLCGen.CustomPropertyEditors/TLCGen.CustomPropertyEditors.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Parts/TLCGen.Dialogs/TLCGen.Dialogs.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Parts/TLCGen.Settings/TLCGen.Settings.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/TLCGen.PluggedInItems/">
+    <Project Path="TLCGen.PluggedInItems/TLCGen.GebruikersOpties/TLCGen.GebruikersOpties.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Generators.CCOL/TLCGen.Generators.CCOL.csproj">
+      <BuildDependency Project="TLCGen.Parts/TLCGen.Controls/TLCGen.Controls.csproj" />
+      <BuildDependency Project="TLCGen.Parts/TLCGen.CustomPropertyEditors/TLCGen.CustomPropertyEditors.csproj" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Generators.TLCCC/TLCGen.Generators.TLCCC.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Importers.Itf/TLCGen.Importers.Itf/TLCGen.Importers.Itf.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Importers.TabC/TLCGen.Importers.TabC.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.Additor/TLCGen.Plugins.Additor.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.AFM/TLCGen.Plugins.AFM.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.AutoBuild/TLCGen.Plugins.AutoBuild.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.DynamischHiaat/TLCGen.Plugins.DynamischeHiaat.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.MultiSim/TLCGen.Plugins.MultiSim.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.Sumo/TLCGen.Plugins.Sumo.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Plugins.Tools/TLCGen.Plugins.Tools.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.PluggedInItems/TLCGen.Specificator/TLCGen.Specificator.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/TLCGen.Tools/">
+    <Project Path="TLCGen.Tools/TLCGen.FolderVersionRenamer/TLCGen.FolderVersionRenamer.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Tools/TLCGen.Specificator.Tester/TLCGen.Specificator.Tester.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="TLCGen.Tools/TLCGen.WikiConverter/TLCGen.WikiConverter.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+  </Folder>
+  <Project Path="build/_build.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="TLCGen.Setup/TLCGen.Setup.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|x86" Project="x64" />
+    <Build Solution="*|Any CPU" Project="false" />
+  </Project>
+  <Project Path="TLCGen.UnitTests/TLCGen.UnitTests.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="TLCGen/TLCGen.csproj">
+    <BuildDependency Project="TLCGen.PluggedInItems/TLCGen.GebruikersOpties/TLCGen.GebruikersOpties.csproj" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>

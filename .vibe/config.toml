@@ -1,0 +1,15 @@
+active_model = "mistral-medium-3.5"
+
+[[mcp_servers]]
+name = "knowledge"
+transport = "streamable-http"
+url = "http://localhost:8778/mcp"
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+
+[mcp_servers.auth]
+type = "static"
+api_key_env = "64ZDsxLDvESnwd8Qagg0"
+
+[tools.knowledge_list_notes]
+permission = "always"
