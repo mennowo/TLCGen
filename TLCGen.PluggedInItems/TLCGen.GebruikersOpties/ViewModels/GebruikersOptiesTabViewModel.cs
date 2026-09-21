@@ -334,6 +334,7 @@ namespace TLCGen.GebruikersOpties
             }
 
             WeakReferenceMessengerEx.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(null));
         }
 
         bool RemoveGebruikersOptieCommand_CanExecute()

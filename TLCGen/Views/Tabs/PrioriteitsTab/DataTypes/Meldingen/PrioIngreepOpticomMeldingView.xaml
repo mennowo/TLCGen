@@ -9,11 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:PrioIngreepOpticomMeldingViewModel}">
     <UserControl.Resources>
-        <views:InmeldingToVisibilityConverter x:Key="InmToVisConv" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
-        <Grid Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />

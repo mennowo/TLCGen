@@ -384,6 +384,114 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
+
+            // Version 12.4.0.20: HD ingrepen ported to generic prio ingrepen
+            checkVer = Version.Parse("12.4.0.20");
+            if (v < checkVer)
+            {
+                foreach (var hd in controller.PrioData.HDIngrepen)
+                {
+                    var sg = controller.GetFaseCyclus(hd.FaseCyclus);
+                    if (sg == null) continue;
+
+                    var prio = new PrioIngreepModel
+                    {
+                        FaseCyclus = sg.Naam,
+                        Type = PrioIngreepVoertuigTypeEnum.Hulpdienst,
+                    };
+                    SetPrioIngreepName(prio, controller);
+                
+                    if (hd.KAR)
+                    {
+                        prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "KAR",
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                            AntiJutterTijd = hd.KARInmeldingFilterTijd.HasValue ? hd.KARInmeldingFilterTijd.Value : 0,
+                            AntiJutterTijdToepassen = hd.KARInmeldingFilterTijd.HasValue,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
+                        });
+                        prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "KAR",
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding,
+                            AntiJutterTijd = hd.KARUitmeldingFilterTijd.HasValue ? hd.KARUitmeldingFilterTijd.Value : 0,
+                            AntiJutterTijdToepassen = hd.KARUitmeldingFilterTijd.HasValue,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
+                        });
+                    }
+
+                    if (hd.RIS)
+                    {
+                        prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "RIS",
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde,
+                            RisEta = hd.RisEta,
+                            RisStart = hd.RisStart,
+                            RisEnd = hd.RisEnd,
+                            RisImportance = hd.RisImportance,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
+                        });
+                        prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "RIS",
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde,
+                            RisEta = hd.RisEta,
+                            RisStart = hd.RisStart,
+                            RisEnd = hd.RisEnd,
+                            RisImportance = hd.RisImportance,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
+                        });
+                    }
+
+                    if (hd.Opticom)
+                    {
+                        prio.MeldingenData.Inmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "Opticom", 
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom,
+                            AntiJutterTijd = hd.OpticomInmeldingFilterTijd.HasValue ? hd.OpticomInmeldingFilterTijd.Value : 0,
+                            AntiJutterTijdToepassen = hd.OpticomInmeldingFilterTijd.HasValue,
+                            RelatedInput1 = hd.OpticomRelatedInput,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding,
+                        });
+                        prio.MeldingenData.Uitmeldingen.Add(new PrioIngreepInUitMeldingModel() {
+                            Naam = "Opticom",
+                            Type = PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom,
+                            RelatedInput1 = hd.OpticomRelatedInput,
+                            InUit = PrioIngreepInUitMeldingTypeEnum.Uitmelding,
+                        });
+                    }
+                    DefaultsProvider.Default.SetDefaultsOnModel(prio, prio.Type.ToString(), null, true);
+                    prio.CheckOpSirene = hd.Sirene;
+                    prio.RijTijdOngehinderd = hd.RijTijdOngehinderd;
+                    prio.RijTijdBeperktgehinderd = hd.RijTijdBeperktgehinderd;
+                    prio.RijTijdGehinderd = hd.RijTijdGehinderd;
+                    prio.GroenBewaking = hd.GroenBewaking;
+                    prio.InmeldingOokDoorFase = hd.InmeldingOokDoorFase;
+                    prio.InmeldingOokDoorToepassen = hd.InmeldingOokDoorToepassen;
+                    prio.MeerealiserendeFaseCycli = [.. hd.MeerealiserendeFaseCycli.Select(x => new PrioIngreepMeerealiserendeFaseCyclusModel() { FaseCyclus = x.FaseCyclus })];
+                    
+                    controller.PrioData.PrioIngrepen.Add(prio);
+                }
+            }
+        }
+
+        private void SetPrioIngreepName(PrioIngreepModel prio, ControllerModel controller)
+        {
+            var newName = prio.FaseCyclus + DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type);
+            if (!NameSyntaxChecker.IsValidCName(newName))
+            {
+                newName = prio.FaseCyclus + "default";
+            }
+
+            var iNewName = 0;
+            var tempName = newName;
+            while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(
+                    controller, tempName,
+                    TLCGenObjectTypeEnum.PrioriteitsIngreep))
+            {
+                tempName = newName + ++iNewName;
+            }
+
+            prio.Naam = DefaultsProvider.Default.GetVehicleTypeAbbreviation(prio.Type) +
+            (iNewName == 0 ? "" : iNewName.ToString());
         }
 
         private static void RenameXmlNode(XmlDocument doc, XmlNode oldRoot, string newname)

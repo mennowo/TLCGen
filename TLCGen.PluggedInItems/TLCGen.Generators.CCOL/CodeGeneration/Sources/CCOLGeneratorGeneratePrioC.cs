@@ -1097,7 +1097,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.PrioCInUitMelden, false, true, true, true);
 
-            if (c.PrioData.HDIngrepen.Count > 0)
+            if (c.PrioData.HDIngrepen.Count > 0 ||
+                c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
             {
                 sb.AppendLine($"{ts}/* herstarten FB_timer bij in- of uitmelding HD of einde ingreep (door groenbewaking) */");
                 sb.AppendLine($"{ts}RTFB &= ~PRIO_RTFB_BIT;");
@@ -1141,7 +1142,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #region HD ingrepen mee inmelden
 
-            if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0))
+            if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0) ||
+                c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
             {
                 sb.AppendLine($"{ts}/* Doorzetten HD inmeldingen */");
                 foreach (var hd in c.PrioData.HDIngrepen)

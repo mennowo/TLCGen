@@ -1,1204 +1,1431 @@
 ﻿<?xml version="1.0"?>
 <TLCGenDefaultsModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <VehicleTypes>
-    <VehicleType>
-      <VehicleType>Tram</VehicleType>
-      <Default>tram</Default>
-      <Setting>tram</Setting>
-    </VehicleType>
-    <VehicleType>
-      <VehicleType>Bus</VehicleType>
-      <Default>bus</Default>
-      <Setting>bus</Setting>
-    </VehicleType>
-    <VehicleType>
-      <VehicleType>Fiets</VehicleType>
-      <Default>fts</Default>
-      <Setting>fts</Setting>
-    </VehicleType>
-    <VehicleType>
-      <VehicleType>Vrachtwagen</VehicleType>
-      <Default>vrw</Default>
-      <Setting>vrw</Setting>
-    </VehicleType>
-    <VehicleType>
-      <VehicleType>NG</VehicleType>
-      <Default>alg</Default>
-      <Setting>alg</Setting>
-    </VehicleType>
-  </VehicleTypes>
-  <Defaults>
-    <!-- FaseCycli -->
-    <Default>
-      <DefaultName>Fasecyclus auto</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="FaseCyclusModel">
-        <Naam />
-        <BitmapCoordinaten />
-        <Type>Auto</Type>
-        <TFG>50</TFG>
-        <TGG>40</TGG>
-        <TGG_min>40</TGG_min>
-        <TRG>20</TRG>
-        <TRG_min>20</TRG_min>
-        <TGL>30</TGL>
-        <TGL_min>30</TGL_min>
-        <Kopmax>80</Kopmax>
-        <HDIngreep>false</HDIngreep>
-        <VasteAanvraag>SchUit</VasteAanvraag>
-        <Wachtgroen>SchUit</Wachtgroen>
-        <Meeverlengen>SchAan</Meeverlengen>
-        <MeeverlengenType>To</MeeverlengenType>
-        <MeeverlengenVerschil xsi:nil="true" />
-        <AantalRijstroken>1</AantalRijstroken>
-        <VeiligheidsGroenMaximaal>80</VeiligheidsGroenMaximaal>
-        <Detectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Fasecyclus fiets</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="FaseCyclusModel">
-        <Naam />
-        <BitmapCoordinaten />
-        <Type>Fiets</Type>
-        <TFG>60</TFG>
-        <TGG>40</TGG>
-        <TGG_min>40</TGG_min>
-        <TRG>10</TRG>
-        <TRG_min>10</TRG_min>
-        <TGL>30</TGL>
-        <TGL_min>30</TGL_min>
-        <Kopmax>80</Kopmax>
-        <HDIngreep>false</HDIngreep>
-        <VasteAanvraag>SchUit</VasteAanvraag>
-        <Wachtgroen>SchUit</Wachtgroen>
-        <Meeverlengen>SchAan</Meeverlengen>
-        <MeeverlengenType>To</MeeverlengenType>
-        <MeeverlengenVerschil xsi:nil="true" />
-        <AantalRijstroken>1</AantalRijstroken>
-        <Detectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Fasecyclus voetganger</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Voetganger</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="FaseCyclusModel">
-        <Naam />
-        <BitmapCoordinaten />
-        <Type>Voetganger</Type>
-        <TFG>40</TFG>
-        <TGG>50</TGG>
-        <TGG_min>40</TGG_min>
-        <TRG>10</TRG>
-        <TRG_min>10</TRG_min>
-        <TGL>30</TGL>
-        <TGL_min>30</TGL_min>
-        <Kopmax>80</Kopmax>
-        <HDIngreep>false</HDIngreep>
-        <VasteAanvraag>SchUit</VasteAanvraag>
-        <Wachtgroen>SchUit</Wachtgroen>
-        <Meeverlengen>SchAan</Meeverlengen>
-        <MeeverlengenType>Voetganger</MeeverlengenType>
-        <MeeverlengenVerschil xsi:nil="true" />
-        <AantalRijstroken>2</AantalRijstroken>
-        <Detectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Fasecyclus ov</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>OV</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="FaseCyclusModel">
-        <Naam />
-        <BitmapCoordinaten />
-        <Type>OV</Type>
-        <TFG>40</TFG>
-        <TGG>40</TGG>
-        <TGG_min>40</TGG_min>
-        <TRG>10</TRG>
-        <TRG_min>10</TRG_min>
-        <TGL>30</TGL>
-        <TGL_min>30</TGL_min>
-        <Kopmax>80</Kopmax>
-        <HDIngreep>false</HDIngreep>
-        <VasteAanvraag>SchUit</VasteAanvraag>
-        <Wachtgroen>SchUit</Wachtgroen>
-        <Meeverlengen>SchUit</Meeverlengen>
-        <MeeverlengenType>To</MeeverlengenType>
-        <MeeverlengenVerschil xsi:nil="true" />
-        <Detectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Groentijd auto</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="GroentijdModel">
-        <FaseCyclus />
-        <Waarde>300</Waarde>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Groentijd fiets</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="GroentijdModel">
-        <FaseCyclus />
-        <Waarde>150</Waarde>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Groentijd voetganger</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Voetganger</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="GroentijdModel">
-        <FaseCyclus />
-        <Waarde xsi:nil="true" />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Groentijd OV</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>OV</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
-      <Data xsi:type="GroentijdModel">
-        <FaseCyclus />
-        <Waarde xsi:nil="true" />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RoBuGrover auto en OV</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <MinGroenTijd>100</MinGroenTijd>
-        <MaxGroenTijd>500</MaxGroenTijd>
-        <FileDetectoren />
-        <HiaatDetectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RoBuGrover overig</DefaultName>
-      <Category>FaseCyclus</Category>
-      <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <MinGroenTijd>0</MinGroenTijd>
-        <MaxGroenTijd>0</MaxGroenTijd>
-        <FileDetectoren />
-        <HiaatDetectoren />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Conflict van prioriteit</DefaultName>
-      <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.PioIngreepSignaalGroepParametersModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
-        <MinimumGroentijdConflictOVRealisatie>60</MinimumGroentijdConflictOVRealisatie>
-        <PercMaxGroentijdConflictOVRealisatie>0</PercMaxGroentijdConflictOVRealisatie>
-        <PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
-        <OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
-        <OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Alternatief</DefaultName>
-      <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.FaseCyclusModuleDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <ModulenVooruit>1</ModulenVooruit>
-        <AlternatiefToestaan>true</AlternatiefToestaan>
-        <AlternatieveRuimte>60</AlternatieveRuimte>
-        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
-      </Data>
-    </Default>
+	<VehicleTypes>
+		<VehicleType>
+			<VehicleType>Tram</VehicleType>
+			<Default>tram</Default>
+			<Setting>tram</Setting>
+		</VehicleType>
+		<VehicleType>
+			<VehicleType>Bus</VehicleType>
+			<Default>bus</Default>
+			<Setting>bus</Setting>
+		</VehicleType>
+		<VehicleType>
+			<VehicleType>Fiets</VehicleType>
+			<Default>fts</Default>
+			<Setting>fts</Setting>
+		</VehicleType>
+		<VehicleType>
+			<VehicleType>Vrachtwagen</VehicleType>
+			<Default>vrw</Default>
+			<Setting>vrw</Setting>
+		</VehicleType>
+		<VehicleType>
+			<VehicleType>NG</VehicleType>
+			<Default>alg</Default>
+			<Setting>alg</Setting>
+		</VehicleType>
+	</VehicleTypes>
+	<Defaults>
+		<!-- FaseCycli -->
+		<Default>
+			<DefaultName>Fasecyclus auto</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Auto</Selector1>
+			<DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="FaseCyclusModel">
+				<Naam />
+				<BitmapCoordinaten />
+				<Type>Auto</Type>
+				<TFG>50</TFG>
+				<TGG>40</TGG>
+				<TGG_min>40</TGG_min>
+				<TRG>20</TRG>
+				<TRG_min>20</TRG_min>
+				<TGL>30</TGL>
+				<TGL_min>30</TGL_min>
+				<Kopmax>80</Kopmax>
+				<HDIngreep>false</HDIngreep>
+				<VasteAanvraag>SchUit</VasteAanvraag>
+				<Wachtgroen>SchUit</Wachtgroen>
+				<Meeverlengen>SchAan</Meeverlengen>
+				<MeeverlengenType>To</MeeverlengenType>
+				<MeeverlengenVerschil xsi:nil="true" />
+				<AantalRijstroken>1</AantalRijstroken>
+				<VeiligheidsGroenMaximaal>80</VeiligheidsGroenMaximaal>
+				<Detectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Fasecyclus fiets</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Fiets</Selector1>
+			<DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="FaseCyclusModel">
+				<Naam />
+				<BitmapCoordinaten />
+				<Type>Fiets</Type>
+				<TFG>60</TFG>
+				<TGG>40</TGG>
+				<TGG_min>40</TGG_min>
+				<TRG>10</TRG>
+				<TRG_min>10</TRG_min>
+				<TGL>30</TGL>
+				<TGL_min>30</TGL_min>
+				<Kopmax>80</Kopmax>
+				<HDIngreep>false</HDIngreep>
+				<VasteAanvraag>SchUit</VasteAanvraag>
+				<Wachtgroen>SchUit</Wachtgroen>
+				<Meeverlengen>SchAan</Meeverlengen>
+				<MeeverlengenType>To</MeeverlengenType>
+				<MeeverlengenVerschil xsi:nil="true" />
+				<AantalRijstroken>1</AantalRijstroken>
+				<Detectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Fasecyclus voetganger</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Voetganger</Selector1>
+			<DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="FaseCyclusModel">
+				<Naam />
+				<BitmapCoordinaten />
+				<Type>Voetganger</Type>
+				<TFG>40</TFG>
+				<TGG>50</TGG>
+				<TGG_min>40</TGG_min>
+				<TRG>10</TRG>
+				<TRG_min>10</TRG_min>
+				<TGL>30</TGL>
+				<TGL_min>30</TGL_min>
+				<Kopmax>80</Kopmax>
+				<HDIngreep>false</HDIngreep>
+				<VasteAanvraag>SchUit</VasteAanvraag>
+				<Wachtgroen>SchUit</Wachtgroen>
+				<Meeverlengen>SchAan</Meeverlengen>
+				<MeeverlengenType>Voetganger</MeeverlengenType>
+				<MeeverlengenVerschil xsi:nil="true" />
+				<AantalRijstroken>2</AantalRijstroken>
+				<Detectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Fasecyclus ov</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>OV</Selector1>
+			<DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="FaseCyclusModel">
+				<Naam />
+				<BitmapCoordinaten />
+				<Type>OV</Type>
+				<TFG>40</TFG>
+				<TGG>40</TGG>
+				<TGG_min>40</TGG_min>
+				<TRG>10</TRG>
+				<TRG_min>10</TRG_min>
+				<TGL>30</TGL>
+				<TGL_min>30</TGL_min>
+				<Kopmax>80</Kopmax>
+				<HDIngreep>false</HDIngreep>
+				<VasteAanvraag>SchUit</VasteAanvraag>
+				<Wachtgroen>SchUit</Wachtgroen>
+				<Meeverlengen>SchUit</Meeverlengen>
+				<MeeverlengenType>To</MeeverlengenType>
+				<MeeverlengenVerschil xsi:nil="true" />
+				<Detectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Groentijd auto</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Auto</Selector1>
+			<DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="GroentijdModel">
+				<FaseCyclus />
+				<Waarde>300</Waarde>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Groentijd fiets</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Fiets</Selector1>
+			<DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="GroentijdModel">
+				<FaseCyclus />
+				<Waarde>150</Waarde>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Groentijd voetganger</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Voetganger</Selector1>
+			<DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="GroentijdModel">
+				<FaseCyclus />
+				<Waarde xsi:nil="true" />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Groentijd OV</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>OV</Selector1>
+			<DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
+			<Data xsi:type="GroentijdModel">
+				<FaseCyclus />
+				<Waarde xsi:nil="true" />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RoBuGrover auto en OV</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Auto</Selector1>
+			<DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<MinGroenTijd>100</MinGroenTijd>
+				<MaxGroenTijd>500</MaxGroenTijd>
+				<FileDetectoren />
+				<HiaatDetectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RoBuGrover overig</DefaultName>
+			<Category>FaseCyclus</Category>
+			<Selector1>Fiets</Selector1>
+			<DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<MinGroenTijd>0</MinGroenTijd>
+				<MaxGroenTijd>0</MaxGroenTijd>
+				<FileDetectoren />
+				<HiaatDetectoren />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Conflict van prioriteit</DefaultName>
+			<Category>FaseCyclus</Category>
+			<DataType>TLCGen.Models.PioIngreepSignaalGroepParametersModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
+				<MinimumGroentijdConflictOVRealisatie>60</MinimumGroentijdConflictOVRealisatie>
+				<PercMaxGroentijdConflictOVRealisatie>0</PercMaxGroentijdConflictOVRealisatie>
+				<PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
+				<OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
+				<OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Alternatief</DefaultName>
+			<Category>FaseCyclus</Category>
+			<DataType>TLCGen.Models.FaseCyclusModuleDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<ModulenVooruit>1</ModulenVooruit>
+				<AlternatiefToestaan>true</AlternatiefToestaan>
+				<AlternatieveRuimte>60</AlternatieveRuimte>
+				<AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+			</Data>
+		</Default>
 
-    <!-- Detectie -->
-    <Default>
-      <DefaultName>Koplus auto</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Kop</Selector1>
-      <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>10</TDB>
-        <TDH>30</TDH>
-        <TOG>360</TOG>
-        <TBG>20</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>true</AanvraagDirect>
-        <AanvraagDirectSch>SchAan</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Kop</Type>
-        <Aanvraag>RnietTRG</Aanvraag>
-        <Verlengen>Kopmax</Verlengen>
-        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
-        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Lange lus auto</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Lang</Selector1>
-      <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>10</TDH>
-        <TOG>360</TOG>
-        <TBG>60</TBG>
-        <TFL>60</TFL>
-        <CFL>30</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Lang</Type>
-        <Aanvraag>RnietTRG</Aanvraag>
-        <Verlengen>MK2</Verlengen>
-        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
-        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Verweg lus auto</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Verweg</Selector1>
-      <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>30</TDH>
-        <TOG>360</TOG>
-        <TBG>60</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Verweg</Type>
-        <Aanvraag>Uit</Aanvraag>
-        <Verlengen>MK2</Verlengen>
-        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
-        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>File lus auto</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>File</Selector1>
-      <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
-        <TOG>360</TOG>
-        <TBG>20</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>File</Type>
-        <Aanvraag>Uit</Aanvraag>
-        <Verlengen>Uit</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Koplus fiets</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Kop</Selector1>
-      <Selector2>Fiets</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>15</TDB>
-        <TDH>30</TDH>
-        <TOG>1440</TOG>
-        <TBG>10</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>true</AanvraagDirect>
-        <AanvraagDirectSch>SchAan</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Kop</Type>
-        <Aanvraag>RnietTRG</Aanvraag>
-        <Verlengen>Kopmax</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Verweg lus fiets</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Verweg</Selector1>
-      <Selector2>Fiets</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>30</TDH>
-        <TOG>360</TOG>
-        <TBG>60</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Verweg</Type>
-        <Aanvraag>Uit</Aanvraag>
-        <Verlengen>MK2</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Fiets drukknop</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Knop</Selector1>
-      <Selector2>Fiets</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG>1440</TOG>
-        <TBG>10</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>true</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Knop</Type>
-        <Aanvraag>Rood</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Voetganger drukknop binnen</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>KnopBinnen</Selector1>
-      <Selector2>Voetganger</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG>1440</TOG>
-        <TBG>10</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>true</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>KnopBinnen</Type>
-        <Aanvraag>RoodGeel</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Voetganger drukknop buiten</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>KnopBuiten</Selector1>
-      <Selector2>Voetganger</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG>1440</TOG>
-        <TBG>10</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>true</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>KnopBuiten</Type>
-        <Aanvraag>RoodGeel</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Radar</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Radar</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG>1440</TOG>
-        <TBG>10</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Radar</Type>
-        <Aanvraag>Geen</Aanvraag>
-        <Verlengen>MK2</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>OpticomIngang</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>OpticomIngang</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG xsi:nil="true"/>
-        <TBG xsi:nil="true"/>
-        <TFL xsi:nil="true"/>
-        <CFL xsi:nil="true"/>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>OpticomIngang</Type>
-        <Aanvraag>Geen</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>VecomDetector</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>VecomDetector</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG xsi:nil="true"/>
-        <TBG xsi:nil="true"/>
-        <TFL xsi:nil="true"/>
-        <CFL xsi:nil="true"/>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>VecomDetector</Type>
-        <Aanvraag>Geen</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Overig</DefaultName>
-      <Category>Detector</Category>
-      <Selector1>Overig</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB xsi:nil="true"/>
-        <TDH xsi:nil="true"/>
-        <TOG xsi:nil="true"/>
-        <TBG xsi:nil="true"/>
-        <TFL xsi:nil="true"/>
-        <CFL xsi:nil="true"/>
-        <AanvraagDirect>false</AanvraagDirect>
-        <AanvraagDirectSch>Nooit</AanvraagDirectSch>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Overig</Type>
-        <Aanvraag>Geen</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RoBuGrover file detector</DefaultName>
-      <Category>Detector</Category>
-      <DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Detector />
-        <FileTijd>60</FileTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RoBuGrover hiaat lus</DefaultName>
-      <Category>Detector</Category>
-      <DataType>TLCGen.Models.RoBuGroverHiaatDetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Detector />
-        <HiaatTijd>10</HiaatTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>File ingreep detector</DefaultName>
-      <Category>Detector</Category>
-      <DataType>TLCGen.Models.FileIngreepDetectorModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Detector />
-        <BezetTijd>35</BezetTijd>
-        <RijTijd>20</RijTijd>
-        <AfvalVertraging>120</AfvalVertraging>
-      </Data>
-    </Default>
+		<!-- Detectie -->
+		<Default>
+			<DefaultName>Koplus auto</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Kop</Selector1>
+			<Selector2>Auto</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>10</TDB>
+				<TDH>30</TDH>
+				<TOG>360</TOG>
+				<TBG>20</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>true</AanvraagDirect>
+				<AanvraagDirectSch>SchAan</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Kop</Type>
+				<Aanvraag>RnietTRG</Aanvraag>
+				<Verlengen>Kopmax</Verlengen>
+				<VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+				<VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Lange lus auto</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Lang</Selector1>
+			<Selector2>Auto</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>0</TDB>
+				<TDH>10</TDH>
+				<TOG>360</TOG>
+				<TBG>60</TBG>
+				<TFL>60</TFL>
+				<CFL>30</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Lang</Type>
+				<Aanvraag>RnietTRG</Aanvraag>
+				<Verlengen>MK2</Verlengen>
+				<VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+				<VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Verweg lus auto</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Verweg</Selector1>
+			<Selector2>Auto</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>0</TDB>
+				<TDH>30</TDH>
+				<TOG>360</TOG>
+				<TBG>60</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Verweg</Type>
+				<Aanvraag>Uit</Aanvraag>
+				<Verlengen>MK2</Verlengen>
+				<VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+				<VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>File lus auto</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>File</Selector1>
+			<Selector2>Auto</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>0</TDB>
+				<TDH>0</TDH>
+				<TOG>360</TOG>
+				<TBG>20</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>File</Type>
+				<Aanvraag>Uit</Aanvraag>
+				<Verlengen>Uit</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Koplus fiets</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Kop</Selector1>
+			<Selector2>Fiets</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>15</TDB>
+				<TDH>30</TDH>
+				<TOG>1440</TOG>
+				<TBG>10</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>true</AanvraagDirect>
+				<AanvraagDirectSch>SchAan</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Kop</Type>
+				<Aanvraag>RnietTRG</Aanvraag>
+				<Verlengen>Kopmax</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Verweg lus fiets</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Verweg</Selector1>
+			<Selector2>Fiets</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB>0</TDB>
+				<TDH>30</TDH>
+				<TOG>360</TOG>
+				<TBG>60</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Verweg</Type>
+				<Aanvraag>Uit</Aanvraag>
+				<Verlengen>MK2</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Fiets drukknop</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Knop</Selector1>
+			<Selector2>Fiets</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG>1440</TOG>
+				<TBG>10</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>true</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Knop</Type>
+				<Aanvraag>Rood</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Voetganger drukknop binnen</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>KnopBinnen</Selector1>
+			<Selector2>Voetganger</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG>1440</TOG>
+				<TBG>10</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>true</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>KnopBinnen</Type>
+				<Aanvraag>RoodGeel</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Voetganger drukknop buiten</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>KnopBuiten</Selector1>
+			<Selector2>Voetganger</Selector2>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG>1440</TOG>
+				<TBG>10</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>true</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>KnopBuiten</Type>
+				<Aanvraag>RoodGeel</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Radar</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Radar</Selector1>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG>1440</TOG>
+				<TBG>10</TBG>
+				<TFL>60</TFL>
+				<CFL>45</CFL>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Radar</Type>
+				<Aanvraag>Geen</Aanvraag>
+				<Verlengen>MK2</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OpticomIngang</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>OpticomIngang</Selector1>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG xsi:nil="true"/>
+				<TBG xsi:nil="true"/>
+				<TFL xsi:nil="true"/>
+				<CFL xsi:nil="true"/>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>OpticomIngang</Type>
+				<Aanvraag>Geen</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>VecomDetector</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>VecomDetector</Selector1>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG xsi:nil="true"/>
+				<TBG xsi:nil="true"/>
+				<TFL xsi:nil="true"/>
+				<CFL xsi:nil="true"/>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>VecomDetector</Type>
+				<Aanvraag>Geen</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Overig</DefaultName>
+			<Category>Detector</Category>
+			<Selector1>Overig</Selector1>
+			<DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<BitmapCoordinaten />
+				<VissimNaam />
+				<TDB xsi:nil="true"/>
+				<TDH xsi:nil="true"/>
+				<TOG xsi:nil="true"/>
+				<TBG xsi:nil="true"/>
+				<TFL xsi:nil="true"/>
+				<CFL xsi:nil="true"/>
+				<AanvraagDirect>false</AanvraagDirect>
+				<AanvraagDirectSch>Nooit</AanvraagDirectSch>
+				<Wachtlicht>false</Wachtlicht>
+				<WachtlichtBitmapData />
+				<Simulatie />
+				<Type>Overig</Type>
+				<Aanvraag>Geen</Aanvraag>
+				<Verlengen>Geen</Verlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RoBuGrover file detector</DefaultName>
+			<Category>Detector</Category>
+			<DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Detector />
+				<FileTijd>60</FileTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RoBuGrover hiaat lus</DefaultName>
+			<Category>Detector</Category>
+			<DataType>TLCGen.Models.RoBuGroverHiaatDetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Detector />
+				<HiaatTijd>10</HiaatTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>File ingreep detector</DefaultName>
+			<Category>Detector</Category>
+			<DataType>TLCGen.Models.FileIngreepDetectorModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Detector />
+				<BezetTijd>35</BezetTijd>
+				<RijTijd>20</RijTijd>
+				<AfvalVertraging>120</AfvalVertraging>
+			</Data>
+		</Default>
 
-    <!-- Overig -->
-	<Default>
-		<DefaultName>VLOG settings</DefaultName>
-		<Category>Other</Category>
-		<Selector1>VLOG330</Selector1>
-		<DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
-		<Data>
-			<VLOGToepassen>true</VLOGToepassen>
-			<VLOGVersie>VLOG33x</VLOGVersie>
-			<MONTYPE_def>1</MONTYPE_def>
-			<MONDP_def>17</MONDP_def>
-			<MONIS_def>31</MONIS_def>
-			<MONFC_def>1023</MONFC_def>
-			<MONUS_def>15</MONUS_def>
-			<MONDS_def>1</MONDS_def>
-			<LOGTYPE_def>1</LOGTYPE_def>
-			<LOGTYPE_DATI>1</LOGTYPE_DATI>
-			<LOGTYPE_DP>1</LOGTYPE_DP>
-			<LOGTYPE_IS>15</LOGTYPE_IS>
-			<LOGTYPE_FC>1023</LOGTYPE_FC>
-			<LOGTYPE_US>15</LOGTYPE_US>
-			<LOGTYPE_PS>3</LOGTYPE_PS>
-			<LOGTYPE_DS>1</LOGTYPE_DS>
-			<LOGTYPE_MLX>1</LOGTYPE_MLX>
-			<LOGTYPE_OMG>1</LOGTYPE_OMG>
-			<LOGTYPE_CRC>1</LOGTYPE_CRC>
-			<LOGTYPE_CFG>1</LOGTYPE_CFG>
-			<MONTYPE_DATI>1</MONTYPE_DATI>
-			<MONTYPE_DP>1</MONTYPE_DP>
-			<MONTYPE_IS>1</MONTYPE_IS>
-			<MONTYPE_FC>1023</MONTYPE_FC>
-			<MONTYPE_US>15</MONTYPE_US>
-			<MONTYPE_PS>3</MONTYPE_PS>
-			<MONTYPE_DS>1</MONTYPE_DS>
-			<MONTYPE_MLX>1</MONTYPE_MLX>
-			<MONTYPE_OMG>1</MONTYPE_OMG>
-			<MONTYPE_CRC>3</MONTYPE_CRC>
-			<MONTYPE_CFG>1</MONTYPE_CFG>
-			<LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
-			<LOGPRM_EVENT>6</LOGPRM_EVENT>
-			<MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
-			<MONPRM_EVENT>6</MONPRM_EVENT>
-		</Data>
-	</Default>
-    <Default>
-      <DefaultName>VLOG settings</DefaultName>
-      <Category>Other</Category>
-      <Selector1>VLOG310</Selector1>
-      <DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VLOGToepassen>true</VLOGToepassen>
-        <VLOGVersie>VLOG31x</VLOGVersie>
-        <MONTYPE_def>1</MONTYPE_def>
-        <MONDP_def>17</MONDP_def>
-        <MONIS_def>31</MONIS_def>
-        <MONFC_def>255</MONFC_def>
-        <MONUS_def>15</MONUS_def>
-        <MONDS_def>1</MONDS_def>
-        <LOGTYPE_def>1</LOGTYPE_def>
-        <LOGTYPE_DATI>1</LOGTYPE_DATI>
-        <LOGTYPE_DP>1</LOGTYPE_DP>
-        <LOGTYPE_IS>15</LOGTYPE_IS>
-        <LOGTYPE_FC>255</LOGTYPE_FC>
-        <LOGTYPE_US>15</LOGTYPE_US>
-        <LOGTYPE_PS>3</LOGTYPE_PS>
-        <LOGTYPE_DS>1</LOGTYPE_DS>
-        <LOGTYPE_MLX>1</LOGTYPE_MLX>
-        <LOGTYPE_OMG>1</LOGTYPE_OMG>
-        <LOGTYPE_CRC>1</LOGTYPE_CRC>
-        <LOGTYPE_CFG>1</LOGTYPE_CFG>
-        <MONTYPE_DATI>1</MONTYPE_DATI>
-        <MONTYPE_DP>1</MONTYPE_DP>
-        <MONTYPE_IS>1</MONTYPE_IS>
-        <MONTYPE_FC>255</MONTYPE_FC>
-        <MONTYPE_US>15</MONTYPE_US>
-        <MONTYPE_PS>3</MONTYPE_PS>
-        <MONTYPE_DS>1</MONTYPE_DS>
-        <MONTYPE_MLX>1</MONTYPE_MLX>
-        <MONTYPE_OMG>1</MONTYPE_OMG>
-        <MONTYPE_CRC>3</MONTYPE_CRC>
-        <MONTYPE_CFG>1</MONTYPE_CFG>
-        <LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
-        <LOGPRM_EVENT>6</LOGPRM_EVENT>
-        <MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
-        <MONPRM_EVENT>6</MONPRM_EVENT>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>VLOG settings</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VLOGToepassen>true</VLOGToepassen>
-        <VLOGVersie>VLOG30x</VLOGVersie>
-        <MONTYPE_def>1</MONTYPE_def>
-        <MONDP_def>1</MONDP_def>
-        <MONIS_def>15</MONIS_def>
-        <MONFC_def>255</MONFC_def>
-        <MONUS_def>15</MONUS_def>
-        <MONDS_def>1</MONDS_def>
-        <LOGTYPE_def>1</LOGTYPE_def>
-        <LOGTYPE_DATI>1</LOGTYPE_DATI>
-        <LOGTYPE_DP>1</LOGTYPE_DP>
-        <LOGTYPE_IS>15</LOGTYPE_IS>
-        <LOGTYPE_FC>255</LOGTYPE_FC>
-        <LOGTYPE_US>3</LOGTYPE_US>
-        <LOGTYPE_PS>3</LOGTYPE_PS>
-        <LOGTYPE_DS>1</LOGTYPE_DS>
-        <LOGTYPE_MLX>1</LOGTYPE_MLX>
-        <LOGTYPE_OMG>1</LOGTYPE_OMG>
-        <LOGTYPE_CRC>1</LOGTYPE_CRC>
-        <LOGTYPE_CFG>1</LOGTYPE_CFG>
-        <MONTYPE_DATI>1</MONTYPE_DATI>
-        <MONTYPE_DP>1</MONTYPE_DP>
-        <MONTYPE_IS>1</MONTYPE_IS>
-        <MONTYPE_FC>255</MONTYPE_FC>
-        <MONTYPE_US>15</MONTYPE_US>
-        <MONTYPE_PS>3</MONTYPE_PS>
-        <MONTYPE_DS>1</MONTYPE_DS>
-        <MONTYPE_MLX>1</MONTYPE_MLX>
-        <MONTYPE_OMG>1</MONTYPE_OMG>
-        <MONTYPE_CRC>3</MONTYPE_CRC>
-        <MONTYPE_CFG>1</MONTYPE_CFG>
-        <LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
-        <LOGPRM_EVENT>6</LOGPRM_EVENT>
-        <MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
-        <MONPRM_EVENT>6</MONPRM_EVENT>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Richtinggevoelige aanvraag</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.RichtingGevoeligeAanvraagModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <VanDetector />
-        <NaarDetector />
-        <MaxTijdsVerschil>10</MaxTijdsVerschil>
-        <ResetAanvraag>false</ResetAanvraag>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Richtinggevoelig verlengen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.RichtingGevoeligVerlengModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <VanDetector />
-        <NaarDetector />
-        <MaxTijdsVerschil>10</MaxTijdsVerschil>
-        <VerlengTijd>30</VerlengTijd>
-        <TypeVerlengen>MK2</TypeVerlengen>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Regeling instellingen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.ControllerDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <Stad />
-        <Straat1 />
-        <Straat2 />
-        <BitmapNaam />
-        <VissimNaam />
-        <Fasebewaking>240</Fasebewaking>
-        <CCOLVersie>CCOL8</CCOLVersie>
-        <KWCType>Geen</KWCType>
-        <KWCUitgebreid>false</KWCUitgebreid>
-        <VLOGType>Filebased</VLOGType>
-        <VLOGSettings />
-        <VLOGInTestOmgeving>false</VLOGInTestOmgeving>
-        <GarantieOntruimingsTijden>false</GarantieOntruimingsTijden>
-        <ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
-        <TypeGroentijden>MaxGroentijden</TypeGroentijden>
-        <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
-        <WachttijdvoorspellerNietHalterenMax>21</WachttijdvoorspellerNietHalterenMax>
-        <WachttijdvoorspellerNietHalterenMin>5</WachttijdvoorspellerNietHalterenMin>
-        <WachttijdvoorspellerAansturenBus>false</WachttijdvoorspellerAansturenBus>
-        <WachttijdvoorspellerAansturenBusHD>false</WachttijdvoorspellerAansturenBusHD>
-        <NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
-        <Intergroen>false</Intergroen>
-        <CCOLMulti>false</CCOLMulti>
-        <CCOLMultiSlave>0</CCOLMultiSlave>
-        <HuidigeVersieMajor>0</HuidigeVersieMajor>
-        <HuidigeVersieMinor>0</HuidigeVersieMinor>
-        <HuidigeVersieRevision>0</HuidigeVersieRevision>
-        <TLCGenVersie />
-        <SegmentenDisplayBitmapData />
-        <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
-        <ModulenDisplayBitmapData />
-        <UitgangPerModule>false</UitgangPerModule>
-        <TDHAMaxToepassen>true</TDHAMaxToepassen>
-        <FixatieData>
-          <FixatieMogelijk>true</FixatieMogelijk>
-          <BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>
-          <FixatieBitmapData />
-        </FixatieData>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>OV ingreep</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <FaseCyclus />
-        <Type>Bus</Type>
-        <VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
-        <NoodaanvraagKoplus>false</NoodaanvraagKoplus>
-        <KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
-        <Koplus />
-        <RijTijdOngehinderd>140</RijTijdOngehinderd>
-        <RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
-        <RijTijdGehinderd>60</RijTijdGehinderd>
-        <OnderMaximum>150</OnderMaximum>
-        <GroenBewaking>300</GroenBewaking>
-        <BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
-        <MinimaleRoodtijd>70</MinimaleRoodtijd>
-        <AfkappenConflicten>true</AfkappenConflicten>
-        <AfkappenConflictenOV>false</AfkappenConflictenOV>
-        <VasthoudenGroen>true</VasthoudenGroen>
-        <TussendoorRealiseren>true</TussendoorRealiseren>
-        <AlleLijnen>false</AlleLijnen>
-        <GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
-        <GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
-        <GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
-        <GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
-        <PrioInmeldingBitmapData />
-        <GeconditioneerdePrioTeVroegBitmapData />
-        <GeconditioneerdePrioOpTijdBitmapData />
-        <GeconditioneerdePrioTeLaatBitmapData />
-        <DummyKARInmelding />
-        <DummyKARUitmelding />
-        <MeldingenData />
-        <LijnNummers>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-          <LijnNummer>
-            <Nummer>0</Nummer>
-          </LijnNummer>
-        </LijnNummers>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>HD ingreep</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.HDIngreepModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <FaseCyclus />
-        <KAR>true</KAR>
-        <Vecom>false</Vecom>
-        <Opticom>false</Opticom>
-        <Sirene>false</Sirene>
-        <RijTijdOngehinderd>0</RijTijdOngehinderd>
-        <RijTijdBeperktgehinderd>0</RijTijdBeperktgehinderd>
-        <RijTijdGehinderd>0</RijTijdGehinderd>
-        <GroenBewaking>900</GroenBewaking>
-        <HDInmeldingBitmapData />
-        <HDKARDummyInmeldingBitmapData />
-        <HDKARDummyUitmeldingBitmapData />
-        <HDVecomDummyInmeldingBitmapData />
-        <HDVecomDummyUitmeldingBitmapData />
-        <MeerealiserendeFaseCycli />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode rateltikkers altijd</DefaultName>
-      <Selector1>RateltikkersAltijd</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>rtaltijd</Naam>
-        <Type>RateltikkersAltijd</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar>Rateltikkers altijd actief</Commentaar>
-        <BitmapData/>
-        <StartTijd>15:30</StartTijd>
-        <EindTijd>19:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode rateltikkers aanvraag</DefaultName>
-      <Selector1>RateltikkersAanvraag</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>rtaanvraag</Naam>
-        <Type>RateltikkersAanvraag</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar>Rateltikkers op aanvraag</Commentaar>
-        <BitmapData/>
-        <StartTijd>06:00</StartTijd>
-        <EindTijd>22:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode rateltikkers dimmen</DefaultName>
-      <Selector1>RateltikkersDimmen</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>rtdim</Naam>
-        <Type>RateltikkersDimmen</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar>Rateltikkers dimmen</Commentaar>
-        <BitmapData/>
-        <StartTijd>19:00</StartTijd>
-        <EindTijd>07:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode bellen actief</DefaultName>
-      <Selector1>BellenActief</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>belact</Naam>
-        <Type>BellenActief</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar>Bellen actief</Commentaar>
-        <BitmapData/>
-        <StartTijd>06:00</StartTijd>
-        <EindTijd>22:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode bellen dimmen</DefaultName>
-      <Selector1>BellenDimmen</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>beldim</Naam>
-        <Type>BellenDimmen</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar>Bellen dimmen</Commentaar>
-        <BitmapData/>
-        <StartTijd>19:00</StartTijd>
-        <EindTijd>07:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Periode overig</DefaultName>
-      <Selector1>Overig</Selector1>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam>beldim</Naam>
-        <Type>Overig</Type>
-        <DagCode>10</DagCode>
-        <GroentijdenSet />
-        <Commentaar></Commentaar>
-        <BitmapData/>
-        <StartTijd>00:00</StartTijd>
-        <EindTijd>24:00</EindTijd>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RoBuGrover instellingen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.RoBuGroverModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <RoBuGrover>true</RoBuGrover>
-        <MinimaleCyclustijd>900</MinimaleCyclustijd>
-        <MaximaleCyclustijd>1500</MaximaleCyclustijd>
-        <GroentijdVerschil>50</GroentijdVerschil>
-        <MethodeRoBuGrover>IngesteldMaximum</MethodeRoBuGrover>
-        <GroenOphoogFactor>50</GroenOphoogFactor>
-        <GroenVerlaagFactor>20</GroenVerlaagFactor>
-        <GroenVerlaagFactorNietPrimair>50</GroenVerlaagFactorNietPrimair>
-        <OphogenTijdensGroen>true</OphogenTijdensGroen>
-        <BitmapData />
-        <ConflictGroepen />
-        <SignaalGroepInstellingen />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>File ingreep</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.FileIngreepModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <Naam />
-        <MinimaalAantalMeldingen>0</MinimaalAantalMeldingen>
-        <AfvalVertraging>600</AfvalVertraging>
-        <EerlijkDoseren>false</EerlijkDoseren>
-        <BitmapData />
-        <FileDetectoren />
-        <TeDoserenSignaalGroepen />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Prioriteit instellingen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PrioriteitDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <PrioIngreepType>Geen</PrioIngreepType>
-        <CheckOpDSIN>false</CheckOpDSIN>
-        <MaxWachttijdAuto>120</MaxWachttijdAuto>
-        <MaxWachttijdFiets>90</MaxWachttijdFiets>
-        <MaxWachttijdVoetganger>90</MaxWachttijdVoetganger>
-        <GeconditioneerdePrioGrensTeVroeg>60</GeconditioneerdePrioGrensTeVroeg>
-        <GeconditioneerdePrioGrensTeLaat>120</GeconditioneerdePrioGrensTeLaat>
-        <KARMeldingBitmapData />
-        <KAROnderGedragBitmapData />
-        <MaximaleWachttijdOverschredenBitmapData />
-        <OVIngrepen />
-        <HDIngrepen />
-        <OVIngreepSignaalGroepParameters />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Prio meldingen instellingen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PrioIngreepMeldingenDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <AntiJutterVoorAlleUitmeldingen>true</AntiJutterVoorAlleUitmeldingen>
-        <AntiJutterTijdVoorAlleUitmeldingen>15</AntiJutterTijdVoorAlleUitmeldingen>
-        <AntiJutterVoorAlleInmeldingen>false</AntiJutterVoorAlleInmeldingen>
-        <AntiJutterTijdVoorAlleInmeldingen>15</AntiJutterTijdVoorAlleInmeldingen>
-        <Wissel1>false</Wissel1>
-        <Wissel1Type>Ingang</Wissel1Type>
-        <Wissel1Input />
-        <Wissel1Detector />
-        <Wissel1InputVoorwaarde>false</Wissel1InputVoorwaarde>
-        <Wissel2>false</Wissel2>
-        <Wissel2Type>Ingang</Wissel2Type>
-        <Wissel2Input />
-        <Wissel2Detector />
-        <Wissel2InputVoorwaarde>false</Wissel2InputVoorwaarde>
-        <Inmeldingen />
-        <Uitmeldingen />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Perioden instellingen</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <UsePeriodNames>true</UsePeriodNames>
-        <DefaultPeriodeGroentijdenSet></DefaultPeriodeGroentijdenSet>
-        <DefaultPeriodeNaam></DefaultPeriodeNaam>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie default</DefaultName>
-      <Category>Other</Category>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>DEFAULT</VehicleRole>
-        <VehicleSubrole>UNKNOWN</VehicleSubrole>
-        <Prioriteit>false</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>0</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie bus</DefaultName>
-      <Category>Other</Category>
-      <Selector1>Auto</Selector1>
-      <Selector2>BUS</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>PUBLICTRANSPORT</VehicleRole>
-        <VehicleSubrole>BUS</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>11</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie heavy truck</DefaultName>
-      <Category>Other</Category>
-      <Selector1>Auto</Selector1>
-      <Selector2>HEAVYTRUCK</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>COMMERCIAL</VehicleRole>
-        <VehicleSubrole>EXPRESSTRANSIT</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>11</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie special vehicles</DefaultName>
-      <Category>Other</Category>
-      <Selector1>Auto</Selector1>
-      <Selector2>SPECIALVEHICLES</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>EMERGENCY</VehicleRole>
-        <VehicleSubrole>EMERGENCY</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>14</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie fiets</DefaultName>
-      <Category>Other</Category>
-      <Selector1>Fiets</Selector1>
-      <Selector2>CYCLIST</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>DEFAULT</VehicleRole>
-        <VehicleSubrole>UNKNOWN</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>15</Snelheid>
-        <Afstand>100</Afstand>
-        <Importance>0</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS simulatie voetganger</DefaultName>
-      <Category>Other</Category>
-      <Selector1>Voetganger</Selector1>
-      <Selector2>PEDESTRIAN</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>DEFAULT</VehicleRole>
-        <VehicleSubrole>UNKNOWN</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>5</Snelheid>
-        <Afstand>15</Afstand>
-        <Importance>0</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS OV simulatie bus</DefaultName>
-      <Category>Other</Category>
-      <Selector1>OV</Selector1>
-      <Selector2>BUS</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>PUBLICTRANSPORT</VehicleRole>
-        <VehicleSubrole>BUS</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>11</Importance>
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>RIS OV simulatie special vehicles</DefaultName>
-      <Category>Other</Category>
-      <Selector1>OV</Selector1>
-      <Selector2>SPECIALVEHICLES</Selector2>
-      <DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
-      <Data>
-        <VehicleRole>EMERGENCY</VehicleRole>
-        <VehicleSubrole>EMERGENCY</VehicleSubrole>
-        <Prioriteit>true</Prioriteit>
-        <Flow>0</Flow>
-        <Snelheid>50</Snelheid>
-        <Afstand>300</Afstand>
-        <Importance>14</Importance>
-      </Data>
-    </Default>
-  </Defaults>
+		<!-- Overig -->
+		<Default>
+			<DefaultName>VLOG settings</DefaultName>
+			<Category>Other</Category>
+			<Selector1>VLOG330</Selector1>
+			<DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VLOGToepassen>true</VLOGToepassen>
+				<VLOGVersie>VLOG33x</VLOGVersie>
+				<MONTYPE_def>1</MONTYPE_def>
+				<MONDP_def>17</MONDP_def>
+				<MONIS_def>31</MONIS_def>
+				<MONFC_def>1023</MONFC_def>
+				<MONUS_def>15</MONUS_def>
+				<MONDS_def>1</MONDS_def>
+				<LOGTYPE_def>1</LOGTYPE_def>
+				<LOGTYPE_DATI>1</LOGTYPE_DATI>
+				<LOGTYPE_DP>1</LOGTYPE_DP>
+				<LOGTYPE_IS>15</LOGTYPE_IS>
+				<LOGTYPE_FC>1023</LOGTYPE_FC>
+				<LOGTYPE_US>15</LOGTYPE_US>
+				<LOGTYPE_PS>3</LOGTYPE_PS>
+				<LOGTYPE_DS>1</LOGTYPE_DS>
+				<LOGTYPE_MLX>1</LOGTYPE_MLX>
+				<LOGTYPE_OMG>1</LOGTYPE_OMG>
+				<LOGTYPE_CRC>1</LOGTYPE_CRC>
+				<LOGTYPE_CFG>1</LOGTYPE_CFG>
+				<MONTYPE_DATI>1</MONTYPE_DATI>
+				<MONTYPE_DP>1</MONTYPE_DP>
+				<MONTYPE_IS>1</MONTYPE_IS>
+				<MONTYPE_FC>1023</MONTYPE_FC>
+				<MONTYPE_US>15</MONTYPE_US>
+				<MONTYPE_PS>3</MONTYPE_PS>
+				<MONTYPE_DS>1</MONTYPE_DS>
+				<MONTYPE_MLX>1</MONTYPE_MLX>
+				<MONTYPE_OMG>1</MONTYPE_OMG>
+				<MONTYPE_CRC>3</MONTYPE_CRC>
+				<MONTYPE_CFG>1</MONTYPE_CFG>
+				<LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
+				<LOGPRM_EVENT>6</LOGPRM_EVENT>
+				<MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
+				<MONPRM_EVENT>6</MONPRM_EVENT>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>VLOG settings</DefaultName>
+			<Category>Other</Category>
+			<Selector1>VLOG310</Selector1>
+			<DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VLOGToepassen>true</VLOGToepassen>
+				<VLOGVersie>VLOG31x</VLOGVersie>
+				<MONTYPE_def>1</MONTYPE_def>
+				<MONDP_def>17</MONDP_def>
+				<MONIS_def>31</MONIS_def>
+				<MONFC_def>255</MONFC_def>
+				<MONUS_def>15</MONUS_def>
+				<MONDS_def>1</MONDS_def>
+				<LOGTYPE_def>1</LOGTYPE_def>
+				<LOGTYPE_DATI>1</LOGTYPE_DATI>
+				<LOGTYPE_DP>1</LOGTYPE_DP>
+				<LOGTYPE_IS>15</LOGTYPE_IS>
+				<LOGTYPE_FC>255</LOGTYPE_FC>
+				<LOGTYPE_US>15</LOGTYPE_US>
+				<LOGTYPE_PS>3</LOGTYPE_PS>
+				<LOGTYPE_DS>1</LOGTYPE_DS>
+				<LOGTYPE_MLX>1</LOGTYPE_MLX>
+				<LOGTYPE_OMG>1</LOGTYPE_OMG>
+				<LOGTYPE_CRC>1</LOGTYPE_CRC>
+				<LOGTYPE_CFG>1</LOGTYPE_CFG>
+				<MONTYPE_DATI>1</MONTYPE_DATI>
+				<MONTYPE_DP>1</MONTYPE_DP>
+				<MONTYPE_IS>1</MONTYPE_IS>
+				<MONTYPE_FC>255</MONTYPE_FC>
+				<MONTYPE_US>15</MONTYPE_US>
+				<MONTYPE_PS>3</MONTYPE_PS>
+				<MONTYPE_DS>1</MONTYPE_DS>
+				<MONTYPE_MLX>1</MONTYPE_MLX>
+				<MONTYPE_OMG>1</MONTYPE_OMG>
+				<MONTYPE_CRC>3</MONTYPE_CRC>
+				<MONTYPE_CFG>1</MONTYPE_CFG>
+				<LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
+				<LOGPRM_EVENT>6</LOGPRM_EVENT>
+				<MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
+				<MONPRM_EVENT>6</MONPRM_EVENT>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>VLOG settings</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.VLOGSettingsDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VLOGToepassen>true</VLOGToepassen>
+				<VLOGVersie>VLOG30x</VLOGVersie>
+				<MONTYPE_def>1</MONTYPE_def>
+				<MONDP_def>1</MONDP_def>
+				<MONIS_def>15</MONIS_def>
+				<MONFC_def>255</MONFC_def>
+				<MONUS_def>15</MONUS_def>
+				<MONDS_def>1</MONDS_def>
+				<LOGTYPE_def>1</LOGTYPE_def>
+				<LOGTYPE_DATI>1</LOGTYPE_DATI>
+				<LOGTYPE_DP>1</LOGTYPE_DP>
+				<LOGTYPE_IS>15</LOGTYPE_IS>
+				<LOGTYPE_FC>255</LOGTYPE_FC>
+				<LOGTYPE_US>3</LOGTYPE_US>
+				<LOGTYPE_PS>3</LOGTYPE_PS>
+				<LOGTYPE_DS>1</LOGTYPE_DS>
+				<LOGTYPE_MLX>1</LOGTYPE_MLX>
+				<LOGTYPE_OMG>1</LOGTYPE_OMG>
+				<LOGTYPE_CRC>1</LOGTYPE_CRC>
+				<LOGTYPE_CFG>1</LOGTYPE_CFG>
+				<MONTYPE_DATI>1</MONTYPE_DATI>
+				<MONTYPE_DP>1</MONTYPE_DP>
+				<MONTYPE_IS>1</MONTYPE_IS>
+				<MONTYPE_FC>255</MONTYPE_FC>
+				<MONTYPE_US>15</MONTYPE_US>
+				<MONTYPE_PS>3</MONTYPE_PS>
+				<MONTYPE_DS>1</MONTYPE_DS>
+				<MONTYPE_MLX>1</MONTYPE_MLX>
+				<MONTYPE_OMG>1</MONTYPE_OMG>
+				<MONTYPE_CRC>3</MONTYPE_CRC>
+				<MONTYPE_CFG>1</MONTYPE_CFG>
+				<LOGPRM_VLOGMODE>VLOGMODE_LOG_FILE_ASCII</LOGPRM_VLOGMODE>
+				<LOGPRM_EVENT>6</LOGPRM_EVENT>
+				<MONPRM_VLOGMODE>ASCII</MONPRM_VLOGMODE>
+				<MONPRM_EVENT>6</MONPRM_EVENT>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Richtinggevoelige aanvraag</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.RichtingGevoeligeAanvraagModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<VanDetector />
+				<NaarDetector />
+				<MaxTijdsVerschil>10</MaxTijdsVerschil>
+				<ResetAanvraag>false</ResetAanvraag>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Richtinggevoelig verlengen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.RichtingGevoeligVerlengModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<VanDetector />
+				<NaarDetector />
+				<MaxTijdsVerschil>10</MaxTijdsVerschil>
+				<VerlengTijd>30</VerlengTijd>
+				<TypeVerlengen>MK2</TypeVerlengen>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Regeling instellingen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.ControllerDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<Stad />
+				<Straat1 />
+				<Straat2 />
+				<BitmapNaam />
+				<VissimNaam />
+				<Fasebewaking>240</Fasebewaking>
+				<CCOLVersie>CCOL8</CCOLVersie>
+				<KWCType>Geen</KWCType>
+				<KWCUitgebreid>false</KWCUitgebreid>
+				<VLOGType>Filebased</VLOGType>
+				<VLOGSettings />
+				<VLOGInTestOmgeving>false</VLOGInTestOmgeving>
+				<GarantieOntruimingsTijden>false</GarantieOntruimingsTijden>
+				<ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
+				<TypeGroentijden>MaxGroentijden</TypeGroentijden>
+				<AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
+				<WachttijdvoorspellerNietHalterenMax>21</WachttijdvoorspellerNietHalterenMax>
+				<WachttijdvoorspellerNietHalterenMin>5</WachttijdvoorspellerNietHalterenMin>
+				<WachttijdvoorspellerAansturenBus>false</WachttijdvoorspellerAansturenBus>
+				<WachttijdvoorspellerAansturenBusHD>false</WachttijdvoorspellerAansturenBusHD>
+				<NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
+				<Intergroen>false</Intergroen>
+				<CCOLMulti>false</CCOLMulti>
+				<CCOLMultiSlave>0</CCOLMultiSlave>
+				<HuidigeVersieMajor>0</HuidigeVersieMajor>
+				<HuidigeVersieMinor>0</HuidigeVersieMinor>
+				<HuidigeVersieRevision>0</HuidigeVersieRevision>
+				<TLCGenVersie />
+				<SegmentenDisplayBitmapData />
+				<SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
+				<ModulenDisplayBitmapData />
+				<UitgangPerModule>false</UitgangPerModule>
+				<TDHAMaxToepassen>true</TDHAMaxToepassen>
+				<FixatieData>
+					<FixatieMogelijk>true</FixatieMogelijk>
+					<BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>
+					<FixatieBitmapData />
+				</FixatieData>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Bus</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Bus</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Bus</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+				</LijnNummers>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Tram</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Tram</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Bus</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+				</LijnNummers>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Fiets</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Fiets</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Fiets</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Vrachtwagen</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Vrachtwagen</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Vrachtwagen</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Auto</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Auto</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Auto</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>OV ingreep Hulpdienst</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Hulpdienst</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>Hulpdienst</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>0</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>0</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>0</RijTijdGehinderd>
+				<OnderMaximum>0</OnderMaximum>
+				<GroenBewaking>900</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>HD ingreep</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.HDIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<FaseCyclus />
+				<KAR>true</KAR>
+				<Vecom>false</Vecom>
+				<Opticom>false</Opticom>
+				<Sirene>false</Sirene>
+				<RijTijdOngehinderd>0</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>0</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>0</RijTijdGehinderd>
+				<GroenBewaking>900</GroenBewaking>
+				<HDInmeldingBitmapData />
+				<HDKARDummyInmeldingBitmapData />
+				<HDKARDummyUitmeldingBitmapData />
+				<HDVecomDummyInmeldingBitmapData />
+				<HDVecomDummyUitmeldingBitmapData />
+				<MeerealiserendeFaseCycli />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode rateltikkers altijd</DefaultName>
+			<Selector1>RateltikkersAltijd</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>rtaltijd</Naam>
+				<Type>RateltikkersAltijd</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar>Rateltikkers altijd actief</Commentaar>
+				<BitmapData/>
+				<StartTijd>15:30</StartTijd>
+				<EindTijd>19:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode rateltikkers aanvraag</DefaultName>
+			<Selector1>RateltikkersAanvraag</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>rtaanvraag</Naam>
+				<Type>RateltikkersAanvraag</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar>Rateltikkers op aanvraag</Commentaar>
+				<BitmapData/>
+				<StartTijd>06:00</StartTijd>
+				<EindTijd>22:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode rateltikkers dimmen</DefaultName>
+			<Selector1>RateltikkersDimmen</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>rtdim</Naam>
+				<Type>RateltikkersDimmen</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar>Rateltikkers dimmen</Commentaar>
+				<BitmapData/>
+				<StartTijd>19:00</StartTijd>
+				<EindTijd>07:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode bellen actief</DefaultName>
+			<Selector1>BellenActief</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>belact</Naam>
+				<Type>BellenActief</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar>Bellen actief</Commentaar>
+				<BitmapData/>
+				<StartTijd>06:00</StartTijd>
+				<EindTijd>22:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode bellen dimmen</DefaultName>
+			<Selector1>BellenDimmen</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>beldim</Naam>
+				<Type>BellenDimmen</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar>Bellen dimmen</Commentaar>
+				<BitmapData/>
+				<StartTijd>19:00</StartTijd>
+				<EindTijd>07:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Periode overig</DefaultName>
+			<Selector1>Overig</Selector1>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam>beldim</Naam>
+				<Type>Overig</Type>
+				<DagCode>10</DagCode>
+				<GroentijdenSet />
+				<Commentaar></Commentaar>
+				<BitmapData/>
+				<StartTijd>00:00</StartTijd>
+				<EindTijd>24:00</EindTijd>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RoBuGrover instellingen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.RoBuGroverModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<RoBuGrover>true</RoBuGrover>
+				<MinimaleCyclustijd>900</MinimaleCyclustijd>
+				<MaximaleCyclustijd>1500</MaximaleCyclustijd>
+				<GroentijdVerschil>50</GroentijdVerschil>
+				<MethodeRoBuGrover>IngesteldMaximum</MethodeRoBuGrover>
+				<GroenOphoogFactor>50</GroenOphoogFactor>
+				<GroenVerlaagFactor>20</GroenVerlaagFactor>
+				<GroenVerlaagFactorNietPrimair>50</GroenVerlaagFactorNietPrimair>
+				<OphogenTijdensGroen>true</OphogenTijdensGroen>
+				<BitmapData />
+				<ConflictGroepen />
+				<SignaalGroepInstellingen />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>File ingreep</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.FileIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<MinimaalAantalMeldingen>0</MinimaalAantalMeldingen>
+				<AfvalVertraging>600</AfvalVertraging>
+				<EerlijkDoseren>false</EerlijkDoseren>
+				<BitmapData />
+				<FileDetectoren />
+				<TeDoserenSignaalGroepen />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Prioriteit instellingen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PrioriteitDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<PrioIngreepType>Geen</PrioIngreepType>
+				<CheckOpDSIN>false</CheckOpDSIN>
+				<MaxWachttijdAuto>120</MaxWachttijdAuto>
+				<MaxWachttijdFiets>90</MaxWachttijdFiets>
+				<MaxWachttijdVoetganger>90</MaxWachttijdVoetganger>
+				<GeconditioneerdePrioGrensTeVroeg>60</GeconditioneerdePrioGrensTeVroeg>
+				<GeconditioneerdePrioGrensTeLaat>120</GeconditioneerdePrioGrensTeLaat>
+				<KARMeldingBitmapData />
+				<KAROnderGedragBitmapData />
+				<MaximaleWachttijdOverschredenBitmapData />
+				<OVIngrepen />
+				<HDIngrepen />
+				<OVIngreepSignaalGroepParameters />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Prio meldingen instellingen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PrioIngreepMeldingenDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<AntiJutterVoorAlleUitmeldingen>true</AntiJutterVoorAlleUitmeldingen>
+				<AntiJutterTijdVoorAlleUitmeldingen>15</AntiJutterTijdVoorAlleUitmeldingen>
+				<AntiJutterVoorAlleInmeldingen>false</AntiJutterVoorAlleInmeldingen>
+				<AntiJutterTijdVoorAlleInmeldingen>15</AntiJutterTijdVoorAlleInmeldingen>
+				<Wissel1>false</Wissel1>
+				<Wissel1Type>Ingang</Wissel1Type>
+				<Wissel1Input />
+				<Wissel1Detector />
+				<Wissel1InputVoorwaarde>false</Wissel1InputVoorwaarde>
+				<Wissel2>false</Wissel2>
+				<Wissel2Type>Ingang</Wissel2Type>
+				<Wissel2Input />
+				<Wissel2Detector />
+				<Wissel2InputVoorwaarde>false</Wissel2InputVoorwaarde>
+				<Inmeldingen />
+				<Uitmeldingen />
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>Perioden instellingen</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<UsePeriodNames>true</UsePeriodNames>
+				<DefaultPeriodeGroentijdenSet></DefaultPeriodeGroentijdenSet>
+				<DefaultPeriodeNaam></DefaultPeriodeNaam>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie default</DefaultName>
+			<Category>Other</Category>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>DEFAULT</VehicleRole>
+				<VehicleSubrole>UNKNOWN</VehicleSubrole>
+				<Prioriteit>false</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>0</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie bus</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Auto</Selector1>
+			<Selector2>BUS</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>PUBLICTRANSPORT</VehicleRole>
+				<VehicleSubrole>BUS</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>11</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie heavy truck</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Auto</Selector1>
+			<Selector2>HEAVYTRUCK</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>COMMERCIAL</VehicleRole>
+				<VehicleSubrole>EXPRESSTRANSIT</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>11</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie special vehicles</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Auto</Selector1>
+			<Selector2>SPECIALVEHICLES</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>EMERGENCY</VehicleRole>
+				<VehicleSubrole>EMERGENCY</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>14</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie fiets</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Fiets</Selector1>
+			<Selector2>CYCLIST</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>DEFAULT</VehicleRole>
+				<VehicleSubrole>UNKNOWN</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>15</Snelheid>
+				<Afstand>100</Afstand>
+				<Importance>0</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS simulatie voetganger</DefaultName>
+			<Category>Other</Category>
+			<Selector1>Voetganger</Selector1>
+			<Selector2>PEDESTRIAN</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>DEFAULT</VehicleRole>
+				<VehicleSubrole>UNKNOWN</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>5</Snelheid>
+				<Afstand>15</Afstand>
+				<Importance>0</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS OV simulatie bus</DefaultName>
+			<Category>Other</Category>
+			<Selector1>OV</Selector1>
+			<Selector2>BUS</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>PUBLICTRANSPORT</VehicleRole>
+				<VehicleSubrole>BUS</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>11</Importance>
+			</Data>
+		</Default>
+		<Default>
+			<DefaultName>RIS OV simulatie special vehicles</DefaultName>
+			<Category>Other</Category>
+			<Selector1>OV</Selector1>
+			<Selector2>SPECIALVEHICLES</Selector2>
+			<DataType>TLCGen.Models.RISFaseCyclusLaneSimulatedStationModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<VehicleRole>EMERGENCY</VehicleRole>
+				<VehicleSubrole>EMERGENCY</VehicleSubrole>
+				<Prioriteit>true</Prioriteit>
+				<Flow>0</Flow>
+				<Snelheid>50</Snelheid>
+				<Afstand>300</Afstand>
+				<Importance>14</Importance>
+			</Data>
+		</Default>
+	</Defaults>
 </TLCGenDefaultsModel>

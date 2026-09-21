@@ -1,13 +1,14 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
 using TLCGen.Extensions;
@@ -80,6 +81,8 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(nameof(IsTypeHulpdienst));
                 OnPropertyChanged(nameof(IsNotTypeHulpdienst));
                 OnPropertyChanged(nameof(ShowLijnnummer));
+
+                DefaultsProvider.Default.SetDefaultsOnModel(PrioIngreep, PrioIngreep.Type.ToString(), null, false);
             }
         }
 

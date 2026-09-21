@@ -11,6 +11,9 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\VersionInfo\12.4.0.20.rtf" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AvalonEdit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" />
@@ -28,6 +31,7 @@
     <EmbeddedResource Include="Resources\VersionInfo\0.5.3.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.5.4.0.rtf" />
     <EmbeddedResource Include="Resources\VersionInfo\0.7.0.0.rtf" />
+    <EmbeddedResource Include="Resources\VersionInfo\12.4.0.20.rtf" />
     <None Update="Licenses\BSD-3-CLAUSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

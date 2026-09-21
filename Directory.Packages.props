@@ -20,6 +20,7 @@
     <PackageVersion Include="NUnit" Version="4.6.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.2.0" />
     <PackageVersion Include="System.Drawing.Common" Version="9.0.4" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.11" />
     <PackageVersion Include="WixToolset.UI.wixext" Version="7.0.0" />
     <PackageVersion Include="NUnit.ConsoleRunner" Version="3.22.0" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
