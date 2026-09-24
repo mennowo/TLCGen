@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
         private readonly FaseCyclusWithPrioViewModel _parentIngreep;
         private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
         private PrioIngreepWisselDataViewModel _wisselData;
-        private PrioIngreepMeerealiserendeFaseCyclusViewModel _SelectedMeerealiserendeFase;
+        private PrioIngreepMeerealiserendeIngreepViewModel _SelectedMeerealiserendeIngreep;
         private ObservableCollection<string> _Fasen;
         private string _SelectedFase;
         
@@ -493,11 +493,24 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_Fasen == null)
+                if (_Fasen == null)
                 {
                     _Fasen = new ObservableCollection<string>();
                 }
                 return _Fasen;
+            }
+        }
+
+        [Browsable(false)]
+        public ObservableCollection<MeerealiserendeIngreepItemViewModel> Ingrepen
+        {
+            get
+            {
+                if (_Ingrepen == null)
+                {
+                    _Ingrepen = new ObservableCollection<MeerealiserendeIngreepItemViewModel>();
+                }
+                return _Ingrepen;
             }
         }
 
@@ -514,19 +527,31 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public PrioIngreepMeerealiserendeFaseCyclusViewModel SelectedMeerealiserendeFase
+        public MeerealiserendeIngreepItemViewModel SelectedIngreep
         {
-            get => _SelectedMeerealiserendeFase;
+            get => _SelectedIngreep;
             set
             {
-                _SelectedMeerealiserendeFase = value;
+                _SelectedIngreep = value;
+                OnPropertyChanged("SelectedIngreep");
+                _AddMeerealiserendeFaseCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
+        [Browsable(false)]
+        public PrioIngreepMeerealiserendeIngreepViewModel SelectedMeerealiserendeIngreep
+        {
+            get => _SelectedMeerealiserendeIngreep;
+            set
+            {
+                _SelectedMeerealiserendeIngreep = value;
                 OnPropertyChanged("SelectedMeerealiserendeFase");
                 _RemoveMeerealiserendeFaseCommand?.NotifyCanExecuteChanged();
             }
         }
 
         [Browsable(false)]
-        public ObservableCollectionAroundList<PrioIngreepMeerealiserendeFaseCyclusViewModel, PrioIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFasen
+        public ObservableCollectionAroundList<PrioIngreepMeerealiserendeIngreepViewModel, PrioIngreepMeerealiserendeIngreepModel> MeerealiserendeIngrepen
         {
             get;
             private set;
@@ -696,6 +721,9 @@ namespace TLCGen.ViewModels
 
         RelayCommand _AddMeerealiserendeFaseCommand;
         RelayCommand _RemoveMeerealiserendeFaseCommand;
+        private ObservableCollection<MeerealiserendeIngreepItemViewModel> _Ingrepen;
+        private MeerealiserendeIngreepItemViewModel _SelectedIngreep;
+
         public ICommand AddMeerealiserendeFaseCommand
         {
             get
@@ -727,49 +755,49 @@ namespace TLCGen.ViewModels
 
         void AddNewMeerealiserendeFaseCommand_Executed()
         {
-            if (!(MeerealiserendeFasen.Where(x => x.FaseCyclus.FaseCyclus == SelectedFase).Count() > 0))
+            if (!(MeerealiserendeIngrepen.Where(x => x.Ingreep.PrioIngreep == SelectedFase).Count() > 0))
             {
-                MeerealiserendeFasen.Add(
-                    new PrioIngreepMeerealiserendeFaseCyclusViewModel(
-                        new PrioIngreepMeerealiserendeFaseCyclusModel() { FaseCyclus = SelectedFase }));
+                MeerealiserendeIngrepen.Add(
+                    new PrioIngreepMeerealiserendeIngreepViewModel(
+                        new PrioIngreepMeerealiserendeIngreepModel() { PrioIngreep = SelectedIngreep.PrioIngreep, FaseCyclus = SelectedIngreep.FaseCyclus }));
             }
 
-            BuildFasenList();
+            BuildIngrepenList();
 
-            PrioIngreep.MeerealiserendeFaseCycli.BubbleSort();
-            MeerealiserendeFasen.Rebuild();
+            PrioIngreep.MeerealiserendeIngrepen.BubbleSort();
+            MeerealiserendeIngrepen.Rebuild();
 
-            if (MeerealiserendeFasen.Count > 0)
-                SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
+            if (MeerealiserendeIngrepen.Count > 0)
+                SelectedMeerealiserendeIngreep = MeerealiserendeIngrepen[MeerealiserendeIngrepen.Count - 1];
 
             OnPropertyChanged(broadcast: true);
         }
 
         bool AddNewMeerealiserendeFaseCommand_CanExecute()
         {
-            return MeerealiserendeFasen != null && SelectedFase != null;
+            return MeerealiserendeIngrepen != null && SelectedIngreep != null;
         }
 
         void RemoveMeerealiserendeFaseCommand_Executed()
         {
-            MeerealiserendeFasen.Remove(SelectedMeerealiserendeFase);
+            MeerealiserendeIngrepen.Remove(SelectedMeerealiserendeIngreep);
 
-            BuildFasenList();
+            BuildIngrepenList();
 
-            PrioIngreep.MeerealiserendeFaseCycli.BubbleSort();
-            MeerealiserendeFasen.Rebuild();
+            PrioIngreep.MeerealiserendeIngrepen.BubbleSort();
+            MeerealiserendeIngrepen.Rebuild();
 
-            if (MeerealiserendeFasen.Count > 0)
-                SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
+            if (MeerealiserendeIngrepen.Count > 0)
+                SelectedMeerealiserendeIngreep = MeerealiserendeIngrepen[MeerealiserendeIngrepen.Count - 1];
             else
-                SelectedMeerealiserendeFase = null;
+                SelectedMeerealiserendeIngreep = null;
 
             OnPropertyChanged(broadcast: true);
         }
 
         bool RemoveMeerealiserendeFaseCommand_CanExecute()
         {
-            return SelectedMeerealiserendeFase != null && MeerealiserendeFasen != null && MeerealiserendeFasen.Count > 0;
+            return SelectedMeerealiserendeIngreep != null && MeerealiserendeIngrepen != null && MeerealiserendeIngrepen.Count > 0;
         }
 
         #endregion // Command functionality
@@ -860,7 +888,17 @@ namespace TLCGen.ViewModels
                 Fasen.Add(f.Naam);
             }
         }
-        
+
+        private void BuildIngrepenList()
+        {
+            Ingrepen.Clear();
+            foreach (var f in DataAccess.TLCGenControllerDataProvider.Default.Controller.PrioData.PrioIngrepen)
+            {
+                if (ReferenceEquals(this, f)) continue;
+                Ingrepen.Add(new MeerealiserendeIngreepItemViewModel { FaseCyclus = f.FaseCyclus, PrioIngreep = f.Naam });
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -875,15 +913,22 @@ namespace TLCGen.ViewModels
             WeakReferenceMessengerEx.Default.Register<NameChangedMessage>(this, OnNameChanged);
             WeakReferenceMessengerEx.Default.Register<PeriodenChangedMessage>(this, OnPeriodenChanged);
             WeakReferenceMessengerEx.Default.Register<CCOLVersionChangedMessage>(this, OnCCOLVersionChanged);
+            WeakReferenceMessengerEx.Default.Register<PrioIngrepenChangedMessage>(this, OnPrioIngrepenChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null, null);
 
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Inmeldingen", PrioIngreepInUitMeldingTypeEnum.Inmelding, ovingreep.MeldingenData, this));
             MeldingenLists.Add(new PrioIngreepMeldingenListViewModel("Uitmeldingen", PrioIngreepInUitMeldingTypeEnum.Uitmelding, ovingreep.MeldingenData, this));
 
-            MeerealiserendeFasen = new ObservableCollectionAroundList<PrioIngreepMeerealiserendeFaseCyclusViewModel, PrioIngreepMeerealiserendeFaseCyclusModel>(ovingreep.MeerealiserendeFaseCycli);
+            MeerealiserendeIngrepen = new ObservableCollectionAroundList<PrioIngreepMeerealiserendeIngreepViewModel, PrioIngreepMeerealiserendeIngreepModel>(ovingreep.MeerealiserendeIngrepen);
 
             BuildFasenList();
+            BuildIngrepenList();
+        }
+
+        private void OnPrioIngrepenChanged(object recipient, PrioIngrepenChangedMessage message)
+        {
+            BuildIngrepenList();
         }
 
         private void OnCCOLVersionChanged(object sender, CCOLVersionChangedMessage obj)

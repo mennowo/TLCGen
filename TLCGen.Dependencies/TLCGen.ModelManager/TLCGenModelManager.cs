@@ -466,7 +466,6 @@ namespace TLCGen.ModelManagement
                     prio.GroenBewaking = hd.GroenBewaking;
                     prio.InmeldingOokDoorFase = hd.InmeldingOokDoorFase;
                     prio.InmeldingOokDoorToepassen = hd.InmeldingOokDoorToepassen;
-                    prio.MeerealiserendeFaseCycli = [.. hd.MeerealiserendeFaseCycli.Select(x => new PrioIngreepMeerealiserendeFaseCyclusModel() { FaseCyclus = x.FaseCyclus })];
                     
                     controller.PrioData.PrioIngrepen.Add(prio);
                 }

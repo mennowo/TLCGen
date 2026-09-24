@@ -293,16 +293,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
-                    if (c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
+                    if (c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeIngrepen.Count > 0))
                     {
                         sb.AppendLine();
-                        foreach (var prioHd in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
+                        foreach (var prioHd in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeIngrepen.Count > 0))
                         {
-                            if (prioHd.MeerealiserendeFaseCycli.Any())
+                            if (prioHd.MeerealiserendeIngrepen.Any())
                             {
-                                foreach (var fc in prioHd.MeerealiserendeFaseCycli)
+                                foreach (var mrPrio in prioHd.MeerealiserendeIngrepen)
                                 {
-                                    sb.AppendLine($"{ts}if (granted_verstrekt[{_fcpf}{fc.FaseCyclus}] == 2) granted_verstrekt[{_fcpf}{prioHd.FaseCyclus}] = 2;");
+                                    var mrIngreep = c.GetPrioIngreep(mrPrio);
+                                    sb.AppendLine($"{ts}if (granted_verstrekt[{_fcpf}{mrPrio.FaseCyclus}] == 2) granted_verstrekt[{_fcpf}{prioHd.FaseCyclus}] = 2;");
                                 }
                             }
                         }

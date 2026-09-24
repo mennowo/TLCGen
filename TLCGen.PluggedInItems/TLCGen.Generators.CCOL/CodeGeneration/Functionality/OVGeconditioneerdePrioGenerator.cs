@@ -154,14 +154,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (hasPrioHd || hd != null) sbc.Append(" && ");
                             hasPrioHd = true;
                             sbc.Append($"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prioHd)}]");
-                            foreach (var mfc in prioHd.MeerealiserendeFaseCycli)
+                            foreach (var mfc in prioHd.MeerealiserendeIngrepen)
                             {
-                                var meerealFc = c.Fasen.FirstOrDefault(x => x.Naam == mfc.FaseCyclus);
-                                var meereas = c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == mfc.FaseCyclus && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst);
-                                foreach (var mrprio in meereas)
-                                {
-                                    sbc.Append($" && !C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, mrprio)}]");
-                                }
+                                var meerealIngreep = c.GetPrioIngreep(mfc);
+                                sbc.Append($" && !C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, meerealIngreep)}]");
                             }
                             hasconditions = true;
                         }

@@ -356,9 +356,10 @@ namespace TLCGen.Plugins.AFM
                                     if (first) sb.Append(" && ");
                                     first = false;
                                     sb.Append($"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prioHd)}]");
-                                    foreach (var mfc in prioHd.MeerealiserendeFaseCycli)
+                                    foreach (var mfc in prioHd.MeerealiserendeIngrepen)
                                     {
-                                        sb.Append($" && !C[{_ctpf}{_cvc}{mfc.FaseCyclus}]");
+                                        var mrIngreep = c.GetPrioIngreep(mfc);
+                                        if (mrIngreep != null) sb.Append($" && !C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}]");
                                     }
                                 }
                             }

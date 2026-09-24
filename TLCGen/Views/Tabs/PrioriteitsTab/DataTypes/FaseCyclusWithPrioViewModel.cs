@@ -151,6 +151,7 @@ namespace TLCGen.ViewModels
                     ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.Remove(m.PrioIngreep);
                 }
             }
+            WeakReferenceMessengerEx.Default.Send(new PrioIngrepenChangedMessage());
         }
         
         #endregion // Private Methods

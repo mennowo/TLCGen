@@ -238,8 +238,8 @@
                                Visibility="{Binding Path=IsTypeHulpdienst,Converter={StaticResource Bool2VisConv}}" />
                         <TextBox Text="{Binding Path=InmeldingOokDoorFase}" Grid.Row="4" Grid.Column="1" Margin="2" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" 
                                  Visibility="{Binding Path=IsTypeHulpdienst,Converter={StaticResource Bool2VisConv}}" />
-                        <Label Content="Meerealiserende fasen" Grid.ColumnSpan="2" />
-                        <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeFasen}" SelectedItem="{Binding SelectedMeerealiserendeFase,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" MinHeight="24" Grid.ColumnSpan="2" >
+                        <Label Content="Meerealiserende ingrepen" Grid.ColumnSpan="2" />
+                        <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeIngrepen}" SelectedItem="{Binding SelectedMeerealiserendeIngreep,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" MinHeight="24" Grid.ColumnSpan="2" >
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" />
@@ -257,7 +257,11 @@
                                         <Setter.Value>
                                             <DataTemplate>
                                                 <Border BorderBrush="Gray" BorderThickness="1.0">
-                                                    <TextBlock Text="{Binding Path=Fase}" Padding="2" Background="Beige" />
+                                                    <TextBlock Padding="2" Background="Beige">
+                                                        <TextBlock Text="{Binding Path=FaseCyclus}" />
+                                                        <TextBlock Text=" - " />
+                                                        <TextBlock Text="{Binding Path=PrioIngreep}" />
+                                                    </TextBlock>
                                                 </Border>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -268,7 +272,11 @@
                                                 <Setter.Value>
                                                     <DataTemplate>
                                                         <Border BorderBrush="CornflowerBlue" BorderThickness="1.0">
-                                                            <TextBlock Text="{Binding Path=Fase}" Padding="2" Background="Beige" />
+                                                            <TextBlock Padding="2" Background="Beige">
+                                                                <TextBlock Text="{Binding Path=FaseCyclus}" />
+                                                                <TextBlock Text=" - " />
+                                                                <TextBlock Text="{Binding Path=PrioIngreep}" />
+                                                            </TextBlock>
                                                         </Border>
                                                     </DataTemplate>
                                                 </Setter.Value>
@@ -279,7 +287,7 @@
                             </ListView.ItemContainerStyle>
                         </ListView>
                         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
-                            <ComboBox Margin="2" ItemsSource="{Binding Path=Fasen}" SelectedValue="{Binding Path=SelectedFase,UpdateSourceTrigger=PropertyChanged}" />
+                            <ComboBox Margin="2" ItemsSource="{Binding Path=Ingrepen}" SelectedValue="{Binding Path=SelectedIngreep,UpdateSourceTrigger=PropertyChanged}" />
                             <Button Content="+" IsDefault="True" Command="{Binding AddMeerealiserendeFaseCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
                             <Button Content="-" Command="{Binding RemoveMeerealiserendeFaseCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
                         </StackPanel>

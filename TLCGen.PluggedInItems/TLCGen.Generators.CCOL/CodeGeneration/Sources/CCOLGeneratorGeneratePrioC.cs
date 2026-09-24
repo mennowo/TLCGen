@@ -795,16 +795,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
-                if (c.PrioData.PrioIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0))
+                if (c.PrioData.PrioIngrepen.Any(x => x.MeerealiserendeIngrepen.Count > 0))
                 {
                     sb.AppendLine($"{ts}/* definitie van de meerealisaties voor de hulpdiensten */");
-                    foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.MeerealiserendeFaseCycli.Count > 0))
+                    var added = new Dictionary<string, List<string>>();
+                    foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.MeerealiserendeIngrepen.Count > 0))
                     {
                         var i = 0;
-                        foreach (var mr in prio.MeerealiserendeFaseCycli)
+                        if (!added.ContainsKey(prio.FaseCyclus)) added.Add(prio.FaseCyclus, []);
+                        foreach (var mr in prio.MeerealiserendeIngrepen)
                         {
-                            sb.AppendLine($"{ts}iPrioMeeRealisatie[{_fcpf}{prio.FaseCyclus}][{i}] = {_fcpf}{mr.FaseCyclus};");
-                            ++i;
+                            if (!added[prio.FaseCyclus].Contains(mr.FaseCyclus))
+                            {
+                                added[prio.FaseCyclus].Add(mr.FaseCyclus);
+                                sb.AppendLine($"{ts}iPrioMeeRealisatie[{_fcpf}{prio.FaseCyclus}][{i}] = {_fcpf}{mr.FaseCyclus};");
+                                ++i;
+                            }
                         }
                     }
                     sb.AppendLine();
@@ -1143,26 +1149,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             #region HD ingrepen mee inmelden
 
             if (c.PrioData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0) ||
-                c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeFaseCycli.Count > 0))
+                c.PrioData.PrioIngrepen.Any(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.MeerealiserendeIngrepen.Count > 0))
             {
                 sb.AppendLine($"{ts}/* Doorzetten HD inmeldingen */");
                 foreach (var hd in c.PrioData.HDIngrepen)
                 {
                     if (hd.MeerealiserendeFaseCycli.Any())
                     {
-                        foreach (var fc in hd.MeerealiserendeFaseCycli)
+                        foreach (var mrFc in hd.MeerealiserendeFaseCycli)
                         {
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{fc.FaseCyclus}] |= IH[{_hpf}{_hhdin}{hd.FaseCyclus}]; IH[{_hpf}{_hhduit}{fc.FaseCyclus}] |= IH[{_hpf}{_hhduit}{hd.FaseCyclus}];");
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{mrFc.FaseCyclus}] |= IH[{_hpf}{_hhdin}{hd.FaseCyclus}]; IH[{_hpf}{_hhduit}{mrFc.FaseCyclus}] |= IH[{_hpf}{_hhduit}{hd.FaseCyclus}];");
                         }
                     }
                 }
                 foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
                 {
-                    if (prio.MeerealiserendeFaseCycli.Any())
+                    if (prio.MeerealiserendeIngrepen.Any())
                     {
-                        foreach (var fc in prio.MeerealiserendeFaseCycli)
+                        foreach (var mrPrio in prio.MeerealiserendeIngrepen)
                         {
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] |= IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] && SCH[{_hpf}{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}]; IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] |= IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] && SCH[{_hpf}{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}];");
+                            var mrIngreep = c.GetPrioIngreep(mrPrio);
+                            if (mrIngreep == null) continue;
+                            sb.AppendLine(
+                                $"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}] |= " +
+                                    $"IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] && " +
+                                    $"SCH[{_schpf}{_schpriomr}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}met{CCOLCodeHelper.GetPriorityName(c, prio)}]; " +
+                                    $"IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}] |= " +
+                                    $"IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] && " +
+                                    $"SCH[{_schpf}{_schpriomr}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}met{CCOLCodeHelper.GetPriorityName(c, prio)}];");
                         }
                     }
                 }

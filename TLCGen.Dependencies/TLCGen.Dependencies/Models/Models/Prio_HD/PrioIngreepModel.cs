@@ -60,8 +60,8 @@ namespace TLCGen.Models
         public int InmeldingOokDoorFase { get; set; }
 
         [Browsable(false)]
-        [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
-        public List<PrioIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; } = [];
+        [XmlArrayItem(ElementName = "MeerealiserendeIngreep")]
+        public List<PrioIngreepMeerealiserendeIngreepModel> MeerealiserendeIngrepen { get; set; } = [];
 
         public bool GeenEigenVerklikking { get; set; }
 

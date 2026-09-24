@@ -319,6 +319,11 @@ namespace TLCGen.Models
                  c.PrioData.HDIngrepen.Any());
         }
 
+        public static PrioIngreepModel GetPrioIngreep(this ControllerModel c, PrioIngreepMeerealiserendeIngreepModel mrPrio)
+        {
+            return c.PrioData.PrioIngrepen.FirstOrDefault(x => x.FaseCyclus == mrPrio.FaseCyclus && x.Naam == mrPrio.PrioIngreep);
+        }
+
         #endregion // Public Transport
     }
 }

@@ -399,14 +399,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && prio.MeerealiserendeFaseCycli.Any())
+            if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && prio.MeerealiserendeIngrepen.Any())
             {
-                foreach (var fc in prio.MeerealiserendeFaseCycli)
+                foreach (var mrPrio in prio.MeerealiserendeIngrepen)
                 {
+                    var mrIngreep = c.GetPrioIngreep(mrPrio);
+                    if (mrIngreep == null) continue;
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schpriomr}{fc.FaseCyclus}met{CCOLCodeHelper.GetPriorityName(c, prio)}", 1,
-                            CCOLElementTimeTypeEnum.SCH_type, _schpriomr, fc.FaseCyclus, prio.Type.GetDescription()));
+                            $"{_schpriomr}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}met{CCOLCodeHelper.GetPriorityName(c, prio)}", 1,
+                            CCOLElementTimeTypeEnum.SCH_type, _schpriomr, CCOLCodeHelper.GetPriorityName(c, mrIngreep), prio.Type.GetDescription()));
                 }
             }
         }
@@ -1972,7 +1974,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var naloopWithPrioConflicts = new List<(NaloopModel naloop, List<ConflictModel> conflicts)>();
             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
             {
-                // search conflicts of naloop fc (search nl 'to' and conflict 'from')
+                // search conflicts of naloop mrPrio (search nl 'to' and conflict 'from')
                 var conflicts = c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseNaar);
                 if (!conflicts.Any()) continue;
                 // find out if conflict has prio (search conflict 'to')
