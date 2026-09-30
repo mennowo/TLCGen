@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using TLCGen.Extensions;
-using TLCGen.Models;
-
+using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 
@@ -1644,9 +1644,7 @@ namespace TLCGen.Specificator
 
             foreach (PrioIngreepVoertuigTypeEnum voertuigtype in Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)))
             {
-                if (c.PrioData.PrioIngrepen.Exists(x => x.Type == voertuigtype &&
-                                              (x.MeldingenData. Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
-                                               x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                if (c.PrioData.PrioIngrepen.Exists(x => x.Type == voertuigtype))
                 {
                     UpdateTables("In-uitmeldingen" + voertuigtype);
                     items.Add(OpenXmlHelper.GetTextParagraph($"Tabel {NumberOfTables.ToString()}: Instellingen tbv in- en uitmeldingen voor voertuigtype '{voertuigtype}'", styleid: "Caption"));
@@ -1670,13 +1668,11 @@ namespace TLCGen.Specificator
                             }
                         };
                         var oldfc = "";
-                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
-                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
-                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype))
                         {
                             var fc = prio.FaseCyclus;
 
-                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            foreach (var melding in prio.MeldingenData.Inmeldingen)
                             {
                                 var wisseldc1 = prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel1Detector :
                                                 prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel1Input : "--";
@@ -1738,7 +1734,7 @@ namespace TLCGen.Specificator
                                 oldfc = fc;
                             }
 
-                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen)
                             {
                                 var wisseldc1 = prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Detector ? prio.MeldingenData.Wissel1Detector :
                                                 prio.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang ? prio.MeldingenData.Wissel1Input : "--";
@@ -1819,13 +1815,11 @@ namespace TLCGen.Specificator
                             }
                         };
                         var oldfc = "";
-                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
-                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
-                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype))
                         {
                             var fc = prio.FaseCyclus;
 
-                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            foreach (var melding in prio.MeldingenData.Inmeldingen)
                             {
                                 var mls = "";
                                 var blk = melding.FietsPrioriteitBlok;
@@ -1889,13 +1883,11 @@ namespace TLCGen.Specificator
                             }
                         };
                         var oldfc = "";
-                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype &&
-                                                      (x.MeldingenData.Inmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde) ||
-                                                       x.MeldingenData.Uitmeldingen.Any(y => y.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))))
+                        foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.Type == voertuigtype))
                         {
                             var fc = prio.FaseCyclus;
 
-                            foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            foreach (var melding in prio.MeldingenData.Inmeldingen)
                             {
                                 l.Add(new List<string>
                                 {
@@ -1941,7 +1933,7 @@ namespace TLCGen.Specificator
                                 oldfc = fc;
                             }
 
-                            foreach (var melding in prio.MeldingenData.Uitmeldingen.Where(x => x.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+                            foreach (var melding in prio.MeldingenData.Uitmeldingen)
                             {
                                 l.Add(new List<string>
                                 {
@@ -2117,6 +2109,7 @@ namespace TLCGen.Specificator
                     new List<string>
                     {
                         "Signaalgroep (##)",
+                        "Prioingreep",
                         "Geconditioneerde prio",
                         "Gec. Te vroeg    PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstipttevroeg") + "##bus",
                         "Gec. Op tijd       PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstiptoptijd") + "##bus",
@@ -2131,31 +2124,32 @@ namespace TLCGen.Specificator
                         "Ondermaximum                     PRM " + CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx") + "##bus"
                     }
                 };
-                foreach (var ov in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepDSI() || x.HasOVIngreepVecom() ||
+                foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.HasOVIngreepDSI() || x.HasOVIngreepVecom() ||
                                                                       x.HasOVIngreepVecomIO() || x.HasOVIngreepWissel() || x.HasPrioIngreepKAR() ))
                 {
-                    var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                    var cp = prio.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
                     var opties = 0;
-                    if (ov.AfkappenConflicten || ov.AfkappenConflictenPrio) opties += 100;
-                    if (ov.AfkappenConflictenPrio) opties += 300;
-                    if (ov.TussendoorRealiseren) opties += 3;
-                    if (ov.VasthoudenGroen) opties += 20;
+                    if (prio.AfkappenConflicten || prio.AfkappenConflictenPrio) opties += 100;
+                    if (prio.AfkappenConflictenPrio) opties += 300;
+                    if (prio.TussendoorRealiseren) opties += 3;
+                    if (prio.VasthoudenGroen) opties += 20;
                     var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
                     l.Add(new List<string>
                     {
-                        ov.FaseCyclus,
-                        ov.GeconditioneerdePrioriteit.GetDescription(),
-                        cp ? ov.GeconditioneerdePrioTeVroeg.ToString() : "-",
-                        cp ? ov.GeconditioneerdePrioOpTijd.ToString() : "-",
-                        cp ? ov.GeconditioneerdePrioTeLaat.ToString() : "-",
+                        prio.FaseCyclus,
+                        CCOLCodeHelper.GetPriorityName(c, prio),
+                        prio.GeconditioneerdePrioriteit.GetDescription(),
+                        cp ? prio.GeconditioneerdePrioTeVroeg.ToString() : "-",
+                        cp ? prio.GeconditioneerdePrioOpTijd.ToString() : "-",
+                        cp ? prio.GeconditioneerdePrioTeLaat.ToString() : "-",
                         sopties,
-                        ov.RijTijdOngehinderd.ToString(),
-                        ov.RijTijdBeperktgehinderd.ToString(),
-                        ov.RijTijdGehinderd.ToString(),
-                        ov.BezettijdPrioGehinderd.ToString(),
-                        ov.BlokkeertijdNaPrioIngreep.ToString(),
-                        ov.GroenBewaking.ToString(),
-                        ov.OnderMaximum.ToString()
+                        prio.RijTijdOngehinderd.ToString(),
+                        prio.RijTijdBeperktgehinderd.ToString(),
+                        prio.RijTijdGehinderd.ToString(),
+                        prio.BezettijdPrioGehinderd.ToString(),
+                        prio.BlokkeertijdNaPrioIngreep.ToString(),
+                        prio.GroenBewaking.ToString(),
+                        prio.OnderMaximum.ToString()
                     });
                 }
             }
@@ -2284,7 +2278,7 @@ namespace TLCGen.Specificator
             l.Add(ll);
             foreach (var ovcf in c.PrioData.HDIngrepen)
             {
-                ll = new List<string> { ovcf.FaseCyclus };
+                ll = [ovcf.FaseCyclus];
                 if (c.HasHDKAR())
                 {
                     ll.Add(ovcf.KAR.ToCustomString());

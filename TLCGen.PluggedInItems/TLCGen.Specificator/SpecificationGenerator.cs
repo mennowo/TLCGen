@@ -163,7 +163,8 @@ namespace TLCGen.Specificator
                         body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OV"]}", c.HasHD() ? 2 : 1));
                         body.Append(FunctionalityGenerator.GetChapter_OV(c, doc, c.HasHD() ? 2 : 1));
                     }
-                    if (c.HasHD())
+                    // old style HD ingrepen present?
+                    if (c.PrioData.HDIngrepen.Any())
                     {
                         body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_HD"]}", c.HasPT() ? 2 : 1));
                         body.Append(FunctionalityGenerator.GetChapter_HD(c, doc, c.HasHD() ? 2 : 1));

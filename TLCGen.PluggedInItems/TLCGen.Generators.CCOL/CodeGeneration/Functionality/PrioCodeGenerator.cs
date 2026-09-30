@@ -1432,7 +1432,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var vtgType = $"PRM[{_prmpf}{_prmvtgcat}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
                         if (!int.TryParse(prio.FaseCyclus, out var fcNmr)) fcNmr = -1;
 
-                        if (prio.MeldingenData.Inmeldingen.Any())
+                        // In case of no "inmeldingen" we still set the PRIO H to FALSE
+                        if (!prio.MeldingenData.Inmeldingen.Any())
+                        {
+                            sb.AppendLine($"{ts}/* Inmelding {_fcpf}{prio.FaseCyclus} type {prio.Type.GetDescription()} */");
+                            sb.Append($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                            sb.AppendLine("FALSE;");
+                        }
+                        else
                         {
                             var inmHelems = new List<string>();
                             if (!first) sb.AppendLine(); first = false;
@@ -1452,7 +1459,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                               $"{_ctpf}{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}," +
                                               $"SH[{he}], ML);");
                             }
-                            
+
                             var sb2 = new StringBuilder();
                             foreach (var inm in prio.MeldingenData.Inmeldingen)
                             {
@@ -1485,7 +1492,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 if (prio.GerelateerdePerioden.Count > 1) sb.Append(")");
                                 sb.Append(" && ");
-                                
+
                                 sb.Append("(");
                             }
                             foreach (var i in inmHelems)
