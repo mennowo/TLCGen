@@ -386,7 +386,7 @@ namespace TLCGen.ModelManagement
             }
 
             // Version 12.4.0.20: HD ingrepen ported to generic prio ingrepen
-            checkVer = Version.Parse("12.4.0.20");
+            /*checkVer = Version.Parse("12.4.0.20");
             if (v < checkVer)
             {
                 foreach (var hd in controller.PrioData.HDIngrepen)
@@ -469,7 +469,7 @@ namespace TLCGen.ModelManagement
                     
                     controller.PrioData.PrioIngrepen.Add(prio);
                 }
-            }
+            }*/
         }
 
         private void SetPrioIngreepName(PrioIngreepModel prio, ControllerModel controller)
