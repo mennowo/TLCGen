@@ -1509,7 +1509,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(";");
                         }
 
-                        if (prio.MeldingenData.Uitmeldingen.Any())
+                        // In case of no "uitmeldingen" we still set the PRIO H to FALSE
+                        if (!prio.MeldingenData.Uitmeldingen.Any())
+                        {
+                            sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{prio.FaseCyclus} type {prio.Type.GetDescription()} */");
+                            sb.Append($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                            sb.AppendLine("FALSE;");
+                        }
+                        else
+                            if (prio.MeldingenData.Uitmeldingen.Any())
                         {
                             var uitmHelems = new List<string>();
                             if (!first) sb.AppendLine(); 
