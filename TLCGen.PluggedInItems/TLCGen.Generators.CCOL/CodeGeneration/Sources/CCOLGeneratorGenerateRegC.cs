@@ -59,10 +59,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
             {
                 sb.Append(GenerateRegCBepaalInterStartGroenTijden(controller));
-                if (controller.HasPTorHD())
-                {
-                    sb.Append(GenerateRegCBepaalInterStartGroenTijdenPrio(controller));
-                }
             }
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.Append(GenerateRegCWachtgroen(controller));
@@ -185,7 +181,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#endif");
                 sb.AppendLine($"{ts}#endif");
             }
-            sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
+            if (c.IsInterFunc())
+            {
+                sb.AppendLine($"{ts}#ifdef INTERFUNC");
+                sb.AppendLine($"{ts}{ts}#ifdef NO_TIGMAX");
+                sb.AppendLine($"{ts}{ts}{ts}#include \"kffunc_to_tig.c\"  /* TIG variabelen eb functie   */");
+                sb.AppendLine($"{ts}{ts}{ts}#include \"prsvar_to_tig.c\"  /* parameterparser met TIG_max */");
+                sb.AppendLine($"{ts}{ts}#else");
+                sb.AppendLine($"{ts}{ts}{ts}#include \"prsvar.c\"   /* parameters parser                 */");
+                sb.AppendLine($"{ts}{ts}#endif");
+                sb.AppendLine($"{ts}#else");
+                sb.AppendLine($"{ts}{ts}#include \"prsvar.c\"   /* parameters parser                 */");
+                sb.AppendLine($"{ts}#endif");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
+            }
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
 
@@ -401,27 +413,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("void BepaalInterStartGroenTijden(void)");
+            sb.AppendLine("void BepaalInterStartGroenTijden(mulv tisg[FCMAX][FCMAX],mulv tvg_max[],boolv ar_los)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijden, true, true, false, true);
-
-            sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
-
-            sb.AppendLine("}");
-            sb.AppendLine();
-
-            return sb.ToString();
-        }
-
-        private string GenerateRegCBepaalInterStartGroenTijdenPrio(ControllerModel controller)
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("void BepaalInterStartGroenTijden_PRIO(void)");
-            sb.AppendLine("{");
-
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBepaalInterStartGroenTijdenPrio, true, true, false, true);
 
             sb.AppendLine($"{ts}BepaalInterStartGroenTijden_Add();");
 
@@ -870,7 +865,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 (c.PrioData.PrioIngrepen.Count > 0 ||
                  c.PrioData.HDIngrepen.Count > 0))
             {
-                sb.AppendLine("#ifndef NO_PRIO");
+                sb.AppendLine("#if !defined NO_PRIO && !defined INTERFUNC");
                 if (c.HalfstarData.IsHalfstar)
                 {
                     if (!c.StarData.ToepassenStar)

@@ -334,7 +334,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}/* als de PAR niet meer waar is, kan je hem naar RR sturen voor gekoppelde realisaties */");
                                 foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
                                 {
-                                    sb.AppendLine($"{ts}if (!PAR[{_fcpf}{nl:van}] && RA[{_fcpf}{nl:van}] && AR[{_fcpf}{nl:van}]) RR[{_fcpf}{nl:van}] |= BIT5;");
+                                    sb.AppendLine($"{ts}if (!PAR_los[{_fcpf}{nl:van}] && RA[{_fcpf}{nl:van}] && (AR[{_fcpf}{nl:van}] & ALTERNATIEF_LOS)) RR[{_fcpf}{nl:van}] |= BIT5;");
                                 }
                                 sb.AppendLine();
                             }
@@ -537,6 +537,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                         {
                             sb.AppendLine($"{ts}langstwachtende_alternatief();");
+                            sb.AppendLine($"{ts}langstwachtende_alternatief_los();");
                             sb.AppendLine($"{ts}PrioBijzonderRealiserenISG();");
                         }
                     }

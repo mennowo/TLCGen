@@ -35,7 +35,7 @@ mulv init_tvg;
 mulv TISG_afkap[FCMAX][FCMAX];
 
 bool PAR_los[FCMAX];
-
+#define ALTERNATIEF_LOS     16
 /* BEPAAL RESULTERENDE INTERGROENTIJDEN - TIGR[][] */
 /* ----------------------------------------------- */
 /* void BepaalIntergroenTijden(void) bepaalt de initiele waarden van de resulterende intergroentijden matrix TIGR[][] en
@@ -179,7 +179,7 @@ void RealisatieTijden_VulHardeConflictenIn(void)
  *  //Realisatietijden
  *  InitRealisatieTijden();
  *  RealisatieTijden_VulHardeConflictenIn();
- *  RealisatieTijden_VulGroenGroenConflictenIn(); 
+ *  RealisatieTijden_VulGroenGroenConflictenIn();
  */
 
 void RealisatieTijden_VulGroenGroenConflictenIn(void)
@@ -234,7 +234,7 @@ void RealisatieTijden_VulGroenGroenConflictenIn(void)
  *  //Realisatietijden
  *  InitRealisatieTijden();
  *  RealisatieTijden_VulHardeConflictenIn();
- *  RealisatieTijden_VulGroenGroenConflictenIn();  
+ *  RealisatieTijden_VulGroenGroenConflictenIn();
  *  CorrigeerRealisatieTijdenObvGarantieTijden();  // een richting mag na groen niet direct weer realiseren (eerst GL en TRG)
  *
  */
@@ -280,7 +280,7 @@ void CorrigeerRealisatieTijdenObvGarantieTijden(void)
  *  //Realisatietijden
  *  InitRealisatieTijden();
  *  RealisatieTijden_VulHardeConflictenIn();
- *  RealisatieTijden_VulGroenGroenConflictenIn();  
+ *  RealisatieTijden_VulGroenGroenConflictenIn();
  *  CorrigeerRealisatieTijdenObvGarantieTijden();  // een richting mag na groen niet direct weer realiseren (eerst GL en TRG)
  *
  *  //Pas Realisatietijden aan voor nalopenEG
@@ -405,11 +405,11 @@ void Realisatietijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count tnle
  *  //Realisatietijden
  *  InitRealisatieTijden();
  *  RealisatieTijden_VulHardeConflictenIn();
- *  RealisatieTijden_VulGroenGroenConflictenIn(); 
+ *  RealisatieTijden_VulGroenGroenConflictenIn();
  *  CorrigeerRealisatieTijdenObvGarantieTijden(); // een richting mag na groen niet direct weer realiseren (eerst GL en TRG)
  *
  *  //Pas Realisatietijden aan voor nalopenEG
- *  Realisatietijd_NLEG(fc02, fc62, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, tvgnaloop0262);  
+ *  Realisatietijd_NLEG(fc02, fc62, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, tvgnaloop0262);
  *  Realisatietijd_NLEG(fc08, fc68, tnlfg0868, tnlfgd0868, tnleg0868, tnlegd0868, tvgnaloop0868);
  *  Realisatietijd_NLEG(fc11, fc68, tnlfg1168, tnlfgd1168, tnleg1168, tnlegd1168, tvgnaloop1168);
  *  Realisatietijd_NLEG(fc22, fc21, tnlfg2221, tnlfgd2221, tnleg2221, tnlegd2221, tvgnaloop2221);
@@ -500,7 +500,7 @@ void Realisatietijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, count tnl
 
 /* REALISATIETIJD NALOOP OP STARTGROEN (NLSG) */
 /* ------------------------------------------ */
-/* void Realisatietijd_NLSG(count i, count j, count tnlsg, count tnlsgd) bepaalt de REALISATIETIJD[][] bij een NaloopSG. 
+/* void Realisatietijd_NLSG(count i, count j, count tnlsg, count tnlsgd) bepaalt de REALISATIETIJD[][] bij een NaloopSG.
  * voor de harde en groen-groen conflicten van de volgrichting/nalooprichting worden de REALISATIETIJD[][]-en bepaald t.o.v. de voedende richting REALISATIETIJD[i][k[] - dit zijn vaak fictieve conflicten van elkaar.
  *
  *  i ---->    j --->       i: index-voedende richting en j: index-nalooprichting
@@ -521,7 +521,7 @@ void Realisatietijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, count tnl
  *  //Realisatietijden
  *  InitRealisatieTijden();
  *  RealisatieTijden_VulHardeConflictenIn();
- *  RealisatieTijden_VulGroenGroenConflictenIn(); 
+ *  RealisatieTijden_VulGroenGroenConflictenIn();
  *  CorrigeerRealisatieTijdenObvGarantieTijden(); // een richting mag na groen niet direct weer realiseren (eerst GL en TRG)
  *
  *  // Pas Realisatietijden aan voor nalopenEG
@@ -619,12 +619,16 @@ void Realisatietijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2)
  */
 
 
-void Realisatietijd_Ontruiming_Voorstart(count fcns, count fcvs, count tfo)
+void Realisatietijd_Ontruiming_Voorstart(count fcns, count fcvs, count tfo, count tvs)
 {
     RT[tfo] = G[fcns]; /* hertart de fictieve ontruimingstijd */
     if (T[tfo] && !G[fcvs])
     {
         REALISATIETIJD[fcns][fcvs] = TFG_max[fcns] - TFG_timer[fcns] + (((TVG_max[fcns] - TVG_timer[fcns]) > 0) ? (TVG_max[fcns] - TVG_timer[fcns]) : 0) + T_max[tfo] - T_timer[tfo];
+    }
+    if (RA[fcns] && PR[fc05] && R[fcvs] && (PG[fcvs] & PRIMAIR_OVERSLAG) && (REALISATIETIJD_max[fcns] < T_max[tvs]))
+    {
+        REALISATIETIJD[fcns][fcvs] = REALISATIETIJD_max[fcns] + TFG_max[fcns] + TVG_max[fcns] + T_max[tfo];
     }
 }
 
@@ -718,36 +722,36 @@ void Realisatietijd_Ontruiming_LateRelease(count fcvs, count fclr, count tlr, co
  *   } while (wijziging);  //@PSN Let op! functie zou in theorie oneindig kunnen doorgaan!!
  */
 
-bool Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs)
+bool Realisatietijd_Voorstart_Correctie(mulv realisatietijd[FCMAX][FCMAX], mulv realisatietijd_max[FCMAX], count fcvs, count fcns, count tvs)
 {
     count n;
     bool result = FALSE;
-    if ((A[fcvs] || !(PG[fcvs] & PRIMAIR_OVERSLAG) || TRUE) && !G[fcvs])  //@PSN || TRUE is altijd waar; //@@## warning C4127: conditional expression is constant
+    if ((A[fcvs] || !(PG[fcvs] & PRIMAIR_OVERSLAG)) && !G[fcvs])
     {
         for (n = 0; n < FCMAX; ++n)
         {
-            if ((REALISATIETIJD[n][fcns] < (REALISATIETIJD[n][fcvs] + T_max[tvs])) && REALISATIETIJD[n][fcvs] > 0)  
+            if ((realisatietijd[n][fcns] < (realisatietijd[n][fcvs] + T_max[tvs])) && realisatietijd[n][fcvs] > 0)
             {                                                                                                     /* @PSN is testen op REALISATIETIJD[n][fcvs] > 0 wel goed? >=0??  extra haakjes (REALISATIETIJD[n][fcvs] > 0) */
-               REALISATIETIJD[n][fcns] = REALISATIETIJD[n][fcvs] + T_max[tvs];                                    /* @PSN bij REALISATIETIJD[n][fcvs] == 0 moet toch worden verhoogd met T_max[tvs]; */
+                realisatietijd[n][fcns] = realisatietijd[n][fcvs] + T_max[tvs];                                    /* @PSN bij REALISATIETIJD[n][fcvs] == 0 moet toch worden verhoogd met T_max[tvs]; */
                 result = TRUE;
             }
         }
     }
-    if (G[fcvs] || RA[fcvs] && (REALISATIETIJD_max[fcvs] <= 1)) //@PSN G[fcvs] er wordt toch ook tijdens groen aangepast!
+    if (G[fcvs] || RA[fcvs] && (realisatietijd_max[fcvs] <= 1)) //@PSN G[fcvs] er wordt toch ook tijdens groen aangepast!
     {
         if (TG[fcvs])
         {
-            if (REALISATIETIJD[fcvs][fcns] < (T_max[tvs] - TG_timer[fcvs]))
+            if (realisatietijd[fcvs][fcns] < (T_max[tvs] - TG_timer[fcvs]))
             {
-                REALISATIETIJD[fcvs][fcns] = T_max[tvs] - TG_timer[fcvs];
+                realisatietijd[fcvs][fcns] = T_max[tvs] - TG_timer[fcvs];
                 result = TRUE;
             }
         }
         else
         {
-            if (REALISATIETIJD[fcvs][fcns] < T_max[tvs])
+            if (realisatietijd[fcvs][fcns] < T_max[tvs])
             {
-                REALISATIETIJD[fcvs][fcns] = T_max[tvs];
+                realisatietijd[fcvs][fcns] = T_max[tvs];
                 result = TRUE;
             }
         }
@@ -781,32 +785,32 @@ bool Realisatietijd_Voorstart_Correctie(count fcvs, count fcns, count tvs)
  */
 
 
-bool Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2)
+bool Realisatietijd_Gelijkstart_Correctie(mulv realisatietijd[FCMAX][FCMAX], count fc1, count fc2)
 {
     count n;
     bool result = FALSE;
     // @PSN TODO vergt uitwerking indien een van de twee gelijkstartende richtingen niet komt
     // if ((A[fc1] || !(PG[fc1] & PRIMAIR_OVERSLAG)) && (A[fc2] || !(PG[fc2] & PRIMAIR_OVERSLAG)) && !G[fc1] && !G[fc2])
     // {
-    for (n = 0; n < FCMAX; ++n) 
+    for (n = 0; n < FCMAX; ++n)
     {
-        if (REALISATIETIJD[n][fc1] < REALISATIETIJD[n][fc2])
+        if (realisatietijd[n][fc1] < realisatietijd[n][fc2])
         {
-            REALISATIETIJD[n][fc1] = REALISATIETIJD[n][fc2];
+            realisatietijd[n][fc1] = realisatietijd[n][fc2];
             result = TRUE;
         }
         else
         {
-            if (REALISATIETIJD[n][fc1] != REALISATIETIJD[n][fc2])   /* @PSN REALISATIETIJD[n][fc1] > REALISATIETIJD[n][fc2] */
+            if (realisatietijd[n][fc1] > realisatietijd[n][fc2])
             {
-                REALISATIETIJD[n][fc2] = REALISATIETIJD[n][fc1];
+                realisatietijd[n][fc2] = realisatietijd[n][fc1];
                 result = TRUE;
             }
-            // }
         }
     }
     return result;
 }
+
 
 /* REALISATIETIJD LATERELEASE CORRECTIE */
 /* ------------------------------------ */
@@ -843,7 +847,7 @@ bool Realisatietijd_Gelijkstart_Correctie(count fc1, count fc2)
  *   } while (wijziging);  //@PSN Let op! functie zou in theorie oneindig kunnen doorgaan!!
  */
 
-bool Realisatietijd_LateRelease_Correctie(count fcvs, count fclr, count tlr)
+bool Realisatietijd_LateRelease_Correctie(mulv realisatietijd[FCMAX][FCMAX], count fcvs, count fclr, count tlr)
 {
     count n;
     bool result = FALSE;
@@ -853,10 +857,10 @@ bool Realisatietijd_LateRelease_Correctie(count fcvs, count fclr, count tlr)
         {
             for (n = 0; n < FCMAX; ++n)
             {
-                if (REALISATIETIJD[n][fcvs] < REALISATIETIJD[n][fclr] - T_max[tlr])
+                if (realisatietijd[n][fcvs] < realisatietijd[n][fclr] - T_max[tlr])
                 {
-                    REALISATIETIJD[n][fcvs] = REALISATIETIJD[n][fclr] - T_max[tlr];
-                    if (REALISATIETIJD[n][fcvs] < 0) REALISATIETIJD[n][fcvs] = 0;
+                    realisatietijd[n][fcvs] = realisatietijd[n][fclr] - T_max[tlr];
+                    if (realisatietijd[n][fcvs] < 0) realisatietijd[n][fcvs] = 0;
                     result = TRUE;
                 }
             }
@@ -865,30 +869,7 @@ bool Realisatietijd_LateRelease_Correctie(count fcvs, count fclr, count tlr)
     return result;
 }
 
-/* Deze functie is gelijk aan Realisatietijd_LateRelease_Correctie (zie hierboven) maar kijkt naar de maximale tijd.
- */
 
-bool Realisatietijd_LateRelease_Correctie_wtv(count fcvs, count fclr, count tlr)
-{
-    count n;
-    bool result = FALSE;
-    if (A[fclr] || !PG[fclr] || TRUE)   //@PSN || TRUE is altijd waar; warning C4127: conditional expression is constant
-    {
-        if (!G[fcvs])
-        {
-            for (n = 0; n < FCMAX; ++n)
-            {
-                if (REALISATIETIJD_wtv[n][fcvs] < REALISATIETIJD_wtv[n][fclr] - T_max[tlr])
-                {
-                    REALISATIETIJD_wtv[n][fcvs] = REALISATIETIJD_wtv[n][fclr] - T_max[tlr];
-                    if (REALISATIETIJD_wtv[n][fcvs] < 0) REALISATIETIJD_wtv[n][fcvs] = 0;
-                    result = TRUE;
-                }
-            }
-        }
-    }
-    return result;
-}
 
 /* BEPAAL REALISATIETIJD VOOR RICHTING */
 /* ----------------------------------- */
@@ -896,20 +877,20 @@ bool Realisatietijd_LateRelease_Correctie_wtv(count fcvs, count fclr, count tlr)
  *
  * void Bepaal_Realisatietijd_voor_richting(i) wordt aangeroepen vanuit de applicatiefunctie void BepaalRealisatieTijden(void) na de initialisatie en correctie
  * van de de REALISATIETIJD[][]-en.
- * 
+ *
  * BepaalRealisatieTijden() wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden().
  */
 
 void Bepaal_Realisatietijd_voor_richting(count i)
 {
-   int j;
-   REALISATIETIJD_max[i] = 0;/* @PSN moet de intiele waarde niet NG zijn? */
-   REALISATIETIJD_max_wtv[i] = 0;/* @PSN moet de intiele waarde niet NG zijn? */ 
-   for (j = 0; j < FCMAX; ++j) /* zoek de hoogste waarde voor de realisatietijd */
-   {
-       if (REALISATIETIJD_max[i] < REALISATIETIJD[j][i]) REALISATIETIJD_max[i] = REALISATIETIJD[j][i]; 
-       if (REALISATIETIJD_max_wtv[i] < REALISATIETIJD_wtv[j][i]) REALISATIETIJD_max_wtv[i] = REALISATIETIJD_wtv[j][i]; 
-   }
+    int j;
+    REALISATIETIJD_max[i] = 0;/* @PSN moet de intiele waarde niet NG zijn? */
+    REALISATIETIJD_max_wtv[i] = 0;/* @PSN moet de intiele waarde niet NG zijn? */
+    for (j = 0; j < FCMAX; ++j) /* zoek de hoogste waarde voor de realisatietijd */
+    {
+        if (REALISATIETIJD_max[i] < REALISATIETIJD[j][i]) REALISATIETIJD_max[i] = REALISATIETIJD[j][i];
+        if (REALISATIETIJD_max_wtv[i] < REALISATIETIJD_wtv[j][i]) REALISATIETIJD_max_wtv[i] = REALISATIETIJD_wtv[j][i];
+    }
 }
 
 /* BEPAAL REALISATIETIJD VOOR ALLE RICHTINGEN */
@@ -918,18 +899,18 @@ void Bepaal_Realisatietijd_voor_richting(count i)
  *
  * void Bepaal_Realisatietijd_alle_richtingen() wordt aangeroepen vanuit de applicatiefunctie void BepaalRealisatieTijden(void) na de initialisatie en correctie
  * van de de REALISATIETIJD[][]-en.
- * 
+ *
  * BepaalRealisatieTijden() wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden().
  *
  */
 
 void Bepaal_Realisatietijd_alle_richtingen()
 {
-   count i;
-   for (i = 0; i < FCMAX; ++i)
-   {
-      Bepaal_Realisatietijd_voor_richting(i);
-   }
+    count i;
+    for (i = 0; i < FCMAX; ++i)
+    {
+        Bepaal_Realisatietijd_voor_richting(i);
+    }
 }
 
 /* MEEVERLENGEN - YM_MAX_TIG_REALISATIETIJD */
@@ -1044,16 +1025,13 @@ void TegenhoudenDoorRealisatietijden()
  * BepaalInterStartGroenTijden() wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden(), die wordt aangeroepen door application().
  */
 
-void InitInterStartGroenTijden(void)
+void InitInterStartGroenTijden(mulv tisg[FCMAX][FCMAX])
 {
-    count i, j;
-    for (i = 0; i < FC_MAX; i++)  /* zet alle GK en GKL conflicten om in FK */
+    for (count i = 0; i < FC_MAX; i++)  /* zet alle GK en GKL conflicten om in FK */
     {
-        for (j = 0; j < FC_MAX; j++)
+        for (count j = 0; j < FC_MAX; j++)
         {
-            TISG_PR[i][j] = NG;
-            TISG_AR[i][j] = NG;
-            TISG_AR_los[i][j] = NG;
+            tisg[i][j] = NG;
         }
     }
 }
@@ -1075,121 +1053,64 @@ void InitInterStartGroenTijden(void)
  */
 
 
-void InterStartGroenTijden_VulHardeConflictenIn(void)
+
+
+
+
+ /* INTERSTARTGROENTIJD NALOOP OP EINDE GROEN (NLEG) */
+ /* ------------------------------------------------ */
+ /* void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop) bepaalt TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2]
+  * bij een NaloopEG voor de harde en groen-groen conflicten van de volgrichting worden TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bepaald t.o.v. de voedende richting.
+  *
+  * bij aanroep van de functie dienen de volgende argumenten te worden meegegeven:
+  * fc1 - index fasecyclus van de voedende richting
+  * fc2 - index fasecyclus van de nalooprichting
+  *
+  * tnlfg     -  index tijdelement    - Vaste nalooptijd voor (eerste) voertuig(en) tijdens vastgroen (FG[fc1]) van de voedende richting;
+  *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
+  * tnlfgd    - index tijdelement    - Detectie afhankelijke nalooptijd voor (eerste) voertuig(en) tijdens vastgroen (FG[fc1]) van de voedende richting;
+  *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
+  * tnleg     -  index tijdelement    - Vaste nalooptijd voor voertuig(en) tijdens groen (G[fc1]) van de voedende richting;
+  *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
+  * tnlegd    - index tijdelement    - Detectie afhankelijke nalooptijd voor voertuig(en) tijdens groen of geel (G[fc1] || GL[fc1]) van de voedende richting;
+  *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
+  * tvgnaloop - index T_max[]        - Maximale verlengtijd op eigen detectie na aflopen nalooptijden voor de nalooprichting.
+  *
+  * void InterStartGroenTijd_NLEG() wordt aangeroepen vanuit de applicatiefunctie void BepaalInterStartGroenTijden(void) na de initialisatie van TISG_PR[][] en TISG_AR[][].
+  * BepaalInterStartGroenTijden(void) wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden(), die wordt aangeroepen door application().
+  *
+  * //Bepaal InterStartGroenTijden
+  * InitInterStartGroenTijden();
+  * InterStartGroenTijden_VulHardeConflictenIn();
+  *  InterStartGroenTijden_VulGroenGroenConflictenIn();
+  *
+  * //Pas interstartgroentijden aan voor naloopEG
+  * InterStartGroenTijd_NLEG(fc02, fc62, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, tvgnaloop0262);
+  * InterStartGroenTijd_NLEG(fc08, fc68, tnlfg0868, tnlfgd0868, tnleg0868, tnlegd0868, tvgnaloop0868);
+  * InterStartGroenTijd_NLEG(fc11, fc68, tnlfg1168, tnlfgd1168, tnleg1168, tnlegd1168, tvgnaloop1168);
+  * InterStartGroenTijd_NLEG(fc22, fc21, tnlfg2221, tnlfgd2221, tnleg2221, tnlegd2221, tvgnaloop2221);
+  * InterStartGroenTijd_NLEG(fc82, fc81, tnlfg8281, tnlfgd8281, tnleg8281, tnlegd8281, tvgnaloop8281);
+  *
+  */
+
+void InterStartGroenTijd_NLEG(mulv tisg[FCMAX][FCMAX], mulv tvg_max[FCMAX], count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop)
 {
-    count fc1, fc2, n;
-    for (fc1 = 0; fc1 < FCMAX; ++fc1)
-    {
-        for (n = 0; n < KFC_MAX[fc1]; ++n)
-        {
-            fc2 = KF_pointer[fc1][n]; /* bepaal de index van de conflicterende fasecyclus */
-            TISG_PR[fc1][fc2] = TFG_max[fc1] + TVG_PR[fc1] + TIG_max[fc1][fc2];
-            TISG_AR[fc1][fc2] = TFG_max[fc1] + TVG_AR[fc1] + TIG_max[fc1][fc2];
-            TISG_AR_los[fc1][fc2] = TFG_max[fc1] + TVG_AR[fc1] + TIG_max[fc1][fc2];
-        }
-    }
-}
-
-/* INTERSTARTGROENTIJDEN VUL GROEN-GROEN CONFLICTEN IN */
-/* --------------------------------------------------- */
-/* void InterStartGroenTijden_VulGroenGroenConflictenIn(void) vult de TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] in voor alle Groen-Groen conflicten met de vastgroentijden
- * en verlengroentijden.
- *
- * InterStartGroenTijden_VulGroenGroenConflictenIn(void) wordt aangeroepen vanuit de applicatiefunctie void BepaalInterStartGroenTijden(void) na
- * de initialisatie van TISG_PR[][] en TISG_AR[][].
- * BepaalInterStartGroenTijden(void) wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden(), die wordt aangeroepen door application().
- *
- * //Bepaal InterStartGroenTijden
- * InitInterStartGroenTijden();
- * InterStartGroenTijden_VulHardeConflictenIn();
- * InterStartGroenTijden_VulGroenGroenConflictenIn();
- *
- * //Pas interstartgroentijden aan voor naloopEG
- * InterStartGroenTijd_NLEG(fc02, fc62, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, tvgnaloop0262);
- * InterStartGroenTijd_NLEG(fc08, fc68, tnlfg0868, tnlfgd0868, tnleg0868, tnlegd0868, tvgnaloop0868);
- * InterStartGroenTijd_NLEG(fc11, fc68, tnlfg1168, tnlfgd1168, tnleg1168, tnlegd1168, tvgnaloop1168);
- * InterStartGroenTijd_NLEG(fc22, fc21, tnlfg2221, tnlfgd2221, tnleg2221, tnlegd2221, tvgnaloop2221);
- * InterStartGroenTijd_NLEG(fc82, fc81, tnlfg8281, tnlfgd8281, tnleg8281, tnlegd8281, tvgnaloop8281);
- */
-
-
-void InterStartGroenTijden_VulGroenGroenConflictenIn(void)
-{
-    count fc1, fc2, n;
-    for (fc1 = 0; fc1 < FCMAX; ++fc1)
-    {
-        for (n = KFC_MAX[fc1]; n < GKFC_MAX[fc1]; ++n)
-        {
-            fc2 = KF_pointer[fc1][n]; /* bepaal de index van de conflicterende fasecyclus */
-            TISG_PR[fc1][fc2] = TFG_max[fc1] + TVG_PR[fc1];
-            TISG_AR[fc1][fc2] = TFG_max[fc1] + TVG_AR[fc1];
-            TISG_AR_los[fc1][fc2] = TFG_max[fc1] + TVG_AR[fc1];
-        }
-    }
-}
-
-/* INTERSTARTGROENTIJD NALOOP OP EINDE GROEN (NLEG) */
-/* ------------------------------------------------ */
-/* void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop) bepaalt TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2]
- * bij een NaloopEG voor de harde en groen-groen conflicten van de volgrichting worden TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bepaald t.o.v. de voedende richting.
- *
- * bij aanroep van de functie dienen de volgende argumenten te worden meegegeven:
- * fc1 - index fasecyclus van de voedende richting
- * fc2 - index fasecyclus van de nalooprichting
- *
- * tnlfg     -  index tijdelement    - Vaste nalooptijd voor (eerste) voertuig(en) tijdens vastgroen (FG[fc1]) van de voedende richting;
- *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
- * tnlfgd    - index tijdelement    - Detectie afhankelijke nalooptijd voor (eerste) voertuig(en) tijdens vastgroen (FG[fc1]) van de voedende richting;
- *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
- * tnleg     -  index tijdelement    - Vaste nalooptijd voor voertuig(en) tijdens groen (G[fc1]) van de voedende richting;
- *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
- * tnlegd    - index tijdelement    - Detectie afhankelijke nalooptijd voor voertuig(en) tijdens groen of geel (G[fc1] || GL[fc1]) van de voedende richting;
- *                                 rijtijd tot de detectie van de volgrichting; NG indien niet gebruikt.
- * tvgnaloop - index T_max[]        - Maximale verlengtijd op eigen detectie na aflopen nalooptijden voor de nalooprichting.
- *
- * void InterStartGroenTijd_NLEG() wordt aangeroepen vanuit de applicatiefunctie void BepaalInterStartGroenTijden(void) na de initialisatie van TISG_PR[][] en TISG_AR[][].
- * BepaalInterStartGroenTijden(void) wordt aangeroepen vanuit de applicatiefunctie Verlenggroentijden(), die wordt aangeroepen door application().
- *
- * //Bepaal InterStartGroenTijden
- * InitInterStartGroenTijden();
- * InterStartGroenTijden_VulHardeConflictenIn();
- *  InterStartGroenTijden_VulGroenGroenConflictenIn();
- *
- * //Pas interstartgroentijden aan voor naloopEG
- * InterStartGroenTijd_NLEG(fc02, fc62, tnlfg0262, tnlfgd0262, tnleg0262, tnlegd0262, tvgnaloop0262);
- * InterStartGroenTijd_NLEG(fc08, fc68, tnlfg0868, tnlfgd0868, tnleg0868, tnlegd0868, tvgnaloop0868);
- * InterStartGroenTijd_NLEG(fc11, fc68, tnlfg1168, tnlfgd1168, tnleg1168, tnlegd1168, tvgnaloop1168);
- * InterStartGroenTijd_NLEG(fc22, fc21, tnlfg2221, tnlfgd2221, tnleg2221, tnlegd2221, tvgnaloop2221);
- * InterStartGroenTijd_NLEG(fc82, fc81, tnlfg8281, tnlfgd8281, tnleg8281, tnlegd8281, tvgnaloop8281);
- *
- */
-
-void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop)
-{
-    int k, n;
-    for (n = 0; n < KFC_MAX[j]; n++)
+    count k;
+    for (count n = 0; n < KFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n];
-        if (!(tnlfg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlfgd == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnleg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + TVG_PR[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlegd == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + TVG_PR[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlfg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlfgd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnleg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlegd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG))  tisg[i][k] = max(tisg[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfgd == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + tvg_max[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + tvg_max[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
     }
-    for (n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
+    for (count n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n];
-        if (!(tnlfg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop]);
-        if (!(tnlfgd == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnleg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + TVG_PR[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlegd == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + TVG_PR[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlfg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlfgd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnleg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
-        if (!(tnlegd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + TGL_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlfg == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop]);
+        if (!(tnlfgd == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + T_max[tnlfgd] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnleg == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + tvg_max[i] + T_max[tnleg] + T_max[tvgnaloop] + TIG_max[j][k]);
+        if (!(tnlegd == NG)) tisg[i][k] = max(tisg[i][k], TFG_max[i] + tvg_max[i] + T_max[tnlegd] + T_max[tvgnaloop] + TIG_max[j][k]);
     }
 }
 
@@ -1229,10 +1150,13 @@ void InterStartGroenTijd_NLEG(count i, count j, count tnlfg, count tnlfgd, count
  *
  */
 
-void InterStartGroenTijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop)
+void InterStartGroenTijd_NLEVG(mulv tisg[FCMAX][FCMAX], mulv tvg_max[FCMAX], count i, count j, count tnlfg, count tnlfgd, count tnlevg, count tnlevgd, count tvgnaloop)
 {
-    int k, n;
-    for (n = 0; n < KFC_MAX[j]; n++)
+    count k;
+    tisg[0][0] = 0; //@PSN verwijderen ? ter voorkoming van warning C4100: unreferenced formal parameter
+    tvg_max[0] = 0; //@PSN verwijderen ? ter voorkoming van warning C4100: unreferenced formal parameter
+
+    for (count n = 0; n < KFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n];  /* bepaal de index van de conflicterende fasecyclus */
         if (!(tnlfg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
@@ -1244,7 +1168,7 @@ void InterStartGroenTijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, coun
         if (!(tnlevg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + T_max[tnlevg] + T_max[tvgnaloop] + TIG_max[j][k]);
         if (!(tnlevgd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], TFG_max[i] + TVG_AR[i] + T_max[tnlevgd] + T_max[tvgnaloop] + TIG_max[j][k]);
     }
-    for (n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
+    for (count n = KFC_MAX[j]; n < GKFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n]; /* bepaal de index van de conflicterende fasecyclus */
         if (!(tnlfg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], TFG_max[i] + T_max[tnlfg] + T_max[tvgnaloop] + TIG_max[j][k]);
@@ -1260,7 +1184,7 @@ void InterStartGroenTijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, coun
 
 /* INTERSTARTGROENTIJD NALOOP OP STARTGROEN (NLSG) */
 /* ------------------------------------------------ */
-/* void InterStartGroenTijd_NLSG(count i, count j, count tnlsg, count tnlsgd) bepaalt de TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bij een NaloopSG. 
+/* void InterStartGroenTijd_NLSG(count i, count j, count tnlsg, count tnlsgd) bepaalt de TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bij een NaloopSG.
  * voor de harde en groen-groen conflicten van de volgrichting worden TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bepaald t.o.v. de voedende richting.
  *
  * bij aanroep van de functie dienen de volgende argumenten te worden meegegeven:
@@ -1292,16 +1216,14 @@ void InterStartGroenTijd_NLEVG(count i, count j, count tnlfg, count tnlfgd, coun
  * InterStartGroenTijd_NLSG(fc34, fc33, NG, tnlsgd3433);
  */
 
-void InterStartGroenTijd_NLSG(count i, count j, count tnlsg, count tnlsgd)
+void InterStartGroenTijd_NLSG(mulv tisg[FCMAX][FCMAX], count i, count j, count tnlsg, count tnlsgd)
 {
-    int k, n;
-    for (n = 0; n < KFC_MAX[j]; n++)
+    count k;
+    for (count n = 0; n < KFC_MAX[j]; n++)
     {
         k = KF_pointer[j][n]; /* bepaal de index van de conflicterende fasecyclus */
-        if (!(tnlsg == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], T_max[tnlsg] + TIG_max[j][k]);
-        if (!(tnlsgd == NG)) TISG_PR[i][k] = max(TISG_PR[i][k], T_max[tnlsgd] + TIG_max[j][k]);
-        if (!(tnlsg == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], T_max[tnlsg] + TIG_max[j][k]);
-        if (!(tnlsgd == NG)) TISG_AR[i][k] = max(TISG_AR[i][k], T_max[tnlsgd] + TIG_max[j][k]);
+        if (!(tnlsg == NG)) tisg[i][k] = max(tisg[i][k], T_max[tnlsg] + TIG_max[j][k]);
+        if (!(tnlsgd == NG)) tisg[i][k] = max(tisg[i][k], T_max[tnlsgd] + TIG_max[j][k]);
     }
 }
 
@@ -1325,16 +1247,14 @@ void InterStartGroenTijd_NLSG(count i, count j, count tnlsg, count tnlsgd)
  */
 
 
-void InterStartGroentijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2)
+void InterStartGroentijd_HardMeeverlengenDeelconflict(mulv tisg[FCMAX][FCMAX], mulv tvg_max[FCMAX], count fc1, count fc2)
 {
-    count fc;
-    for (fc = 0; fc < FCMAX; fc++)
+
+    for (count fc = 0; fc < FCMAX; fc++)
     {
-        if (TIGR[fc2][fc] >= 0)
+        if (tisg[fc2][fc] >= 0)
         {
-            TISG_PR[fc1][fc] = max(TISG_PR[fc1][fc], TFG_max[fc1] + TVG_PR[fc1] + TIGR[fc2][fc]);
-            TISG_AR[fc1][fc] = max(TISG_AR[fc1][fc], TFG_max[fc1] + TVG_AR[fc1] + TIGR[fc2][fc]);
-            TISG_AR_los[fc1][fc] = max(TISG_AR_los[fc1][fc], TFG_max[fc1] + TVG_AR[fc1] + TIGR[fc2][fc]);
+            tisg[fc1][fc] = max(tisg[fc1][fc], TFG_max[fc1] + tvg_max[fc1] + TIGR[fc2][fc]);
         }
     }
 }
@@ -1342,7 +1262,7 @@ void InterStartGroentijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2)
 /* INTERSTARTGROENTIJD VOORSTART CORRECTIE */
 /* --------------------------------------- */
 /* bool InterStartGroenTijd_Voorstart_Correctie(count fcvs, count fcns, count tvs) corrigeert TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] bij deelconflicten met een Voorstart.
- *                                                                                  
+ *
  * bij aanroep van de functie dienen de volgende argumenten te worden meegegeven:
  * fcvs - index fasecyclus die als eerste start
  * fcns - index fasecyclus die als laatste start
@@ -1367,26 +1287,14 @@ void InterStartGroentijd_HardMeeverlengenDeelconflict(mulv fc1, mulv fc2)
  */
 
 
-bool InterStartGroenTijd_Voorstart_Correctie(count fcvs, count fcns, count tvs)
+bool InterStartGroenTijd_Voorstart_Correctie(mulv tisg[FCMAX][FCMAX], count fcvs, count fcns, count tvs)
 {
-    count n;
-    bool result;
-    result = FALSE;
-    for (n = 0; n < FCMAX; ++n)
+    bool result = FALSE;
+    for (count n = 0; n < FCMAX; ++n)
     {
-        if ((TISG_PR[n][fcns] < TISG_PR[n][fcvs] + T_max[tvs]) && (TISG_PR[n][fcvs] > 0))
+        if ((tisg[n][fcns] < tisg[n][fcvs] + T_max[tvs]) && (tisg[n][fcvs] > 0))
         {
-            TISG_PR[n][fcns] = TISG_PR[n][fcvs] + T_max[tvs];
-            result = TRUE;
-        }
-        if ((TISG_AR[n][fcns] < TISG_AR[n][fcvs] + T_max[tvs]) && (TISG_AR[n][fcvs] > 0))
-        {
-            TISG_AR[n][fcns] = TISG_AR[n][fcvs] + T_max[tvs];
-            result = TRUE;
-        }
-        if ((TISG_AR_los[n][fcns] < TISG_AR_los[n][fcvs] + T_max[tvs]) && (TISG_AR_los[n][fcvs] > 0))
-        {
-            TISG_AR_los[n][fcns] = TISG_AR_los[n][fcvs] + T_max[tvs];
+            tisg[n][fcns] = tisg[n][fcvs] + T_max[tvs];
             result = TRUE;
         }
     }
@@ -1421,49 +1329,21 @@ bool InterStartGroenTijd_Voorstart_Correctie(count fcvs, count fcns, count tvs)
  *   } while (wijziging);
  */
 
-bool InterStartGroenTijd_Gelijkstart_Correctie(count fc1, count fc2)
+bool InterStartGroenTijd_Gelijkstart_Correctie(mulv tisg[FCMAX][FCMAX], count fc1, count fc2)
 {
-    count n;
-    bool result;
-    result = FALSE;
-    for (n = 0; n < FCMAX; ++n)
+    bool result = FALSE;
+    for (count n = 0; n < FCMAX; ++n)
     {
-        if (TISG_PR[n][fc1] < TISG_PR[n][fc2])
+        if (tisg[n][fc1] < tisg[n][fc2])
         {
-            TISG_PR[n][fc1] = TISG_PR[n][fc2];
+            tisg[n][fc1] = tisg[n][fc2];
             result = TRUE;
         }
         else
         {
-            if (TISG_PR[n][fc1] != TISG_PR[n][fc2])
+            if (tisg[n][fc1] != tisg[n][fc2])
             {
-                TISG_PR[n][fc2] = TISG_PR[n][fc1];
-                result = TRUE;
-            }
-        }
-        if (TISG_AR[n][fc1] < TISG_AR[n][fc2])
-        {
-            TISG_AR[n][fc1] = TISG_AR[n][fc2];
-            result = TRUE;
-        }
-        else
-        {
-            if (TISG_AR[n][fc1] != TISG_AR[n][fc2])
-            {
-                TISG_AR[n][fc2] = TISG_AR[n][fc1];
-                result = TRUE;
-            }
-        }
-        if (TISG_AR_los[n][fc1] < TISG_AR_los[n][fc2])
-        {
-            TISG_AR_los[n][fc1] = TISG_AR_los[n][fc2];
-            result = TRUE;
-        }
-        else
-        {
-            if (TISG_AR_los[n][fc1] != TISG_AR_los[n][fc2])
-            {
-                TISG_AR_los[n][fc2] = TISG_AR_los[n][fc1];
+                tisg[n][fc2] = tisg[n][fc1];
                 result = TRUE;
             }
         }
@@ -1474,7 +1354,7 @@ bool InterStartGroenTijd_Gelijkstart_Correctie(count fc1, count fc2)
 /* INTERSTARTGROENTIJD LATERELEASE CORRECTIE */
 /* ----------------------------------------- */
 /* bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr) corrigeert  TISG_PR[fc1][fc2] en TISG_AR[fc1][fc2] voor LateRelease.
- *                                                                              
+ *
  * bij aanroep van de functie dienen de volgende argumenten te worden meegegeven:
  * fclr  - index fasecyclus deelconflict die als laatste start met LateRelease
  * fcvs  - index fasecyclus deelconflict die als eerste start
@@ -1511,20 +1391,14 @@ bool InterStartGroenTijd_Gelijkstart_Correctie(count fc1, count fc2)
  *   } while (wijziging);  //@PSN Let op! functie zou in theorie oneindig kunnen doorgaan!!
  */
 
-bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr)
+bool InterStartGroenTijd_LateRelease_Correctie(mulv tisg[FCMAX][FCMAX], count fclr, count fcvs, count tlr)
 {
-    count n;
     bool result = FALSE;
-    for (n = 0; n < FCMAX; ++n)
+    for (count n = 0; n < FCMAX; ++n)
     {
-        if (TISG_PR[n][fcvs] < TISG_PR[n][fclr] - T_max[tlr])
+        if (tisg[n][fcvs] < tisg[n][fclr] - T_max[tlr])
         {
-            TISG_PR[n][fcvs] = TISG_PR[n][fclr] - T_max[tlr];
-            result = TRUE;
-        }
-        if (TISG_AR[n][fcvs] < TISG_AR[n][fclr] - T_max[tlr])
-        {
-            TISG_AR[n][fcvs] = TISG_AR[n][fclr] - T_max[tlr];
+            tisg[n][fcvs] = tisg[n][fclr] - T_max[tlr];
             result = TRUE;
         }
     }
@@ -1533,7 +1407,7 @@ bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr
 
 
 
-/* TVG_max[] - CORRECTIE MAXIMUM VERLENGGROENTIJDEN VOOR NALOOP RICHTINGEN */ 
+/* TVG_max[] - CORRECTIE MAXIMUM VERLENGGROENTIJDEN VOOR NALOOP RICHTINGEN */
 /* ======================================================================= */
 
 /* Voor de naloop richtingen moet de verlenggroentijd groot genoeg zijn om de gehele naloop te kunnen afwikkelingen.
@@ -1548,7 +1422,7 @@ bool InterStartGroenTijd_LateRelease_Correctie(count fclr, count fcvs, count tlr
  */
 
 
- /* TVG_max[] CORRECTIE NALOOP EINDE GROEN (NLEG) */  
+ /* TVG_max[] CORRECTIE NALOOP EINDE GROEN (NLEG) */
  /* --------------------------------------------- */
  /* void NaloopEG_TVG_NaloopEG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop)
   * wordt in de regelapplicatie gebruikt voor corrigeren/aanpassen van de verlenggroentijd (TVG_max[]) van de naloop/volgrichting voor een NaloopEG.
@@ -1599,9 +1473,9 @@ void NaloopEG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, cou
         }
     }
     if ((TVG_max[fc2] < TVG_AR[fc2]) && AR[fc2]) TVG_max[fc2] = TVG_AR[fc2];
-}                                                                           
+}
 
-/* TVG_max[] CORRECTIE NALOOP EINDE VERLENGGROEN (NLEVG) */ 
+/* TVG_max[] CORRECTIE NALOOP EINDE VERLENGGROEN (NLEVG) */
 /* ----------------------------------------------------- */
 /* void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, count tnleg, count tnlegd, count tvgnaloop)
  * wordt in de regelapplicatie gebruikt voor corrigeren/aanpassen van de verlenggroentijd (TVG_max[]) van de naloop/volgrichting voor een NaloopEVG.
@@ -1656,7 +1530,7 @@ void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, co
 
 //@PSN Algemeen: functienaam met TVG laten beginnen. TVG_NaloopSG_Correctie() etc. zoals ook bij realisatie en interstartgroentijd TVG_NaloopEG_Correctie().
 
-/* TVG_max[] CORRECTIE NALOOP START GROEN (NLVTG) */ 
+/* TVG_max[] CORRECTIE NALOOP START GROEN (NLVTG) */
 /* ---------------------------------------------- */
 /* void NaloopVtg_TVG_Correctie(count fc1, count fc2, count tnlsg, count tnlsgd)    //@PSN  'fc1' : unreferenced formal parameter
  * wordt in de regelapplicatie gebruikt voor corrigeren/aanpassen van de verlenggroentijd (TVG_max[]) van de volgrichting voor een NaloopVtg.
@@ -1665,7 +1539,7 @@ void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, co
  * fc1 - index fasecyclus van de voedende richting                                  //@PSN  'fc1' : unreferenced formal parameter
  * fc2 - index fasecyclus van de nalooprichting
  *
- * hnlsg  - hulpwaarde naloop wel/niet toegestaan op basis van primair+alternatief gecoordineerd 
+ * hnlsg  - hulpwaarde naloop wel/niet toegestaan op basis van primair+alternatief gecoordineerd
  * tnlsg  - vaste nalooptijd voor (eerste) voetganger vanaf startgroen (SG[fc1]) van de voedende richting; NG indien niet gebruikt.
  * tnlsgd - detectie aanvraag afhankelijke nalooptijd voor (eerste) voetganger vanaf startgroen (SG[fc1]) van de voedende richting; NG indien niet gebruikt
  *
@@ -1679,12 +1553,13 @@ void NaloopEVG_TVG_Correctie(count fc1, count fc2, count tnlfg, count tnlfgd, co
 
 void NaloopVtg_TVG_Correctie(count fc1, count fc2, count hnlsg, count tnlsg, count tnlsgd)
 {
-   fc1 = 0; // fc1 wordt niet gebruikt in deze functie. door deze toevoeging wordt een compileer warming voorkomen 
-   if (!(tnlsg == NG) && H[hnlsg]) TVG_max[fc2] = max(TVG_max[fc2], T_max[tnlsg] - T_timer[tnlsg] + TVG_timer[fc2]);
-   if (!(tnlsgd == NG) && H[hnlsg]) TVG_max[fc2] = max(TVG_max[fc2], -TFG_max[fc2] + TFG_timer[fc2] + T_max[tnlsgd] - T_timer[tnlsgd] + TVG_timer[fc2]);
+    hnlsg = 0; //@PSN verwijderen ? ter voorkoming van warning C4100: unreferenced formal parameter
+    fc1 = 0; // fc1 wordt niet gebruikt in deze functie. door deze toevoeging wordt een compileer warming voorkomen 
+    if (!(tnlsg == NG) && T[tnlsg]) TVG_max[fc2] = max(TVG_max[fc2], T_max[tnlsg] - T_timer[tnlsg] + TVG_timer[fc2]);
+    if (!(tnlsgd == NG) && T[tnlsgd]) TVG_max[fc2] = max(TVG_max[fc2], -TFG_max[fc2] + TFG_timer[fc2] + T_max[tnlsgd] - T_timer[tnlsgd] + TVG_timer[fc2]);
 }
 
-/* VASTHOUDEN NALOOP START GROEN/VOETGANGER (NLSG/NLVTG) */ 
+/* VASTHOUDEN NALOOP START GROEN/VOETGANGER (NLSG/NLVTG) */
 /* ----------------------------------------------------- */
 /* void NaloopVtg(count fc1, count fc2, count dk, count hdk, bool hnlsg, count tnlsg, count tnlsgd) //@PSN  hnlsg is een index dus count ip.v. bool.
  * wordt in de regelapplicatie gebruikt voor het in groen vasthouden van de volgrichting voor voetgangers van de voedende richting die op start groen vertrekken.
@@ -1901,14 +1776,14 @@ void NaloopEVG(count fc1, count fc2, count tnlfg, count tnlfgd, count tnlevg, co
  */
 
 
-bool max_par(count fc, mulv t_wacht[])   
+bool max_par(count fc, mulv t_wacht[])
 {
     int k, n;
     if (kcv(fc)) return FALSE;
     for (n = 0; n < FKFC_MAX[fc]; ++n)
     {
         k = KF_pointer[fc][n];
-        if ((t_wacht[k] > 0) && ((t_wacht[k] - REALISATIETIJD_max[fc] + offsetAR) < TISG_AR[fc][k]))
+        if ((t_wacht[k] > 0) && ((t_wacht[k] - REALISATIETIJD_max[fc]) < TISG_AR[fc][k] + offsetAR))
         {
             return FALSE;
         }
@@ -1933,7 +1808,7 @@ bool max_par(count fc, mulv t_wacht[])
  * De functie max_par_los() wordt aangeroepen vanuit de applicatiefunctie RealisatieAfhandeling().
  *
  * voorbeelden: PAR_los[fc31] = max_par_los(fc31, twacht) && SCH[schlos3132] && (!IH[hmadk31a] || SCH[schgeennla3132])              || RA[fc31] && PAR_los[fc31];
- *              PAR_los[fc32] = max_par_los(fc32, twacht) && SCH[schlos3231] && (!IH[hmadk32a] || SCH[schgeennla3231] && PAR[fc22]) || RA[fc32] && PAR_los[fc32]; // voorstart 
+ *              PAR_los[fc32] = max_par_los(fc32, twacht) && SCH[schlos3231] && (!IH[hmadk32a] || SCH[schgeennla3231] && PAR[fc22]) || RA[fc32] && PAR_los[fc32]; // voorstart
  */
 
 bool max_par_los(count fc, mulv t_wacht[])
@@ -1970,7 +1845,7 @@ bool max_par_los(count fc, mulv t_wacht[])
  */
 
 
-void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max)  
+void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max)
 {
     register count i, j, m, n, hml;
     mulv twacht_tmp = NG;
@@ -1980,19 +1855,19 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max)
     /* ------------------------------------ */
     for (i = 0; i < FC_MAX; i++)
     {
-        twacht[i] = NG; 
-        twacht_wtv[i] = NG; 
+        twacht[i] = NG;
+        twacht_wtv[i] = NG;
         twacht_AR[i] = NG;
-        twacht_AR_wtv[i] = NG; 
-        twacht_afkap[i] = NG; 
+        twacht_AR_wtv[i] = NG;
+        twacht_afkap[i] = NG;
     }
     /* bereken wachttijden van de primaire fasecycli van de actieve module */
     /* ------------------------------------------------------------------- */
     for (i = 0; i < FC_MAX; i++) {
         if ((prml[ml][i] & PRIMAIR_VERSNELD) && !PG[i] && R[i])
         {
-            twacht[i] = REALISATIETIJD_max[i]; 
-            twacht_wtv[i] = REALISATIETIJD_max_wtv[i]; 
+            twacht[i] = REALISATIETIJD_max[i];
+            twacht_wtv[i] = REALISATIETIJD_max_wtv[i];
             for (j = 0; j < FC_MAX; j++)
             {
                 if (RA[j] && AR[j])
@@ -2105,6 +1980,8 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max)
     for (i = 0; i < FC_MAX; i++) {
         if (RA[i] && AR[i]) {
             twacht_AR[i] = REALISATIETIJD_max[i];
+        }
+        if (RA[i] && AR[i] && !(AR[i] & ALTERNATIEF_LOS)) {
             twacht_AR_wtv[i] = REALISATIETIJD_max_wtv[i];
         }
 
@@ -2114,7 +1991,7 @@ void max_wachttijd_modulen_primair_ISG(bool* prml[], count ml, count ml_max)
 /* VASTHOUDEN MODULE */
 /* ================= */
 
-/* bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max) 
+/* bool yml_cv_pr_nl_ISG(bool* prml[], count ml, count ml_max)
  * wordt gebruikt voor het vasthouden van de module-afwikkeling en houdt de actieve module ook vast voor de afwikkeling van nalopen.
  *
  * yml_cv_pr_nl_ISG() is gebaseerd op de werking van de functie bool yml_pg_kcv(), die is gedefinieerd in mlefunc.c.
@@ -2249,7 +2126,7 @@ void MeeverlengenUitDoorVoetgangerLos(count fcvtg, count hmadk)
 
 /* PERCENTAGEVERLENGGROENTIJDEN ISG */
 /* -------------------------------- */
-/* @PSN gebruiken wij deze ? 
+/* @PSN gebruiken wij deze ?
  * void PercentageVerlengGroenTijdenISG(count fc, count percentage)   //@@ in de naam zit ISG, maar daar maakt de functie geen gebruik van; is ISG weglaten. @@Tijden is onjuist, betreft een tijd.
  * PercentageVerlengGroenTijdenISG() wordt gebruikt voor de berekening van de instelling van de verlenggroentijd van een fasecyclus op basis van een opgegeven percentage.
  *
@@ -2324,9 +2201,22 @@ bool hf_wsg_nlISG(void)
 void afsluiten_aanvraaggebied_prISG(bool* prml[], count ml)
 {
     register count i;
+    bool aanvraagvoedende_richting;
     for (i = 0; i < FC_MAX; i++) {
-        if ((prml[ml][i] & PRIMAIR) && !PG[i] && !A[i] && fka(i)) /* was && fkaa(i) */
-            PG[i] |= PRIMAIR_OVERSLAG;
+        if ((prml[ml][i] & PRIMAIR) && !PG[i] && !A[i] && fka(i))
+        {
+            for (count j = 0; j < FCMAX; j++)
+            {
+                aanvraagvoedende_richting = FALSE;
+
+                if ((TNL_type[j][i] != TNL_NG) && A[j])
+                {
+                    aanvraagvoedende_richting = TRUE;
+                    break;
+                }
+            }
+            if (!aanvraagvoedende_richting) PG[i] |= PRIMAIR_OVERSLAG;
+        }
     }
 
 }
@@ -2394,10 +2284,10 @@ void PrioAanwezig(void)
  *             TNL_type[fc22][fc21] = TNL_EVG;
  *             TNL_type[fc31][fc32] = TNL_SG;
  *
- *             FK_type[fc02][fc09] =  FK_EG; Het eindegroenmoment van richting 2 bepaalt het startgroenmoment van richting 9  
- *             FK_type[fc22][fc02] =  FK_EVG; Het eindeverlenggroenmoment van richting 22 bepaalt het startgroenmoment van richting 2. 
- *                                            Dit is als we 22 wel willen laten meeverlengen tijdens 2 bij bijv. een lange middenberm 
- *             FK_type[fc32][fc02] =  FK_SG; Het startgroenmoment van richting 32 bepaalt het startgroenmoment van richtng 2  
+ *             FK_type[fc02][fc09] =  FK_EG; Het eindegroenmoment van richting 2 bepaalt het startgroenmoment van richting 9
+ *             FK_type[fc22][fc02] =  FK_EVG; Het eindeverlenggroenmoment van richting 22 bepaalt het startgroenmoment van richting 2.
+ *                                            Dit is als we 22 wel willen laten meeverlengen tijdens 2 bij bijv. een lange middenberm
+ *             FK_type[fc32][fc02] =  FK_SG; Het startgroenmoment van richting 32 bepaalt het startgroenmoment van richtng 2
  */
 
 
@@ -2414,7 +2304,7 @@ void InitInterfunc()
     }
 }
 
-/* ISGDEBUG */
+/*  */
 /* -------- */
 /* void IsgDebug (void)
  * schrijf in de testomgeving debug informatie over Realisatietijd, InterStartGroentijd en PAR naar het XY-Printf scherm.
@@ -2424,7 +2314,7 @@ void IsgDebug()
 {
 #ifndef AUTOMAAT
     count x, y;
-    xyprintf(30, 1, "Realisatietijd");
+    xyprintf(30, 2, "Realisatietijd");
     //    xyprintf(38 + 4 * FCMAX, 1, "InterStartGroentijd");
     //    xyprintf(46 + 8 * FCMAX, 1, "PAR");
     for (y = 0; y < FCMAX; ++y)
@@ -2432,7 +2322,7 @@ void IsgDebug()
         xyprintf(30, y + 4, "%2s", FC_code[y]);
         for (x = 0; x < FCMAX; ++x)
         {
-            xyprintf(34 + 4 * x, y + 4, "%4d", REALISATIETIJD[y][x]);
+            xyprintf(34 + 4 * x, y + 4, "%4d", REALISATIETIJD_wtv[y][x]);
         }
     }
     for (x = 0; x < FCMAX; ++x)
@@ -2442,6 +2332,10 @@ void IsgDebug()
     for (x = 0; x < FCMAX; ++x)
     {
         xyprintf(34 + 4 * x, 4 + FCMAX, "%4d", REALISATIETIJD_max[x]);
+    }
+    for (x = 0; x < FCMAX; ++x)
+    {
+        xyprintf(34 + 4 * x, 5 + FCMAX, "%4d", REALISATIETIJD_max_wtv[x]);
     }
     for (x = 0; x < FCMAX; ++x)
     {
@@ -2457,11 +2351,11 @@ void IsgDebug()
     }
     for (x = 0; x < FCMAX; ++x)
     {
-        xyprintf(34 + 4 * x, 5 + FCMAX, "%4d", twacht[x]);
+        xyprintf(34 + 4 * x, 6 + FCMAX, "%4d", twacht[x]);
     }
     for (x = 0; x < FCMAX; ++x)
     {
-        xyprintf(34 + 4 * x, 6 + FCMAX, "%4d", twacht_wtv[x]);
+        xyprintf(34 + 4 * x, 7 + FCMAX, "%4d", twacht_wtv[x]);
     }
     xyprintf(36 + 4 * FCMAX, 4 + FCMAX, "twacht");
     for (y = 0; y < FCMAX; ++y)
@@ -2474,8 +2368,8 @@ void IsgDebug()
 
 /* OPHOGING TVG_max */
 /* ---------------- */
-/* Deze functie zorgt er voor dat de TVG_max van een richting aleen wordt aangepast op einde verlenggroen van de primaire realisatie en bij het starten van de regeling. 
- * Op deze manier wordt de maximale wachttijd van een conflicterende richting niet tussentijds verhoogd bij een wijziging van de primaire verlenggroentijd.     
+/* Deze functie zorgt er voor dat de TVG_max van een richting aleen wordt aangepast op einde verlenggroen van de primaire realisatie en bij het starten van de regeling.
+ * Op deze manier wordt de maximale wachttijd van een conflicterende richting niet tussentijds verhoogd bij een wijziging van de primaire verlenggroentijd.
  */
 
 void IsgCorrectieTvgPrTvgMax()
@@ -2498,7 +2392,7 @@ void IsgCorrectieTvgPrTvgMax()
 
 /* CORRIGEER TVG_max */
 /* ----------------- */
-/* Corrigeer TVG_timer[] i.r.t. TVG_max[] 
+/* Corrigeer TVG_timer[] i.r.t. TVG_max[]
  */
 
 void IsgCorrectieTvgTimerTvgMax()
@@ -2523,7 +2417,7 @@ void IsgCorrectieTvgTimerTvgMax()
 void InitInterStartGroenTijden_rgv()
 {
     count i, j;
-    for (i = 0; i < FC_MAX; i++) 
+    for (i = 0; i < FC_MAX; i++)
     {
         for (j = 0; j < FC_MAX; j++)
         {
@@ -2776,7 +2670,7 @@ bool Correctie_TISG_LateRelease_rgv(count fclr, count fcvs, count txnl)
 /* Resetten van de naloopbits
  */
 
-void ResetNaloopBits() 
+void ResetNaloopBits()
 {
     int fc;
     for (fc = 0; fc < FCMAX; ++fc)
@@ -2790,43 +2684,43 @@ void ResetNaloopBits()
 
 
 /* Realisatie fasecyclus mag niet meer worden tegengehouden doordat het aantal uitgestuurde ledjes een minimaal aantal bereikt heeft.
- * Daardoor mag de tijd tot conflictende groen van de conlflictrictingen (fc) al opgehoogd wroden met de tijd tot groen van deze richting i 
+ * Daardoor mag de tijd tot conflictende groen van de conlflictrictingen (fc) al opgehoogd wroden met de tijd tot groen van deze richting i
  */
 
 void Realisatietijd_wtv_correctie(count i, count mwtv, count prmwtvhaltmin)
 {
-   count fc, prio, n;
-   if ((MM[mwtv] < PRM[prmwtvhaltmin]) && (MM[mwtv] > 0))
-   {
-      Bepaal_Realisatietijd_voor_richting(i); /* bepaal de maximale realisatietijd voor deze richting */
-      for (n = 0; n < FKFC_MAX[i]; ++n)
-      {
-         fc = KF_pointer[i][n];
-         if (BR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_BR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_BR[i][fc]) : REALISATIETIJD[i][fc];
-         if (AR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_AR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_AR[i][fc]) : REALISATIETIJD[i][fc];
-         if (PR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_PR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_PR[i][fc]) : REALISATIETIJD[i][fc];
-         for (prio = 0; prio < prioFCMAX; ++prio)
-         {
-            if (iPrioriteit[prio] && (iPrioriteitsOpties[prio] & poAfkappenKonfliktRichtingen) && (fc == iFC_PRIOix[prio]))
+    count fc, prio, n;
+    if ((MM[mwtv] < PRM[prmwtvhaltmin]) && (MM[mwtv] > 0))
+    {
+        Bepaal_Realisatietijd_voor_richting(i); /* bepaal de maximale realisatietijd voor deze richting */
+        for (n = 0; n < FKFC_MAX[i]; ++n)
+        {
+            fc = KF_pointer[i][n];
+            if (BR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_BR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_BR[i][fc]) : REALISATIETIJD[i][fc];
+            if (AR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_AR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_AR[i][fc]) : REALISATIETIJD[i][fc];
+            if (PR[i]) REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_PR[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_PR[i][fc]) : REALISATIETIJD[i][fc];
+            for (prio = 0; prio < prioFCMAX; ++prio)
             {
-               REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_afkap[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_afkap[i][fc]) : REALISATIETIJD[i][fc];
+                if (iPrioriteit[prio] && (iPrioriteitsOpties[prio] & poAfkappenKonfliktRichtingen) && (fc == iFC_PRIOix[prio]))
+                {
+                    REALISATIETIJD[i][fc] = ((REALISATIETIJD_max[i] + TISG_afkap[i][fc]) > REALISATIETIJD[i][fc]) ? (REALISATIETIJD_max[i] + TISG_afkap[i][fc]) : REALISATIETIJD[i][fc];
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }
 
 /* @PSN Commentaar
  */
-bool Realisatietijd_Lokgroen_Correctie(count fc1, count fc2)
+bool Realisatietijd_Lokgroen_Correctie(mulv realisatietijd[FCMAX][FCMAX], count fc1, count fc2)
 {
     count n;
     bool result = FALSE;
     for (n = 0; n < FCMAX; ++n)
     {
-        if (REALISATIETIJD[n][fc1] < REALISATIETIJD[n][fc2])
+        if (realisatietijd[n][fc1] < realisatietijd[n][fc2])
         {
-            REALISATIETIJD[n][fc1] = REALISATIETIJD[n][fc2];
+            realisatietijd[n][fc1] = realisatietijd[n][fc2];
             result = TRUE;
         }
     }
@@ -2852,23 +2746,14 @@ bool Realisatietijd_Lokgroen_Correctie_wtv(count fc1, count fc2)
 
 /* @PSN Commentaar
  */
-bool TISG_Lokgroen_Correctie(count fc1, count fc2)
+bool TISG_Lokgroen_Correctie(mulv tisg[FCMAX][FCMAX], count fc1, count fc2)
 {
-    count n;
     bool result = FALSE;
-    for (n = 0; n < FCMAX; ++n)
+    for (count n = 0; n < FCMAX; ++n)
     {
-        if (TISG_PR[n][fc1] < TISG_PR[n][fc2])
+        if (tisg[n][fc1] < tisg[n][fc2])
         {
-            TISG_PR[n][fc1] = TISG_PR[n][fc2];
-            result = TRUE;
-        }
-    }
-    for (n = 0; n < FCMAX; ++n)
-    {
-        if (TISG_AR[n][fc1] < TISG_AR[n][fc2])
-        {
-            TISG_AR[n][fc1] = TISG_AR[n][fc2];
+            tisg[n][fc1] = tisg[n][fc2];
             result = TRUE;
         }
     }
@@ -2908,6 +2793,44 @@ void InitRealisatieTijdenWtv(void) {
         for (j = 0; j < FCMAX; ++j)
         {
             REALISATIETIJD_wtv[i][j] = REALISATIETIJD[i][j];
+        }
+    }
+}
+bool set_ARLW_los(count i)
+{
+    if (PAR_los[i] && A[i] && RV[i] && !TRG[i] && !AA[i] && (!RR[i] || P[i])
+        && !BL[i] && !kcv(i) && !fkaa(i) && testar_fk_calw(i)) {
+        AA[i] = TRUE;		/* set actuation		*/
+        AR[i] = ALTERNATIEF_LOS;
+        return (TRUE);
+    }
+    return (FALSE);
+}
+
+
+void langstwachtende_alternatief_los(void)
+{
+    register count i;
+
+    for (i = 0; i < FC_MAX; i++) {
+        set_ARLW_los(i);
+    }
+}
+
+void InterStartGroenTijden_VulConflictenIn(mulv tisg[FCMAX][FCMAX], mulv tvg_max[])
+{
+    count fc1, fc2, n;
+    for (fc1 = 0; fc1 < FCMAX; ++fc1)
+    {
+        for (n = 0; n < KFC_MAX[fc1]; ++n)
+        {
+            fc2 = KF_pointer[fc1][n]; /* bepaal de index van de conflicterende fasecyclus */
+            tisg[fc1][fc2] = TFG_max[fc1] + tvg_max[fc1] + TIG_max[fc1][fc2];
+        }
+        for (n = KFC_MAX[fc1]; n < GKFC_MAX[fc1]; ++n)
+        {
+            fc2 = KF_pointer[fc1][n]; /* bepaal de index van de conflicterende fasecyclus */
+            tisg[fc1][fc2] = TFG_max[fc1] + tvg_max[fc1];
         }
     }
 }

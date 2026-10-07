@@ -390,7 +390,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     var d = nl.Detectoren.First();
                                     sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl:naar}, {_fcpf}{nl:van}, ({c.GetBoolV()})" +
-                                              $"(SG[{_fcpf}{nl:van}] && A[{_fcpf}{nl:naar}] && IH[{_hpf}{_hnla}{d.Detector}] && IH[{_hpf}{_hnlsg}{nl:vannaar}]));");
+                                              $"(SG[{_fcpf}{nl:van}] && A[{_fcpf}{nl:naar}] && IH[{_hpf}{_hnla}{d.Detector}] && IH[{_hpf}{_hnlsg}{nl:vannaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
                                 }
                                 else if (nl.MaximaleVoorstart.HasValue)
                                 {
@@ -407,7 +407,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.Data.SynchronisatiesType == SynchronisatiesTypeEnum.InterFunc)
                                 {
-                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()})(G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}] && IH[{_hpf}{_hnleg}{nl:vannaar}]));");
+                                    sb.AppendLine($"{ts}set_MRLW_nl({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, ({c.GetBoolV()})(G[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}] && IH[{_hpf}{_hnleg}{nl:vannaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
                                 }
                                 else if (nl.MaximaleVoorstart.HasValue)
                                 {
@@ -431,7 +431,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.DetectieAfhankelijk && x.TegenhoudenLokgroen != NooitAanUitEnum.Nooit))
                             {
                                 var dk = nl.Detectoren.FirstOrDefault();
-                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl:van}, {_fcpf}{nl:naar}, (boolv)(RA[{_fcpf}{nl:naar}] && !K[{_fcpf}{nl:naar}] && (SCH[{_schpf}{_schisglos}{nl:naarvan}] && SCH[{_schpf}{_schgeenlokgroen}{nl:naarvan}] && IH[{_hpf}{_hnla}{dk.Detector}] || !SCH[{_schpf}{_schisglos}{nl:naarvan}])));");
+                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl:van}, {_fcpf}{nl:naar}, (boolv)(RA[{_fcpf}{nl:naar}] && !K[{_fcpf}{nl:naar}] && (SCH[{_schpf}{_schisglos}{nl:naarvan}] && SCH[{_schpf}{_schgeenlokgroen}{nl:naarvan}] && IH[{_hpf}{_hnla}{dk.Detector}] || !SCH[{_schpf}{_schisglos}{nl:naarvan}]) && !kcv({_fcpf}{nl.FaseVan})));");
                             }
                         }
                     }
