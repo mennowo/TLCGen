@@ -233,75 +233,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return elements;
         }
 
-        private static string GetMeldingDetectieCode(PrioIngreepInUitMeldingModel melding, string dpf)
-        {
-            var sb = new StringBuilder();
-            switch (melding.RelatedInput1Type)
-            {
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                    sb.Append($"SD[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                    sb.Append($"D[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                    sb.Append($"DB[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                    sb.Append($"!DB_old[{dpf}{melding.RelatedInput1}] && DB[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                    sb.Append($"ED[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                    sb.Append($"TDH_old[{dpf}{melding.RelatedInput1}] && !TDH[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang:
-                    sb.Append($"IS[{dpf}{melding.RelatedInput1}] && !IS_old[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog:
-                    sb.Append($"IS[{dpf}{melding.RelatedInput1}]");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang:
-                    sb.Append($"IS_old[{dpf}{melding.RelatedInput1}] && !IS[{dpf}{melding.RelatedInput1}]");
-                    break;
-            }
-            if (melding.TweedeInput)
-            {
-                switch (melding.RelatedInput2Type)
-                {
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                        sb.Append($" && SD[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                        sb.Append($" && D[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                        sb.Append($" && DB[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                        sb.Append($" && !DB_old[{dpf}{melding.RelatedInput2}] && DB[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                        sb.Append($" && ED[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                        sb.Append($" && TDH_old[{dpf}{melding.RelatedInput2}] && !TDH[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang:
-                        sb.Append($" && IS[{dpf}{melding.RelatedInput2}] && !IS_old[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog:
-                        sb.Append($" && IS[{dpf}{melding.RelatedInput2}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang:
-                        sb.Append($" && IS_old[{dpf}{melding.RelatedInput2}] && !IS[{dpf}{melding.RelatedInput2}]");
-                        break;
-                }
-            }
-            return sb.ToString();
-        }
-
         private List<string> GetMeldingCode(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
         {
             var meldingHElems = new List<string>();
@@ -333,18 +264,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 tts = ts + ts;
                 sb.Append($"{ts}else if (SCH[{sw}]");
             }
-            switch (melding.Type)
+
+            var extra = "";
+            if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector ||
+                 melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) &&
+                prio.CheckLijnNummer && prio.LijnNummers.Any())
             {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
-                    if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
-                    {
-                        sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
-                        if (melding.TweedeInput && !string.IsNullOrWhiteSpace(melding.RelatedInput2))
-                        {
-                            sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)");
-                        }
-                    }
-                    break;
+                if (!prio.CheckRitCategorie || melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
+                {
+                    extra += "DSIMeldingPRIO_LijnNummer_V1(" +
+                             $"{_prmpf + _prmallelijnen + prioName}, " +
+                             $"{prio.LijnNummers.Count})";
+                }
+                else
+                {
+                    extra += "DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(" +
+                             $"{_prmpf + _prmallelijnen + prioName}, " +
+                             $"{prio.LijnNummers.Count})";
+                }
+            }
+            if (prio.CheckWagenNummer)
+            {
+                extra += extra == "" ? "" : " && ";
+                extra += melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? $"WDNST_check_in({_fcpf}{prio.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{prio.FaseCyclus})";
+            }
+            if (prio.CheckOpSirene)
+            {
+                extra += extra == "" ? "" : " && ";
+                extra += $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
+            }
+            if (extra == "") extra = "TRUE";
+
+            var emitter = GetMeldingEmitter(melding.Type);
+            var m = new PrioMeldingContext(c, prio, melding, names, prioName)
+            {
+                Ts = ts, Tts = tts, VtgType = vtgType, FcNmr = fcNmr, Timer = ti, Extra = extra
+            };
+
+            if (emitter != null) sb.Append(emitter.GetStoringCondition(m));
+            else switch (melding.Type)
+            {
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
                     {
@@ -424,37 +383,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{prioName}] && ");
             }
 
-            var extra = "";
-            if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector ||
-                 melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) &&
-                prio.CheckLijnNummer && prio.LijnNummers.Any())
-            {
-                if (!prio.CheckRitCategorie || melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
-                {
-                    extra += "DSIMeldingPRIO_LijnNummer_V1(" +
-                             $"{_prmpf + _prmallelijnen + prioName}, " +
-                             $"{prio.LijnNummers.Count})";
-                }
-                else
-                {
-                    extra += "DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(" +
-                             $"{_prmpf + _prmallelijnen + prioName}, " +
-                             $"{prio.LijnNummers.Count})";
-                }
-            }
-            if (prio.CheckWagenNummer)
-            {
-                extra += extra == "" ? "" : " && ";
-                extra += melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? $"WDNST_check_in({_fcpf}{prio.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{prio.FaseCyclus})";
-            }
-            if (prio.CheckOpSirene)
-            {
-                extra += extra == "" ? "" : " && ";
-                extra += $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
-            }
-            if (extra == "") extra = "TRUE";
-
-            switch (melding.Type)
+            if (emitter != null) emitter.AppendCondition(m, sb);
+            else switch (melding.Type)
             {
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
                     var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
@@ -534,12 +464,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                         ? "CIF_DSIN, "
                                                         : "CIF_DSUIT, ") +
                                                     $"{extra});");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
-                    sb.AppendLine(GetMeldingDetectieCode(melding, _dpf) + ";");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang:
-                    sb.AppendLine(GetMeldingDetectieCode(melding, _ispf) + ";");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
