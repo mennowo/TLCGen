@@ -160,8 +160,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.InmeldingOokDoorToepassen && x.InmeldingOokDoorFase > 0))
                 {
-                    var priofcnr = (prio.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + prio.InmeldingOokDoorFase.ToString()
-                                                                                           : prio.InmeldingOokDoorFase.ToString();
+                    var priofcnr = GetOokDoorFaseName(prio.InmeldingOokDoorFase);
                     var parm = $"{_prmkarsg}{priofcnr}";
                     if (!karSgParms.Contains(parm))
                     {
@@ -179,8 +178,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                     {
-                        var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString()
-                                                                                         : hd.InmeldingOokDoorFase.ToString();
+                        var hdpriofcnr = GetOokDoorFaseName(hd.InmeldingOokDoorFase);
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmkarsghd}{hdpriofcnr}", hd.InmeldingOokDoorFase, CCOLElementTimeTypeEnum.None, _prmkarsghd, hdpriofcnr));
                     }

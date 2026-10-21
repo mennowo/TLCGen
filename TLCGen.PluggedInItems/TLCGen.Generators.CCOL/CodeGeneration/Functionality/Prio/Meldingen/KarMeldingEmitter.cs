@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
@@ -19,74 +19,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 var c = m.C;
                 var prio = m.Prio;
-                var ts = m.Ts;
-                var tts = m.Tts;
-                var fcNmr = m.FcNmr;
-                var prioName = m.PrioName;
+                var hd = prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst;
+                var cif = m.IsInmelding ? "CIF_DSIN, " : "CIF_DSUIT, ";
                 var extra = G.GetDsiExtraCondition(m, false);
 
-                var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
-                        ? $"PRM[{G._prmpf}{G._prmkarsg}{prio.FaseCyclus}]"
-                        : fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString();
+                string GetDsiCall(string sg) => hd
+                    ? $"DSIMelding_HD_V1({sg}, {cif}(!SCH[{G._schpf}{G._schchecksirene}{m.PrioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))"
+                    : $"DSIMeldingPRIO{(m.IsInmelding ? "_V1" : "_V2")}(" +
+                      (m.IsInmelding ? "" : $"{G._fcpf}{prio.FaseCyclus}, prioFC{m.PrioName}, ") +
+                      $"0, {m.VtgType}, TRUE, {sg},TRUE, {cif}{extra})";
+
+                var sgCheck = G.GetKarSignalGroup(c, G._prmkarsg, prio.FaseCyclus, m.FcNmr);
                 sb.AppendLine();
-                if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
+                sb.Append($"{m.Tts}{m.Ts}{GetDsiCall(hd || m.FcNmr != -1 ? sgCheck : "NG")}");
+                if (hd && prio.InmeldingOokDoorToepassen && prio.InmeldingOokDoorFase > 0)
                 {
-                    sb.Append($"{tts}{ts}DSIMelding_HD_V1({sgCheck}, " +
-                                                          (m.IsInmelding
-                                                              ? "CIF_DSIN, "
-                                                              : "CIF_DSUIT, ") +
-                                                          $"(!SCH[{G._schpf}{G._schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
-                }
-                else
-                {
-                    sb.Append($"{tts}{ts}DSIMeldingPRIO{(m.IsInmelding ? "_V1" : "_V2")}(" +
-                                                    (m.IsInmelding
-                                                        ? ""
-                                                        : $"{G._fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
-                                                    $"0, " +
-                                                    $"{m.VtgType}, " +
-                                                    "TRUE, " +
-                                                    $"{(fcNmr == -1 ? "NG" : sgCheck)}," +
-                                                    "TRUE, " +
-                                                    (m.IsInmelding
-                                                        ? "CIF_DSIN, "
-                                                        : "CIF_DSUIT, ") +
-                                                    $"{extra})");
-                }
-                if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst &&
-                    prio.InmeldingOokDoorToepassen && prio.InmeldingOokDoorFase > 0)
-                {
-                    var hdpriofcnr = (prio.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + prio.InmeldingOokDoorFase.ToString()
-                                                                                             : prio.InmeldingOokDoorFase.ToString();
-                    var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                        ? $"PRM[{G._prmpf}{G._prmkarsg}{hdpriofcnr}]"
-                        : prio.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
-                            ? (prio.InmeldingOokDoorFase - 200).ToString() : prio.InmeldingOokDoorFase.ToString();
+                    var alsoFc = G.GetKarSignalGroup(c, G._prmkarsg, GetOokDoorFaseName(prio.InmeldingOokDoorFase), prio.InmeldingOokDoorFase);
                     sb.AppendLine(" ||");
-                    if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
-                    {
-                        sb.Append($"{tts}{ts}DSIMelding_HD_V1({actualAlsoFc}, " +
-                                                              (m.IsInmelding
-                                                                  ? "CIF_DSIN, "
-                                                                  : "CIF_DSUIT, ") +
-                                                              $"(!SCH[{G._schpf}{G._schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
-                    }
-                    else
-                    {
-                        sb.Append($"{tts}{ts}DSIMeldingPRIO{(m.IsInmelding ? "_V1" : "_V2")}(" +
-                                                (m.IsInmelding
-                                                    ? ""
-                                                    : $"{G._fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
-                                                $"0, " +
-                                                $"{m.VtgType}, " +
-                                                "TRUE, " +
-                                                $"{actualAlsoFc}," +
-                                                "TRUE, " +
-                                                (m.IsInmelding
-                                                    ? "CIF_DSIN, "
-                                                    : "CIF_DSUIT, ") +
-                                                $"{extra})");
-                    }
+                    sb.Append($"{m.Tts}{m.Ts}{GetDsiCall(alsoFc)}");
                 }
                 sb.AppendLine(";");
             }

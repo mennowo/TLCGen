@@ -113,11 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     ifc = ifc2;
                 }
 
-                var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
-                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
-                    : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
-                        ? (ifc - 200).ToString()
-                        : ifc.ToString();
+                var sgCheck = GetKarSignalGroup(c, _prmkarsghd, hd.FaseCyclus, ifc);
                 var inmHelems = new List<string>();
                 if (!first) sb.AppendLine();
                 first = false;
@@ -126,13 +122,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                     {
-                        var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString() 
-                                                                                         : hd.InmeldingOokDoorFase.ToString();
-                        var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                            ? $"PRM[{_prmpf}{_prmkarsghd}{hdpriofcnr}]"
-                            : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
-                                ? (hd.InmeldingOokDoorFase - 200).ToString() 
-                                : hd.InmeldingOokDoorFase.ToString();
+                        var hdpriofcnr = GetOokDoorFaseName(hd.InmeldingOokDoorFase);
+                        var actualAlsoFc = GetKarSignalGroup(c, _prmkarsghd, hdpriofcnr, hd.InmeldingOokDoorFase);
                         sb.AppendLine($"{ts}" +
                                       $"IH[{_hpf}{_hhdin}{hd.FaseCyclus}kar] = " +
                                       (hd.KARToepassenFilterTijden 
@@ -227,11 +218,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     ifc = ifc2;
                 }
 
-                var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
-                    ? $"PRM[{_prmpf}{_prmkarsghd}{hd.FaseCyclus}]"
-                    : ifc > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
-                        ? (ifc - 200).ToString()
-                        : ifc.ToString();
+                var sgCheck = GetKarSignalGroup(c, _prmkarsghd, hd.FaseCyclus, ifc);
                 var uitmHelems = new List<string>();
                 if (!first) sb.AppendLine();
                 first = false;
@@ -240,13 +227,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     if (hd.InmeldingOokDoorToepassen && hd.InmeldingOokDoorFase > 0)
                     {
-                        var hdpriofcnr = (hd.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + hd.InmeldingOokDoorFase.ToString()
-                                                                                            : hd.InmeldingOokDoorFase.ToString();
-                        var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                            ? $"PRM[{_prmpf}{_prmkarsghd}{hdpriofcnr}]"
-                            : hd.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers 
-                                ? (hd.InmeldingOokDoorFase - 200).ToString() 
-                                : hd.InmeldingOokDoorFase.ToString();
+                        var hdpriofcnr = GetOokDoorFaseName(hd.InmeldingOokDoorFase);
+                        var actualAlsoFc = GetKarSignalGroup(c, _prmkarsghd, hdpriofcnr, hd.InmeldingOokDoorFase);
                         sb.AppendLine($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}kar] = " +
                                       (hd.KARToepassenFilterTijden
                                           ? $"RT[{_tpf}{_thduit}{hd.FaseCyclus}kar] = " +
