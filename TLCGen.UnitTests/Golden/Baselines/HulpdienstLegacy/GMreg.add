@@ -1,0 +1,158 @@
+/* BEGIN GEGENEREERDE HEADER */
+/* REGEL BESTAND, GEBRUIKERS TOEVOEGINGEN              */
+/* --------------------------------------------------- */
+
+/* KRUISPUNT: 
+              GM
+              
+              
+
+   BESTAND:   GMreg.add
+      CCOL:   11.0
+    TLCGEN:   
+   CCOLGEN:   UnitTest
+*/
+
+/****************************** Versie commentaar ***********************************
+ *
+ * Versie   Datum   Ontwerper   Commentaar
+ *
+ ************************************************************************************/
+/* EINDE GEGENEREERDE HEADER */
+
+
+#if defined CCOL_IS_SPECIAL
+void SpecialSignals_Add(void)
+{
+
+}
+#endif
+
+void post_init_application()
+{
+
+}
+
+void PreApplication_Add(void)
+{
+
+}
+
+void DetectieStoring_Aanvraag_Add(void)
+{
+
+}
+
+void DetectieStoring_Meetkriterium_Add(void)
+{
+
+}
+
+void DetectieStoring_MaxGroen_Add(void)
+{
+
+}
+
+void KlokPerioden_Add(void)
+{
+
+}
+
+void Aanvragen_Add(void)
+{
+
+}
+
+void Maxgroen_Add(void)
+{
+
+}
+
+boolv CorrectieRealisatieTijd_Add(void)
+{
+    /* let op! deze functie wordt in een loop aangeroepen (max. 100 iteraties). */
+    boolv aanpassing = FALSE;
+    
+    /* Voeg hier zonodig eigen code toe, bijv:
+     * aanpassing |= VTG2_Real_Los(fc32, fc31, T_max[tinl3231], T_max[tinl3132], hinl32, hinl31, hlos32, hlos31, (IH[hdrtk311] && IH[hdrtk321]));
+     * aanpassing |= VTG2_Real_Los(fc31, fc32, T_max[tinl3132], T_max[tinl3231], hinl31, hinl32, hlos31, hlos32, (IH[hdrtk311] && IH[hdrtk321]));
+     */
+    
+    return aanpassing;
+}
+
+void BepaalRealisatieTijden_Add(void)
+{
+
+}
+
+void Wachtgroen_Add(void)
+{
+
+}
+
+void Meetkriterium_Add(void)
+{
+
+}
+
+void Meeverlengen_Add(void)
+{
+
+}
+
+void Synchronisaties_Add(void)
+{
+
+}
+
+void VersneldPrimair_Add(void)
+{
+
+}
+
+void Alternatief_Add(void)
+{
+
+}
+
+void Modules_Add(void)
+{
+
+}
+
+void RealisatieAfhandeling_Add(void)
+{
+
+}
+
+void FileVerwerking_Add(void)
+{
+
+}
+
+void PostApplication_Add(void)
+{
+
+}
+
+void pre_system_application(void)
+{
+
+}
+
+void post_system_application(void)
+{
+
+}
+
+void post_system_application2(void)
+{
+
+}
+
+void post_dump_application(void)
+{
+
+}
+

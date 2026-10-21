@@ -264,7 +264,7 @@ namespace TLCGen.UnitTests.Build
             return p;
         }
 
-        private static CCOLCodeGeneratorPlugin CcolGen = new CCOLCodeGeneratorPlugin(true);
+        private static CCOLCodeGeneratorPlugin CcolGen => CCOLTestGenerator.Plugin;
 
         [OneTimeSetUp]
         public void Setup()

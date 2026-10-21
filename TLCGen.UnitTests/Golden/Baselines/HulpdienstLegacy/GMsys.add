@@ -1,0 +1,38 @@
+/* BEGIN GEGENEREERDE HEADER */
+/* DEFINITIE BESTAND, GEBRUIKERS TOEVOEGINGEN          */
+/* --------------------------------------------------- */
+
+/* KRUISPUNT: 
+              GM
+              
+              
+
+   BESTAND:   GMsys.add
+      CCOL:   11.0
+    TLCGEN:   
+   CCOLGEN:   UnitTest
+*/
+
+/****************************** Versie commentaar ***********************************
+ *
+ * Versie   Datum   Ontwerper   Commentaar
+ *
+ ************************************************************************************/
+/* EINDE GEGENEREERDE HEADER */
+
+
+#define FCMAX  (FCMAX1 + 0)  /* Totaal aantal gebruikte fasecycli      */
+#define USMAX  (USMAX1 + 0)  /* Totaal aantal gebruikte uitgangen      */
+#define DPMAX  (DPMAX1 + 0)  /* Totaal aantal gebruikte detectoren     */
+#define ISMAX  (ISMAX1 + 0)  /* Totaal aantal gebruikte ingangen       */
+#define HEMAX  (HEMAX1 + 0)  /* Totaal aantal gebruikte hulpelementen  */
+#define MEMAX  (MEMAX1 + 0)  /* Totaal aantal gebruikte mem.elementen  */
+#define TMMAX  (TMMAX1 + 0)  /* Totaal aantal gebruikte timers         */
+#define CTMAX  (CTMAX1 + 0)  /* Totaal aantal gebruikte tellers        */
+#define SCHMAX (SCHMAX1 + 0) /* Totaal aantal gebruikte schakelaars    */
+#define PRMMAX (PRMMAX1 + 0) /* Totaal aantal gebruikte parameters     */
+#define MLMAX  (MLMAX1 + 0)  /* Totaal aantal gebruikte modulen        */
+#if !defined AUTOMAAT
+#define LNKMAX (LNKMAX1 + 0) /* Totaal aantal gebruikte simulatie elementen */
+#endif
+

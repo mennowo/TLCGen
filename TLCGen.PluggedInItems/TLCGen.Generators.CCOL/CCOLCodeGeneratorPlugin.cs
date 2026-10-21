@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +18,9 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
+// the project does not generate assembly info, so an InternalsVisibleTo item in the csproj has no effect
+[assembly: InternalsVisibleTo("TLCGen.UnitTests")]
+
 namespace TLCGen.Generators.CCOL
 {
     [TLCGenPlugin(TLCGenPluginElems.Generator | TLCGenPluginElems.HasSettings | TLCGenPluginElems.MenuControl | TLCGenPluginElems.PlugMessaging)]
@@ -27,6 +31,12 @@ namespace TLCGen.Generators.CCOL
         #region ITLCGenGenerator
 
         private readonly CCOLGenerator _generator;
+
+        /// <summary>
+        /// Direct access for headless tests: generating via the view model also stamps the entry assembly version
+        /// and may show a message box.
+        /// </summary>
+        internal CCOLGenerator Generator => _generator;
 
         [Browsable(false)]
         public UserControl GeneratorView { get; }
