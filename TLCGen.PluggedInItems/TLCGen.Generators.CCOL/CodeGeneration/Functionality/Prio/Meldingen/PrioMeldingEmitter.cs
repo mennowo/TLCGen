@@ -34,8 +34,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             public int FcNmr { get; init; }
             /// <summary>Anti-jutter timer of the melding, with prefix.</summary>
             public string Timer { get; init; }
-            /// <summary>Extra DSI conditions (line numbers, wagennummer, sirene), "TRUE" if none.</summary>
-            public string Extra { get; init; }
         }
 
         private abstract class PrioMeldingEmitter
@@ -68,6 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, new DetectorMeldingEmitter(this, false) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, new DetectorMeldingEmitter(this, true) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, new VecomMeldingEmitter(this) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector, new SelectieveDetectorMeldingEmitter(this) },
             };
             return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
         }

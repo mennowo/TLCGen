@@ -233,6 +233,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return elements;
         }
 
+        /// <summary>
+        /// Extra conditions of a DSI melding (KAR, selectieve detector): line numbers, wagennummer and sirene.
+        /// Returns "TRUE" if there are none.
+        /// </summary>
+        private string GetDsiExtraCondition(PrioMeldingContext m, bool checkRitCategorie)
+        {
+            var prio = m.Prio;
+            var extra = "";
+            if (prio.CheckLijnNummer && prio.LijnNummers.Any())
+            {
+                extra += (checkRitCategorie ? "DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(" : "DSIMeldingPRIO_LijnNummer_V1(") +
+                         $"{_prmpf + _prmallelijnen + m.PrioName}, " +
+                         $"{prio.LijnNummers.Count})";
+            }
+            if (prio.CheckWagenNummer)
+            {
+                extra += extra == "" ? "" : " && ";
+                extra += m.IsInmelding ? $"WDNST_check_in({_fcpf}{prio.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{prio.FaseCyclus})";
+            }
+            if (prio.CheckOpSirene)
+            {
+                extra += extra == "" ? "" : " && ";
+                extra += $"(!SCH[{_schpf}{_schchecksirene}{m.PrioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
+            }
+            return extra == "" ? "TRUE" : extra;
+        }
+
         private List<string> GetMeldingCode(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
         {
             var meldingHElems = new List<string>();
@@ -265,40 +292,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.Append($"{ts}else if (SCH[{sw}]");
             }
 
-            var extra = "";
-            if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector ||
-                 melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding) &&
-                prio.CheckLijnNummer && prio.LijnNummers.Any())
-            {
-                if (!prio.CheckRitCategorie || melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
-                {
-                    extra += "DSIMeldingPRIO_LijnNummer_V1(" +
-                             $"{_prmpf + _prmallelijnen + prioName}, " +
-                             $"{prio.LijnNummers.Count})";
-                }
-                else
-                {
-                    extra += "DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(" +
-                             $"{_prmpf + _prmallelijnen + prioName}, " +
-                             $"{prio.LijnNummers.Count})";
-                }
-            }
-            if (prio.CheckWagenNummer)
-            {
-                extra += extra == "" ? "" : " && ";
-                extra += melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? $"WDNST_check_in({_fcpf}{prio.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{prio.FaseCyclus})";
-            }
-            if (prio.CheckOpSirene)
-            {
-                extra += extra == "" ? "" : " && ";
-                extra += $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
-            }
-            if (extra == "") extra = "TRUE";
-
             var emitter = GetMeldingEmitter(melding.Type);
             var m = new PrioMeldingContext(c, prio, melding, names, prioName)
             {
-                Ts = ts, Tts = tts, VtgType = vtgType, FcNmr = fcNmr, Timer = ti, Extra = extra
+                Ts = ts, Tts = tts, VtgType = vtgType, FcNmr = fcNmr, Timer = ti
             };
 
             if (emitter != null) sb.Append(emitter.GetStoringCondition(m));
@@ -378,6 +375,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             else switch (melding.Type)
             {
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                    var extra = GetDsiExtraCondition(m, false);
                     var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
                             ? $"PRM[{_prmpf}{_prmkarsg}{prio.FaseCyclus}]"
                             : fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString();
@@ -442,19 +440,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     sb.AppendLine(";");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
-                    sb.AppendLine();
-                    sb.AppendLine($"{tts}{ts}DSIMeldingPRIO_V1({(_dpf + melding.RelatedInput1).ToUpper()}, " +
-                                                    $"{vtgType}, " +
-                                                    "FALSE, " +
-                                                    "NG, " +
-                                                    $"SCH[{_schpf}{_schcheckdstype}], " +
-                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ||
-                                                     melding.CheckAltijdOpDsinBijVecom
-                                                        ? "CIF_DSIN, "
-                                                        : "CIF_DSUIT, ") +
-                                                    $"{extra});");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
                     if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
