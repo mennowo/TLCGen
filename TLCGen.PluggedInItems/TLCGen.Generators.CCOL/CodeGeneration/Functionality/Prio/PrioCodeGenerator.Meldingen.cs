@@ -302,15 +302,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             };
 
             if (emitter != null) sb.Append(emitter.GetStoringCondition(m));
-            else switch (melding.Type)
-            {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
-                    if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
-                    {
-                        sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
-                    }
-                    break;
-            }
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
@@ -464,9 +455,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                         ? "CIF_DSIN, "
                                                         : "CIF_DSUIT, ") +
                                                     $"{extra});");
-                    break;
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
-                    sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
                     if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)

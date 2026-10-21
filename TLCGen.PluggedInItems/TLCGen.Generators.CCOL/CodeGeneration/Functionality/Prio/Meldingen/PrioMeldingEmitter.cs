@@ -67,6 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, new DetectorMeldingEmitter(this, false) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, new DetectorMeldingEmitter(this, true) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, new VecomMeldingEmitter(this) },
             };
             return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
         }
