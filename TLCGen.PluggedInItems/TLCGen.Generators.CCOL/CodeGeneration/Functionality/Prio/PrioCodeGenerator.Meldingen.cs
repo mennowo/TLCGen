@@ -13,7 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     // Prio: in- and uitmeldingen per ingreep (KAR, selectieve detector, detector, ingang, Vecom, fiets, RIS, Opticom).
     // Hook: PrioCInUitMelden (prio.c InUitMelden()); also the element names of meldingen (GetMeldingElements),
-    // used by CollectCCOLElements. NOTE: names are built in both GetMeldingElements and GetMeldingCode; keep them in sync.
+    // used by CollectCCOLElements. The names of a melding come from GetMeldingNames (MeldingNames.cs).
     public partial class PrioCodeGenerator
     {
         private string GetInUitMeldenCode(ControllerModel c, string ts)
@@ -23,14 +23,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var prio in c.PrioData.PrioIngrepen)
             {
-                var vtgType = $"PRM[{_prmpf}{_prmvtgcat}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
+                var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
+                var vtgType = $"PRM[{_prmpf}{_prmvtgcat}{prioName}]";
                 if (!int.TryParse(prio.FaseCyclus, out var fcNmr)) fcNmr = -1;
 
                 // In case of no "inmeldingen" we still set the PRIO H to FALSE
                 if (!prio.MeldingenData.Inmeldingen.Any())
                 {
                     sb.AppendLine($"{ts}/* Inmelding {_fcpf}{prio.FaseCyclus} type {prio.Type.GetDescription()} */");
-                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{prioName}] = ");
                     sb.AppendLine("FALSE;");
                 }
                 else
@@ -41,16 +42,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton))
                     {
+                        var names = GetMeldingNames(c, prio, melding);
                         var hov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _hprioin.ToString() : _hpriouit.ToString();
-                        var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+                        // NOTE: unlike names.Hulp, this only includes the input when the loop is used (todo note 1579)
+                        var he = $"{_hpf}{hov}{names.Base}";
                         if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton && melding.FietsPrioriteitGebruikLus)
                         {
                             he += melding.RelatedInput1;
                         }
                         sb.AppendLine($"{ts}fietsprio_update({_fcpf}{prio.FaseCyclus}, " +
                                       (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
-                                      $"{_ctpf}{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}," +
+                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{names.Base}, " : "NG, ") +
+                                      $"{_ctpf}{_cftscyc}{names.Base}," +
                                       $"SH[{he}], ML);");
                     }
 
@@ -60,7 +63,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var hulps = GetMeldingCode(c, prio, inm, sb2, vtgType, fcNmr, ts, prio.MeldingenData.AntiJutterVoorAlleInmeldingen);
                         inmHelems.AddRange(hulps);
                     }
-                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{prioName}] = ");
                     foreach (var i in inmHelems)
                     {
                         sb.Append($"IH[{i}] = ");
@@ -69,10 +72,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.Append(sb2);
 
-                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hprioin}{prioName}] = ");
                     if (prio.MeldingenData.AntiJutterVoorAlleInmeldingen)
                     {
-                        sb.Append($"RT[{_tpf}{_tprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                        sb.Append($"RT[{_tpf}{_tprioin}{prioName}] = ");
                     }
                     var ifirst = true;
                     if (prio.CheckPeriode && prio.GerelateerdePerioden.Any(x => !string.IsNullOrEmpty(x.Periode)))
@@ -107,7 +110,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (!prio.MeldingenData.Uitmeldingen.Any())
                 {
                     sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{prio.FaseCyclus} type {prio.Type.GetDescription()} */");
-                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{prioName}] = ");
                     sb.AppendLine("FALSE;");
                 }
                 else
@@ -124,7 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var hulps = GetMeldingCode(c, prio, uitm, sb2, vtgType, fcNmr, ts, prio.MeldingenData.AntiJutterVoorAlleUitmeldingen);
                         uitmHelems.AddRange(hulps);
                     }
-                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{prioName}] = ");
                     foreach (var i in uitmHelems)
                     {
                         sb.Append($"IH[{i}] = ");
@@ -132,10 +135,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine("FALSE;");
                     sb.Append(sb2);
 
-                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                    sb.Append($"{ts}IH[{_hpf}{_hpriouit}{prioName}] = ");
                     if (prio.MeldingenData.AntiJutterVoorAlleUitmeldingen)
                     {
-                        sb.Append($"RT[{_tpf}{_tpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}] = ");
+                        sb.Append($"RT[{_tpf}{_tpriouit}{prioName}] = ");
                     }
                     first = true;
                     foreach (var i in uitmHelems)
@@ -158,71 +161,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private IEnumerable<CCOLElement> GetMeldingElements(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, bool addHov)
         {
             var elements = new List<CCOLElement>();
-            string hprio;
-            string schprio;
-            string tprio;
-
-            // type melding
-            switch (melding.InUit)
-            {
-                case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                    hprio = _hprioin.ToString();
-                    schprio = _schprioin.ToString();
-                    tprio = _tprioin.ToString();
-                    break;
-                case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                default:
-                    hprio = _hpriouit.ToString();
-                    schprio = _schpriouit.ToString();
-                    tprio = _tpriouit.ToString();
-                    break;
-            }
-
-            var he = $"{hprio}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            var ti = $"{tprio}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            var sw = $"{schprio}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
-                melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
-            {
-                he += melding.RelatedInput1;
-                ti += melding.RelatedInput1;
-                sw = sw + melding.RelatedInput1;
-                if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
-                {
-                    sw += PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput1Type);
-                }
-                if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector || melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang) && melding.TweedeInput)
-                {
-                    he += melding.RelatedInput2;
-                    ti += melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput2Type);
-                }
-            }
+            var names = GetMeldingNames(c, prio, melding);
+            var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
+            var he = names.Hulp;
+            var ti = names.Timer;
+            var sw = names.Switch;
 
             if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && 
                 melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 999, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{names.Base}", 999, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
                 if (melding.FietsPrioriteitGebruikLus)
                 {
-                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 999, CCOLElementTimeTypeEnum.None, _cftsvtg, prio.FaseCyclus));
+                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftsvtg}{names.Base}", 999, CCOLElementTimeTypeEnum.None, _cftsvtg, prio.FaseCyclus));
                 }
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsblok}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _prmftsblok, prio.FaseCyclus));
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsmaxpercyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitAantalKeerPerCyclus, CCOLElementTimeTypeEnum.None, _prmftsmaxpercyc, prio.FaseCyclus));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsblok}{names.Base}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _prmftsblok, prio.FaseCyclus));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsmaxpercyc}{names.Base}", melding.FietsPrioriteitAantalKeerPerCyclus, CCOLElementTimeTypeEnum.None, _prmftsmaxpercyc, prio.FaseCyclus));
                 if (melding.FietsPrioriteitGebruikLus)
                 {
-                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitMinimumAantalVoertuigen, CCOLElementTimeTypeEnum.None, _prmftsminvtg, prio.FaseCyclus));
+                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminvtg}{names.Base}", melding.FietsPrioriteitMinimumAantalVoertuigen, CCOLElementTimeTypeEnum.None, _prmftsminvtg, prio.FaseCyclus));
                 }
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminwt}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.FietsPrioriteitMinimumWachttijdVoorPrioriteit, CCOLElementTimeTypeEnum.TS_type, _prmftsminwt, prio.FaseCyclus));
+                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminwt}{names.Base}", melding.FietsPrioriteitMinimumWachttijdVoorPrioriteit, CCOLElementTimeTypeEnum.TS_type, _prmftsminwt, prio.FaseCyclus));
 
                 if (melding.FietsPrioriteitGebruikRIS)
                 {
                     elements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", _mftstelris, CCOLCodeHelper.GetPriorityName(c, prio)));
+                            $"{_mftstelris}{names.Base}", _mftstelris, prioName));
                     elements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmftsminvtgris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 
+                            $"{_prmftsminvtgris}{names.Base}", 
                             melding.FietsPrioriteitMinimumAantalVoertuigenRIS, CCOLElementTimeTypeEnum.None, _prmftsminvtgris, prio.FaseCyclus));
                 }
             }
@@ -256,10 +224,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding &&
                 !string.IsNullOrWhiteSpace(melding.RelatedInput1))
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", _hprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", melding.AntiJutterTijdToepassen ? melding.AntiJutterTijd : 0, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", 1, CCOLElementTimeTypeEnum.SCH_type, _schprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}", _hpriouit, prio.FaseCyclus, "Opticom"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprioin}{names.Base}", _hprioin, prio.FaseCyclus, "Opticom"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{names.Base}", melding.AntiJutterTijdToepassen ? melding.AntiJutterTijd : 0, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, "Opticom"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schprioin}{names.Base}", 1, CCOLElementTimeTypeEnum.SCH_type, _schprioin, prio.FaseCyclus, "Opticom"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriouit}{names.Base}", _hpriouit, prio.FaseCyclus, "Opticom"));
             }
 
             return elements;
@@ -337,46 +305,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<string> GetMeldingCode(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
         {
             var meldingHElems = new List<string>();
-            string hov;
-            string schov;
-            string tov;
+            var names = GetMeldingNames(c, prio, melding);
+            var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
+            // anti-jutter timer prefix, also used for the timer of all in- or uitmeldingen together
+            var tov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _tprioin.ToString() : _tpriouit.ToString();
 
-            // type melding
-            switch (melding.InUit)
-            {
-                case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                    hov = _hprioin.ToString();
-                    schov = _schprioin.ToString();
-                    tov = _tprioin.ToString();
-                    break;
-                case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                default:
-                    hov = _hpriouit.ToString();
-                    schov = _schpriouit.ToString();
-                    tov = _tpriouit.ToString();
-                    break;
-            }
-
-            var he = $"{_hpf}{hov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            var ti = $"{_tpf}{tov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            var sw = $"{_schpf}{schov}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
-            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
-                melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
-            {
-                he += melding.RelatedInput1;
-                ti += melding.RelatedInput1;
-                sw += melding.RelatedInput1;
-                if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
-                {
-                    sw += PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput1Type);
-                }
-                if ((melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector || melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang) && melding.TweedeInput)
-                {
-                    he += melding.RelatedInput2;
-                    ti += melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2 + PrioCodeGeneratorHelper.GetDetectorTypeSCHString(melding.RelatedInput2Type);
-                }
-            }
+            var he = $"{_hpf}{names.Hulp}";
+            var ti = $"{_tpf}{names.Timer}";
+            var sw = $"{_schpf}{names.Switch}";
             if (otherHov != null) he = otherHov;
             else meldingHElems.Add(he);
 
@@ -421,7 +357,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (melding.FietsPrioriteitGebruikRIS)
             {
-                var mm = $"{_mpf}{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}";
+                var mm = $"{_mpf}{_mftstelris}{names.Base}";
                 sb.AppendLine($"{tts}MM[{mm}] = 0;");
                 var lanes = c.RISData.RISPelotonLanes.Where(x => x.SignalGroupName == prio.FaseCyclus).ToArray();
                 if (lanes.Length > 0)
@@ -439,9 +375,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == fcLane?.SystemITF) : -1;
 
                         var laneIdPrm = $"{_prmpf}{_prmrislaneid}_{l.RijstrookIndex}";
-                        if (CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
+                        if (prioName != prio.FaseCyclus)
                         {
-                            laneIdPrm = $"{_prmpf}{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{l.RijstrookIndex}";
+                            laneIdPrm = $"{_prmpf}{_prmrislaneid}{prioName}_{l.RijstrookIndex}";
                         }
 
                         sb.AppendLine($"{tts}MM[{mm}] += {(fcLane.UseHeading ? "ris_itsstations_heading" : "ris_itsstations")}(" +
@@ -468,7 +404,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
             if (antiJutVoorAlles && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
-                sb.Append($"!T[{_tpf}{tov}{CCOLCodeHelper.GetPriorityName(c, prio)}] && ");
+                sb.Append($"!T[{_tpf}{tov}{prioName}] && ");
             }
             if (melding.AntiJutterTijdToepassen && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
@@ -477,15 +413,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (melding.AlleenIndienGeenInmelding ||
                 melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
-                sb.Append($"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && ");
+                sb.Append($"!C[{_ctpf}{_cvc}{prioName}] && ");
             }
             if (melding.KijkNaarWisselStand)
             {
-                sb.Append($"IH[{_hpf}{_hwissel}{CCOLCodeHelper.GetPriorityName(c, prio)}] && ");
+                sb.Append($"IH[{_hpf}{_hwissel}{prioName}] && ");
             }
             if (melding.AlleenIndienRood)
             {
-                sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{CCOLCodeHelper.GetPriorityName(c, prio)}] && ");
+                sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{prioName}] && ");
             }
 
             var extra = "";
@@ -496,13 +432,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (!prio.CheckRitCategorie || melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
                 {
                     extra += "DSIMeldingPRIO_LijnNummer_V1(" +
-                             $"{_prmpf + _prmallelijnen + CCOLCodeHelper.GetPriorityName(c, prio)}, " +
+                             $"{_prmpf + _prmallelijnen + prioName}, " +
                              $"{prio.LijnNummers.Count})";
                 }
                 else
                 {
                     extra += "DSIMeldingPRIO_LijnNummerEnRitCategorie_V1(" +
-                             $"{_prmpf + _prmallelijnen + CCOLCodeHelper.GetPriorityName(c, prio)}, " +
+                             $"{_prmpf + _prmallelijnen + prioName}, " +
                              $"{prio.LijnNummers.Count})";
                 }
             }
@@ -514,7 +450,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (prio.CheckOpSirene)
             {
                 extra += extra == "" ? "" : " && ";
-                extra += $"(!SCH[{_schpf}{_schchecksirene}{CCOLCodeHelper.GetPriorityName(c, prio)}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
+                extra += $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR)";
             }
             if (extra == "") extra = "TRUE";
 
@@ -531,14 +467,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                               (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
                                                                   ? "CIF_DSIN, "
                                                                   : "CIF_DSUIT, ") + 
-                                                              $"(!SCH[{_schpf}{_schchecksirene}{CCOLCodeHelper.GetPriorityName(c, prio)}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
+                                                              $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
                     }
                     else
                     {
                         sb.Append($"{tts}{ts}DSIMeldingPRIO{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "_V1" : "_V2")}(" +
                                                         (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
                                                             ? ""
-                                                            : $"{_fcpf}{prio.FaseCyclus}, prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}, ") +
+                                                            : $"{_fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
                                                         $"0, " +
                                                         $"{vtgType}, " +
                                                         "TRUE, " +
@@ -565,14 +501,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                                   (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
                                                                       ? "CIF_DSIN, "
                                                                       : "CIF_DSUIT, ") +
-                                                                  $"(!SCH[{_schpf}{_schchecksirene}{CCOLCodeHelper.GetPriorityName(c, prio)}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
+                                                                  $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
                         }
                         else
                         {
                             sb.Append($"{tts}{ts}DSIMeldingPRIO{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "_V1" : "_V2")}(" +
                                                     (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
                                                         ? ""
-                                                        : $"{_fcpf}{prio.FaseCyclus}, prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}, ") +
+                                                        : $"{_fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
                                                     $"0, " +
                                                     $"{vtgType}, " +
                                                     "TRUE, " +
@@ -614,21 +550,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         sb.AppendLine($"{tts}{ts}fietsprio_inmelding({_fcpf}{prio.FaseCyclus}, " +
                                       (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
-                                      $"{_ctpf}{_cftscyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
-                                      $"{_prmpf}{_prmftsblok}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
-                                      $"{_prmpf}{_prmftsmaxpercyc}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_prmpf}{_prmftsminvtg}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " : "NG, ") +
-                                      $"{_prmpf}{_prmftsminwt}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, " +
+                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{names.Base}, " : "NG, ") +
+                                      $"{_ctpf}{_cftscyc}{names.Base}, " +
+                                      $"{_prmpf}{_prmftsblok}{names.Base}, " +
+                                      $"{_prmpf}{_prmftsmaxpercyc}{names.Base}, " +
+                                      (melding.FietsPrioriteitGebruikLus ? $"{_prmpf}{_prmftsminvtg}{names.Base}, " : "NG, ") +
+                                      $"{_prmpf}{_prmftsminwt}{names.Base}, " +
                                       $"ML, " +
                                       (melding.FietsPrioriteitGebruikRIS
-                                          ? $"{_mpf}{_mftstelris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}, {_prmpf}{_prmftsminvtgris}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}"
+                                          ? $"{_mpf}{_mftstelris}{names.Base}, {_prmpf}{_prmftsminvtgris}{names.Base}"
                                           : "NG, NG") +
                                       ");");
                     }
                     else
                     {
-                        sb.AppendLine($"C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && G[{_fcpf}{prio.FaseCyclus}] && (T[{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, prio)}] && (T_timer[{_tpf}{_tgb}{CCOLCodeHelper.GetPriorityName(c, prio)}] > 1));");
+                        sb.AppendLine($"C[{_ctpf}{_cvc}{prioName}] && G[{_fcpf}{prio.FaseCyclus}] && (T[{_tpf}{_tgb}{prioName}] && (T_timer[{_tpf}{_tgb}{prioName}] > 1));");
                     }
                     break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
@@ -648,24 +584,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
                                     sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
                                               $"{_fcpf}{prio.FaseCyclus}, " +
-                                              $"PRM[{_prmpf}{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
+                                              $"PRM[{_prmpf}{_prmrisapproachid}{prioName}], " +
                                               $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                              $"PRM[{_prmpf}{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{lane.RijstrookIndex}], " +
-                                              $"PRM[{_prmpf}{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"PRM[{_prmpf}{_prmrisstart}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"PRM[{_prmpf}{_prmrisend}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"PRM[{_prmpf}{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"PRM[{_prmpf}{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"PRM[{_prmpf}{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}], " +
-                                              $"{(melding.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{CCOLCodeHelper.GetPriorityName(c, prio)}]" : "NG")}, " +
-                                              $"prioFC{CCOLCodeHelper.GetPriorityName(c, prio)})");
+                                              $"PRM[{_prmpf}{_prmrislaneid}{prioName}_{lane.RijstrookIndex}], " +
+                                              $"PRM[{_prmpf}{_prmrisstationtype}{prioName}], " +
+                                              $"PRM[{_prmpf}{_prmrisstart}{prioName}], " +
+                                              $"PRM[{_prmpf}{_prmrisend}{prioName}], " +
+                                              $"PRM[{_prmpf}{_prmrisrole}{prioName}], " +
+                                              $"PRM[{_prmpf}{_prmrissubrole}{prioName}], " +
+                                              $"PRM[{_prmpf}{_prmrisimportance}{prioName}], " +
+                                              $"{(melding.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{prioName}]" : "NG")}, " +
+                                              $"prioFC{prioName})");
                                     first = false;
                                 }
                                 sb.AppendLine(";");
                             }
                             break;
                         case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                            sb.AppendLine($"({c.GetBoolV()})ris_uitmelding_selectief(prioFC{CCOLCodeHelper.GetPriorityName(c, prio)});");
+                            sb.AppendLine($"({c.GetBoolV()})ris_uitmelding_selectief(prioFC{prioName});");
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -675,14 +611,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     switch(melding.InUit)
                     {
                         case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                            sb.AppendLine($"SCH[{_schpf}{_schprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}] && !C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}] && DB[{_dpf}{melding.RelatedInput1}];");
-                            sb.AppendLine($"{ts}{ts}RT[{ti}] = G[{_fcpf}{prio.FaseCyclus}] && C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}];");
+                            sb.AppendLine($"SCH[{_schpf}{_schprioin}{names.Base}] && !C[{_ctpf}{_cvc}{prioName}] && DB[{_dpf}{melding.RelatedInput1}];");
+                            sb.AppendLine($"{ts}{ts}RT[{ti}] = G[{_fcpf}{prio.FaseCyclus}] && C[{_ctpf}{_cvc}{prioName}];");
                             break;
                         case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
                             var uitMelding = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom);
                             if (uitMelding != null && uitMelding.RelatedInput1 != null)
                             { 
-                                sb.AppendLine($"SCH[{_schpf}{_schprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}{DefaultsProvider.Default.GetMeldingShortcode(melding)}] && !TDH[{_dpf}{uitMelding.RelatedInput1}] && TDH_old[{_dpf}{uitMelding.RelatedInput1}];");
+                                sb.AppendLine($"SCH[{_schpf}{_schprioin}{names.Base}] && !TDH[{_dpf}{uitMelding.RelatedInput1}] && TDH_old[{_dpf}{uitMelding.RelatedInput1}];");
                             }
                             break;
                     }
@@ -691,9 +627,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
                 if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
-                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}]) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] = TRUE;");
+                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}]) iPrioriteitNooitAfkappen[prioFC{prioName}] = TRUE;");
                 else
-                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}] && iAantalInmeldingen[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] == 0) iPrioriteitNooitAfkappen[prioFC{CCOLCodeHelper.GetPriorityName(c, prio)}] = FALSE;");
+                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}] && iAantalInmeldingen[prioFC{prioName}] == 0) iPrioriteitNooitAfkappen[prioFC{prioName}] = FALSE;");
             }
             sb.AppendLine($"{ts}}}");
             if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)

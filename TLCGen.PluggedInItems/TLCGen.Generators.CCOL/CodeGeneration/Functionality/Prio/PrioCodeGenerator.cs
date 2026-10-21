@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     //                                     PrioCIncludes, RegCTop, RegCWachtgroen and PrioCInitPrio are inline
     // - PrioCodeGenerator.Elements.cs     CCOL elements (CollectCCOLElements)
     // - PrioCodeGenerator.Meldingen.cs    in- and uitmeldingen: PrioCInUitMelden (prio.c InUitMelden())
+    // - PrioCodeGenerator.MeldingNames.cs element names of a melding (single source for declaration and use)
     // - PrioCodeGenerator.Wissel.cs       RegCPreApplication (reg.c PreApplication())
     // - PrioCodeGenerator.Naloop.cs       RegCRealisatieAfhandelingNaModules (reg.c RealisatieAfhandeling())
     // - PrioCodeGenerator.Verklikking.cs  RegCSystemApplication, RegCPostSystemApplication (reg.c system_application())

@@ -190,16 +190,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private void AddAllIngreepElements(PrioIngreepModel prio, bool prioUitgangPerFase, ControllerModel c)
         {
+            var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
+
             // Verklikken prio
             if (!prioUitgangPerFase)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{CCOLCodeHelper.GetPriorityName(c, prio)}", _usovinm, prio.PrioInmeldingBitmapData, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{prioName}", _usovinm, prio.PrioInmeldingBitmapData, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             // Hulp elementen prio
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprio}{CCOLCodeHelper.GetPriorityName(c, prio)}", _hprio, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}", _hprioin, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}", _hpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprio}{prioName}", _hprio, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprioin}{prioName}", _hprioin, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriouit}{prioName}", _hpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
 
             // Elementen voor in- en uitmeldingen
             foreach (var melding in prio.MeldingenData.Inmeldingen.Concat(prio.MeldingenData.Uitmeldingen))
@@ -210,33 +212,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Anti-jutter timers indien actief voor alle in- of uitmeldingen gezamenlijk
             if (prio.MeldingenData.AntiJutterVoorAlleInmeldingen && prio.MeldingenData.Inmeldingen.Any())
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{prioName}", prio.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, prio.Type.GetDescription()));
             }
             if (prio.MeldingenData.AntiJutterVoorAlleUitmeldingen && prio.MeldingenData.Uitmeldingen.Any())
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriouit}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpriouit}{prioName}", prio.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             // Generieke elementen: voor elke ingreep
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.BezettijdPrioGehinderd, CCOLElementTimeTypeEnum.TE_type, _tbtovg, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trt}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.TE_type, _trt, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}", 999, CCOLElementTimeTypeEnum.CT_type, _cvc, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgb}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgb, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrto}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrto, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbg}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbg, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtg}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtg, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.BlokkeertijdNaPrioIngreep, CCOLElementTimeTypeEnum.TE_type, _tblk, prio.FaseCyclus, prio.Type.GetDescription()));
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmupinagb}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.None, _prmupinagb, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{prioName}", prio.BezettijdPrioGehinderd, CCOLElementTimeTypeEnum.TE_type, _tbtovg, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trt}{prioName}", 0, CCOLElementTimeTypeEnum.TE_type, _trt, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvc}{prioName}", 999, CCOLElementTimeTypeEnum.CT_type, _cvc, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgb}{prioName}", prio.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgb, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrto}{prioName}", prio.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrto, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbg}{prioName}", prio.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbg, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtg}{prioName}", prio.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtg, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{prioName}", prio.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{prioName}", prio.BlokkeertijdNaPrioIngreep, CCOLElementTimeTypeEnum.TE_type, _tblk, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmupinagb}{prioName}", 0, CCOLElementTimeTypeEnum.None, _prmupinagb, prio.FaseCyclus, prio.Type.GetDescription()));
             if (prio.CheckOpSirene && prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schchecksirene}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.CheckOpSirene ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schchecksirene, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schchecksirene}{prioName}", prio.CheckOpSirene ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schchecksirene, prio.FaseCyclus, prio.Type.GetDescription()));
             }
             if ((prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
                  prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit) &&
                 !string.IsNullOrWhiteSpace(prio.Koplus) && prio.Koplus != "NG")
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schvi}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvi, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schvi}{prioName}", prio.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvi, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             if (prio.MeldingenData.Inmeldingen.Any(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector) ||
@@ -249,7 +251,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     PrioIngreepVoertuigTypeEnum.Tram => 2,
                     _ => 0
                 };
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvtgcat}{CCOLCodeHelper.GetPriorityName(c, prio)}", vtgtype, CCOLElementTimeTypeEnum.None, _prmvtgcat, CCOLCodeHelper.GetPriorityName(c, prio)));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvtgcat}{prioName}", vtgtype, CCOLElementTimeTypeEnum.None, _prmvtgcat, prioName));
             }
 
             var opties = 0;
@@ -277,18 +279,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 }
             }
-            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{CCOLCodeHelper.GetPriorityName(c, prio)}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, prio.FaseCyclus, prio.Type.GetDescription()));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{prioName}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, prio.FaseCyclus, prio.Type.GetDescription()));
 
             if (prio.CheckLijnNummer)
             {
                 // !!! NOTE !!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmallelijnen}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None, _prmallelijnen, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmallelijnen}{prioName}", prio.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None, _prmallelijnen, prio.FaseCyclus, prio.Type.GetDescription()));
                 var n = 1;
                 foreach (var l in prio.LijnNummers)
                 {
                     if (!int.TryParse(l.Nummer, out var num)) continue;
                     _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlijn}{CCOLCodeHelper.GetPriorityName(c, prio)}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmlijn, n.ToString(), prio.FaseCyclus, prio.Type.GetDescription()));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlijn}{prioName}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmlijn, n.ToString(), prio.FaseCyclus, prio.Type.GetDescription()));
                     ++n;
                 }
 
@@ -299,7 +301,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (!int.TryParse(l.RitCategorie, out var ritcat)) continue;
                         _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmritcat}{CCOLCodeHelper.GetPriorityName(c, prio)}_{n:00}", ritcat, CCOLElementTimeTypeEnum.None, _prmritcat, n.ToString(), prio.FaseCyclus, prio.Type.GetDescription()));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmritcat}{prioName}_{n:00}", ritcat, CCOLElementTimeTypeEnum.None, _prmritcat, n.ToString(), prio.FaseCyclus, prio.Type.GetDescription()));
                         ++n;
                     }
                 }
@@ -309,7 +311,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (prio.HasOVIngreepWissel())
             {
                 _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwissel}{CCOLCodeHelper.GetPriorityName(c, prio)}", _hwissel, prio.FaseCyclus, prio.Type.GetDescription()));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwissel}{prioName}", _hwissel, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             if (prio.HasPrioIngreepKAR())
@@ -321,7 +323,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (prio.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || prio.NoodaanvraagKoplus)
             {
                 _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovminrood}{CCOLCodeHelper.GetPriorityName(c, prio)}", prio.MinimaleRoodtijd, CCOLElementTimeTypeEnum.TE_type, _tovminrood, prio.FaseCyclus, prio.Type.GetDescription()));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovminrood}{prioName}", prio.MinimaleRoodtijd, CCOLElementTimeTypeEnum.TE_type, _tovminrood, prio.FaseCyclus, prio.Type.GetDescription()));
             }
 
             var inRis = prio.MeldingenData.Inmeldingen.Where(x =>
@@ -336,22 +338,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     var fcRis = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
 
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstart}{CCOLCodeHelper.GetPriorityName(c, prio)}", inR.RisStart, CCOLElementTimeTypeEnum.None, _prmrisstart, prio.FaseCyclus));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisend}{CCOLCodeHelper.GetPriorityName(c, prio)}", inR.RisEnd, CCOLElementTimeTypeEnum.None, _prmrisend, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstart}{prioName}", inR.RisStart, CCOLElementTimeTypeEnum.None, _prmrisstart, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisend}{prioName}", inR.RisEnd, CCOLElementTimeTypeEnum.None, _prmrisend, prio.FaseCyclus));
                     if (inR.RisEta.HasValue)
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmriseta}{CCOLCodeHelper.GetPriorityName(c, prio)}", inR.RisEta.Value, CCOLElementTimeTypeEnum.TE_type, _prmriseta, prio.FaseCyclus));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisRole, CCOLElementTimeTypeEnum.None, _prmrisrole, prio.FaseCyclus));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisSubrole, CCOLElementTimeTypeEnum.None, _prmrissubrole, prio.FaseCyclus));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{CCOLCodeHelper.GetPriorityName(c, prio)}", (int)inR.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, prio.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmriseta}{prioName}", inR.RisEta.Value, CCOLElementTimeTypeEnum.TE_type, _prmriseta, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisrole}{prioName}", (int)inR.RisRole, CCOLElementTimeTypeEnum.None, _prmrisrole, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrissubrole}{prioName}", (int)inR.RisSubrole, CCOLElementTimeTypeEnum.None, _prmrissubrole, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisimportance}{prioName}", (int)inR.RisImportance, CCOLElementTimeTypeEnum.None, _prmrisimportance, prio.FaseCyclus));
 
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{CCOLCodeHelper.GetPriorityName(c, prio)}", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisstationtype}{prioName}", 0, CCOLElementTimeTypeEnum.None, _prmrisstationtype, prio.FaseCyclus));
 
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisgrenspriotype}{CCOLCodeHelper.GetPriorityName(c, prio)}", 9, CCOLElementTimeTypeEnum.None, _prmrisgrenspriotype, prio.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrisgrenspriotype}{prioName}", 9, CCOLElementTimeTypeEnum.None, _prmrisgrenspriotype, prio.FaseCyclus));
 
                     // we only need these elements if they differ from the elements already created for signalgroups
-                    if (fcRis != null && CCOLCodeHelper.GetPriorityName(c, prio) != prio.FaseCyclus)
+                    if (fcRis != null && prioName != prio.FaseCyclus)
                     {
-                        var approach = $"{_prmrisapproachid}{CCOLCodeHelper.GetPriorityName(c, prio)}";
+                        var approach = $"{_prmrisapproachid}{prioName}";
                         if (_myElements.All(x => x.Naam != approach))
                         {
                             _myElements.Add(
@@ -363,7 +365,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             _myElements.Add(
                                 CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                    $"{_prmrislaneid}{CCOLCodeHelper.GetPriorityName(c, prio)}_{lane.RijstrookIndex}", 
+                                    $"{_prmrislaneid}{prioName}_{lane.RijstrookIndex}", 
                                     lane.LaneID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
                                     PrioCodeGeneratorHelper.CAT_Prioriteren, PrioCodeGeneratorHelper.SUBCAT_OpenbaarVervoer));
                         }
@@ -379,7 +381,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (mrIngreep == null) continue;
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schpriomr}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}met{CCOLCodeHelper.GetPriorityName(c, prio)}", 1,
+                            $"{_schpriomr}{CCOLCodeHelper.GetPriorityName(c, mrIngreep)}met{prioName}", 1,
                             CCOLElementTimeTypeEnum.SCH_type, _schpriomr, CCOLCodeHelper.GetPriorityName(c, mrIngreep), prio.Type.GetDescription()));
                 }
             }
