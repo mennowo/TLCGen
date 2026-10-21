@@ -47,6 +47,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             protected PrioCodeGenerator G { get; }
 
             /// <summary>
+            /// Whether the melding bij storing (MeldingBijstoring) is generated as an "else if" after this melding.
+            /// </summary>
+            public virtual bool SupportsOpvangStoring => true;
+
+            /// <summary>
             /// Condition appended to "if (SCH[switch]", eg. to skip the melding on detector failure.
             /// </summary>
             public virtual string GetStoringCondition(PrioMeldingContext m) => "";
@@ -63,6 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _meldingEmitters ??= new Dictionary<PrioIngreepInUitMeldingVoorwaardeTypeEnum, PrioMeldingEmitter>
             {
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding, new KarMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, new DetectorMeldingEmitter(this, false) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, new DetectorMeldingEmitter(this, true) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, new VecomMeldingEmitter(this) },

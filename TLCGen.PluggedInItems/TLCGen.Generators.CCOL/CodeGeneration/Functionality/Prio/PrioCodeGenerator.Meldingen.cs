@@ -374,73 +374,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (emitter != null) emitter.AppendCondition(m, sb);
             else switch (melding.Type)
             {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
-                    var extra = GetDsiExtraCondition(m, false);
-                    var sgCheck = c.PrioData.KARSignaalGroepNummersInParameters
-                            ? $"PRM[{_prmpf}{_prmkarsg}{prio.FaseCyclus}]"
-                            : fcNmr > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString();
-                    sb.AppendLine();
-                    if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
-                    {
-                        sb.Append($"{tts}{ts}DSIMelding_HD_V1({sgCheck}, " +
-                                                              (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                                  ? "CIF_DSIN, "
-                                                                  : "CIF_DSUIT, ") + 
-                                                              $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
-                    }
-                    else
-                    {
-                        sb.Append($"{tts}{ts}DSIMeldingPRIO{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "_V1" : "_V2")}(" +
-                                                        (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                            ? ""
-                                                            : $"{_fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
-                                                        $"0, " +
-                                                        $"{vtgType}, " +
-                                                        "TRUE, " +
-                                                        $"{(fcNmr == -1 ? "NG" : sgCheck)}," +
-                                                        "TRUE, " +
-                                                        (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                            ? "CIF_DSIN, "
-                                                            : "CIF_DSUIT, ") +
-                                                        $"{extra})");
-                    }
-                    if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst &&
-                        prio.InmeldingOokDoorToepassen && prio.InmeldingOokDoorFase > 0)
-                    {
-                        var hdpriofcnr = (prio.InmeldingOokDoorFase.ToString().Length < 2) ? "0" + prio.InmeldingOokDoorFase.ToString()
-                                                                                                 : prio.InmeldingOokDoorFase.ToString();
-                        var actualAlsoFc = c.PrioData.KARSignaalGroepNummersInParameters
-                            ? $"PRM[{_prmpf}{_prmkarsg}{hdpriofcnr}]"
-                            : prio.InmeldingOokDoorFase > 200 && c.PrioData.VerlaagHogeSignaalGroepNummers
-                                ? (prio.InmeldingOokDoorFase - 200).ToString() : prio.InmeldingOokDoorFase.ToString();
-                        sb.AppendLine(" ||");
-                        if (prio.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst)
-                        {
-                            sb.Append($"{tts}{ts}DSIMelding_HD_V1({actualAlsoFc}, " +
-                                                                  (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                                      ? "CIF_DSIN, "
-                                                                      : "CIF_DSUIT, ") +
-                                                                  $"(!SCH[{_schpf}{_schchecksirene}{prioName}] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR))");
-                        }
-                        else
-                        {
-                            sb.Append($"{tts}{ts}DSIMeldingPRIO{(melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "_V1" : "_V2")}(" +
-                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                        ? ""
-                                                        : $"{_fcpf}{prio.FaseCyclus}, prioFC{prioName}, ") +
-                                                    $"0, " +
-                                                    $"{vtgType}, " +
-                                                    "TRUE, " +
-                                                    $"{actualAlsoFc}," +
-                                                    "TRUE, " +
-                                                    (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
-                                                        ? "CIF_DSIN, "
-                                                        : "CIF_DSUIT, ") +
-                                                    $"{extra})");
-                        }
-                    }
-                    sb.AppendLine(";");
-                    break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
                     if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
                     {
@@ -533,7 +466,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.AppendLine($"#endif /* NO_RIS */");
             }
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+            if (melding.OpvangStoring && melding.MeldingBijstoring != null && (emitter?.SupportsOpvangStoring ?? true))
             {
                 meldingHElems.AddRange(GetMeldingCode(c, prio, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
             }
