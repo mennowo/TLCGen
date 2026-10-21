@@ -1,0 +1,179 @@
+/* BEGIN GEGENEREERDE HEADER */
+/* PRIORITEIT BESTAND, GEBRUIKERS TOEVOEGINGEN         */
+/* --------------------------------------------------- */
+
+/* KRUISPUNT: 
+              GM
+              
+              
+
+   BESTAND:   GMprio.add
+      CCOL:   10.0
+    TLCGEN:   
+   CCOLGEN:   UnitTest
+*/
+
+/****************************** Versie commentaar ***********************************
+ *
+ * Versie   Datum   Ontwerper   Commentaar
+ *
+ ************************************************************************************/
+/* EINDE GEGENEREERDE HEADER */
+
+void RijTijdScenario_Add(void) {
+  /* -----------------------------------------------
+     Pas hier zonodig het RijTijdScenario aan, bijv:
+     iRijTijdScenario[prioFC02] = rtsOngehinderd;
+     ----------------------------------------------- */
+}
+
+void InUitMelden_Add(void) {
+  /* -----------------------------------------------------
+     Pas hier zo nodig de instructie voor de hulpelementen
+     aan t.b.v. de in- en uitmeldingen.
+     ----------------------------------------------------- */
+}
+
+void PrioInstellingen_Add(void) {
+  /* -------------------------------------------------------------
+     Pas hier zonodig de beschikbare alternatieve ruimte of de
+     toestemming om alternatief te realiseren door niet-konflikten
+     tijdens een ingreep aan, bijv:
+     iPRM_ALTP[fc02] = TFG_max[fc02];
+     iSCH_ALTG[fc02] = TRUE;
+     ------------------------------------------------------------- */
+}
+
+void WachtTijdBewaking_Add(void) {
+  /* --------------------------------------------------------
+     Pas hier zonodig MaximumWachtTijdOverschreden aan, bijv:
+     iMaximumWachtTijdOverschreden[prioFC02] = FALSE;
+     -------------------------------------------------------- */
+}
+
+void KonfliktTijden_Add(void) {
+  /* ----------------------------------------------
+     Pas hier zonodig iKonfliktTijd aan, bijv:
+     iKonfliktTijd[fc31] = iKonfliktTijd[fc32]=
+       iKonfliktTijd[fc31] >= iKonfliktTijd[fc32] ?
+       iKonfliktTijd[fc31] : iKonfliktTijd[fc32];
+     ---------------------------------------------- */
+}
+
+void OnderMaximum_Add(void) {
+  /* ------------------------------------------------------
+     Pas hier zonodig het OnderMaximumVerstreken aan, bijv:
+     iOnderMaximumVerstreken[prioFC02] = FALSE;
+     ------------------------------------------------------ */
+}
+
+void BlokkeringsTijd_Add(void) {
+  /* -----------------------------------------------
+     Pas hier zonodig de BlokkeringsTimer aan, bijv:
+     iBlokkeringsTimer[prioFC02] = MAX_INT;
+     ----------------------------------------------- */
+}
+
+void PrioriteitsOpties_Add(void) {
+  /* ------------------------------------------------
+     Pas hier zonodig de PrioriteitsOpties aan, bijv:
+     iPrioriteitsOpties[prioFC02] = poGeenPrioriteit;
+     ------------------------------------------------ */
+}
+
+void PrioriteitsNiveau_Add(void) {
+  /* ---------------------------------------------------
+     Pas hier zonodig het PrioriteitsNiveau aan, bijv:
+     iPrioriteitsNiveau[prioFC02] = 0;
+     ---------------------------------------------------
+     Houdt hier zonodig tijdelijk de prioteitstoekenning
+     tegen, door gebruik te maken van iXPrio[fc], bijv:
+     iXPrio[prioFC02] = TRUE;
+     --------------------------------------------------- */
+
+}
+
+void PrioriteitsToekenning_Add(void) {
+  /* -----------------------------------------
+     Pas hier zonodig de Prioriteit aan, bijv:
+     iPrioriteit[prioFC02] = FALSE;
+     ----------------------------------------- */
+}
+
+void AfkapGroen_Add(void) {
+  /* ------------------------------------------
+     Pas hier zonodig het AfkapGroen aan, bijv:
+     iAfkapGroen[fc02] = TFG_max[fc02];
+     ------------------------------------------ */
+}
+
+void StartGroenMomenten_Add(void) {
+  /* ------------------------------------------------
+     Pas hier zonodig het StartGroenMoment aan, bijv:
+     iStartGroen[prioFC02] = 0;
+     ------------------------------------------------ */
+
+}
+
+void PrioAanvragen_Add(void) {
+  /* -------------------------------------------
+     Pas hier zonodig de aanvraag A[] aan, bijv:
+     A[fc02] |= TRUE;
+     ------------------------------------------- */
+}
+
+void RealisatieTijden_Add(void) {
+  /* ----------------------------------------------------
+     Een met de prio-richting konflikterende richting wordt
+     tegengehouden, als zijn realisatietijd groter is dan
+     het startgroenmoment van de prio-richting.
+     De realisatietijd van een richting is de hoeveelheid
+     tijd dat de prio-richting niet kan komen t.g.v. een
+     realisatie van de konflikterende richting.
+     Pas hier zonodig de RealisatieTijd aan.
+     ---------------------------------------------------- */
+}
+
+void PrioTegenhouden_Add(void) {
+  /* -----------------------------------------------------
+     Pas hier zonodig de instructievariabele RR aan, bijv:
+     if (RR[fc08] & PRIO_RR_BIT) {
+       RR[fc24]|= PRIO_RR_BIT;
+     }
+     ----------------------------------------------------- */
+}
+
+void PrioAfkappen_Add(void) {
+  /* --------------------------------------------------------
+     Pas hier zonodig het TerugKomen aan, bijv:
+     iTerugKomen[fc02] = FALSE;
+     --------------------------------------------------------
+     Pas hier zonodig de TerugKomGroenTijd aan, bijv:
+     iTerugKomGroenTijd[[fc02] = 0;
+     --------------------------------------------------------
+     Pas hier zonodig het NietAfkappen aan, bijv:
+     iNietAfkappen[fc02]=FALSE;
+     -------------------------------------------------------
+     Pas hier zonodig het AantalMalenNietAfkappen aan, bijv:
+     iAantalMalenNietAfkappen[fc02] = 3;
+     ------------------------------------------------------- */
+
+}
+
+void PrioAlternatieven_Add(void) {
+    /* -----------------------------------------------------
+    Pas hier zonodig de PAR aan (bijvoorbeeld bij naloop,
+    deelconflict, voorstarten...), bijv:
+    PAR[fc31] = PAR[fc31] && PAR[fc32];
+    ----------------------------------------------------- */
+}
+
+void PostAfhandelingPrio_Add(void) {
+
+}
+
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
+void PrioDebug_Add(void) {
+  PrioDebug(NG);
+}
+#endif
