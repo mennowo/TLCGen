@@ -60,6 +60,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             public virtual bool RequiresNoActiveInmelding(PrioMeldingContext m) => false;
 
             /// <summary>
+            /// Whether the code of the melding is enclosed in #ifndef NO_RIS.
+            /// </summary>
+            public virtual bool WrapInNoRis => false;
+
+            /// <summary>
+            /// Whether the condition checks the anti-jutter timers (!T[timer]) of the melding and of all meldingen.
+            /// </summary>
+            public virtual bool ChecksAntiJutterTimers => true;
+
+            /// <summary>
+            /// Whether the condition restarts the anti-jutter timer of the melding (RT[timer]).
+            /// </summary>
+            public virtual bool RestartsAntiJutterTimer => true;
+
+            /// <summary>
             /// Whether the melding bij storing (MeldingBijstoring) is generated as an "else if" after this melding.
             /// </summary>
             public virtual bool SupportsOpvangStoring => true;
@@ -73,6 +88,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             /// The melding condition, appended to "IH[hulp] = [common conditions] ". Ends the statement.
             /// </summary>
             public abstract void AppendCondition(PrioMeldingContext m, StringBuilder sb);
+
+            /// <summary>
+            /// Code after the condition, inside the if-block of the melding.
+            /// </summary>
+            /// <param name="hulpElements">Helper elements of the melding so far (empty for a melding bij storing).</param>
+            public virtual void AppendAfterCondition(PrioMeldingContext m, StringBuilder sb, IReadOnlyList<string> hulpElements)
+            {
+            }
         }
 
         private Dictionary<PrioIngreepInUitMeldingVoorwaardeTypeEnum, PrioMeldingEmitter> _meldingEmitters;
@@ -87,6 +110,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, new VecomMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector, new SelectieveDetectorMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, new FietsMeldingEmitter(this) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, new RisMeldingEmitter(this) },
             };
             return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
         }

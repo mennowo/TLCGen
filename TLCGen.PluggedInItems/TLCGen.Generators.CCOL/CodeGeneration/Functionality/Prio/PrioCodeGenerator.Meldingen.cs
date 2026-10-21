@@ -237,8 +237,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             else meldingHElems.Add(he);
 
             var tts = ts;
+            var emitter = GetMeldingEmitter(melding.Type);
 
-            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            if (emitter?.WrapInNoRis == true)
             {
                 sb.AppendLine($"#ifndef NO_RIS");
             }
@@ -254,7 +255,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.Append($"{ts}else if (SCH[{sw}]");
             }
 
-            var emitter = GetMeldingEmitter(melding.Type);
             var m = new PrioMeldingContext(c, prio, melding, names, prioName)
             {
                 Ts = ts, Tts = tts, VtgType = vtgType, FcNmr = fcNmr, Timer = ti
@@ -276,11 +276,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"RT[{ti}] = ");
             }
-            if (antiJutVoorAlles && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            var checksAntiJutter = emitter?.ChecksAntiJutterTimers ?? true;
+            if (antiJutVoorAlles && checksAntiJutter)
             {
                 sb.Append($"!T[{_tpf}{tov}{prioName}] && ");
             }
-            if (melding.AntiJutterTijdToepassen && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            if (melding.AntiJutterTijdToepassen && checksAntiJutter)
             {
                 sb.Append($"!T[{ti}] && ");
             }
@@ -300,46 +301,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (emitter != null) emitter.AppendCondition(m, sb);
             else switch (melding.Type)
             {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
-                    switch (melding.InUit)
-                    {
-                        case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                            var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
-                            var first = true;
-
-                            if (risFc != null)
-                            {
-                                sb.AppendLine();
-                                foreach (var lane in risFc.LaneData)
-                                {
-                                    if (!first) sb.AppendLine(" ||");
-                                    var itf = c.RISData.HasMultipleSystemITF
-                                        ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == lane.SystemITF) : -1;
-                                    sb.Append($"{ts}{ts}{ts}ris_inmelding_selectief(" +
-                                              $"{_fcpf}{prio.FaseCyclus}, " +
-                                              $"PRM[{_prmpf}{_prmrisapproachid}{prioName}], " +
-                                              $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                              $"PRM[{_prmpf}{_prmrislaneid}{prioName}_{lane.RijstrookIndex}], " +
-                                              $"PRM[{_prmpf}{_prmrisstationtype}{prioName}], " +
-                                              $"PRM[{_prmpf}{_prmrisstart}{prioName}], " +
-                                              $"PRM[{_prmpf}{_prmrisend}{prioName}], " +
-                                              $"PRM[{_prmpf}{_prmrisrole}{prioName}], " +
-                                              $"PRM[{_prmpf}{_prmrissubrole}{prioName}], " +
-                                              $"PRM[{_prmpf}{_prmrisimportance}{prioName}], " +
-                                              $"{(melding.RisEta.HasValue ? $"PRM[{_prmpf}{_prmriseta}{prioName}]" : "NG")}, " +
-                                              $"prioFC{prioName})");
-                                    first = false;
-                                }
-                                sb.AppendLine(";");
-                            }
-                            break;
-                        case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                            sb.AppendLine($"({c.GetBoolV()})ris_uitmelding_selectief(prioFC{prioName});");
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom:
                     switch(melding.InUit)
                     {
@@ -357,15 +318,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     break;
             }
-            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
-            {
-                if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
-                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}]) iPrioriteitNooitAfkappen[prioFC{prioName}] = TRUE;");
-                else
-                    sb.AppendLine($"{ts}{ts}if (IH[{meldingHElems.Last()}] && iAantalInmeldingen[prioFC{prioName}] == 0) iPrioriteitNooitAfkappen[prioFC{prioName}] = FALSE;");
-            }
+            emitter?.AppendAfterCondition(m, sb, meldingHElems);
             sb.AppendLine($"{ts}}}");
-            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            if (emitter?.WrapInNoRis == true)
             {
                 sb.AppendLine($"#endif /* NO_RIS */");
             }
