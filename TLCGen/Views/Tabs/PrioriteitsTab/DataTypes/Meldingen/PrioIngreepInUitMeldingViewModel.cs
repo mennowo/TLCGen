@@ -35,6 +35,7 @@ namespace TLCGen.ViewModels
         private readonly object _parent;
         private ObservableObjectEx _actualViewModel;
         private PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper _prioIngreepInUitMeldingType;
+        private ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper> _meldingenTypes = new ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper>();
 
         #endregion // Fields
 
@@ -54,42 +55,29 @@ namespace TLCGen.ViewModels
         
         public PrioIngreepInUitMeldingTypeEnum InUit => PrioIngreepInUitMelding.InUit;
 
-        public ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper> MeldingenTypes { get; } = new ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper>();
+        /// <summary>
+        /// The melding types that can be chosen (PrioMeldingTypes.GetAllowed). Replaced as a whole by
+        /// RefreshAvailableTypes, never cleared: clearing a bound ItemsSource makes the ComboBox write null to Type.
+        /// </summary>
+        public ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper> MeldingenTypes
+        {
+            get => _meldingenTypes;
+            private set
+            {
+                _meldingenTypes = value;
+                OnPropertyChanged();
+            }
+        }
 
         public PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper Type
         {
             get => _prioIngreepInUitMeldingType;
             set
             {
+                // The ComboBox writes null while its ItemsSource is replaced; that is not a choice of the user
+                if (value == null) return;
                 _prioIngreepInUitMeldingType = value;
-                
-                if (value != null && PrioIngreepInUitMelding != null)
-                {
-                    var raise = PrioIngreepInUitMelding.Type != value.Value;
-                    PrioIngreepInUitMelding.Type = value.Value;
-                    if (raise) OnPropertyChanged(broadcast: true);
-                }
-
-                if (Type?.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
-                {
-                    RISViewModel.RisEta ??= _ingreep.RijTijdGehinderd;
-                    if (PrioIngreepInUitMelding is { RisRole: 0, RisSubrole: 0 })
-                    {
-                        _ingreep.SetRisRoles(this);
-                    }
-                }
-
-                OnPropertyChanged("");
-
-                var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
-                WeakReferenceMessengerEx.Default.Send(msg);
-                if (msg.FaseCyclus == null) return;
-                Naam = msg.FaseCyclus 
-                       + msg.Ingreep 
-                       + DefaultsProvider.Default.GetMeldingShortcode(PrioIngreepInUitMelding)
-                       + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
-                WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
-                SetActualViewModel();
+                OnMeldingTypeChanged();
             }
         }
         
@@ -183,78 +171,53 @@ namespace TLCGen.ViewModels
 
         #region Public Methods
 
+        /// <summary>
+        /// Rebuilds the melding types that can be chosen and selects the type of the model (or the first allowed type).
+        /// The model normally already has an allowed type: PrioIngreepModelSync takes care of that.
+        /// </summary>
         public void RefreshAvailableTypes()
         {
-            var sel = Type;
-            MeldingenTypes.Clear();
-            switch (_ingreep.Type)
-            {
-                case PrioIngreepVoertuigTypeEnum.Tram:
-                case PrioIngreepVoertuigTypeEnum.Bus:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
-                    if (ControllerAccessProvider.Default.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
-                    {
-                        MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    }
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang));
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Fiets:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton));
-                    if (ControllerAccessProvider.Default.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
-                    {
-                        MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    }
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    if (ControllerAccessProvider.Default.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
-                    {
-                        MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    }
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Auto:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton));
-                    if (ControllerAccessProvider.Default.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
-                    {
-                        MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    }
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Hulpdienst:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));                    
-                    break;
-                case PrioIngreepVoertuigTypeEnum.NG:
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton));
-                    MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton));
-                    if (ControllerAccessProvider.Default.Controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL110)
-                    {
-                        MeldingenTypes.Add(new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            Type = MeldingenTypes.FirstOrDefault(x => x.Value == sel?.Value);
-            if (Type == null) Type = MeldingenTypes.FirstOrDefault();
+            var allowed = PrioMeldingTypes.GetAllowed(_ingreep.Type, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
+            MeldingenTypes = new ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper>(
+                allowed.Select(x => new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(x)));
+            Type = MeldingenTypes.FirstOrDefault(x => x.Value == PrioIngreepInUitMelding.Type) ?? MeldingenTypes.FirstOrDefault();
         }
 
         #endregion // Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// Side effects of choosing a melding type: store it in the model, RIS defaults, the name of the melding,
+        /// notify the rest of the application (dummy KAR detectors etc.) and switch the sub view-model.
+        /// </summary>
+        private void OnMeldingTypeChanged()
+        {
+            var raise = PrioIngreepInUitMelding.Type != Type.Value;
+            PrioIngreepInUitMelding.Type = Type.Value;
+            if (raise) OnPropertyChanged(nameof(Type), broadcast: true);
+
+            if (Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+            {
+                RISViewModel.RisEta ??= _ingreep.RijTijdGehinderd;
+                if (PrioIngreepInUitMelding is { RisRole: 0, RisSubrole: 0 })
+                {
+                    _ingreep.SetRisRoles(this);
+                }
+            }
+
+            OnPropertyChanged("");
+
+            var msg = new PrioIngreepMeldingNeedsFaseCyclusAndIngreepMessage(this);
+            WeakReferenceMessengerEx.Default.Send(msg);
+            if (msg.FaseCyclus == null) return;
+            Naam = msg.FaseCyclus
+                   + msg.Ingreep
+                   + DefaultsProvider.Default.GetMeldingShortcode(PrioIngreepInUitMelding)
+                   + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
+            WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
+            SetActualViewModel();
+        }
 
         private void SetActualViewModel()
         {
@@ -293,12 +256,11 @@ namespace TLCGen.ViewModels
 
         public PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMeldingModel oVIngreepMassaDetectieMelding, object parent, PrioIngreepViewModel ingreep)
         {
+            // The model and the sub view-models must exist before a type is selected: OnMeldingTypeChanged uses them
             _ingreep = ingreep;
-            RefreshAvailableTypes();
             _parent = parent;
-
             PrioIngreepInUitMelding = oVIngreepMassaDetectieMelding;
-            
+
             ViewModel = new PrioIngreepRegularMeldingViewModel(this);
             RISViewModel = new PrioIngreepRISMeldingViewModel(this);
             PelotonViewModel = new PrioIngreepPelotonMeldingViewModel(this);
@@ -310,15 +272,9 @@ namespace TLCGen.ViewModels
                 MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring, this, ingreep));
             }
 
-            Type = MeldingenTypes.FirstOrDefault(x => x.Value == PrioIngreepInUitMelding.Type);
-            if (Type == null)
-            {
-                Type = MeldingenTypes.FirstOrDefault();
-            }
-
+            RefreshAvailableTypes();
             SetActualViewModel();
         }
-
 
         #endregion //Constructor
     }
