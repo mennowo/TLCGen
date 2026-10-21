@@ -19,6 +19,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     // - PrioCodeGenerator.Elements.cs     CCOL elements (CollectCCOLElements)
     // - PrioCodeGenerator.Meldingen.cs    in- and uitmeldingen: PrioCInUitMelden (prio.c InUitMelden())
     // - PrioCodeGenerator.MeldingNames.cs element names of a melding (single source for declaration and use)
+    // - Meldingen/PrioMeldingEmitter.cs   base class of the per melding type emitters (Meldingen/*MeldingEmitter.cs),
+    //                                     used by Meldingen.cs; not registered generators
     // - PrioCodeGenerator.Wissel.cs       RegCPreApplication (reg.c PreApplication())
     // - PrioCodeGenerator.Naloop.cs       RegCRealisatieAfhandelingNaModules (reg.c RealisatieAfhandeling())
     // - PrioCodeGenerator.Verklikking.cs  RegCSystemApplication, RegCPostSystemApplication (reg.c system_application())

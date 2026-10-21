@@ -120,8 +120,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, new FietsMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, new RisMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, new OpticomMeldingEmitter(this) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.AutoMassaPeloton, new AutoPelotonMeldingEmitter(this) },
             };
-            return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
+            // Every melding type has an emitter; a new type without one fails here rather than generating partial code
+            return _meldingEmitters[type];
         }
 
         private FietsMeldingEmitter FietsEmitter => (FietsMeldingEmitter)GetMeldingEmitter(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton);

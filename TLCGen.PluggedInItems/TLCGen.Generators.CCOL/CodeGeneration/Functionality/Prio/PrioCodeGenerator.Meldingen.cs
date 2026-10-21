@@ -12,8 +12,9 @@ using TLCGen.Settings;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     // Prio: in- and uitmeldingen per ingreep (KAR, selectieve detector, detector, ingang, Vecom, fiets, RIS, Opticom).
-    // Hook: PrioCInUitMelden (prio.c InUitMelden()); also the element names of meldingen (GetMeldingElements),
+    // Hook: PrioCInUitMelden (prio.c InUitMelden()); also the elements of meldingen (GetMeldingElements),
     // used by CollectCCOLElements. The names of a melding come from GetMeldingNames (MeldingNames.cs).
+    // This file holds what all meldingen share; the type specific parts are in Prio/Meldingen/*MeldingEmitter.cs.
     public partial class PrioCodeGenerator
     {
         private string GetInUitMeldenCode(ControllerModel c, string ts)
@@ -155,7 +156,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var ti = names.Timer;
             var sw = names.Switch;
 
-            GetMeldingEmitter(melding.Type)?.AddElements(m, elements);
+            GetMeldingEmitter(melding.Type).AddElements(m, elements);
 
             if (addHov)
             {
@@ -182,7 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            GetMeldingEmitter(melding.Type)?.AddElementsBeforeMelding(m, _myElements);
+            GetMeldingEmitter(melding.Type).AddElementsBeforeMelding(m, _myElements);
 
             return elements;
         }
@@ -217,42 +218,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<string> GetMeldingCode(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
         {
             var meldingHElems = new List<string>();
-            var names = GetMeldingNames(c, prio, melding);
-            var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
-            // anti-jutter timer prefix, also used for the timer of all in- or uitmeldingen together
-            var tov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _tprioin.ToString() : _tpriouit.ToString();
-
-            var he = $"{_hpf}{names.Hulp}";
-            var ti = $"{_tpf}{names.Timer}";
-            var sw = $"{_schpf}{names.Switch}";
-            if (otherHov != null) he = otherHov;
-            else meldingHElems.Add(he);
-
-            var tts = ts;
             var emitter = GetMeldingEmitter(melding.Type);
+            var m = CreateMeldingContext(c, prio, melding);
+            m = m with { Ts = ts, Tts = ts + ts, VtgType = vtgType, FcNmr = fcNmr, Timer = $"{_tpf}{m.Names.Timer}" };
+            var ti = m.Timer;
+            var prioName = m.PrioName;
+            // anti-jutter timer prefix, also used for the timer of all in- or uitmeldingen together
+            var tov = m.IsInmelding ? _tprioin.ToString() : _tpriouit.ToString();
 
-            if (emitter?.WrapInNoRis == true)
+            var he = otherHov ?? $"{_hpf}{m.Names.Hulp}";
+            if (otherHov == null) meldingHElems.Add(he);
+
+            if (emitter.WrapInNoRis)
             {
                 sb.AppendLine($"#ifndef NO_RIS");
             }
 
-            if (!opvang)
-            {
-                tts = ts + ts;
-                sb.Append($"{ts}if (SCH[{sw}]");
-            }
-            else if (opvang)
-            {
-                tts = ts + ts;
-                sb.Append($"{ts}else if (SCH[{sw}]");
-            }
-
-            var m = new PrioMeldingContext(c, prio, melding, names, prioName)
-            {
-                Ts = ts, Tts = tts, VtgType = vtgType, FcNmr = fcNmr, Timer = ti
-            };
-
-            if (emitter != null) sb.Append(emitter.GetStoringCondition(m));
+            sb.Append($"{ts}{(opvang ? "else if" : "if")} (SCH[{_schpf}{m.Names.Switch}]");
+            sb.Append(emitter.GetStoringCondition(m));
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
@@ -263,12 +246,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 FietsEmitter.AppendRisTellingCode(m, sb);
             }
 
-            sb.Append($"{tts}IH[{he}] = ");
-            if (melding.AntiJutterTijdToepassen && (emitter?.RestartsAntiJutterTimer ?? true))
+            sb.Append($"{m.Tts}IH[{he}] = ");
+            if (melding.AntiJutterTijdToepassen && emitter.RestartsAntiJutterTimer)
             {
                 sb.Append($"RT[{ti}] = ");
             }
-            var checksAntiJutter = emitter?.ChecksAntiJutterTimers ?? true;
+            var checksAntiJutter = emitter.ChecksAntiJutterTimers;
             if (antiJutVoorAlles && checksAntiJutter)
             {
                 sb.Append($"!T[{_tpf}{tov}{prioName}] && ");
@@ -277,7 +260,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"!T[{ti}] && ");
             }
-            if (melding.AlleenIndienGeenInmelding || (emitter?.RequiresNoActiveInmelding(m) ?? false))
+            if (melding.AlleenIndienGeenInmelding || emitter.RequiresNoActiveInmelding(m))
             {
                 sb.Append($"!C[{_ctpf}{_cvc}{prioName}] && ");
             }
@@ -290,14 +273,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{prioName}] && ");
             }
 
-            emitter?.AppendCondition(m, sb);
-            emitter?.AppendAfterCondition(m, sb, meldingHElems);
+            emitter.AppendCondition(m, sb);
+            emitter.AppendAfterCondition(m, sb, meldingHElems);
             sb.AppendLine($"{ts}}}");
-            if (emitter?.WrapInNoRis == true)
+            if (emitter.WrapInNoRis)
             {
                 sb.AppendLine($"#endif /* NO_RIS */");
             }
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null && (emitter?.SupportsOpvangStoring ?? true))
+            if (melding.OpvangStoring && melding.MeldingBijstoring != null && emitter.SupportsOpvangStoring)
             {
                 meldingHElems.AddRange(GetMeldingCode(c, prio, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
             }
