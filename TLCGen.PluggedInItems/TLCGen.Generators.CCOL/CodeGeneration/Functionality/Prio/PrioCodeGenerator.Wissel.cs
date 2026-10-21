@@ -49,18 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append($"{ts}IH[{_hpf}{_hwissel}{CCOLCodeHelper.GetPriorityName(c, ov)}] = (");
                         if (ov.MeldingenData.Wissel1)
                         {
-                            if (ov.MeldingenData.Wissel1Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
-                            {
-                                sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])" :
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])");
-                            }
-                            else
-                            {
-                                sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Detector}] ? !D[{_dpf}{ov.MeldingenData.Wissel1Detector}] : D[{_dpf}{ov.MeldingenData.Wissel1Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])" :
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Detector}] ? D[{_dpf}{ov.MeldingenData.Wissel1Detector}] : !D[{_dpf}{ov.MeldingenData.Wissel1Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])");
-                            }
+                            sb.Append(GetWisselCondition(ov.MeldingenData.Wissel1Type, ov.MeldingenData.Wissel1Input, ov.MeldingenData.Wissel1Detector, ov.MeldingenData.Wissel1InputVoorwaarde));
                         }
                         if (ov.MeldingenData.Wissel2)
                         {
@@ -68,24 +57,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append(" && ");
                             }
-                            if (ov.MeldingenData.Wissel2Type == PrioIngreepInUitDataWisselTypeEnum.Ingang)
-                            {
-                                sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])" :
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])");
-                            }
-                            else
-                            {
-                                sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Detector}] ? !D[{_dpf}{ov.MeldingenData.Wissel2Detector}] : D[{_dpf}{ov.MeldingenData.Wissel2Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])" :
-                                    $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Detector}] ? D[{_dpf}{ov.MeldingenData.Wissel2Detector}] : !D[{_dpf}{ov.MeldingenData.Wissel2Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])");
-                            }
+                            sb.Append(GetWisselCondition(ov.MeldingenData.Wissel2Type, ov.MeldingenData.Wissel2Input, ov.MeldingenData.Wissel2Detector, ov.MeldingenData.Wissel2InputVoorwaarde));
                         }
                         sb.AppendLine(");");
                     }
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Condition of one wissel: the input (IS) or detector (D) is in the required state (inverted by the polarity
+        /// switch schwisselpol), or the wissel is not used (schgeenwissel).
+        /// </summary>
+        /// <param name="voorwaarde">Required state: TRUE when the input or detector must be high.</param>
+        private string GetWisselCondition(PrioIngreepInUitDataWisselTypeEnum type, string input, string detector, bool voorwaarde)
+        {
+            var ingang = type == PrioIngreepInUitDataWisselTypeEnum.Ingang;
+            var name = ingang ? input : detector;
+            var state = ingang ? $"IS[{_ispf}{name}]" : $"D[{_dpf}{name}]";
+            var whenPolarity = voorwaarde ? $"!{state}" : state;
+            var otherwise = voorwaarde ? state : $"!{state}";
+            return $"((SCH[{_schpf}{_schwisselpol}{name}] ? {whenPolarity} : {otherwise}) || SCH[{_schpf}{_schgeenwissel}{name}])";
         }
     }
 }
