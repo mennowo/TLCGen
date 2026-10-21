@@ -60,18 +60,15 @@ namespace TLCGen.ViewModels
             get => PrioIngreep.Type;
             set
             {
-                PrioIngreep.Type = value;
-                
-                foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
-
-                PrioIngreep.EnsureDummyKARDetectors();
-
-                var meldingen = MeldingenLists.SelectMany(x => x.Meldingen);
-                foreach (var melding in meldingen)
+                // the model owns the rules (allowed melding types, RIS roles, dummy KAR detectors); the
+                // melding view-models then follow the model
+                PrioIngreepModelSync.ApplyVehicleTypeChange(PrioIngreep, value, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
+                foreach (var melding in MeldingenLists.SelectMany(x => x.Meldingen))
                 {
-                    SetRisRoles(melding);
+                    melding.RefreshAvailableTypes();
+                    melding.RISViewModel.UpdateRoles();
                 }
-                
+
                 OnPropertyChanged(nameof(Type), broadcast: true);
                 OnPropertyChanged(nameof(IsTypeBus));
                 OnPropertyChanged(nameof(IsTypeBicycle));
@@ -125,9 +122,7 @@ namespace TLCGen.ViewModels
                     DataAccess.TLCGenControllerDataProvider.Default.Controller, newName,
                     TLCGenObjectTypeEnum.PrioriteitsIngreep))
                 {
-                    PrioIngreep.Naam = value;
-                    PrioIngreep.EnsureDummyKARDetectors();
-                    PrioIngreep.RenameDummyKARDetectors();
+                    PrioIngreepModelSync.RenameIngreep(PrioIngreep, value);
                     OnPropertyChanged(nameof(Naam), broadcast: true);
                 }
                 else
@@ -800,38 +795,7 @@ namespace TLCGen.ViewModels
 
         public void SetRisRoles(PrioIngreepInUitMeldingViewModel ingreepMelding)
         {
-            switch (Type)
-            {
-                case PrioIngreepVoertuigTypeEnum.Tram:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.TRAM;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Bus:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.BUS;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Fiets:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.DEFAULT;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Vrachtwagen:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.COMMERCIAL | RISVehicleRole.SPECIALTRANSPORT;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Auto:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.DEFAULT;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.UNKNOWN;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.Hulpdienst:
-                    ingreepMelding.PrioIngreepInUitMelding.RisRole = RISVehicleRole.EMERGENCY;
-                    ingreepMelding.PrioIngreepInUitMelding.RisSubrole = RISVehicleSubrole.EMERGENCY;
-                    break;
-                case PrioIngreepVoertuigTypeEnum.NG:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
+            PrioIngreepModelSync.SetRisRoles(ingreepMelding.PrioIngreepInUitMelding, Type);
             ingreepMelding.RISViewModel.UpdateRoles();
         }
 
@@ -925,6 +889,7 @@ namespace TLCGen.ViewModels
 
         private void OnCCOLVersionChanged(object sender, CCOLVersionChangedMessage obj)
         {
+            PrioIngreepModelSync.ApplyAllowedMeldingTypes(PrioIngreep, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
             foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
         }
 
