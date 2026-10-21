@@ -19,6 +19,7 @@ namespace TLCGen.Models
         /// </summary>
         public static void ApplyVehicleTypeChange(PrioIngreepModel prio, PrioIngreepVoertuigTypeEnum vehicleType, CCOLVersieEnum ccolVersie)
         {
+            PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: vehicle type {prio.Type} -> {vehicleType}");
             prio.Type = vehicleType;
             ApplyAllowedMeldingTypes(prio, ccolVersie);
             foreach (var melding in GetMeldingen(prio))
@@ -39,6 +40,7 @@ namespace TLCGen.Models
             if (allowed.Count == 0) return changed;
             foreach (var melding in GetMeldingen(prio).Where(x => !allowed.Contains(x.Type)))
             {
+                PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: {melding.InUit} {melding.Type} not allowed, -> {allowed[0]}");
                 melding.Type = allowed[0];
                 changed.Add(melding);
             }
@@ -89,6 +91,7 @@ namespace TLCGen.Models
         /// </summary>
         public static void RenameIngreep(PrioIngreepModel prio, string naam)
         {
+            PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: renamed to {prio.FaseCyclus}{naam}");
             prio.Naam = naam;
             prio.EnsureDummyKARDetectors();
             prio.RenameDummyKARDetectors();
@@ -111,14 +114,17 @@ namespace TLCGen.Models
             {
                 if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                 {
+                    if (melding.DummyKARMelding != null) PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: dummy {melding.DummyKARMelding.Naam} removed ({melding.InUit} is {melding.Type})");
                     melding.DummyKARMelding = null;
                     continue;
                 }
-                melding.DummyKARMelding ??= new DetectorModel
+                if (melding.DummyKARMelding != null) continue;
+                melding.DummyKARMelding = new DetectorModel
                 {
                     Dummy = true,
                     Naam = prio.GetDummyKARDetectorName(melding.InUit)
                 };
+                PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: dummy {melding.DummyKARMelding.Naam} added");
             }
         }
 

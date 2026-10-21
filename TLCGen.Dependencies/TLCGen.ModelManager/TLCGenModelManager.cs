@@ -1059,6 +1059,8 @@ namespace TLCGen.ModelManagement
             switch (msg)
             {
                 case PrioIngreepMeldingChangedMessage meldingMsg:
+                    PrioTrace.Write($"melding changed message: fc {meldingMsg.FaseCyclus}, {meldingMsg.IngreepMelding?.InUit} " +
+                                    $"{meldingMsg.IngreepMelding?.Type}{(meldingMsg.Removing ? ", removing" : "")}");
                     // A removed melding is no longer part of any ingreep: drop its dummy explicitly
                     if (meldingMsg.Removing && meldingMsg.IngreepMelding != null)
                     {

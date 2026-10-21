@@ -194,6 +194,7 @@ namespace TLCGen.ViewModels
         private void OnMeldingTypeChanged()
         {
             var raise = PrioIngreepInUitMelding.Type != Type.Value;
+            if (raise) PrioTrace.Write($"{_ingreep.FaseCyclus}{_ingreep.Naam}: {InUit} type {PrioIngreepInUitMelding.Type} -> {Type.Value} (UI)");
             PrioIngreepInUitMelding.Type = Type.Value;
             if (raise) OnPropertyChanged(nameof(Type), broadcast: true);
 
