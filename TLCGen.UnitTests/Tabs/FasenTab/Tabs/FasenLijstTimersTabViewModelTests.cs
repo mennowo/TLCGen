@@ -9,6 +9,7 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [ResetGlobalState]
     public class FasenLijstTimersTabViewModelTests
     {
         [Test]
@@ -21,6 +22,7 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
+            ControllerAccessProvider.OverrideDefault(FakesCreator.CreateControllerAccessProvider(model));
             var vm = new FasenLijstTimersTabViewModel {Controller = model};
 
             vm.OnSelected();
@@ -38,6 +40,7 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
+            ControllerAccessProvider.OverrideDefault(FakesCreator.CreateControllerAccessProvider(model));
             var vm = new FasenLijstTimersTabViewModel { Controller = model };
 
             vm.OnSelected();

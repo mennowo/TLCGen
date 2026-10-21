@@ -47,7 +47,8 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-
+            // messages may reach this tab before the model manager has updated the dummies, so always refresh on show
+            if (_Controller != null) RebuildDetectorenList();
         }
 
         public override ControllerModel Controller

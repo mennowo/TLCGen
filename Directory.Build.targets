@@ -17,4 +17,34 @@
     <NoWarn Condition="$(TargetFramework.Contains('-windows'))">$(NoWarn);CA1416</NoWarn>
   </PropertyGroup>
 
+  <!-- ===================== Build timestamp (replaces T4 BuildConstants.tt) =====================
+       Projects setting <BuildConstantsTimestamp>true</BuildConstantsTimestamp> get a
+       BuildConstants.g.cs generated in $(IntermediateOutputPath) with the same output the
+       old T4 template produced (build timestamp as UTC ticks, labeled Local, as before).
+       Generated into obj/, so nothing needs to be checked in or gitignored, and it works
+       from both the dotnet CLI and Visual Studio. Regenerates on every build, like the T4 did. -->
+  <Target Name="BuildConstantsTimestamp" BeforeTargets="CoreCompile"
+          Condition="'$(BuildConstantsTimestamp)' == 'true'">
+    <PropertyGroup>
+      <_BuildTimestampTicks>$([System.DateTime]::UtcNow.Ticks)</_BuildTimestampTicks>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- NB: semicolons must be written as %3B and leading spaces as %20 inside Include,
+           or MSBuild splits/trims the line. -->
+      <_BuildConstantsLine Include="using System%3B" />
+      <_BuildConstantsLine Include="namespace $(RootNamespace)" />
+      <_BuildConstantsLine Include="{" />
+      <_BuildConstantsLine Include="%20%20%20%20public static class BuildConstants" />
+      <_BuildConstantsLine Include="%20%20%20%20{" />
+      <_BuildConstantsLine Include="%20%20%20%20%20%20%20%20public static DateTime CompilationTimestampLocal =&gt; new DateTime($(_BuildTimestampTicks)L, DateTimeKind.Local)%3B" />
+      <_BuildConstantsLine Include="%20%20%20%20}" />
+      <_BuildConstantsLine Include="}" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(IntermediateOutputPath)BuildConstants.g.cs" Lines="@(_BuildConstantsLine)" Overwrite="true" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)BuildConstants.g.cs" />
+      <FileWrites Include="$(IntermediateOutputPath)BuildConstants.g.cs" />
+    </ItemGroup>
+  </Target>
+
 </Project>

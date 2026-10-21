@@ -70,6 +70,8 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioOpTijd { get; set; }
         public int GeconditioneerdePrioTeLaat { get; set; }
 
+        // Reference properties holding user data must never be overwritten by defaults
+        [HasDefault(false)]
         public HalfstarPrioIngreepModel HalfstarIngreepData { get; set; }
 
         [HasDefault(false)]
@@ -100,12 +102,15 @@ namespace TLCGen.Models
         [IOElement("tl", BitmappedItemTypeEnum.Uitgang, nameof(IngreepNaam), nameof(HasGeconditioneerdePrioriteit))]
         public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
 
+        [HasDefault(false)]
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
 
+        [HasDefault(false)]
         [XmlArrayItem(ElementName = "Periode")]
         public List<OVIngreepPeriodeModel> GerelateerdePerioden { get; set; }
 
+        [HasDefault(false)]
         public PrioIngreepMeldingenDataModel MeldingenData { get; set; }
 
         #endregion // Properties

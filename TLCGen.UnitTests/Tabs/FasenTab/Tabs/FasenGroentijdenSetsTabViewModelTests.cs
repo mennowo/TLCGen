@@ -12,6 +12,7 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [ResetGlobalState]
     public class FasenGroentijdenSetsTabViewModelTests
     {
         [Test]

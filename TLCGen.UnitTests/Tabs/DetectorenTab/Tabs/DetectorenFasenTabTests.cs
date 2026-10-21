@@ -11,6 +11,7 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [ResetGlobalState]
     public class DetectorenFasenTabTests
     {
         [Test]

@@ -168,6 +168,9 @@ namespace TLCGen.ModelManagement
                 }
             }
 
+            // every KAR melding has a dummy detector (also repairs files saved while dummies got lost)
+            foreach (var prio in controller.PrioData.PrioIngrepen) prio.EnsureDummyKARDetectors();
+
             // sort if needed
             if (!controller.Detectoren.IsSorted()) controller.Detectoren.BubbleSort();
             if (!controller.SelectieveDetectoren.IsSorted()) controller.SelectieveDetectoren.BubbleSort();
@@ -1056,59 +1059,12 @@ namespace TLCGen.ModelManagement
             switch (msg)
             {
                 case PrioIngreepMeldingChangedMessage meldingMsg:
-                    var ovi = Controller.PrioData.PrioIngrepen.FirstOrDefault(
-                        x =>
-                            x.MeldingenData.Inmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)) ||
-                            x.MeldingenData.Uitmeldingen.Any(x2 => ReferenceEquals(x2, meldingMsg.IngreepMelding)));
-                   
-                    if (meldingMsg.IngreepMelding != null)
+                    // A removed melding is no longer part of any ingreep: drop its dummy explicitly
+                    if (meldingMsg.Removing && meldingMsg.IngreepMelding != null)
                     {
-                        if (meldingMsg.IngreepMelding.Type ==
-                            PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
-                        {
-                            switch (meldingMsg.IngreepMelding.InUit)
-                            {
-                                case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                                    if (meldingMsg.Removing)
-                                    {
-                                        meldingMsg.IngreepMelding.DummyKARMelding = null;
-                                    }
-                                    else if (meldingMsg.IngreepMelding.DummyKARMelding == null)
-                                    {
-                                        meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
-                                        {
-                                            Dummy = true,
-                                            Naam =
-                                                $"dummykarin{ovi.FaseCyclus}{ovi.Naam}"
-                                        };
-                                    }
-
-                                    break;
-                                case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                                    if (meldingMsg.Removing)
-                                    {
-                                        meldingMsg.IngreepMelding.DummyKARMelding = null;
-                                    }
-                                    else if (meldingMsg.IngreepMelding.DummyKARMelding == null)
-                                    {
-                                        meldingMsg.IngreepMelding.DummyKARMelding = new DetectorModel()
-                                        {
-                                            Dummy = true,
-                                            Naam =
-                                                $"dummykaruit{ovi.FaseCyclus}{ovi.Naam}"
-                                        };
-                                    }
-
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
-                        }
-                        else
-                        {
-                            meldingMsg.IngreepMelding.DummyKARMelding = null;
-                        }
+                        meldingMsg.IngreepMelding.DummyKARMelding = null;
                     }
+                    foreach (var prio in Controller.PrioData.PrioIngrepen) prio.EnsureDummyKARDetectors();
                     SetSpecialIOPerSignalGroup(Controller);
                     break;
                 case ModulesChangedMessage modulesMessage:

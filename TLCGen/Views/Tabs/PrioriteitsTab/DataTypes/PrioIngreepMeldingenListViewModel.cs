@@ -53,7 +53,6 @@ namespace TLCGen.ViewModels
             {
                 case PrioIngreepInUitMeldingTypeEnum.Inmelding:
                     m.InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding;
-                    m.InUit = PrioIngreepInUitMeldingTypeEnum.Inmelding;
                     PrioIngreepMeldingenData.Inmeldingen.Add(m);
                     break;
                 case PrioIngreepInUitMeldingTypeEnum.Uitmelding:

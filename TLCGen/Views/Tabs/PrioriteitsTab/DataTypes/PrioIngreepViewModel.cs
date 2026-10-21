@@ -64,8 +64,7 @@ namespace TLCGen.ViewModels
                 
                 foreach (var m in MeldingenLists.SelectMany(x => x.Meldingen)) m.RefreshAvailableTypes();
 
-                foreach (var m in PrioIngreep.MeldingenData.Inmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
-                foreach (var m in PrioIngreep.MeldingenData.Uitmeldingen.Where(m => m.DummyKARMelding != null)) m.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{DefaultsProvider.Default.GetVehicleTypeAbbreviation(value)}";
+                PrioIngreep.EnsureDummyKARDetectors();
 
                 var meldingen = MeldingenLists.SelectMany(x => x.Meldingen);
                 foreach (var melding in meldingen)
@@ -82,7 +81,8 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(nameof(IsNotTypeHulpdienst));
                 OnPropertyChanged(nameof(ShowLijnnummer));
 
-                DefaultsProvider.Default.SetDefaultsOnModel(PrioIngreep, PrioIngreep.Type.ToString(), null, false);
+                // values only: copying reference properties would replace MeldingenData etc. with the defaults' instances
+                DefaultsProvider.Default.SetDefaultsOnModel(PrioIngreep, PrioIngreep.Type.ToString(), null, true);
             }
         }
 
@@ -126,16 +126,8 @@ namespace TLCGen.ViewModels
                     TLCGenObjectTypeEnum.PrioriteitsIngreep))
                 {
                     PrioIngreep.Naam = value;
-                    foreach (var melding in PrioIngreep.MeldingenData.Inmeldingen.Where(x =>
-                        x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
-                    {
-                        melding.DummyKARMelding.Naam = $"dummykarin{PrioIngreep.FaseCyclus}{value}";
-                    }
-                    foreach (var melding in PrioIngreep.MeldingenData.Uitmeldingen.Where(x =>
-                        x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
-                    {
-                        melding.DummyKARMelding.Naam = $"dummykaruit{PrioIngreep.FaseCyclus}{value}";
-                    }
+                    PrioIngreep.EnsureDummyKARDetectors();
+                    PrioIngreep.RenameDummyKARDetectors();
                     OnPropertyChanged(nameof(Naam), broadcast: true);
                 }
                 else

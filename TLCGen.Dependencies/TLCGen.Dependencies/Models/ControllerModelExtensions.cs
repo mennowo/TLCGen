@@ -199,6 +199,46 @@ namespace TLCGen.Models
             return ov.MeldingenData.Uitmeldingen.Where(x => x.DummyKARMelding != null).Select(x => x.DummyKARMelding);
         }
 
+        public static string GetDummyKARDetectorName(this PrioIngreepModel prio, PrioIngreepInUitMeldingTypeEnum inUit)
+        {
+            return $"dummykar{(inUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit")}{prio.FaseCyclus}{prio.Naam}";
+        }
+
+        /// <summary>
+        /// Single owner of the dummy KAR detectors of a priority ingreep, regardless of vehicle type:
+        /// every (top level) KAR in- or uitmelding has a dummy detector, other meldingen have none.
+        /// Existing dummies are kept as they are (name and simulation data).
+        /// </summary>
+        public static void EnsureDummyKARDetectors(this PrioIngreepModel prio)
+        {
+            if (prio.MeldingenData == null) return;
+            foreach (var melding in prio.MeldingenData.Inmeldingen.Concat(prio.MeldingenData.Uitmeldingen))
+            {
+                if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
+                {
+                    melding.DummyKARMelding = null;
+                    continue;
+                }
+                melding.DummyKARMelding ??= new DetectorModel
+                {
+                    Dummy = true,
+                    Naam = prio.GetDummyKARDetectorName(melding.InUit)
+                };
+            }
+        }
+
+        /// <summary>
+        /// Renames all dummy KAR detectors of a priority ingreep to the canonical name, eg. after renaming the ingreep.
+        /// </summary>
+        public static void RenameDummyKARDetectors(this PrioIngreepModel prio)
+        {
+            if (prio.MeldingenData == null) return;
+            foreach (var melding in prio.MeldingenData.Inmeldingen.Concat(prio.MeldingenData.Uitmeldingen).Where(x => x.DummyKARMelding != null))
+            {
+                melding.DummyKARMelding.Naam = prio.GetDummyKARDetectorName(melding.InUit);
+            }
+        }
+
         public static bool HasOVIngreepWissel(this PrioIngreepModel ov)
         {
             return ov.MeldingenData.Wissel1 &&

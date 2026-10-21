@@ -15,6 +15,7 @@ using TLCGen.ModelManagement;
 namespace TLCGen.UnitTests
 {
     [TestFixture]
+    [ResetGlobalState]
     [NonParallelizable]
     public class FasenLijstTabViewModelTests
     {

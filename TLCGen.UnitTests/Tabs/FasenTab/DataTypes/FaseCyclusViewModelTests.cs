@@ -14,6 +14,7 @@ using TLCGen.ViewModels;
 namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
 {
     [TestFixture]
+    [ResetGlobalState]
     public class FaseCyclusViewModelTests
     {
         [Test]
