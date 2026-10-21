@@ -54,6 +54,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             /// <summary>
+            /// Elements added straight to the elements of the generator, so before the elements of the melding itself
+            /// (and after those of its melding bij storing).
+            /// </summary>
+            public virtual void AddElementsBeforeMelding(PrioMeldingContext m, List<CCOLElement> elements)
+            {
+            }
+
+            /// <summary>
             /// Whether the melding only applies when the ingreep has no active inmelding (!C[cvc]), regardless of
             /// AlleenIndienGeenInmelding.
             /// </summary>
@@ -111,6 +119,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector, new SelectieveDetectorMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, new FietsMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, new RisMeldingEmitter(this) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, new OpticomMeldingEmitter(this) },
             };
             return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
         }

@@ -182,15 +182,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom && 
-                melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding &&
-                !string.IsNullOrWhiteSpace(melding.RelatedInput1))
-            {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprioin}{names.Base}", _hprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{names.Base}", melding.AntiJutterTijdToepassen ? melding.AntiJutterTijd : 0, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schprioin}{names.Base}", 1, CCOLElementTimeTypeEnum.SCH_type, _schprioin, prio.FaseCyclus, "Opticom"));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriouit}{names.Base}", _hpriouit, prio.FaseCyclus, "Opticom"));
-            }
+            GetMeldingEmitter(melding.Type)?.AddElementsBeforeMelding(m, _myElements);
 
             return elements;
         }
@@ -272,7 +264,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             sb.Append($"{tts}IH[{he}] = ");
-            if (melding.AntiJutterTijdToepassen && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom)
+            if (melding.AntiJutterTijdToepassen && (emitter?.RestartsAntiJutterTimer ?? true))
             {
                 sb.Append($"RT[{ti}] = ");
             }
@@ -298,26 +290,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{prioName}] && ");
             }
 
-            if (emitter != null) emitter.AppendCondition(m, sb);
-            else switch (melding.Type)
-            {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom:
-                    switch(melding.InUit)
-                    {
-                        case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                            sb.AppendLine($"SCH[{_schpf}{_schprioin}{names.Base}] && !C[{_ctpf}{_cvc}{prioName}] && DB[{_dpf}{melding.RelatedInput1}];");
-                            sb.AppendLine($"{ts}{ts}RT[{ti}] = G[{_fcpf}{prio.FaseCyclus}] && C[{_ctpf}{_cvc}{prioName}];");
-                            break;
-                        case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
-                            var uitMelding = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom);
-                            if (uitMelding != null && uitMelding.RelatedInput1 != null)
-                            { 
-                                sb.AppendLine($"SCH[{_schpf}{_schprioin}{names.Base}] && !TDH[{_dpf}{uitMelding.RelatedInput1}] && TDH_old[{_dpf}{uitMelding.RelatedInput1}];");
-                            }
-                            break;
-                    }
-                    break;
-            }
+            emitter?.AppendCondition(m, sb);
             emitter?.AppendAfterCondition(m, sb, meldingHElems);
             sb.AppendLine($"{ts}}}");
             if (emitter?.WrapInNoRis == true)
