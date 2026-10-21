@@ -47,6 +47,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             protected PrioCodeGenerator G { get; }
 
             /// <summary>
+            /// Elements specific to the melding type, declared before the helper element, timer and switch of the melding.
+            /// </summary>
+            public virtual void AddElements(PrioMeldingContext m, List<CCOLElement> elements)
+            {
+            }
+
+            /// <summary>
+            /// Whether the melding only applies when the ingreep has no active inmelding (!C[cvc]), regardless of
+            /// AlleenIndienGeenInmelding.
+            /// </summary>
+            public virtual bool RequiresNoActiveInmelding(PrioMeldingContext m) => false;
+
+            /// <summary>
             /// Whether the melding bij storing (MeldingBijstoring) is generated as an "else if" after this melding.
             /// </summary>
             public virtual bool SupportsOpvangStoring => true;
@@ -73,8 +86,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, new DetectorMeldingEmitter(this, true) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, new VecomMeldingEmitter(this) },
                 { PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector, new SelectieveDetectorMeldingEmitter(this) },
+                { PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, new FietsMeldingEmitter(this) },
             };
             return _meldingEmitters.TryGetValue(type, out var emitter) ? emitter : null;
+        }
+
+        private FietsMeldingEmitter FietsEmitter => (FietsMeldingEmitter)GetMeldingEmitter(PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton);
+
+        private PrioMeldingContext CreateMeldingContext(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding)
+        {
+            return new PrioMeldingContext(c, prio, melding, GetMeldingNames(c, prio, melding), CCOLCodeHelper.GetPriorityName(c, prio));
         }
     }
 }

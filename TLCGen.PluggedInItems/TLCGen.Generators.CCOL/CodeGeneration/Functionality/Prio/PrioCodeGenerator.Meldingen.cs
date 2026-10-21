@@ -42,19 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (var melding in prio.MeldingenData.Inmeldingen.Where(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton))
                     {
-                        var names = GetMeldingNames(c, prio, melding);
-                        var hov = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _hprioin.ToString() : _hpriouit.ToString();
-                        // NOTE: unlike names.Hulp, this only includes the input when the loop is used (todo note 1579)
-                        var he = $"{_hpf}{hov}{names.Base}";
-                        if (melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton && melding.FietsPrioriteitGebruikLus)
-                        {
-                            he += melding.RelatedInput1;
-                        }
-                        sb.AppendLine($"{ts}fietsprio_update({_fcpf}{prio.FaseCyclus}, " +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{names.Base}, " : "NG, ") +
-                                      $"{_ctpf}{_cftscyc}{names.Base}," +
-                                      $"SH[{he}], ML);");
+                        FietsEmitter.AppendUpdateCode(CreateMeldingContext(c, prio, melding) with { Ts = ts }, sb);
                     }
 
                     var sb2 = new StringBuilder();
@@ -161,39 +149,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private IEnumerable<CCOLElement> GetMeldingElements(ControllerModel c, PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, bool addHov)
         {
             var elements = new List<CCOLElement>();
-            var names = GetMeldingNames(c, prio, melding);
-            var prioName = CCOLCodeHelper.GetPriorityName(c, prio);
+            var m = CreateMeldingContext(c, prio, melding);
+            var names = m.Names;
             var he = names.Hulp;
             var ti = names.Timer;
             var sw = names.Switch;
 
-            if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && 
-                melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
-            {
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftscyc}{names.Base}", 999, CCOLElementTimeTypeEnum.None, _cftscyc, prio.FaseCyclus));
-                if (melding.FietsPrioriteitGebruikLus)
-                {
-                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cftsvtg}{names.Base}", 999, CCOLElementTimeTypeEnum.None, _cftsvtg, prio.FaseCyclus));
-                }
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsblok}{names.Base}", melding.FietsPrioriteitBlok, CCOLElementTimeTypeEnum.None, _prmftsblok, prio.FaseCyclus));
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsmaxpercyc}{names.Base}", melding.FietsPrioriteitAantalKeerPerCyclus, CCOLElementTimeTypeEnum.None, _prmftsmaxpercyc, prio.FaseCyclus));
-                if (melding.FietsPrioriteitGebruikLus)
-                {
-                    elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminvtg}{names.Base}", melding.FietsPrioriteitMinimumAantalVoertuigen, CCOLElementTimeTypeEnum.None, _prmftsminvtg, prio.FaseCyclus));
-                }
-                elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmftsminwt}{names.Base}", melding.FietsPrioriteitMinimumWachttijdVoorPrioriteit, CCOLElementTimeTypeEnum.TS_type, _prmftsminwt, prio.FaseCyclus));
-
-                if (melding.FietsPrioriteitGebruikRIS)
-                {
-                    elements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_mftstelris}{names.Base}", _mftstelris, prioName));
-                    elements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmftsminvtgris}{names.Base}", 
-                            melding.FietsPrioriteitMinimumAantalVoertuigenRIS, CCOLElementTimeTypeEnum.None, _prmftsminvtgris, prio.FaseCyclus));
-                }
-            }
+            GetMeldingEmitter(melding.Type)?.AddElements(m, elements);
 
             if (addHov)
             {
@@ -302,48 +264,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
+            // NOTE: checks the flag regardless of the melding type, while its elements are only declared for a
+            // fiets inmelding (todo note 1579)
             if (melding.FietsPrioriteitGebruikRIS)
             {
-                var mm = $"{_mpf}{_mftstelris}{names.Base}";
-                sb.AppendLine($"{tts}MM[{mm}] = 0;");
-                var lanes = c.RISData.RISPelotonLanes.Where(x => x.SignalGroupName == prio.FaseCyclus).ToArray();
-                if (lanes.Length > 0)
-                {
-                    sb.AppendLine($"#ifndef NO_RIS");
-                    foreach (var l in lanes)
-                    {
-                        // opzoeken lane instellingen
-                        var risFc = c.RISData.RISFasen.FirstOrDefault(x => x.FaseCyclus == prio.FaseCyclus);
-                        if (risFc == null) continue;
-                        
-                        var fcLane = risFc.LaneData.FirstOrDefault(x => x.RijstrookIndex == l.RijstrookIndex);
-                        
-                        var itf = c.RISData.HasMultipleSystemITF
-                            ? c.RISData.MultiSystemITF.FindIndex(x => x.SystemITF == fcLane?.SystemITF) : -1;
-
-                        var laneIdPrm = $"{_prmpf}{_prmrislaneid}_{l.RijstrookIndex}";
-                        if (prioName != prio.FaseCyclus)
-                        {
-                            laneIdPrm = $"{_prmpf}{_prmrislaneid}{prioName}_{l.RijstrookIndex}";
-                        }
-
-                        sb.AppendLine($"{tts}MM[{mm}] += {(fcLane.UseHeading ? "ris_itsstations_heading" : "ris_itsstations")}(" +
-                                      $"{_fcpf}{prio.FaseCyclus}, " +
-                                      $"SYSTEM_ITF{(itf >= 0 ? (itf + 1).ToString() : "")}, " +
-                                      $"PRM[{laneIdPrm}], " +
-                                      $"RIS_{l.Type}, " +
-                                      $"PRM[{_prmpf}{_prmrispstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
-                                      $"PRM[{_prmpf}{_prmrispend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], " +
-                                      $"SCH[{_schpf}{_schrisgeencheckopsg}]" +
-                                      (fcLane.UseHeading 
-                                          ? $", PRM[{_prmpf}{_prmrislaneheading}{l.SignalGroupName}_{l.RijstrookIndex}], " +
-                                            $"PRM[{_prmpf}{_prmrislaneheadingmarge}{l.SignalGroupName}_{l.RijstrookIndex}]);"
-                                          : ");"));
-                    }
-                    sb.AppendLine($"#endif /* NO_RIS */");
-                }
+                FietsEmitter.AppendRisTellingCode(m, sb);
             }
-            
+
             sb.Append($"{tts}IH[{he}] = ");
             if (melding.AntiJutterTijdToepassen && melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom)
             {
@@ -357,8 +284,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"!T[{ti}] && ");
             }
-            if (melding.AlleenIndienGeenInmelding ||
-                melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
+            if (melding.AlleenIndienGeenInmelding || (emitter?.RequiresNoActiveInmelding(m) ?? false))
             {
                 sb.Append($"!C[{_ctpf}{_cvc}{prioName}] && ");
             }
@@ -374,29 +300,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (emitter != null) emitter.AppendCondition(m, sb);
             else switch (melding.Type)
             {
-                case PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton:
-                    if (melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"{tts}{ts}fietsprio_inmelding({_fcpf}{prio.FaseCyclus}, " +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_dpf}{melding.RelatedInput1}, " : "NG, ") +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_ctpf}{_cftsvtg}{names.Base}, " : "NG, ") +
-                                      $"{_ctpf}{_cftscyc}{names.Base}, " +
-                                      $"{_prmpf}{_prmftsblok}{names.Base}, " +
-                                      $"{_prmpf}{_prmftsmaxpercyc}{names.Base}, " +
-                                      (melding.FietsPrioriteitGebruikLus ? $"{_prmpf}{_prmftsminvtg}{names.Base}, " : "NG, ") +
-                                      $"{_prmpf}{_prmftsminwt}{names.Base}, " +
-                                      $"ML, " +
-                                      (melding.FietsPrioriteitGebruikRIS
-                                          ? $"{_mpf}{_mftstelris}{names.Base}, {_prmpf}{_prmftsminvtgris}{names.Base}"
-                                          : "NG, NG") +
-                                      ");");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"C[{_ctpf}{_cvc}{prioName}] && G[{_fcpf}{prio.FaseCyclus}] && (T[{_tpf}{_tgb}{prioName}] && (T_timer[{_tpf}{_tgb}{prioName}] > 1));");
-                    }
-                    break;
                 case PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde:
                     switch (melding.InUit)
                     {
