@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -36,71 +36,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             private static string GetMeldingDetectieCode(PrioIngreepInUitMeldingModel melding, string dpf)
             {
-                var sb = new StringBuilder();
-                switch (melding.RelatedInput1Type)
-                {
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                        sb.Append($"SD[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                        sb.Append($"D[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                        sb.Append($"DB[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                        sb.Append($"!DB_old[{dpf}{melding.RelatedInput1}] && DB[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                        sb.Append($"ED[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                        sb.Append($"TDH_old[{dpf}{melding.RelatedInput1}] && !TDH[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang:
-                        sb.Append($"IS[{dpf}{melding.RelatedInput1}] && !IS_old[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog:
-                        sb.Append($"IS[{dpf}{melding.RelatedInput1}]");
-                        break;
-                    case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang:
-                        sb.Append($"IS_old[{dpf}{melding.RelatedInput1}] && !IS[{dpf}{melding.RelatedInput1}]");
-                        break;
-                }
+                var code = GetInputCode(melding.RelatedInput1Type, $"{dpf}{melding.RelatedInput1}");
                 if (melding.TweedeInput)
                 {
-                    switch (melding.RelatedInput2Type)
-                    {
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
-                            sb.Append($" && SD[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
-                            sb.Append($" && D[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
-                            sb.Append($" && DB[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
-                            sb.Append($" && !DB_old[{dpf}{melding.RelatedInput2}] && DB[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
-                            sb.Append($" && ED[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
-                            sb.Append($" && TDH_old[{dpf}{melding.RelatedInput2}] && !TDH[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang:
-                            sb.Append($" && IS[{dpf}{melding.RelatedInput2}] && !IS_old[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog:
-                            sb.Append($" && IS[{dpf}{melding.RelatedInput2}]");
-                            break;
-                        case PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang:
-                            sb.Append($" && IS_old[{dpf}{melding.RelatedInput2}] && !IS[{dpf}{melding.RelatedInput2}]");
-                            break;
-                    }
+                    var code2 = GetInputCode(melding.RelatedInput2Type, $"{dpf}{melding.RelatedInput2}");
+                    if (code2 != null) code += $" && {code2}";
                 }
-                return sb.ToString();
+                return code;
+            }
+
+            /// <summary>
+            /// Condition on a single detector or input, eg. SD[d1]; null for an unknown input type.
+            /// </summary>
+            private static string GetInputCode(PrioIngreepInUitMeldingVoorwaardeInputTypeEnum type, string input)
+            {
+                return type switch
+                {
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie => $"SD[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp => $"D[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet => $"DB[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet => $"!DB_old[{input}] && DB[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie => $"ED[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat => $"TDH_old[{input}] && !TDH[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang => $"IS[{input}] && !IS_old[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.IngangHoog => $"IS[{input}]",
+                    PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang => $"IS_old[{input}] && !IS[{input}]",
+                    _ => null
+                };
             }
         }
     }
