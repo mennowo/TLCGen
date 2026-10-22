@@ -344,7 +344,7 @@ namespace TLCGen.UnitTests.Golden
         }
 
         // blocking non-conflicts during a HD ingreep (all fasen, or langzaam verkeer only), with generic HD ingrepen
-        // on an auto and a fiets fase and a legacy HD ingreep
+        // on two auto fasen and a legacy HD ingreep; langzaam verkeer (22, 31) has no HD ingrepen (PrioVoertuigTypes)
         private static ControllerModel HulpdienstBlokkeren(bool alleenLangzaamVerkeer)
         {
             var c = CreateController(("02", FaseTypeEnum.Auto), ("05", FaseTypeEnum.Auto), ("08", FaseTypeEnum.Auto),
@@ -353,7 +353,7 @@ namespace TLCGen.UnitTests.Golden
             c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer = alleenLangzaamVerkeer;
 
             AddIngreep(c, "02", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
-            AddIngreep(c, "22", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
+            AddIngreep(c, "05", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
             AddHDIngreep(c, "08").KAR = true;
             AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, Kar(true), Kar(false));
 

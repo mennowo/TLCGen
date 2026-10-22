@@ -185,8 +185,8 @@ void simulation_parameters(void)
     Q3[13] = 0;
     Q4[13] = 0;
 
-    LNK_code[14] = "dummykarin22hd";
-    IS_nr[14] = ddummykarin22hd;
+    LNK_code[14] = "dummykarin05hd";
+    IS_nr[14] = ddummykarin05hd;
     FC_nr[14] = NG;
     S_generator[14] = NG;
     S_stopline[14] = 0;
@@ -215,8 +215,8 @@ void simulation_parameters(void)
     Q3[16] = 0;
     Q4[16] = 0;
 
-    LNK_code[17] = "dummykaruit22hd";
-    IS_nr[17] = ddummykaruit22hd;
+    LNK_code[17] = "dummykaruit05hd";
+    IS_nr[17] = ddummykaruit05hd;
     FC_nr[17] = NG;
     S_generator[17] = NG;
     S_stopline[17] = 0;

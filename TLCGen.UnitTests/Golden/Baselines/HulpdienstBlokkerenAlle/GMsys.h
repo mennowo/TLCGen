@@ -43,7 +43,7 @@
     #define uskarmelding (FCMAX +  8) /* Verklikken ontvangst melding KAR           */
     #define uskarog      (FCMAX +  9) /* Verklikken ondergedrag KAR                 */
     #define usovinm02hd  (FCMAX + 10) /* Verklikken inmelding OV fase 02            */
-    #define usovinm22hd  (FCMAX + 11) /* Verklikken inmelding OV fase 22            */
+    #define usovinm05hd  (FCMAX + 11) /* Verklikken inmelding OV fase 05            */
     #define usovinm41bus (FCMAX + 12) /* Verklikken inmelding OV fase 41            */
     #define ushdinm08    (FCMAX + 13) /* Verklikken inmelding HD fase 08            */
     #define usperdef     (FCMAX + 14) /* Default periode actief                     */
@@ -67,10 +67,10 @@
     #define d412              12
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST
     #define ddummykarin02hd   13
-    #define ddummykarin22hd   14
+    #define ddummykarin05hd   14
     #define ddummykarin41bus  15
     #define ddummykaruit02hd  16
-    #define ddummykaruit22hd  17
+    #define ddummykaruit05hd  17
     #define ddummykaruit41bus 18
     #define ddummyhdkarin08   19
     #define ddummyhdkaruit08  20
@@ -90,11 +90,11 @@
     #define hpriouit02hd      2 /* Prioriteit uitmelding 02 Nood- en hulpdienst     */
     #define hprioin02hdkar    3 /* Prioriteit inmelding fase 02 Nood- en hulpdienst */
     #define hpriouit02hdkar   4 /* Prioriteit uitmelding 02 Nood- en hulpdienst     */
-    #define hprio22hd         5 /* Bijhouden actief zijn prioriteit fase 22         */
-    #define hprioin22hd       6 /* Prioriteit inmelding fase 22 Nood- en hulpdienst */
-    #define hpriouit22hd      7 /* Prioriteit uitmelding 22 Nood- en hulpdienst     */
-    #define hprioin22hdkar    8 /* Prioriteit inmelding fase 22 Nood- en hulpdienst */
-    #define hpriouit22hdkar   9 /* Prioriteit uitmelding 22 Nood- en hulpdienst     */
+    #define hprio05hd         5 /* Bijhouden actief zijn prioriteit fase 05         */
+    #define hprioin05hd       6 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
+    #define hpriouit05hd      7 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
+    #define hprioin05hdkar    8 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
+    #define hpriouit05hdkar   9 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
     #define hprio41bus       10 /* Bijhouden actief zijn prioriteit fase 41         */
     #define hprioin41bus     11 /* Prioriteit inmelding fase 41 Bus                 */
     #define hpriouit41bus    12 /* Prioriteit uitmelding 41 Bus                     */
@@ -132,10 +132,10 @@
     #define trt02hd      9 /* Actuele rijtijd prio fase 02                          */
     #define tgb02hd     10 /* Groenbewaking prioriteit fase 02                      */
     #define tblk02hd    11 /* Blokkeertijd na prioriteitsingreep fase 02            */
-    #define tbtovg22hd  12 /* Timer bezettijd prioriteit gehinderde rijtijd fase 22 */
-    #define trt22hd     13 /* Actuele rijtijd prio fase 22                          */
-    #define tgb22hd     14 /* Groenbewaking prioriteit fase 22                      */
-    #define tblk22hd    15 /* Blokkeertijd na prioriteitsingreep fase 22            */
+    #define tbtovg05hd  12 /* Timer bezettijd prioriteit gehinderde rijtijd fase 05 */
+    #define trt05hd     13 /* Actuele rijtijd prio fase 05                          */
+    #define tgb05hd     14 /* Groenbewaking prioriteit fase 05                      */
+    #define tblk05hd    15 /* Blokkeertijd na prioriteitsingreep fase 05            */
     #define tbtovg41bus 16 /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
     #define trt41bus    17 /* Actuele rijtijd prio fase 41                          */
     #define tgb41bus    18 /* Groenbewaking prioriteit fase 41                      */
@@ -150,7 +150,7 @@
 /* teller elementen */
 /* ---------------- */
     #define cvc02hd  0 /* Bijhouden prio inmeldingen fase 02 type Nood- en hulpdienst */
-    #define cvc22hd  1 /* Bijhouden prio inmeldingen fase 22 type Nood- en hulpdienst */
+    #define cvc05hd  1 /* Bijhouden prio inmeldingen fase 05 type Nood- en hulpdienst */
     #define cvc41bus 2 /* Bijhouden prio inmeldingen fase 41 type Bus                 */
     #define cvchd08  3 /* Bijhouden prio inmeldingen fase 08                          */
     #define CTMAX1   4
@@ -160,8 +160,8 @@
     #define schcheckdstype      0 /* Check type DSI bericht bij VECOM                       */
     #define schprioin02hdkar    1 /* Inmelden 02 via Nood- en hulpdienst toestaan           */
     #define schpriouit02hdkar   2 /* Uitmelden 02 via Nood- en hulpdienst toestaan          */
-    #define schprioin22hdkar    3 /* Inmelden 22 via Nood- en hulpdienst toestaan           */
-    #define schpriouit22hdkar   4 /* Uitmelden 22 via Nood- en hulpdienst toestaan          */
+    #define schprioin05hdkar    3 /* Inmelden 05 via Nood- en hulpdienst toestaan           */
+    #define schpriouit05hdkar   4 /* Uitmelden 05 via Nood- en hulpdienst toestaan          */
     #define schprioin41buskar   5 /* Inmelden 41 via Bus toestaan                           */
     #define schpriouit41buskar  6 /* Uitmelden 41 via Bus toestaan                          */
     #define schhdin08kar        7 /* Inmelden 08 via KAR HD toestaan                        */
@@ -236,13 +236,13 @@
     #define prmupinagb02hd   56 /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 02                  */
     #define prmvtgcat02hd    57 /* Voertuigcategorie DSI voor prio ingreep 02hd                                   */
     #define prmprio02hd      58 /* Prioriteitsinstelling OV fase 02                                               */
-    #define prmrto22hd       59 /* Ongehinderde rijtijd prioriteit fase 22                                        */
-    #define prmrtbg22hd      60 /* Beperkt gehinderde rijtijd prioriteit fase 22                                  */
-    #define prmrtg22hd       61 /* Gehinderde rijtijd prioriteit fase 22                                          */
-    #define prmomx22hd       62 /* Ondermaximum OV fase 22                                                        */
-    #define prmupinagb22hd   63 /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 22                  */
-    #define prmvtgcat22hd    64 /* Voertuigcategorie DSI voor prio ingreep 22hd                                   */
-    #define prmprio22hd      65 /* Prioriteitsinstelling OV fase 22                                               */
+    #define prmrto05hd       59 /* Ongehinderde rijtijd prioriteit fase 05                                        */
+    #define prmrtbg05hd      60 /* Beperkt gehinderde rijtijd prioriteit fase 05                                  */
+    #define prmrtg05hd       61 /* Gehinderde rijtijd prioriteit fase 05                                          */
+    #define prmomx05hd       62 /* Ondermaximum OV fase 05                                                        */
+    #define prmupinagb05hd   63 /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 05                  */
+    #define prmvtgcat05hd    64 /* Voertuigcategorie DSI voor prio ingreep 05hd                                   */
+    #define prmprio05hd      65 /* Prioriteitsinstelling OV fase 05                                               */
     #define prmrto41bus      66 /* Ongehinderde rijtijd prioriteit fase 41                                        */
     #define prmrtbg41bus     67 /* Beperkt gehinderde rijtijd prioriteit fase 41                                  */
     #define prmrtg41bus      68 /* Gehinderde rijtijd prioriteit fase 41                                          */
@@ -303,7 +303,7 @@
     #define DSMAX    1
 
     #define prioFC02hd 0
-    #define prioFC22hd 1
+    #define prioFC05hd 1
     #define prioFC41bus 2
     #define hdFC08 3
     #define prioFCMAX 4

@@ -126,7 +126,7 @@ void control_parameters(void)
     US_code[uskarmelding] = "karmelding";                        /* Verklikken ontvangst melding KAR           */
     US_code[uskarog]      = "karog";                             /* Verklikken ondergedrag KAR                 */
     US_code[usovinm02hd]  = "ovinm02hd";                         /* Verklikken inmelding OV fase 02            */
-    US_code[usovinm22hd]  = "ovinm22hd";                         /* Verklikken inmelding OV fase 22            */
+    US_code[usovinm05hd]  = "ovinm05hd";                         /* Verklikken inmelding OV fase 05            */
     US_code[usovinm41bus] = "ovinm41bus";                        /* Verklikken inmelding OV fase 41            */
     US_code[ushdinm08]    = "hdinm08";                           /* Verklikken inmelding HD fase 08            */
     US_code[usperdef]     = "perdef";                            /* Default periode actief                     */
@@ -149,10 +149,10 @@ void control_parameters(void)
     D_code[d412] = "412"; 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST
     D_code[ddummykarin02hd]   = "dummykarin02hd";   
-    D_code[ddummykarin22hd]   = "dummykarin22hd";   
+    D_code[ddummykarin05hd]   = "dummykarin05hd";   
     D_code[ddummykarin41bus]  = "dummykarin41bus";  
     D_code[ddummykaruit02hd]  = "dummykaruit02hd";  
-    D_code[ddummykaruit22hd]  = "dummykaruit22hd";  
+    D_code[ddummykaruit05hd]  = "dummykaruit05hd";  
     D_code[ddummykaruit41bus] = "dummykaruit41bus"; 
     D_code[ddummyhdkarin08]   = "dummyhdkarin08";   
     D_code[ddummyhdkaruit08]  = "dummyhdkaruit08";  
@@ -168,11 +168,11 @@ void control_parameters(void)
     H_code[hpriouit02hd]     = "priouit02hd";                                /* Prioriteit uitmelding 02 Nood- en hulpdienst     */
     H_code[hprioin02hdkar]   = "prioin02hdkar";                              /* Prioriteit inmelding fase 02 Nood- en hulpdienst */
     H_code[hpriouit02hdkar]  = "priouit02hdkar";                             /* Prioriteit uitmelding 02 Nood- en hulpdienst     */
-    H_code[hprio22hd]        = "prio22hd";                                   /* Bijhouden actief zijn prioriteit fase 22         */
-    H_code[hprioin22hd]      = "prioin22hd";                                 /* Prioriteit inmelding fase 22 Nood- en hulpdienst */
-    H_code[hpriouit22hd]     = "priouit22hd";                                /* Prioriteit uitmelding 22 Nood- en hulpdienst     */
-    H_code[hprioin22hdkar]   = "prioin22hdkar";                              /* Prioriteit inmelding fase 22 Nood- en hulpdienst */
-    H_code[hpriouit22hdkar]  = "priouit22hdkar";                             /* Prioriteit uitmelding 22 Nood- en hulpdienst     */
+    H_code[hprio05hd]        = "prio05hd";                                   /* Bijhouden actief zijn prioriteit fase 05         */
+    H_code[hprioin05hd]      = "prioin05hd";                                 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
+    H_code[hpriouit05hd]     = "priouit05hd";                                /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
+    H_code[hprioin05hdkar]   = "prioin05hdkar";                              /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
+    H_code[hpriouit05hdkar]  = "priouit05hdkar";                             /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
     H_code[hprio41bus]       = "prio41bus";                                  /* Bijhouden actief zijn prioriteit fase 41         */
     H_code[hprioin41bus]     = "prioin41bus";                                /* Prioriteit inmelding fase 41 Bus                 */
     H_code[hpriouit41bus]    = "priouit41bus";                               /* Prioriteit uitmelding 41 Bus                     */
@@ -208,10 +208,10 @@ void control_parameters(void)
     T_code[trt02hd]     = "rt02hd";     T_max[trt02hd]     = 0;    T_type[trt02hd]     = TE_type; /* Actuele rijtijd prio fase 02                          */
     T_code[tgb02hd]     = "gb02hd";     T_max[tgb02hd]     = 600;  T_type[tgb02hd]     = TE_type; /* Groenbewaking prioriteit fase 02                      */
     T_code[tblk02hd]    = "blk02hd";    T_max[tblk02hd]    = 200;  T_type[tblk02hd]    = TE_type; /* Blokkeertijd na prioriteitsingreep fase 02            */
-    T_code[tbtovg22hd]  = "btovg22hd";  T_max[tbtovg22hd]  = 30;   T_type[tbtovg22hd]  = TE_type; /* Timer bezettijd prioriteit gehinderde rijtijd fase 22 */
-    T_code[trt22hd]     = "rt22hd";     T_max[trt22hd]     = 0;    T_type[trt22hd]     = TE_type; /* Actuele rijtijd prio fase 22                          */
-    T_code[tgb22hd]     = "gb22hd";     T_max[tgb22hd]     = 600;  T_type[tgb22hd]     = TE_type; /* Groenbewaking prioriteit fase 22                      */
-    T_code[tblk22hd]    = "blk22hd";    T_max[tblk22hd]    = 200;  T_type[tblk22hd]    = TE_type; /* Blokkeertijd na prioriteitsingreep fase 22            */
+    T_code[tbtovg05hd]  = "btovg05hd";  T_max[tbtovg05hd]  = 30;   T_type[tbtovg05hd]  = TE_type; /* Timer bezettijd prioriteit gehinderde rijtijd fase 05 */
+    T_code[trt05hd]     = "rt05hd";     T_max[trt05hd]     = 0;    T_type[trt05hd]     = TE_type; /* Actuele rijtijd prio fase 05                          */
+    T_code[tgb05hd]     = "gb05hd";     T_max[tgb05hd]     = 600;  T_type[tgb05hd]     = TE_type; /* Groenbewaking prioriteit fase 05                      */
+    T_code[tblk05hd]    = "blk05hd";    T_max[tblk05hd]    = 200;  T_type[tblk05hd]    = TE_type; /* Blokkeertijd na prioriteitsingreep fase 05            */
     T_code[tbtovg41bus] = "btovg41bus"; T_max[tbtovg41bus] = 30;   T_type[tbtovg41bus] = TE_type; /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
     T_code[trt41bus]    = "rt41bus";    T_max[trt41bus]    = 0;    T_type[trt41bus]    = TE_type; /* Actuele rijtijd prio fase 41                          */
     T_code[tgb41bus]    = "gb41bus";    T_max[tgb41bus]    = 600;  T_type[tgb41bus]    = TE_type; /* Groenbewaking prioriteit fase 41                      */
@@ -225,7 +225,7 @@ void control_parameters(void)
 /* teller elementen */
 /* ---------------- */
     C_code[cvc02hd]  = "vc02hd";  C_max[cvc02hd]  = 999; C_type[cvc02hd]  = CT_type; /* Bijhouden prio inmeldingen fase 02 type Nood- en hulpdienst */
-    C_code[cvc22hd]  = "vc22hd";  C_max[cvc22hd]  = 999; C_type[cvc22hd]  = CT_type; /* Bijhouden prio inmeldingen fase 22 type Nood- en hulpdienst */
+    C_code[cvc05hd]  = "vc05hd";  C_max[cvc05hd]  = 999; C_type[cvc05hd]  = CT_type; /* Bijhouden prio inmeldingen fase 05 type Nood- en hulpdienst */
     C_code[cvc41bus] = "vc41bus"; C_max[cvc41bus] = 999; C_type[cvc41bus] = CT_type; /* Bijhouden prio inmeldingen fase 41 type Bus                 */
     C_code[cvchd08]  = "vchd08";  C_max[cvchd08]  = 999; C_type[cvchd08]  = CT_type; /* Bijhouden prio inmeldingen fase 08                          */
 
@@ -234,8 +234,8 @@ void control_parameters(void)
     SCH_code[schcheckdstype]     = "checkdstype";     SCH[schcheckdstype]     = 0;                                  /* Check type DSI bericht bij VECOM                       */
     SCH_code[schprioin02hdkar]   = "prioin02hdkar";   SCH[schprioin02hdkar]   = 1;                                  /* Inmelden 02 via Nood- en hulpdienst toestaan           */
     SCH_code[schpriouit02hdkar]  = "priouit02hdkar";  SCH[schpriouit02hdkar]  = 1;                                  /* Uitmelden 02 via Nood- en hulpdienst toestaan          */
-    SCH_code[schprioin22hdkar]   = "prioin22hdkar";   SCH[schprioin22hdkar]   = 1;                                  /* Inmelden 22 via Nood- en hulpdienst toestaan           */
-    SCH_code[schpriouit22hdkar]  = "priouit22hdkar";  SCH[schpriouit22hdkar]  = 1;                                  /* Uitmelden 22 via Nood- en hulpdienst toestaan          */
+    SCH_code[schprioin05hdkar]   = "prioin05hdkar";   SCH[schprioin05hdkar]   = 1;                                  /* Inmelden 05 via Nood- en hulpdienst toestaan           */
+    SCH_code[schpriouit05hdkar]  = "priouit05hdkar";  SCH[schpriouit05hdkar]  = 1;                                  /* Uitmelden 05 via Nood- en hulpdienst toestaan          */
     SCH_code[schprioin41buskar]  = "prioin41buskar";  SCH[schprioin41buskar]  = 1;                                  /* Inmelden 41 via Bus toestaan                           */
     SCH_code[schpriouit41buskar] = "priouit41buskar"; SCH[schpriouit41buskar] = 1;                                  /* Uitmelden 41 via Bus toestaan                          */
     SCH_code[schhdin08kar]       = "hdin08kar";       SCH[schhdin08kar]       = 1;                                  /* Inmelden 08 via KAR HD toestaan                        */
@@ -309,13 +309,13 @@ void control_parameters(void)
     PRM_code[prmupinagb02hd]  = "upinagb02hd";  PRM[prmupinagb02hd]  = 0;                                         /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 02                  */
     PRM_code[prmvtgcat02hd]   = "vtgcat02hd";   PRM[prmvtgcat02hd]   = 0;                                         /* Voertuigcategorie DSI voor prio ingreep 02hd                                   */
     PRM_code[prmprio02hd]     = "prio02hd";     PRM[prmprio02hd]     = 9005;                                      /* Prioriteitsinstelling OV fase 02                                               */
-    PRM_code[prmrto22hd]      = "rto22hd";      PRM[prmrto22hd]      = 150;  PRM_type[prmrto22hd]      = TE_type; /* Ongehinderde rijtijd prioriteit fase 22                                        */
-    PRM_code[prmrtbg22hd]     = "rtbg22hd";     PRM[prmrtbg22hd]     = 200;  PRM_type[prmrtbg22hd]     = TE_type; /* Beperkt gehinderde rijtijd prioriteit fase 22                                  */
-    PRM_code[prmrtg22hd]      = "rtg22hd";      PRM[prmrtg22hd]      = 300;  PRM_type[prmrtg22hd]      = TE_type; /* Gehinderde rijtijd prioriteit fase 22                                          */
-    PRM_code[prmomx22hd]      = "omx22hd";      PRM[prmomx22hd]      = 50;   PRM_type[prmomx22hd]      = TE_type; /* Ondermaximum OV fase 22                                                        */
-    PRM_code[prmupinagb22hd]  = "upinagb22hd";  PRM[prmupinagb22hd]  = 0;                                         /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 22                  */
-    PRM_code[prmvtgcat22hd]   = "vtgcat22hd";   PRM[prmvtgcat22hd]   = 0;                                         /* Voertuigcategorie DSI voor prio ingreep 22hd                                   */
-    PRM_code[prmprio22hd]     = "prio22hd";     PRM[prmprio22hd]     = 9005;                                      /* Prioriteitsinstelling OV fase 22                                               */
+    PRM_code[prmrto05hd]      = "rto05hd";      PRM[prmrto05hd]      = 150;  PRM_type[prmrto05hd]      = TE_type; /* Ongehinderde rijtijd prioriteit fase 05                                        */
+    PRM_code[prmrtbg05hd]     = "rtbg05hd";     PRM[prmrtbg05hd]     = 200;  PRM_type[prmrtbg05hd]     = TE_type; /* Beperkt gehinderde rijtijd prioriteit fase 05                                  */
+    PRM_code[prmrtg05hd]      = "rtg05hd";      PRM[prmrtg05hd]      = 300;  PRM_type[prmrtg05hd]      = TE_type; /* Gehinderde rijtijd prioriteit fase 05                                          */
+    PRM_code[prmomx05hd]      = "omx05hd";      PRM[prmomx05hd]      = 50;   PRM_type[prmomx05hd]      = TE_type; /* Ondermaximum OV fase 05                                                        */
+    PRM_code[prmupinagb05hd]  = "upinagb05hd";  PRM[prmupinagb05hd]  = 0;                                         /* Selectieve detectie onbetrouwbaar na groenbewaking OV fase 05                  */
+    PRM_code[prmvtgcat05hd]   = "vtgcat05hd";   PRM[prmvtgcat05hd]   = 0;                                         /* Voertuigcategorie DSI voor prio ingreep 05hd                                   */
+    PRM_code[prmprio05hd]     = "prio05hd";     PRM[prmprio05hd]     = 9005;                                      /* Prioriteitsinstelling OV fase 05                                               */
     PRM_code[prmrto41bus]     = "rto41bus";     PRM[prmrto41bus]     = 150;  PRM_type[prmrto41bus]     = TE_type; /* Ongehinderde rijtijd prioriteit fase 41                                        */
     PRM_code[prmrtbg41bus]    = "rtbg41bus";    PRM[prmrtbg41bus]    = 200;  PRM_type[prmrtbg41bus]    = TE_type; /* Beperkt gehinderde rijtijd prioriteit fase 41                                  */
     PRM_code[prmrtg41bus]     = "rtg41bus";     PRM[prmrtg41bus]     = 300;  PRM_type[prmrtg41bus]     = TE_type; /* Gehinderde rijtijd prioriteit fase 41                                          */

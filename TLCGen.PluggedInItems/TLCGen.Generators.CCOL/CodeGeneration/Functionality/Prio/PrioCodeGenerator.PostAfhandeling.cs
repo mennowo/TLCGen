@@ -73,9 +73,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}if (isHD)");
                     }
                     sb.AppendLine($"{ts}{{");
+                    // langzaam verkeer has no HD ingrepen of its own (PrioVoertuigTypes): always blocked
                     foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
                     {
-                        AppendBlokkeerBijHDCode(c, sb, fc.Naam, ts);
+                        sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
                     }
                 }
                 sb.AppendLine($"{ts}}}");

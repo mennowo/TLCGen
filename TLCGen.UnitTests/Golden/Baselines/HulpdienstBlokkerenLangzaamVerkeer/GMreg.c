@@ -408,7 +408,7 @@ void system_application(void)
     /* PRIO verklikking */
     /* ---------------- */
     CIF_GUS[usovinm02hd] = C[cvc02hd];
-    CIF_GUS[usovinm22hd] = C[cvc22hd];
+    CIF_GUS[usovinm05hd] = C[cvc05hd];
     CIF_GUS[usovinm41bus] = C[cvc41bus];
     CIF_GUS[ushdinm08] = C[cvchd08];
 

@@ -60,7 +60,7 @@
                         <Label Content="Type voertuig" />
                         <ComboBox Margin="2"
                             SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PrioIngreepVoertuigTypeEnum}}}" />
+                            ItemsSource="{Binding Path=AvailableTypes}" />
                         
                         <!-- Tijden -->
                         <TextBlock Text="Tijden" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />

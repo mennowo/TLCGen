@@ -63,10 +63,10 @@ void display_parameters(void)
     X_is[d412] = NG; Y_is[d412] = NG;
 #if (!defined AUTOMAAT_TEST)
     X_is[ddummykarin02hd] = NG; Y_is[ddummykarin02hd] = NG;
-    X_is[ddummykarin22hd] = NG; Y_is[ddummykarin22hd] = NG;
+    X_is[ddummykarin05hd] = NG; Y_is[ddummykarin05hd] = NG;
     X_is[ddummykarin41bus] = NG; Y_is[ddummykarin41bus] = NG;
     X_is[ddummykaruit02hd] = NG; Y_is[ddummykaruit02hd] = NG;
-    X_is[ddummykaruit22hd] = NG; Y_is[ddummykaruit22hd] = NG;
+    X_is[ddummykaruit05hd] = NG; Y_is[ddummykaruit05hd] = NG;
     X_is[ddummykaruit41bus] = NG; Y_is[ddummykaruit41bus] = NG;
     X_is[ddummyhdkarin08] = NG; Y_is[ddummyhdkarin08] = NG;
     X_is[ddummyhdkaruit08] = NG; Y_is[ddummyhdkaruit08] = NG;
@@ -85,7 +85,7 @@ void display_parameters(void)
     X_us[uskarmelding] = NG; Y_us[uskarmelding] = NG;
     X_us[uskarog] = NG; Y_us[uskarog] = NG;
     X_us[usovinm02hd] = NG; Y_us[usovinm02hd] = NG;
-    X_us[usovinm22hd] = NG; Y_us[usovinm22hd] = NG;
+    X_us[usovinm05hd] = NG; Y_us[usovinm05hd] = NG;
     X_us[usovinm41bus] = NG; Y_us[usovinm41bus] = NG;
     X_us[ushdinm08] = NG; Y_us[ushdinm08] = NG;
     X_us[usperdef] = NG; Y_us[usperdef] = NG;
