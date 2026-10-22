@@ -279,7 +279,7 @@ void control_parameters(void)
     PRM_code[prmrisimportance41bus]     = "risimportance41bus";     PRM[prmrisimportance41bus]     = 2;                                                 
     PRM_code[prmrisstationtype41bus]    = "risstationtype41bus";    PRM[prmrisstationtype41bus]    = 0;                                                 
     PRM_code[prmrisgrenspriotype41bus]  = "risgrenspriotype41bus";  PRM[prmrisgrenspriotype41bus]  = 9;                                                  /* Greenswaarde type prioriteit RIS voor fase 41                                  */
-    PRM_code[prmrisapproachid41bus]     = "risapproachid41bus";     PRM[prmrisapproachid41bus]     = 1;                                                 
+    PRM_code[prmrisapproachid41bus]     = "risapproachid41bus";     PRM[prmrisapproachid41bus]     = 999;                                               
     PRM_code[prmrislaneid41bus_1]       = "rislaneid41bus_1";       PRM[prmrislaneid41bus_1]       = 1;                                                 
     PRM_code[prmrislaneid41bus_2]       = "rislaneid41bus_2";       PRM[prmrislaneid41bus_2]       = 2;                                                 
     PRM_code[prmrto41tram]              = "rto41tram";              PRM[prmrto41tram]              = 150; PRM_type[prmrto41tram]              = TE_type; /* Ongehinderde rijtijd prioriteit fase 41                                        */
@@ -296,7 +296,7 @@ void control_parameters(void)
     PRM_code[prmrisimportance41tram]    = "risimportance41tram";    PRM[prmrisimportance41tram]    = 2;                                                 
     PRM_code[prmrisstationtype41tram]   = "risstationtype41tram";   PRM[prmrisstationtype41tram]   = 0;                                                 
     PRM_code[prmrisgrenspriotype41tram] = "risgrenspriotype41tram"; PRM[prmrisgrenspriotype41tram] = 9;                                                  /* Greenswaarde type prioriteit RIS voor fase 41                                  */
-    PRM_code[prmrisapproachid41tram]    = "risapproachid41tram";    PRM[prmrisapproachid41tram]    = 1;                                                 
+    PRM_code[prmrisapproachid41tram]    = "risapproachid41tram";    PRM[prmrisapproachid41tram]    = 999;                                               
     PRM_code[prmrislaneid41tram_1]      = "rislaneid41tram_1";      PRM[prmrislaneid41tram_1]      = 1;                                                 
     PRM_code[prmrislaneid41tram_2]      = "rislaneid41tram_2";      PRM[prmrislaneid41tram_2]      = 2;                                                 
     PRM_code[prmrto42]                  = "rto42";                  PRM[prmrto42]                  = 150; PRM_type[prmrto42]                  = TE_type; /* Ongehinderde rijtijd prioriteit fase 42                                        */
