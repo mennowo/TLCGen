@@ -362,7 +362,7 @@ void InUitMelden(void)
     if (SCH[schprioin61ahdkar])
     {
         IH[hprioin61ahdkar] = 
-            DSIMelding_HD_V1(-1, CIF_DSIN, (!SCH[schchecksirene61ahd] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR));
+            DSIMelding_HD_V1(NG, CIF_DSIN, (!SCH[schchecksirene61ahd] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR));
     }
     IH[hprioin61ahd] = IH[hprioin61ahdkar];
 
@@ -371,7 +371,7 @@ void InUitMelden(void)
     if (SCH[schpriouit61ahdkar])
     {
         IH[hpriouit61ahdkar] = 
-            DSIMelding_HD_V1(-1, CIF_DSUIT, (!SCH[schchecksirene61ahd] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR));
+            DSIMelding_HD_V1(NG, CIF_DSUIT, (!SCH[schchecksirene61ahd] || CIF_DSI[CIF_DSI_PRI] == CIF_SIR));
     }
     IH[hpriouit61ahd] = IH[hpriouit61ahdkar];
 
