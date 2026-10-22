@@ -154,20 +154,19 @@
     #define schchecksirene02hd       3 /* Bij HD meldingen bij 02 via DSI controleren op CIF_SIR             */
     #define schpriomr05hdmet02hd     4 /* Meerealisatie fase 05hd met hulpdienst ingreep Nood- en hulpdienst */
     #define schprioin05hdkar         5 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
-    #define schprioin05hdopti        6 /* Inmelden 05 via Opticom toestaan                                   */
-    #define schprioin05hdopti051DB   7 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
-    #define schpriouit05hdkar        8 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
-    #define schpriouit05hdopti052DB  9 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
-    #define schpriomr02hdmet05hd    10 /* Meerealisatie fase 02hd met hulpdienst ingreep Nood- en hulpdienst */
-    #define schprioin08hddet081SD   11 /* Inmelden 08 via Nood- en hulpdienst toestaan                       */
-    #define schpriouit08hddet082ED  12 /* Uitmelden 08 via Nood- en hulpdienst toestaan                      */
-    #define schprioin41buskar       13 /* Inmelden 41 via Bus toestaan                                       */
-    #define schpriouit41buskar      14 /* Uitmelden 41 via Bus toestaan                                      */
-    #define schaltg02               15 /* Alternatieve realisatie toestaan fase 02                           */
-    #define schaltg05               16 /* Alternatieve realisatie toestaan fase 05                           */
-    #define schaltg08               17 /* Alternatieve realisatie toestaan fase 08                           */
-    #define schaltg41               18 /* Alternatieve realisatie toestaan fase 41                           */
-    #define SCHMAX1                 19
+    #define schprioin05hdopti051DB   6 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
+    #define schpriouit05hdkar        7 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
+    #define schpriouit05hdopti052DB  8 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
+    #define schpriomr02hdmet05hd     9 /* Meerealisatie fase 02hd met hulpdienst ingreep Nood- en hulpdienst */
+    #define schprioin08hddet081SD   10 /* Inmelden 08 via Nood- en hulpdienst toestaan                       */
+    #define schpriouit08hddet082ED  11 /* Uitmelden 08 via Nood- en hulpdienst toestaan                      */
+    #define schprioin41buskar       12 /* Inmelden 41 via Bus toestaan                                       */
+    #define schpriouit41buskar      13 /* Uitmelden 41 via Bus toestaan                                      */
+    #define schaltg02               14 /* Alternatieve realisatie toestaan fase 02                           */
+    #define schaltg05               15 /* Alternatieve realisatie toestaan fase 05                           */
+    #define schaltg08               16 /* Alternatieve realisatie toestaan fase 08                           */
+    #define schaltg41               17 /* Alternatieve realisatie toestaan fase 41                           */
+    #define SCHMAX1                 18
 
 /* parameters */
 /* ---------- */

@@ -208,7 +208,6 @@ void control_parameters(void)
     SCH_code[schchecksirene02hd]      = "checksirene02hd";      SCH[schchecksirene02hd]      = 1;                                       /* Bij HD meldingen bij 02 via DSI controleren op CIF_SIR             */
     SCH_code[schpriomr05hdmet02hd]    = "priomr05hdmet02hd";    SCH[schpriomr05hdmet02hd]    = 1;                                       /* Meerealisatie fase 05hd met hulpdienst ingreep Nood- en hulpdienst */
     SCH_code[schprioin05hdkar]        = "prioin05hdkar";        SCH[schprioin05hdkar]        = 1;                                       /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
-    SCH_code[schprioin05hdopti]       = "prioin05hdopti";       SCH[schprioin05hdopti]       = 1;                                       /* Inmelden 05 via Opticom toestaan                                   */
     SCH_code[schprioin05hdopti051DB]  = "prioin05hdopti051DB";  SCH[schprioin05hdopti051DB]  = 1;                                       /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
     SCH_code[schpriouit05hdkar]       = "priouit05hdkar";       SCH[schpriouit05hdkar]       = 1;                                       /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
     SCH_code[schpriouit05hdopti052DB] = "priouit05hdopti052DB"; SCH[schpriouit05hdopti052DB] = 1;                                       /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */

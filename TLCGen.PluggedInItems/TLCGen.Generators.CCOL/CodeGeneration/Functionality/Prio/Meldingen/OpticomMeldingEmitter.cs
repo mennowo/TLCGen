@@ -8,8 +8,8 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     // Prio: meldingen of type Opticom: inmelding on an occupied Opticom detector, uitmelding at the end of
-    // detection of the detector of the Opticom uitmelding. NOTE: the names used here do not match the declared
-    // elements in all cases (todo note 1576).
+    // detection of the detector of the Opticom uitmelding. Enabled by the regular switch of the melding only.
+    // NOTE: the names used here do not match the declared elements in all cases (todo note 1576).
     public partial class PrioCodeGenerator
     {
         private sealed class OpticomMeldingEmitter : PrioMeldingEmitter
@@ -30,7 +30,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var provider = CCOLGeneratorSettingsProvider.Default;
                 elements.Add(provider.CreateElement($"{G._hprioin}{b}", G._hprioin, fc, "Opticom"));
                 elements.Add(provider.CreateElement($"{G._tprioin}{b}", melding.AntiJutterTijdToepassen ? melding.AntiJutterTijd : 0, CCOLElementTimeTypeEnum.TE_type, G._tprioin, fc, "Opticom"));
-                elements.Add(provider.CreateElement($"{G._schprioin}{b}", 1, CCOLElementTimeTypeEnum.SCH_type, G._schprioin, fc, "Opticom"));
                 elements.Add(provider.CreateElement($"{G._hpriouit}{b}", G._hpriouit, fc, "Opticom"));
             }
 
@@ -42,14 +41,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 switch (m.Melding.InUit)
                 {
                     case PrioIngreepInUitMeldingTypeEnum.Inmelding:
-                        sb.AppendLine($"SCH[{G._schpf}{G._schprioin}{b}] && !C[{G._ctpf}{G._cvc}{m.PrioName}] && DB[{G._dpf}{m.Melding.RelatedInput1}];");
+                        sb.AppendLine($"!C[{G._ctpf}{G._cvc}{m.PrioName}] && DB[{G._dpf}{m.Melding.RelatedInput1}];");
                         sb.AppendLine($"{ts}{ts}RT[{m.Timer}] = G[{G._fcpf}{prio.FaseCyclus}] && C[{G._ctpf}{G._cvc}{m.PrioName}];");
                         break;
                     case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
                         var uitMelding = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom);
                         if (uitMelding != null && uitMelding.RelatedInput1 != null)
                         {
-                            sb.AppendLine($"SCH[{G._schpf}{G._schprioin}{b}] && !TDH[{G._dpf}{uitMelding.RelatedInput1}] && TDH_old[{G._dpf}{uitMelding.RelatedInput1}];");
+                            sb.AppendLine($"!TDH[{G._dpf}{uitMelding.RelatedInput1}] && TDH_old[{G._dpf}{uitMelding.RelatedInput1}];");
                         }
                         break;
                 }
