@@ -30,6 +30,8 @@ namespace TLCGen.UnitTests.Golden
             ["Ris"] = Ris,
             ["HulpdienstGeneriek"] = HulpdienstGeneriek,
             ["HulpdienstLegacy"] = HulpdienstLegacy,
+            ["HulpdienstBlokkerenAlle"] = () => HulpdienstBlokkeren(false),
+            ["HulpdienstBlokkerenLangzaamVerkeer"] = () => HulpdienstBlokkeren(true),
             ["KarSgInParametersUitgangPerFase"] = () => KarSgHogeNummers(true),
             ["KarSgHogeNummers"] = () => KarSgHogeNummers(false),
             ["NaloopMetPrio"] = NaloopMetPrio,
@@ -336,6 +338,23 @@ namespace TLCGen.UnitTests.Golden
             hd08.RisEta = null;
             hd08.RisImportance = RISVehicleImportance.I02;
 
+            AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, Kar(true), Kar(false));
+
+            return c;
+        }
+
+        // blocking non-conflicts during a HD ingreep (all fasen, or langzaam verkeer only), with generic HD ingrepen
+        // on two auto fasen and a legacy HD ingreep; langzaam verkeer (22, 31) has no HD ingrepen (PrioVoertuigTypes)
+        private static ControllerModel HulpdienstBlokkeren(bool alleenLangzaamVerkeer)
+        {
+            var c = CreateController(("02", FaseTypeEnum.Auto), ("05", FaseTypeEnum.Auto), ("08", FaseTypeEnum.Auto),
+                ("22", FaseTypeEnum.Fiets), ("31", FaseTypeEnum.Voetganger), ("41", FaseTypeEnum.OV));
+            c.PrioData.BlokkeerNietConflictenBijHDIngreep = true;
+            c.PrioData.BlokkeerNietConflictenAlleenLangzaamVerkeer = alleenLangzaamVerkeer;
+
+            AddIngreep(c, "02", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
+            AddIngreep(c, "05", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
+            AddHDIngreep(c, "08").KAR = true;
             AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, Kar(true), Kar(false));
 
             return c;

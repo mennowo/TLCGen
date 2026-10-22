@@ -63,6 +63,13 @@ namespace TLCGen.ViewModels
             get => PrioIngreep.Type;
             set
             {
+                // eg. Hulpdienst on a langzaam verkeer fase (the overview grid offers all types): keep the current type
+                if (!AvailableTypes.Contains(value))
+                {
+                    OnPropertyChanged(nameof(Type));
+                    return;
+                }
+
                 // the model owns the rules (allowed melding types, RIS roles, dummy KAR detectors); the
                 // melding view-models then follow the model
                 PrioIngreepModelSync.ApplyVehicleTypeChange(PrioIngreep, value, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
@@ -83,6 +90,21 @@ namespace TLCGen.ViewModels
 
                 // values only: copying reference properties would replace MeldingenData etc. with the defaults' instances
                 DefaultsProvider.Default.SetDefaultsOnModel(PrioIngreep, PrioIngreep.Type.ToString(), null, true);
+            }
+        }
+
+        /// <summary>
+        /// The vehicle types that can be chosen for the fase of this ingreep (PrioVoertuigTypes).
+        /// </summary>
+        [Browsable(false)]
+        public IReadOnlyList<PrioIngreepVoertuigTypeEnum> AvailableTypes
+        {
+            get
+            {
+                var fc = ControllerAccessProvider.Default.Controller?.Fasen.FirstOrDefault(x => x.Naam == PrioIngreep.FaseCyclus);
+                return fc == null
+                    ? Enum.GetValues(typeof(PrioIngreepVoertuigTypeEnum)).Cast<PrioIngreepVoertuigTypeEnum>().ToList()
+                    : PrioVoertuigTypes.GetAllowed(fc.Type);
             }
         }
 
