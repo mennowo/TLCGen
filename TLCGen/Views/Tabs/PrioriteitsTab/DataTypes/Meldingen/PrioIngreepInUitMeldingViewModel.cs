@@ -160,6 +160,10 @@ namespace TLCGen.ViewModels
                         break;
                     case PrioIngreepMeldingenListViewModel list:
                         list.Meldingen.Remove(this);
+                        if (PrioIngreepInUitMelding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
+                        {
+                            foreach (var melding in list.Meldingen) melding.RefreshAvailableTypes();
+                        }
                         WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(_ingreep.PrioIngreep.FaseCyclus, PrioIngreepInUitMelding, true));
                         break;
                 }
@@ -193,7 +197,7 @@ namespace TLCGen.ViewModels
 
             var allowed = IsMeldingBijStoring
                 ? new[] { PrioMeldingTypes.MeldingBijStoringType }
-                : PrioMeldingTypes.GetAllowed(_ingreep.Type, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
+                : PrioMeldingTypes.GetAllowed(_ingreep.PrioIngreep, PrioIngreepInUitMelding, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
             MeldingenTypes = new ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper>(
                 allowed.Select(x => new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(x)));
             Type = MeldingenTypes.FirstOrDefault(x => x.Value == PrioIngreepInUitMelding.Type) ?? MeldingenTypes.FirstOrDefault();
@@ -209,7 +213,8 @@ namespace TLCGen.ViewModels
         /// </summary>
         private void OnMeldingTypeChanged()
         {
-            var raise = PrioIngreepInUitMelding.Type != Type.Value;
+            var oldType = PrioIngreepInUitMelding.Type;
+            var raise = oldType != Type.Value;
             if (raise) PrioTrace.Write($"{_ingreep.FaseCyclus}{_ingreep.Naam}: {InUit} type {PrioIngreepInUitMelding.Type} -> {Type.Value} (UI)");
             PrioIngreepInUitMelding.Type = Type.Value;
             if (raise) OnPropertyChanged(nameof(Type), broadcast: true);
@@ -217,6 +222,13 @@ namespace TLCGen.ViewModels
             // a type without opvang storing loses its melding bij storing (only on a real change: older files keep
             // theirs until then; the generator ignores it)
             if (raise && OpvangStoring && !CanHaveOpvangStoring) OpvangStoring = false;
+
+            // at most one RIS melding per side: the other meldingen offer RIS again, or no longer
+            if (raise && (oldType == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde ||
+                          Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+            {
+                RefreshSiblingTypes();
+            }
 
             if (Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {
@@ -238,6 +250,18 @@ namespace TLCGen.ViewModels
                    + (InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? "in" : "uit");
             WeakReferenceMessengerEx.Default.Send(new PrioIngreepMeldingChangedMessage(msg.FaseCyclus, PrioIngreepInUitMelding));
             SetActualViewModel();
+        }
+
+        /// <summary>
+        /// Refreshes the melding types of the other meldingen in the same list (eg. RIS available or not).
+        /// </summary>
+        private void RefreshSiblingTypes()
+        {
+            if (_parent is not PrioIngreepMeldingenListViewModel { Meldingen: not null } list) return;
+            foreach (var melding in list.Meldingen.Where(x => x != this))
+            {
+                melding.RefreshAvailableTypes();
+            }
         }
 
         private void SetActualViewModel()

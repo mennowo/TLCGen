@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -28,6 +29,26 @@ namespace TLCGen.Models
             melding.OpvangStoring && melding.MeldingBijstoring != null &&
             SupportsOpvangStoring(melding.Type) &&
             melding.MeldingBijstoring.Type == MeldingBijStoringType;
+
+        /// <summary>
+        /// The melding types allowed for a (top level) melding of an ingreep: those of the vehicle type, without RIS
+        /// when another in- or uitmelding (same side) of the ingreep already is a RIS melding: an ingreep has at most
+        /// one RIS inmelding and one RIS uitmelding (the generated element names would clash). A melding that already
+        /// is RIS keeps it (no correction of older files).
+        /// </summary>
+        public static IReadOnlyList<PrioIngreepInUitMeldingVoorwaardeTypeEnum> GetAllowed(PrioIngreepModel prio, PrioIngreepInUitMeldingModel melding, CCOLVersieEnum ccolVersie)
+        {
+            var types = GetAllowed(prio.Type, ccolVersie);
+            var meldingen = melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding
+                ? prio.MeldingenData.Inmeldingen
+                : prio.MeldingenData.Uitmeldingen;
+            if (melding.Type != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde &&
+                meldingen.Any(x => !ReferenceEquals(x, melding) && x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde))
+            {
+                return types.Where(x => x != PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde).ToList();
+            }
+            return types;
+        }
 
         /// <summary>
         /// The melding types allowed for a vehicle type, in the order they are offered in the UI. RIS meldingen

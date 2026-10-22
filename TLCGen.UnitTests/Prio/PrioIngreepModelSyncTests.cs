@@ -45,6 +45,21 @@ namespace TLCGen.UnitTests.Prio
                 Does.Contain(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
         }
 
+        [Test]
+        public void GetAllowed_ForMelding_AtMostOneRisMeldingPerSide()
+        {
+            var prio = CreateIngreep(PrioIngreepVoertuigTypeEnum.Bus,
+                PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+            var ris = prio.MeldingenData.Inmeldingen[0];
+            var kar = prio.MeldingenData.Inmeldingen[1];
+            var uit = prio.MeldingenData.Uitmeldingen[0];
+            const PrioIngreepInUitMeldingVoorwaardeTypeEnum risType = PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
+
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, ris, CCOLVersieEnum.CCOL110), Does.Contain(risType), "the RIS melding itself");
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, kar, CCOLVersieEnum.CCOL110), Does.Not.Contain(risType), "a second inmelding");
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, uit, CCOLVersieEnum.CCOL110), Does.Contain(risType), "an uitmelding (other side)");
+        }
+
         [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
         [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
         [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, false)]
