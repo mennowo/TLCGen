@@ -114,24 +114,26 @@
 
 /* tijd elementen */
 /* -------------- */
-    #define tkm02                0 /* Kop maximum voor detector 02                          */
-    #define tkm05                1 /* Kop maximum voor detector 05                          */
-    #define tkm41                2 /* Kop maximum voor detector 41                          */
-    #define tkm42                3 /* Kop maximum voor detector 42                          */
-    #define tkarmelding          4 /* Duur verklikking ontvangst melding KAR                */
-    #define tkarog               5 /* Ondergedrag KAR                                       */
-    #define tprioin41buskar      6 /* Anti jutter tijd inmelden 41 Bus                      */
-    #define tprioin41busdet413   7 /* Anti jutter tijd inmelden 41 Bus                      */
-    #define tprioin41busopti414  8 /* Anti jutter tijd inmelden 41 Bus                      */
-    #define tbtovg41bus          9 /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
-    #define trt41bus            10 /* Actuele rijtijd prio fase 41                          */
-    #define tgb41bus            11 /* Groenbewaking prioriteit fase 41                      */
-    #define tblk41bus           12 /* Blokkeertijd na prioriteitsingreep fase 41            */
-    #define tbtovg42bus         13 /* Timer bezettijd prioriteit gehinderde rijtijd fase 42 */
-    #define trt42bus            14 /* Actuele rijtijd prio fase 42                          */
-    #define tgb42bus            15 /* Groenbewaking prioriteit fase 42                      */
-    #define tblk42bus           16 /* Blokkeertijd na prioriteitsingreep fase 42            */
-    #define TMMAX1              17
+    #define tkm02                   0 /* Kop maximum voor detector 02                          */
+    #define tkm05                   1 /* Kop maximum voor detector 05                          */
+    #define tkm41                   2 /* Kop maximum voor detector 41                          */
+    #define tkm42                   3 /* Kop maximum voor detector 42                          */
+    #define tkarmelding             4 /* Duur verklikking ontvangst melding KAR                */
+    #define tkarog                  5 /* Ondergedrag KAR                                       */
+    #define tprioin41buskar         6 /* Anti jutter tijd inmelden 41 Bus                      */
+    #define tprioin41busdet413      7 /* Anti jutter tijd inmelden 41 Bus                      */
+    #define tprioin41busopti414     8 /* Anti jutter tijd inmelden 41 Bus                      */
+    #define tpriouit41busdet412413  9 /* Anti jutter tijd uitmelden 41                         */
+    #define tbtovg41bus            10 /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
+    #define trt41bus               11 /* Actuele rijtijd prio fase 41                          */
+    #define tgb41bus               12 /* Groenbewaking prioriteit fase 41                      */
+    #define tblk41bus              13 /* Blokkeertijd na prioriteitsingreep fase 41            */
+    #define tpriouit42busopti422   14 /* Anti jutter tijd uitmelden 42                         */
+    #define tbtovg42bus            15 /* Timer bezettijd prioriteit gehinderde rijtijd fase 42 */
+    #define trt42bus               16 /* Actuele rijtijd prio fase 42                          */
+    #define tgb42bus               17 /* Groenbewaking prioriteit fase 42                      */
+    #define tblk42bus              18 /* Blokkeertijd na prioriteitsingreep fase 42            */
+    #define TMMAX1                 19
 
 /* teller elementen */
 /* ---------------- */
