@@ -77,6 +77,7 @@
                 Visibility="{Binding Path=InUit,Converter={StaticResource InmToVisConv}}"
                 Text="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" />
         <CheckBox IsChecked="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Content="Opvang storing"
+                  Visibility="{Binding Path=CanHaveOpvangStoring,Converter={StaticResource BoolToVisConv}}"
                   Grid.ColumnSpan="2"  />
     </controls:AutoGrid>
 </UserControl>

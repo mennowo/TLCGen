@@ -46,6 +46,60 @@ namespace TLCGen.UnitTests.Prio
         }
 
         [Test]
+        public void GetAllowed_ForMelding_AtMostOneRisMeldingPerSide()
+        {
+            var prio = CreateIngreep(PrioIngreepVoertuigTypeEnum.Bus,
+                PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+            var ris = prio.MeldingenData.Inmeldingen[0];
+            var kar = prio.MeldingenData.Inmeldingen[1];
+            var uit = prio.MeldingenData.Uitmeldingen[0];
+            const PrioIngreepInUitMeldingVoorwaardeTypeEnum risType = PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde;
+
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, ris, CCOLVersieEnum.CCOL110), Does.Contain(risType), "the RIS melding itself");
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, kar, CCOLVersieEnum.CCOL110), Does.Not.Contain(risType), "a second inmelding");
+            Assert.That(PrioMeldingTypes.GetAllowed(prio, uit, CCOLVersieEnum.CCOL110), Does.Contain(risType), "an uitmelding (other side)");
+        }
+
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, false)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, false)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, false)]
+        public void HasValidOpvangStoring_OnlyDetectorOrVecomWithDetectorFallback(
+            PrioIngreepInUitMeldingVoorwaardeTypeEnum type, PrioIngreepInUitMeldingVoorwaardeTypeEnum fallbackType, bool expected)
+        {
+            var melding = new PrioIngreepInUitMeldingModel
+            {
+                Type = type, OpvangStoring = true, MeldingBijstoring = new PrioIngreepInUitMeldingModel { Type = fallbackType }
+            };
+
+            Assert.That(PrioMeldingTypes.HasValidOpvangStoring(melding), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ApplyVehicleTypeChange_TypeWithoutOpvangStoring_DropsMeldingBijStoring()
+        {
+            var prio = CreateIngreep(PrioIngreepVoertuigTypeEnum.Bus,
+                PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector);
+            foreach (var m in prio.MeldingenData.Inmeldingen)
+            {
+                m.OpvangStoring = true;
+                m.MeldingBijstoring = new PrioIngreepInUitMeldingModel { Type = PrioMeldingTypes.MeldingBijStoringType };
+            }
+
+            // hulpdienst: Ingang is not allowed (-> KAR, no opvang storing), Vecom is
+            PrioIngreepModelSync.ApplyVehicleTypeChange(prio, PrioIngreepVoertuigTypeEnum.Hulpdienst, CCOLVersieEnum.CCOL110);
+
+            var ingang = prio.MeldingenData.Inmeldingen[0];
+            var vecom = prio.MeldingenData.Inmeldingen[1];
+            Assert.That(ingang.Type, Is.EqualTo(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            Assert.That(ingang.OpvangStoring, Is.False);
+            Assert.That(ingang.MeldingBijstoring, Is.Null);
+            Assert.That(vecom.OpvangStoring, Is.True);
+            Assert.That(vecom.MeldingBijstoring, Is.Not.Null);
+        }
+
+        [Test]
         public void ApplyVehicleTypeChange_BusToFiets_DisallowedMeldingGetsFirstAllowedType()
         {
             var prio = CreateIngreep(PrioIngreepVoertuigTypeEnum.Bus,

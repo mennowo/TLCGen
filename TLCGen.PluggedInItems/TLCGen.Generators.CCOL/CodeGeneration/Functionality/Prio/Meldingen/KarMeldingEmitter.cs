@@ -13,8 +13,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
             }
 
-            public override bool SupportsOpvangStoring => false;
-
             public override void AppendCondition(PrioMeldingContext m, StringBuilder sb)
             {
                 var c = m.C;
@@ -29,9 +27,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                       (m.IsInmelding ? "" : $"{G._fcpf}{prio.FaseCyclus}, prioFC{m.PrioName}, ") +
                       $"0, {m.VtgType}, TRUE, {sg},TRUE, {cif}{extra})";
 
-                var sgCheck = G.GetKarSignalGroup(c, G._prmkarsg, prio.FaseCyclus, m.FcNmr);
+                // a non-numeric fase has no KAR signal group number (and no prmkarsg parameter): NG
+                var sgCheck = m.FcNmr != -1 ? G.GetKarSignalGroup(c, G._prmkarsg, prio.FaseCyclus, m.FcNmr) : "NG";
                 sb.AppendLine();
-                sb.Append($"{m.Tts}{m.Ts}{GetDsiCall(hd || m.FcNmr != -1 ? sgCheck : "NG")}");
+                sb.Append($"{m.Tts}{m.Ts}{GetDsiCall(sgCheck)}");
                 if (hd && prio.InmeldingOokDoorToepassen && prio.InmeldingOokDoorFase > 0)
                 {
                     var alsoFc = G.GetKarSignalGroup(c, G._prmkarsg, GetOokDoorFaseName(prio.InmeldingOokDoorFase), prio.InmeldingOokDoorFase);

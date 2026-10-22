@@ -83,13 +83,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             public void AppendUpdateCode(PrioMeldingContext m, StringBuilder sb)
             {
                 var melding = m.Melding;
-                var hov = m.IsInmelding ? G._hprioin.ToString() : G._hpriouit.ToString();
-                // NOTE: unlike Names.Hulp, this only includes the input when the loop is used (todo note 1579)
-                var he = $"{G._hpf}{hov}{m.Names.Base}";
-                if (melding.FietsPrioriteitGebruikLus)
-                {
-                    he += melding.RelatedInput1;
-                }
+                // the declared helper element of the melding (it includes RelatedInput1, also without loop)
+                var he = $"{G._hpf}{m.Names.Hulp}";
                 sb.AppendLine($"{m.Ts}fietsprio_update({G._fcpf}{m.Prio.FaseCyclus}, " +
                               (melding.FietsPrioriteitGebruikLus ? $"{G._dpf}{melding.RelatedInput1}, " : "NG, ") +
                               (melding.FietsPrioriteitGebruikLus ? $"{G._ctpf}{G._cftsvtg}{m.Names.Base}, " : "NG, ") +

@@ -31,7 +31,8 @@ namespace TLCGen.Models
 
         /// <summary>
         /// Gives meldingen of a type that is not allowed for the vehicle type and CCOL version the first allowed type,
-        /// and updates the dummy KAR detectors. Returns the meldingen whose type was changed.
+        /// drops their melding bij storing if the new type has no opvang storing, and updates the dummy KAR
+        /// detectors. Returns the meldingen whose type was changed.
         /// </summary>
         public static IReadOnlyList<PrioIngreepInUitMeldingModel> ApplyAllowedMeldingTypes(PrioIngreepModel prio, CCOLVersieEnum ccolVersie)
         {
@@ -42,6 +43,11 @@ namespace TLCGen.Models
             {
                 PrioTrace.Write($"{prio.FaseCyclus}{prio.Naam}: {melding.InUit} {melding.Type} not allowed, -> {allowed[0]}");
                 melding.Type = allowed[0];
+                if (!PrioMeldingTypes.SupportsOpvangStoring(melding.Type))
+                {
+                    melding.OpvangStoring = false;
+                    melding.MeldingBijstoring = null;
+                }
                 changed.Add(melding);
             }
             prio.EnsureDummyKARDetectors();

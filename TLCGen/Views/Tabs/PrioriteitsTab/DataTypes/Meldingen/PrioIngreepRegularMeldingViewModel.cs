@@ -131,6 +131,8 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool CanHaveOpvangStoring => Parent.CanHaveOpvangStoring;
+
         public bool OpvangStoring
         {
             get => Parent.OpvangStoring;

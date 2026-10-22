@@ -171,7 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(sw, 1, CCOLElementTimeTypeEnum.SCH_type,
                 melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _schprioin : _schpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
 
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+            if (PrioMeldingTypes.HasValidOpvangStoring(melding))
             {
                 var elems = GetMeldingElements(c, prio, melding.MeldingBijstoring, false);
                 foreach (var e in elems)
@@ -247,9 +247,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
-            // NOTE: checks the flag regardless of the melding type, while its elements are only declared for a
-            // fiets inmelding (todo note 1579)
-            if (melding.FietsPrioriteitGebruikRIS)
+            // counting cyclists via RIS: only for a fiets inmelding (its elements are only declared there); the flag
+            // may be left over on other melding types after a type change
+            if (melding.FietsPrioriteitGebruikRIS && m.IsInmelding &&
+                melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
                 FietsEmitter.AppendRisTellingCode(m, sb);
             }
@@ -289,7 +290,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.AppendLine($"#endif /* NO_RIS */");
             }
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null && emitter.SupportsOpvangStoring)
+            if (PrioMeldingTypes.HasValidOpvangStoring(melding))
             {
                 meldingHElems.AddRange(GetMeldingCode(c, prio, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
             }
