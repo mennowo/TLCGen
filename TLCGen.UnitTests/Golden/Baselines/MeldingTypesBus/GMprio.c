@@ -395,12 +395,16 @@ void InUitMelden(void)
     IH[hprioin42bus] = IH[hprioin42busopti421];
 
     /* Uitmelding fc42 type Bus */
-    IH[hpriouit42bus] = IH[hpriouit42busopti422] = FALSE;
+    IH[hpriouit42bus] = IH[hpriouit42busopti422] = IH[hpriouit42busopti423] = FALSE;
     if (SCH[schpriouit42busopti422DB])
     {
         IH[hpriouit42busopti422] = !TDH[d422] && TDH_old[d422];
     }
-    IH[hpriouit42bus] = IH[hpriouit42busopti422];
+    if (SCH[schpriouit42busopti423DB])
+    {
+        IH[hpriouit42busopti423] = !TDH[d422] && TDH_old[d422];
+    }
+    IH[hpriouit42bus] = IH[hpriouit42busopti422] || IH[hpriouit42busopti423];
 
 
     /* Bijhouden melding en ondergedrag KAR */

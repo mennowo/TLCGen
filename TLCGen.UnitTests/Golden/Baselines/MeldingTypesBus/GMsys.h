@@ -104,7 +104,8 @@
     #define hpriouit42busopti             25 /* Prioriteit uitmelding 42 Opticom         */
     #define hprioin42busopti421           26 /* Prioriteit inmelding fase 42 Bus         */
     #define hpriouit42busopti422          27 /* Prioriteit uitmelding 42 Bus             */
-    #define HEMAX1                        28
+    #define hpriouit42busopti423          28 /* Prioriteit uitmelding 42 Bus             */
+    #define HEMAX1                        29
 
 /* geheugen elementen */
 /* ------------------ */
@@ -167,11 +168,12 @@
     #define schpriouit41busopti414DB             18 /* Uitmelden 41 via Bus toestaan            */
     #define schprioin42busopti421DB              19 /* Inmelden 42 via Bus toestaan             */
     #define schpriouit42busopti422DB             20 /* Uitmelden 42 via Bus toestaan            */
-    #define schaltg02                            21 /* Alternatieve realisatie toestaan fase 02 */
-    #define schaltg05                            22 /* Alternatieve realisatie toestaan fase 05 */
-    #define schaltg41                            23 /* Alternatieve realisatie toestaan fase 41 */
-    #define schaltg42                            24 /* Alternatieve realisatie toestaan fase 42 */
-    #define SCHMAX1                              25
+    #define schpriouit42busopti423DB             21 /* Uitmelden 42 via Bus toestaan            */
+    #define schaltg02                            22 /* Alternatieve realisatie toestaan fase 02 */
+    #define schaltg05                            23 /* Alternatieve realisatie toestaan fase 05 */
+    #define schaltg41                            24 /* Alternatieve realisatie toestaan fase 41 */
+    #define schaltg42                            25 /* Alternatieve realisatie toestaan fase 42 */
+    #define SCHMAX1                              26
 
 /* parameters */
 /* ---------- */

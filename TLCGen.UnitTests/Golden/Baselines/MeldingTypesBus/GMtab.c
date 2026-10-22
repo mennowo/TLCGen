@@ -162,6 +162,7 @@ void control_parameters(void)
     H_code[hpriouit42busopti]             = "priouit42busopti";                                                     /* Prioriteit uitmelding 42 Opticom         */
     H_code[hprioin42busopti421]           = "prioin42busopti421";                                                   /* Prioriteit inmelding fase 42 Bus         */
     H_code[hpriouit42busopti422]          = "priouit42busopti422";                                                  /* Prioriteit uitmelding 42 Bus             */
+    H_code[hpriouit42busopti423]          = "priouit42busopti423";                                                  /* Prioriteit uitmelding 42 Bus             */
 
 /* geheugen elementen */
 /* ------------------ */
@@ -221,6 +222,7 @@ void control_parameters(void)
     SCH_code[schpriouit41busopti414DB]             = "priouit41busopti414DB";             SCH[schpriouit41busopti414DB]             = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
     SCH_code[schprioin42busopti421DB]              = "prioin42busopti421DB";              SCH[schprioin42busopti421DB]              = 1;                                                    /* Inmelden 42 via Bus toestaan             */
     SCH_code[schpriouit42busopti422DB]             = "priouit42busopti422DB";             SCH[schpriouit42busopti422DB]             = 1;                                                    /* Uitmelden 42 via Bus toestaan            */
+    SCH_code[schpriouit42busopti423DB]             = "priouit42busopti423DB";             SCH[schpriouit42busopti423DB]             = 1;                                                    /* Uitmelden 42 via Bus toestaan            */
     SCH_code[schaltg02]                            = "altg02";                            SCH[schaltg02]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 02 */
     SCH_code[schaltg05]                            = "altg05";                            SCH[schaltg05]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 05 */
     SCH_code[schaltg41]                            = "altg41";                            SCH[schaltg41]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 41 */
