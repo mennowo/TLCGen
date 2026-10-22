@@ -210,7 +210,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Anti-jutter timers indien actief voor alle in- of uitmeldingen gezamenlijk
             if (prio.MeldingenData.AntiJutterVoorAlleInmeldingen && prio.MeldingenData.Inmeldingen.Any())
             {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{prioName}", prio.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, prio.Type.GetDescription()));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tprioin}{prioName}", prio.MeldingenData.AntiJutterTijdVoorAlleInmeldingen, CCOLElementTimeTypeEnum.TE_type, _tprioin, prio.FaseCyclus, prio.Type.GetDescription()));
             }
             if (prio.MeldingenData.AntiJutterVoorAlleUitmeldingen && prio.MeldingenData.Uitmeldingen.Any())
             {
