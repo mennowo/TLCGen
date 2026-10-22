@@ -35,6 +35,7 @@ namespace TLCGen.UnitTests.Golden
             ["KarSgInParametersUitgangPerFase"] = () => KarSgHogeNummers(true),
             ["KarSgHogeNummers"] = () => KarSgHogeNummers(false),
             ["NaloopMetPrio"] = NaloopMetPrio,
+            ["Randgevallen"] = Randgevallen,
         };
 
         #region Cases
@@ -339,6 +340,31 @@ namespace TLCGen.UnitTests.Golden
             hd08.RisImportance = RISVehicleImportance.I02;
 
             AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, Kar(true), Kar(false));
+
+            return c;
+        }
+
+        // edge cases: KAR on a non-numeric fase (bus and hulpdienst), fiets without lus but with a left-over input,
+        // a left-over fiets RIS flag on other melding types, opvang storing on a melding type that does not support it
+        private static ControllerModel Randgevallen()
+        {
+            var c = CreateController(("02", FaseTypeEnum.Auto), ("22", FaseTypeEnum.Fiets), ("41", FaseTypeEnum.OV), ("61a", FaseTypeEnum.Auto));
+
+            AddIngreep(c, "61a", "bus", PrioIngreepVoertuigTypeEnum.Bus, Kar(true), Kar(false));
+            AddIngreep(c, "61a", "hd", PrioIngreepVoertuigTypeEnum.Hulpdienst, Kar(true), Kar(false));
+
+            var fietsZonderLus = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, "221", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
+            fietsZonderLus.FietsPrioriteitGebruikLus = false;
+            AddIngreep(c, "22", "fiets", PrioIngreepVoertuigTypeEnum.Fiets, fietsZonderLus,
+                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton, null, PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie));
+
+            var detMetFietsRis = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, "411", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
+            detMetFietsRis.FietsPrioriteitGebruikRIS = true;
+            var ingangOpvang = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, "ov41in", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang);
+            ingangOpvang.OpvangStoring = true;
+            ingangOpvang.MeldingBijstoring = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, "413", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
+            AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, detMetFietsRis, ingangOpvang,
+                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, "412", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie));
 
             return c;
         }
