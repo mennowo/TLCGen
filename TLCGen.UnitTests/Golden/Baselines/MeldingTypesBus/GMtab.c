@@ -144,8 +144,6 @@ void control_parameters(void)
     H_code[hprioin41businpov41in]         = "prioin41businpov41in";                                                 /* Prioriteit inmelding fase 41 Bus         */
     H_code[hprioin41businpov41inov41uit]  = "prioin41businpov41inov41uit";                                          /* Prioriteit inmelding fase 41 Bus         */
     H_code[hprioin41busvecio411]          = "prioin41busvecio411";                                                  /* Prioriteit inmelding fase 41 Bus         */
-    H_code[hprioin41busopti]              = "prioin41busopti";                                                      /* Prioriteit inmelding fase 41 Opticom     */
-    H_code[hpriouit41busopti]             = "priouit41busopti";                                                     /* Prioriteit uitmelding 41 Opticom         */
     H_code[hprioin41busopti414]           = "prioin41busopti414";                                                   /* Prioriteit inmelding fase 41 Bus         */
     H_code[hpriouit41buskar]              = "priouit41buskar";                                                      /* Prioriteit uitmelding 41 Bus             */
     H_code[hpriouit41bussdsd41uit]        = "priouit41bussdsd41uit";                                                /* Prioriteit uitmelding 41 Bus             */
@@ -158,10 +156,9 @@ void control_parameters(void)
     H_code[hprio42bus]                    = "prio42bus";                                                            /* Bijhouden actief zijn prioriteit fase 42 */
     H_code[hprioin42bus]                  = "prioin42bus";                                                          /* Prioriteit inmelding fase 42 Bus         */
     H_code[hpriouit42bus]                 = "priouit42bus";                                                         /* Prioriteit uitmelding 42 Bus             */
-    H_code[hprioin42busopti]              = "prioin42busopti";                                                      /* Prioriteit inmelding fase 42 Opticom     */
-    H_code[hpriouit42busopti]             = "priouit42busopti";                                                     /* Prioriteit uitmelding 42 Opticom         */
     H_code[hprioin42busopti421]           = "prioin42busopti421";                                                   /* Prioriteit inmelding fase 42 Bus         */
     H_code[hpriouit42busopti422]          = "priouit42busopti422";                                                  /* Prioriteit uitmelding 42 Bus             */
+    H_code[hpriouit42busopti423]          = "priouit42busopti423";                                                  /* Prioriteit uitmelding 42 Bus             */
 
 /* geheugen elementen */
 /* ------------------ */
@@ -181,13 +178,11 @@ void control_parameters(void)
     T_code[tkarog]              = "karog";              T_max[tkarog]              = 1440; T_type[tkarog]              = TM_type; /* Ondergedrag KAR                                       */
     T_code[tprioin41buskar]     = "prioin41buskar";     T_max[tprioin41buskar]     = 50;   T_type[tprioin41buskar]     = TE_type; /* Anti jutter tijd inmelden 41 Bus                      */
     T_code[tprioin41busdet413]  = "prioin41busdet413";  T_max[tprioin41busdet413]  = 30;   T_type[tprioin41busdet413]  = TE_type; /* Anti jutter tijd inmelden 41 Bus                      */
-    T_code[tprioin41busopti]    = "prioin41busopti";    T_max[tprioin41busopti]    = 20;   T_type[tprioin41busopti]    = TE_type; /* Anti jutter tijd inmelden 41 Opticom                  */
     T_code[tprioin41busopti414] = "prioin41busopti414"; T_max[tprioin41busopti414] = 20;   T_type[tprioin41busopti414] = TE_type; /* Anti jutter tijd inmelden 41 Bus                      */
     T_code[tbtovg41bus]         = "btovg41bus";         T_max[tbtovg41bus]         = 30;   T_type[tbtovg41bus]         = TE_type; /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
     T_code[trt41bus]            = "rt41bus";            T_max[trt41bus]            = 0;    T_type[trt41bus]            = TE_type; /* Actuele rijtijd prio fase 41                          */
     T_code[tgb41bus]            = "gb41bus";            T_max[tgb41bus]            = 600;  T_type[tgb41bus]            = TE_type; /* Groenbewaking prioriteit fase 41                      */
     T_code[tblk41bus]           = "blk41bus";           T_max[tblk41bus]           = 200;  T_type[tblk41bus]           = TE_type; /* Blokkeertijd na prioriteitsingreep fase 41            */
-    T_code[tprioin42busopti]    = "prioin42busopti";    T_max[tprioin42busopti]    = 0;    T_type[tprioin42busopti]    = TE_type; /* Anti jutter tijd inmelden 42 Opticom                  */
     T_code[tbtovg42bus]         = "btovg42bus";         T_max[tbtovg42bus]         = 30;   T_type[tbtovg42bus]         = TE_type; /* Timer bezettijd prioriteit gehinderde rijtijd fase 42 */
     T_code[trt42bus]            = "rt42bus";            T_max[trt42bus]            = 0;    T_type[trt42bus]            = TE_type; /* Actuele rijtijd prio fase 42                          */
     T_code[tgb42bus]            = "gb42bus";            T_max[tgb42bus]            = 600;  T_type[tgb42bus]            = TE_type; /* Groenbewaking prioriteit fase 42                      */
@@ -210,7 +205,6 @@ void control_parameters(void)
     SCH_code[schprioin41businpov41inSIS]           = "prioin41businpov41inSIS";           SCH[schprioin41businpov41inSIS]           = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schprioin41businpov41inISov41uitSIS]  = "prioin41businpov41inISov41uitSIS";  SCH[schprioin41businpov41inISov41uitSIS]  = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schprioin41busvecio411SD]             = "prioin41busvecio411SD";             SCH[schprioin41busvecio411SD]             = 1;                                                    /* Inmelden 41 via Bus toestaan             */
-    SCH_code[schprioin41busopti]                   = "prioin41busopti";                   SCH[schprioin41busopti]                   = 1;                                                    /* Inmelden 41 via Opticom toestaan         */
     SCH_code[schprioin41busopti414DB]              = "prioin41busopti414DB";              SCH[schprioin41busopti414DB]              = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schpriouit41buskar]                   = "priouit41buskar";                   SCH[schpriouit41buskar]                   = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
     SCH_code[schpriouit41bussdsd41uitSD]           = "priouit41bussdsd41uitSD";           SCH[schpriouit41bussdsd41uitSD]           = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
@@ -220,9 +214,9 @@ void control_parameters(void)
     SCH_code[schpriouit41businpov41uitEISov41inIS] = "priouit41businpov41uitEISov41inIS"; SCH[schpriouit41businpov41uitEISov41inIS] = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
     SCH_code[schpriouit41busvecio414SD]            = "priouit41busvecio414SD";            SCH[schpriouit41busvecio414SD]            = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
     SCH_code[schpriouit41busopti414DB]             = "priouit41busopti414DB";             SCH[schpriouit41busopti414DB]             = 1;                                                    /* Uitmelden 41 via Bus toestaan            */
-    SCH_code[schprioin42busopti]                   = "prioin42busopti";                   SCH[schprioin42busopti]                   = 1;                                                    /* Inmelden 42 via Opticom toestaan         */
     SCH_code[schprioin42busopti421DB]              = "prioin42busopti421DB";              SCH[schprioin42busopti421DB]              = 1;                                                    /* Inmelden 42 via Bus toestaan             */
     SCH_code[schpriouit42busopti422DB]             = "priouit42busopti422DB";             SCH[schpriouit42busopti422DB]             = 1;                                                    /* Uitmelden 42 via Bus toestaan            */
+    SCH_code[schpriouit42busopti423DB]             = "priouit42busopti423DB";             SCH[schpriouit42busopti423DB]             = 1;                                                    /* Uitmelden 42 via Bus toestaan            */
     SCH_code[schaltg02]                            = "altg02";                            SCH[schaltg02]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 02 */
     SCH_code[schaltg05]                            = "altg05";                            SCH[schaltg05]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 05 */
     SCH_code[schaltg41]                            = "altg41";                            SCH[schaltg41]                            = 0;                                                    /* Alternatieve realisatie toestaan fase 41 */

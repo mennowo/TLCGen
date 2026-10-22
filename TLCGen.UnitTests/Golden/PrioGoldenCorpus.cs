@@ -125,10 +125,11 @@ namespace TLCGen.UnitTests.Golden
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, "414", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie),
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "414", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet));
 
-            // opticom only, with the uitmelding input taken from the uitmelding
+            // opticom only, without anti-jutter; two uitmeldingen, each on its own input
             AddIngreep(c, "42", "bus", PrioIngreepVoertuigTypeEnum.Bus,
                 Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "421", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet),
-                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "422", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet));
+                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "422", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet),
+                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "423", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet));
 
             return c;
         }

@@ -372,8 +372,7 @@ void InUitMelden(void)
     }
     if (SCH[schprioin05hdopti051DB])
     {
-        IH[hprioin05hdopti051] = SCH[schprioin05hdopti] && !C[cvc05hd] && DB[d051];
-        RT[tprioin05hdopti051] = G[fc05] && C[cvc05hd];
+        IH[hprioin05hdopti051] = !C[cvc05hd] && DB[d051];
     }
     IH[hprioin05hd] = IH[hprioin05hdkar] || IH[hprioin05hdopti051];
 
@@ -386,7 +385,7 @@ void InUitMelden(void)
     }
     if (SCH[schpriouit05hdopti052DB])
     {
-        IH[hpriouit05hdopti052] = SCH[schprioin05hdopti] && !TDH[d052] && TDH_old[d052];
+        IH[hpriouit05hdopti052] = !TDH[d052] && TDH_old[d052];
     }
     IH[hpriouit05hd] = IH[hpriouit05hdkar] || IH[hpriouit05hdopti052];
 

@@ -343,7 +343,7 @@ void InUitMelden(void)
     }
     if (SCH[schprioin41busopti414DB])
     {
-        IH[hprioin41busopti414] = !T[tprioin41busopti414] && SCH[schprioin41busopti] && !C[cvc41bus] && DB[d414];
+        IH[hprioin41busopti414] = !T[tprioin41busopti414] && !C[cvc41bus] && DB[d414];
         RT[tprioin41busopti414] = G[fc41] && C[cvc41bus];
     }
     IH[hprioin41bus] = IH[hprioin41buskar] || IH[hprioin41bussdsd41in] || IH[hprioin41busdet412413] || IH[hprioin41busdet413] || IH[hprioin41businpov41in] || IH[hprioin41businpov41inov41uit] || IH[hprioin41busvecio411] || IH[hprioin41busopti414];
@@ -382,7 +382,7 @@ void InUitMelden(void)
     }
     if (SCH[schpriouit41busopti414DB])
     {
-        IH[hpriouit41busopti414] = SCH[schprioin41busopti] && !TDH[d414] && TDH_old[d414];
+        IH[hpriouit41busopti414] = !TDH[d414] && TDH_old[d414];
     }
     IH[hpriouit41bus] = IH[hpriouit41buskar] || IH[hpriouit41bussdsd41uit] || IH[hpriouit41busdet411] || IH[hpriouit41busdet412413] || IH[hpriouit41businpov41in] || IH[hpriouit41businpov41uitov41in] || IH[hpriouit41busvecio414] || IH[hpriouit41busopti414];
 
@@ -390,18 +390,21 @@ void InUitMelden(void)
     IH[hprioin42bus] = IH[hprioin42busopti421] = FALSE;
     if (SCH[schprioin42busopti421DB])
     {
-        IH[hprioin42busopti421] = SCH[schprioin42busopti] && !C[cvc42bus] && DB[d421];
-        RT[tprioin42busopti421] = G[fc42] && C[cvc42bus];
+        IH[hprioin42busopti421] = !C[cvc42bus] && DB[d421];
     }
     IH[hprioin42bus] = IH[hprioin42busopti421];
 
     /* Uitmelding fc42 type Bus */
-    IH[hpriouit42bus] = IH[hpriouit42busopti422] = FALSE;
+    IH[hpriouit42bus] = IH[hpriouit42busopti422] = IH[hpriouit42busopti423] = FALSE;
     if (SCH[schpriouit42busopti422DB])
     {
-        IH[hpriouit42busopti422] = SCH[schprioin42busopti] && !TDH[d422] && TDH_old[d422];
+        IH[hpriouit42busopti422] = !TDH[d422] && TDH_old[d422];
     }
-    IH[hpriouit42bus] = IH[hpriouit42busopti422];
+    if (SCH[schpriouit42busopti423DB])
+    {
+        IH[hpriouit42busopti423] = !TDH[d423] && TDH_old[d423];
+    }
+    IH[hpriouit42bus] = IH[hpriouit42busopti422] || IH[hpriouit42busopti423];
 
 
     /* Bijhouden melding en ondergedrag KAR */

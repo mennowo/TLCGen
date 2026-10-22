@@ -85,22 +85,20 @@
     #define hprioin05hd          6 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
     #define hpriouit05hd         7 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
     #define hprioin05hdkar       8 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
-    #define hprioin05hdopti      9 /* Prioriteit inmelding fase 05 Opticom             */
-    #define hpriouit05hdopti    10 /* Prioriteit uitmelding 05 Opticom                 */
-    #define hprioin05hdopti051  11 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
-    #define hpriouit05hdkar     12 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
-    #define hpriouit05hdopti052 13 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
-    #define hprio08hd           14 /* Bijhouden actief zijn prioriteit fase 08         */
-    #define hprioin08hd         15 /* Prioriteit inmelding fase 08 Nood- en hulpdienst */
-    #define hpriouit08hd        16 /* Prioriteit uitmelding 08 Nood- en hulpdienst     */
-    #define hprioin08hddet081   17 /* Prioriteit inmelding fase 08 Nood- en hulpdienst */
-    #define hpriouit08hddet082  18 /* Prioriteit uitmelding 08 Nood- en hulpdienst     */
-    #define hprio41bus          19 /* Bijhouden actief zijn prioriteit fase 41         */
-    #define hprioin41bus        20 /* Prioriteit inmelding fase 41 Bus                 */
-    #define hpriouit41bus       21 /* Prioriteit uitmelding 41 Bus                     */
-    #define hprioin41buskar     22 /* Prioriteit inmelding fase 41 Bus                 */
-    #define hpriouit41buskar    23 /* Prioriteit uitmelding 41 Bus                     */
-    #define HEMAX1              24
+    #define hprioin05hdopti051   9 /* Prioriteit inmelding fase 05 Nood- en hulpdienst */
+    #define hpriouit05hdkar     10 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
+    #define hpriouit05hdopti052 11 /* Prioriteit uitmelding 05 Nood- en hulpdienst     */
+    #define hprio08hd           12 /* Bijhouden actief zijn prioriteit fase 08         */
+    #define hprioin08hd         13 /* Prioriteit inmelding fase 08 Nood- en hulpdienst */
+    #define hpriouit08hd        14 /* Prioriteit uitmelding 08 Nood- en hulpdienst     */
+    #define hprioin08hddet081   15 /* Prioriteit inmelding fase 08 Nood- en hulpdienst */
+    #define hpriouit08hddet082  16 /* Prioriteit uitmelding 08 Nood- en hulpdienst     */
+    #define hprio41bus          17 /* Bijhouden actief zijn prioriteit fase 41         */
+    #define hprioin41bus        18 /* Prioriteit inmelding fase 41 Bus                 */
+    #define hpriouit41bus       19 /* Prioriteit uitmelding 41 Bus                     */
+    #define hprioin41buskar     20 /* Prioriteit inmelding fase 41 Bus                 */
+    #define hpriouit41buskar    21 /* Prioriteit uitmelding 41 Bus                     */
+    #define HEMAX1              22
 
 /* geheugen elementen */
 /* ------------------ */
@@ -113,30 +111,29 @@
 
 /* tijd elementen */
 /* -------------- */
-    #define tkm02            0 /* Kop maximum voor detector 02                          */
-    #define tkm05            1 /* Kop maximum voor detector 05                          */
-    #define tkm08            2 /* Kop maximum voor detector 08                          */
-    #define tkm41            3 /* Kop maximum voor detector 41                          */
-    #define tkarmelding      4 /* Duur verklikking ontvangst melding KAR                */
-    #define tkarog           5 /* Ondergedrag KAR                                       */
-    #define tbtovg02hd       6 /* Timer bezettijd prioriteit gehinderde rijtijd fase 02 */
-    #define trt02hd          7 /* Actuele rijtijd prio fase 02                          */
-    #define tgb02hd          8 /* Groenbewaking prioriteit fase 02                      */
-    #define tblk02hd         9 /* Blokkeertijd na prioriteitsingreep fase 02            */
-    #define tprioin05hdopti 10 /* Anti jutter tijd inmelden 05 Opticom                  */
-    #define tbtovg05hd      11 /* Timer bezettijd prioriteit gehinderde rijtijd fase 05 */
-    #define trt05hd         12 /* Actuele rijtijd prio fase 05                          */
-    #define tgb05hd         13 /* Groenbewaking prioriteit fase 05                      */
-    #define tblk05hd        14 /* Blokkeertijd na prioriteitsingreep fase 05            */
-    #define tbtovg08hd      15 /* Timer bezettijd prioriteit gehinderde rijtijd fase 08 */
-    #define trt08hd         16 /* Actuele rijtijd prio fase 08                          */
-    #define tgb08hd         17 /* Groenbewaking prioriteit fase 08                      */
-    #define tblk08hd        18 /* Blokkeertijd na prioriteitsingreep fase 08            */
-    #define tbtovg41bus     19 /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
-    #define trt41bus        20 /* Actuele rijtijd prio fase 41                          */
-    #define tgb41bus        21 /* Groenbewaking prioriteit fase 41                      */
-    #define tblk41bus       22 /* Blokkeertijd na prioriteitsingreep fase 41            */
-    #define TMMAX1          23
+    #define tkm02        0 /* Kop maximum voor detector 02                          */
+    #define tkm05        1 /* Kop maximum voor detector 05                          */
+    #define tkm08        2 /* Kop maximum voor detector 08                          */
+    #define tkm41        3 /* Kop maximum voor detector 41                          */
+    #define tkarmelding  4 /* Duur verklikking ontvangst melding KAR                */
+    #define tkarog       5 /* Ondergedrag KAR                                       */
+    #define tbtovg02hd   6 /* Timer bezettijd prioriteit gehinderde rijtijd fase 02 */
+    #define trt02hd      7 /* Actuele rijtijd prio fase 02                          */
+    #define tgb02hd      8 /* Groenbewaking prioriteit fase 02                      */
+    #define tblk02hd     9 /* Blokkeertijd na prioriteitsingreep fase 02            */
+    #define tbtovg05hd  10 /* Timer bezettijd prioriteit gehinderde rijtijd fase 05 */
+    #define trt05hd     11 /* Actuele rijtijd prio fase 05                          */
+    #define tgb05hd     12 /* Groenbewaking prioriteit fase 05                      */
+    #define tblk05hd    13 /* Blokkeertijd na prioriteitsingreep fase 05            */
+    #define tbtovg08hd  14 /* Timer bezettijd prioriteit gehinderde rijtijd fase 08 */
+    #define trt08hd     15 /* Actuele rijtijd prio fase 08                          */
+    #define tgb08hd     16 /* Groenbewaking prioriteit fase 08                      */
+    #define tblk08hd    17 /* Blokkeertijd na prioriteitsingreep fase 08            */
+    #define tbtovg41bus 18 /* Timer bezettijd prioriteit gehinderde rijtijd fase 41 */
+    #define trt41bus    19 /* Actuele rijtijd prio fase 41                          */
+    #define tgb41bus    20 /* Groenbewaking prioriteit fase 41                      */
+    #define tblk41bus   21 /* Blokkeertijd na prioriteitsingreep fase 41            */
+    #define TMMAX1      22
 
 /* teller elementen */
 /* ---------------- */
@@ -154,20 +151,19 @@
     #define schchecksirene02hd       3 /* Bij HD meldingen bij 02 via DSI controleren op CIF_SIR             */
     #define schpriomr05hdmet02hd     4 /* Meerealisatie fase 05hd met hulpdienst ingreep Nood- en hulpdienst */
     #define schprioin05hdkar         5 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
-    #define schprioin05hdopti        6 /* Inmelden 05 via Opticom toestaan                                   */
-    #define schprioin05hdopti051DB   7 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
-    #define schpriouit05hdkar        8 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
-    #define schpriouit05hdopti052DB  9 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
-    #define schpriomr02hdmet05hd    10 /* Meerealisatie fase 02hd met hulpdienst ingreep Nood- en hulpdienst */
-    #define schprioin08hddet081SD   11 /* Inmelden 08 via Nood- en hulpdienst toestaan                       */
-    #define schpriouit08hddet082ED  12 /* Uitmelden 08 via Nood- en hulpdienst toestaan                      */
-    #define schprioin41buskar       13 /* Inmelden 41 via Bus toestaan                                       */
-    #define schpriouit41buskar      14 /* Uitmelden 41 via Bus toestaan                                      */
-    #define schaltg02               15 /* Alternatieve realisatie toestaan fase 02                           */
-    #define schaltg05               16 /* Alternatieve realisatie toestaan fase 05                           */
-    #define schaltg08               17 /* Alternatieve realisatie toestaan fase 08                           */
-    #define schaltg41               18 /* Alternatieve realisatie toestaan fase 41                           */
-    #define SCHMAX1                 19
+    #define schprioin05hdopti051DB   6 /* Inmelden 05 via Nood- en hulpdienst toestaan                       */
+    #define schpriouit05hdkar        7 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
+    #define schpriouit05hdopti052DB  8 /* Uitmelden 05 via Nood- en hulpdienst toestaan                      */
+    #define schpriomr02hdmet05hd     9 /* Meerealisatie fase 02hd met hulpdienst ingreep Nood- en hulpdienst */
+    #define schprioin08hddet081SD   10 /* Inmelden 08 via Nood- en hulpdienst toestaan                       */
+    #define schpriouit08hddet082ED  11 /* Uitmelden 08 via Nood- en hulpdienst toestaan                      */
+    #define schprioin41buskar       12 /* Inmelden 41 via Bus toestaan                                       */
+    #define schpriouit41buskar      13 /* Uitmelden 41 via Bus toestaan                                      */
+    #define schaltg02               14 /* Alternatieve realisatie toestaan fase 02                           */
+    #define schaltg05               15 /* Alternatieve realisatie toestaan fase 05                           */
+    #define schaltg08               16 /* Alternatieve realisatie toestaan fase 08                           */
+    #define schaltg41               17 /* Alternatieve realisatie toestaan fase 41                           */
+    #define SCHMAX1                 18
 
 /* parameters */
 /* ---------- */
