@@ -376,7 +376,7 @@ void InUitMelden(void)
     IH[hpriouit61ahd] = IH[hpriouit61ahdkar];
 
     /* Inmelding fc22 type Fiets */
-    fietsprio_update(fc22, NG, NG, cftscyc22fietsfiets,SH[hprioin22fietsfiets], ML);
+    fietsprio_update(fc22, NG, NG, cftscyc22fietsfiets,SH[hprioin22fietsfiets221], ML);
     IH[hprioin22fiets] = IH[hprioin22fietsfiets221] = FALSE;
     if (SCH[schprioin22fietsfiets221])
     {
