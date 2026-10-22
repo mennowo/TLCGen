@@ -163,7 +163,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(he,
                     melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _hprioin : _hpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
             }
-            if (melding.AntiJutterTijdToepassen)
+            if (HasAntiJutterPerMelding(melding))
             {
                 elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(ti, melding.AntiJutterTijd, CCOLElementTimeTypeEnum.TE_type,
                     melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _tprioin : _tpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
@@ -187,6 +187,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             return elements;
         }
+
+        /// <summary>
+        /// Anti-jutter per melding (AntiJutterTijdToepassen) is for inmeldingen only: uitmeldingen share the anti-jutter
+        /// timer of all uitmeldingen (AntiJutterVoorAlleUitmeldingen). The flag on an uitmelding is ignored.
+        /// The same goes for AlleenIndienGeenInmelding and AlleenIndienRood (checked inline in GetMeldingCode).
+        /// </summary>
+        private static bool HasAntiJutterPerMelding(PrioIngreepInUitMeldingModel melding) =>
+            melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding && melding.AntiJutterTijdToepassen;
 
         /// <summary>
         /// Extra conditions of a DSI melding (KAR, selectieve detector): line numbers, wagennummer and sirene.
@@ -247,7 +255,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             sb.Append($"{m.Tts}IH[{he}] = ");
-            if (melding.AntiJutterTijdToepassen && emitter.RestartsAntiJutterTimer)
+            var antiJutterPerMelding = HasAntiJutterPerMelding(melding);
+            if (antiJutterPerMelding && emitter.RestartsAntiJutterTimer)
             {
                 sb.Append($"RT[{ti}] = ");
             }
@@ -256,11 +265,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"!T[{_tpf}{tov}{prioName}] && ");
             }
-            if (melding.AntiJutterTijdToepassen && checksAntiJutter)
+            if (antiJutterPerMelding && checksAntiJutter)
             {
                 sb.Append($"!T[{ti}] && ");
             }
-            if (melding.AlleenIndienGeenInmelding || emitter.RequiresNoActiveInmelding(m))
+            if ((m.IsInmelding && melding.AlleenIndienGeenInmelding) || emitter.RequiresNoActiveInmelding(m))
             {
                 sb.Append($"!C[{_ctpf}{_cvc}{prioName}] && ");
             }
@@ -268,7 +277,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"IH[{_hpf}{_hwissel}{prioName}] && ");
             }
-            if (melding.AlleenIndienRood)
+            if (m.IsInmelding && melding.AlleenIndienRood)
             {
                 sb.Append($"R[{_fcpf}{prio.FaseCyclus}] && !T[{_tpf}{_tovminrood}{prioName}] && ");
             }

@@ -101,6 +101,11 @@ namespace TLCGen.UnitTests.Golden
             detUitTwee.TweedeInput = true;
             detUitTwee.RelatedInput2 = "413";
             detUitTwee.RelatedInput2Type = PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat;
+            // inmelding-only options, set on an uitmelding (could be set in the UI by mistake): must be ignored
+            detUitTwee.AntiJutterTijdToepassen = true;
+            detUitTwee.AntiJutterTijd = 30;
+            detUitTwee.AlleenIndienGeenInmelding = true;
+            detUitTwee.AlleenIndienRood = true;
 
             var ingUitTwee = Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, "ov41uit", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeIngang);
             ingUitTwee.TweedeInput = true;
@@ -125,10 +130,13 @@ namespace TLCGen.UnitTests.Golden
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, "414", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie),
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "414", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet));
 
-            // opticom only, without anti-jutter; two uitmeldingen, each on its own input
+            // opticom only, without anti-jutter; two uitmeldingen, each on its own input, one with (ignored) anti-jutter
+            var opticomUit = Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "422", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet);
+            opticomUit.AntiJutterTijdToepassen = true;
+            opticomUit.AntiJutterTijd = 25;
             AddIngreep(c, "42", "bus", PrioIngreepVoertuigTypeEnum.Bus,
                 Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "421", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet),
-                Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "422", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet),
+                opticomUit,
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom, "423", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet));
 
             return c;

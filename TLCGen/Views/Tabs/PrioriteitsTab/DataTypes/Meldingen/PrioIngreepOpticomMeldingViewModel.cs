@@ -30,6 +30,11 @@ namespace TLCGen.ViewModels
 
         public PrioIngreepInUitMeldingTypeEnum InUit => Parent.InUit;
 
+        // anti-jutter per melding is for inmeldingen only: uitmeldingen use the timer of all uitmeldingen
+        public bool IsInmelding => InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding;
+
+        public bool ShowAntiJutterTijd => IsInmelding && AntiJutterTijdToepassen;
+
         public bool AntiJutterTijdToepassen
         {
             get => Parent.PrioIngreepInUitMelding.AntiJutterTijdToepassen;
@@ -37,6 +42,7 @@ namespace TLCGen.ViewModels
             {
                 Parent.PrioIngreepInUitMelding.AntiJutterTijdToepassen = value;
                 OnPropertyChanged(broadcast: true);
+                OnPropertyChanged(nameof(ShowAntiJutterTijd));
             }
         }
 
