@@ -502,10 +502,10 @@ void PostAfhandelingPrio(void)
     /* Blokkeren alle richtingen zonder HD ingreep */
     if (isHD)
     {
-        if (!C[cvchd02]) { RR[fc02] |= BIT6; Z[fc02] |= BIT6; }
+        if (!C[cvc02hd]) { RR[fc02] |= BIT6; Z[fc02] |= BIT6; }
         RR[fc05] |= BIT6; Z[fc05] |= BIT6;
         if (!C[cvchd08]) { RR[fc08] |= BIT6; Z[fc08] |= BIT6; }
-        if (!C[cvchd22]) { RR[fc22] |= BIT6; Z[fc22] |= BIT6; }
+        if (!C[cvc22hd]) { RR[fc22] |= BIT6; Z[fc22] |= BIT6; }
         RR[fc31] |= BIT6; Z[fc31] |= BIT6;
         RR[fc41] |= BIT6; Z[fc41] |= BIT6;
     }

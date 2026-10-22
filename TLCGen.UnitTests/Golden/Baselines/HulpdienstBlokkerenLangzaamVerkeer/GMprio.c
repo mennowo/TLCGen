@@ -502,7 +502,7 @@ void PostAfhandelingPrio(void)
     /* Blokkeren alle langzaam verkeer (tevens niet-conflicten) */
     if (isHD)
     {
-        RR[fc22] |= BIT6; Z[fc22] |= BIT6;
+        if (!C[cvc22hd]) { RR[fc22] |= BIT6; Z[fc22] |= BIT6; }
         RR[fc31] |= BIT6; Z[fc31] |= BIT6;
     }
 

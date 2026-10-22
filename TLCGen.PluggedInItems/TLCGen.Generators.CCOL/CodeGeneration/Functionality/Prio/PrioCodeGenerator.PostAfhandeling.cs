@@ -53,15 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     foreach (var fc in c.Fasen)
                     {
-                        if (c.PrioData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam) && 
-                            c.PrioData.PrioIngrepen.Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst).All(x => x.FaseCyclus != fc.Naam))
-                        {
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
-                        }
+                        AppendBlokkeerBijHDCode(c, sb, fc.Naam, ts);
                     }
                 }
                 else
@@ -83,14 +75,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
                     {
-                        if (c.PrioData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
-                        {
-                            sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
-                        }
+                        AppendBlokkeerBijHDCode(c, sb, fc.Naam, ts);
                     }
                 }
                 sb.AppendLine($"{ts}}}");
@@ -190,6 +175,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Blocks a fase during a HD ingreep, unless the fase has a HD ingreep of its own that is active.
+        /// The counters of both legacy (cvchd&lt;fc&gt;) and generic (cvc&lt;prio&gt;) HD ingrepen count.
+        /// </summary>
+        private void AppendBlokkeerBijHDCode(ControllerModel c, StringBuilder sb, string fc, string ts)
+        {
+            var counters = new List<string>();
+            if (c.PrioData.HDIngrepen.Any(x => x.FaseCyclus == fc))
+            {
+                counters.Add($"{_ctpf}{_cvchd}{fc}");
+            }
+            counters.AddRange(c.PrioData.PrioIngrepen
+                .Where(x => x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst && x.FaseCyclus == fc)
+                .Select(x => $"{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, x)}"));
+
+            var block = $"RR[{_fcpf}{fc}] |= BIT6; Z[{_fcpf}{fc}] |= BIT6;";
+            if (counters.Count == 0)
+            {
+                sb.AppendLine($"{ts}{ts}{block}");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}{ts}if ({string.Join(" && ", counters.Select(x => $"!C[{x}]"))}) {{ {block} }}");
+            }
         }
     }
 }
