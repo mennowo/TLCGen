@@ -402,7 +402,7 @@ void InUitMelden(void)
     }
     if (SCH[schpriouit42busopti423DB])
     {
-        IH[hpriouit42busopti423] = !TDH[d422] && TDH_old[d422];
+        IH[hpriouit42busopti423] = !TDH[d423] && TDH_old[d423];
     }
     IH[hpriouit42bus] = IH[hpriouit42busopti422] || IH[hpriouit42busopti423];
 
