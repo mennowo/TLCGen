@@ -391,7 +391,6 @@ void InUitMelden(void)
     if (SCH[schprioin42busopti421DB])
     {
         IH[hprioin42busopti421] = !C[cvc42bus] && DB[d421];
-        RT[tprioin42busopti421] = G[fc42] && C[cvc42bus];
     }
     IH[hprioin42bus] = IH[hprioin42busopti421];
 

@@ -42,7 +42,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     case PrioIngreepInUitMeldingTypeEnum.Inmelding:
                         sb.AppendLine($"!C[{G._ctpf}{G._cvc}{m.PrioName}] && DB[{G._dpf}{m.Melding.RelatedInput1}];");
-                        sb.AppendLine($"{ts}{ts}RT[{m.Timer}] = G[{G._fcpf}{prio.FaseCyclus}] && C[{G._ctpf}{G._cvc}{m.PrioName}];");
+                        if (m.Melding.AntiJutterTijdToepassen)
+                        {
+                            sb.AppendLine($"{ts}{ts}RT[{m.Timer}] = G[{G._fcpf}{prio.FaseCyclus}] && C[{G._ctpf}{G._cvc}{m.PrioName}];");
+                        }
                         break;
                     case PrioIngreepInUitMeldingTypeEnum.Uitmelding:
                         var uitMelding = prio.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.Opticom);

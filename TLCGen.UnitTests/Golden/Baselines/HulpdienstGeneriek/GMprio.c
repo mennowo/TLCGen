@@ -373,7 +373,6 @@ void InUitMelden(void)
     if (SCH[schprioin05hdopti051DB])
     {
         IH[hprioin05hdopti051] = !C[cvc05hd] && DB[d051];
-        RT[tprioin05hdopti051] = G[fc05] && C[cvc05hd];
     }
     IH[hprioin05hd] = IH[hprioin05hdkar] || IH[hprioin05hdopti051];
 
