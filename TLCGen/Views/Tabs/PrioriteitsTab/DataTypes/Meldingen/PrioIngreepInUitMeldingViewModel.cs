@@ -109,6 +109,16 @@ namespace TLCGen.ViewModels
 
         public PrioIngreepOpticomMeldingViewModel OpticomViewModel { get; }
 
+        /// <summary>
+        /// Whether this is the fallback melding (melding bij storing) of another melding.
+        /// </summary>
+        public bool IsMeldingBijStoring => _parent is PrioIngreepInUitMeldingViewModel;
+
+        /// <summary>
+        /// Opvang storing is only possible for Detector and Vecom meldingen, and not for a melding bij storing itself.
+        /// </summary>
+        public bool CanHaveOpvangStoring => !IsMeldingBijStoring && Type != null && PrioMeldingTypes.SupportsOpvangStoring(Type.Value);
+
         public bool OpvangStoring
         {
             get => PrioIngreepInUitMelding.OpvangStoring;
@@ -119,7 +129,8 @@ namespace TLCGen.ViewModels
                 {
                     PrioIngreepInUitMelding.MeldingBijstoring = new PrioIngreepInUitMeldingModel()
                     {
-                        InUit = this.InUit
+                        InUit = this.InUit,
+                        Type = PrioMeldingTypes.MeldingBijStoringType
                     };
                     MeldingBijstoring.Add(new PrioIngreepInUitMeldingViewModel(PrioIngreepInUitMelding.MeldingBijstoring, this, _ingreep));
                 }
@@ -177,7 +188,12 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void RefreshAvailableTypes()
         {
-            var allowed = PrioMeldingTypes.GetAllowed(_ingreep.Type, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
+            // the model may have dropped the melding bij storing (PrioIngreepModelSync): follow it
+            if (PrioIngreepInUitMelding.MeldingBijstoring == null && MeldingBijstoring.Any()) MeldingBijstoring.Clear();
+
+            var allowed = IsMeldingBijStoring
+                ? new[] { PrioMeldingTypes.MeldingBijStoringType }
+                : PrioMeldingTypes.GetAllowed(_ingreep.Type, ControllerAccessProvider.Default.Controller.Data.CCOLVersie);
             MeldingenTypes = new ObservableCollection<PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper>(
                 allowed.Select(x => new PrioIngreepInUitMeldingVoorwaardeTypeEnumWrapper(x)));
             Type = MeldingenTypes.FirstOrDefault(x => x.Value == PrioIngreepInUitMelding.Type) ?? MeldingenTypes.FirstOrDefault();
@@ -197,6 +213,10 @@ namespace TLCGen.ViewModels
             if (raise) PrioTrace.Write($"{_ingreep.FaseCyclus}{_ingreep.Naam}: {InUit} type {PrioIngreepInUitMelding.Type} -> {Type.Value} (UI)");
             PrioIngreepInUitMelding.Type = Type.Value;
             if (raise) OnPropertyChanged(nameof(Type), broadcast: true);
+
+            // a type without opvang storing loses its melding bij storing (only on a real change: older files keep
+            // theirs until then; the generator ignores it)
+            if (raise && OpvangStoring && !CanHaveOpvangStoring) OpvangStoring = false;
 
             if (Type.Value == PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde)
             {

@@ -83,11 +83,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             public virtual bool RestartsAntiJutterTimer => true;
 
             /// <summary>
-            /// Whether the melding bij storing (MeldingBijstoring) is generated as an "else if" after this melding.
-            /// </summary>
-            public virtual bool SupportsOpvangStoring => true;
-
-            /// <summary>
             /// Condition appended to "if (SCH[switch]", eg. to skip the melding on detector failure.
             /// </summary>
             public virtual string GetStoringCondition(PrioMeldingContext m) => "";

@@ -196,7 +196,6 @@ void control_parameters(void)
 /* schakelaars */
 /* ----------- */
     SCH_code[schcheckdstype]                       = "checkdstype";                       SCH[schcheckdstype]                       = 0;                                                    /* Check type DSI bericht bij VECOM         */
-    SCH_code[schprioin41busdet411SD]               = "prioin41busdet411SD";               SCH[schprioin41busdet411SD]               = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schprioin41buskar]                    = "prioin41buskar";                    SCH[schprioin41buskar]                    = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schprioin41bussdsd41inSD]             = "prioin41bussdsd41inSD";             SCH[schprioin41bussdsd41inSD]             = 1;                                                    /* Inmelden 41 via Bus toestaan             */
     SCH_code[schprioin41busdet412D413DB]           = "prioin41busdet412D413DB";           SCH[schprioin41busdet412D413DB]           = 1;                                                    /* Inmelden 41 via Bus toestaan             */

@@ -95,8 +95,9 @@
     #define hpriouit41bus          17 /* Prioriteit uitmelding 41 Bus                      */
     #define hprioin41busdet411     18 /* Prioriteit inmelding fase 41 Bus                  */
     #define hprioin41businpov41in  19 /* Prioriteit inmelding fase 41 Bus                  */
-    #define hpriouit41busdet412    20 /* Prioriteit uitmelding 41 Bus                      */
-    #define HEMAX1                 21
+    #define hprioin41busvecio414   20 /* Prioriteit inmelding fase 41 Bus                  */
+    #define hpriouit41busdet412    21 /* Prioriteit uitmelding 41 Bus                      */
+    #define HEMAX1                 22
 
 /* geheugen elementen */
 /* ------------------ */
@@ -152,8 +153,8 @@
     #define schprioin22fietsfiets221    5 /* Inmelden 22 via Fiets toestaan                 */
     #define schpriouit22fietsfiets      6 /* Uitmelden 22 via Fiets toestaan                */
     #define schprioin41busdet411SD      7 /* Inmelden 41 via Bus toestaan                   */
-    #define schprioin41busdet413SD      8 /* Inmelden 41 via Bus toestaan                   */
-    #define schprioin41businpov41inSIS  9 /* Inmelden 41 via Bus toestaan                   */
+    #define schprioin41businpov41inSIS  8 /* Inmelden 41 via Bus toestaan                   */
+    #define schprioin41busvecio414SD    9 /* Inmelden 41 via Bus toestaan                   */
     #define schpriouit41busdet412ED    10 /* Uitmelden 41 via Bus toestaan                  */
     #define schaltg02                  11 /* Alternatieve realisatie toestaan fase 02       */
     #define schaltg22                  12 /* Alternatieve realisatie toestaan fase 22       */

@@ -171,7 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             elements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(sw, 1, CCOLElementTimeTypeEnum.SCH_type,
                 melding.InUit == PrioIngreepInUitMeldingTypeEnum.Inmelding ? _schprioin : _schpriouit, prio.FaseCyclus, prio.Type.GetDescription()));
 
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null)
+            if (PrioMeldingTypes.HasValidOpvangStoring(melding))
             {
                 var elems = GetMeldingElements(c, prio, melding.MeldingBijstoring, false);
                 foreach (var e in elems)
@@ -290,7 +290,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.AppendLine($"#endif /* NO_RIS */");
             }
-            if (melding.OpvangStoring && melding.MeldingBijstoring != null && emitter.SupportsOpvangStoring)
+            if (PrioMeldingTypes.HasValidOpvangStoring(melding))
             {
                 meldingHElems.AddRange(GetMeldingCode(c, prio, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
             }

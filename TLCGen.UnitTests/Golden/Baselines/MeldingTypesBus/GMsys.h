@@ -142,32 +142,31 @@
 /* schakelaars */
 /* ----------- */
     #define schcheckdstype                        0 /* Check type DSI bericht bij VECOM         */
-    #define schprioin41busdet411SD                1 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41buskar                     2 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41bussdsd41inSD              3 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41busdet412D413DB            4 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41busdet414ETDH              5 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41busdet413SDB               6 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41businpov41inSIS            7 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41businpov41inISov41uitSIS   8 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41busvecio411SD              9 /* Inmelden 41 via Bus toestaan             */
-    #define schprioin41busopti414DB              10 /* Inmelden 41 via Bus toestaan             */
-    #define schpriouit41buskar                   11 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41bussdsd41uitSD           12 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41busdet411D               13 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41busdet412ED413ETDH       14 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41businpov41inEIS          15 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41businpov41uitEISov41inIS 16 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41busvecio414SD            17 /* Uitmelden 41 via Bus toestaan            */
-    #define schpriouit41busopti414DB             18 /* Uitmelden 41 via Bus toestaan            */
-    #define schprioin42busopti421DB              19 /* Inmelden 42 via Bus toestaan             */
-    #define schpriouit42busopti422DB             20 /* Uitmelden 42 via Bus toestaan            */
-    #define schpriouit42busopti423DB             21 /* Uitmelden 42 via Bus toestaan            */
-    #define schaltg02                            22 /* Alternatieve realisatie toestaan fase 02 */
-    #define schaltg05                            23 /* Alternatieve realisatie toestaan fase 05 */
-    #define schaltg41                            24 /* Alternatieve realisatie toestaan fase 41 */
-    #define schaltg42                            25 /* Alternatieve realisatie toestaan fase 42 */
-    #define SCHMAX1                              26
+    #define schprioin41buskar                     1 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41bussdsd41inSD              2 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41busdet412D413DB            3 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41busdet414ETDH              4 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41busdet413SDB               5 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41businpov41inSIS            6 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41businpov41inISov41uitSIS   7 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41busvecio411SD              8 /* Inmelden 41 via Bus toestaan             */
+    #define schprioin41busopti414DB               9 /* Inmelden 41 via Bus toestaan             */
+    #define schpriouit41buskar                   10 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41bussdsd41uitSD           11 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41busdet411D               12 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41busdet412ED413ETDH       13 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41businpov41inEIS          14 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41businpov41uitEISov41inIS 15 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41busvecio414SD            16 /* Uitmelden 41 via Bus toestaan            */
+    #define schpriouit41busopti414DB             17 /* Uitmelden 41 via Bus toestaan            */
+    #define schprioin42busopti421DB              18 /* Inmelden 42 via Bus toestaan             */
+    #define schpriouit42busopti422DB             19 /* Uitmelden 42 via Bus toestaan            */
+    #define schpriouit42busopti423DB             20 /* Uitmelden 42 via Bus toestaan            */
+    #define schaltg02                            21 /* Alternatieve realisatie toestaan fase 02 */
+    #define schaltg05                            22 /* Alternatieve realisatie toestaan fase 05 */
+    #define schaltg41                            23 /* Alternatieve realisatie toestaan fase 41 */
+    #define schaltg42                            24 /* Alternatieve realisatie toestaan fase 42 */
+    #define SCHMAX1                              25
 
 /* parameters */
 /* ---------- */

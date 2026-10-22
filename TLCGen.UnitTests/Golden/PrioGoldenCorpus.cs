@@ -363,7 +363,11 @@ namespace TLCGen.UnitTests.Golden
             var ingangOpvang = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, "ov41in", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartIngang);
             ingangOpvang.OpvangStoring = true;
             ingangOpvang.MeldingBijstoring = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, "413", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
-            AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, detMetFietsRis, ingangOpvang,
+            // a melding bij storing of another type than Detector (used to crash the generator for RIS): ignored
+            var vecomOpvangRis = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, "414", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
+            vecomOpvangRis.OpvangStoring = true;
+            vecomOpvangRis.MeldingBijstoring = Melding(true, PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, null, PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie);
+            AddIngreep(c, "41", "bus", PrioIngreepVoertuigTypeEnum.Bus, detMetFietsRis, ingangOpvang, vecomOpvangRis,
                 Melding(false, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, "412", PrioIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie));
 
             return c;

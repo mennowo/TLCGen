@@ -394,7 +394,7 @@ void InUitMelden(void)
     IH[hpriouit22fiets] = IH[hpriouit22fietsfiets];
 
     /* Inmelding fc41 type Bus */
-    IH[hprioin41bus] = IH[hprioin41busdet411] = IH[hprioin41businpov41in] = FALSE;
+    IH[hprioin41bus] = IH[hprioin41busdet411] = IH[hprioin41businpov41in] = IH[hprioin41busvecio414] = FALSE;
     if (SCH[schprioin41busdet411SD] && (CIF_IS[d411] < CIF_DET_STORING))
     {
         IH[hprioin41busdet411] = SD[d411];
@@ -403,11 +403,11 @@ void InUitMelden(void)
     {
         IH[hprioin41businpov41in] = IS[isov41in] && !IS_old[isov41in];
     }
-    else if (SCH[schprioin41busdet413SD] && (CIF_IS[d413] < CIF_DET_STORING))
+    if (SCH[schprioin41busvecio414SD] && (CIF_IS[d414] < CIF_DET_STORING))
     {
-        IH[hprioin41businpov41in] = SD[d413];
+        IH[hprioin41busvecio414] =  SD[d414];
     }
-    IH[hprioin41bus] = IH[hprioin41busdet411] || IH[hprioin41businpov41in];
+    IH[hprioin41bus] = IH[hprioin41busdet411] || IH[hprioin41businpov41in] || IH[hprioin41busvecio414];
 
     /* Uitmelding fc41 type Bus */
     IH[hpriouit41bus] = IH[hpriouit41busdet412] = FALSE;

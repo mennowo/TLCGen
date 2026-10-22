@@ -153,6 +153,7 @@ void control_parameters(void)
     H_code[hpriouit41bus]          = "priouit41bus";                                           /* Prioriteit uitmelding 41 Bus                      */
     H_code[hprioin41busdet411]     = "prioin41busdet411";                                      /* Prioriteit inmelding fase 41 Bus                  */
     H_code[hprioin41businpov41in]  = "prioin41businpov41in";                                   /* Prioriteit inmelding fase 41 Bus                  */
+    H_code[hprioin41busvecio414]   = "prioin41busvecio414";                                    /* Prioriteit inmelding fase 41 Bus                  */
     H_code[hpriouit41busdet412]    = "priouit41busdet412";                                     /* Prioriteit uitmelding 41 Bus                      */
 
 /* geheugen elementen */
@@ -206,8 +207,8 @@ void control_parameters(void)
     SCH_code[schprioin22fietsfiets221]   = "prioin22fietsfiets221";   SCH[schprioin22fietsfiets221]   = 1;                                          /* Inmelden 22 via Fiets toestaan                 */
     SCH_code[schpriouit22fietsfiets]     = "priouit22fietsfiets";     SCH[schpriouit22fietsfiets]     = 1;                                          /* Uitmelden 22 via Fiets toestaan                */
     SCH_code[schprioin41busdet411SD]     = "prioin41busdet411SD";     SCH[schprioin41busdet411SD]     = 1;                                          /* Inmelden 41 via Bus toestaan                   */
-    SCH_code[schprioin41busdet413SD]     = "prioin41busdet413SD";     SCH[schprioin41busdet413SD]     = 1;                                          /* Inmelden 41 via Bus toestaan                   */
     SCH_code[schprioin41businpov41inSIS] = "prioin41businpov41inSIS"; SCH[schprioin41businpov41inSIS] = 1;                                          /* Inmelden 41 via Bus toestaan                   */
+    SCH_code[schprioin41busvecio414SD]   = "prioin41busvecio414SD";   SCH[schprioin41busvecio414SD]   = 1;                                          /* Inmelden 41 via Bus toestaan                   */
     SCH_code[schpriouit41busdet412ED]    = "priouit41busdet412ED";    SCH[schpriouit41busdet412ED]    = 1;                                          /* Uitmelden 41 via Bus toestaan                  */
     SCH_code[schaltg02]                  = "altg02";                  SCH[schaltg02]                  = 0;                                          /* Alternatieve realisatie toestaan fase 02       */
     SCH_code[schaltg22]                  = "altg22";                  SCH[schaltg22]                  = 0;                                          /* Alternatieve realisatie toestaan fase 22       */

@@ -13,8 +13,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
             }
 
-            public override bool SupportsOpvangStoring => false;
-
             public override void AppendCondition(PrioMeldingContext m, StringBuilder sb)
             {
                 var c = m.C;

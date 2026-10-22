@@ -45,6 +45,45 @@ namespace TLCGen.UnitTests.Prio
                 Does.Contain(PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde));
         }
 
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, true)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, false)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, false)]
+        [TestCase(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector, PrioIngreepInUitMeldingVoorwaardeTypeEnum.RISVoorwaarde, false)]
+        public void HasValidOpvangStoring_OnlyDetectorOrVecomWithDetectorFallback(
+            PrioIngreepInUitMeldingVoorwaardeTypeEnum type, PrioIngreepInUitMeldingVoorwaardeTypeEnum fallbackType, bool expected)
+        {
+            var melding = new PrioIngreepInUitMeldingModel
+            {
+                Type = type, OpvangStoring = true, MeldingBijstoring = new PrioIngreepInUitMeldingModel { Type = fallbackType }
+            };
+
+            Assert.That(PrioMeldingTypes.HasValidOpvangStoring(melding), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ApplyVehicleTypeChange_TypeWithoutOpvangStoring_DropsMeldingBijStoring()
+        {
+            var prio = CreateIngreep(PrioIngreepVoertuigTypeEnum.Bus,
+                PrioIngreepInUitMeldingVoorwaardeTypeEnum.Ingang, PrioIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector);
+            foreach (var m in prio.MeldingenData.Inmeldingen)
+            {
+                m.OpvangStoring = true;
+                m.MeldingBijstoring = new PrioIngreepInUitMeldingModel { Type = PrioMeldingTypes.MeldingBijStoringType };
+            }
+
+            // hulpdienst: Ingang is not allowed (-> KAR, no opvang storing), Vecom is
+            PrioIngreepModelSync.ApplyVehicleTypeChange(prio, PrioIngreepVoertuigTypeEnum.Hulpdienst, CCOLVersieEnum.CCOL110);
+
+            var ingang = prio.MeldingenData.Inmeldingen[0];
+            var vecom = prio.MeldingenData.Inmeldingen[1];
+            Assert.That(ingang.Type, Is.EqualTo(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+            Assert.That(ingang.OpvangStoring, Is.False);
+            Assert.That(ingang.MeldingBijstoring, Is.Null);
+            Assert.That(vecom.OpvangStoring, Is.True);
+            Assert.That(vecom.MeldingBijstoring, Is.Not.Null);
+        }
+
         [Test]
         public void ApplyVehicleTypeChange_BusToFiets_DisallowedMeldingGetsFirstAllowedType()
         {
