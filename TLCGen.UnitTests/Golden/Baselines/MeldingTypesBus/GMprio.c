@@ -366,7 +366,7 @@ void InUitMelden(void)
     }
     if (SCH[schpriouit41busdet412ED413ETDH] && (CIF_IS[d412] < CIF_DET_STORING) && (CIF_IS[d413] < CIF_DET_STORING))
     {
-        IH[hpriouit41busdet412413] = RT[tpriouit41busdet412413] = !T[tpriouit41busdet412413] && !C[cvc41bus] && R[fc41] && !T[tovminrood41bus] && ED[d412] && TDH_old[d413] && !TDH[d413];
+        IH[hpriouit41busdet412413] = ED[d412] && TDH_old[d413] && !TDH[d413];
     }
     if (SCH[schpriouit41businpov41inEIS])
     {
@@ -398,7 +398,7 @@ void InUitMelden(void)
     IH[hpriouit42bus] = IH[hpriouit42busopti422] = IH[hpriouit42busopti423] = FALSE;
     if (SCH[schpriouit42busopti422DB])
     {
-        IH[hpriouit42busopti422] = !T[tpriouit42busopti422] && !TDH[d422] && TDH_old[d422];
+        IH[hpriouit42busopti422] = !TDH[d422] && TDH_old[d422];
     }
     if (SCH[schpriouit42busopti423DB])
     {

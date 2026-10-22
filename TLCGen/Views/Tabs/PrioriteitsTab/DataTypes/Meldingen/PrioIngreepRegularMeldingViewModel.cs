@@ -13,7 +13,11 @@ namespace TLCGen.ViewModels
         #region Properties
 
         public PrioIngreepInUitMeldingViewModel Parent { get; }
-        
+
+        // Used by the view to show the inmelding-only options (anti-jutter per melding, alleen indien geen inmelding,
+        // alleen bij rood) for inmeldingen only; the generator ignores them for uitmeldingen
+        public PrioIngreepInUitMeldingTypeEnum InUit => Parent.InUit;
+
         public ObservableCollection<string> AvailableInputs
         {
             get

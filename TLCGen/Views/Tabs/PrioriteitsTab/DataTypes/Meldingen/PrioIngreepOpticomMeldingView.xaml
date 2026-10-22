@@ -27,13 +27,15 @@
             <Label Grid.Row="1" Grid.Column="0" Content="Opticom ingang" />
             <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=AvailableDetectors}" Margin="2"
                       SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <Label Grid.Row="2" Grid.Column="0" Content="Toepassen anti jutter tijd" />
+            <Label Grid.Row="2" Grid.Column="0" Content="Toepassen anti jutter tijd"
+                   Visibility="{Binding Path=IsInmelding,Converter={StaticResource BooleanToVisibilityConverter}}" />
             <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=AntiJutterTijdToepassen,UpdateSourceTrigger=PropertyChanged}"
+                      Visibility="{Binding Path=IsInmelding,Converter={StaticResource BooleanToVisibilityConverter}}"
                       VerticalAlignment="Center" />
             <Label Grid.Row="3" Grid.Column="0" Content="Anti jutter tijd"
-                   Visibility="{Binding Path=AntiJutterTijdToepassen,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   Visibility="{Binding Path=ShowAntiJutterTijd,Converter={StaticResource BooleanToVisibilityConverter}}" />
             <TextBox Grid.Row="3" Grid.Column="1" Margin="2" Text="{Binding Path=AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}"
-                     Visibility="{Binding Path=AntiJutterTijdToepassen,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                     Visibility="{Binding Path=ShowAntiJutterTijd,Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>
