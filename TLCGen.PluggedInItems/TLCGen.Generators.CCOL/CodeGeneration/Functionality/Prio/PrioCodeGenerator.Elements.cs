@@ -356,7 +356,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             _myElements.Add(
                                 CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                    approach, 999, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
+                                    approach, fcRis.ApproachID, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, "",
                                     PrioCodeGeneratorHelper.CAT_Prioriteren, PrioCodeGeneratorHelper.SUBCAT_OpenbaarVervoer));
                         }
                         foreach (var lane in fcRis.LaneData)
