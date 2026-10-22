@@ -247,9 +247,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine(")");
             sb.AppendLine($"{ts}{{");
 
-            // NOTE: checks the flag regardless of the melding type, while its elements are only declared for a
-            // fiets inmelding (todo note 1579)
-            if (melding.FietsPrioriteitGebruikRIS)
+            // counting cyclists via RIS: only for a fiets inmelding (its elements are only declared there); the flag
+            // may be left over on other melding types after a type change
+            if (melding.FietsPrioriteitGebruikRIS && m.IsInmelding &&
+                melding.Type == PrioIngreepInUitMeldingVoorwaardeTypeEnum.FietsMassaPeloton)
             {
                 FietsEmitter.AppendRisTellingCode(m, sb);
             }

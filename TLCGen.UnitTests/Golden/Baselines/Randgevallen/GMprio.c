@@ -397,7 +397,6 @@ void InUitMelden(void)
     IH[hprioin41bus] = IH[hprioin41busdet411] = IH[hprioin41businpov41in] = FALSE;
     if (SCH[schprioin41busdet411SD] && (CIF_IS[d411] < CIF_DET_STORING))
     {
-        MM[mftstelris41busdet] = 0;
         IH[hprioin41busdet411] = SD[d411];
     }
     if (SCH[schprioin41businpov41inSIS])
