@@ -643,23 +643,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             else
                             {
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] = MM[{_mpf}{_mwtvm}{fc.Naam}];");
-                                if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
-                                {
-                                    if (!c.Data.WachttijdvoorspellerAansturenBusHD)
-                                    {
-                                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(bHDAanwezig);");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
-                                    }
-                                }
 
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}1] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT1) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}2] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT2) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}3] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT3) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                                 sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}4] = (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT4) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                            }
+
+                            if (c.Data.WachttijdvoorspellerAansturenBus && c.PrioData.PrioIngreepType != PrioIngreepTypeEnum.Geen)
+                            {
+                                sb.AppendLine();
+                                if (!c.Data.WachttijdvoorspellerAansturenBusHD)
+                                {
+                                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(bHDAanwezig);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}] = CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
+                                }
                             }
 
                             sb.AppendLine();
