@@ -69,6 +69,10 @@ namespace TLCGen.Models
                     melding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
                     melding.RisSubrole = RISVehicleSubrole.BUS;
                     break;
+                case PrioIngreepVoertuigTypeEnum.HOV:
+                    melding.RisRole = RISVehicleRole.PUBLICTRANSPORT;
+                    melding.RisSubrole = RISVehicleSubrole.EXPRESSTRANSIT;
+                    break;
                 case PrioIngreepVoertuigTypeEnum.Fiets:
                     melding.RisRole = RISVehicleRole.DEFAULT;
                     melding.RisSubrole = RISVehicleSubrole.UNKNOWN;

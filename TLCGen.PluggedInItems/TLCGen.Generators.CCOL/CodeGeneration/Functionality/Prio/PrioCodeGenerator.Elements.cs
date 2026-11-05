@@ -247,6 +247,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     PrioIngreepVoertuigTypeEnum.Bus => 1,
                     PrioIngreepVoertuigTypeEnum.Tram => 2,
+                    PrioIngreepVoertuigTypeEnum.HOV => 71,
                     _ => 0
                 };
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvtgcat}{prioName}", vtgtype, CCOLElementTimeTypeEnum.None, _prmvtgcat, prioName));

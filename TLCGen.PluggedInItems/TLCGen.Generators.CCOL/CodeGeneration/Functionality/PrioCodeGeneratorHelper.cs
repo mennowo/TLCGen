@@ -71,6 +71,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public static bool IsOV(this PrioIngreepModel prio)
         {
             return prio.Type == PrioIngreepVoertuigTypeEnum.Bus ||
+                   prio.Type == PrioIngreepVoertuigTypeEnum.HOV ||
                    prio.Type == PrioIngreepVoertuigTypeEnum.Tram;
         }
     }

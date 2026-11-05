@@ -305,6 +305,9 @@ namespace TLCGen.Settings
                         case PrioIngreepVoertuigTypeEnum.Bus:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "bus", Setting = "bus"});
                             break;
+                        case PrioIngreepVoertuigTypeEnum.HOV:
+                            Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel { VehicleType = (PrioIngreepVoertuigTypeEnum)vtgT, Default = "hov", Setting = "hov" });
+                            break;
                         case PrioIngreepVoertuigTypeEnum.Fiets:
                             Defaults.VehicleTypes.Add(new VehicleTypeAbbreviationModel {VehicleType = (PrioIngreepVoertuigTypeEnum) vtgT, Default = "fts", Setting = "fts"});
                             break;

@@ -62,6 +62,7 @@ namespace TLCGen.Models
             {
                 case PrioIngreepVoertuigTypeEnum.Tram:
                 case PrioIngreepVoertuigTypeEnum.Bus:
+                case PrioIngreepVoertuigTypeEnum.HOV:
                     types.Add(PrioIngreepInUitMeldingVoorwaardeTypeEnum.Detector);
                     types.Add(PrioIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                     types.Add(PrioIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
