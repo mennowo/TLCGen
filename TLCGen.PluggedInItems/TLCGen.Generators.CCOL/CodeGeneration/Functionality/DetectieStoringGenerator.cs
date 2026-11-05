@@ -93,6 +93,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private void AanvraagAlleDetectoren(StringBuilder sb, ControllerModel c, string ts)
         {
             sb.AppendLine($"{ts}/* vaste/vertraagde aanvraag bij detectiestoring */");
+
+            foreach (var fc in c.Fasen.Where(x =>
+                x.AanvraagBijDetectieStoring &&
+                x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
+                x.AanvraagBijDetectieStoringVertraagd)))
+            {
+                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (ET[{_tpf}{_tdstvert}{fc.Naam}] ? BIT11 : 0);");
+            }
+            sb.AppendLine();
+
             foreach (var fc in c.Fasen.Where(x => 
                 (x.AanvraagBijDetectieStoring || x.Detectoren.Any(x => x.AanvraagBijStoring != NooitAltijdAanUitEnum.Nooit)) &&
                 x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen)))
@@ -272,14 +282,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 sb.AppendLine(fc.AanvraagBijDetectieStoringVertraagd ? ");" : ") ? BIT11 : 0;");
             }
-            foreach (var fc in c.Fasen.Where(x =>
-                x.AanvraagBijDetectieStoring &&
-                x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
-                x.AanvraagBijDetectieStoringVertraagd)))
-            {
-                sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= (ET[{_tpf}{_tdstvert}{fc.Naam}] ? BIT11 : 0);");
-            }
-            sb.AppendLine();
         }
 
         private void VervangendHiaatKoplus(StringBuilder sb, ControllerModel c, string ts)
