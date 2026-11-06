@@ -21,7 +21,7 @@ bool ym_max_toV1(count i, mulv to_verschil);
 bool ym_max_toV2(count i, mulv to_verschil);
 bool ym_max_vtgV1(count i);
 bool ym_max_vtgV2(count i);
-void AanvraagSnelV2(count fc1, count dp);
+void AanvraagSnelV3(count fc1, count dp);
 bool Rateltikkers(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */

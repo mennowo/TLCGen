@@ -633,16 +633,6 @@ bool ym_max_vtgV2(count i)
    return ym;
 }
 
-void AanvraagSnelV2(count fc1, count dp)
-{
-   /* richting mag gelijk realiseren indien er geen conflicten lopen */
-   if ((bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
-      D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)))
-   {
-      A[fc1] |= BIT5;
-   }
-}
-
 /** ------------------------------------------------------------------------------
 AANVRAAG SNEL
 ------------------------------------------------------------------------------
