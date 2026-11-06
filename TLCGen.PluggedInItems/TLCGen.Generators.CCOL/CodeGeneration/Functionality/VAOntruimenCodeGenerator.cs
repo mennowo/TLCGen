@@ -25,12 +25,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tvamax}{va.FaseCyclus}", va.VAOntrMax, CCOLElementTimeTypeEnum.TE_type, _tvamax, va.FaseCyclus));
+                // rows: the signal groups to create a timer for (hard conflicts plus manual conflicts)
+                var conflicts = va.GetAllConflicts();
                 foreach (var d in va.VADetectoren)
                 {
-                    foreach(var cf in d.ConflicterendeFasen)
+                    foreach(var cf in conflicts)
                     {
+                        // the time of this detector, not the representative instance from the union above
+                        var time = d.GetConflictForDetector(cf.FaseCyclus) ?? cf;
                         _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}", cf.VAOntruimingsTijd, CCOLElementTimeTypeEnum.TE_type, _tva, va.FaseCyclus));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}", time.VAOntruimingsTijd, CCOLElementTimeTypeEnum.TE_type, _tva, va.FaseCyclus));
                     }
                 }
             }
@@ -72,6 +76,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (va.VADetectoren?.Count > 0)
                         {
+                            var conflicts = va.GetAllConflicts();
                             sb.AppendLine($"{ts}/* Fase {va.FaseCyclus} */");
                             foreach (var d in va.VADetectoren)
                             {
@@ -112,14 +117,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
-                                foreach (var cf in d.ConflicterendeFasen)
+                                foreach (var cf in conflicts)
                                 {
                                     sb.AppendLine($"{ts}{ts}RT[{_tpf}{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}] = D[{_dpf}{d.Detector}] && T[{_tpf}{_tvamax}{va.FaseCyclus}] && T_max[{_tpf}{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}];");
                                 }
                                 sb.AppendLine($"{ts}}}");
                                 sb.AppendLine($"{ts}else");
                                 sb.AppendLine($"{ts}{{");
-                                foreach (var cf in d.ConflicterendeFasen)
+                                foreach (var cf in conflicts)
                                 {
                                     sb.AppendLine($"{ts}{ts}RT[{_tpf}{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}] = FALSE;");
                                 }
@@ -136,8 +141,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (va.VADetectoren?.Count > 0)
                         {
-                            var fasen = va.VADetectoren.First().ConflicterendeFasen;
-                            foreach (var cf in fasen)
+                            foreach (var cf in va.GetAllConflicts())
                             {
                                 if (!cFasen.Contains(cf.FaseCyclus))
                                 {
@@ -190,9 +194,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (va.VADetectoren?.Count > 0)
                         {
                             sb.AppendLine($"{ts}/* opzetten X voor conflicten van fase {va.FaseCyclus} */");
-                            var fasen = va.VADetectoren.First().ConflicterendeFasen;
-                            foreach (var cf in fasen)
-                            { 
+                            foreach (var cf in va.GetAllConflicts())
+                            {
                                 sb.Append($"{ts}if(");
                                 var i = 0;
                                 foreach (var d in va.VADetectoren)

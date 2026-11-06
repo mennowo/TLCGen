@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -19,7 +21,13 @@ namespace TLCGen.ViewModels
         private Dictionary<string, int> _ConflicterendeFasen;
         private ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> _detectorManager;
         private ObservableCollection<string> _VAOntruimenMatrixColumnHeaders;
-        private ObservableCollection<string> _VAOntruimenMatrixRowHeaders;
+        private ObservableCollection<VAOntruimenMatrixRowHeader> _VAOntruimenMatrixRowHeaders;
+        private ObservableCollection<string> _availableManualConflicts;
+        private ObservableCollection<string> _manualConflictFases;
+        private string _selectedManualConflictToAdd;
+        private string _selectedManualConflictToRemove;
+        private RelayCommand _addManualConflictCommand;
+        private RelayCommand _removeManualConflictCommand;
 
         #endregion // Fields
 
@@ -203,6 +211,40 @@ namespace TLCGen.ViewModels
             get;
         }
 
+        public ObservableCollection<string> AvailableManualConflicts =>
+            _availableManualConflicts ??= new ObservableCollection<string>();
+
+        /// <summary>
+        /// Signal groups the user added for VA ontruimen that are not automatic (hard) conflicts.
+        /// The membership is fase-wide (one entry in every detector); the time is per detector.
+        /// </summary>
+        public ObservableCollection<string> ManualConflictFases =>
+            _manualConflictFases ??= new ObservableCollection<string>();
+
+        public string SelectedManualConflictToAdd
+        {
+            get => _selectedManualConflictToAdd;
+            set
+            {
+                if (_selectedManualConflictToAdd == value) return;
+                _selectedManualConflictToAdd = value;
+                OnPropertyChanged();
+                _addManualConflictCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
+        public string SelectedManualConflictToRemove
+        {
+            get => _selectedManualConflictToRemove;
+            set
+            {
+                if (_selectedManualConflictToRemove == value) return;
+                _selectedManualConflictToRemove = value;
+                OnPropertyChanged();
+                _removeManualConflictCommand?.NotifyCanExecuteChanged();
+            }
+        }
+
         public Dictionary<string, int> ConflicterendeFasen => _ConflicterendeFasen ??= new Dictionary<string, int>();
 
         public VAOntruimenNaarFaseViewModel[,] VAOntruimenMatrix
@@ -214,8 +256,8 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> VAOntruimenMatrixColumnHeaders =>
             _VAOntruimenMatrixColumnHeaders ??= new ObservableCollection<string>();
 
-        public ObservableCollection<string> VAOntruimenMatrixRowHeaders =>
-            _VAOntruimenMatrixRowHeaders ??= new ObservableCollection<string>();
+        public ObservableCollection<VAOntruimenMatrixRowHeader> VAOntruimenMatrixRowHeaders =>
+            _VAOntruimenMatrixRowHeaders ??= new ObservableCollection<VAOntruimenMatrixRowHeader>();
 
         public ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
         {
@@ -236,6 +278,11 @@ namespace TLCGen.ViewModels
                             {
                                 vad.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = kv.Key });
                             }
+                            // the manual membership is fase-wide; a new detector starts with time 0
+                            foreach (var fc in _VAOntruimenFase.GetManualConflicts())
+                            {
+                                vad.ManualConflicts.Add(new VAOntruimenNaarFaseModel { FaseCyclus = fc });
+                            }
                             return new VAOntruimenDetectorViewModel(vad);
                         },
                         x => VAOntruimenDetectoren.All(y => y.Detector != x),
@@ -251,32 +298,135 @@ namespace TLCGen.ViewModels
         public ObservableCollection<string> WisselDetectoren { get; }
 
         public ObservableCollection<string> WisselInputs { get; }
-        
+
         #endregion Properties
 
+        #region Commands
+
+        public ICommand AddManualConflictCommand => _addManualConflictCommand ??= new RelayCommand(
+            () =>
+            {
+                // membership is fase-wide: add the signal group to every detector; the user then
+                // fills in the time per detector in the matrix
+                foreach (var detector in VAOntruimenDetectoren)
+                {
+                    detector.ManualConflicts.Add(new VAOntruimenNaarFaseViewModel(
+                        new VAOntruimenNaarFaseModel { FaseCyclus = SelectedManualConflictToAdd }));
+                }
+                SendChanged();
+                Refresh();
+            },
+            () => !string.IsNullOrWhiteSpace(SelectedManualConflictToAdd) && VAOntruimenDetectoren.Count > 0);
+
+        public ICommand RemoveManualConflictCommand => _removeManualConflictCommand ??= new RelayCommand(
+            () =>
+            {
+                foreach (var detector in VAOntruimenDetectoren)
+                {
+                    var manual = detector.ManualConflicts.FirstOrDefault(x => x.FaseCyclus == SelectedManualConflictToRemove);
+                    if (manual != null)
+                    {
+                        detector.ManualConflicts.Remove(manual);
+                    }
+                }
+                SelectedManualConflictToRemove = null;
+                SendChanged();
+                Refresh();
+            },
+            () => !string.IsNullOrWhiteSpace(SelectedManualConflictToRemove));
+
+        #endregion // Commands
+
         #region Private methods
+
+        private bool IsAutomaticConflict(string faseCyclus)
+        {
+            return VAOntruimenDetectoren.Any(d => d.ConflicterendeFasen.Any(x => x.FaseCyclus == faseCyclus));
+        }
+
+        private void SendChanged()
+        {
+            WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(this));
+        }
+
+        private void UpdateManualConflictCandidates()
+        {
+            var manualConflicts = _VAOntruimenFase.GetManualConflicts();
+
+            AvailableManualConflicts.Clear();
+            foreach (var fc in ControllerAccessProvider.Default.AllSignalGroupStrings)
+            {
+                if (fc == FaseCyclus) continue;
+                if (IsAutomaticConflict(fc)) continue;
+                if (manualConflicts.Contains(fc)) continue;
+                AvailableManualConflicts.Add(fc);
+            }
+
+            ManualConflictFases.Clear();
+            foreach (var fc in manualConflicts)
+            {
+                ManualConflictFases.Add(fc);
+            }
+
+            if (SelectedManualConflictToAdd == null || !AvailableManualConflicts.Contains(SelectedManualConflictToAdd))
+            {
+                SelectedManualConflictToAdd = AvailableManualConflicts.FirstOrDefault();
+            }
+            if (SelectedManualConflictToRemove == null || !ManualConflictFases.Contains(SelectedManualConflictToRemove))
+            {
+                SelectedManualConflictToRemove = ManualConflictFases.FirstOrDefault();
+            }
+
+            _addManualConflictCommand?.NotifyCanExecuteChanged();
+            _removeManualConflictCommand?.NotifyCanExecuteChanged();
+        }
 
         private void RebuildVAOnruimenMatrix()
         {
             VAOntruimenMatrixColumnHeaders.Clear();
             VAOntruimenMatrixRowHeaders.Clear();
 
-            if (ConflicterendeFasen.Count == 0 || VAOntruimenDetectoren.Count == 0)
+            // rows: the automatic hard conflicts (normally equal for all detectors) plus the manual conflicts
+            var rowHeaders = new List<VAOntruimenMatrixRowHeader>();
+            foreach (var cf in VAOntruimenDetectoren.SelectMany(x => x.ConflicterendeFasen))
+            {
+                if (rowHeaders.All(x => x.FaseCyclus != cf.FaseCyclus))
+                {
+                    rowHeaders.Add(new VAOntruimenMatrixRowHeader(cf.FaseCyclus, false));
+                }
+            }
+            foreach (var fc in _VAOntruimenFase.GetManualConflicts())
+            {
+                if (rowHeaders.All(x => x.FaseCyclus != fc))
+                {
+                    rowHeaders.Add(new VAOntruimenMatrixRowHeader(fc, true));
+                }
+            }
+
+            if (rowHeaders.Count == 0 || VAOntruimenDetectoren.Count == 0)
             {
                 VAOntruimenMatrix = null;
                 OnPropertyChanged("VAOntruimenMatrix");
                 return;
             }
 
-            VAOntruimenMatrix = new VAOntruimenNaarFaseViewModel[ConflicterendeFasen.Count, VAOntruimenDetectoren.Count];
+            VAOntruimenMatrix = new VAOntruimenNaarFaseViewModel[rowHeaders.Count, VAOntruimenDetectoren.Count];
+            foreach (var rh in rowHeaders)
+            {
+                VAOntruimenMatrixRowHeaders.Add(rh);
+            }
 
             for (var d = 0; d < VAOntruimenDetectoren.Count; ++d)
             {
                 VAOntruimenMatrixColumnHeaders.Add(VAOntruimenDetectoren[d].Detector);
-                for (var cfc = 0; cfc < VAOntruimenDetectoren[d].ConflicterendeFasen.Count; ++cfc)
+                for (var r = 0; r < rowHeaders.Count; ++r)
                 {
-                    VAOntruimenMatrixRowHeaders.Add(VAOntruimenDetectoren[d].ConflicterendeFasen[cfc].FaseCyclus);
-                    VAOntruimenMatrix[cfc, d] = VAOntruimenDetectoren[d].ConflicterendeFasen[cfc];
+                    // every column shows this detector's own entry, so a manual conflict has its own
+                    // time per detector just like a hard conflict
+                    VAOntruimenMatrix[r, d] =
+                        VAOntruimenDetectoren[d].ConflicterendeFasen.FirstOrDefault(x => x.FaseCyclus == rowHeaders[r].FaseCyclus)
+                        ?? VAOntruimenDetectoren[d].ManualConflicts.FirstOrDefault(x => x.FaseCyclus == rowHeaders[r].FaseCyclus);
                 }
             }
             OnPropertyChanged("VAOntruimenMatrix");
@@ -292,6 +442,7 @@ namespace TLCGen.ViewModels
             VAOntruimenDetectoren.Rebuild();
             VAOntruimenDetectoren.CollectionChanged += VAOntruimenDetectoren_CollectionChanged;
             RebuildVAOnruimenMatrix();
+            UpdateManualConflictCandidates();
             DetectorManager = null;
             OnPropertyChanged("DetectorManager");
         }
@@ -346,6 +497,7 @@ namespace TLCGen.ViewModels
         private void VAOntruimenDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             WeakReferenceMessengerEx.Default.Send(new ControllerDataChangedMessage());
+            WeakReferenceMessengerEx.Default.Send(new BroadcastMessage(this));
         }
 
         #endregion // Collection changed

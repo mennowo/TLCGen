@@ -209,8 +209,12 @@ namespace TLCGen.Integrity
                     foreach(var ontr in c.VAOntruimenFasen)
                     {
                         var conflicts = TLCGenControllerChecker.GetFaseConflicts(c, ontr.FaseCyclus);
+                        // manual conflicts that have become hard conflicts are covered by the automatic
+                        // list from now on; keep the two lists from overlapping
+                        var hardConflicts = conflicts.Where(x => x.Waarde >= 0).Select(x => x.FaseNaar).ToList();
                         foreach(var d in ontr.VADetectoren)
                         {
+                            d.ManualConflicts?.RemoveAll(x => hardConflicts.Contains(x.FaseCyclus));
                             var addfcs = new List<VAOntruimenNaarFaseModel>();
                             var remfcs = new List<VAOntruimenNaarFaseModel>();
                             foreach (var fc in d.ConflicterendeFasen)

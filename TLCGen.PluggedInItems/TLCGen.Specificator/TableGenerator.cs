@@ -2755,10 +2755,11 @@ namespace TLCGen.Specificator
                         foreach (var d in vao.VADetectoren)
                         {
                             ++detcount;
-                            aantalcf = d.ConflicterendeFasen.Count;
+                            aantalcf = vao.GetAllConflicts().Count;
                             cfcount = 0;
-                            foreach (var f in d.ConflicterendeFasen)
+                            foreach (var f in vao.GetAllConflicts())
                             {
+                                var conf = d.GetConflictForDetector(f.FaseCyclus) ?? f;
                                 ++cfcount;
                                 if ((detcount == 1) && (cfcount == 1) && eersterijgeweest)
                                 {
@@ -2770,8 +2771,8 @@ namespace TLCGen.Specificator
                                 ((detcount == 1) && (cfcount == 1))? vao.VAOntrMax.ToString()  : "",
                                 ((detcount == 1) && (cfcount == 1))? vao.KijkNaarWisselstand.ToCustomString() : "",
                                 (cfcount == 1) ? d.Detector : "",
-                                f.FaseCyclus,
-                                f.VAOntruimingsTijd.ToString(),
+                                conf.FaseCyclus,
+                                conf.VAOntruimingsTijd.ToString(),
                             });
                                 eersterijgeweest = true;
                             }
@@ -2806,10 +2807,11 @@ namespace TLCGen.Specificator
                         foreach (var d in vao.VADetectoren)
                         {
                             ++detcount;
-                            aantalcf = d.ConflicterendeFasen.Count;
+                            aantalcf = vao.GetAllConflicts().Count;
                             cfcount = 0;
-                            foreach (var f in d.ConflicterendeFasen)
+                            foreach (var f in vao.GetAllConflicts())
                             {
+                                var conf = d.GetConflictForDetector(f.FaseCyclus) ?? f;
                                 ++cfcount;
                                 if ((detcount == 1) && (cfcount == 1) && eersterijgeweest)
                                 {
@@ -2821,8 +2823,8 @@ namespace TLCGen.Specificator
                                 ((detcount == 1) && (cfcount == 1))? vao.VAOntrMax.ToString()  : "",
                               //((detcount == 1) && (cfcount == 1))? vao.KijkNaarWisselstand.ToCustomString() : "",
                                 (cfcount == 1) ? d.Detector : "",
-                                f.FaseCyclus,
-                                f.VAOntruimingsTijd.ToString(),
+                                conf.FaseCyclus,
+                                conf.VAOntruimingsTijd.ToString(),
                             });
                                 eersterijgeweest = true;
                             }

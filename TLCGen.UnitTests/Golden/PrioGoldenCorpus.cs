@@ -446,7 +446,8 @@ namespace TLCGen.UnitTests.Golden
 
         #region Helpers
 
-        private static ControllerModel CreateController(params (string naam, FaseTypeEnum type)[] fasen)
+        // also used by the VA ontruimen generator tests: a minimal but complete controller
+        internal static ControllerModel CreateController(params (string naam, FaseTypeEnum type)[] fasen)
         {
             var c = new ControllerModel();
             c.Data.SetSegmentOutputs();
