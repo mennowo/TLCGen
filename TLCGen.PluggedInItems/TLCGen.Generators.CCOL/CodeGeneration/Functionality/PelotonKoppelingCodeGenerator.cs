@@ -364,7 +364,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append($"{ts}IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] |= proc_pel_in_V1({_hpf}{_hpku}{pk.GerelateerdePelotonKoppeling}, {_tpf}{_tpelmeet}{pk.GekoppeldeSignaalGroep}, {_tpf}{_tpelmaxhiaat}{pk.GekoppeldeSignaalGroep}, {_prmpf}{_prmpelgrens}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelvtg}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelin}{pk.GekoppeldeSignaalGroep}, ");
                                     foreach (var d in pk.Detectoren)
                                     {
-                                        sb.Append($"{_hpf}{_hpkud}{d}{pk.GerelateerdePelotonKoppeling}, ");
+                                        sb.Append($"{_hpf}{_hpkud}{d.DetectorNaam}{pk.GerelateerdePelotonKoppeling}, ");
                                     }
                                     sb.AppendLine("END);");
                                 }
