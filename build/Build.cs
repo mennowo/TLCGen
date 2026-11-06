@@ -82,9 +82,11 @@ class Build : FalloutBuild
                 var publishDirectory = project.Directory / "bin" / "x64" / "Release" / "net10.0-windows";
 
                 SignToolTasks.SignTool(_ => _
-                    .SetFile("C:\\Users\\menno\\CodingConnected\\Various\\CodeCert\\cert-cc-2023-2026.cer")
+                    .SetSigningSubjectName("CodingConnected e.U.")
                     .SetDescription("TLCGen")
                     .SetFileDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
+                    .SetRfc3161TimestampServerUrl("http://time.certum.pl")
+                    .SetTimestampServerDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
                     .SetFiles(publishDirectory / "TLCGen.exe"));
             }
         });
@@ -111,9 +113,11 @@ class Build : FalloutBuild
             if (DoSign)
             {
                 SignToolTasks.SignTool(_ => _
-                    .SetFile("C:\\Users\\menno\\CodingConnected\\Various\\CodeCert\\cert-cc-2023-2026.cer")
+                    .SetSigningSubjectName("CodingConnected e.U.")
                     .SetDescription("TLCGen")
                     .SetFileDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
+                    .SetRfc3161TimestampServerUrl("http://time.certum.pl")
+                    .SetTimestampServerDigestAlgorithm(SignToolDigestAlgorithm.SHA256)
                     .SetFiles(setupPublishDirectory / "TLCGen.Setup.msi"));
             }
 
