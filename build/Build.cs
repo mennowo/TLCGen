@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
@@ -45,7 +46,9 @@ class Build : FalloutBuild
 
             if (DoClean) 
             { 
-                SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(x =>
+                SourceDirectory.GlobDirectories("**/bin", "**/obj")
+                .Where(x => !x.ToString().StartsWith(BuildProjectDirectory))
+                .ForEach(x =>
                 {
                     Directory.EnumerateFiles(x).ForEach(File.Delete);
                 });
@@ -56,8 +59,8 @@ class Build : FalloutBuild
         .DependsOn(Clean)
         .Executes(() =>
         {
-            DotNetRestore(_ => _.SetProjectFile(Solution.GetProject("TLCGen")));
-            DotNetRestore(_ => _.SetProjectFile(Solution.GetProject("TLCGen.Setup")));
+            DotNetRestore(_ => _.SetProjectFile(Solution.AllProjects.First(x => x.Name == "TLCGen")));
+            DotNetRestore(_ => _.SetProjectFile(Solution.AllProjects.First(x => x.Name == "TLCGen.Setup")));
         });
 
     Target CompileAndSign => _ => _
@@ -67,12 +70,12 @@ class Build : FalloutBuild
             MSBuildTasks.MSBuild(_ => _
                 .SetProcessToolPath(MsBuildPath)
                 .SetProcessEnvironmentVariable("DevEnvDir", @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\")
-                .SetProjectFile(Solution.GetProject("TLCGen"))
+                .SetProjectFile(Solution.AllProjects.First(x => x.Name == "TLCGen"))
                 .SetConfiguration("Release")
                 .SetTargetPlatform(MSBuildTargetPlatform.x64)
                 .SetMSBuildPlatform(MSBuildPlatform.x64));
 
-            var project = Solution.GetProject("TLCGen");
+            var project = Solution.AllProjects.First(x => x.Name == "TLCGen");
             if (DoSign && project != null)
             {
                 // get publish folder
@@ -92,13 +95,13 @@ class Build : FalloutBuild
         {
             MSBuildTasks.MSBuild(_ => _
                 .SetProcessToolPath(MsBuildPath)
-                .SetProjectFile(Solution.GetProject("TLCGen.Setup"))
+                .SetProjectFile(Solution.AllProjects.First(x => x.Name == "TLCGen.Setup"))
                 .SetConfiguration("Release")
                 .SetTargetPlatform(MSBuildTargetPlatform.x64)
                 .SetMSBuildPlatform(MSBuildPlatform.x64));
 
-            var setupProject = Solution.GetProject("TLCGen.Setup");
-            var project = Solution.GetProject("TLCGen");
+            var setupProject = Solution.AllProjects.First(x => x.Name == "TLCGen.Setup");
+            var project = Solution.AllProjects.First(x => x.Name == "TLCGen");
             if (setupProject == null || project == null) return;
             
             var setupPublishDirectory = setupProject.Directory / "bin" / "x64" / "Release";
@@ -122,7 +125,7 @@ class Build : FalloutBuild
         .DependsOn(CompileSetup)
         .Executes(() =>
         {
-            var project = Solution.GetProject("TLCGen");
+            var project = Solution.AllProjects.First(x => x.Name == "TLCGen");
             if (project != null)
             {
                 // get publish folder
@@ -193,7 +196,7 @@ class Build : FalloutBuild
         {
             if (!DoDeploy) return;
 
-            var project = Solution.GetProject("TLCGen");
+            var project = Solution.AllProjects.First(x => x.Name == "TLCGen");
             if (project == null) return;
 
             var versionLine = File.ReadAllLines(project.Directory / "tlcgenversioning")[0][7..];

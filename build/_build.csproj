@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Fallout.Common" />
     <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageDownload Include="Microsoft.Windows.SDK.BuildTools" Version="[10.0.28000.2705]" />
   </ItemGroup>
 
   <ItemGroup>

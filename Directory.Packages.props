@@ -14,17 +14,17 @@
     <PackageVersion Include="Gu.Wpf.DataGrid2D" Version="0.2.4" />
     <PackageVersion Include="InputSimulator" Version="1.0.4" />
     <PackageVersion Include="MdXaml" Version="1.27" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.161" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="NSubstitute" Version="5.3" />
-    <PackageVersion Include="NUnit" Version="4.6.1" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="6.2.0" />
+    <PackageVersion Include="NSubstitute" Version="6.2.0" />
+    <PackageVersion Include="NUnit" Version="5.0.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
     <PackageVersion Include="System.Drawing.Common" Version="9.0.4" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.11" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.13" />
     <PackageVersion Include="WixToolset.UI.wixext" Version="7.0.0" />
     <PackageVersion Include="NUnit.ConsoleRunner" Version="3.22.0" />
-    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
-    <PackageVersion Include="Fallout.Common" Version="10.3.49" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.13" />
+    <PackageVersion Include="Fallout.Common" Version="10.4.0" />
   </ItemGroup>
 </Project>

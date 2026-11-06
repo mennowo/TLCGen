@@ -223,3 +223,8 @@ ModelManifest.xml
 /local.cake
 *.ods#
 /CLAUDE.md
+
+# Local tooling / agent config
+.mcp.json
+.fallout/
+/ollama.ps1
