@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using TLCGen.Integrity;
 using TLCGen.Models;
@@ -66,6 +67,74 @@ namespace TLCGen.UnitTests.Helpers
 
             Assert.That(0 == controller.SelectieveDetectoren.Count);
             Assert.That(0 == controller.PrioData.PrioIngrepen[0].MeldingenData.Inmeldingen.Count);
+        }
+
+        [Test]
+        public void RemoveModelItemFromController_RemoveFaseCyclusFromController_RemovesManualVAOntruimenConflict()
+        {
+            var controller = new ControllerModel();
+            controller.Fasen.Add(new FaseCyclusModel { Naam = "33" });
+            var va = new VAOntruimenFaseModel { FaseCyclus = "05" };
+            va.VADetectoren.Add(new VAOntruimenDetectorModel
+            {
+                Detector = "051",
+                ManualConflicts = { new VAOntruimenNaarFaseModel { FaseCyclus = "33", VAOntruimingsTijd = 7 } }
+            });
+            controller.VAOntruimenFasen.Add(va);
+            TLCGenControllerModifier.OverrideDefault(new TLCGenControllerModifier { Controller = controller });
+
+            TLCGenControllerModifier.Default.RemoveModelItemFromController("33", TLCGenObjectTypeEnum.Fase);
+
+            Assert.That(va.VADetectoren[0].ManualConflicts, Is.Empty);
+        }
+
+        [Test]
+        public void CorrectModel_AlteredConflicts_KeepsManualVAOntruimenConflictThatIsNotAHardConflict()
+        {
+            var controller = CreateControllerWithVAOntruimen(manualConflictWaarde: -2);
+
+            TLCGenControllerModifier.OverrideDefault(new TLCGenControllerModifier { Controller = controller });
+            TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
+
+            var manualConflicts = controller.VAOntruimenFasen[0].VADetectoren[0].ManualConflicts;
+            Assert.That(manualConflicts.Count, Is.EqualTo(1));
+            Assert.That(manualConflicts[0].FaseCyclus, Is.EqualTo("33"));
+            Assert.That(manualConflicts[0].VAOntruimingsTijd, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void CorrectModel_AlteredConflicts_RemovesManualConflictThatBecameAHardConflict()
+        {
+            var controller = CreateControllerWithVAOntruimen(manualConflictWaarde: 30);
+
+            TLCGenControllerModifier.OverrideDefault(new TLCGenControllerModifier { Controller = controller });
+            TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
+
+            var detector = controller.VAOntruimenFasen[0].VADetectoren[0];
+            Assert.That(detector.ManualConflicts, Is.Empty);
+            Assert.That(detector.ConflicterendeFasen.Any(x => x.FaseCyclus == "33"), Is.True,
+                "the conflict is now maintained automatically");
+        }
+
+        private static ControllerModel CreateControllerWithVAOntruimen(int manualConflictWaarde)
+        {
+            var controller = new ControllerModel();
+            controller.Fasen.Add(new FaseCyclusModel { Naam = "05" });
+            controller.Fasen.Add(new FaseCyclusModel { Naam = "26" });
+            controller.Fasen.Add(new FaseCyclusModel { Naam = "33" });
+
+            var va = new VAOntruimenFaseModel { FaseCyclus = "05" };
+            va.VADetectoren.Add(new VAOntruimenDetectorModel
+            {
+                Detector = "051",
+                ConflicterendeFasen = { new VAOntruimenNaarFaseModel { FaseCyclus = "26", VAOntruimingsTijd = 4 } },
+                ManualConflicts = { new VAOntruimenNaarFaseModel { FaseCyclus = "33", VAOntruimingsTijd = 7 } }
+            });
+            controller.VAOntruimenFasen.Add(va);
+
+            controller.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "05", FaseNaar = "26", Waarde = 30 });
+            controller.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "05", FaseNaar = "33", Waarde = manualConflictWaarde });
+            return controller;
         }
     }
 }

@@ -34,6 +34,15 @@ namespace TLCGen.ViewModels
             private set;
         }
 
+        /// <summary>
+        /// Manually added signal groups (typically deelconflicten) with this detector's own time.
+        /// </summary>
+        public ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel> ManualConflicts
+        {
+            get;
+            private set;
+        }
+
         #endregion Properties
 
         #region Private methods
@@ -58,6 +67,7 @@ namespace TLCGen.ViewModels
         private void OnFasenChanged(object sender, FasenChangedMessage message)
         {
             ConflicterendeFasen.Rebuild();
+            ManualConflicts.Rebuild();
         }
 
         #endregion // TLCGen Events
@@ -68,6 +78,7 @@ namespace TLCGen.ViewModels
         {
             _VAOntruimenDetector = vaontruimend;
             ConflicterendeFasen = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ConflicterendeFasen);
+            ManualConflicts = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ManualConflicts);
             WeakReferenceMessengerEx.Default.Register<FasenChangedMessage>(this, OnFasenChanged);
         }
 
