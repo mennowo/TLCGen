@@ -554,7 +554,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                             {
-                                sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
+                                sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || (MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) && !bHDAanwezig) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
                             }
                             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                             {
