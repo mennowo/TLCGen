@@ -124,7 +124,20 @@ namespace TLCGen.Settings
             get => _template.Replace;
             set
             {
+                var oldReplace = _template.Replace;
                 _template.Replace = value;
+                // Items created before Replace was filled in have no FaseCyclus. Keep the placeholder in sync,
+                // otherwise applying the template cannot replace it with the fase it is inserted under.
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    foreach (var item in PrioIngrepen)
+                    {
+                        if (string.IsNullOrWhiteSpace(item.FaseCyclus) || item.FaseCyclus == oldReplace)
+                        {
+                            item.FaseCyclus = value;
+                        }
+                    }
+                }
                 OnPropertyChanged();
             }
         }
@@ -151,8 +164,11 @@ namespace TLCGen.Settings
                 PrioIngreepUitmeldingen.CollectionChanged -= PrioIngreepUitmeldingenOnCollectionChanged;
                 PrioIngreepInmeldingen.Clear();
                 PrioIngreepUitmeldingen.Clear();
-                foreach (var m in _selectedPrioIngreep.MeldingenData.Inmeldingen) PrioIngreepInmeldingen.Add(m);
-                foreach (var m in _selectedPrioIngreep.MeldingenData.Uitmeldingen) PrioIngreepUitmeldingen.Add(m);
+                if (_selectedPrioIngreep != null)
+                {
+                    foreach (var m in _selectedPrioIngreep.MeldingenData.Inmeldingen) PrioIngreepInmeldingen.Add(m);
+                    foreach (var m in _selectedPrioIngreep.MeldingenData.Uitmeldingen) PrioIngreepUitmeldingen.Add(m);
+                }
                 PrioIngreepInmeldingen.CollectionChanged += PrioIngreepInmeldingenOnCollectionChanged;
                 PrioIngreepUitmeldingen.CollectionChanged += PrioIngreepUitmeldingenOnCollectionChanged;
                 PrioIngreepSelectedInmelding = PrioIngreepInmeldingen.FirstOrDefault();

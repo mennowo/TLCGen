@@ -197,6 +197,6 @@
             </StackPanel>
         </Grid>
         <local:TemplateManagerView Grid.Row="3" Grid.Column="0" DataContext="{Binding TemplatesProviderVm}"
-                                   ParentItemName="{Binding ElementName=Root,Path=DataContext.SelectedFaseCyclus.Naam}"/>
+                                   ParentItemName="{Binding ElementName=Root,Path=DataContext.SelectedName}"/>
     </Grid>
 </UserControl>
