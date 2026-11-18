@@ -224,6 +224,7 @@ namespace TLCGen.Plugins.Timings.CodeGeneration
                         {
                             PrioIngreepVoertuigTypeEnum.Tram => "CIF_FC_RWT_OV_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Bus => "CIF_FC_RWT_OV_INGREEP",
+                            PrioIngreepVoertuigTypeEnum.HOV => "CIF_FC_RWT_OV_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Fiets => "CIF_FC_RWT_FIETS_PELOTON_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Vrachtwagen => "CIF_FC_RWT_VRACHTVERKEER_INGREEP",
                             PrioIngreepVoertuigTypeEnum.Auto => "CIF_FC_RWT_VOERTUIG_PELOTON_INGREEP",

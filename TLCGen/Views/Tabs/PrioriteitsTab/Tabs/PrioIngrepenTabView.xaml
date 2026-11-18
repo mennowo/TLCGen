@@ -85,7 +85,7 @@
                                 </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="{StaticResource BusIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBus,Converter={StaticResource Bool2Vis}}" />
+                        <Image Source="{StaticResource BusIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBusOrHov,Converter={StaticResource Bool2Vis}}" />
                         <Image Source="{StaticResource TramIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTram,Converter={StaticResource Bool2Vis}}" />
                         <Image Source="{StaticResource TruckIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeTruck,Converter={StaticResource Bool2Vis}}" />
                         <Image Source="{StaticResource BicycleIconGrayDrawingImage}" Margin="2" Width="14" Height="14" Visibility="{Binding Path=IsTypeBicycle,Converter={StaticResource Bool2Vis}}" />

@@ -14,5 +14,7 @@ namespace TLCGen.Models.Enumerations
         NG = 5,
         [Description("Nood- en hulpdienst")]
         Hulpdienst = 6,
+
+        HOV = 7,
     }
 }
