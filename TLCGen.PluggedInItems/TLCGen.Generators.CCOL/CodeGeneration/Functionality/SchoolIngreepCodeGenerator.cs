@@ -153,7 +153,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam}]) ");
                         }
-                        sb.AppendLine($"CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] = CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] && !(IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz) || G[{_fcpf}{d.Item1.Naam}] && D[{_dpf}{d.Item2.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz;");
+                        sb.AppendLine($"CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] = CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] && !(IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz) || G[{_fcpf}{d.Item1.Naam}] && D[{_dpf}{d.Item2.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz || EH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && A[{_fcpf}{d.Item1.Naam}] && !G[{_fcpf}{d.Item1.Naam}];");
                     }
                     break;
             }
