@@ -45,18 +45,21 @@ namespace TLCGen.ViewModels
                         SelectedIngreep = null;
                         SelectedMelding = null;
                         SelectedFaseCyclus = fc;
+                        TemplatesProviderVm.ApplyToItem = null;
                         break;
                     case PrioIngreepMeldingenListViewModel list:
                         SelectedFaseCyclus = null;
                         SelectedIngreep = null;
                         SelectedMelding = null;
                         SelectedMeldingenList = list;
+                        TemplatesProviderVm.ApplyToItem = null;
                         break;
                     case PrioIngreepViewModel ing:
                         SelectedFaseCyclus = null;
                         SelectedMeldingenList = null;
                         SelectedMelding = null;
                         SelectedIngreep = ing;
+                        TemplatesProviderVm.ApplyToItem = ing.PrioIngreep;
                         break;
                     case PrioIngreepInUitMeldingViewModel mel:
                         SelectedFaseCyclus = null;
@@ -69,11 +72,16 @@ namespace TLCGen.ViewModels
                         SelectedIngreep = null;
                         SelectedMeldingenList = null;
                         SelectedMelding = null;
+                        TemplatesProviderVm.ApplyToItem = null;
                         break;
                 }
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedName));
             }
         }
+
+        public string SelectedName =>
+            SelectedIngreep?.Naam ?? SelectedFaseCyclus?.Naam ?? string.Empty;
 
         public FaseCyclusWithPrioViewModel SelectedFaseCyclus
         {
@@ -242,11 +250,15 @@ namespace TLCGen.ViewModels
 
         public void InsertItemsFromTemplate(List<PrioIngreepModel> items)
         {
-            if (_Controller == null)
+            if (_Controller == null || SelectedFaseCyclus == null)
                 return;
 
             foreach (var prio in items)
             {
+                // An ingreep inserted under a fase must belong to that fase: the tree, the overview and the generator
+                // all group/filter by FaseCyclus. A template clone may carry a placeholder or no FaseCyclus at all,
+                // which string replacement cannot repair; leaving it that way makes the ingreep disappear after reload.
+                prio.FaseCyclus = SelectedFaseCyclus.Naam;
                 ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.Add(prio);
                 ControllerAccessProvider.Default.Controller.PrioData.PrioIngrepen.BubbleSort();
                 // needed to regulate KAR dummies
@@ -262,6 +274,7 @@ namespace TLCGen.ViewModels
 
         public void UpdateAfterApplyTemplate(PrioIngreepModel item)
         {
+            SelectedIngreep?.OnPropertyChanged("", broadcast: true);
         }
 
         #endregion // IAllowTemplates
