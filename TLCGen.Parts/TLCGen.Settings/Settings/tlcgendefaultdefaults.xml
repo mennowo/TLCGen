@@ -872,6 +872,76 @@
 			</Data>
 		</Default>
 		<Default>
+			<DefaultName>OV ingreep HOV</DefaultName>
+			<Category>Other</Category>
+			<Selector1>HOV</Selector1>
+			<DataType>TLCGen.Models.PrioIngreepModel,TLCGen.Dependencies</DataType>
+			<Data>
+				<Naam />
+				<FaseCyclus />
+				<Type>HOV</Type>
+				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+				<Koplus />
+				<RijTijdOngehinderd>140</RijTijdOngehinderd>
+				<RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+				<RijTijdGehinderd>60</RijTijdGehinderd>
+				<OnderMaximum>150</OnderMaximum>
+				<GroenBewaking>300</GroenBewaking>
+				<BlokkeertijdNaPrioIngreep>0</BlokkeertijdNaPrioIngreep>
+				<MinimaleRoodtijd>70</MinimaleRoodtijd>
+				<AfkappenConflicten>true</AfkappenConflicten>
+				<AfkappenConflictenOV>false</AfkappenConflictenOV>
+				<VasthoudenGroen>true</VasthoudenGroen>
+				<TussendoorRealiseren>true</TussendoorRealiseren>
+				<AlleLijnen>false</AlleLijnen>
+				<GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+				<GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+				<GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
+				<GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
+				<PrioInmeldingBitmapData />
+				<GeconditioneerdePrioTeVroegBitmapData />
+				<GeconditioneerdePrioOpTijdBitmapData />
+				<GeconditioneerdePrioTeLaatBitmapData />
+				<DummyKARInmelding />
+				<DummyKARUitmelding />
+				<MeldingenData />
+				<LijnNummers>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+					<LijnNummer>
+						<Nummer>0</Nummer>
+					</LijnNummer>
+				</LijnNummers>
+			</Data>
+		</Default>
+		<Default>
 			<DefaultName>OV ingreep Tram</DefaultName>
 			<Category>Other</Category>
 			<Selector1>Tram</Selector1>
@@ -879,7 +949,7 @@
 			<Data>
 				<Naam />
 				<FaseCyclus />
-				<Type>Bus</Type>
+				<Type>Tram</Type>
 				<VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
 				<NoodaanvraagKoplus>false</NoodaanvraagKoplus>
 				<KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>

@@ -86,6 +86,7 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged(nameof(IsTypeTruck));
                 OnPropertyChanged(nameof(IsTypeHulpdienst));
                 OnPropertyChanged(nameof(IsTypeHOV));
+                OnPropertyChanged(nameof(IsTypeBusOrHov));
                 OnPropertyChanged(nameof(IsNotTypeHulpdienst));
                 OnPropertyChanged(nameof(ShowLijnnummer));
 
@@ -121,6 +122,9 @@ namespace TLCGen.ViewModels
         public bool IsTypeHulpdienst => Type == PrioIngreepVoertuigTypeEnum.Hulpdienst;
         [Browsable(false)]
         public bool IsTypeHOV => Type == PrioIngreepVoertuigTypeEnum.HOV;
+        [Browsable(false)]
+        public bool IsTypeBusOrHov => Type == PrioIngreepVoertuigTypeEnum.Bus ||
+                                      Type == PrioIngreepVoertuigTypeEnum.HOV;
         [Browsable(false)]
         public bool IsNotTypeHulpdienst => Type != PrioIngreepVoertuigTypeEnum.Hulpdienst;
         [Browsable(false)]
