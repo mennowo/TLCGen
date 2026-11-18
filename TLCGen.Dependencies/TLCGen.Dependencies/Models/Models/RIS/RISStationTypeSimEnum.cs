@@ -60,6 +60,8 @@ namespace TLCGen.Models
     [Flags]
     public enum RISVehicleImportance
     {
+        [Description("0")]
+        I00 = 0x0001,
         [Description("1")]
         I01 = 0x0002,
         [Description("2")]
