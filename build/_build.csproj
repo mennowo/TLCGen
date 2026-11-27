@@ -20,13 +20,13 @@
 
   <ItemGroup>
     <Reference Include="Rebex.Common">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\netstandard2.0\Rebex.Common.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Rebex Components 8.0.9797\bin\net-10.0\Rebex.Common.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Networking">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\netstandard2.0\Rebex.Networking.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Rebex Components 8.0.9797\bin\net-10.0\Rebex.Networking.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Sftp">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Rebex Components 7.0.9083\bin\netstandard2.0\Rebex.Sftp.dll</HintPath>
+      <HintPath>..\..\..\Program Files (x86)\Rebex Components 8.0.9797\bin\net-10.0\Rebex.Sftp.dll</HintPath>
     </Reference>
   </ItemGroup>
 

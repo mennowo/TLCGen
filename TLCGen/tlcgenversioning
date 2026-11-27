@@ -1,8 +1,22 @@
-TLCGen=12.4.0.19
+TLCGen=12.4.0.20
 RN==TLCGen
 TLCGen versie: 12.4.0.20
+- Hulpdienst als generieke prio-ingreep
+- HOV als voertuigtype voor prio ingrepen
+- Handmatig conflicten toevoegen bij VA ontruimen
+- RIS-importance 0 (0x0001, I00) wordt nu geaccepteerd
 - Voorkomen lege naam van prio ingreep
+- Wachttijdvoorspeller knippert wanneer het aantal leds onder het ingestelde minimum zit en er een hulpdienst aanwezig is
 - Diverse fixes voor 'interstartgroen func'
+- Diverse fixes voor Opticom
+- FC met wtv: minimale realisatietijd, vooruitrealisatie bij weinig leds, niet meer tegengehouden bij een laag aantal leds
+- Fix voor beschikbaarheid de garantietijden-rekentool
+- Ongebruikte functie aanvraagsnel V2 verwijderd
+- Lege modules bij fixatie bij gebruik van multi-module-molens
+- Fix voor generatie van interne pelotonkoppeling type 1
+- Fix voor code volgorde bij vertraagde detectie storingsaanvraag
+- Wachtlicht kon uit blijven wanneer een schoolinggroep afviel
+- Fix voor openen zéér oude TLCGen-bestanden (bv. v0.5.0.0)
 TLCGen versie: 12.4.0.19
 - Diverse fixes voor 'interstartgroen func'
 - Fix voor issues met TLCGen defaults xml file

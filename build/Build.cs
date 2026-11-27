@@ -22,20 +22,20 @@ class Build : FalloutBuild
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
     public static int Main () => Execute<Build>(x => x.Deploy);
-    
-    [Solution] readonly Solution Solution;
+
+    [Solution("TLCGen.sln")] readonly Solution Solution;
 
     private static AbsolutePath SourceDirectory => RootDirectory;
     private static AbsolutePath OutputDirectory => RootDirectory / "output";
 
     const string MsBuildPath = @"C:\Program Files\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe";
     
-    const bool Dev = true;
+    const bool Dev = false;
 
     const bool DoClean = true;
     const bool DoSign = true;
     const bool DoDeploy = true;
-    const bool DoArchiveOld = false;
+    const bool DoArchiveOld = true;
     const string ArchiveOldVersion = "12.4.0.19";
 
     Target Clean => _ => _
