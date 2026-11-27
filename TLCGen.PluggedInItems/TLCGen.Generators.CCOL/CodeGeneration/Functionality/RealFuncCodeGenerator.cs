@@ -549,6 +549,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         foreach (var prio in c.PrioData.PrioIngrepen.Where(x => x.FaseCyclus == grsync.FaseNaar && x.Type == PrioIngreepVoertuigTypeEnum.Hulpdienst))
                                         {
                                             if (!first) condition += " && ";
+                                            else if (condition == "TRUE") condition = "";
                                             condition += $"!C[{_ctpf}{_cvc}{CCOLCodeHelper.GetPriorityName(c, prio)}]";
                                             first = false;
                                         }
